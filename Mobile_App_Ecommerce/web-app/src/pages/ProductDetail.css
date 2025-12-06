@@ -1,0 +1,135 @@
+.product-detail {
+  padding: 20px 0;
+}
+
+.product-detail-layout {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 40px;
+  background-color: #fff;
+  padding: 30px;
+  border-radius: 8px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.product-image-section {
+  width: 100%;
+}
+
+.detail-image {
+  width: 100%;
+  height: 500px;
+  object-fit: contain;
+  border-radius: 8px;
+  background-color: #f5f5f5;
+}
+
+.product-info-section {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.detail-name {
+  font-size: 32px;
+  font-weight: bold;
+  margin-bottom: 10px;
+}
+
+.detail-price {
+  font-size: 28px;
+  font-weight: bold;
+  color: #007AFF;
+}
+
+.detail-description {
+  margin-top: 20px;
+}
+
+.detail-description h3 {
+  font-size: 20px;
+  margin-bottom: 10px;
+}
+
+.detail-description p {
+  line-height: 1.6;
+  color: #666;
+}
+
+.detail-stock {
+  font-size: 16px;
+  font-weight: 500;
+}
+
+.in-stock {
+  color: #34C759;
+}
+
+.out-of-stock {
+  color: #FF3B30;
+}
+
+.detail-actions {
+  display: flex;
+  gap: 15px;
+  align-items: center;
+  margin-top: 20px;
+}
+
+.quantity-selector {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  padding: 8px;
+}
+
+.quantity-selector button {
+  background-color: #007AFF;
+  color: #fff;
+  border: none;
+  width: 30px;
+  height: 30px;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 18px;
+  font-weight: bold;
+}
+
+.quantity-selector span {
+  font-size: 18px;
+  font-weight: 600;
+  min-width: 30px;
+  text-align: center;
+}
+
+.add-to-cart-button {
+  flex: 1;
+  background-color: #007AFF;
+  color: #fff;
+  border: none;
+  padding: 12px 24px;
+  border-radius: 4px;
+  font-size: 16px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+.add-to-cart-button:hover:not(:disabled) {
+  background-color: #0056b3;
+}
+
+.add-to-cart-button:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.loading,
+.empty {
+  text-align: center;
+  padding: 40px;
+  color: #666;
+}
+

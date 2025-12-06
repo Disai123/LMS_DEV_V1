@@ -1,0 +1,86 @@
+CREATE THE COMPLETE MOBILE APP E-COMMERCE PROJECT
+
+Build a fully functional, standalone E-Commerce application in the Mobile_App_Ecommerce folder with:
+
+1. BACKEND (Node.js + Express + Sequelize + PostgreSQL)
+2. MOBILE APP (React Native - iOS & Android)
+3. WEB APP (React.js 18 with Vite)
+
+IMPORTANT: This is completely separate from any LMS project. All code goes in Mobile_App_Ecommerce/ folder.
+
+REFERENCE FILES (Read these first):
+- docs/MASTER_PLAN.md - Complete project structure
+- docs/DATABASE_SCHEMA_CONVERSION.md - Database design
+- docs/API_ENDPOINTS_MAPPING.md - API endpoints
+- docs/IMPLEMENTATION_PROMPT.md - Detailed instructions
+- docs/PROJECT_SETUP.md - Setup guide
+
+IMPLEMENTATION ORDER:
+
+1. BACKEND FIRST (backend/ folder)
+   - Create folder structure: config/, models/, migrations/, seeders/, routes/, controllers/, middleware/, services/, utils/
+   - Initialize Node.js project with package.json
+   - Install dependencies: express, sequelize, pg, jsonwebtoken, bcryptjs, winston, joi, multer, cors, helmet
+   - Create Sequelize models: User, Product, Order, OrderItem, CartItem (see DATABASE_SCHEMA_CONVERSION.md)
+   - Create migrations for all tables with indexes
+   - Create seeders for admin user and sample products
+   - Create middleware: auth.js (JWT), errorHandler.js, upload.js, validator.js
+   - Create controllers: authController, productController, cartController, orderController, categoryController
+   - Create routes: authRoutes, productRoutes, cartRoutes, orderRoutes, categoryRoutes
+   - Create server.js with Express setup, CORS, Helmet, Morgan, error handling
+   - All API responses must follow format: { success, data, message, error }
+   - Use JWT authentication - access token + refresh token
+   - Test all endpoints with Postman before proceeding
+
+2. MOBILE APP SECOND (mobile-app/ folder)
+   - Initialize React Native project (Expo or CLI)
+   - Create folder structure: src/screens/, src/components/, src/navigation/, src/store/, src/services/
+   - Install: @react-navigation/native, axios, zustand, @react-native-async-storage/async-storage, react-hook-form
+   - Create API service layer (src/services/api.js) with Axios, interceptors for JWT tokens
+   - Create Zustand stores: authStore, cartStore, productStore, categoryStore
+   - Create navigation: AppNavigator, AuthNavigator, TabNavigator
+   - Create screens: Login, Register, Home, ProductList, ProductDetail, Cart, Wishlist, Orders, Profile
+   - Create reusable components: Button, Input, ProductCard, CartItem, OrderCard
+   - Connect all screens to backend API
+   - Test on iOS simulator and Android emulator
+
+3. WEB APP THIRD (web-app/ folder)
+   - Initialize React.js 18 project with Vite
+   - Create folder structure: src/pages/, src/components/, src/services/, src/store/, src/contexts/
+   - Install: axios, zustand, react-router-dom, react-hook-form
+   - Create API service layer similar to mobile app
+   - Create Zustand stores: authStore, cartStore, productStore, categoryStore
+   - Set up React Router with public and protected routes
+   - Create pages: Home, Products, ProductDetail, Cart, Wishlist, Orders, Login, Register, Profile
+   - Create reusable components: Header, Footer, ProductCard, CartItem, OrderCard
+   - Connect all pages to backend API
+   - Test in browser
+
+REQUIREMENTS:
+- All code must be functional and working
+- Backend must handle errors properly
+- Authentication must work on all platforms
+- Database operations must work correctly
+- API endpoints must match API_ENDPOINTS_MAPPING.md
+- Database schema must match DATABASE_SCHEMA_CONVERSION.md
+- Use environment variables for all configuration
+- Follow response format: { success: true/false, data: {...}, message: "...", error: "..." }
+
+TESTING:
+- Backend: Test all API endpoints with Postman/Thunder Client
+- Mobile App: Test on iOS simulator and Android emulator
+- Web App: Test in browser
+- Integration: Test same user on web and mobile simultaneously
+
+SUCCESS CRITERIA:
+✅ Backend API running on port 5001
+✅ All API endpoints working
+✅ Mobile app running on iOS and Android
+✅ Web app running in browser
+✅ Authentication working on all platforms
+✅ Cart, Orders, Products working
+✅ Database operations working
+✅ Code is clean and well-structured
+
+START WITH BACKEND, THEN MOBILE APP, THEN WEB APP. Make sure each component is fully functional before moving to the next!
+

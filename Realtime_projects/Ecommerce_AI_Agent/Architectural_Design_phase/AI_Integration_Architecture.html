@@ -1,0 +1,178 @@
+<div class="content-body">
+  <div class="content-section">
+    <h3 class="content-heading">AI Integration Architecture</h3>
+    <div style="max-width: none;">
+      <p style="color: #4b5563; line-height: 1.75; margin-bottom: 1.5rem;">
+        The AI integration architecture defines how OpenAI GPT models are integrated into the system, including 
+        function calling, context management, and tool execution patterns.
+      </p>
+      
+      <div style="display: flex; flex-direction: column; gap: 2rem;">
+        <div class="card">
+          <h4 style="font-size: 1.25rem; font-weight: 600; color: #1f2937; margin-bottom: 1.5rem; display: flex; align-items: center; gap: 0.5rem;">
+            <span style="font-size: 1.5rem;">🤖</span>
+            OpenAI Configuration
+          </h4>
+          
+          <div style="background: #f9fafb; border-radius: 0.5rem; padding: 1.5rem;">
+            <div style="display: flex; flex-direction: column; gap: 1rem;">
+              <div style="border-left: 4px solid #3b82f6; padding-left: 1rem;">
+                <h5 style="font-weight: 600; color: #1f2937; margin-bottom: 0.5rem;">Model Selection</h5>
+                <ul style="font-size: 0.875rem; color: #4b5563; list-style: disc; list-style-position: inside;">
+                  <li><strong>Model:</strong> gpt-4o-mini (cost-effective, fast)</li>
+                  <li><strong>API Key:</strong> Stored in environment variable (OPENAI_API_KEY)</li>
+                  <li><strong>Temperature:</strong> 0.7 (balanced creativity/consistency)</li>
+                  <li><strong>Max Tokens:</strong> 1000 (sufficient for responses)</li>
+                </ul>
+              </div>
+
+              <div style="border-left: 4px solid #10b981; padding-left: 1rem;">
+                <h5 style="font-weight: 600; color: #1f2937; margin-bottom: 0.5rem;">System Prompt</h5>
+                <p style="font-size: 0.875rem; color: #6b7280; margin-bottom: 0.5rem;">
+                  Defines AI personality and behavior:
+                </p>
+                <div style="background: #1f2937; color: #10b981; padding: 1rem; border-radius: 0.5rem; font-family: monospace; font-size: 0.75rem; overflow-x: auto;">
+                  <pre>"You are askunicart, the friendly shopping assistant. 
+You help customers browse products, check stock, 
+recommend products, and manage carts..."</pre>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="card">
+          <h4 style="font-size: 1.25rem; font-weight: 600; color: #1f2937; margin-bottom: 1.5rem; display: flex; align-items: center; gap: 0.5rem;">
+            <span style="font-size: 1.5rem;">🔧</span>
+            Function Calling (Tools)
+          </h4>
+          
+          <div style="background: #f9fafb; border-radius: 0.5rem; padding: 1.5rem;">
+            <div style="margin-bottom: 1rem;">
+              <h5 style="font-weight: 600; color: #1f2937; margin-bottom: 0.75rem;">Available Tools</h5>
+              <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1rem;">
+                <div style="background: white; padding: 1rem; border-radius: 0.5rem; border: 1px solid #e5e7eb;">
+                  <div style="font-weight: 600; color: #1f2937; margin-bottom: 0.25rem;">searchProducts</div>
+                  <div style="font-size: 0.75rem; color: #6b7280;">Search products by query, category, price</div>
+                </div>
+                <div style="background: white; padding: 1rem; border-radius: 0.5rem; border: 1px solid #e5e7eb;">
+                  <div style="font-weight: 600; color: #1f2937; margin-bottom: 0.25rem;">getProductDetails</div>
+                  <div style="font-size: 0.75rem; color: #6b7280;">Get detailed product information</div>
+                </div>
+                <div style="background: white; padding: 1rem; border-radius: 0.5rem; border: 1px solid #e5e7eb;">
+                  <div style="font-weight: 600; color: #1f2937; margin-bottom: 0.25rem;">checkStock</div>
+                  <div style="font-size: 0.75rem; color: #6b7280;">Check product availability</div>
+                </div>
+                <div style="background: white; padding: 1rem; border-radius: 0.5rem; border: 1px solid #e5e7eb;">
+                  <div style="font-weight: 600; color: #1f2937; margin-bottom: 0.25rem;">getRecommendations</div>
+                  <div style="font-size: 0.75rem; color: #6b7280;">Get product recommendations</div>
+                </div>
+                <div style="background: white; padding: 1rem; border-radius: 0.5rem; border: 1px solid #e5e7eb;">
+                  <div style="font-weight: 600; color: #1f2937; margin-bottom: 0.25rem;">addToCart</div>
+                  <div style="font-size: 0.75rem; color: #6b7280;">Add product to cart</div>
+                </div>
+                <div style="background: white; padding: 1rem; border-radius: 0.5rem; border: 1px solid #e5e7eb;">
+                  <div style="font-weight: 600; color: #1f2937; margin-bottom: 0.25rem;">getCart</div>
+                  <div style="font-size: 0.75rem; color: #6b7280;">Get cart contents</div>
+                </div>
+                <div style="background: white; padding: 1rem; border-radius: 0.5rem; border: 1px solid #e5e7eb;">
+                  <div style="font-weight: 600; color: #1f2937; margin-bottom: 0.25rem;">updateCartItem</div>
+                  <div style="font-size: 0.75rem; color: #6b7280;">Update cart item quantity</div>
+                </div>
+                <div style="background: white; padding: 1rem; border-radius: 0.5rem; border: 1px solid #e5e7eb;">
+                  <div style="font-weight: 600; color: #1f2937; margin-bottom: 0.25rem;">removeFromCart</div>
+                  <div style="font-size: 0.75rem; color: #6b7280;">Remove item from cart</div>
+                </div>
+              </div>
+            </div>
+
+            <div>
+              <h5 style="font-weight: 600; color: #1f2937; margin-bottom: 0.75rem;">Tool Execution Flow</h5>
+              <div style="background: #1f2937; color: #10b981; padding: 1rem; border-radius: 0.5rem; font-family: monospace; font-size: 0.75rem; overflow-x: auto;">
+                <pre>1. AI decides to call a tool
+2. Tool function executed with parameters
+3. Tool result returned to AI
+4. AI generates response using tool result
+5. Response sent to user</pre>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="card">
+          <h4 style="font-size: 1.25rem; font-weight: 600; color: #1f2937; margin-bottom: 1.5rem; display: flex; align-items: center; gap: 0.5rem;">
+            <span style="font-size: 1.5rem;">💾</span>
+            Context Management
+          </h4>
+          
+          <div style="background: #f9fafb; border-radius: 0.5rem; padding: 1.5rem;">
+            <div style="display: flex; flex-direction: column; gap: 1rem;">
+              <div style="border-left: 4px solid #3b82f6; padding-left: 1rem;">
+                <h5 style="font-weight: 600; color: #1f2937; margin-bottom: 0.5rem;">Conversation History</h5>
+                <p style="font-size: 0.875rem; color: #6b7280;">
+                  Last 20 messages loaded from database and sent to OpenAI as context. 
+                  This enables multi-turn conversations while limiting token usage.
+                </p>
+              </div>
+
+              <div style="border-left: 4px solid #10b981; padding-left: 1rem;">
+                <h5 style="font-weight: 600; color: #1f2937; margin-bottom: 0.5rem;">Message Format</h5>
+                <div style="background: #1f2937; color: #3b82f6; padding: 1rem; border-radius: 0.5rem; font-family: monospace; font-size: 0.75rem; overflow-x: auto;">
+                  <pre>[
+  { role: "system", content: "System prompt..." },
+  { role: "user", content: "Message 1" },
+  { role: "assistant", content: "Response 1" },
+  { role: "user", content: "Message 2" }
+]</pre>
+                </div>
+              </div>
+
+              <div style="border-left: 4px solid #a855f7; padding-left: 1rem;">
+                <h5 style="font-weight: 600; color: #1f2937; margin-bottom: 0.5rem;">Token Optimization</h5>
+                <ul style="font-size: 0.875rem; color: #4b5563; list-style: disc; list-style-position: inside;">
+                  <li>Limit context to 20 messages</li>
+                  <li>Truncate very long messages if needed</li>
+                  <li>Use concise tool descriptions</li>
+                  <li>Monitor token usage per request</li>
+                </ul>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="card">
+          <h4 style="font-size: 1.25rem; font-weight: 600; color: #1f2937; margin-bottom: 1.5rem; display: flex; align-items: center; gap: 0.5rem;">
+            <span style="font-size: 1.5rem;">⚙️</span>
+            Error Handling
+          </h4>
+          
+          <div style="background: #f9fafb; border-radius: 0.5rem; padding: 1.5rem;">
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 1rem;">
+              <div style="background: white; padding: 1rem; border-radius: 0.5rem; border: 1px solid #e5e7eb;">
+                <h5 style="font-weight: 600; color: #1f2937; margin-bottom: 0.5rem;">API Errors</h5>
+                <p style="font-size: 0.875rem; color: #6b7280;">
+                  Handle OpenAI API failures gracefully with retry logic and user-friendly error messages.
+                </p>
+              </div>
+
+              <div style="background: white; padding: 1rem; border-radius: 0.5rem; border: 1px solid #e5e7eb;">
+                <h5 style="font-weight: 600; color: #1f2937; margin-bottom: 0.5rem;">Tool Errors</h5>
+                <p style="font-size: 0.875rem; color: #6b7280;">
+                  Catch tool execution errors and inform AI, allowing it to provide alternative responses.
+                </p>
+              </div>
+
+              <div style="background: white; padding: 1rem; border-radius: 0.5rem; border: 1px solid #e5e7eb;">
+                <h5 style="font-weight: 600; color: #1f2937; margin-bottom: 0.5rem;">Timeout Handling</h5>
+                <p style="font-size: 0.875rem; color: #6b7280;">
+                  60-second timeout for AI requests. Return timeout error if exceeded.
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+

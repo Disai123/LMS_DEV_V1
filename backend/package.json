@@ -18,6 +18,7 @@
     "db:migrate:undo:all": "npx sequelize-cli db:migrate:undo:all",
     "db:create-admin": "node create-admin-user.js",
     "db:seed": "node seed-data.js",
+    "db:migrate:prod-to-dev": "node migrate-prod-to-dev.js",
     "legacy:create-tables": "node create-all-tables.js",
     "legacy:delete-tables": "node delete-all-tables.js"
   },

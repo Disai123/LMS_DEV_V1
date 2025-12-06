@@ -1,0 +1,150 @@
+.products-page {
+  padding: 20px 0;
+}
+
+.products-page h1 {
+  font-size: 32px;
+  margin-bottom: 30px;
+  text-align: center;
+}
+
+.products-layout {
+  display: grid;
+  grid-template-columns: 250px 1fr;
+  gap: 30px;
+}
+
+.sidebar {
+  background-color: #fff;
+  padding: 20px;
+  border-radius: 8px;
+  height: fit-content;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.sidebar h3 {
+  font-size: 20px;
+  margin-bottom: 15px;
+}
+
+.category-filters {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.category-filter {
+  padding: 10px 15px;
+  border: 1px solid #ddd;
+  background-color: #fff;
+  border-radius: 4px;
+  cursor: pointer;
+  text-align: left;
+  transition: all 0.3s;
+}
+
+.category-filter:hover {
+  background-color: #f5f5f5;
+}
+
+.category-filter.active {
+  background-color: #007AFF;
+  color: #fff;
+  border-color: #007AFF;
+}
+
+.products-main {
+  flex: 1;
+}
+
+.search-bar {
+  display: flex;
+  gap: 10px;
+  margin-bottom: 20px;
+}
+
+.search-input {
+  flex: 1;
+  padding: 10px 15px;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  font-size: 16px;
+}
+
+.search-button {
+  padding: 10px 20px;
+  background-color: #007AFF;
+  color: #fff;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  font-weight: 500;
+  transition: background-color 0.3s;
+}
+
+.search-button:hover {
+  background-color: #0056b3;
+}
+
+.product-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+  gap: 20px;
+}
+
+.product-card {
+  background-color: #fff;
+  border-radius: 8px;
+  overflow: hidden;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  text-decoration: none;
+  color: inherit;
+  transition: transform 0.3s, box-shadow 0.3s;
+}
+
+.product-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.15);
+}
+
+.product-image {
+  width: 100%;
+  height: 200px;
+  object-fit: cover;
+}
+
+.product-info {
+  padding: 16px;
+}
+
+.product-name {
+  font-size: 16px;
+  font-weight: 600;
+  margin-bottom: 8px;
+  color: #333;
+}
+
+.product-price {
+  font-size: 20px;
+  font-weight: bold;
+  color: #007AFF;
+  margin-bottom: 5px;
+}
+
+.in-stock {
+  color: #34C759;
+  font-size: 14px;
+}
+
+.out-of-stock {
+  color: #FF3B30;
+  font-size: 14px;
+}
+
+.loading,
+.empty {
+  text-align: center;
+  padding: 40px;
+  color: #666;
+}
+

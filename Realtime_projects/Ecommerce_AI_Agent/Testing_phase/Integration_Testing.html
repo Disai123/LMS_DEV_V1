@@ -1,0 +1,121 @@
+<div class="content-body">
+  <div class="content-section">
+    <h3 class="content-heading">Integration Testing</h3>
+    <div style="max-width: none;">
+      <p style="color: #4b5563; line-height: 1.75; margin-bottom: 1.5rem;">
+        Integration tests verify that all components work together correctly: API routes, database operations, 
+        OpenAI integration, and tool execution.
+      </p>
+      
+      <div style="display: flex; flex-direction: column; gap: 2rem;">
+        <div class="card">
+          <h4 style="font-size: 1.25rem; font-weight: 600; color: #1f2937; margin-bottom: 1.5rem; display: flex; align-items: center; gap: 0.5rem;">
+            <span style="font-size: 1.5rem;">🔌</span>
+            API Integration Tests
+          </h4>
+          
+          <div style="background: #f9fafb; border-radius: 0.5rem; padding: 1.5rem;">
+            <div style="display: flex; flex-direction: column; gap: 1rem;">
+              <div style="border-left: 4px solid #3b82f6; padding-left: 1rem;">
+                <h5 style="font-weight: 600; color: #1f2937; margin-bottom: 0.5rem;">POST /api/askunicart</h5>
+                <ul style="font-size: 0.875rem; color: #4b5563; list-style: disc; list-style-position: inside;">
+                  <li>✅ Authenticated request succeeds</li>
+                  <li>✅ Unauthenticated request returns 401</li>
+                  <li>✅ Creates new conversation if needed</li>
+                  <li>✅ Loads existing conversation history</li>
+                  <li>✅ Saves messages to database</li>
+                  <li>✅ Returns AI response</li>
+                </ul>
+              </div>
+
+              <div style="border-left: 4px solid #10b981; padding-left: 1rem;">
+                <h5 style="font-weight: 600; color: #1f2937; margin-bottom: 0.5rem;">GET /api/askunicart</h5>
+                <ul style="font-size: 0.875rem; color: #4b5563; list-style: disc; list-style-position: inside;">
+                  <li>✅ Returns conversation with messages</li>
+                  <li>✅ Returns all conversations for user</li>
+                  <li>✅ Returns 404 for invalid conversationId</li>
+                  <li>✅ Isolates conversations per user</li>
+                </ul>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="card">
+          <h4 style="font-size: 1.25rem; font-weight: 600; color: #1f2937; margin-bottom: 1.5rem; display: flex; align-items: center; gap: 0.5rem;">
+            <span style="font-size: 1.5rem;">🤖</span>
+            OpenAI Integration Tests
+          </h4>
+          
+          <div style="background: #f9fafb; border-radius: 0.5rem; padding: 1.5rem;">
+            <div style="display: flex; flex-direction: column; gap: 1rem;">
+              <div style="border-left: 4px solid #a855f7; padding-left: 1rem;">
+                <h5 style="font-weight: 600; color: #1f2937; margin-bottom: 0.5rem;">AI Response Tests</h5>
+                <ul style="font-size: 0.875rem; color: #4b5563; list-style: disc; list-style-position: inside;">
+                  <li>✅ OpenAI API call succeeds</li>
+                  <li>✅ System prompt applied correctly</li>
+                  <li>✅ Conversation history included</li>
+                  <li>✅ Tools available to AI</li>
+                  <li>✅ Response generated successfully</li>
+                </ul>
+              </div>
+
+              <div style="border-left: 4px solid #f97316; padding-left: 1rem;">
+                <h5 style="font-weight: 600; color: #1f2937; margin-bottom: 0.5rem;">Tool Calling Tests</h5>
+                <ul style="font-size: 0.875rem; color: #4b5563; list-style: disc; list-style-position: inside;">
+                  <li>✅ AI calls searchProducts tool correctly</li>
+                  <li>✅ AI calls addToCart tool correctly</li>
+                  <li>✅ Tool results returned to AI</li>
+                  <li>✅ AI generates response from tool results</li>
+                  <li>✅ Multiple tool calls in sequence</li>
+                </ul>
+              </div>
+
+              <div style="border-left: 4px solid #ef4444; padding-left: 1rem;">
+                <h5 style="font-weight: 600; color: #1f2937; margin-bottom: 0.5rem;">Error Handling Tests</h5>
+                <ul style="font-size: 0.875rem; color: #4b5563; list-style: disc; list-style-position: inside;">
+                  <li>✅ Handles OpenAI API failures</li>
+                  <li>✅ Handles invalid API key</li>
+                  <li>✅ Handles rate limiting</li>
+                  <li>✅ Returns user-friendly error messages</li>
+                </ul>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="card">
+          <h4 style="font-size: 1.25rem; font-weight: 600; color: #1f2937; margin-bottom: 1.5rem; display: flex; align-items: center; gap: 0.5rem;">
+            <span style="font-size: 1.5rem;">🗄️</span>
+            Database Integration Tests
+          </h4>
+          
+          <div style="background: #f9fafb; border-radius: 0.5rem; padding: 1.5rem;">
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 1rem;">
+              <div style="background: white; padding: 1rem; border-radius: 0.5rem; border: 1px solid #e5e7eb;">
+                <h5 style="font-weight: 600; color: #1f2937; margin-bottom: 0.5rem;">Conversation CRUD</h5>
+                <ul style="font-size: 0.875rem; color: #4b5563; list-style: disc; list-style-position: inside;">
+                  <li>✅ Create conversation</li>
+                  <li>✅ Read conversation</li>
+                  <li>✅ Update conversation</li>
+                  <li>✅ User isolation</li>
+                </ul>
+              </div>
+
+              <div style="background: white; padding: 1rem; border-radius: 0.5rem; border: 1px solid #e5e7eb;">
+                <h5 style="font-weight: 600; color: #1f2937; margin-bottom: 0.5rem;">Message Operations</h5>
+                <ul style="font-size: 0.875rem; color: #4b5563; list-style: disc; list-style-position: inside;">
+                  <li>✅ Create messages</li>
+                  <li>✅ Load message history</li>
+                  <li>✅ Cascade delete on conversation</li>
+                  <li>✅ Ordering by timestamp</li>
+                </ul>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
