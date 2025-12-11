@@ -1822,6 +1822,23 @@ const reviewSubmission = async (req, res, next) => {
 
     if (status === 'accepted') {
       await submission.accept(req.user.id, review_notes, score);
+      
+      // Award points for hackathon approval
+      try {
+        const scoringService = require('../services/scoringService');
+        const ranking = submission.ranking || null; // Get ranking if set
+        
+        await scoringService.awardHackathonPoints({
+          studentId: submission.student_id,
+          hackathonId: id,
+          ranking: ranking,
+          approvedBy: req.user.id
+        });
+        logger.info(`Points awarded for hackathon approval: student ${submission.student_id}, hackathon ${id}`);
+      } catch (scoringError) {
+        logger.error('Error awarding hackathon points:', scoringError);
+        // Don't fail the approval if scoring fails
+      }
     } else {
       await submission.reject(req.user.id, review_notes);
     }
@@ -1856,6 +1873,24 @@ const setSubmissionWinner = async (req, res, next) => {
     }
 
     await submission.setWinner(prize, ranking);
+    
+    // Update points if ranking changed (recalculate)
+    if (ranking && submission.status === 'accepted') {
+      try {
+        const scoringService = require('../services/scoringService');
+        // Recalculate to update points based on new ranking
+        await scoringService.awardHackathonPoints({
+          studentId: submission.student_id,
+          hackathonId: id,
+          ranking: ranking,
+          approvedBy: req.user.id
+        });
+        logger.info(`Points updated for hackathon winner: student ${submission.student_id}, hackathon ${id}, ranking ${ranking}`);
+      } catch (scoringError) {
+        logger.error('Error updating hackathon points:', scoringError);
+        // Don't fail if scoring update fails
+      }
+    }
 
     res.json({
       success: true,

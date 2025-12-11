@@ -392,6 +392,21 @@ const submitTest = async (req, res, next) => {
 
         logger.info(`Certificate ${certificateNumber} successfully generated for student ${req.user.email}, course ${course.title} (ID: ${courseIdForCertificate}), test ${test.id}`);
 
+        // Award points for course completion
+        try {
+          const scoringService = require('../services/scoringService');
+          await scoringService.awardCourseCompletionPoints({
+            studentId: req.user.id,
+            courseId: courseIdForCertificate,
+            certificateId: newCertificate.id,
+            courseDifficulty: course.difficulty || 'beginner'
+          });
+          logger.info(`Points awarded for course completion: student ${req.user.id}, course ${courseIdForCertificate}`);
+        } catch (scoringError) {
+          logger.error('Error awarding course completion points:', scoringError);
+          // Don't fail the certificate generation if scoring fails
+        }
+
         // Create Achievement record so it shows up in achievements tab
         try {
           // Check if achievement already exists for this course

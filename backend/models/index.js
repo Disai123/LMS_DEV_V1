@@ -58,6 +58,9 @@ const GroupMember = require('./GroupMember')(sequelize, Sequelize.DataTypes);
 const ChatMessage = require('./ChatMessage')(sequelize, Sequelize.DataTypes);
 const ChatParticipant = require('./ChatParticipant')(sequelize, Sequelize.DataTypes);
 const StudentPermission = require('./StudentPermission')(sequelize, Sequelize.DataTypes);
+const StudentAchievement = require('./StudentAchievement')(sequelize, Sequelize.DataTypes);
+const StudentScore = require('./StudentScore')(sequelize, Sequelize.DataTypes);
+const ScoringRule = require('./ScoringRule')(sequelize, Sequelize.DataTypes);
 
 // Define associations
 const defineAssociations = () => {
@@ -252,6 +255,11 @@ const defineAssociations = () => {
   ProjectProgress.belongsTo(ProjectPhase, {
     foreignKey: 'phase_id',
     as: 'phase'
+  });
+
+  ProjectProgress.belongsTo(User, {
+    foreignKey: 'approved_by',
+    as: 'approvedBy'
   });
 
   // User has many ProjectProgress
@@ -696,6 +704,35 @@ const defineAssociations = () => {
     onDelete: 'SET NULL'
   });
 
+  // StudentAchievement associations
+  User.hasMany(StudentAchievement, {
+    foreignKey: 'student_id',
+    as: 'studentAchievements',
+    onDelete: 'CASCADE'
+  });
+
+  StudentAchievement.belongsTo(User, {
+    foreignKey: 'student_id',
+    as: 'student'
+  });
+
+  StudentAchievement.belongsTo(User, {
+    foreignKey: 'awarded_by',
+    as: 'awardedBy'
+  });
+
+  // StudentScore associations
+  User.hasOne(StudentScore, {
+    foreignKey: 'student_id',
+    as: 'studentScore',
+    onDelete: 'CASCADE'
+  });
+
+  StudentScore.belongsTo(User, {
+    foreignKey: 'student_id',
+    as: 'student'
+  });
+
 };
 
 // Define associations
@@ -734,5 +771,8 @@ module.exports = {
   GroupMember,
   ChatMessage,
   ChatParticipant,
-  StudentPermission
+  StudentPermission,
+  StudentAchievement,
+  StudentScore,
+  ScoringRule
 };

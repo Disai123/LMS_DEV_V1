@@ -15,8 +15,13 @@ router.get('/:projectId/videos', videoController.getProjectVideos);
 router.get('/videos/:id', videoController.getVideoById);
 router.post('/videos/:id/view', videoController.incrementViewCount);
 
-// Admin routes - require authentication
+// Student routes - require authentication
 router.use(auth.authenticate);
+
+// Project submission (Student only)
+router.post('/:projectId/submit', projectController.submitProject);
+
+// Admin routes - require admin role
 router.use(auth.requireAdmin);
 
 // Project CRUD operations
@@ -38,5 +43,10 @@ router.post('/:projectId/videos', videoController.createVideo);
 router.put('/videos/:id', videoController.updateVideo);
 router.delete('/videos/:id', videoController.deleteVideo);
 router.get('/admin/videos/stats', videoController.getVideoStats);
+
+// Project submission management (Admin only)
+router.get('/admin/submissions', projectController.getProjectSubmissions);
+router.post('/:projectId/submissions/:studentId/approve', projectController.approveProjectSubmission);
+router.post('/:projectId/submissions/:studentId/reject', projectController.rejectProjectSubmission);
 
 module.exports = router;

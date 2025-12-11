@@ -226,3 +226,6 @@ logs/
 uploads/
 temp/
 tmp/
+
+# Exclude Dakshath folder (separate project)
+Dakshath/

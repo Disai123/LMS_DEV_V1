@@ -7,6 +7,7 @@ import { courseService } from '../services/courseService'
 import { enrollmentService } from '../services/enrollmentService'
 import { activityService } from '../services/activityService'
 import { hackathonService } from '../services/hackathonService'
+import { scoreService } from '../services/scoreService'
 import { usePermissions } from '../hooks/usePermissions'
 import { useRealtimeProjects } from '../hooks/useRealtimeProjects'
 import ProjectCard from '../components/projects/ProjectCard'
@@ -80,6 +81,19 @@ const StudentDashboard = () => {
     }
   )
 
+  const { data: scoreData, isLoading: scoreLoading, error: scoreError } = useQuery(
+    'student-score',
+    () => scoreService.getMyScore(),
+    {
+      refetchOnWindowFocus: false,
+      staleTime: 5 * 60 * 1000,
+      retry: 1,
+      onError: (error) => {
+        console.error('Score API error:', error)
+      }
+    }
+  )
+
   // const { data: chatRoomsData, isLoading: chatRoomsLoading, error: chatRoomsError } = useQuery(
   //   'student-chat-rooms',
   //   () => chatService.getMyChatRooms(),
@@ -133,7 +147,7 @@ const StudentDashboard = () => {
   const { hasAccess } = usePermissions()
   const { projects: realtimeProjects = [], hasAccess: hasProjectsAccess = false } = useRealtimeProjects({ category: 'all', difficulty: 'all', sort: 'name' })
   
-  const isLoading = coursesLoading || enrollmentsLoading || activitiesLoading || hackathonsLoading
+  const isLoading = coursesLoading || enrollmentsLoading || activitiesLoading || hackathonsLoading || scoreLoading
   const courses = coursesData?.data?.courses || []
   const enrollments = enrollmentsData?.data?.enrollments || []
   const activities = activitiesData?.data?.activities || []
@@ -329,81 +343,131 @@ const StudentDashboard = () => {
             animate={{ opacity: 1, y: 0 }}
             className="space-y-8"
           >
-            {/* Enhanced Welcome Section */}
-            <div className="relative overflow-hidden bg-gradient-to-r from-indigo-600 via-purple-600 to-pink-600 rounded-2xl shadow-2xl">
+            {/* Combined Welcome and Academic Score Section */}
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.2 }}
+              className="relative overflow-hidden bg-gradient-to-r from-indigo-600 via-purple-600 to-pink-600 rounded-2xl shadow-2xl"
+            >
               <div className="absolute inset-0 bg-black/10"></div>
               <div className="absolute top-0 right-0 w-32 h-32 bg-white/10 rounded-full -translate-y-16 translate-x-16"></div>
               <div className="absolute bottom-0 left-0 w-24 h-24 bg-white/5 rounded-full translate-y-12 -translate-x-12"></div>
               
-              <div className="relative px-6 py-8">
-                <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between">
-                  <div className="flex-1">
-                    <motion.div
-                      initial={{ opacity: 0, x: -20 }}
-                      animate={{ opacity: 1, x: 0 }}
-                      transition={{ delay: 0.2 }}
-                    >
-                      <h1 className="text-2xl lg:text-3xl font-bold text-white mb-3">
+              <div className="relative px-5 py-5">
+                <div className="grid grid-cols-1 lg:grid-cols-3 gap-5">
+                  {/* Left: Welcome Section */}
+                  <div className="lg:col-span-1">
+                    <div className="flex items-center justify-between mb-3">
+                      <h1 className="text-xl lg:text-2xl font-bold text-white">
                         Welcome, <span className="text-yellow-300">{user?.name || 'Student'}!</span>
                       </h1>
-                      <p className="text-lg text-indigo-100 mb-4 max-w-2xl">
-                        Continue your learning journey and explore new courses.
-                      </p>
-                      <div className="flex flex-col sm:flex-row gap-3">
-                  <button 
-                    onClick={() => navigate('/courses')}
-                          className="inline-flex items-center justify-center px-4 sm:px-6 py-2 bg-white text-indigo-600 font-semibold rounded-lg hover:bg-indigo-50 transition-all duration-300 shadow-lg hover:shadow-xl transform hover:-translate-y-1"
-                  >
-                          <svg className="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.746 0 3.332.477 4.5 1.253v13C19.832 18.477 18.246 18 16.5 18c-1.746 0-3.332.477-4.5 1.253" />
+                      {scoreData?.data?.master_certificate_issued && (
+                        <div className="flex items-center gap-1.5 bg-yellow-400/20 px-2.5 py-1 rounded-full border border-yellow-300/30">
+                          <svg className="w-4 h-4 text-yellow-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4M7.835 4.697a3.42 3.42 0 001.946-.806 3.42 3.42 0 014.438 0 3.42 3.42 0 001.946.806 3.42 3.42 0 013.138 3.138 3.42 3.42 0 00.806 1.946 3.42 3.42 0 010 4.438 3.42 3.42 0 00-.806 1.946 3.42 3.42 0 01-3.138 3.138 3.42 3.42 0 00-1.946.806 3.42 3.42 0 01-4.438 0 3.42 3.42 0 00-1.946-.806 3.42 3.42 0 01-3.138-3.138 3.42 3.42 0 00-.806-1.946 3.42 3.42 0 010-4.438 3.42 3.42 0 00.806-1.946 3.42 3.42 0 013.138-3.138z" />
                           </svg>
-                    Browse All Courses
-                  </button>
-                        <button 
-                          onClick={() => navigate('/profile')}
-                          className="inline-flex items-center justify-center px-4 sm:px-6 py-2 bg-white/20 text-white font-semibold rounded-lg hover:bg-white/30 transition-all duration-300 backdrop-blur-sm border border-white/30"
-                        >
-                          <svg className="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
-                          </svg>
-                          View Profile
-                        </button>
-                        <button 
-                          onClick={() => navigate('/certificates')}
-                          className="inline-flex items-center justify-center px-4 sm:px-6 py-2 bg-white/20 text-white font-semibold rounded-lg hover:bg-white/30 transition-all duration-300 backdrop-blur-sm border border-white/30"
-                        >
-                          <svg className="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
-                          </svg>
-                          My Certificates
-                        </button>
-                      </div>
-                    </motion.div>
+                          <span className="text-yellow-200 text-xs font-semibold">Master</span>
+                        </div>
+                      )}
+                    </div>
+                    <p className="text-sm text-indigo-100 mb-3">
+                      Continue your learning journey and explore new courses.
+                    </p>
+                    <div className="flex flex-wrap gap-2">
+                      <button 
+                        onClick={() => navigate('/courses')}
+                        className="inline-flex items-center justify-center px-3 py-1.5 bg-white text-indigo-600 text-sm font-semibold rounded-lg hover:bg-indigo-50 transition-all duration-200 shadow-md hover:shadow-lg"
+                      >
+                        <svg className="w-3.5 h-3.5 mr-1.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.746 0 3.332.477 4.5 1.253v13C19.832 18.477 18.246 18 16.5 18c-1.746 0-3.332.477-4.5 1.253" />
+                        </svg>
+                        Browse Courses
+                      </button>
+                      <button 
+                        onClick={() => navigate('/profile')}
+                        className="inline-flex items-center justify-center px-3 py-1.5 bg-white/20 text-white text-sm font-semibold rounded-lg hover:bg-white/30 transition-all duration-200 backdrop-blur-sm border border-white/30"
+                      >
+                        <svg className="w-3.5 h-3.5 mr-1.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
+                        </svg>
+                        Profile
+                      </button>
+                      <button 
+                        onClick={() => navigate('/certificates')}
+                        className="inline-flex items-center justify-center px-3 py-1.5 bg-white/20 text-white text-sm font-semibold rounded-lg hover:bg-white/30 transition-all duration-200 backdrop-blur-sm border border-white/30"
+                      >
+                        <svg className="w-3.5 h-3.5 mr-1.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+                        </svg>
+                        Certificates
+                      </button>
+                    </div>
                   </div>
-                  
-                  <div className="mt-6 lg:mt-0 lg:ml-8">
-                    <motion.div
-                      initial={{ opacity: 0, scale: 0.8 }}
-                      animate={{ opacity: 1, scale: 1 }}
-                      transition={{ delay: 0.4 }}
-                      className="relative"
-                    >
-                      <div className="w-48 h-32 bg-white/10 rounded-xl backdrop-blur-sm border border-white/20 flex items-center justify-center">
-                        <div className="text-center">
-                          <div className="w-12 h-12 bg-white/20 rounded-full flex items-center justify-center mx-auto mb-2">
-                            <svg className="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 10V3L4 14h7v7l9-11h-7z" />
-                            </svg>
-                          </div>
-                          <p className="text-white font-semibold text-sm">Learning Progress</p>
-                          <p className="text-indigo-200 text-xs">Keep up the great work!</p>
+
+                  {/* Right: Academic Score Display */}
+                  {scoreData?.data && (
+                    <div className="lg:col-span-2 border-l-0 lg:border-l border-white/20 pl-0 lg:pl-5">
+                      <h2 className="text-lg font-bold text-white mb-3">Your Academic Score</h2>
+                      
+                      <div className="grid grid-cols-2 md:grid-cols-4 gap-2.5 mb-3">
+                        <div className="bg-white/10 backdrop-blur-sm rounded-lg p-2.5 text-center border border-white/20 hover:bg-white/15 transition-colors">
+                          <p className="text-white/80 text-xs mb-0.5">Total Points</p>
+                          <p className="text-2xl font-bold text-white">
+                            {scoreData?.data?.total_points || 0}
+                            {scoreData?.data?.max_total_points > 0 && (
+                              <span className="text-sm font-normal text-white/70"> / {scoreData.data.max_total_points}</span>
+                            )}
+                          </p>
+                        </div>
+                        <div className="bg-white/10 backdrop-blur-sm rounded-lg p-2.5 text-center border border-white/20 hover:bg-white/15 transition-colors">
+                          <p className="text-white/80 text-xs mb-0.5">Course Points</p>
+                          <p className="text-xl font-bold text-white">
+                            {scoreData?.data?.total_course_points || 0}
+                            {scoreData?.data?.max_course_points > 0 && (
+                              <span className="text-sm font-normal text-white/70"> / {scoreData.data.max_course_points}</span>
+                            )}
+                          </p>
+                        </div>
+                        <div className="bg-white/10 backdrop-blur-sm rounded-lg p-2.5 text-center border border-white/20 hover:bg-white/15 transition-colors">
+                          <p className="text-white/80 text-xs mb-0.5">Project Points</p>
+                          <p className="text-xl font-bold text-white">
+                            {scoreData?.data?.total_project_points || 0}
+                            {scoreData?.data?.max_project_points > 0 && (
+                              <span className="text-sm font-normal text-white/70"> / {scoreData.data.max_project_points}</span>
+                            )}
+                          </p>
+                        </div>
+                        <div className="bg-white/10 backdrop-blur-sm rounded-lg p-2.5 text-center border border-white/20 hover:bg-white/15 transition-colors">
+                          <p className="text-white/80 text-xs mb-0.5">Hackathon Points</p>
+                          <p className="text-xl font-bold text-white">
+                            {scoreData?.data?.total_hackathon_points || 0}
+                            {scoreData?.data?.max_hackathon_points > 0 && (
+                              <span className="text-sm font-normal text-white/70"> / {scoreData.data.max_hackathon_points}</span>
+                            )}
+                          </p>
                         </div>
                       </div>
-                    </motion.div>
-                  </div>
+                      
+                      <div className="grid grid-cols-3 gap-2.5">
+                        <div className="text-center bg-white/5 rounded-lg py-2">
+                          <p className="text-white/70 text-xs mb-0.5">Courses Completed</p>
+                          <p className="text-base font-bold text-white">{scoreData?.data?.courses_completed_count || 0}</p>
+                        </div>
+                        <div className="text-center bg-white/5 rounded-lg py-2">
+                          <p className="text-white/70 text-xs mb-0.5">Projects Approved</p>
+                          <p className="text-base font-bold text-white">{scoreData?.data?.projects_approved_count || 0}</p>
+                        </div>
+                        <div className="text-center bg-white/5 rounded-lg py-2">
+                          <p className="text-white/70 text-xs mb-0.5">Hackathons</p>
+                          <p className="text-base font-bold text-white">{scoreData?.data?.hackathons_approved_count || 0}</p>
+                        </div>
+                      </div>
+                    </div>
+                  )}
                 </div>
               </div>
-            </div>
+            </motion.div>
 
             {/* Enhanced Stats Cards */}
             <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4">

@@ -66,6 +66,47 @@ module.exports = (sequelize, DataTypes) => {
   metadata: {
     type: DataTypes.JSONB,
     defaultValue: {}
+  },
+  submission_url: {
+    type: DataTypes.TEXT,
+    allowNull: true,
+    comment: 'URL to the submitted project (mandatory for final submission)'
+  },
+  submitted_at: {
+    type: DataTypes.DATE,
+    allowNull: true,
+    comment: 'When the project was submitted for review'
+  },
+  admin_approved: {
+    type: DataTypes.BOOLEAN,
+    defaultValue: false,
+    comment: 'Whether admin has approved the project'
+  },
+  approved_by: {
+    type: DataTypes.INTEGER,
+    allowNull: true,
+    references: {
+      model: 'users',
+      key: 'id'
+    },
+    onUpdate: 'CASCADE',
+    onDelete: 'SET NULL',
+    comment: 'Admin who approved the project'
+  },
+  approved_at: {
+    type: DataTypes.DATE,
+    allowNull: true,
+    comment: 'When the project was approved'
+  },
+  points_awarded: {
+    type: DataTypes.INTEGER,
+    defaultValue: 0,
+    comment: 'Points awarded for this project approval'
+  },
+  review_notes: {
+    type: DataTypes.TEXT,
+    allowNull: true,
+    comment: 'Admin review notes'
   }
 }, {
   tableName: 'project_progress',

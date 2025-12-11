@@ -1,5 +1,25 @@
 require('dotenv').config();
 
+// Helper function to determine if database is remote (requires SSL)
+function isRemoteDatabase(host) {
+  return host && 
+         host !== 'localhost' && 
+         host !== '127.0.0.1' && 
+         !host.startsWith('192.168.') &&
+         !host.startsWith('10.');
+}
+
+// Get SSL configuration based on host
+function getSSLConfig(host) {
+  if (isRemoteDatabase(host)) {
+    return {
+      require: true,
+      rejectUnauthorized: false
+    };
+  }
+  return false;
+}
+
 module.exports = {
   development: {
     username: process.env.DB_USER || 'postgres',
@@ -16,7 +36,7 @@ module.exports = {
       idle: 10000
     },
     dialectOptions: {
-      ssl: false
+      ssl: getSSLConfig(process.env.DB_HOST || 'localhost')
     }
   },
   test: {
@@ -34,7 +54,7 @@ module.exports = {
       idle: 10000
     },
     dialectOptions: {
-      ssl: false
+      ssl: getSSLConfig(process.env.DB_HOST)
     }
   },
   production: {
