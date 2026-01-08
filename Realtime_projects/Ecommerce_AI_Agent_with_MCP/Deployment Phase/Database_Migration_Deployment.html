@@ -1,0 +1,181 @@
+<div class="content-body">
+  <div class="content-section">
+    <div style="text-align: center; margin-bottom: 2rem;">
+      <h3 style="font-size: 1.875rem; font-weight: 700; color: #1f2937; margin-bottom: 1rem;">Database Migration & Deployment</h3>
+      <p style="font-size: 1.125rem; color: #4b5563; max-width: 48rem; margin: 0 auto;">
+        Deploy and manage database schema migrations for the askunicart AI agent, ensuring 
+        data integrity and smooth transitions between environments.
+      </p>
+    </div>
+
+    <div class="card" style="margin-bottom: 2rem;">
+      <h4 style="font-size: 1.5rem; font-weight: 600; color: #1f2937; margin-bottom: 1.5rem; text-align: center;">Database Schema Overview</h4>
+      <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 1.5rem; width: 100%;">
+        <div style="background: linear-gradient(to bottom right, #eff6ff, #dbeafe); border-radius: 0.5rem; padding: 1.5rem;">
+          <h5 style="font-weight: 600; color: #1f2937; margin-bottom: 1rem;">Core Models</h5>
+          <ul style="font-size: 0.875rem; color: #4b5563; display: flex; flex-direction: column; gap: 0.5rem; list-style: none; padding: 0;">
+            <li>• <strong>User:</strong> Authentication and user profiles</li>
+            <li>• <strong>Category:</strong> Product categories</li>
+            <li>• <strong>Product:</strong> Product catalog</li>
+            <li>• <strong>Order:</strong> Customer orders</li>
+            <li>• <strong>CartItem:</strong> Shopping cart items</li>
+            <li>• <strong>WishlistItem:</strong> User wishlists</li>
+          </ul>
+        </div>
+        <div style="background: linear-gradient(to bottom right, #f0fdf4, #dcfce7); border-radius: 0.5rem; padding: 1.5rem;">
+          <h5 style="font-weight: 600; color: #1f2937; margin-bottom: 1rem;">AI Agent Models</h5>
+          <ul style="font-size: 0.875rem; color: #4b5563; display: flex; flex-direction: column; gap: 0.5rem; list-style: none; padding: 0;">
+            <li>• <strong>Conversation:</strong> AI chat sessions</li>
+            <li>• <strong>Message:</strong> Individual chat messages</li>
+            <li>• <strong>ToolCall:</strong> AI tool execution logs</li>
+            <li>• <strong>AgentContext:</strong> Conversation context</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <div style="background: linear-gradient(to right, #d1fae5, #a7f3d0); border-radius: 0.75rem; padding: 1.5rem; border: 1px solid #86efac; margin-bottom: 2rem;">
+      <h4 style="font-size: 1.5rem; font-weight: 600; color: #1f2937; margin-bottom: 1.5rem; text-align: center;">Prisma Migration Process</h4>
+      <div style="display: flex; flex-direction: column; gap: 1.5rem;">
+        <div style="background: #ffffff; border-radius: 0.5rem; padding: 1.5rem; box-shadow: 0 1px 3px rgba(0,0,0,0.1);">
+          <h5 style="font-size: 1.125rem; font-weight: 500; color: #1f2937; margin-bottom: 1rem;">1. Generate Prisma Client</h5>
+          <div style="background: #f9fafb; border-radius: 0.5rem; padding: 1rem;">
+            <pre style="font-size: 0.75rem; color: #374151; background: #f3f4f6; padding: 0.75rem; border-radius: 0.25rem; overflow-x: auto; line-height: 1.5;">
+# Generate Prisma Client from schema
+npx prisma generate
+
+# This creates the Prisma Client in node_modules/.prisma/client
+# Required before running migrations
+            </pre>
+          </div>
+        </div>
+
+        <div style="background: #ffffff; border-radius: 0.5rem; padding: 1.5rem; box-shadow: 0 1px 3px rgba(0,0,0,0.1);">
+          <h5 style="font-size: 1.125rem; font-weight: 500; color: #1f2937; margin-bottom: 1rem;">2. Create Migration</h5>
+          <div style="background: #f9fafb; border-radius: 0.5rem; padding: 1rem;">
+            <pre style="font-size: 0.75rem; color: #374151; background: #f3f4f6; padding: 0.75rem; border-radius: 0.25rem; overflow-x: auto; line-height: 1.5;">
+# Create a new migration
+npx prisma migrate dev --name init
+
+# This will:
+# - Create migration files in prisma/migrations/
+# - Apply the migration to your database
+# - Regenerate Prisma Client
+            </pre>
+          </div>
+        </div>
+
+        <div style="background: #ffffff; border-radius: 0.5rem; padding: 1.5rem; box-shadow: 0 1px 3px rgba(0,0,0,0.1);">
+          <h5 style="font-size: 1.125rem; font-weight: 500; color: #1f2937; margin-bottom: 1rem;">3. Deploy Migration to Production</h5>
+          <div style="background: #f9fafb; border-radius: 0.5rem; padding: 1rem;">
+            <pre style="font-size: 0.75rem; color: #374151; background: #f3f4f6; padding: 0.75rem; border-radius: 0.25rem; overflow-x: auto; line-height: 1.5;">
+# Deploy migrations to production (Vercel)
+npx prisma migrate deploy
+
+# This applies pending migrations without:
+# - Creating new migrations
+# - Regenerating Prisma Client
+# - Running seed scripts
+            </pre>
+          </div>
+        </div>
+
+        <div style="background: #ffffff; border-radius: 0.5rem; padding: 1.5rem; box-shadow: 0 1px 3px rgba(0,0,0,0.1);">
+          <h5 style="font-size: 1.125rem; font-weight: 500; color: #1f2937; margin-bottom: 1rem;">4. Push Schema Changes (Development Only)</h5>
+          <div style="background: #f9fafb; border-radius: 0.5rem; padding: 1rem;">
+            <pre style="font-size: 0.75rem; color: #374151; background: #f3f4f6; padding: 0.75rem; border-radius: 0.25rem; overflow-x: auto; line-height: 1.5;">
+# Push schema changes directly (dev only)
+npx prisma db push
+
+# WARNING: Use only in development
+# This does not create migration files
+# Use migrate dev for production workflows
+            </pre>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="card" style="margin-bottom: 2rem;">
+      <h4 style="font-size: 1.5rem; font-weight: 600; color: #1f2937; margin-bottom: 1.5rem; text-align: center;">Vercel Deployment Configuration</h4>
+      <div style="display: flex; flex-direction: column; gap: 1.5rem;">
+        <div style="background: #fff7ed; border-radius: 0.5rem; padding: 1.5rem;">
+          <h5 style="font-weight: 500; color: #1f2937; margin-bottom: 1rem;">Postinstall Script</h5>
+          <p style="font-size: 0.875rem; color: #4b5563; margin-bottom: 1rem;">
+            Add to <code style="background: #f3f4f6; padding: 0.125rem 0.25rem; border-radius: 0.25rem;">package.json</code> to automatically generate Prisma Client on deployment:
+          </p>
+          <div style="background: #f9fafb; border-radius: 0.5rem; padding: 1rem;">
+            <pre style="font-size: 0.75rem; color: #374151; background: #f3f4f6; padding: 0.75rem; border-radius: 0.25rem; overflow-x: auto; line-height: 1.5;">
+{
+  "scripts": {
+    "postinstall": "prisma generate"
+  }
+}
+            </pre>
+          </div>
+        </div>
+
+        <div style="background: #f0fdf4; border-radius: 0.5rem; padding: 1.5rem;">
+          <h5 style="font-weight: 500; color: #1f2937; margin-bottom: 1rem;">Vercel Build Configuration</h5>
+          <p style="font-size: 0.875rem; color: #4b5563; margin-bottom: 1rem;">
+            Configure <code style="background: #f3f4f6; padding: 0.125rem 0.25rem; border-radius: 0.25rem;">vercel.json</code> for proper build settings:
+          </p>
+          <div style="background: #f9fafb; border-radius: 0.5rem; padding: 1rem;">
+            <pre style="font-size: 0.75rem; color: #374151; background: #f3f4f6; padding: 0.75rem; border-radius: 0.25rem; overflow-x: auto; line-height: 1.5;">
+{
+  "buildCommand": "npm run build",
+  "framework": "nextjs",
+  "functions": {
+    "app/api/**/*.ts": {
+      "maxDuration": 30
+    }
+  }
+}
+            </pre>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div style="background: linear-gradient(to right, #fef2f2, #fee2e2); border-radius: 0.75rem; padding: 1.5rem; border: 1px solid #fecaca;">
+      <h4 style="font-size: 1.5rem; font-weight: 600; color: #1f2937; margin-bottom: 1.5rem; text-align: center;">Database Migration Checklist</h4>
+      <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 1.5rem; width: 100%;">
+        <div>
+          <h5 style="font-size: 1.125rem; font-weight: 500; color: #1f2937; margin-bottom: 1rem;">Pre-Migration</h5>
+          <div style="display: flex; flex-direction: column; gap: 0.5rem;">
+            <div style="display: flex; align-items: center; gap: 0.75rem; padding: 0.75rem; background: #ffffff; border-radius: 0.5rem; box-shadow: 0 1px 3px rgba(0,0,0,0.1);">
+              <div style="width: 1.5rem; height: 1.5rem; background: #10b981; color: #ffffff; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 0.875rem; font-weight: 700;">✓</div>
+              <span style="font-size: 0.875rem; color: #374151;">Backup production database</span>
+            </div>
+            <div style="display: flex; align-items: center; gap: 0.75rem; padding: 0.75rem; background: #ffffff; border-radius: 0.5rem; box-shadow: 0 1px 3px rgba(0,0,0,0.1);">
+              <div style="width: 1.5rem; height: 1.5rem; background: #10b981; color: #ffffff; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 0.875rem; font-weight: 700;">✓</div>
+              <span style="font-size: 0.875rem; color: #374151;">Test migration on staging</span>
+            </div>
+            <div style="display: flex; align-items: center; gap: 0.75rem; padding: 0.75rem; background: #ffffff; border-radius: 0.5rem; box-shadow: 0 1px 3px rgba(0,0,0,0.1);">
+              <div style="width: 1.5rem; height: 1.5rem; background: #10b981; color: #ffffff; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 0.875rem; font-weight: 700;">✓</div>
+              <span style="font-size: 0.875rem; color: #374151;">Verify DATABASE_URL is correct</span>
+            </div>
+          </div>
+        </div>
+        <div>
+          <h5 style="font-size: 1.125rem; font-weight: 500; color: #1f2937; margin-bottom: 1rem;">Post-Migration</h5>
+          <div style="display: flex; flex-direction: column; gap: 0.5rem;">
+            <div style="display: flex; align-items: center; gap: 0.75rem; padding: 0.75rem; background: #ffffff; border-radius: 0.5rem; box-shadow: 0 1px 3px rgba(0,0,0,0.1);">
+              <div style="width: 1.5rem; height: 1.5rem; background: #10b981; color: #ffffff; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 0.875rem; font-weight: 700;">✓</div>
+              <span style="font-size: 0.875rem; color: #374151;">Verify schema changes applied</span>
+            </div>
+            <div style="display: flex; align-items: center; gap: 0.75rem; padding: 0.75rem; background: #ffffff; border-radius: 0.5rem; box-shadow: 0 1px 3px rgba(0,0,0,0.1);">
+              <div style="width: 1.5rem; height: 1.5rem; background: #10b981; color: #ffffff; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 0.875rem; font-weight: 700;">✓</div>
+              <span style="font-size: 0.875rem; color: #374151;">Test application functionality</span>
+            </div>
+            <div style="display: flex; align-items: center; gap: 0.75rem; padding: 0.75rem; background: #ffffff; border-radius: 0.5rem; box-shadow: 0 1px 3px rgba(0,0,0,0.1);">
+              <div style="width: 1.5rem; height: 1.5rem; background: #10b981; color: #ffffff; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 0.875rem; font-weight: 700;">✓</div>
+              <span style="font-size: 0.875rem; color: #374151;">Monitor for errors and performance</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+

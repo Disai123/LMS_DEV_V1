@@ -1,0 +1,181 @@
+<div class="content-body">
+  <div class="content-section">
+    <h3 class="content-heading">Chat Interface Design</h3>
+    <div style="max-width: none;">
+      <p style="color: #4b5563; line-height: 1.75; margin-bottom: 1.5rem;">
+        The chat interface is the primary touchpoint between users and the AI agent. This section details the design 
+        specifications for all chat UI components, ensuring a cohesive and intuitive user experience.
+      </p>
+      
+      <div style="display: flex; flex-direction: column; gap: 2rem;">
+        <!-- Chat Button -->
+        <div class="card">
+          <h4 style="font-size: 1.25rem; font-weight: 600; color: #1f2937; margin-bottom: 1.5rem; display: flex; align-items: center; gap: 0.5rem;">
+            <span style="font-size: 1.5rem;">🔵</span>
+            Chat Button (Floating)
+          </h4>
+          
+          <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 1.5rem;">
+            <div style="background: #eff6ff; border-radius: 0.5rem; padding: 1rem;">
+              <h5 style="font-weight: 600; color: #1f2937; margin-bottom: 0.75rem;">Specifications</h5>
+              <ul style="font-size: 0.875rem; color: #4b5563; list-style: disc; list-style-position: inside; display: flex; flex-direction: column; gap: 0.25rem;">
+                <li><strong>Size:</strong> 56px × 56px (desktop), 48px × 48px (mobile)</li>
+                <li><strong>Shape:</strong> Circular with rounded corners</li>
+                <li><strong>Position:</strong> Fixed, bottom-right (24px from edges)</li>
+                <li><strong>Z-index:</strong> 9999 (always on top)</li>
+                <li><strong>Background:</strong> Blue gradient (#3b82f6 to #2563eb)</li>
+                <li><strong>Icon:</strong> MessageCircle icon, white color</li>
+                <li><strong>Shadow:</strong> Large shadow for depth</li>
+                <li><strong>Hover:</strong> Scale to 1.1, darker blue</li>
+              </ul>
+            </div>
+
+            <div style="background: #f0fdf4; border-radius: 0.5rem; padding: 1rem;">
+              <h5 style="font-weight: 600; color: #1f2937; margin-bottom: 0.75rem;">States</h5>
+              <ul style="font-size: 0.875rem; color: #4b5563; list-style: disc; list-style-position: inside; display: flex; flex-direction: column; gap: 0.25rem;">
+                <li><strong>Default:</strong> Visible when chat is closed</li>
+                <li><strong>Hidden:</strong> Hidden when chat window is open</li>
+                <li><strong>Hover:</strong> Slight scale and shadow increase</li>
+                <li><strong>Active:</strong> Pressed state with scale down</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+
+        <!-- Chat Window -->
+        <div class="card">
+          <h4 style="font-size: 1.25rem; font-weight: 600; color: #1f2937; margin-bottom: 1.5rem; display: flex; align-items: center; gap: 0.5rem;">
+            <span style="font-size: 1.5rem;">💬</span>
+            Chat Window
+          </h4>
+          
+          <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 1.5rem;">
+            <div style="background: #eff6ff; border-radius: 0.5rem; padding: 1rem;">
+              <h5 style="font-weight: 600; color: #1f2937; margin-bottom: 0.75rem;">Layout</h5>
+              <ul style="font-size: 0.875rem; color: #4b5563; list-style: disc; list-style-position: inside; display: flex; flex-direction: column; gap: 0.25rem;">
+                <li><strong>Dimensions:</strong> 400px × 600px (desktop)</li>
+                <li><strong>Position:</strong> Fixed, bottom-right</li>
+                <li><strong>Border Radius:</strong> 12px (rounded corners)</li>
+                <li><strong>Shadow:</strong> Large shadow (2xl)</li>
+                <li><strong>Background:</strong> White (#FFFFFF)</li>
+                <li><strong>Structure:</strong> Header, Messages, Input</li>
+              </ul>
+            </div>
+
+            <div style="background: #f0fdf4; border-radius: 0.5rem; padding: 1rem;">
+              <h5 style="font-weight: 600; color: #1f2937; margin-bottom: 0.75rem;">Header</h5>
+              <ul style="font-size: 0.875rem; color: #4b5563; list-style: disc; list-style-position: inside; display: flex; flex-direction: column; gap: 0.25rem;">
+                <li><strong>Background:</strong> Blue (#3b82f6)</li>
+                <li><strong>Text:</strong> White, "askunicart" title</li>
+                <li><strong>Actions:</strong> Clear chat, Close button</li>
+                <li><strong>Height:</strong> 48px</li>
+                <li><strong>Padding:</strong> 12px 16px</li>
+              </ul>
+            </div>
+
+            <div style="background: #fef2f2; border-radius: 0.5rem; padding: 1rem;">
+              <h5 style="font-weight: 600; color: #1f2937; margin-bottom: 0.75rem;">Messages Area</h5>
+              <ul style="font-size: 0.875rem; color: #4b5563; list-style: disc; list-style-position: inside; display: flex; flex-direction: column; gap: 0.25rem;">
+                <li><strong>Scrollable:</strong> Vertical scroll with auto-scroll</li>
+                <li><strong>Padding:</strong> 16px</li>
+                <li><strong>Empty State:</strong> Welcome message with icon</li>
+                <li><strong>Spacing:</strong> 16px gap between messages</li>
+                <li><strong>Max Height:</strong> Flexible (fills available space)</li>
+              </ul>
+            </div>
+
+            <div style="background: #faf5ff; border-radius: 0.5rem; padding: 1rem;">
+              <h5 style="font-weight: 600; color: #1f2937; margin-bottom: 0.75rem;">Input Area</h5>
+              <ul style="font-size: 0.875rem; color: #4b5563; list-style: disc; list-style-position: inside; display: flex; flex-direction: column; gap: 0.25rem;">
+                <li><strong>Text Input:</strong> Full width, rounded</li>
+                <li><strong>Send Button:</strong> Icon button, right side</li>
+                <li><strong>Placeholder:</strong> "Type your message..."</li>
+                <li><strong>Disabled:</strong> When loading or empty</li>
+                <li><strong>Padding:</strong> 12px 16px</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+
+        <!-- Message Bubbles -->
+        <div class="card">
+          <h4 style="font-size: 1.25rem; font-weight: 600; color: #1f2937; margin-bottom: 1.5rem; display: flex; align-items: center; gap: 0.5rem;">
+            <span style="font-size: 1.5rem;">💭</span>
+            Message Bubbles
+          </h4>
+          
+          <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 1.5rem;">
+            <div style="background: #eff6ff; border-radius: 0.5rem; padding: 1rem; border-left: 4px solid #3b82f6;">
+              <h5 style="font-weight: 600; color: #1f2937; margin-bottom: 0.75rem;">User Messages</h5>
+              <ul style="font-size: 0.875rem; color: #4b5563; list-style: disc; list-style-position: inside; display: flex; flex-direction: column; gap: 0.25rem;">
+                <li><strong>Alignment:</strong> Right-aligned</li>
+                <li><strong>Background:</strong> Blue (#3b82f6)</li>
+                <li><strong>Text Color:</strong> White</li>
+                <li><strong>Border Radius:</strong> 12px (rounded)</li>
+                <li><strong>Max Width:</strong> 80% of chat width</li>
+                <li><strong>Padding:</strong> 12px 16px</li>
+                <li><strong>Font Size:</strong> 14px</li>
+              </ul>
+            </div>
+
+            <div style="background: #f3f4f6; border-radius: 0.5rem; padding: 1rem; border-left: 4px solid #6b7280;">
+              <h5 style="font-weight: 600; color: #1f2937; margin-bottom: 0.75rem;">AI Messages</h5>
+              <ul style="font-size: 0.875rem; color: #4b5563; list-style: disc; list-style-position: inside; display: flex; flex-direction: column; gap: 0.25rem;">
+                <li><strong>Alignment:</strong> Left-aligned</li>
+                <li><strong>Background:</strong> Light gray (#f3f4f6)</li>
+                <li><strong>Text Color:</strong> Dark gray (#1f2937)</li>
+                <li><strong>Border Radius:</strong> 12px (rounded)</li>
+                <li><strong>Max Width:</strong> 80% of chat width</li>
+                <li><strong>Padding:</strong> 12px 16px</li>
+                <li><strong>Font Size:</strong> 14px</li>
+                <li><strong>Line Height:</strong> 1.5 (readable)</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+
+        <!-- Loading States -->
+        <div class="card">
+          <h4 style="font-size: 1.25rem; font-weight: 600; color: #1f2937; margin-bottom: 1.5rem; display: flex; align-items: center; gap: 0.5rem;">
+            <span style="font-size: 1.5rem;">⏳</span>
+            Loading & Error States
+          </h4>
+          
+          <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 1.5rem;">
+            <div style="background: #faf5ff; border-radius: 0.5rem; padding: 1rem;">
+              <h5 style="font-weight: 600; color: #1f2937; margin-bottom: 0.75rem;">Loading Indicator</h5>
+              <ul style="font-size: 0.875rem; color: #4b5563; list-style: disc; list-style-position: inside; display: flex; flex-direction: column; gap: 0.25rem;">
+                <li><strong>Type:</strong> Animated spinner (Loader2 icon)</li>
+                <li><strong>Position:</strong> Left-aligned (AI message style)</li>
+                <li><strong>Animation:</strong> Rotating, smooth</li>
+                <li><strong>Color:</strong> Gray (#6b7280)</li>
+                <li><strong>Size:</strong> 20px × 20px</li>
+              </ul>
+            </div>
+
+            <div style="background: #fef2f2; border-radius: 0.5rem; padding: 1rem;">
+              <h5 style="font-weight: 600; color: #1f2937; margin-bottom: 0.75rem;">Error Messages</h5>
+              <ul style="font-size: 0.875rem; color: #4b5563; list-style: disc; list-style-position: inside; display: flex; flex-direction: column; gap: 0.25rem;">
+                <li><strong>Style:</strong> Red text or border</li>
+                <li><strong>Position:</strong> Inline with message or toast</li>
+                <li><strong>Message:</strong> User-friendly error text</li>
+                <li><strong>Action:</strong> Retry option when applicable</li>
+              </ul>
+            </div>
+
+            <div style="background: #fffbeb; border-radius: 0.5rem; padding: 1rem;">
+              <h5 style="font-weight: 600; color: #1f2937; margin-bottom: 0.75rem;">Empty State</h5>
+              <ul style="font-size: 0.875rem; color: #4b5563; list-style: disc; list-style-position: inside; display: flex; flex-direction: column; gap: 0.25rem;">
+                <li><strong>Icon:</strong> Large MessageCircle icon</li>
+                <li><strong>Text:</strong> Welcome message</li>
+                <li><strong>Subtext:</strong> Example queries</li>
+                <li><strong>Centered:</strong> Vertically and horizontally</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+

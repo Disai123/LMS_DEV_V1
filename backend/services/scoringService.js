@@ -27,7 +27,7 @@ class ScoringService {
    */
   async awardCourseCompletionPoints({ studentId, courseId, certificateId, courseDifficulty = 'beginner' }) {
     const transaction = await sequelize.transaction();
-    
+
     try {
       // Check if achievement already exists
       const existing = await StudentAchievement.checkExists(
@@ -55,7 +55,7 @@ class ScoringService {
       const achievement = await StudentAchievement.create({
         student_id: studentId,
         achievement_type: 'course_completion',
-        source_id: courseId,
+        source_id: String(courseId), // Convert to string to match VARCHAR column
         source_type: 'course',
         points_awarded: points,
         metadata: {
@@ -73,7 +73,7 @@ class ScoringService {
 
       await transaction.commit();
       logger.info(`Awarded ${points} points for course completion: student ${studentId}, course ${courseId}`);
-      
+
       return achievement;
     } catch (error) {
       await transaction.rollback();
@@ -87,7 +87,7 @@ class ScoringService {
    */
   async awardProjectPoints({ studentId, projectId, approvedBy, projectDifficulty = 'intermediate' }) {
     const transaction = await sequelize.transaction();
-    
+
     try {
       // Check if achievement already exists
       const existing = await StudentAchievement.checkExists(
@@ -121,7 +121,7 @@ class ScoringService {
       const achievement = await StudentAchievement.create({
         student_id: studentId,
         achievement_type: 'project_approval',
-        source_id: projectId,
+        source_id: String(projectId), // Convert to string to match VARCHAR column
         source_type: 'project',
         points_awarded: points,
         awarded_by: approvedBy,
@@ -136,7 +136,7 @@ class ScoringService {
 
       await transaction.commit();
       logger.info(`Awarded ${points} points for project approval: student ${studentId}, project ${projectId}`);
-      
+
       return achievement;
     } catch (error) {
       await transaction.rollback();
@@ -150,7 +150,7 @@ class ScoringService {
    */
   async awardHackathonPoints({ studentId, hackathonId, ranking = null, approvedBy }) {
     const transaction = await sequelize.transaction();
-    
+
     try {
       // Check if achievement already exists
       const existing = await StudentAchievement.checkExists(
@@ -198,7 +198,7 @@ class ScoringService {
       const achievement = await StudentAchievement.create({
         student_id: studentId,
         achievement_type: 'hackathon_approval',
-        source_id: hackathonId,
+        source_id: String(hackathonId), // Convert to string to match VARCHAR column
         source_type: 'hackathon',
         points_awarded: points,
         awarded_by: approvedBy,
@@ -214,11 +214,61 @@ class ScoringService {
 
       await transaction.commit();
       logger.info(`Awarded ${points} points for hackathon approval: student ${studentId}, hackathon ${hackathonId}, ranking ${ranking}`);
-      
+
       return achievement;
     } catch (error) {
       await transaction.rollback();
       logger.error('Error awarding hackathon points:', error);
+      throw error;
+    }
+  }
+
+  /**
+   * Award points for realtime project completion
+   */
+  async awardRealtimeProjectPoints({ studentId, projectId, projectName, difficulty = 'intermediate' }) {
+    const transaction = await sequelize.transaction();
+
+    try {
+      // Check if achievement already exists
+      const existing = await StudentAchievement.checkExists(
+        studentId,
+        'realtime_project_completion',
+        projectId
+      );
+
+      if (existing) {
+        logger.info(`Realtime project completion achievement already exists for student ${studentId}, project ${projectId}`);
+        await transaction.rollback();
+        return existing;
+      }
+
+      // Get points from scoring rules based on difficulty
+      const points = await this.getPointsForRule('realtime_project_completion', difficulty);
+
+      // Create achievement record
+      const achievement = await StudentAchievement.create({
+        student_id: studentId,
+        achievement_type: 'realtime_project_completion',
+        source_id: String(projectId), // Convert to string to match VARCHAR column
+        source_type: 'realtime_project',
+        points_awarded: points,
+        metadata: {
+          project_name: projectName,
+          project_difficulty: difficulty
+        }
+      }, { transaction });
+
+      // Recalculate student scores
+      await this.recalculateStudentScores(studentId, transaction);
+
+      await transaction.commit();
+      logger.info(`Awarded ${points} points for realtime project completion: student ${studentId}, project ${projectId}`);
+
+      return achievement;
+    } catch (error) {
+      await transaction.rollback();
+      logger.error('Error awarding realtime project points:', error);
       throw error;
     }
   }
@@ -263,7 +313,7 @@ class ScoringService {
       }, { transaction });
 
       logger.info(`Awarded ${points} points for master certificate: student ${studentId}`);
-      
+
       return achievement;
     } catch (error) {
       logger.error('Error awarding master certificate points:', error);
@@ -292,7 +342,7 @@ class ScoringService {
           if (ach.achievement_type === 'course_completion') {
             acc.courses_count++;
           }
-        } else if (ach.achievement_type === 'project_approval') {
+        } else if (ach.achievement_type === 'project_approval' || ach.achievement_type === 'realtime_project_completion') {
           acc.project_points += ach.points_awarded;
           acc.projects_count++;
         } else if (ach.achievement_type === 'hackathon_approval') {
@@ -325,7 +375,7 @@ class ScoringService {
       }, { transaction });
 
       logger.info(`Recalculated scores for student ${studentId}: Total = ${totals.course_points + totals.project_points + totals.hackathon_points}`);
-      
+
       return studentScore;
     } catch (error) {
       logger.error('Error recalculating student scores:', error);
@@ -383,7 +433,7 @@ class ScoringService {
       if (allCompleted) {
         // Issue master certificate
         const masterCertPoints = await this.getPointsForRule('master_certificate', 'default');
-        
+
         await this.awardMasterCertificatePoints({
           studentId,
           points: masterCertPoints,
@@ -394,7 +444,7 @@ class ScoringService {
         await this.recalculateStudentScores(studentId, transaction);
 
         logger.info(`Master certificate issued to student ${studentId}`);
-        
+
         return {
           eligible: true,
           issued: true,

@@ -18,13 +18,13 @@ module.exports = (sequelize, DataTypes) => {
       onDelete: 'CASCADE'
     },
     achievement_type: {
-      type: DataTypes.ENUM('course_completion', 'project_approval', 'hackathon_approval', 'master_certificate'),
+      type: DataTypes.ENUM('course_completion', 'project_approval', 'hackathon_approval', 'realtime_project_completion', 'master_certificate'),
       allowNull: false
     },
     source_id: {
-      type: DataTypes.INTEGER,
+      type: DataTypes.STRING(255),
       allowNull: false,
-      comment: 'course_id, project_id, or hackathon_id'
+      comment: 'course_id, project_id, hackathon_id, or realtime_project_id (can be string or integer)'
     },
     source_type: {
       type: DataTypes.STRING(50),
@@ -89,13 +89,13 @@ module.exports = (sequelize, DataTypes) => {
   });
 
   // Instance methods
-  StudentAchievement.prototype.toJSON = function() {
+  StudentAchievement.prototype.toJSON = function () {
     const values = Object.assign({}, this.get());
     return values;
   };
 
   // Class methods
-  StudentAchievement.findByStudent = function(studentId, options = {}) {
+  StudentAchievement.findByStudent = function (studentId, options = {}) {
     return this.findAll({
       where: {
         student_id: studentId,
@@ -107,7 +107,7 @@ module.exports = (sequelize, DataTypes) => {
     });
   };
 
-  StudentAchievement.findByType = function(studentId, achievementType) {
+  StudentAchievement.findByType = function (studentId, achievementType) {
     return this.findAll({
       where: {
         student_id: studentId,
@@ -118,12 +118,12 @@ module.exports = (sequelize, DataTypes) => {
     });
   };
 
-  StudentAchievement.checkExists = function(studentId, achievementType, sourceId) {
+  StudentAchievement.checkExists = function (studentId, achievementType, sourceId) {
     return this.findOne({
       where: {
         student_id: studentId,
         achievement_type: achievementType,
-        source_id: sourceId,
+        source_id: String(sourceId), // Convert to string to match VARCHAR column
         is_active: true
       }
     });

@@ -58,8 +58,8 @@ const getStudentPermissions = async (req, res) => {
         // Student doesn't have permissions yet - use defaults
         permissions[student.id] = {
           courses: true, // Default access to courses
-          hackathons: false,
-          realtimeProjects: false
+          hackathons: true,
+          realtimeProjects: true
         };
       }
     });
@@ -86,7 +86,7 @@ const getStudentPermissions = async (req, res) => {
 const updateStudentPermissions = async (req, res) => {
   try {
     const { permissions } = req.body;
-    
+
     if (!permissions || typeof permissions !== 'object') {
       return res.status(400).json({
         success: false,
@@ -101,97 +101,97 @@ const updateStudentPermissions = async (req, res) => {
     // Use database transaction to ensure all updates are committed
     const result = await sequelize.transaction(async (t) => {
       const updatePromises = Object.entries(permissions).map(async ([studentId, studentPermissions]) => {
-      try {
-        // Check if student exists
-        const student = await User.findOne({
-          where: { 
-            id: studentId,
-            role: 'student' 
-          },
-          transaction: t
-        });
+        try {
+          // Check if student exists
+          const student = await User.findOne({
+            where: {
+              id: studentId,
+              role: 'student'
+            },
+            transaction: t
+          });
 
-        if (!student) {
-          console.warn(`Student with ID ${studentId} not found`);
-          return;
-        }
+          if (!student) {
+            console.warn(`Student with ID ${studentId} not found`);
+            return;
+          }
 
-        // Skip if studentPermissions is empty or has no valid values
-        if (!studentPermissions || 
-            (studentPermissions.courses === undefined && 
-             studentPermissions.hackathons === undefined && 
-             studentPermissions.realtimeProjects === undefined)) {
-          console.log(`Skipping student ${studentId} - no permission values provided`);
-          return;
-        }
+          // Skip if studentPermissions is empty or has no valid values
+          if (!studentPermissions ||
+            (studentPermissions.courses === undefined &&
+              studentPermissions.hackathons === undefined &&
+              studentPermissions.realtimeProjects === undefined)) {
+            console.log(`Skipping student ${studentId} - no permission values provided`);
+            return;
+          }
 
-        // Find or create permission record
-        const [permission, created] = await StudentPermission.findOrCreate({
-          where: { student_id: studentId },
-          defaults: {
-            student_id: studentId,
-            courses: studentPermissions.courses !== undefined ? studentPermissions.courses : true,
-            hackathons: studentPermissions.hackathons !== undefined ? studentPermissions.hackathons : false,
-            realtime_projects: studentPermissions.realtimeProjects !== undefined ? studentPermissions.realtimeProjects : false
-          },
-          transaction: t
-        });
+          // Find or create permission record
+          const [permission, created] = await StudentPermission.findOrCreate({
+            where: { student_id: studentId },
+            defaults: {
+              student_id: studentId,
+              courses: studentPermissions.courses !== undefined ? studentPermissions.courses : true,
+              hackathons: studentPermissions.hackathons !== undefined ? studentPermissions.hackathons : false,
+              realtime_projects: studentPermissions.realtimeProjects !== undefined ? studentPermissions.realtimeProjects : false
+            },
+            transaction: t
+          });
 
-        if (!created) {
-          // Update existing permission - force update with provided values
-          const updateData = {
-            courses: studentPermissions.courses,
-            hackathons: studentPermissions.hackathons,
-            realtime_projects: studentPermissions.realtimeProjects
-          };
-          
-          console.log(`Student ${studentId} - Update data prepared:`, updateData);
-          console.log(`Student ${studentId} - Current permission values:`, {
+          if (!created) {
+            // Update existing permission - force update with provided values
+            const updateData = {
+              courses: studentPermissions.courses,
+              hackathons: studentPermissions.hackathons,
+              realtime_projects: studentPermissions.realtimeProjects
+            };
+
+            console.log(`Student ${studentId} - Update data prepared:`, updateData);
+            console.log(`Student ${studentId} - Current permission values:`, {
+              courses: permission.courses,
+              hackathons: permission.hackathons,
+              realtime_projects: permission.realtime_projects
+            });
+
+            // Force update with the provided data
+            console.log(`Updating student ${studentId} with data:`, updateData);
+            console.log(`Current permission record before update:`, {
+              id: permission.id,
+              student_id: permission.student_id,
+              courses: permission.courses,
+              hackathons: permission.hackathons,
+              realtime_projects: permission.realtime_projects
+            });
+
+            await permission.update(updateData, { transaction: t });
+
+            // Reload the permission to verify the update
+            await permission.reload({ transaction: t });
+
+            console.log(`✅ Successfully updated permissions for student ${studentId}`);
+            console.log(`Permission record after update:`, {
+              id: permission.id,
+              student_id: permission.student_id,
+              courses: permission.courses,
+              hackathons: permission.hackathons,
+              realtime_projects: permission.realtime_projects
+            });
+          } else {
+            console.log(`✅ Created new permission record for student ${studentId}`);
+          }
+
+          console.log(`Final permissions for student ${studentId}:`, {
             courses: permission.courses,
             hackathons: permission.hackathons,
             realtime_projects: permission.realtime_projects
           });
-          
-          // Force update with the provided data
-          console.log(`Updating student ${studentId} with data:`, updateData);
-          console.log(`Current permission record before update:`, {
-            id: permission.id,
-            student_id: permission.student_id,
-            courses: permission.courses,
-            hackathons: permission.hackathons,
-            realtime_projects: permission.realtime_projects
-          });
-          
-          await permission.update(updateData, { transaction: t });
-          
-          // Reload the permission to verify the update
-          await permission.reload({ transaction: t });
-          
-          console.log(`✅ Successfully updated permissions for student ${studentId}`);
-          console.log(`Permission record after update:`, {
-            id: permission.id,
-            student_id: permission.student_id,
-            courses: permission.courses,
-            hackathons: permission.hackathons,
-            realtime_projects: permission.realtime_projects
-          });
-        } else {
-          console.log(`✅ Created new permission record for student ${studentId}`);
+        } catch (error) {
+          console.error(`Error updating permissions for student ${studentId}:`, error);
+          throw error;
         }
-
-        console.log(`Final permissions for student ${studentId}:`, {
-          courses: permission.courses,
-          hackathons: permission.hackathons,
-          realtime_projects: permission.realtime_projects
-        });
-      } catch (error) {
-        console.error(`Error updating permissions for student ${studentId}:`, error);
-        throw error;
-      }
-    });
+      });
 
       await Promise.all(updatePromises);
-      
+
       // Final verification - check if updates were actually committed
       console.log('🔍 Verifying updates were committed...');
       for (const [studentId] of Object.entries(permissions)) {
@@ -207,17 +207,17 @@ const updateStudentPermissions = async (req, res) => {
           });
         }
       }
-      
+
       return true; // Transaction successful
     });
 
     console.log('✅ Database transaction completed successfully');
     console.log('🎉 All permission updates have been committed to the database');
 
-  res.json({
-    success: true,
-    message: 'Student permissions updated successfully'
-  });
+    res.json({
+      success: true,
+      message: 'Student permissions updated successfully'
+    });
 
   } catch (error) {
     console.error('Error updating student permissions:', error);
@@ -238,9 +238,9 @@ const getStudentPermission = async (req, res) => {
 
     // Check if student exists
     const student = await User.findOne({
-      where: { 
+      where: {
         id: studentId,
-        role: 'student' 
+        role: 'student'
       },
       attributes: ['id', 'name', 'email', 'avatar']
     });
@@ -263,8 +263,8 @@ const getStudentPermission = async (req, res) => {
       realtimeProjects: permission.realtime_projects
     } : {
       courses: true, // Default access to courses
-      hackathons: false,
-      realtimeProjects: false
+      hackathons: true,
+      realtimeProjects: true
     };
 
     res.json({
@@ -296,9 +296,9 @@ const updateStudentPermission = async (req, res) => {
 
     // Check if student exists
     const student = await User.findOne({
-      where: { 
+      where: {
         id: studentId,
-        role: 'student' 
+        role: 'student'
       }
     });
 
@@ -367,9 +367,9 @@ const checkStudentAccess = async (req, res) => {
 
     // Check if student exists
     const student = await User.findOne({
-      where: { 
+      where: {
         id: studentId,
-        role: 'student' 
+        role: 'student'
       }
     });
 
@@ -388,8 +388,8 @@ const checkStudentAccess = async (req, res) => {
     // Default permissions
     const defaultPermissions = {
       courses: true,
-      hackathons: false,
-      realtimeProjects: false
+      hackathons: true,
+      realtimeProjects: true
     };
 
     // Map feature names to database field names
@@ -458,8 +458,8 @@ const getMyPermissions = async (req, res) => {
         realtimeProjects: permission.realtime_projects
       } : {
         courses: true, // Default access to courses
-        hackathons: false,
-        realtimeProjects: false
+        hackathons: true,
+        realtimeProjects: true
       };
 
       return res.json({

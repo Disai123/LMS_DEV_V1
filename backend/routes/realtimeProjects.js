@@ -13,7 +13,10 @@ const {
 // Diagnostic endpoint (no auth required for debugging)
 router.get('/diagnose', diagnoseProjects);
 
-// All routes require authentication
+// Public endpoint for landing page (no auth required)
+router.get('/public', getProjectsList);
+
+// All other routes require authentication
 router.use(authenticate);
 
 // Get all projects (for students with permission)
@@ -35,14 +38,14 @@ router.get('/shared/*', (req, res, next) => {
   // Check the referer to get the projectId
   const referer = req.get('referer') || '';
   const projectIdMatch = referer.match(/\/api\/realtime-projects\/([^\/]+)/);
-  
+
   if (projectIdMatch && projectIdMatch[1]) {
     const projectId = projectIdMatch[1];
     const resourcePath = req.params[0] || '';
     console.log(`[Route Fix] Redirecting malformed request: /shared/${resourcePath} -> /${projectId}/shared/${resourcePath}`);
     return res.redirect(`/api/realtime-projects/${projectId}/shared/${resourcePath}${req.query.token ? `?token=${req.query.token}` : ''}`);
   }
-  
+
   // If we can't determine the project, return a helpful error
   return res.status(400).json({
     success: false,

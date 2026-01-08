@@ -1,12 +1,12 @@
 import React, { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import { useNavigate } from 'react-router-dom';
-import { 
-  FiCalendar, 
-  FiUsers, 
-  FiAward, 
-  FiClock, 
-  FiCode, 
+import {
+  FiCalendar,
+  FiUsers,
+  FiAward,
+  FiClock,
+  FiCode,
   FiStar,
   FiArrowRight,
   FiX,
@@ -25,19 +25,7 @@ const HackathonLandingPage = () => {
   const navigate = useNavigate();
   const { isAuthenticated, user } = useAuth();
   const { hasAccess, isAdmin } = usePermissions();
-  
-  // Redirect ALL authenticated users to student page (let it handle access control)
-  useEffect(() => {
-    if (isAuthenticated) {
-      navigate('/student/hackathons', { replace: true })
-    }
-  }, [isAuthenticated, navigate]);
-  
-  // Don't show landing page to authenticated users
-  if (isAuthenticated) {
-    return null
-  }
-  
+
   const [hackathons, setHackathons] = useState([]);
   const [enrolledHackathons, setEnrolledHackathons] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -62,7 +50,7 @@ const HackathonLandingPage = () => {
   const fetchHackathons = async () => {
     try {
       setLoading(true);
-      
+
       // Always fetch all hackathons (public access)
       const response = await hackathonService.getAllHackathons({
         sort: 'start_date',
@@ -70,14 +58,14 @@ const HackathonLandingPage = () => {
         limit: 15
       });
       console.log('Hackathons response:', response);
-      
+
       // Sort hackathons by start_date (latest first)
       const sortedHackathons = (response.data.hackathons || []).sort((a, b) => {
         return new Date(b.start_date) - new Date(a.start_date);
       });
-      
+
       setHackathons(sortedHackathons);
-      
+
       // If user is logged in, also fetch enrolled hackathons
       if (isAuthenticated && user) {
         try {
@@ -115,13 +103,13 @@ const HackathonLandingPage = () => {
   const handleFormSubmit = async (e) => {
     e.preventDefault();
     setSubmitting(true);
-    
+
     try {
       // Filter out empty team members
-      const validMembers = joinFormData.teamMembers.filter(member => 
+      const validMembers = joinFormData.teamMembers.filter(member =>
         member.name.trim() && member.email.trim()
       );
-      
+
       if (validMembers.length === 0) {
         alert('Please add at least one team member');
         return;
@@ -135,7 +123,7 @@ const HackathonLandingPage = () => {
       };
 
       await hackathonService.submitJoinRequest(selectedHackathon.id, joinRequestData);
-      
+
       setSubmitted(true);
     } catch (error) {
       console.error('Error submitting join request:', error);
@@ -164,7 +152,7 @@ const HackathonLandingPage = () => {
   const updateTeamMember = (index, field, value) => {
     setJoinFormData(prev => ({
       ...prev,
-      teamMembers: prev.teamMembers.map((member, i) => 
+      teamMembers: prev.teamMembers.map((member, i) =>
         i === index ? { ...member, [field]: value } : member
       )
     }));
@@ -245,11 +233,11 @@ const HackathonLandingPage = () => {
                 <span className="text-6xl">⚡</span>
               </div>
             </div>
-            
+
             <h1 className="text-5xl md:text-6xl font-bold text-gray-900 mb-6">
               Join Amazing <span className="text-transparent bg-clip-text bg-gradient-to-r from-indigo-600 to-purple-600">Hackathons</span>
             </h1>
-            
+
             <p className="text-xl md:text-2xl text-gray-600 max-w-4xl mx-auto leading-relaxed mb-12">
               Compete with talented developers, build innovative solutions, and win amazing prizes in our exciting hackathons
             </p>
@@ -277,7 +265,7 @@ const HackathonLandingPage = () => {
       {/* Hackathons Section */}
       <section className="py-20">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          
+
           {/* My Enrolled Hackathons Section (only show if logged in and has enrollments) */}
           {isAuthenticated && enrolledHackathons.length > 0 && (
             <motion.div
@@ -305,7 +293,7 @@ const HackathonLandingPage = () => {
                     className="group relative bg-gradient-to-br from-green-50 to-emerald-50 rounded-2xl shadow-lg hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-2 overflow-hidden border-2 border-green-200"
                   >
                     <div className="absolute inset-0 bg-gradient-to-br from-green-500/5 to-emerald-500/5 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
-                    
+
                     <div className="relative p-8">
                       <div className="flex justify-between items-start mb-6">
                         <span className="px-4 py-2 rounded-full text-sm font-medium bg-green-100 text-green-800 border border-green-200">
@@ -342,12 +330,12 @@ const HackathonLandingPage = () => {
                         <div className="flex items-center space-x-3">
                           <FiClock className="w-5 h-5 text-gray-400" />
                           <span className="text-sm text-gray-600">
-                            {new Date(hackathon.start_date).toLocaleTimeString('en-US', { 
-                              hour: '2-digit', 
-                              minute: '2-digit' 
-                            })} - {new Date(hackathon.end_date).toLocaleTimeString('en-US', { 
-                              hour: '2-digit', 
-                              minute: '2-digit' 
+                            {new Date(hackathon.start_date).toLocaleTimeString('en-US', {
+                              hour: '2-digit',
+                              minute: '2-digit'
+                            })} - {new Date(hackathon.end_date).toLocaleTimeString('en-US', {
+                              hour: '2-digit',
+                              minute: '2-digit'
                             })}
                           </span>
                         </div>
@@ -412,7 +400,7 @@ const HackathonLandingPage = () => {
                   className="group relative bg-white rounded-2xl shadow-lg hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-2 overflow-hidden"
                 >
                   <div className="absolute inset-0 bg-gradient-to-br from-indigo-500/5 to-purple-500/5 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
-                  
+
                   <div className="relative p-8">
                     {/* Status Badge */}
                     <div className="flex justify-between items-start mb-6">
@@ -453,12 +441,12 @@ const HackathonLandingPage = () => {
                       <div className="flex items-center space-x-3">
                         <FiClock className="w-5 h-5 text-gray-400" />
                         <span className="text-sm text-gray-600">
-                          {new Date(hackathon.start_date).toLocaleTimeString('en-US', { 
-                            hour: '2-digit', 
-                            minute: '2-digit' 
-                          })} - {new Date(hackathon.end_date).toLocaleTimeString('en-US', { 
-                            hour: '2-digit', 
-                            minute: '2-digit' 
+                          {new Date(hackathon.start_date).toLocaleTimeString('en-US', {
+                            hour: '2-digit',
+                            minute: '2-digit'
+                          })} - {new Date(hackathon.end_date).toLocaleTimeString('en-US', {
+                            hour: '2-digit',
+                            minute: '2-digit'
                           })}
                         </span>
                       </div>
@@ -540,7 +528,7 @@ const HackathonLandingPage = () => {
                   </div>
                   <h4 className="text-xl font-bold text-gray-900 mb-4">Request Submitted!</h4>
                   <p className="text-gray-600 mb-6">
-                    Your request to join <strong>{selectedHackathon.name}</strong> has been sent to the admin. 
+                    Your request to join <strong>{selectedHackathon.name}</strong> has been sent to the admin.
                     You'll be notified once your team is approved.
                   </p>
                   <button

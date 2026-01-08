@@ -14,18 +14,18 @@ const RBACManagementPage = () => {
   const [selectedStudents, setSelectedStudents] = useState([]);
   const [bulkPermissions, setBulkPermissions] = useState({
     courses: true,
-    hackathons: false,
-    realtimeProjects: false
+    hackathons: true,
+    realtimeProjects: true
   });
 
   const fetchStudentPermissions = useCallback(async () => {
     try {
       const token = localStorage.getItem('accessToken') || localStorage.getItem('token');
-      
+
       if (!token) {
         return;
       }
-      
+
       const apiUrl = import.meta.env.VITE_API_URL || 'http://localhost:5000';
       const response = await fetch(`${apiUrl}/api/rbac/permissions`, {
         headers: {
@@ -65,7 +65,7 @@ const RBACManagementPage = () => {
     try {
       setLoading(true);
       const token = localStorage.getItem('accessToken') || localStorage.getItem('token');
-      
+
       if (!token) {
         throw new Error('Authentication token not found');
       }
@@ -89,13 +89,13 @@ const RBACManagementPage = () => {
         data.data.users.forEach(student => {
           initialPermissions[student.id] = {
             courses: true,
-            hackathons: false,
-            realtimeProjects: false
+            hackathons: true,
+            realtimeProjects: true
           };
         });
         console.log('Initial permissions created for students:', initialPermissions);
         setPermissions(initialPermissions);
-        
+
         // Try to fetch existing permissions, but don't fail if it doesn't work
         fetchStudentPermissions().catch((error) => {
           console.log('Failed to fetch existing permissions, using defaults:', error);
@@ -122,35 +122,35 @@ const RBACManagementPage = () => {
     try {
       setSaving(true);
       const token = localStorage.getItem('accessToken') || localStorage.getItem('token');
-      
+
       if (!token) {
         alert('Authentication token not found. Please login again.');
         return;
       }
-      
+
       // Filter out empty permission objects and only send students with actual permission changes
       const filteredPermissions = {};
       Object.entries(permissions).forEach(([studentId, studentPermissions]) => {
         // Only include students that have actual permission values (not empty objects)
-        if (studentPermissions && 
-            Object.keys(studentPermissions).length > 0 &&
-            (studentPermissions.courses !== undefined || 
-             studentPermissions.hackathons !== undefined || 
-             studentPermissions.realtimeProjects !== undefined)) {
+        if (studentPermissions &&
+          Object.keys(studentPermissions).length > 0 &&
+          (studentPermissions.courses !== undefined ||
+            studentPermissions.hackathons !== undefined ||
+            studentPermissions.realtimeProjects !== undefined)) {
           filteredPermissions[studentId] = studentPermissions;
         }
       });
-      
+
       console.log('Saving permissions (filtered):', filteredPermissions);
       console.log('Original permissions object:', permissions);
-      
+
       // Don't send request if no permissions to update
       if (Object.keys(filteredPermissions).length === 0) {
         alert('No permission changes to save.');
         setSaving(false);
         return;
       }
-      
+
       const apiUrl = import.meta.env.VITE_API_URL || 'http://localhost:5000';
       const response = await fetch(`${apiUrl}/api/rbac/permissions`, {
         method: 'PUT',
@@ -189,10 +189,10 @@ const RBACManagementPage = () => {
     setPermissions(prev => {
       const currentStudentPerms = prev[studentId] || {
         courses: true,
-        hackathons: false,
-        realtimeProjects: false
+        hackathons: true,
+        realtimeProjects: true
       };
-      
+
       const newPermissions = {
         ...prev,
         [studentId]: {
@@ -200,7 +200,7 @@ const RBACManagementPage = () => {
           [permissionType]: !currentStudentPerms[permissionType]
         }
       };
-      
+
       console.log(`Toggled ${permissionType} for student ${studentId}:`, newPermissions[studentId]);
       return newPermissions;
     });
@@ -218,10 +218,10 @@ const RBACManagementPage = () => {
     selectedStudents.forEach(studentId => {
       const currentStudentPerms = newPermissions[studentId] || {
         courses: true,
-        hackathons: false,
-        realtimeProjects: false
+        hackathons: true,
+        realtimeProjects: true
       };
-      
+
       newPermissions[studentId] = {
         ...currentStudentPerms,
         ...bulkPermissions
@@ -241,8 +241,8 @@ const RBACManagementPage = () => {
   };
 
   const toggleStudentSelection = (studentId) => {
-    setSelectedStudents(prev => 
-      prev.includes(studentId) 
+    setSelectedStudents(prev =>
+      prev.includes(studentId)
         ? prev.filter(id => id !== studentId)
         : [...prev, studentId]
     );
@@ -448,8 +448,8 @@ const RBACManagementPage = () => {
           </h3>
           {students.length > 0 && (
             <p className="text-sm text-gray-500 mt-1">
-              {getFilteredStudents().length === students.length 
-                ? 'All students shown' 
+              {getFilteredStudents().length === students.length
+                ? 'All students shown'
                 : `${getFilteredStudents().length} of ${students.length} students shown`
               }
             </p>
@@ -517,49 +517,43 @@ const RBACManagementPage = () => {
                         </div>
                       </div>
                     </td>
-                    
+
                     <td className="px-6 py-4 whitespace-nowrap text-center">
                       <button
                         onClick={() => togglePermission(student.id, 'courses')}
-                        className={`w-12 h-6 rounded-full transition-colors duration-200 ${
-                          permissions[student.id]?.courses 
-                            ? 'bg-green-500' 
+                        className={`w-12 h-6 rounded-full transition-colors duration-200 ${permissions[student.id]?.courses
+                            ? 'bg-green-500'
                             : 'bg-gray-300'
-                        }`}
+                          }`}
                       >
-                        <div className={`w-5 h-5 bg-white rounded-full shadow transform transition-transform duration-200 ${
-                          permissions[student.id]?.courses ? 'translate-x-6' : 'translate-x-0.5'
-                        }`} />
+                        <div className={`w-5 h-5 bg-white rounded-full shadow transform transition-transform duration-200 ${permissions[student.id]?.courses ? 'translate-x-6' : 'translate-x-0.5'
+                          }`} />
                       </button>
                     </td>
 
                     <td className="px-6 py-4 whitespace-nowrap text-center">
                       <button
                         onClick={() => togglePermission(student.id, 'hackathons')}
-                        className={`w-12 h-6 rounded-full transition-colors duration-200 ${
-                          permissions[student.id]?.hackathons 
-                            ? 'bg-purple-500' 
+                        className={`w-12 h-6 rounded-full transition-colors duration-200 ${permissions[student.id]?.hackathons
+                            ? 'bg-purple-500'
                             : 'bg-gray-300'
-                        }`}
+                          }`}
                       >
-                        <div className={`w-5 h-5 bg-white rounded-full shadow transform transition-transform duration-200 ${
-                          permissions[student.id]?.hackathons ? 'translate-x-6' : 'translate-x-0.5'
-                        }`} />
+                        <div className={`w-5 h-5 bg-white rounded-full shadow transform transition-transform duration-200 ${permissions[student.id]?.hackathons ? 'translate-x-6' : 'translate-x-0.5'
+                          }`} />
                       </button>
                     </td>
 
                     <td className="px-6 py-4 whitespace-nowrap text-center">
                       <button
                         onClick={() => togglePermission(student.id, 'realtimeProjects')}
-                        className={`w-12 h-6 rounded-full transition-colors duration-200 ${
-                          permissions[student.id]?.realtimeProjects 
-                            ? 'bg-orange-500' 
+                        className={`w-12 h-6 rounded-full transition-colors duration-200 ${permissions[student.id]?.realtimeProjects
+                            ? 'bg-orange-500'
                             : 'bg-gray-300'
-                        }`}
+                          }`}
                       >
-                        <div className={`w-5 h-5 bg-white rounded-full shadow transform transition-transform duration-200 ${
-                          permissions[student.id]?.realtimeProjects ? 'translate-x-6' : 'translate-x-0.5'
-                        }`} />
+                        <div className={`w-5 h-5 bg-white rounded-full shadow transform transition-transform duration-200 ${permissions[student.id]?.realtimeProjects ? 'translate-x-6' : 'translate-x-0.5'
+                          }`} />
                       </button>
                     </td>
                   </tr>

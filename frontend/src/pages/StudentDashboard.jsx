@@ -85,8 +85,9 @@ const StudentDashboard = () => {
     'student-score',
     () => scoreService.getMyScore(),
     {
-      refetchOnWindowFocus: false,
-      staleTime: 5 * 60 * 1000,
+      refetchOnMount: 'always', // Always fetch fresh data when dashboard loads
+      refetchOnWindowFocus: true, // Refetch when user returns to tab
+      staleTime: 1 * 60 * 1000, // Reduced to 1 minute for fresher data
       retry: 1,
       onError: (error) => {
         console.error('Score API error:', error)
@@ -135,7 +136,7 @@ const StudentDashboard = () => {
 
   // Track which course is being enrolled
   const [enrollingCourseId, setEnrollingCourseId] = useState(null)
-  
+
   // Modal state
   const [isAllCoursesModalOpen, setIsAllCoursesModalOpen] = useState(false)
   const [isEnrolledCoursesModalOpen, setIsEnrolledCoursesModalOpen] = useState(false)
@@ -146,7 +147,7 @@ const StudentDashboard = () => {
 
   const { hasAccess } = usePermissions()
   const { projects: realtimeProjects = [], hasAccess: hasProjectsAccess = false } = useRealtimeProjects({ category: 'all', difficulty: 'all', sort: 'name' })
-  
+
   const isLoading = coursesLoading || enrollmentsLoading || activitiesLoading || hackathonsLoading || scoreLoading
   const courses = coursesData?.data?.courses || []
   const enrollments = enrollmentsData?.data?.enrollments || []
@@ -313,7 +314,7 @@ const StudentDashboard = () => {
             </div>
             <h1 className="text-2xl font-bold text-gray-900 mb-4">Unable to Load Dashboard</h1>
             <p className="text-gray-600 mb-6">There was an error loading your dashboard data. Please try refreshing the page.</p>
-            <button 
+            <button
               onClick={() => window.location.reload()}
               className="inline-flex items-center px-6 py-3 bg-indigo-600 text-white font-semibold rounded-xl hover:bg-indigo-700 transition-all duration-200"
             >
@@ -335,7 +336,7 @@ const StudentDashboard = () => {
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-50 via-blue-50 to-indigo-100">
       <Header />
-      
+
       <main className="py-8">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <motion.div
@@ -353,7 +354,7 @@ const StudentDashboard = () => {
               <div className="absolute inset-0 bg-black/10"></div>
               <div className="absolute top-0 right-0 w-32 h-32 bg-white/10 rounded-full -translate-y-16 translate-x-16"></div>
               <div className="absolute bottom-0 left-0 w-24 h-24 bg-white/5 rounded-full translate-y-12 -translate-x-12"></div>
-              
+
               <div className="relative px-5 py-5">
                 <div className="grid grid-cols-1 lg:grid-cols-3 gap-5">
                   {/* Left: Welcome Section */}
@@ -375,7 +376,7 @@ const StudentDashboard = () => {
                       Continue your learning journey and explore new courses.
                     </p>
                     <div className="flex flex-wrap gap-2">
-                      <button 
+                      <button
                         onClick={() => navigate('/courses')}
                         className="inline-flex items-center justify-center px-3 py-1.5 bg-white text-indigo-600 text-sm font-semibold rounded-lg hover:bg-indigo-50 transition-all duration-200 shadow-md hover:shadow-lg"
                       >
@@ -384,7 +385,7 @@ const StudentDashboard = () => {
                         </svg>
                         Browse Courses
                       </button>
-                      <button 
+                      <button
                         onClick={() => navigate('/profile')}
                         className="inline-flex items-center justify-center px-3 py-1.5 bg-white/20 text-white text-sm font-semibold rounded-lg hover:bg-white/30 transition-all duration-200 backdrop-blur-sm border border-white/30"
                       >
@@ -393,7 +394,7 @@ const StudentDashboard = () => {
                         </svg>
                         Profile
                       </button>
-                      <button 
+                      <button
                         onClick={() => navigate('/certificates')}
                         className="inline-flex items-center justify-center px-3 py-1.5 bg-white/20 text-white text-sm font-semibold rounded-lg hover:bg-white/30 transition-all duration-200 backdrop-blur-sm border border-white/30"
                       >
@@ -405,66 +406,64 @@ const StudentDashboard = () => {
                     </div>
                   </div>
 
-                  {/* Right: Academic Score Display */}
-                  {scoreData?.data && (
-                    <div className="lg:col-span-2 border-l-0 lg:border-l border-white/20 pl-0 lg:pl-5">
-                      <h2 className="text-lg font-bold text-white mb-3">Your Academic Score</h2>
-                      
-                      <div className="grid grid-cols-2 md:grid-cols-4 gap-2.5 mb-3">
-                        <div className="bg-white/10 backdrop-blur-sm rounded-lg p-2.5 text-center border border-white/20 hover:bg-white/15 transition-colors">
-                          <p className="text-white/80 text-xs mb-0.5">Total Points</p>
-                          <p className="text-2xl font-bold text-white">
-                            {scoreData?.data?.total_points || 0}
-                            {scoreData?.data?.max_total_points > 0 && (
-                              <span className="text-sm font-normal text-white/70"> / {scoreData.data.max_total_points}</span>
-                            )}
-                          </p>
-                        </div>
-                        <div className="bg-white/10 backdrop-blur-sm rounded-lg p-2.5 text-center border border-white/20 hover:bg-white/15 transition-colors">
-                          <p className="text-white/80 text-xs mb-0.5">Course Points</p>
-                          <p className="text-xl font-bold text-white">
-                            {scoreData?.data?.total_course_points || 0}
-                            {scoreData?.data?.max_course_points > 0 && (
-                              <span className="text-sm font-normal text-white/70"> / {scoreData.data.max_course_points}</span>
-                            )}
-                          </p>
-                        </div>
-                        <div className="bg-white/10 backdrop-blur-sm rounded-lg p-2.5 text-center border border-white/20 hover:bg-white/15 transition-colors">
-                          <p className="text-white/80 text-xs mb-0.5">Project Points</p>
-                          <p className="text-xl font-bold text-white">
-                            {scoreData?.data?.total_project_points || 0}
-                            {scoreData?.data?.max_project_points > 0 && (
-                              <span className="text-sm font-normal text-white/70"> / {scoreData.data.max_project_points}</span>
-                            )}
-                          </p>
-                        </div>
-                        <div className="bg-white/10 backdrop-blur-sm rounded-lg p-2.5 text-center border border-white/20 hover:bg-white/15 transition-colors">
-                          <p className="text-white/80 text-xs mb-0.5">Hackathon Points</p>
-                          <p className="text-xl font-bold text-white">
-                            {scoreData?.data?.total_hackathon_points || 0}
-                            {scoreData?.data?.max_hackathon_points > 0 && (
-                              <span className="text-sm font-normal text-white/70"> / {scoreData.data.max_hackathon_points}</span>
-                            )}
-                          </p>
-                        </div>
+                  {/* Right: Academic Score Display - Always show, even if data is loading/null */}
+                  <div className="lg:col-span-2 border-l-0 lg:border-l border-white/20 pl-0 lg:pl-5">
+                    <h2 className="text-lg font-bold text-white mb-3">Your Academic Score</h2>
+
+                    <div className="grid grid-cols-2 md:grid-cols-4 gap-2.5 mb-3">
+                      <div className="bg-white/10 backdrop-blur-sm rounded-lg p-2.5 text-center border border-white/20 hover:bg-white/15 transition-colors">
+                        <p className="text-white/80 text-xs mb-0.5">Total Points</p>
+                        <p className="text-2xl font-bold text-white">
+                          {scoreData?.data?.total_points || 0}
+                          {scoreData?.data?.max_total_points > 0 && (
+                            <span className="text-sm font-normal text-white/70"> / {scoreData.data.max_total_points}</span>
+                          )}
+                        </p>
                       </div>
-                      
-                      <div className="grid grid-cols-3 gap-2.5">
-                        <div className="text-center bg-white/5 rounded-lg py-2">
-                          <p className="text-white/70 text-xs mb-0.5">Courses Completed</p>
-                          <p className="text-base font-bold text-white">{scoreData?.data?.courses_completed_count || 0}</p>
-                        </div>
-                        <div className="text-center bg-white/5 rounded-lg py-2">
-                          <p className="text-white/70 text-xs mb-0.5">Projects Approved</p>
-                          <p className="text-base font-bold text-white">{scoreData?.data?.projects_approved_count || 0}</p>
-                        </div>
-                        <div className="text-center bg-white/5 rounded-lg py-2">
-                          <p className="text-white/70 text-xs mb-0.5">Hackathons</p>
-                          <p className="text-base font-bold text-white">{scoreData?.data?.hackathons_approved_count || 0}</p>
-                        </div>
+                      <div className="bg-white/10 backdrop-blur-sm rounded-lg p-2.5 text-center border border-white/20 hover:bg-white/15 transition-colors">
+                        <p className="text-white/80 text-xs mb-0.5">Course Points</p>
+                        <p className="text-xl font-bold text-white">
+                          {scoreData?.data?.total_course_points || 0}
+                          {scoreData?.data?.max_course_points > 0 && (
+                            <span className="text-sm font-normal text-white/70"> / {scoreData.data.max_course_points}</span>
+                          )}
+                        </p>
+                      </div>
+                      <div className="bg-white/10 backdrop-blur-sm rounded-lg p-2.5 text-center border border-white/20 hover:bg-white/15 transition-colors">
+                        <p className="text-white/80 text-xs mb-0.5">Project Points</p>
+                        <p className="text-xl font-bold text-white">
+                          {scoreData?.data?.total_project_points || 0}
+                          {scoreData?.data?.max_project_points > 0 && (
+                            <span className="text-sm font-normal text-white/70"> / {scoreData.data.max_project_points}</span>
+                          )}
+                        </p>
+                      </div>
+                      <div className="bg-white/10 backdrop-blur-sm rounded-lg p-2.5 text-center border border-white/20 hover:bg-white/15 transition-colors">
+                        <p className="text-white/80 text-xs mb-0.5">Hackathon Points</p>
+                        <p className="text-xl font-bold text-white">
+                          {scoreData?.data?.total_hackathon_points || 0}
+                          {scoreData?.data?.max_hackathon_points > 0 && (
+                            <span className="text-sm font-normal text-white/70"> / {scoreData.data.max_hackathon_points}</span>
+                          )}
+                        </p>
                       </div>
                     </div>
-                  )}
+
+                    <div className="grid grid-cols-3 gap-2.5">
+                      <div className="text-center bg-white/5 rounded-lg py-2">
+                        <p className="text-white/70 text-xs mb-0.5">Courses Completed</p>
+                        <p className="text-base font-bold text-white">{scoreData?.data?.courses_completed_count || 0}</p>
+                      </div>
+                      <div className="text-center bg-white/5 rounded-lg py-2">
+                        <p className="text-white/70 text-xs mb-0.5">Projects Approved</p>
+                        <p className="text-base font-bold text-white">{scoreData?.data?.projects_approved_count || 0}</p>
+                      </div>
+                      <div className="text-center bg-white/5 rounded-lg py-2">
+                        <p className="text-white/70 text-xs mb-0.5">Hackathons</p>
+                        <p className="text-base font-bold text-white">{scoreData?.data?.hackathons_approved_count || 0}</p>
+                      </div>
+                    </div>
+                  </div>
                 </div>
               </div>
             </motion.div>
@@ -480,12 +479,12 @@ const StudentDashboard = () => {
                 <div className="absolute inset-0 bg-gradient-to-br from-blue-500 to-blue-600 opacity-0 group-hover:opacity-5 transition-opacity duration-300"></div>
                 <div className="relative p-4">
                   <div className="flex items-center justify-between">
-                <div className="flex items-center">
+                    <div className="flex items-center">
                       <div className="p-3 bg-gradient-to-br from-blue-500 to-blue-600 rounded-lg shadow-md">
                         <svg className="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.746 0 3.332.477 4.5 1.253v13C19.832 18.477 18.246 18 16.5 18c-1.746 0-3.332.477-4.5 1.253" />
-                    </svg>
-                  </div>
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.746 0 3.332.477 4.5 1.253v13C19.832 18.477 18.246 18 16.5 18c-1.746 0-3.332.477-4.5 1.253" />
+                        </svg>
+                      </div>
                       <div className="ml-3">
                         <p className="text-xs font-medium text-gray-600">Enrolled</p>
                         <p className="text-xl font-bold text-gray-900">{enrollments.length}</p>
@@ -508,12 +507,12 @@ const StudentDashboard = () => {
                 <div className="absolute inset-0 bg-gradient-to-br from-green-500 to-green-600 opacity-0 group-hover:opacity-5 transition-opacity duration-300"></div>
                 <div className="relative p-4">
                   <div className="flex items-center justify-between">
-                <div className="flex items-center">
+                    <div className="flex items-center">
                       <div className="p-3 bg-gradient-to-br from-green-500 to-green-600 rounded-lg shadow-md">
                         <svg className="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
-                    </svg>
-                  </div>
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+                        </svg>
+                      </div>
                       <div className="ml-3">
                         <p className="text-xs font-medium text-gray-600">Completed</p>
                         <p className="text-xl font-bold text-gray-900">{completedCourses}</p>
@@ -536,12 +535,12 @@ const StudentDashboard = () => {
                 <div className="absolute inset-0 bg-gradient-to-br from-yellow-500 to-orange-500 opacity-0 group-hover:opacity-5 transition-opacity duration-300"></div>
                 <div className="relative p-4">
                   <div className="flex items-center justify-between">
-                <div className="flex items-center">
+                    <div className="flex items-center">
                       <div className="p-3 bg-gradient-to-br from-yellow-500 to-orange-500 rounded-lg shadow-md">
                         <svg className="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
-                    </svg>
-                  </div>
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+                        </svg>
+                      </div>
                       <div className="ml-3">
                         <p className="text-xs font-medium text-gray-600">In Progress</p>
                         <p className="text-xl font-bold text-gray-900">{inProgressCourses}</p>
@@ -564,12 +563,12 @@ const StudentDashboard = () => {
                 <div className="absolute inset-0 bg-gradient-to-br from-purple-500 to-pink-500 opacity-0 group-hover:opacity-5 transition-opacity duration-300"></div>
                 <div className="relative p-4">
                   <div className="flex items-center justify-between">
-                <div className="flex items-center">
+                    <div className="flex items-center">
                       <div className="p-3 bg-gradient-to-br from-purple-500 to-pink-500 rounded-lg shadow-md">
                         <svg className="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 10V3L4 14h7v7l9-11h-7z" />
-                    </svg>
-                  </div>
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 10V3L4 14h7v7l9-11h-7z" />
+                        </svg>
+                      </div>
                       <div className="ml-3">
                         <p className="text-xs font-medium text-gray-600">Avg. Progress</p>
                         <p className="text-xl font-bold text-gray-900">{Math.round(totalProgress)}%</p>
@@ -577,7 +576,7 @@ const StudentDashboard = () => {
                     </div>
                     <div className="text-right">
                       <div className="w-12 h-1.5 bg-gray-200 rounded-full overflow-hidden">
-                        <div 
+                        <div
                           className="h-full bg-gradient-to-r from-purple-500 to-pink-500 rounded-full transition-all duration-1000"
                           style={{ width: `${totalProgress}%` }}
                         ></div>
@@ -600,54 +599,54 @@ const StudentDashboard = () => {
               >
                 <div className="absolute top-0 right-0 w-16 h-16 bg-gradient-to-br from-indigo-500 to-purple-600 rounded-full -translate-y-8 translate-x-8 opacity-10"></div>
                 <div className="relative p-6">
-                <div className="flex items-center justify-between mb-6">
+                  <div className="flex items-center justify-between mb-6">
                     <div>
                       <h3 className="text-lg font-bold text-gray-900 mb-1">My Courses</h3>
                       <p className="text-sm text-gray-600">Continue learning</p>
                     </div>
-                  <button 
-                    onClick={() => setIsEnrolledCoursesModalOpen(true)}
+                    <button
+                      onClick={() => setIsEnrolledCoursesModalOpen(true)}
                       className="inline-flex items-center px-3 py-1.5 bg-indigo-100 text-indigo-600 rounded-lg hover:bg-indigo-200 transition-colors duration-200 font-medium text-sm"
-                  >
+                    >
                       <svg className="w-3 h-3 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
                       </svg>
-                    View All
-                  </button>
-                </div>
-                
-                <div className="space-y-4">
-                  {enrollments.slice(0, 3).map((enrollment, index) => (
-                    <EnrolledCourseCard
-                      key={enrollment.id}
-                      enrollment={enrollment}
-                      index={index}
-                      onContinue={(courseId) => navigate(`/courses/${courseId}`)}
-                    />
-                  ))}
-                  
-                  {enrollments.length === 0 && (
+                      View All
+                    </button>
+                  </div>
+
+                  <div className="space-y-4">
+                    {enrollments.slice(0, 3).map((enrollment, index) => (
+                      <EnrolledCourseCard
+                        key={enrollment.id}
+                        enrollment={enrollment}
+                        index={index}
+                        onContinue={(courseId) => navigate(`/courses/${courseId}`)}
+                      />
+                    ))}
+
+                    {enrollments.length === 0 && (
                       <div className="text-center py-12">
                         <div className="w-24 h-24 bg-gradient-to-br from-indigo-100 to-purple-100 rounded-full flex items-center justify-center mx-auto mb-6">
                           <svg className="w-12 h-12 text-indigo-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.746 0 3.332.477 4.5 1.253v13C19.832 18.477 18.246 18 16.5 18c-1.746 0-3.332.477-4.5 1.253" />
-                      </svg>
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.746 0 3.332.477 4.5 1.253v13C19.832 18.477 18.246 18 16.5 18c-1.746 0-3.332.477-4.5 1.253" />
+                          </svg>
                         </div>
                         <h3 className="text-xl font-semibold text-gray-900 mb-2">No courses enrolled yet</h3>
                         <p className="text-gray-600 mb-6">Start your learning journey by enrolling in courses</p>
-                      <button 
-                        onClick={() => navigate('/courses')}
+                        <button
+                          onClick={() => navigate('/courses')}
                           className="inline-flex items-center px-8 py-4 bg-indigo-600 text-white font-semibold rounded-xl hover:bg-indigo-700 transition-all duration-200 shadow-lg hover:shadow-xl transform hover:-translate-y-1"
-                      >
+                        >
                           <svg className="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.746 0 3.332.477 4.5 1.253v13C19.832 18.477 18.246 18 16.5 18c-1.746 0-3.332.477-4.5 1.253" />
                           </svg>
-                        Browse Courses
-                      </button>
-                    </div>
-                  )}
+                          Browse Courses
+                        </button>
+                      </div>
+                    )}
+                  </div>
                 </div>
-              </div>
               </motion.div>
 
               {/* Course Preview Area */}
@@ -669,7 +668,7 @@ const StudentDashboard = () => {
                       <span className="text-xs text-gray-500">Live</span>
                     </div>
                   </div>
-                  
+
                   {/* Large Video Preview Area */}
                   <div className="relative">
                     {enrollments.length > 0 ? (
@@ -679,7 +678,7 @@ const StudentDashboard = () => {
                             <div className="text-center">
                               <div className="w-20 h-20 bg-white/20 rounded-full flex items-center justify-center mx-auto mb-4 group-hover:scale-110 transition-transform duration-300">
                                 <svg className="w-10 h-10 text-white" fill="currentColor" viewBox="0 0 24 24">
-                                  <path d="M8 5v14l11-7z"/>
+                                  <path d="M8 5v14l11-7z" />
                                 </svg>
                               </div>
                               <h4 className="text-xl font-bold text-white mb-2">
@@ -692,12 +691,12 @@ const StudentDashboard = () => {
                           </div>
                         </div>
                         <div className="absolute inset-0 bg-black/20 rounded-xl opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center">
-                          <button 
+                          <button
                             onClick={() => navigate(`/courses/${enrollments[0]?.course?.id}`)}
                             className="inline-flex items-center px-6 py-3 bg-white text-indigo-600 font-semibold rounded-lg hover:bg-indigo-50 transition-all duration-200 shadow-lg hover:shadow-xl transform hover:-translate-y-1"
                           >
                             <svg className="w-5 h-5 mr-2" fill="currentColor" viewBox="0 0 24 24">
-                              <path d="M8 5v14l11-7z"/>
+                              <path d="M8 5v14l11-7z" />
                             </svg>
                             Start Learning
                           </button>
@@ -713,7 +712,7 @@ const StudentDashboard = () => {
                           </div>
                           <h4 className="text-lg font-semibold text-gray-900 mb-2">No courses enrolled yet</h4>
                           <p className="text-gray-600 mb-4">Enroll in a course to start learning</p>
-                          <button 
+                          <button
                             onClick={() => navigate('/courses')}
                             className="inline-flex items-center px-6 py-3 bg-indigo-600 text-white font-semibold rounded-lg hover:bg-indigo-700 transition-all duration-200 shadow-lg hover:shadow-xl transform hover:-translate-y-1"
                           >
@@ -738,35 +737,35 @@ const StudentDashboard = () => {
               >
                 <div className="absolute top-0 left-0 w-16 h-16 bg-gradient-to-br from-green-500 to-teal-600 rounded-full -translate-y-8 -translate-x-8 opacity-10"></div>
                 <div className="relative p-6">
-                <div className="flex items-center justify-between mb-6">
+                  <div className="flex items-center justify-between mb-6">
                     <div>
                       <h3 className="text-lg font-bold text-gray-900 mb-1">Recommended for You</h3>
                       <p className="text-sm text-gray-600">Discover new learning opportunities</p>
                     </div>
-                  <button 
-                    onClick={() => setIsAllCoursesModalOpen(true)}
+                    <button
+                      onClick={() => setIsAllCoursesModalOpen(true)}
                       className="inline-flex items-center px-3 py-1.5 bg-green-100 text-green-600 rounded-lg hover:bg-green-200 transition-colors duration-200 font-medium text-sm"
-                  >
+                    >
                       <svg className="w-3 h-3 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
                       </svg>
-                    View All
-                  </button>
+                      View All
+                    </button>
+                  </div>
+
+                  <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                    {courses.slice(0, 6).map((course, index) => (
+                      <StudentCourseCard
+                        key={course.id}
+                        course={course}
+                        index={index}
+                        isEnrolled={isEnrolled(course.id)}
+                        enrollingCourseId={enrollingCourseId}
+                        onEnroll={handleEnroll}
+                      />
+                    ))}
+                  </div>
                 </div>
-                
-                   <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-                     {courses.slice(0, 6).map((course, index) => (
-                       <StudentCourseCard
-                         key={course.id}
-                         course={course}
-                         index={index}
-                         isEnrolled={isEnrolled(course.id)}
-                         enrollingCourseId={enrollingCourseId}
-                         onEnroll={handleEnroll}
-                       />
-                     ))}
-                   </div>
-              </div>
               </motion.div>
             </div>
 
@@ -868,7 +867,7 @@ const StudentDashboard = () => {
                   <span className="text-xs text-gray-500">Live</span>
                 </div>
               </div>
-              
+
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
                 {hackathons.length > 0 ? (
                   hackathons.slice(0, 6).map((hackathon, index) => (
@@ -920,19 +919,19 @@ const StudentDashboard = () => {
           </motion.div> */}
         </div>
       </main>
-      
+
       {/* All Courses Modal */}
-      <AllCoursesModal 
+      <AllCoursesModal
         isOpen={isAllCoursesModalOpen}
         onClose={() => setIsAllCoursesModalOpen(false)}
       />
-      
+
       {/* Enrolled Courses Modal */}
-      <EnrolledCoursesModal 
+      <EnrolledCoursesModal
         isOpen={isEnrolledCoursesModalOpen}
         onClose={() => setIsEnrolledCoursesModalOpen(false)}
       />
-      
+
       {/* Hackathon Details Modal */}
       <StudentHackathonDetailsModal
         hackathon={selectedHackathon}

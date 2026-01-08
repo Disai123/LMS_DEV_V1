@@ -1,0 +1,16 @@
+{
+    "name": "Ecommerce AI Agent",
+    "description": "Extend your e-commerce platform with an intelligent AI shopping assistant. Learn to integrate AI/ML capabilities, natural language processing, and create conversational interfaces.",
+    "category": "AI & Machine Learning",
+    "difficulty": "advanced",
+    "estimatedHours": 30,
+    "order": 3,
+    "tags": [
+        "Python",
+        "LangChain",
+        "OpenAI API",
+        "FastAPI",
+        "React"
+    ],
+    "version": "1.0.0"
+}

@@ -9,6 +9,7 @@ import NextButton from '../components/projects/NextButton';
 import VideoPlayer from '../components/course/VideoPlayer';
 import { useProjectProgress } from '../context/ProjectProgressContext';
 import { projectService } from '../services/projectService';
+import axios from 'axios';
 
 const DeploymentPhasePage = () => {
   const { projectId } = useParams();
@@ -16,6 +17,7 @@ const DeploymentPhasePage = () => {
   const [selectedTab, setSelectedTab] = useState('overview');
   const [project, setProject] = useState(null);
   const [loading, setLoading] = useState(true);
+  const [showSubmissionForm, setShowSubmissionForm] = useState(false);
   const { isModuleUnlocked, unlockNextPhase } = useProjectProgress();
 
   // Fetch videos for this project
@@ -296,7 +298,7 @@ const DeploymentPhasePage = () => {
         return (
           <div className="space-y-6">
             <h3 className="text-2xl font-bold text-gray-800 mb-4">Deployment Overview</h3>
-            
+
             {/* Video Section */}
             <div className="mb-8">
               {videosLoading ? (
@@ -359,10 +361,10 @@ const DeploymentPhasePage = () => {
 
             <div className="prose prose-lg max-w-none">
               <p className="text-gray-600 leading-relaxed mb-6">
-                This phase focuses on deploying the {project.title} to production environments and ensuring 
+                This phase focuses on deploying the {project.title} to production environments and ensuring
                 smooth operation with proper monitoring, maintenance, and scalability measures in place.
               </p>
-              
+
               <div className="bg-orange-50 rounded-lg p-6 mb-6">
                 <h4 className="text-lg font-semibold text-gray-800 mb-3">Phase Objectives</h4>
                 <ul className="list-disc list-inside space-y-2 text-gray-600">
@@ -395,7 +397,7 @@ const DeploymentPhasePage = () => {
             <div className="text-center">
               <h3 className="text-3xl font-bold text-gray-800 mb-4">E-Commerce Deployment Planning</h3>
               <p className="text-lg text-gray-600 max-w-3xl mx-auto">
-                Comprehensive deployment strategy for E-commerce applications covering local development 
+                Comprehensive deployment strategy for E-commerce applications covering local development
                 setup and cloud deployment options for production environments.
               </p>
             </div>
@@ -406,7 +408,7 @@ const DeploymentPhasePage = () => {
               <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
                 <div className="space-y-4">
                   <h5 className="text-lg font-medium text-gray-800 mb-3">Local Development</h5>
-                    <div className="space-y-3">
+                  <div className="space-y-3">
                     <div className="bg-gradient-to-br from-blue-50 to-blue-100 rounded-lg p-4 border border-blue-200">
                       <h6 className="font-semibold text-gray-800 mb-2 flex items-center gap-2">
                         <span className="text-xl">💻</span>
@@ -418,7 +420,7 @@ const DeploymentPhasePage = () => {
                         <div><strong>Benefits:</strong> Fast development, offline work</div>
                         <div><strong>Limitations:</strong> Single user, limited scalability</div>
                       </div>
-                      </div>
+                    </div>
                     <div className="bg-gradient-to-br from-green-50 to-green-100 rounded-lg p-4 border border-green-200">
                       <h6 className="font-semibold text-gray-800 mb-2 flex items-center gap-2">
                         <span className="text-xl">🐳</span>
@@ -429,13 +431,13 @@ const DeploymentPhasePage = () => {
                         <div><strong>Requirements:</strong> Docker, Docker Compose</div>
                         <div><strong>Benefits:</strong> Consistent environment, easy setup</div>
                         <div><strong>Use Case:</strong> Team development, production-like setup</div>
-                    </div>
+                      </div>
                     </div>
                   </div>
                 </div>
                 <div className="space-y-4">
                   <h5 className="text-lg font-medium text-gray-800 mb-3">Cloud Deployment</h5>
-                    <div className="space-y-3">
+                  <div className="space-y-3">
                     <div className="bg-gradient-to-br from-orange-50 to-orange-100 rounded-lg p-4 border border-orange-200">
                       <h6 className="font-semibold text-gray-800 mb-2 flex items-center gap-2">
                         <span className="text-xl">☁️</span>
@@ -460,10 +462,10 @@ const DeploymentPhasePage = () => {
                         <div><strong>Best For:</strong> Data-driven applications, analytics</div>
                       </div>
                     </div>
-                      </div>
-                    </div>
                   </div>
                 </div>
+              </div>
+            </div>
 
             {/* Local Deployment Setup Scripts */}
             <div className="bg-gradient-to-r from-emerald-50 to-teal-50 rounded-xl p-6 border border-emerald-200">
@@ -475,7 +477,7 @@ const DeploymentPhasePage = () => {
                     <div className="bg-gray-50 rounded-lg p-4">
                       <h6 className="font-medium text-gray-800 mb-2">Node.js & npm Installation</h6>
                       <pre className="text-sm text-gray-600 bg-gray-100 p-3 rounded overflow-x-auto">
-{`# Install Node.js (LTS version)
+                        {`# Install Node.js (LTS version)
 curl -fsSL https://deb.nodesource.com/setup_lts.x | sudo -E bash -
 sudo apt-get install -y nodejs
 
@@ -487,7 +489,7 @@ npm --version`}
                     <div className="bg-gray-50 rounded-lg p-4">
                       <h6 className="font-medium text-gray-800 mb-2">PostgreSQL Installation</h6>
                       <pre className="text-sm text-gray-600 bg-gray-100 p-3 rounded overflow-x-auto">
-{`# Install PostgreSQL
+                        {`# Install PostgreSQL
 sudo apt update
 sudo apt install postgresql postgresql-contrib
 
@@ -511,7 +513,7 @@ GRANT ALL PRIVILEGES ON DATABASE ecommerce_db TO ecommerce_user;`}
                     <div className="bg-gray-50 rounded-lg p-4">
                       <h6 className="font-medium text-gray-800 mb-2">Clone and Install Dependencies</h6>
                       <pre className="text-sm text-gray-600 bg-gray-100 p-3 rounded overflow-x-auto">
-{`# Clone the repository
+                        {`# Clone the repository
 git clone https://github.com/your-username/ecommerce-app.git
 cd ecommerce-app
 
@@ -525,7 +527,7 @@ npm install -g prisma`}
                     <div className="bg-gray-50 rounded-lg p-4">
                       <h6 className="font-medium text-gray-800 mb-2">Environment Configuration</h6>
                       <pre className="text-sm text-gray-600 bg-gray-100 p-3 rounded overflow-x-auto">
-{`# Create environment file
+                        {`# Create environment file
 cp .env.example .env
 
 # Configure environment variables
@@ -539,7 +541,7 @@ STRIPE_PUBLISHABLE_KEY="pk_test_your_stripe_publishable_key"`}
                     <div className="bg-gray-50 rounded-lg p-4">
                       <h6 className="font-medium text-gray-800 mb-2">Database Setup and Migration</h6>
                       <pre className="text-sm text-gray-600 bg-gray-100 p-3 rounded overflow-x-auto">
-{`# Generate Prisma client
+                        {`# Generate Prisma client
 npx prisma generate
 
 # Run database migrations
@@ -576,7 +578,7 @@ npm run dev`}
                     <div className="bg-gray-50 rounded-lg p-4">
                       <h6 className="font-medium text-gray-800 mb-2">AWS Deployment Script</h6>
                       <pre className="text-xs text-gray-600 bg-gray-100 p-3 rounded overflow-x-auto">
-{`# AWS CLI setup
+                        {`# AWS CLI setup
 aws configure
 
 # Create EC2 instance
@@ -613,7 +615,7 @@ npm run build`}
                     <div className="bg-gray-50 rounded-lg p-4">
                       <h6 className="font-medium text-gray-800 mb-2">GCP Deployment Script</h6>
                       <pre className="text-xs text-gray-600 bg-gray-100 p-3 rounded overflow-x-auto">
-{`# GCP CLI setup
+                        {`# GCP CLI setup
 gcloud auth login
 gcloud config set project your-project-id
 
@@ -629,10 +631,10 @@ gcloud compute instances create ecommerce-app \\
 gcloud compute scp --recurse ./ecommerce-app ecommerce-app:~/`}
                       </pre>
                     </div>
-                      </div>
-                    </div>
                   </div>
                 </div>
+              </div>
+            </div>
 
             {/* Deployment Checklist */}
             <div className="bg-gradient-to-r from-slate-50 to-gray-50 rounded-xl p-6 border border-gray-200">
@@ -652,7 +654,7 @@ gcloud compute scp --recurse ./ecommerce-app ecommerce-app:~/`}
                     <div className="flex items-center gap-3 p-3 bg-white rounded-lg shadow-sm">
                       <div className="w-6 h-6 bg-green-500 text-white rounded-full flex items-center justify-center text-sm font-bold">✓</div>
                       <span className="text-sm text-gray-700">Database migrations ready</span>
-                  </div>
+                    </div>
                     <div className="flex items-center gap-3 p-3 bg-white rounded-lg shadow-sm">
                       <div className="w-6 h-6 bg-green-500 text-white rounded-full flex items-center justify-center text-sm font-bold">✓</div>
                       <span className="text-sm text-gray-700">SSL certificates obtained</span>
@@ -691,10 +693,10 @@ gcloud compute scp --recurse ./ecommerce-app ecommerce-app:~/`}
             <h3 className="text-2xl font-bold text-gray-800 mb-4">Environment Setup</h3>
             <div className="prose prose-lg max-w-none">
               <p className="text-gray-600 leading-relaxed mb-6">
-                Environment setup involves configuring development, staging, and production environments 
+                Environment setup involves configuring development, staging, and production environments
                 with appropriate security, performance, and monitoring configurations.
               </p>
-              
+
               <div className="space-y-6">
                 <div className="bg-white rounded-lg p-6 shadow-sm border border-gray-200">
                   <h4 className="text-lg font-semibold text-gray-800 mb-4">Environment Configuration</h4>
@@ -722,7 +724,7 @@ gcloud compute scp --recurse ./ecommerce-app ecommerce-app:~/`}
                         </div>
                       </div>
                     </div>
-                    
+
                     <div className="bg-green-50 rounded-lg p-4">
                       <h5 className="font-medium text-gray-800 mb-2">Staging Environment</h5>
                       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -746,7 +748,7 @@ gcloud compute scp --recurse ./ecommerce-app ecommerce-app:~/`}
                         </div>
                       </div>
                     </div>
-                    
+
                     <div className="bg-red-50 rounded-lg p-4">
                       <h5 className="font-medium text-gray-800 mb-2">Production Environment</h5>
                       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -784,7 +786,7 @@ gcloud compute scp --recurse ./ecommerce-app ecommerce-app:~/`}
                         <div>DB_TIMEOUT=30000</div>
                       </div>
                     </div>
-                    
+
                     <div className="bg-white rounded-lg p-4">
                       <h5 className="font-medium text-gray-800 mb-2">API Configuration</h5>
                       <div className="bg-gray-100 p-3 rounded text-sm font-mono">
@@ -793,7 +795,7 @@ gcloud compute scp --recurse ./ecommerce-app ecommerce-app:~/`}
                         <div>RATE_LIMIT=1000</div>
                       </div>
                     </div>
-                    
+
                     <div className="bg-white rounded-lg p-4">
                       <h5 className="font-medium text-gray-800 mb-2">External Services</h5>
                       <div className="bg-gray-100 p-3 rounded text-sm font-mono">
@@ -809,192 +811,292 @@ gcloud compute scp --recurse ./ecommerce-app ecommerce-app:~/`}
           </div>
         );
 
-       case 'final-steps':
+      case 'final-steps':
         return (
-           <div className="space-y-8">
-             <div className="text-center">
-               <h3 className="text-4xl font-bold text-gray-800 mb-4">🎉 Congratulations!</h3>
-               <p className="text-xl text-gray-600 max-w-3xl mx-auto mb-8">
-                 You have successfully completed all phases of the E-Commerce application development! 
-                 From planning to deployment, you've built a comprehensive, production-ready application.
-               </p>
-                    </div>
-                    
-             {/* Achievement Summary */}
-             <div className="bg-gradient-to-r from-emerald-50 to-teal-50 rounded-xl p-8 border border-emerald-200">
-               <h4 className="text-2xl font-semibold text-gray-800 mb-6 text-center">Project Completion Summary</h4>
-               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-                 <div className="text-center p-4 bg-white rounded-lg shadow-sm">
-                   <div className="text-3xl mb-3">📋</div>
-                   <h5 className="font-semibold text-gray-800 mb-2">BRD Phase</h5>
-                   <p className="text-sm text-gray-600">Requirements defined and documented</p>
-                      </div>
-                 <div className="text-center p-4 bg-white rounded-lg shadow-sm">
-                   <div className="text-3xl mb-3">🎨</div>
-                   <h5 className="font-semibold text-gray-800 mb-2">UI/UX Design</h5>
-                   <p className="text-sm text-gray-600">User interface and experience designed</p>
-                    </div>
-                 <div className="text-center p-4 bg-white rounded-lg shadow-sm">
-                   <div className="text-3xl mb-3">🏗️</div>
-                   <h5 className="font-semibold text-gray-800 mb-2">Architecture</h5>
-                   <p className="text-sm text-gray-600">System architecture planned</p>
-                      </div>
-                 <div className="text-center p-4 bg-white rounded-lg shadow-sm">
-                   <div className="text-3xl mb-3">💻</div>
-                   <h5 className="font-semibold text-gray-800 mb-2">Development</h5>
-                   <p className="text-sm text-gray-600">Full-stack application built</p>
-                    </div>
-                 <div className="text-center p-4 bg-white rounded-lg shadow-sm">
-                   <div className="text-3xl mb-3">🧪</div>
-                   <h5 className="font-semibold text-gray-800 mb-2">Testing</h5>
-                   <p className="text-sm text-gray-600">Comprehensive testing completed</p>
-                      </div>
-                 <div className="text-center p-4 bg-white rounded-lg shadow-sm">
-                   <div className="text-3xl mb-3">🚀</div>
-                   <h5 className="font-semibold text-gray-800 mb-2">Deployment</h5>
-                   <p className="text-sm text-gray-600">Application deployed and ready</p>
-                    </div>
-                  </div>
-                </div>
+          <div className="space-y-8">
+            <div className="text-center">
+              <h3 className="text-4xl font-bold text-gray-800 mb-4">🎉 Congratulations!</h3>
+              <p className="text-xl text-gray-600 max-w-3xl mx-auto mb-8">
+                You have successfully completed all phases of the E-Commerce application development!
+                From planning to deployment, you've built a comprehensive, production-ready application.
+              </p>
+            </div>
 
-             {/* E-Commerce Features Delivered */}
-             <div className="bg-white rounded-xl shadow-lg border border-gray-200 p-6">
-               <h4 className="text-2xl font-semibold text-gray-800 mb-6 text-center">E-Commerce Features Delivered</h4>
-               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                 <div className="text-center p-4 bg-gradient-to-br from-blue-50 to-blue-100 rounded-lg">
-                   <div className="text-3xl mb-3">🛒</div>
-                   <h5 className="font-semibold text-gray-800 mb-2">Shopping Experience</h5>
-                   <div className="text-sm text-gray-600 space-y-1">
-                     <div>• Product browsing & search</div>
-                     <div>• Shopping cart management</div>
-                     <div>• Wishlist functionality</div>
-                     <div>• Product filtering & sorting</div>
-                      </div>
-                    </div>
-                 <div className="text-center p-4 bg-gradient-to-br from-green-50 to-green-100 rounded-lg">
-                   <div className="text-3xl mb-3">💳</div>
-                   <h5 className="font-semibold text-gray-800 mb-2">Payment Processing</h5>
-                   <div className="text-sm text-gray-600 space-y-1">
-                     <div>• Stripe integration</div>
-                     <div>• Secure payment processing</div>
-                     <div>• Order management</div>
-                     <div>• Receipt generation</div>
-                      </div>
-                    </div>
-                 <div className="text-center p-4 bg-gradient-to-br from-purple-50 to-purple-100 rounded-lg">
-                   <div className="text-3xl mb-3">👤</div>
-                   <h5 className="font-semibold text-gray-800 mb-2">User Management</h5>
-                   <div className="text-sm text-gray-600 space-y-1">
-                     <div>• User registration & login</div>
-                     <div>• Profile management</div>
-                     <div>• Order history</div>
-                     <div>• Session management</div>
+            {/* Achievement Summary */}
+            <div className="bg-gradient-to-r from-emerald-50 to-teal-50 rounded-xl p-8 border border-emerald-200">
+              <h4 className="text-2xl font-semibold text-gray-800 mb-6 text-center">Project Completion Summary</h4>
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+                <div className="text-center p-4 bg-white rounded-lg shadow-sm">
+                  <div className="text-3xl mb-3">📋</div>
+                  <h5 className="font-semibold text-gray-800 mb-2">BRD Phase</h5>
+                  <p className="text-sm text-gray-600">Requirements defined and documented</p>
+                </div>
+                <div className="text-center p-4 bg-white rounded-lg shadow-sm">
+                  <div className="text-3xl mb-3">🎨</div>
+                  <h5 className="font-semibold text-gray-800 mb-2">UI/UX Design</h5>
+                  <p className="text-sm text-gray-600">User interface and experience designed</p>
+                </div>
+                <div className="text-center p-4 bg-white rounded-lg shadow-sm">
+                  <div className="text-3xl mb-3">🏗️</div>
+                  <h5 className="font-semibold text-gray-800 mb-2">Architecture</h5>
+                  <p className="text-sm text-gray-600">System architecture planned</p>
+                </div>
+                <div className="text-center p-4 bg-white rounded-lg shadow-sm">
+                  <div className="text-3xl mb-3">💻</div>
+                  <h5 className="font-semibold text-gray-800 mb-2">Development</h5>
+                  <p className="text-sm text-gray-600">Full-stack application built</p>
+                </div>
+                <div className="text-center p-4 bg-white rounded-lg shadow-sm">
+                  <div className="text-3xl mb-3">🧪</div>
+                  <h5 className="font-semibold text-gray-800 mb-2">Testing</h5>
+                  <p className="text-sm text-gray-600">Comprehensive testing completed</p>
+                </div>
+                <div className="text-center p-4 bg-white rounded-lg shadow-sm">
+                  <div className="text-3xl mb-3">🚀</div>
+                  <h5 className="font-semibold text-gray-800 mb-2">Deployment</h5>
+                  <p className="text-sm text-gray-600">Application deployed and ready</p>
+                </div>
+              </div>
+            </div>
+
+            {/* E-Commerce Features Delivered */}
+            <div className="bg-white rounded-xl shadow-lg border border-gray-200 p-6">
+              <h4 className="text-2xl font-semibold text-gray-800 mb-6 text-center">E-Commerce Features Delivered</h4>
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                <div className="text-center p-4 bg-gradient-to-br from-blue-50 to-blue-100 rounded-lg">
+                  <div className="text-3xl mb-3">🛒</div>
+                  <h5 className="font-semibold text-gray-800 mb-2">Shopping Experience</h5>
+                  <div className="text-sm text-gray-600 space-y-1">
+                    <div>• Product browsing & search</div>
+                    <div>• Shopping cart management</div>
+                    <div>• Wishlist functionality</div>
+                    <div>• Product filtering & sorting</div>
                   </div>
                 </div>
-                 <div className="text-center p-4 bg-gradient-to-br from-orange-50 to-orange-100 rounded-lg">
-                   <div className="text-3xl mb-3">📦</div>
-                   <h5 className="font-semibold text-gray-800 mb-2">Admin Panel</h5>
-                   <div className="text-sm text-gray-600 space-y-1">
-                     <div>• Product management</div>
-                     <div>• Order tracking</div>
-                     <div>• User management</div>
-                     <div>• Analytics dashboard</div>
-                    </div>
-                    </div>
-                 <div className="text-center p-4 bg-gradient-to-br from-red-50 to-red-100 rounded-lg">
-                   <div className="text-3xl mb-3">🔐</div>
-                   <h5 className="font-semibold text-gray-800 mb-2">Security Features</h5>
-                   <div className="text-sm text-gray-600 space-y-1">
-                     <div>• Data encryption</div>
-                     <div>• Authentication security</div>
-                     <div>• Payment security (PCI)</div>
-                     <div>• Input validation</div>
-                    </div>
-                    </div>
-                 <div className="text-center p-4 bg-gradient-to-br from-teal-50 to-teal-100 rounded-lg">
-                   <div className="text-3xl mb-3">📱</div>
-                   <h5 className="font-semibold text-gray-800 mb-2">Cross-Platform</h5>
-                   <div className="text-sm text-gray-600 space-y-1">
-                     <div>• Mobile responsiveness</div>
-                     <div>• Browser compatibility</div>
-                     <div>• Device testing</div>
-                     <div>• Accessibility compliance</div>
+                <div className="text-center p-4 bg-gradient-to-br from-green-50 to-green-100 rounded-lg">
+                  <div className="text-3xl mb-3">💳</div>
+                  <h5 className="font-semibold text-gray-800 mb-2">Payment Processing</h5>
+                  <div className="text-sm text-gray-600 space-y-1">
+                    <div>• Stripe integration</div>
+                    <div>• Secure payment processing</div>
+                    <div>• Order management</div>
+                    <div>• Receipt generation</div>
+                  </div>
+                </div>
+                <div className="text-center p-4 bg-gradient-to-br from-purple-50 to-purple-100 rounded-lg">
+                  <div className="text-3xl mb-3">👤</div>
+                  <h5 className="font-semibold text-gray-800 mb-2">User Management</h5>
+                  <div className="text-sm text-gray-600 space-y-1">
+                    <div>• User registration & login</div>
+                    <div>• Profile management</div>
+                    <div>• Order history</div>
+                    <div>• Session management</div>
+                  </div>
+                </div>
+                <div className="text-center p-4 bg-gradient-to-br from-orange-50 to-orange-100 rounded-lg">
+                  <div className="text-3xl mb-3">📦</div>
+                  <h5 className="font-semibold text-gray-800 mb-2">Admin Panel</h5>
+                  <div className="text-sm text-gray-600 space-y-1">
+                    <div>• Product management</div>
+                    <div>• Order tracking</div>
+                    <div>• User management</div>
+                    <div>• Analytics dashboard</div>
+                  </div>
+                </div>
+                <div className="text-center p-4 bg-gradient-to-br from-red-50 to-red-100 rounded-lg">
+                  <div className="text-3xl mb-3">🔐</div>
+                  <h5 className="font-semibold text-gray-800 mb-2">Security Features</h5>
+                  <div className="text-sm text-gray-600 space-y-1">
+                    <div>• Data encryption</div>
+                    <div>• Authentication security</div>
+                    <div>• Payment security (PCI)</div>
+                    <div>• Input validation</div>
+                  </div>
+                </div>
+                <div className="text-center p-4 bg-gradient-to-br from-teal-50 to-teal-100 rounded-lg">
+                  <div className="text-3xl mb-3">📱</div>
+                  <h5 className="font-semibold text-gray-800 mb-2">Cross-Platform</h5>
+                  <div className="text-sm text-gray-600 space-y-1">
+                    <div>• Mobile responsiveness</div>
+                    <div>• Browser compatibility</div>
+                    <div>• Device testing</div>
+                    <div>• Accessibility compliance</div>
                   </div>
                 </div>
               </div>
             </div>
 
-             {/* Technology Stack */}
-             <div className="bg-gradient-to-r from-slate-50 to-gray-50 rounded-xl p-6 border border-gray-200">
-               <h4 className="text-2xl font-semibold text-gray-800 mb-6 text-center">Technology Stack Implemented</h4>
-               <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-                 <div className="text-center p-3 bg-white rounded-lg shadow-sm">
-                   <div className="text-2xl mb-2">⚛️</div>
-                   <div className="text-sm font-medium text-gray-800">React & Next.js</div>
-                      </div>
-                 <div className="text-center p-3 bg-white rounded-lg shadow-sm">
-                   <div className="text-2xl mb-2">🗄️</div>
-                   <div className="text-sm font-medium text-gray-800">PostgreSQL</div>
-                      </div>
-                 <div className="text-center p-3 bg-white rounded-lg shadow-sm">
-                   <div className="text-2xl mb-2">🔧</div>
-                   <div className="text-sm font-medium text-gray-800">Prisma ORM</div>
-                    </div>
-                 <div className="text-center p-3 bg-white rounded-lg shadow-sm">
-                   <div className="text-2xl mb-2">💳</div>
-                   <div className="text-sm font-medium text-gray-800">Stripe</div>
-                      </div>
-                 <div className="text-center p-3 bg-white rounded-lg shadow-sm">
-                   <div className="text-2xl mb-2">🎨</div>
-                   <div className="text-sm font-medium text-gray-800">Tailwind CSS</div>
-                      </div>
-                 <div className="text-center p-3 bg-white rounded-lg shadow-sm">
-                   <div className="text-2xl mb-2">🔐</div>
-                   <div className="text-sm font-medium text-gray-800">NextAuth</div>
-                    </div>
-                 <div className="text-center p-3 bg-white rounded-lg shadow-sm">
-                   <div className="text-2xl mb-2">☁️</div>
-                   <div className="text-sm font-medium text-gray-800">AWS/GCP</div>
-                  </div>
-                 <div className="text-center p-3 bg-white rounded-lg shadow-sm">
-                   <div className="text-2xl mb-2">🧪</div>
-                   <div className="text-sm font-medium text-gray-800">Jest & Cypress</div>
+            {/* Technology Stack */}
+            <div className="bg-gradient-to-r from-slate-50 to-gray-50 rounded-xl p-6 border border-gray-200">
+              <h4 className="text-2xl font-semibold text-gray-800 mb-6 text-center">Technology Stack Implemented</h4>
+              <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+                <div className="text-center p-3 bg-white rounded-lg shadow-sm">
+                  <div className="text-2xl mb-2">⚛️</div>
+                  <div className="text-sm font-medium text-gray-800">React & Next.js</div>
                 </div>
-                      </div>
-                    </div>
-                    
-             {/* Download Code Section */}
-             <div className="bg-gradient-to-r from-blue-50 to-indigo-50 rounded-xl p-8 border border-blue-200 text-center">
-               <h4 className="text-3xl font-semibold text-gray-800 mb-4">Download Your E-Commerce Application</h4>
-               <p className="text-lg text-gray-600 mb-8 max-w-2xl mx-auto">
-                 Your complete E-Commerce application is ready! Download the source code and start building your online business.
-               </p>
-               <div className="flex flex-col sm:flex-row gap-4 justify-center">
-                 <button className="px-8 py-4 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors font-medium text-lg flex items-center gap-3">
-                   <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
-                   </svg>
-                   Download Source Code
-                 </button>
-                 <button className="px-8 py-4 bg-gray-200 text-gray-700 rounded-lg hover:bg-gray-300 transition-colors font-medium text-lg flex items-center gap-3">
-                   <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
-                   </svg>
-                   Download Documentation
-                 </button>
-                        </div>
-               <div className="mt-6 text-sm text-gray-500">
-                 <p>Includes: Complete source code, setup instructions, database schema, and deployment guides</p>
-                  </div>
+                <div className="text-center p-3 bg-white rounded-lg shadow-sm">
+                  <div className="text-2xl mb-2">🗄️</div>
+                  <div className="text-sm font-medium text-gray-800">PostgreSQL</div>
                 </div>
+                <div className="text-center p-3 bg-white rounded-lg shadow-sm">
+                  <div className="text-2xl mb-2">🔧</div>
+                  <div className="text-sm font-medium text-gray-800">Prisma ORM</div>
+                </div>
+                <div className="text-center p-3 bg-white rounded-lg shadow-sm">
+                  <div className="text-2xl mb-2">💳</div>
+                  <div className="text-sm font-medium text-gray-800">Stripe</div>
+                </div>
+                <div className="text-center p-3 bg-white rounded-lg shadow-sm">
+                  <div className="text-2xl mb-2">🎨</div>
+                  <div className="text-sm font-medium text-gray-800">Tailwind CSS</div>
+                </div>
+                <div className="text-center p-3 bg-white rounded-lg shadow-sm">
+                  <div className="text-2xl mb-2">🔐</div>
+                  <div className="text-sm font-medium text-gray-800">NextAuth</div>
+                </div>
+                <div className="text-center p-3 bg-white rounded-lg shadow-sm">
+                  <div className="text-2xl mb-2">☁️</div>
+                  <div className="text-sm font-medium text-gray-800">AWS/GCP</div>
+                </div>
+                <div className="text-center p-3 bg-white rounded-lg shadow-sm">
+                  <div className="text-2xl mb-2">🧪</div>
+                  <div className="text-sm font-medium text-gray-800">Jest & Cypress</div>
+                </div>
+              </div>
+            </div>
 
-             {/* Final Message */}
-             <div className="text-center">
-               <h5 className="text-xl font-semibold text-gray-800 mb-4">Ready to Launch Your E-Commerce Business?</h5>
-               <p className="text-gray-600 max-w-2xl mx-auto">
-                 You now have a complete, production-ready E-Commerce application with all the features needed to start selling online. 
-                 Customize it further, add your products, and launch your business!
-               </p>
+            {/* Download Code Section */}
+            <div className="bg-gradient-to-r from-blue-50 to-indigo-50 rounded-xl p-8 border border-blue-200 text-center">
+              <h4 className="text-3xl font-semibold text-gray-800 mb-4">Download Your E-Commerce Application</h4>
+              <p className="text-lg text-gray-600 mb-8 max-w-2xl mx-auto">
+                Your complete E-Commerce application is ready! Download the source code and start building your online business.
+              </p>
+              <div className="flex flex-col sm:flex-row gap-4 justify-center">
+                <button className="px-8 py-4 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors font-medium text-lg flex items-center gap-3">
+                  <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+                  </svg>
+                  Download Source Code
+                </button>
+                <button className="px-8 py-4 bg-gray-200 text-gray-700 rounded-lg hover:bg-gray-300 transition-colors font-medium text-lg flex items-center gap-3">
+                  <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+                  </svg>
+                  Download Documentation
+                </button>
+              </div>
+              <div className="mt-6 text-sm text-gray-500">
+                <p>Includes: Complete source code, setup instructions, database schema, and deployment guides</p>
+              </div>
+
+              {/* Submit Project Button */}
+              <div className="mt-8 pt-6 border-t border-gray-200">
+                <button
+                  onClick={() => setShowSubmissionForm(!showSubmissionForm)}
+                  className="w-full sm:w-auto px-8 py-4 bg-gradient-to-r from-green-600 to-emerald-600 text-white rounded-lg hover:from-green-700 hover:to-emerald-700 transition-all duration-200 font-semibold text-lg flex items-center justify-center gap-3 shadow-lg hover:shadow-xl transform hover:scale-105 mx-auto"
+                >
+                  <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+                  </svg>
+                  {showSubmissionForm ? 'Hide Form' : 'Submit Project for Review'}
+                </button>
+                <p className="mt-3 text-sm text-gray-600 text-center">
+                  Submit your completed project to earn points and get admin feedback
+                </p>
+              </div>
+
+              {/* Simple Inline Form */}
+              {showSubmissionForm && (
+                <div className="mt-8 bg-gray-50 rounded-lg p-6 border border-gray-200">
+                  <h4 className="text-lg font-semibold mb-4">Submit Your Project</h4>
+                  <form onSubmit={async (e) => {
+                    e.preventDefault();
+                    const formData = new FormData(e.target);
+                    try {
+                      const token = localStorage.getItem('token');
+                      await axios.post('/api/realtime-project-submissions', {
+                        project_id: projectId,
+                        project_name: project?.title || 'Project',
+                        github_url: formData.get('github_url'),
+                        description: formData.get('description'),
+                        screenshots_urls: [formData.get('screenshot_url')],
+                        technologies_used: [],
+                        deployed_url: '',
+                        demo_video_url: '',
+                        challenges_faced: '',
+                        learnings: '',
+                        documentation_url: '',
+                        difficulty: 'intermediate'
+                      }, {
+                        headers: { 'Authorization': `Bearer ${token}` }
+                      });
+                      alert('Project submitted successfully!');
+                      setShowSubmissionForm(false);
+                      e.target.reset();
+                    } catch (error) {
+                      alert('Error: ' + (error.response?.data?.message || 'Failed to submit'));
+                    }
+                  }}>
+                    <div className="space-y-4">
+                      <div>
+                        <label className="block text-sm font-medium mb-1">GitHub URL *</label>
+                        <input
+                          type="url"
+                          name="github_url"
+                          required
+                          placeholder="https://github.com/username/repo"
+                          className="w-full px-3 py-2 border rounded-lg"
+                        />
+                      </div>
+                      <div>
+                        <label className="block text-sm font-medium mb-1">Description * (min 100 chars)</label>
+                        <textarea
+                          name="description"
+                          required
+                          minLength={100}
+                          rows={4}
+                          placeholder="Describe your project..."
+                          className="w-full px-3 py-2 border rounded-lg"
+                        />
+                      </div>
+                      <div>
+                        <label className="block text-sm font-medium mb-1">Screenshot URL *</label>
+                        <input
+                          type="url"
+                          name="screenshot_url"
+                          required
+                          placeholder="https://imgur.com/..."
+                          className="w-full px-3 py-2 border rounded-lg"
+                        />
+                      </div>
+                      <div className="flex gap-2">
+                        <button
+                          type="button"
+                          onClick={() => setShowSubmissionForm(false)}
+                          className="px-4 py-2 bg-gray-200 rounded-lg"
+                        >
+                          Cancel
+                        </button>
+                        <button
+                          type="submit"
+                          className="px-4 py-2 bg-green-600 text-white rounded-lg"
+                        >
+                          Submit
+                        </button>
+                      </div>
+                    </div>
+                  </form>
+                </div>
+              )}
+            </div>
+
+            {/* Final Message */}
+            <div className="text-center">
+              <h5 className="text-xl font-semibold text-gray-800 mb-4">Ready to Launch Your E-Commerce Business?</h5>
+              <p className="text-gray-600 max-w-2xl mx-auto">
+                You now have a complete, production-ready E-Commerce application with all the features needed to start selling online.
+                Customize it further, add your products, and launch your business!
+              </p>
             </div>
           </div>
         );
@@ -1008,14 +1110,14 @@ gcloud compute scp --recurse ./ecommerce-app ecommerce-app:~/`}
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-50 via-blue-50 to-indigo-100">
       <Header />
-      
+
       {/* Phase Navigation Bar - Top Level */}
       <div className="bg-white/90 backdrop-blur-sm border-b border-gray-200">
         <div className="max-w-7xl mx-auto px-4 py-1">
           <PhaseNavigationBar currentPhase="deployment" />
         </div>
       </div>
-      
+
       <div className="flex h-screen">
         {/* Left Sidebar */}
         <div className="w-80 bg-white/90 backdrop-blur-sm shadow-xl border-r border-gray-200 overflow-y-auto">
@@ -1077,12 +1179,10 @@ gcloud compute scp --recurse ./ecommerce-app ecommerce-app:~/`}
               <div className="space-y-2">
                 {deploymentTabs.map((tab) => (
                   <div key={tab.id} className="flex items-center gap-2">
-                    <div className={`w-3 h-3 rounded-full ${
-                      selectedTab === tab.id ? 'bg-orange-500' : 'bg-gray-300'
-                    }`} />
-                    <span className={`text-xs ${
-                      selectedTab === tab.id ? 'text-orange-600 font-medium' : 'text-gray-500'
-                    }`}>
+                    <div className={`w-3 h-3 rounded-full ${selectedTab === tab.id ? 'bg-orange-500' : 'bg-gray-300'
+                      }`} />
+                    <span className={`text-xs ${selectedTab === tab.id ? 'text-orange-600 font-medium' : 'text-gray-500'
+                      }`}>
                       {tab.label}
                     </span>
                   </div>
@@ -1103,30 +1203,33 @@ gcloud compute scp --recurse ./ecommerce-app ecommerce-app:~/`}
             >
               {renderTabContent()}
             </motion.div>
-            
+
             {/* Next Button - positioned relative to module content */}
-             {selectedTab !== 'final-steps' && (
-            <NextButton 
-              currentPhase="deployment" 
-              currentModule={selectedTab}
-              onNext={() => {
-                // Auto-advance to next module
-                const deploymentTabs = [
-                  { id: 'overview' },
-                     { id: 'deployment-planning' },
-                     { id: 'environment-setup' },
-                     { id: 'final-steps' }
-                ];
-                const currentIndex = deploymentTabs.findIndex(tab => tab.id === selectedTab);
-                if (currentIndex < deploymentTabs.length - 1) {
-                  setSelectedTab(deploymentTabs[currentIndex + 1].id);
-                }
-              }}
-            />
-             )}
+            {selectedTab !== 'final-steps' && (
+              <NextButton
+                currentPhase="deployment"
+                currentModule={selectedTab}
+                onNext={() => {
+                  // Auto-advance to next module
+                  const deploymentTabs = [
+                    { id: 'overview' },
+                    { id: 'deployment-planning' },
+                    { id: 'environment-setup' },
+                    { id: 'final-steps' }
+                  ];
+                  const currentIndex = deploymentTabs.findIndex(tab => tab.id === selectedTab);
+                  if (currentIndex < deploymentTabs.length - 1) {
+                    setSelectedTab(deploymentTabs[currentIndex + 1].id);
+                  }
+                }}
+              />
+            )}
           </div>
         </div>
       </div>
+
+
+
       <Footer />
     </div>
   );

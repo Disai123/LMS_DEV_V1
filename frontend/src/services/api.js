@@ -2,61 +2,23 @@ import axios from 'axios'
 
 // Determine API base URL based on environment
 const getApiBaseUrl = () => {
-  // If VITE_API_URL is set, use it
+  // Use VITE_API_URL if set (for both development and production)
   if (import.meta.env.VITE_API_URL) {
-    return import.meta.env.VITE_API_URL.endsWith('/api') 
-      ? import.meta.env.VITE_API_URL 
-      : `${import.meta.env.VITE_API_URL}/api`
+    const url = import.meta.env.VITE_API_URL
+    // Ensure the URL doesn't end with /api (we'll add it in the axios baseURL)
+    return url.endsWith('/api') ? url : `${url}/api`
   }
-  
-  // If running on localhost, use local backend
-  if (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1') {
-    return 'http://localhost:5000/api'
-  }
-  
-  // For production deployment on S3, try to determine backend URL
-  // This is a temporary fix - you should set VITE_API_URL properly
-  const currentHost = window.location.hostname
-  
-  // If deployed on S3, try common backend patterns
-  if (currentHost.includes('s3-website') || currentHost.includes('amazonaws.com')) {
-    // Try to construct backend URL - you need to replace this with your actual backend URL
-    // Common patterns:
-    // - Elastic Beanstalk: https://your-app.region.elasticbeanstalk.com/api
-    // - EC2: http://your-ec2-ip:5000/api
-    // - API Gateway: https://your-api-id.execute-api.region.amazonaws.com/prod/api
-    
-    console.error('❌ CRITICAL: Frontend is deployed but VITE_API_URL is not set!')
-    console.error('Current hostname:', currentHost)
-    console.error('To fix this issue:')
-    console.error('1. Set VITE_API_URL environment variable to your backend API URL')
-    console.error('2. Rebuild and redeploy the frontend')
-    console.error('3. Example: VITE_API_URL=https://your-backend.elasticbeanstalk.com')
-    
-    // Show user-friendly error in the UI
-    if (typeof window !== 'undefined') {
-      const errorDiv = document.createElement('div')
-      errorDiv.style.cssText = `
-        position: fixed; top: 0; left: 0; right: 0; z-index: 9999;
-        background: #ff4444; color: white; padding: 10px; text-align: center;
-        font-family: Arial, sans-serif; font-size: 14px;
-      `
-      errorDiv.innerHTML = `
-        <strong>Configuration Error:</strong> Backend API URL not configured. 
-        Please set VITE_API_URL environment variable and redeploy.
-      `
-      document.body.appendChild(errorDiv)
-    }
-    
-    // For now, return a placeholder that will show an error
-    return 'https://your-backend-api-url-here/api'
-  }
-  
-  // Fallback
+
+  // Fallback for local development if VITE_API_URL is not set
+  console.warn('⚠️ VITE_API_URL is not set. Using default: http://localhost:5000/api')
+  console.warn('For production deployment, please set VITE_API_URL in your .env file')
   return 'http://localhost:5000/api'
 }
 
 const API_BASE_URL = getApiBaseUrl()
+
+console.log('🔗 API Base URL:', API_BASE_URL)
+
 
 // Create axios instance
 const api = axios.create({
@@ -82,7 +44,7 @@ api.interceptors.request.use(
       '/courses/popular',
       '/courses/top-rated'
     ]
-    
+
     // Always add token if available (let backend decide what's public)
     const token = localStorage.getItem('accessToken')
     if (token) {
@@ -95,7 +57,7 @@ api.interceptors.request.use(
         console.warn('No access token found for protected route:', config.url)
       }
     }
-    
+
     return config
   },
   (error) => {
@@ -119,7 +81,7 @@ api.interceptors.response.use(
       console.error('2. VITE_API_URL is not set correctly')
       console.error('3. CORS is not configured properly')
       console.error('Current API URL:', API_BASE_URL)
-      
+
       // Show user-friendly error
       if (typeof window !== 'undefined') {
         const errorDiv = document.createElement('div')

@@ -27,9 +27,27 @@ const ProjectCard = ({ project }) => {
     return '💻';
   };
 
-  const thumbnailUrl = project.thumbnail 
+  // Get static project image based on project name
+  const getProjectImage = (name) => {
+    const nameLower = name?.toLowerCase() || '';
+    if (nameLower.includes('mobile')) {
+      return '/images/projects/ecommerce-mobile.png';
+    }
+    if (nameLower.includes('multi')) {
+      return '/images/projects/ecommerce-multi-agent.png';
+    }
+    if (nameLower.includes('ai') || nameLower.includes('agent')) {
+      return '/images/projects/ecommerce-ai-agent.png';
+    }
+    if (nameLower.includes('ecommerce') || nameLower.includes('web')) {
+      return '/images/projects/ecommerce-web.png';
+    }
+    return '/images/projects/ecommerce-web.png';
+  };
+
+  const thumbnailUrl = project.thumbnail
     ? `${apiUrl}/api/realtime-projects/${project.id}/files/${project.thumbnail}`
-    : null;
+    : getProjectImage(project.name);
 
   return (
     <motion.div
@@ -41,20 +59,15 @@ const ProjectCard = ({ project }) => {
     >
       {/* Thumbnail */}
       <div className="relative h-48 bg-gradient-to-br from-indigo-100 to-purple-100 overflow-hidden">
-        {thumbnailUrl ? (
-          <img 
-            src={thumbnailUrl} 
-            alt={project.name}
-            className="w-full h-full object-cover"
-            onError={(e) => {
-              e.target.style.display = 'none';
-            }}
-          />
-        ) : (
-          <div className="w-full h-full flex items-center justify-center">
-            <FiCode className="w-16 h-16 text-indigo-400" />
-          </div>
-        )}
+        <img
+          src={thumbnailUrl}
+          alt={project.name}
+          className="w-full h-full object-cover"
+          onError={(e) => {
+            // Fallback to default image if loading fails
+            e.target.src = '/images/projects/ecommerce-web.png';
+          }}
+        />
         {/* Category Badge */}
         <div className="absolute top-3 right-3">
           <span className="bg-white/90 backdrop-blur-sm px-2 py-1 rounded-full text-xs font-medium text-gray-700 flex items-center gap-1">
@@ -69,7 +82,7 @@ const ProjectCard = ({ project }) => {
         <h3 className="text-lg font-semibold text-gray-900 mb-2 line-clamp-1">
           {project.name}
         </h3>
-        
+
         <p className="text-sm text-gray-600 mb-3 line-clamp-2 min-h-[2.5rem]">
           {project.description}
         </p>
@@ -78,7 +91,7 @@ const ProjectCard = ({ project }) => {
         {project.tags && project.tags.length > 0 && (
           <div className="flex flex-wrap gap-1 mb-3">
             {project.tags.slice(0, 3).map((tag, index) => (
-              <span 
+              <span
                 key={index}
                 className="inline-flex items-center px-2 py-1 rounded text-xs font-medium bg-gray-100 text-gray-700"
               >
@@ -105,7 +118,7 @@ const ProjectCard = ({ project }) => {
               </span>
             )}
           </div>
-          
+
           <button className="text-indigo-600 hover:text-indigo-700 font-medium text-sm flex items-center">
             View Project →
           </button>

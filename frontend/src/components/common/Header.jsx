@@ -26,6 +26,16 @@ const Header = () => {
     if (isAuthenticated) {
       navigate(path)
     } else {
+      // Store redirect path for after login
+      localStorage.setItem('redirectAfterLogin', path)
+      navigate('/login')
+    }
+  }
+
+  const handleNavClick = (e, path, requiresAuth = false) => {
+    if (!isAuthenticated && requiresAuth) {
+      e.preventDefault()
+      localStorage.setItem('redirectAfterLogin', path)
       navigate('/login')
     }
   }
@@ -40,9 +50,9 @@ const Header = () => {
         <div className="flex justify-between items-center h-16 sm:h-20 py-2">
           {/* Logo */}
           <Link to="/" className="flex items-center space-x-2 overflow-visible">
-            <img 
+            <img
               src="/lms_logo.svg"
-              alt="GNANAM AI" 
+              alt="GNANAM AI"
               className="h-10 sm:h-14 w-auto object-contain"
               style={{ maxHeight: '100%' }}
             />
@@ -64,17 +74,19 @@ const Header = () => {
             </Link>
             <Link
               to={user?.role === 'student' ? '/student/realtime-projects' : '/realtime-projects'}
+              onClick={(e) => handleNavClick(e, '/student/realtime-projects', !isAuthenticated)}
               className="text-gray-700 hover:text-indigo-600 font-medium transition-colors duration-200"
             >
               Realtime Projects
             </Link>
             <Link
               to="/hackathons"
+              onClick={(e) => handleNavClick(e, '/student/hackathons', !isAuthenticated)}
               className="text-gray-700 hover:text-indigo-600 font-medium transition-colors duration-200"
             >
               Hackathons
             </Link>
-            
+
             {user ? (
               <div className="flex items-center space-x-4">
                 <Link
@@ -188,19 +200,19 @@ const Header = () => {
                 </Link>
                 <Link
                   to={user?.role === 'student' ? '/student/realtime-projects' : '/realtime-projects'}
+                  onClick={(e) => { handleNavClick(e, '/student/realtime-projects', !isAuthenticated); setIsMenuOpen(false) }}
                   className="block px-4 py-4 text-gray-700 hover:bg-white/20 rounded-lg transition-colors duration-200 min-h-[44px] flex items-center"
-                  onClick={() => setIsMenuOpen(false)}
                 >
                   Realtime Projects
                 </Link>
                 <Link
                   to="/hackathons"
+                  onClick={(e) => { handleNavClick(e, '/student/hackathons', !isAuthenticated); setIsMenuOpen(false) }}
                   className="block px-4 py-4 text-gray-700 hover:bg-white/20 rounded-lg transition-colors duration-200 min-h-[44px] flex items-center"
-                  onClick={() => setIsMenuOpen(false)}
                 >
                   Hackathons
                 </Link>
-                
+
                 {user ? (
                   <>
                     <Link

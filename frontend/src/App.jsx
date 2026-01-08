@@ -27,13 +27,16 @@ import HackathonPage from './pages/HackathonPage'
 // import UIUXPhasePage from './pages/UIUXPhasePage'
 // import ArchitecturalDesignPhasePage from './pages/ArchitecturalDesignPhasePage'
 // import CodeDevelopmentPhasePage from './pages/CodeDevelopmentPhasePage'
-// import TestingPhasePage from './pages/TestingPhasePage'
+// import TestingPhasePage from './pages/TestingPhasePage';
+// import TestingPhasePage';
+import MyProjectSubmissionsPage from './pages/MyProjectSubmissionsPage';
 // import DeploymentPhasePage from './pages/DeploymentPhasePage'
 // Admin Projects pages - COMMENTED OUT (Admin side removed, but kept for students)
 // import AdminProjectsPage from './pages/AdminProjectsPage'
 // import AdminProjectManagementPage from './pages/AdminProjectManagementPage'
 import ProjectManagementDetailPage from './pages/ProjectManagementDetailPage'
-import AdminHackathonsPage from './pages/AdminHackathonsPage'
+import AdminHackathonsPage from './pages/AdminHackathonsPage';
+import AdminProjectSubmissionsPage from './pages/AdminProjectSubmissionsPage';
 import CreateHackathonPage from './pages/CreateHackathonPage'
 import CreateGroupPage from './pages/CreateGroupPage'
 // import AdminChatPage from './pages/AdminChatPage'
@@ -53,10 +56,10 @@ import { ProjectProgressProvider } from './context/ProjectProgressContext'
 
 function App() {
   console.log('App component is rendering')
-  
+
   // Initialize PostHog tracker for page view tracking
   usePostHogTracker()
-  
+
   try {
     const { user, loading } = useAuth()
     console.log('Auth state:', { user, loading })
@@ -82,85 +85,88 @@ function App() {
             <title>GNANAM AI - AI-Powered Learning Platform</title>
             <meta name="description" content="Experience the future of education with GNANAM AI - your intelligent learning companion" />
           </Helmet>
-          
+
           {/* <ChatNotification /> */}
-          
+
           <AnimatePresence mode="wait">
             <Routes>
-            {/* Public Routes */}
-            <Route path="/" element={<LandingPage />} />
-            <Route path="/login" element={<LoginPage />} />
-            <Route path="/register" element={<RegisterPage />} />
-            <Route path="/auth/callback" element={<AuthCallbackPage />} />
-            
-            {/* Protected Routes */}
-            <Route
-              path="/admin/*"
-              element={
-                <ProtectedRoute requiredRole="admin">
-                  <AdminDashboard />
-                </ProtectedRoute>
-              }
-            />
-            
-            <Route
-              path="/student/*"
-              element={
-                <ProtectedRoute requiredRole="student">
-                  <StudentDashboard />
-                </ProtectedRoute>
-              }
-            />
-            
-            <Route
-              path="/dashboard"
-              element={
-                user ? (
-                  <Navigate to={user.role === 'admin' ? '/admin' : '/student'} replace />
-                ) : (
-                  <Navigate to="/login" replace />
-                )
-              }
-            />
-            
-            {/* Course Routes */}
-            <Route path="/courses" element={<CourseListPage />} />
-            <Route path="/realtime-projects" element={<RealtimeProjectsLandingPage />} />
-            <Route path="/realtime-projects/diagnostics" element={<ProjectDiagnostics />} />
-            <Route path="/hackathons" element={<HackathonLandingPage />} />
-            <Route path="/courses/:id" element={<CourseDetailPage />} />
-            
-            {/* Realtime Projects Routes - Student access */}
-            <Route
-              path="/student/realtime-projects"
-              element={
-                <ProtectedRoute>
-                  <StudentRealtimeProjectsPage />
-                </ProtectedRoute>
-              }
-            />
-            
-            <Route
-              path="/student/realtime-projects/:projectId"
-              element={
-                <ProtectedRoute>
-                  <ProjectViewer />
-                </ProtectedRoute>
-              }
-            />
-            
-            {/* Student Hackathons Route */}
-            <Route
-              path="/student/hackathons"
-              element={
-                <ProtectedRoute>
-                  <HackathonPage />
-                </ProtectedRoute>
-              }
-            />
-            
-            {/* Realtime Projects Phase Routes - COMMENTED OUT (Student access removed, but pages kept for future use) */}
-            {/* <Route
+              {/* Public Routes */}
+              <Route path="/" element={<LandingPage />} />
+              <Route path="/login" element={<LoginPage />} />
+              <Route path="/register" element={<RegisterPage />} />
+              <Route path="/auth/callback" element={<AuthCallbackPage />} />
+
+              {/* Protected Routes */}
+              <Route
+                path="/admin/*"
+                element={
+                  <ProtectedRoute requiredRole="admin">
+                    <AdminDashboard />
+                  </ProtectedRoute>
+                }
+              />
+
+              <Route
+                path="/student/*"
+                element={
+                  <ProtectedRoute requiredRole="student">
+                    <StudentDashboard />
+                  </ProtectedRoute>
+                }
+              />
+
+              <Route
+                path="/dashboard"
+                element={
+                  user ? (
+                    <Navigate to={user.role === 'admin' ? '/admin' : '/student'} replace />
+                  ) : (
+                    <Navigate to="/login" replace />
+                  )
+                }
+              />
+
+              {/* Course Routes */}
+              <Route path="/courses" element={<CourseListPage />} />
+              <Route path="/realtime-projects" element={<RealtimeProjectsLandingPage />} />
+              <Route path="/realtime-projects/diagnostics" element={<ProjectDiagnostics />} />
+              <Route path="/hackathons" element={<HackathonLandingPage />} />
+              <Route path="/admin/hackathons" element={<AdminHackathonsPage />} />
+              <Route path="/admin/project-submissions" element={<AdminProjectSubmissionsPage />} />
+              <Route path="/admin/hackathons/create" element={<CreateHackathonPage />} />
+              <Route path="/courses/:id" element={<CourseDetailPage />} />
+
+              {/* Realtime Projects Routes - Student access */}
+              <Route
+                path="/student/realtime-projects"
+                element={
+                  <ProtectedRoute>
+                    <StudentRealtimeProjectsPage />
+                  </ProtectedRoute>
+                }
+              />
+
+              <Route
+                path="/student/realtime-projects/:projectId"
+                element={
+                  <ProtectedRoute>
+                    <ProjectViewer />
+                  </ProtectedRoute>
+                }
+              />
+
+              {/* Student Hackathons Route */}
+              <Route
+                path="/student/hackathons"
+                element={
+                  <ProtectedRoute>
+                    <HackathonPage />
+                  </ProtectedRoute>
+                }
+              />
+
+              {/* Realtime Projects Phase Routes - COMMENTED OUT (Student access removed, but pages kept for future use) */}
+              {/* <Route
               path="/student/realtime-projects/:projectId/brd"
               element={
                 <ProtectedRoute>
@@ -206,6 +212,15 @@ function App() {
             />
             
             <Route
+              path="/student/my-project-submissions"
+              element={
+                <ProtectedRoute>
+                  <MyProjectSubmissionsPage />
+                </ProtectedRoute>
+              }
+            />
+            
+            <Route
               path="/student/realtime-projects/:projectId/deployment"
               element={
                 <ProtectedRoute>
@@ -213,37 +228,37 @@ function App() {
                 </ProtectedRoute>
               }
             /> */}
-            
-            {/* Admin Routes */}
-            <Route
-              path="/admin/courses/create"
-              element={
-                <ProtectedRoute requiredRole="admin">
-                  <CreateCoursePage />
-                </ProtectedRoute>
-              }
-            />
-            
-            <Route
-              path="/admin/users"
-              element={
-                <ProtectedRoute requiredRole="admin">
-                  <UserManagementPage />
-                </ProtectedRoute>
-              }
-            />
-            
-            <Route
-              path="/admin/students"
-              element={
-                <ProtectedRoute requiredRole="admin">
-                  <StudentListPage />
-                </ProtectedRoute>
-              }
-            />
-            
-            {/* Admin Projects Routes - COMMENTED OUT (Admin side removed, but kept for students) */}
-            {/* <Route
+
+              {/* Admin Routes */}
+              <Route
+                path="/admin/courses/create"
+                element={
+                  <ProtectedRoute requiredRole="admin">
+                    <CreateCoursePage />
+                  </ProtectedRoute>
+                }
+              />
+
+              <Route
+                path="/admin/users"
+                element={
+                  <ProtectedRoute requiredRole="admin">
+                    <UserManagementPage />
+                  </ProtectedRoute>
+                }
+              />
+
+              <Route
+                path="/admin/students"
+                element={
+                  <ProtectedRoute requiredRole="admin">
+                    <StudentListPage />
+                  </ProtectedRoute>
+                }
+              />
+
+              {/* Admin Projects Routes - COMMENTED OUT (Admin side removed, but kept for students) */}
+              {/* <Route
               path="/admin/projects"
               element={
                 <ProtectedRoute requiredRole="admin">
@@ -269,37 +284,37 @@ function App() {
                 </ProtectedRoute>
               }
             /> */}
-            
-            {/* Hackathon Admin Routes */}
-            <Route
-              path="/admin/hackathons"
-              element={
-                <ProtectedRoute requiredRole="admin">
-                  <AdminHackathonsPage />
-                </ProtectedRoute>
-              }
-            />
-            
-            <Route
-              path="/admin/hackathons/create"
-              element={
-                <ProtectedRoute requiredRole="admin">
-                  <CreateHackathonPage />
-                </ProtectedRoute>
-              }
-            />
-            
-            <Route
-              path="/admin/hackathons/create-group"
-              element={
-                <ProtectedRoute requiredRole="admin">
-                  <CreateGroupPage />
-                </ProtectedRoute>
-              }
-            />
-            
-            {/* Chat Management Route - COMMENTED OUT */}
-            {/* <Route
+
+              {/* Hackathon Admin Routes */}
+              <Route
+                path="/admin/hackathons"
+                element={
+                  <ProtectedRoute requiredRole="admin">
+                    <AdminHackathonsPage />
+                  </ProtectedRoute>
+                }
+              />
+
+              <Route
+                path="/admin/hackathons/create"
+                element={
+                  <ProtectedRoute requiredRole="admin">
+                    <CreateHackathonPage />
+                  </ProtectedRoute>
+                }
+              />
+
+              <Route
+                path="/admin/hackathons/create-group"
+                element={
+                  <ProtectedRoute requiredRole="admin">
+                    <CreateGroupPage />
+                  </ProtectedRoute>
+                }
+              />
+
+              {/* Chat Management Route - COMMENTED OUT */}
+              {/* <Route
               path="/admin/chat"
               element={
                 <ProtectedRoute requiredRole="admin">
@@ -307,51 +322,51 @@ function App() {
                 </ProtectedRoute>
               }
             /> */}
-            
-            <Route
-              path="/admin/project-management/:projectId"
-              element={
-                <ProtectedRoute requiredRole="admin">
-                  <ProjectManagementDetailPage />
-                </ProtectedRoute>
-              }
-            />
-            
-            {/* Profile Route */}
-            <Route
-              path="/profile"
-              element={
-                <ProtectedRoute>
-                  <ProfilePage />
-                </ProtectedRoute>
-              }
-            />
-            
-            {/* Certificates Route */}
-            <Route
-              path="/certificates"
-              element={
-                <ProtectedRoute>
-                  <CertificatesPage />
-                </ProtectedRoute>
-              }
-            />
-            
-            {/* 404 Route */}
-            <Route path="*" element={<NotFoundPage />} />
-          </Routes>
-        </AnimatePresence>
+
+              <Route
+                path="/admin/project-management/:projectId"
+                element={
+                  <ProtectedRoute requiredRole="admin">
+                    <ProjectManagementDetailPage />
+                  </ProtectedRoute>
+                }
+              />
+
+              {/* Profile Route */}
+              <Route
+                path="/profile"
+                element={
+                  <ProtectedRoute>
+                    <ProfilePage />
+                  </ProtectedRoute>
+                }
+              />
+
+              {/* Certificates Route */}
+              <Route
+                path="/certificates"
+                element={
+                  <ProtectedRoute>
+                    <CertificatesPage />
+                  </ProtectedRoute>
+                }
+              />
+
+              {/* 404 Route */}
+              <Route path="*" element={<NotFoundPage />} />
+            </Routes>
+          </AnimatePresence>
         </ProjectProgressProvider>
       </ErrorBoundary>
     )
   } catch (error) {
     console.error('Error in App component:', error)
     return (
-      <div style={{ 
-        minHeight: '100vh', 
-        backgroundColor: '#fef2f2', 
-        display: 'flex', 
-        alignItems: 'center', 
+      <div style={{
+        minHeight: '100vh',
+        backgroundColor: '#fef2f2',
+        display: 'flex',
+        alignItems: 'center',
         justifyContent: 'center',
         fontFamily: 'Arial, sans-serif'
       }}>

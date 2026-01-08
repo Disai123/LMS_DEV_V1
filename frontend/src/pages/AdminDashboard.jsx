@@ -67,6 +67,7 @@ const AdminDashboard = () => {
     // Realtime Projects - COMMENTED OUT (Admin side removed, but kept for students)
     // { name: 'Realtime Projects', href: '/admin/projects', icon: 'projects', current: location.pathname.startsWith('/admin/projects') },
     { name: 'Hackathons', href: '/admin/hackathons', icon: 'hackathons', current: location.pathname.startsWith('/admin/hackathons') },
+    { name: 'Project Submissions', href: '/admin/project-submissions', icon: 'submissions', current: location.pathname.startsWith('/admin/project-submissions') },
     { name: 'RBAC Management', href: '/admin/rbac', icon: 'rbac', current: location.pathname.startsWith('/admin/rbac') },
     // { name: 'Chat Management', href: '/admin/chat', icon: 'chat', current: location.pathname.startsWith('/admin/chat') },
     { name: 'Users', href: '/admin/users', icon: 'users', current: location.pathname.startsWith('/admin/users') },
@@ -90,6 +91,16 @@ const AdminDashboard = () => {
       value: usersData?.data?.users?.filter(u => u.role === 'student').length || 0,
       change: '+8%',
       changeType: 'positive',
+      rbac: (
+        <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" />
+        </svg>
+      ),
+      submissions: (
+        <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-3 7h3m-3 4h3m-6-4h.01M9 16h.01" />
+        </svg>
+      ),
       icon: (
         <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
           <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197m13.5-9a2.5 2.5 0 11-5 0 2.5 2.5 0 015 0z" />
@@ -131,10 +142,10 @@ const AdminDashboard = () => {
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-50 via-blue-50 to-indigo-100">
       <Header />
-      
+
       <div className="flex">
         {/* Sidebar */}
-        <AdminSidebar 
+        <AdminSidebar
           navigation={navigation}
           sidebarOpen={sidebarOpen}
           setSidebarOpen={setSidebarOpen}
@@ -192,55 +203,55 @@ const AdminDashboard = () => {
 
               {/* Routes */}
               <Routes>
-                <Route 
-                  path="/" 
+                <Route
+                  path="/"
                   element={
-                    <DashboardOverview 
+                    <DashboardOverview
                       courses={coursesData?.data?.courses || []}
                       users={usersData?.data?.users || []}
                       stats={statsData?.data?.stats || {}}
                     />
-                  } 
+                  }
                 />
-                <Route 
-                  path="/courses" 
+                <Route
+                  path="/courses"
                   element={
-                    <CourseManagement 
+                    <CourseManagement
                       courses={coursesData?.data?.courses || []}
                     />
-                  } 
+                  }
                 />
-                <Route 
-                  path="/courses/create" 
-                  element={<CreateCourse />} 
+                <Route
+                  path="/courses/create"
+                  element={<CreateCourse />}
                 />
-                <Route 
-                  path="/courses/:id/edit" 
-                  element={<EditCourse />} 
+                <Route
+                  path="/courses/:id/edit"
+                  element={<EditCourse />}
                 />
-                <Route 
-                  path="/users" 
+                <Route
+                  path="/users"
                   element={
-                    <UserManagement 
+                    <UserManagement
                       users={usersData?.data?.users || []}
                     />
-                  } 
+                  }
                 />
-                <Route 
-                  path="/analytics" 
-                  element={<UserAnalytics />} 
+                <Route
+                  path="/analytics"
+                  element={<UserAnalytics />}
                 />
-                <Route 
-                  path="/projects" 
-                  element={<AdminProjectsPage />} 
+                <Route
+                  path="/projects"
+                  element={<AdminProjectsPage />}
                 />
-                <Route 
-                  path="/hackathons" 
-                  element={<AdminHackathonsPage />} 
+                <Route
+                  path="/hackathons"
+                  element={<AdminHackathonsPage />}
                 />
-                <Route 
-                  path="/rbac" 
-                  element={<RBACManagementPage />} 
+                <Route
+                  path="/rbac"
+                  element={<RBACManagementPage />}
                 />
               </Routes>
             </div>

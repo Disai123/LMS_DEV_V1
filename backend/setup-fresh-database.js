@@ -69,28 +69,28 @@ class FreshDatabaseSetup {
     try {
       log('🚀 FRESH DATABASE SETUP STARTED', 'bright');
       log('═══════════════════════════════════════════════════════════════');
-      
+
       // Step 1: Load and validate configuration
       await this.loadConfiguration();
-      
+
       // Step 2: Test database connection
       await this.testDatabaseConnection();
-      
+
       // Step 3: Create fresh database schema
       await this.createFreshSchema();
-      
+
       // Step 4: Create admin user
       await this.createAdminUser();
-      
+
       // Step 5: Seed sample data
       await this.seedSampleData();
-      
+
       // Step 6: Validate setup
       await this.validateSetup();
-      
+
       logSuccess('🎉 FRESH DATABASE SETUP COMPLETED SUCCESSFULLY!');
       this.printSummary();
-      
+
     } catch (error) {
       logError(`Setup failed: ${error.message}`);
       logError(`Stack trace: ${error.stack}`);
@@ -100,17 +100,17 @@ class FreshDatabaseSetup {
 
   async loadConfiguration() {
     logStep(1, 'Loading Database Configuration');
-    
+
     // Check if .env file exists
     const envPath = path.join(__dirname, '.env');
     if (!fs.existsSync(envPath)) {
       logWarning('No .env file found. Creating one with default values...');
       await this.createDefaultEnvFile();
     }
-    
+
     // Load environment variables
     require('dotenv').config({ path: envPath });
-    
+
     // Load configuration
     this.config = {
       host: process.env.DB_HOST || 'localhost',
@@ -119,12 +119,12 @@ class FreshDatabaseSetup {
       password: process.env.DB_PASSWORD || 'password',
       database: process.env.DB_DATABASE || process.env.DB_NAME || 'lms_db'
     };
-    
+
     // Validate required configuration
     if (!this.config.password || this.config.password === 'password') {
       logWarning('Using default password. Please update your .env file with secure credentials.');
     }
-    
+
     logSuccess('Database configuration loaded');
     logInfo(`Database: ${this.config.database}@${this.config.host}:${this.config.port}`);
   }
@@ -164,7 +164,7 @@ AWS_S3_BUCKET=your_s3_bucket_name_here
 
   async testDatabaseConnection() {
     logStep(2, 'Testing Database Connection');
-    
+
     this.sequelize = new Sequelize(
       this.config.database,
       this.config.user,
@@ -188,7 +188,7 @@ AWS_S3_BUCKET=your_s3_bucket_name_here
         }
       }
     );
-    
+
     try {
       await this.sequelize.authenticate();
       logSuccess('Database connection successful');
@@ -199,22 +199,22 @@ AWS_S3_BUCKET=your_s3_bucket_name_here
 
   async createFreshSchema() {
     logStep(3, 'Creating Fresh Database Schema');
-    
+
     try {
       // Load models and create schema
       const { sequelize } = require('./models');
-      
+
       // Update sequelize config to use our connection
       sequelize.config.host = this.config.host;
       sequelize.config.port = this.config.port;
       sequelize.config.username = this.config.user;
       sequelize.config.password = this.config.password;
       sequelize.config.database = this.config.database;
-      
+
       // Create all tables
       await sequelize.sync({ force: true });
       logSuccess('Fresh database schema created');
-      
+
     } catch (error) {
       throw new Error(`Failed to create schema: ${error.message}`);
     }
@@ -222,25 +222,24 @@ AWS_S3_BUCKET=your_s3_bucket_name_here
 
   async createAdminUser() {
     logStep(4, 'Creating Admin User');
-    
+
     try {
       const { User } = require('./models');
-      
+
       // Check if admin user already exists
       const existingAdmin = await User.findOne({ where: { email: 'admin@lms.com' } });
-      
+
       if (existingAdmin) {
         logWarning('Admin user already exists');
         return;
       }
-      
+
       // Create admin user
-      const hashedPassword = await bcrypt.hash('admin123', 10);
-      
+      // password will be hashed by User model hook
       const adminUser = await User.create({
         name: 'System Administrator',
         email: 'admin@lms.com',
-        password: hashedPassword,
+        password: 'admin123', // Model hook handles hashing
         role: 'admin',
         is_active: true,
         preferences: {
@@ -248,12 +247,12 @@ AWS_S3_BUCKET=your_s3_bucket_name_here
           notifications: true
         }
       });
-      
+
       logSuccess(`Admin user created with ID: ${adminUser.id}`);
       logInfo('Email: admin@lms.com');
       logInfo('Password: admin123');
       logWarning('Please change the admin password after first login!');
-      
+
     } catch (error) {
       logWarning(`Failed to create admin user: ${error.message}`);
     }
@@ -261,24 +260,24 @@ AWS_S3_BUCKET=your_s3_bucket_name_here
 
   async seedSampleData() {
     logStep(5, 'Seeding Sample Data');
-    
+
     try {
       const { User, Course, CourseChapter, Enrollment } = require('./models');
-      
+
       // Create sample instructor
       const instructor = await User.create({
         name: 'John Instructor',
         email: 'instructor@lms.com',
-        password: await bcrypt.hash('instructor123', 10),
+        password: 'instructor123', // Model hook handles hashing
         role: 'student', // Will be updated to instructor
         is_active: true
       });
-      
+
       // Update to instructor role
       await instructor.update({ role: 'admin' }); // Using admin role for instructor
-      
+
       logSuccess('Sample instructor created');
-      
+
       // Create sample course
       const course = await Course.create({
         title: 'Introduction to Web Development',
@@ -296,9 +295,9 @@ AWS_S3_BUCKET=your_s3_bucket_name_here
         ],
         tags: ['HTML', 'CSS', 'JavaScript', 'Web Development']
       });
-      
+
       logSuccess('Sample course created');
-      
+
       // Create sample chapters
       const chapters = [
         {
@@ -326,25 +325,25 @@ AWS_S3_BUCKET=your_s3_bucket_name_here
           duration_minutes: 60
         }
       ];
-      
+
       for (const chapterData of chapters) {
         await CourseChapter.create({
           ...chapterData,
           course_id: course.id
         });
       }
-      
+
       logSuccess('Sample chapters created');
-      
+
       // Create sample student
       const student = await User.create({
         name: 'Jane Student',
         email: 'student@lms.com',
-        password: await bcrypt.hash('student123', 10),
+        password: 'student123', // Model hook handles hashing
         role: 'student',
         is_active: true
       });
-      
+
       // Create sample enrollment
       await Enrollment.create({
         student_id: student.id,
@@ -352,16 +351,16 @@ AWS_S3_BUCKET=your_s3_bucket_name_here
         status: 'enrolled',
         progress: 0
       });
-      
+
       logSuccess('Sample enrollment created');
-      
+
       logInfo('Sample data includes:');
       logInfo('- 1 Admin user (admin@lms.com / admin123)');
       logInfo('- 1 Instructor user (instructor@lms.com / instructor123)');
       logInfo('- 1 Student user (student@lms.com / student123)');
       logInfo('- 1 Sample course with 3 chapters');
       logInfo('- 1 Sample enrollment');
-      
+
     } catch (error) {
       logWarning(`Failed to seed sample data: ${error.message}`);
     }
@@ -369,7 +368,7 @@ AWS_S3_BUCKET=your_s3_bucket_name_here
 
   async validateSetup() {
     logStep(6, 'Validating Setup');
-    
+
     try {
       // Check tables
       const [tables] = await this.sequelize.query(`
@@ -379,27 +378,27 @@ AWS_S3_BUCKET=your_s3_bucket_name_here
         AND table_type = 'BASE TABLE'
         ORDER BY table_name
       `);
-      
+
       logInfo(`Found ${tables.length} tables in database`);
-      
+
       // Check users
       const [userCount] = await this.sequelize.query(`SELECT COUNT(*) as count FROM "users"`);
       logInfo(`Users: ${userCount[0].count}`);
-      
+
       // Check courses
       const [courseCount] = await this.sequelize.query(`SELECT COUNT(*) as count FROM "courses"`);
       logInfo(`Courses: ${courseCount[0].count}`);
-      
+
       // Check chapters
       const [chapterCount] = await this.sequelize.query(`SELECT COUNT(*) as count FROM "course_chapters"`);
       logInfo(`Chapters: ${chapterCount[0].count}`);
-      
+
       // Check enrollments
       const [enrollmentCount] = await this.sequelize.query(`SELECT COUNT(*) as count FROM "enrollments"`);
       logInfo(`Enrollments: ${enrollmentCount[0].count}`);
-      
+
       logSuccess('Setup validation completed');
-      
+
     } catch (error) {
       logWarning(`Validation warning: ${error.message}`);
     } finally {

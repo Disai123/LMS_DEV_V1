@@ -500,3 +500,12 @@
   background-size: 200% 100%;
   animation: shimmer 2s infinite;
 }
+
+/* Animation delays for staggered effects */
+.animation-delay-2000 {
+  animation-delay: 2s;
+}
+
+.animation-delay-4000 {
+  animation-delay: 4s;
+}

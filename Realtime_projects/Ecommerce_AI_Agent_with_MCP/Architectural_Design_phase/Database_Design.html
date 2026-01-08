@@ -1,0 +1,142 @@
+<div class="content-body">
+  <div class="content-section">
+    <h3 class="content-heading">Database Design</h3>
+    <div style="max-width: none;">
+      <p style="color: #4b5563; line-height: 1.75; margin-bottom: 1.5rem;">
+        The database schema for the AI agent focuses on storing conversation history and messages. It integrates 
+        with existing e-commerce tables (User, Product, CartItem) to provide context for AI interactions.
+      </p>
+      
+      <div style="display: flex; flex-direction: column; gap: 2rem;">
+        <div class="card">
+          <h4 style="font-size: 1.25rem; font-weight: 600; color: #1f2937; margin-bottom: 1.5rem; display: flex; align-items: center; gap: 0.5rem;">
+            <span style="font-size: 1.5rem;">💬</span>
+            Conversation Model
+          </h4>
+          
+          <div style="background: #f9fafb; border-radius: 0.5rem; padding: 1.5rem; overflow-x: auto;">
+            <pre style="font-family: 'Courier New', monospace; font-size: 0.875rem; color: #1f2937; line-height: 1.6; margin: 0;"><code>model Conversation {
+  id        String   @id @default(cuid())
+  userId    String
+  user      User     @relation(fields: [userId], references: [id])
+  title     String?  // Auto-generated from first message
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  
+  messages  Message[]
+  
+  @@index([userId])
+  @@map("conversations")
+}</code></pre>
+          </div>
+          
+          <div style="margin-top: 1rem; padding: 1rem; background: #eff6ff; border-radius: 0.5rem;">
+            <h5 style="font-weight: 600; color: #1f2937; margin-bottom: 0.5rem;">Key Fields:</h5>
+            <ul style="font-size: 0.875rem; color: #4b5563; list-style: disc; list-style-position: inside;">
+              <li><strong>id:</strong> Unique conversation identifier</li>
+              <li><strong>userId:</strong> Links to User table (one-to-many)</li>
+              <li><strong>title:</strong> Optional title for conversation</li>
+              <li><strong>messages:</strong> One-to-many relationship with Message</li>
+            </ul>
+          </div>
+        </div>
+
+        <div class="card">
+          <h4 style="font-size: 1.25rem; font-weight: 600; color: #1f2937; margin-bottom: 1.5rem; display: flex; align-items: center; gap: 0.5rem;">
+            <span style="font-size: 1.5rem;">📝</span>
+            Message Model
+          </h4>
+          
+          <div style="background: #f9fafb; border-radius: 0.5rem; padding: 1.5rem; overflow-x: auto;">
+            <pre style="font-family: 'Courier New', monospace; font-size: 0.875rem; color: #1f2937; line-height: 1.6; margin: 0;"><code>model Message {
+  id             String       @id @default(cuid())
+  conversationId String
+  conversation   Conversation @relation(fields: [conversationId], references: [id], onDelete: Cascade)
+  role           String       // "user" | "assistant"
+  content        String       @db.Text
+  toolCalls      Json?        // Store tool calls if any
+  createdAt      DateTime     @default(now())
+  
+  @@index([conversationId])
+  @@index([createdAt])
+  @@map("messages")
+}</code></pre>
+          </div>
+          
+          <div style="margin-top: 1rem; padding: 1rem; background: #f0fdf4; border-radius: 0.5rem;">
+            <h5 style="font-weight: 600; color: #1f2937; margin-bottom: 0.5rem;">Key Fields:</h5>
+            <ul style="font-size: 0.875rem; color: #4b5563; list-style: disc; list-style-position: inside;">
+              <li><strong>id:</strong> Unique message identifier</li>
+              <li><strong>conversationId:</strong> Links to Conversation (many-to-one)</li>
+              <li><strong>role:</strong> "user" or "assistant" (AI response)</li>
+              <li><strong>content:</strong> Message text content</li>
+              <li><strong>toolCalls:</strong> JSON field storing tool call metadata</li>
+              <li><strong>createdAt:</strong> Timestamp for ordering messages</li>
+            </ul>
+          </div>
+        </div>
+
+        <div class="card">
+          <h4 style="font-size: 1.25rem; font-weight: 600; color: #1f2937; margin-bottom: 1.5rem; display: flex; align-items: center; gap: 0.5rem;">
+            <span style="font-size: 1.5rem;">🔗</span>
+            Relationships
+          </h4>
+          
+          <div style="background: #f9fafb; border-radius: 0.5rem; padding: 1.5rem;">
+            <div style="display: flex; flex-direction: column; gap: 1rem;">
+              <div style="border-left: 4px solid #3b82f6; padding-left: 1rem;">
+                <h5 style="font-weight: 600; color: #1f2937; margin-bottom: 0.5rem;">User → Conversation</h5>
+                <p style="font-size: 0.875rem; color: #6b7280;">
+                  One user can have many conversations. Each conversation is isolated per user.
+                </p>
+              </div>
+
+              <div style="border-left: 4px solid #10b981; padding-left: 1rem;">
+                <h5 style="font-weight: 600; color: #1f2937; margin-bottom: 0.5rem;">Conversation → Message</h5>
+                <p style="font-size: 0.875rem; color: #6b7280;">
+                  One conversation contains many messages. Messages are ordered by createdAt.
+                </p>
+              </div>
+
+              <div style="border-left: 4px solid #a855f7; padding-left: 1rem;">
+                <h5 style="font-weight: 600; color: #1f2937; margin-bottom: 0.5rem;">Integration with E-commerce Tables</h5>
+                <p style="font-size: 0.875rem; color: #6b7280;">
+                  Tool modules query Product, CartItem, Category tables for AI responses. 
+                  No direct foreign keys, accessed via Prisma queries.
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="card">
+          <h4 style="font-size: 1.25rem; font-weight: 600; color: #1f2937; margin-bottom: 1.5rem; display: flex; align-items: center; gap: 0.5rem;">
+            <span style="font-size: 1.5rem;">📊</span>
+            Indexes & Performance
+          </h4>
+          
+          <div style="background: #f9fafb; border-radius: 0.5rem; padding: 1.5rem;">
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 1rem;">
+              <div style="background: white; padding: 1rem; border-radius: 0.5rem; border: 1px solid #e5e7eb;">
+                <h5 style="font-weight: 600; color: #1f2937; margin-bottom: 0.5rem;">Conversation Indexes</h5>
+                <ul style="font-size: 0.875rem; color: #4b5563; list-style: disc; list-style-position: inside;">
+                  <li>userId (for user queries)</li>
+                  <li>createdAt (for sorting)</li>
+                </ul>
+              </div>
+
+              <div style="background: white; padding: 1rem; border-radius: 0.5rem; border: 1px solid #e5e7eb;">
+                <h5 style="font-weight: 600; color: #1f2937; margin-bottom: 0.5rem;">Message Indexes</h5>
+                <ul style="font-size: 0.875rem; color: #4b5563; list-style: disc; list-style-position: inside;">
+                  <li>conversationId (for loading messages)</li>
+                  <li>createdAt (for chronological order)</li>
+                </ul>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+

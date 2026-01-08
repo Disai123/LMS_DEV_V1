@@ -1,0 +1,129 @@
+<div class="content-body">
+  <div class="content-section">
+    <h3 class="content-heading">Unit Testing</h3>
+    <div style="max-width: none;">
+      <p style="color: #4b5563; line-height: 1.75; margin-bottom: 1.5rem;">
+        Unit tests verify that individual tool module functions work correctly in isolation. Each tool function 
+        is tested with various inputs and edge cases.
+      </p>
+      
+      <div style="display: flex; flex-direction: column; gap: 2rem;">
+        <div class="card">
+          <h4 style="font-size: 1.25rem; font-weight: 600; color: #1f2937; margin-bottom: 1.5rem; display: flex; align-items: center; gap: 0.5rem;">
+            <span style="font-size: 1.5rem;">📚</span>
+            Catalog Scout Tests
+          </h4>
+          
+          <div style="background: #f9fafb; border-radius: 0.5rem; padding: 1.5rem;">
+            <div style="display: flex; flex-direction: column; gap: 1rem;">
+              <div style="border-left: 4px solid #3b82f6; padding-left: 1rem;">
+                <h5 style="font-weight: 600; color: #1f2937; margin-bottom: 0.5rem;">searchProducts Tests</h5>
+                <ul style="font-size: 0.875rem; color: #4b5563; list-style: disc; list-style-position: inside;">
+                  <li>✅ Search by product name returns correct results</li>
+                  <li>✅ Search by category filters correctly</li>
+                  <li>✅ Price range filtering works</li>
+                  <li>✅ In-stock filter works</li>
+                  <li>✅ Empty search returns all products</li>
+                  <li>✅ Limit parameter respected</li>
+                </ul>
+              </div>
+
+              <div style="border-left: 4px solid #10b981; padding-left: 1rem;">
+                <h5 style="font-weight: 600; color: #1f2937; margin-bottom: 0.5rem;">getProductDetails Tests</h5>
+                <ul style="font-size: 0.875rem; color: #4b5563; list-style: disc; list-style-position: inside;">
+                  <li>✅ Returns product by ID</li>
+                  <li>✅ Returns product by slug</li>
+                  <li>✅ Returns null for invalid ID</li>
+                  <li>✅ Includes all required fields</li>
+                </ul>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="card">
+          <h4 style="font-size: 1.25rem; font-weight: 600; color: #1f2937; margin-bottom: 1.5rem; display: flex; align-items: center; gap: 0.5rem;">
+            <span style="font-size: 1.5rem;">🛒</span>
+            Cart Manager Tests
+          </h4>
+          
+          <div style="background: #f9fafb; border-radius: 0.5rem; padding: 1.5rem;">
+            <div style="display: flex; flex-direction: column; gap: 1rem;">
+              <div style="border-left: 4px solid #ef4444; padding-left: 1rem;">
+                <h5 style="font-weight: 600; color: #1f2937; margin-bottom: 0.5rem;">addToCart Tests</h5>
+                <ul style="font-size: 0.875rem; color: #4b5563; list-style: disc; list-style-position: inside;">
+                  <li>✅ Adds product by ID</li>
+                  <li>✅ Adds product by name (searches first)</li>
+                  <li>✅ Validates stock before adding</li>
+                  <li>✅ Rejects out-of-stock items</li>
+                  <li>✅ Handles quantity specification</li>
+                  <li>✅ Updates existing cart items</li>
+                </ul>
+              </div>
+
+              <div style="border-left: 4px solid #6366f1; padding-left: 1rem;">
+                <h5 style="font-weight: 600; color: #1f2937; margin-bottom: 0.5rem;">getCart Tests</h5>
+                <ul style="font-size: 0.875rem; color: #4b5563; list-style: disc; list-style-position: inside;">
+                  <li>✅ Returns empty cart for new user</li>
+                  <li>✅ Returns all cart items</li>
+                  <li>✅ Calculates totals correctly</li>
+                  <li>✅ Includes product details</li>
+                </ul>
+              </div>
+
+              <div style="border-left: 4px solid #8b5cf6; padding-left: 1rem;">
+                <h5 style="font-weight: 600; color: #1f2937; margin-bottom: 0.5rem;">updateCartItem Tests</h5>
+                <ul style="font-size: 0.875rem; color: #4b5563; list-style: disc; list-style-position: inside;">
+                  <li>✅ Updates quantity correctly</li>
+                  <li>✅ Validates stock limits</li>
+                  <li>✅ Removes item if quantity = 0</li>
+                  <li>✅ Returns error for invalid productId</li>
+                </ul>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="card">
+          <h4 style="font-size: 1.25rem; font-weight: 600; color: #1f2937; margin-bottom: 1.5rem; display: flex; align-items: center; gap: 0.5rem;">
+            <span style="font-size: 1.5rem;">📦</span>
+            Inventory Sentinel Tests
+          </h4>
+          
+          <div style="background: #f9fafb; border-radius: 0.5rem; padding: 1.5rem;">
+            <div style="border-left: 4px solid #f97316; padding-left: 1rem;">
+              <h5 style="font-weight: 600; color: #1f2937; margin-bottom: 0.5rem;">checkStock Tests</h5>
+              <ul style="font-size: 0.875rem; color: #4b5563; list-style: disc; list-style-position: inside;">
+                <li>✅ Returns stock quantity for valid product</li>
+                <li>✅ Returns 0 for out-of-stock items</li>
+                <li>✅ Handles invalid product IDs</li>
+                <li>✅ Checks stock by category</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+
+        <div class="card">
+          <h4 style="font-size: 1.25rem; font-weight: 600; color: #1f2937; margin-bottom: 1.5rem; display: flex; align-items: center; gap: 0.5rem;">
+            <span style="font-size: 1.5rem;">🎯</span>
+            Recommendation Engine Tests
+          </h4>
+          
+          <div style="background: #f9fafb; border-radius: 0.5rem; padding: 1.5rem;">
+            <div style="border-left: 4px solid #06b6d4; padding-left: 1rem;">
+              <h5 style="font-weight: 600; color: #1f2937; margin-bottom: 0.5rem;">getRecommendations Tests</h5>
+              <ul style="font-size: 0.875rem; color: #4b5563; list-style: disc; list-style-position: inside;">
+                <li>✅ Returns recommendations by category</li>
+                <li>✅ Returns similar products for productId</li>
+                <li>✅ Respects limit parameter</li>
+                <li>✅ Prioritizes in-stock items</li>
+                <li>✅ Returns empty array if no matches</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+

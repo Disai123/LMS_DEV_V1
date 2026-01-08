@@ -5,11 +5,11 @@ import { useMutation, useQuery, useQueryClient } from 'react-query'
 import { testService } from '../../services/testService'
 import toast from 'react-hot-toast'
 
-const TestTakingModal = ({ 
-  isOpen, 
-  onClose, 
-  test, 
-  enrollmentId 
+const TestTakingModal = ({
+  isOpen,
+  onClose,
+  test,
+  enrollmentId
 }) => {
   const queryClient = useQueryClient()
   const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0)
@@ -31,7 +31,7 @@ const TestTakingModal = ({
         willFetchQuestions: !!test?.id && isOpen,
         queryEnabled: !!test?.id && isOpen
       })
-      
+
       // If test doesn't have an ID, log an error
       if (!test?.id) {
         console.error('❌ Test object missing ID:', test)
@@ -107,11 +107,12 @@ const TestTakingModal = ({
         setTestCompleted(true)
         setTestResults(data.data)
         toast.success('Test submitted successfully!')
-        
+
         // Refresh all relevant data including test progress
         queryClient.invalidateQueries('student-enrollments')
         queryClient.invalidateQueries('student-activities')
         queryClient.invalidateQueries('user-achievements')
+        queryClient.invalidateQueries('student-score') // CRITICAL: Invalidate score cache for points update
         // Invalidate course data to get updated enrollment progress
         queryClient.invalidateQueries(['course'])
         // Invalidate chapter progression to update test accessibility
@@ -124,7 +125,8 @@ const TestTakingModal = ({
           queryClient.refetchQueries('student-enrollments'),
           queryClient.refetchQueries(['course']),
           queryClient.refetchQueries(['chapterProgression']),
-          queryClient.refetchQueries('user-achievements') // Refetch achievements immediately
+          queryClient.refetchQueries('user-achievements'), // Refetch achievements immediately
+          queryClient.refetchQueries('student-score') // Refetch score immediately for dashboard
         ])
       },
       onError: (error) => {
@@ -200,7 +202,7 @@ const TestTakingModal = ({
       document.body.style.top = `-${scrollY}px`
       document.body.style.width = '100%'
       document.body.style.overflow = 'hidden'
-      
+
       return () => {
         // Re-enable body scroll when modal closes
         document.body.style.position = ''
@@ -248,7 +250,7 @@ const TestTakingModal = ({
                 </svg>
               </button>
             </div>
-            
+
             {testStarted && !testCompleted && (
               <div className="mt-4 flex items-center justify-between">
                 <div className="flex items-center space-x-4">
@@ -256,7 +258,7 @@ const TestTakingModal = ({
                     Question {currentQuestionIndex + 1} of {questions.length}
                   </div>
                   <div className="w-32 bg-indigo-300 rounded-full h-2">
-                    <div 
+                    <div
                       className="bg-white h-2 rounded-full transition-all duration-300"
                       style={{ width: `${getProgressPercentage()}%` }}
                     />
@@ -310,9 +312,8 @@ const TestTakingModal = ({
             ) : testCompleted ? (
               // Test Results Screen
               <div className="text-center py-12">
-                <div className={`w-24 h-24 rounded-full flex items-center justify-center mx-auto mb-6 ${
-                  isPassing ? 'bg-gradient-to-br from-green-500 to-emerald-600' : 'bg-gradient-to-br from-red-500 to-pink-600'
-                }`}>
+                <div className={`w-24 h-24 rounded-full flex items-center justify-center mx-auto mb-6 ${isPassing ? 'bg-gradient-to-br from-green-500 to-emerald-600' : 'bg-gradient-to-br from-red-500 to-pink-600'
+                  }`}>
                   <svg className="w-12 h-12 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     {isPassing ? (
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
@@ -395,11 +396,10 @@ const TestTakingModal = ({
                     {questions[currentQuestionIndex]?.options?.map((option) => (
                       <label
                         key={option.id}
-                        className={`flex items-center p-4 rounded-lg border-2 cursor-pointer transition-all duration-200 ${
-                          answers[questions[currentQuestionIndex].id] === option.id
+                        className={`flex items-center p-4 rounded-lg border-2 cursor-pointer transition-all duration-200 ${answers[questions[currentQuestionIndex].id] === option.id
                             ? 'border-indigo-500 bg-indigo-50'
                             : 'border-gray-200 hover:border-gray-300 hover:bg-gray-50'
-                        }`}
+                          }`}
                       >
                         <input
                           type="radio"
@@ -409,11 +409,10 @@ const TestTakingModal = ({
                           onChange={() => handleAnswerSelect(questions[currentQuestionIndex].id, option.id)}
                           className="sr-only"
                         />
-                        <div className={`w-4 h-4 rounded-full border-2 mr-3 flex items-center justify-center ${
-                          answers[questions[currentQuestionIndex].id] === option.id
+                        <div className={`w-4 h-4 rounded-full border-2 mr-3 flex items-center justify-center ${answers[questions[currentQuestionIndex].id] === option.id
                             ? 'border-indigo-500 bg-indigo-500'
                             : 'border-gray-300'
-                        }`}>
+                          }`}>
                           {answers[questions[currentQuestionIndex].id] === option.id && (
                             <div className="w-2 h-2 bg-white rounded-full"></div>
                           )}
@@ -433,19 +432,18 @@ const TestTakingModal = ({
                   >
                     Previous
                   </button>
-                  
+
                   <div className="flex space-x-2">
                     {questions.map((_, index) => (
                       <button
                         key={index}
                         onClick={() => setCurrentQuestionIndex(index)}
-                        className={`w-8 h-8 rounded-full text-sm font-medium ${
-                          index === currentQuestionIndex
+                        className={`w-8 h-8 rounded-full text-sm font-medium ${index === currentQuestionIndex
                             ? 'bg-indigo-600 text-white'
                             : answers[questions[index].id]
-                            ? 'bg-indigo-100 text-indigo-700'
-                            : 'bg-gray-100 text-gray-600'
-                        }`}
+                              ? 'bg-indigo-100 text-indigo-700'
+                              : 'bg-gray-100 text-gray-600'
+                          }`}
                       >
                         {index + 1}
                       </button>

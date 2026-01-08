@@ -4,6 +4,7 @@ import { motion } from 'framer-motion';
 import Header from '../common/Header';
 import { useRealtimeProjects } from '../../hooks/useRealtimeProjects';
 import LoadingSpinner from '../common/LoadingSpinner';
+import ProjectSubmissionModal from './ProjectSubmissionModal';
 
 const ProjectViewer = () => {
   const { projectId } = useParams();
@@ -11,6 +12,8 @@ const ProjectViewer = () => {
   const iframeRef = useRef(null);
   const [isFullscreen, setIsFullscreen] = useState(false);
   const [iframeLoading, setIframeLoading] = useState(true);
+  const [showSubmissionModal, setShowSubmissionModal] = useState(false);
+  const [submissionSuccess, setSubmissionSuccess] = useState(false);
   const { projects, isLoading } = useRealtimeProjects();
 
   // Validate projectId exists
@@ -32,20 +35,20 @@ const ProjectViewer = () => {
   }
 
   // Find project by id or folderName
-  const project = projects.find(p => 
-    p.id?.toLowerCase() === projectId?.toLowerCase() || 
+  const project = projects.find(p =>
+    p.id?.toLowerCase() === projectId?.toLowerCase() ||
     p.folderName?.toLowerCase() === projectId?.toLowerCase()
   );
 
   // Get API URL and token
   const apiUrl = import.meta.env.VITE_API_URL || 'http://localhost:5000';
   const token = localStorage.getItem('accessToken') || localStorage.getItem('token');
-  
+
   // Construct project URL only if projectId is valid
-  const projectUrl = projectId 
+  const projectUrl = projectId
     ? `${apiUrl}/api/realtime-projects/${projectId}${token ? `?token=${encodeURIComponent(token)}` : ''}`
     : null;
-  
+
   // Debug logging
   console.log('ProjectViewer - projectId:', projectId);
   console.log('ProjectViewer - projects count:', projects.length);
@@ -198,7 +201,7 @@ const ProjectViewer = () => {
           onLoad={(e) => {
             console.log('Iframe loaded successfully');
             handleIframeLoad();
-            
+
             // Note: We intentionally don't try to access iframe.contentDocument or iframe.contentWindow.document
             // because it's cross-origin (localhost:5000 vs localhost:3000) and will throw a security error.
             // This is expected behavior and the iframe will still display content correctly.
@@ -209,6 +212,64 @@ const ProjectViewer = () => {
           allow="fullscreen"
         />
       </div>
+
+
+
+      {/* Minimized Assistant Icon - Doesn't Block Content */}
+      <div className="fixed bottom-8 right-8 z-40">
+        <button
+          onClick={() => setShowSubmissionModal(true)}
+          className="group relative flex items-center justify-center w-16 h-16 bg-gradient-to-r from-green-500 to-green-600 text-white rounded-full shadow-lg hover:from-green-600 hover:to-green-700 transition-all transform hover:scale-110"
+          title="Submit your project"
+        >
+          {/* Pulsing Ring */}
+          <div className="absolute inset-0 animate-ping">
+            <div className="w-full h-full bg-green-400 rounded-full opacity-75"></div>
+          </div>
+
+          {/* Checkmark Icon */}
+          <svg className="w-8 h-8 relative z-10" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+          </svg>
+
+          {/* Tooltip - Only Shows on Hover */}
+          <div className="absolute -top-14 right-0 bg-white px-4 py-2 rounded-lg shadow-lg border-2 border-green-500 opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap pointer-events-none">
+            <div className="flex items-center gap-2">
+              <svg className="w-4 h-4 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+              </svg>
+              <span className="text-xs font-semibold text-gray-700">Click to submit project!</span>
+            </div>
+            <div className="absolute -bottom-2 right-6 w-3 h-3 bg-white border-r-2 border-b-2 border-green-500 transform rotate-45"></div>
+          </div>
+        </button>
+      </div>
+
+
+      {/* Success Message */}
+      {submissionSuccess && (
+        <div className="fixed top-20 right-8 z-50 bg-green-50 border-l-4 border-green-500 p-4 rounded shadow-lg">
+          <div className="flex items-center gap-2">
+            <svg className="w-5 h-5 text-green-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
+            </svg>
+            <p className="text-green-700 font-semibold">Project submitted successfully!</p>
+          </div>
+        </div>
+      )}
+
+      {/* Submission Modal */}
+      {showSubmissionModal && (
+        <ProjectSubmissionModal
+          projectId={projectId}
+          projectName={project?.name || projectId}
+          onClose={() => setShowSubmissionModal(false)}
+          onSuccess={() => {
+            setSubmissionSuccess(true);
+            setTimeout(() => setSubmissionSuccess(false), 5000);
+          }}
+        />
+      )}
 
       {/* LMS Footer - Hidden for project viewer to maximize space */}
       {/* <Footer /> */}

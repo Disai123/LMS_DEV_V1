@@ -1,0 +1,173 @@
+<div class="content-body">
+  <div class="content-section">
+    <h3 class="content-heading">Tool Modules Development</h3>
+    <div style="max-width: none;">
+      <p style="color: #4b5563; line-height: 1.75; margin-bottom: 1.5rem;">
+        Tool modules are specialized functions that the AI can call to interact with the e-commerce system. 
+        Each module handles a specific domain: product search, inventory, recommendations, and cart management.
+      </p>
+      
+      <div style="display: flex; flex-direction: column; gap: 2rem;">
+        <div class="card">
+          <h4 style="font-size: 1.25rem; font-weight: 600; color: #1f2937; margin-bottom: 1.5rem; display: flex; align-items: center; gap: 0.5rem;">
+            <span style="font-size: 1.5rem;">📚</span>
+            Catalog Scout (catalog.ts)
+          </h4>
+          
+          <div style="background: #f9fafb; border-radius: 0.5rem; padding: 1.5rem;">
+            <div style="display: flex; flex-direction: column; gap: 1rem;">
+              <div style="border-left: 4px solid #3b82f6; padding-left: 1rem;">
+                <h5 style="font-weight: 600; color: #1f2937; margin-bottom: 0.5rem;">searchProducts</h5>
+                <ul style="font-size: 0.875rem; color: #4b5563; list-style: disc; list-style-position: inside;">
+                  <li>Searches products by name, description, brand, tags</li>
+                  <li>Filters by category, price range, stock availability</li>
+                  <li>Returns product list with images, prices, ratings</li>
+                  <li>Uses Prisma with case-insensitive search</li>
+                </ul>
+              </div>
+
+              <div style="border-left: 4px solid #10b981; padding-left: 1rem;">
+                <h5 style="font-weight: 600; color: #1f2937; margin-bottom: 0.5rem;">getProductDetails</h5>
+                <ul style="font-size: 0.875rem; color: #4b5563; list-style: disc; list-style-position: inside;">
+                  <li>Retrieves detailed product information</li>
+                  <li>Accepts productId or productSlug</li>
+                  <li>Includes images, specifications, reviews</li>
+                  <li>Returns stock quantity and availability</li>
+                </ul>
+              </div>
+
+              <div style="border-left: 4px solid #a855f7; padding-left: 1rem;">
+                <h5 style="font-weight: 600; color: #1f2937; margin-bottom: 0.5rem;">getCategories</h5>
+                <ul style="font-size: 0.875rem; color: #4b5563; list-style: disc; list-style-position: inside;">
+                  <li>Lists all active product categories</li>
+                  <li>Returns category hierarchy</li>
+                  <li>Includes product counts per category</li>
+                </ul>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="card">
+          <h4 style="font-size: 1.25rem; font-weight: 600; color: #1f2937; margin-bottom: 1.5rem; display: flex; align-items: center; gap: 0.5rem;">
+            <span style="font-size: 1.5rem;">📦</span>
+            Inventory Sentinel (inventory.ts)
+          </h4>
+          
+          <div style="background: #f9fafb; border-radius: 0.5rem; padding: 1.5rem;">
+            <div style="border-left: 4px solid #f97316; padding-left: 1rem;">
+              <h5 style="font-weight: 600; color: #1f2937; margin-bottom: 0.5rem;">checkStock</h5>
+              <ul style="font-size: 0.875rem; color: #4b5563; list-style: disc; list-style-position: inside;">
+                <li>Checks stock availability for products</li>
+                <li>Accepts productId, productSlug, or category</li>
+                <li>Returns stock quantity and status</li>
+                <li>Handles out-of-stock scenarios</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+
+        <div class="card">
+          <h4 style="font-size: 1.25rem; font-weight: 600; color: #1f2937; margin-bottom: 1.5rem; display: flex; align-items: center; gap: 0.5rem;">
+            <span style="font-size: 1.5rem;">🎯</span>
+            Recommendation Engine (recommendations.ts)
+          </h4>
+          
+          <div style="background: #f9fafb; border-radius: 0.5rem; padding: 1.5rem;">
+            <div style="border-left: 4px solid #06b6d4; padding-left: 1rem;">
+              <h5 style="font-weight: 600; color: #1f2937; margin-bottom: 0.5rem;">getRecommendations</h5>
+              <ul style="font-size: 0.875rem; color: #4b5563; list-style: disc; list-style-position: inside;">
+                <li>Generates product recommendations</li>
+                <li>Can recommend by category</li>
+                <li>Can find similar products to a given productId</li>
+                <li>Returns top N recommendations (default: 5)</li>
+                <li>Prioritizes in-stock items</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+
+        <div class="card">
+          <h4 style="font-size: 1.25rem; font-weight: 600; color: #1f2937; margin-bottom: 1.5rem; display: flex; align-items: center; gap: 0.5rem;">
+            <span style="font-size: 1.5rem;">🛒</span>
+            Cart Manager (cart.ts)
+          </h4>
+          
+          <div style="background: #f9fafb; border-radius: 0.5rem; padding: 1.5rem;">
+            <div style="display: flex; flex-direction: column; gap: 1rem;">
+              <div style="border-left: 4px solid #ef4444; padding-left: 1rem;">
+                <h5 style="font-weight: 600; color: #1f2937; margin-bottom: 0.5rem;">addToCart</h5>
+                <ul style="font-size: 0.875rem; color: #4b5563; list-style: disc; list-style-position: inside;">
+                  <li>Adds product to user's cart</li>
+                  <li>Accepts productName (searches) or productId</li>
+                  <li>Validates stock availability</li>
+                  <li>Handles quantity specification</li>
+                  <li>Returns cart summary</li>
+                </ul>
+              </div>
+
+              <div style="border-left: 4px solid #6366f1; padding-left: 1rem;">
+                <h5 style="font-weight: 600; color: #1f2937; margin-bottom: 0.5rem;">getCart</h5>
+                <ul style="font-size: 0.875rem; color: #4b5563; list-style: disc; list-style-position: inside;">
+                  <li>Retrieves user's current cart</li>
+                  <li>Returns all items with quantities and prices</li>
+                  <li>Calculates subtotal, tax, shipping, total</li>
+                  <li>Includes product details for each item</li>
+                </ul>
+              </div>
+
+              <div style="border-left: 4px solid #8b5cf6; padding-left: 1rem;">
+                <h5 style="font-weight: 600; color: #1f2937; margin-bottom: 0.5rem;">updateCartItem</h5>
+                <ul style="font-size: 0.875rem; color: #4b5563; list-style: disc; list-style-position: inside;">
+                  <li>Updates quantity of cart item</li>
+                  <li>Validates new quantity against stock</li>
+                  <li>Removes item if quantity set to 0</li>
+                </ul>
+              </div>
+
+              <div style="border-left: 4px solid #ec4899; padding-left: 1rem;">
+                <h5 style="font-weight: 600; color: #1f2937; margin-bottom: 0.5rem;">removeFromCart</h5>
+                <ul style="font-size: 0.875rem; color: #4b5563; list-style: disc; list-style-position: inside;">
+                  <li>Removes item from cart</li>
+                  <li>Accepts productName or productId</li>
+                  <li>Confirms removal</li>
+                </ul>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="card">
+          <h4 style="font-size: 1.25rem; font-weight: 600; color: #1f2937; margin-bottom: 1.5rem; display: flex; align-items: center; gap: 0.5rem;">
+            <span style="font-size: 1.5rem;">🔗</span>
+            Tool Integration Pattern
+          </h4>
+          
+          <div style="background: #f9fafb; border-radius: 0.5rem; padding: 1.5rem;">
+            <div style="background: #1f2937; color: #10b981; padding: 1rem; border-radius: 0.5rem; font-family: monospace; font-size: 0.75rem; overflow-x: auto;">
+              <pre>// Tools are registered with OpenAI
+const tools = [
+  {
+    type: 'function',
+    function: {
+      name: 'searchProducts',
+      description: '...',
+      parameters: { ... }
+    }
+  },
+  // ... other tools
+]
+
+// When AI calls a tool:
+if (toolCall.name === 'searchProducts') {
+  const result = await catalogTools.searchProducts(params)
+  // Return result to AI for response generation
+}</pre>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+

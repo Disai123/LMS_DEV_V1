@@ -1,4 +1,5 @@
-require('dotenv').config();
+const fs = require('fs');
+const path = require('path');
 const { sequelize } = require('./models');
 
 /**
@@ -9,7 +10,7 @@ const { sequelize } = require('./models');
 async function markMigrationsUp() {
   console.log('\n');
   console.log('═══════════════════════════════════════════════════════════════');
-  console.log('   🔧 MARKING MIGRATIONS AS UP');
+  console.log('   🔧 MARKING ALL MIGRATIONS AS UP');
   console.log('═══════════════════════════════════════════════════════════════');
   console.log('\n');
 
@@ -18,17 +19,19 @@ async function markMigrationsUp() {
     await sequelize.authenticate();
     console.log('✅ Database connected\n');
 
-    // Migrations that need to be marked as up
-    const migrationsToMark = [
-      '035-create-hackathons.js',
-      '036-create-hackathon-submissions.js',
-      '037-create-student-permissions.js',
-      '038-fix-hackathon-missing-columns.js',
-      '039-create-hackathon-join-requests.js',
-      '20241201000000-create-hackathon-groups.js',
-      '20241201000002-create-groups.js',
-      '20241201000003-create-chat-tables.js'
-    ];
+    // Dynamically read migrations from the directory
+    const migrationsDir = path.join(__dirname, 'migrations');
+    let migrationsToMark = [];
+
+    if (fs.existsSync(migrationsDir)) {
+      migrationsToMark = fs.readdirSync(migrationsDir)
+        .filter(file => file.endsWith('.js'))
+        .sort();
+      console.log(`📂 Found ${migrationsToMark.length} migration files in folder\n`);
+    } else {
+      console.log('❌ Migrations directory not found!\n');
+      process.exit(1);
+    }
 
     // Check which ones already exist - use proper array syntax for IN clause
     const placeholders = migrationsToMark.map((_, i) => `:name${i}`).join(', ');
@@ -53,7 +56,7 @@ async function markMigrationsUp() {
     }
 
     console.log(`📋 Migrations to mark as up: ${toInsert.length}\n`);
-    
+
     // Insert each migration name
     for (const migrationName of toInsert) {
       try {
@@ -90,15 +93,15 @@ async function markMigrationsUp() {
         console.log('✅ Column "group_id" already exists\n');
       } else {
         console.log('📝 Adding group_id column to hackathon_groups table...\n');
-        
+
         // Add the column
         await sequelize.query(`
           ALTER TABLE hackathon_groups 
           ADD COLUMN group_id INTEGER;
         `);
-        
+
         console.log('✅ Column group_id added successfully!\n');
-        
+
         // Add foreign key constraint if it doesn't exist
         try {
           await sequelize.query(`
@@ -123,7 +126,7 @@ async function markMigrationsUp() {
     const allMigrations = await sequelize.query(`
       SELECT name FROM "SequelizeMeta" ORDER BY name
     `);
-    
+
     const migrationsList = allMigrations[0] || [];
     console.log(`📊 Total migrations in database: ${migrationsList.length}\n`);
 

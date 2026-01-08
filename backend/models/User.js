@@ -93,19 +93,32 @@ module.exports = (sequelize, DataTypes) => {
           const bcrypt = require('bcryptjs');
           user.password = await bcrypt.hash(user.password, 12);
         }
+      },
+      afterCreate: async (user) => {
+        // Automatically create StudentPermission record for new student users
+        if (user.role === 'student') {
+          const { StudentPermission } = require('./index');
+          await StudentPermission.create({
+            student_id: user.id,
+            courses: true,
+            hackathons: true,
+            realtime_projects: true
+          });
+          console.log(`Created permissions for new student: ${user.email}`);
+        }
       }
     }
   });
 
   // Instance methods
-  User.prototype.toJSON = function() {
+  User.prototype.toJSON = function () {
     const values = Object.assign({}, this.get());
     delete values.google_id;
     delete values.password;
     return values;
   };
 
-  User.prototype.getPublicProfile = function() {
+  User.prototype.getPublicProfile = function () {
     return {
       id: this.id,
       name: this.name,
@@ -119,15 +132,15 @@ module.exports = (sequelize, DataTypes) => {
     };
   };
 
-  User.prototype.isAdmin = function() {
+  User.prototype.isAdmin = function () {
     return this.role === 'admin';
   };
 
-  User.prototype.isStudent = function() {
+  User.prototype.isStudent = function () {
     return this.role === 'student';
   };
 
-  User.prototype.comparePassword = async function(candidatePassword) {
+  User.prototype.comparePassword = async function (candidatePassword) {
     if (!this.password) {
       return false;
     }
@@ -137,19 +150,19 @@ module.exports = (sequelize, DataTypes) => {
 
 
   // Class methods
-  User.findByEmail = function(email) {
+  User.findByEmail = function (email) {
     return this.findOne({ where: { email } });
   };
 
-  User.findByGoogleId = function(googleId) {
+  User.findByGoogleId = function (googleId) {
     return this.findOne({ where: { google_id: googleId } });
   };
 
-  User.findActiveUsers = function() {
+  User.findActiveUsers = function () {
     return this.findAll({ where: { is_active: true } });
   };
 
-  User.findByRole = function(role) {
+  User.findByRole = function (role) {
     return this.findAll({ where: { role, is_active: true } });
   };
 

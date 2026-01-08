@@ -45,7 +45,7 @@ const startTest = async (req, res, next) => {
     });
 
     // Check if user has already passed the test
-    const hasPassed = existingAttempts.some(attempt => 
+    const hasPassed = existingAttempts.some(attempt =>
       attempt.status === 'completed' && attempt.score >= test.passing_score
     );
 
@@ -76,7 +76,7 @@ const startTest = async (req, res, next) => {
       console.log('Attempt status:', activeAttempt.status);
       console.log('Started at:', activeAttempt.started_at);
       console.log('============================');
-      
+
       return res.json({
         success: true,
         message: 'Resuming existing test attempt',
@@ -262,7 +262,7 @@ const submitTest = async (req, res, next) => {
       if (selectedOptionId) {
         // Find the selected option
         selectedOption = question.options.find(opt => opt.id == selectedOptionId);
-        
+
         if (selectedOption) {
           isCorrect = selectedOption.is_correct;
           if (isCorrect) {
@@ -339,12 +339,12 @@ const submitTest = async (req, res, next) => {
 
       // Auto-generate certificate for passing the test ONLY for the completed course
       const { Certificate } = require('../models');
-      
+
       // CRITICAL: Verify we have the correct course_id before generating certificate
       const courseIdForCertificate = test.course_id;
-      
+
       logger.info(`Checking for existing certificate: student_id=${req.user.id}, course_id=${courseIdForCertificate}`);
-      
+
       // Check if certificate already exists for THIS SPECIFIC COURSE ONLY
       const existingCertificate = await Certificate.findOne({
         where: {
@@ -358,7 +358,7 @@ const submitTest = async (req, res, next) => {
       } else {
         // Generate certificate ONLY for the specific course that was completed
         logger.info(`Generating certificate for student ${req.user.id} and course ${courseIdForCertificate}`);
-        
+
         const certificateNumber = await Certificate.generateCertificateNumber(req.user.id, courseIdForCertificate);
         const verificationCode = Certificate.generateVerificationCode();
 
@@ -392,20 +392,16 @@ const submitTest = async (req, res, next) => {
 
         logger.info(`Certificate ${certificateNumber} successfully generated for student ${req.user.email}, course ${course.title} (ID: ${courseIdForCertificate}), test ${test.id}`);
 
-        // Award points for course completion
-        try {
-          const scoringService = require('../services/scoringService');
-          await scoringService.awardCourseCompletionPoints({
-            studentId: req.user.id,
-            courseId: courseIdForCertificate,
-            certificateId: newCertificate.id,
-            courseDifficulty: course.difficulty || 'beginner'
-          });
-          logger.info(`Points awarded for course completion: student ${req.user.id}, course ${courseIdForCertificate}`);
-        } catch (scoringError) {
-          logger.error('Error awarding course completion points:', scoringError);
-          // Don't fail the certificate generation if scoring fails
-        }
+
+        // Award points for course completion - THIS IS CRITICAL
+        const scoringService = require('../services/scoringService');
+        await scoringService.awardCourseCompletionPoints({
+          studentId: req.user.id,
+          courseId: courseIdForCertificate,
+          certificateId: newCertificate.id,
+          courseDifficulty: course.difficulty || 'beginner'
+        });
+        logger.info(`Points awarded for course completion: student ${req.user.id}, course ${courseIdForCertificate}`);
 
         // Create Achievement record so it shows up in achievements tab
         try {
@@ -468,7 +464,7 @@ const submitTest = async (req, res, next) => {
     // Log test activity
     const activityType = isPassed ? 'test_passed' : 'test_attempted';
     const activityTitle = isPassed ? `Passed ${test.title}` : `Attempted ${test.title}`;
-    const activityDescription = isPassed 
+    const activityDescription = isPassed
       ? `Passed ${test.title} with ${Math.round(score)}% score`
       : `Attempted ${test.title} with ${Math.round(score)}% score`;
 
@@ -626,7 +622,7 @@ const getTestQuestions = async (req, res, next) => {
       }
     });
 
-    const hasPassed = existingAttempts.some(attempt => 
+    const hasPassed = existingAttempts.some(attempt =>
       attempt.status === 'completed' && attempt.score >= test.passing_score
     );
 
@@ -649,9 +645,9 @@ const getTestQuestions = async (req, res, next) => {
 
     // First get questions
     const questions = await TestQuestion.findAll({
-      where: { 
+      where: {
         test_id: testId,
-        is_active: true 
+        is_active: true
       },
       order: [['id', 'ASC']]
     });
@@ -663,7 +659,7 @@ const getTestQuestions = async (req, res, next) => {
           where: { question_id: question.id },
           order: [['id', 'ASC']]
         });
-        
+
         return {
           ...question.getPublicInfo(),
           options: options.map(option => ({

@@ -55,6 +55,18 @@ if (!process.env.JWT_REFRESH_SECRET) {
   process.env.JWT_REFRESH_SECRET = 'your-super-secret-refresh-key-change-this-in-production';
 }
 
+// CORS configuration - Allow frontend to access backend API
+// MUST BE FIRST MIDDLEWARE
+const corsOptions = {
+  origin: true, // Dynamically match the request origin (solves "Allow-Origin" mismatch)
+  credentials: true,
+  methods: ['GET', 'POST', 'PUT', 'DELETE', 'PATCH', 'OPTIONS'],
+  allowedHeaders: ['Content-Type', 'Authorization', 'X-Requested-With', 'Accept', 'Origin'],
+  exposedHeaders: ['Content-Range', 'X-Content-Range'],
+  maxAge: 86400 // 24 hours
+};
+app.use(cors(corsOptions));
+
 // Security middleware
 // Configure Helmet with CSP that allows iframe embedding from frontend
 // Support both local development and production deployments
@@ -80,7 +92,7 @@ app.use(helmet({
       imgSrc: ["'self'", "data:", "https:", "https://us-assets.i.posthog.com", "https://eu-assets.i.posthog.com"],
       scriptSrc: ["'self'", "'unsafe-inline'", "https://accounts.google.com", "https://app.posthog.com", "https://us-assets.i.posthog.com", "https://eu-assets.i.posthog.com"],
       connectSrc: [
-        "'self'", 
+        "'self'",
         "https://accounts.google.com",
         "https://app.posthog.com",
         "https://us.i.posthog.com",
@@ -96,8 +108,6 @@ app.use(helmet({
   // Disable frameGuard for realtime projects routes (handled by CSP frameAncestors)
   frameguard: { action: 'sameorigin' },
 }));
-
-app.use(cors());
 
 
 // Disable caching for API responses to ensure fresh data
@@ -160,10 +170,10 @@ app.get('/health', (req, res) => {
 app.get('/test-uploads', (req, res) => {
   const fs = require('fs');
   const path = require('path');
-  
+
   const uploadsDir = path.join(__dirname, 'uploads');
   const logosDir = path.join(uploadsDir, 'logos');
-  
+
   try {
     const files = fs.readdirSync(logosDir);
     res.json({
@@ -188,10 +198,10 @@ app.get('/test-logo-api/:courseId', async (req, res) => {
   try {
     const { courseId } = req.params;
     console.log(`Test logo API for course ID: ${courseId}`);
-    
+
     // Import the course controller
     const courseController = require('./controllers/courseController');
-    
+
     // Create a mock request and response
     const mockReq = { params: { id: courseId } };
     const mockRes = {
@@ -206,7 +216,7 @@ app.get('/test-logo-api/:courseId', async (req, res) => {
         }
       })
     };
-    
+
     await courseController.getCourseLogo(mockReq, mockRes);
   } catch (error) {
     console.error('Test logo API error:', error);
@@ -230,7 +240,7 @@ app.get('/test-course-logo/:id', (req, res) => {
 app.get('/test-logo-direct/:courseId', (req, res) => {
   const { courseId } = req.params;
   console.log(`Direct logo test for course ID: ${courseId}`);
-  
+
   res.json({
     success: true,
     message: 'Direct test endpoint working',
@@ -261,6 +271,10 @@ app.use('/api/realtime-projects', (req, res, next) => {
 
 // Realtime projects API (for students with permission)
 app.use('/api/realtime-projects', realtimeProjectsRoutes);
+
+// Realtime Project Submissions routes
+const realtimeProjectSubmissionsRoutes = require('./routes/realtimeProjectSubmissions');
+app.use('/api/realtime-project-submissions', realtimeProjectSubmissionsRoutes);
 app.use('/api/hackathons', hackathonRoutes);
 app.use('/api/groups', groupRoutes);
 // app.use('/api/chat', chatRoutes);

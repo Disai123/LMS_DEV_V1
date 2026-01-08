@@ -61,6 +61,7 @@ const StudentPermission = require('./StudentPermission')(sequelize, Sequelize.Da
 const StudentAchievement = require('./StudentAchievement')(sequelize, Sequelize.DataTypes);
 const StudentScore = require('./StudentScore')(sequelize, Sequelize.DataTypes);
 const ScoringRule = require('./ScoringRule')(sequelize, Sequelize.DataTypes);
+const RealtimeProjectSubmission = require('./RealtimeProjectSubmission')(sequelize, Sequelize.DataTypes);
 
 // Define associations
 const defineAssociations = () => {
@@ -167,7 +168,7 @@ const defineAssociations = () => {
     foreignKey: 'created_by',
     as: 'creator'
   });
-  
+
   Project.belongsTo(User, {
     foreignKey: 'updated_by',
     as: 'updater'
@@ -202,12 +203,12 @@ const defineAssociations = () => {
     foreignKey: 'project_id',
     as: 'project'
   });
-  
+
   Document.belongsTo(User, {
     foreignKey: 'uploaded_by',
     as: 'uploader'
   });
-  
+
   Document.belongsTo(User, {
     foreignKey: 'updated_by',
     as: 'updater'
@@ -218,12 +219,12 @@ const defineAssociations = () => {
     foreignKey: 'project_id',
     as: 'project'
   });
-  
+
   Video.belongsTo(User, {
     foreignKey: 'uploaded_by',
     as: 'uploader'
   });
-  
+
   Video.belongsTo(User, {
     foreignKey: 'updated_by',
     as: 'updater'
@@ -410,7 +411,7 @@ const defineAssociations = () => {
     foreignKey: 'created_by',
     as: 'creator'
   });
-  
+
   Hackathon.belongsTo(User, {
     foreignKey: 'updated_by',
     as: 'updater'
@@ -733,6 +734,25 @@ const defineAssociations = () => {
     as: 'student'
   });
 
+  // RealtimeProjectSubmission associations
+  RealtimeProjectSubmission.belongsTo(User, {
+    foreignKey: 'student_id',
+    as: 'student',
+    onDelete: 'CASCADE'
+  });
+
+  RealtimeProjectSubmission.belongsTo(User, {
+    foreignKey: 'reviewed_by',
+    as: 'reviewer',
+    onDelete: 'SET NULL'
+  });
+
+  User.hasMany(RealtimeProjectSubmission, {
+    foreignKey: 'student_id',
+    as: 'realtimeProjectSubmissions',
+    onDelete: 'CASCADE'
+  });
+
 };
 
 // Define associations
@@ -774,5 +794,6 @@ module.exports = {
   StudentPermission,
   StudentAchievement,
   StudentScore,
-  ScoringRule
+  ScoringRule,
+  RealtimeProjectSubmission
 };

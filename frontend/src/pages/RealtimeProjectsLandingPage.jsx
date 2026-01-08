@@ -1,423 +1,587 @@
 import { motion } from 'framer-motion'
 import { useNavigate } from 'react-router-dom'
-import { useEffect } from 'react'
+import { useEffect, useState } from 'react'
 import { useAuth } from '../context/AuthContext'
-import { usePermissions } from '../hooks/usePermissions'
 import Header from '../components/common/Header'
 import Footer from '../components/common/Footer'
+import api from '../services/api'
 
 const RealtimeProjectsLandingPage = () => {
   const navigate = useNavigate()
   const { isAuthenticated } = useAuth()
-  const { hasAccess, isAdmin } = usePermissions()
-  
-  // Redirect ALL authenticated users to student page (let it handle access control)
-  useEffect(() => {
-    if (isAuthenticated) {
-      navigate('/student/realtime-projects', { replace: true })
-    }
-  }, [isAuthenticated, navigate])
+  const [projects, setProjects] = useState([])
+  const [loading, setLoading] = useState(true)
+  const [error, setError] = useState(null)
 
-  // Don't show landing page to authenticated users
-  if (isAuthenticated) {
-    return null
+  // Fetch projects from API
+  useEffect(() => {
+    const fetchProjects = async () => {
+      try {
+        setLoading(true)
+        const response = await api.get('/realtime-projects/public')
+
+        if (response.data.success && response.data.data) {
+          // Map backend data to frontend format
+          const mappedProjects = response.data.data.map((project, index) => ({
+            id: project.id || index + 1,
+            title: project.name,
+            description: project.description,
+            shortDescription: project.description?.substring(0, 100) + '...',
+            difficulty: project.difficulty || 'Intermediate',
+            duration: `${project.estimatedHours || 40} hours`,
+            phases: 5,
+            icon: getProjectIcon(project.name),
+            image: getProjectImage(project.name),
+            gradient: getProjectGradient(index),
+            glowColor: getProjectGlowColor(index),
+            technologies: project.tags || [],
+            category: project.category || 'Web Development',
+            order: project.order !== undefined ? project.order : 999
+          }))
+            .sort((a, b) => a.order - b.order)
+
+          setProjects(mappedProjects)
+        }
+      } catch (err) {
+        console.error('Error fetching projects:', err)
+        setError(err.message)
+        // Use fallback projects if API fails
+        setProjects(getFallbackProjects())
+      } finally {
+        setLoading(false)
+      }
+    }
+
+    fetchProjects()
+  }, [])
+
+  // Helper function to get project icon based on name
+  const getProjectIcon = (name) => {
+    const nameLower = name.toLowerCase()
+    if (nameLower.includes('mobile')) return '📱'
+    if (nameLower.includes('ai') || nameLower.includes('agent')) return '🤖'
+    if (nameLower.includes('multi')) return '🤖'
+    if (nameLower.includes('ecommerce') || nameLower.includes('web')) return '🛒'
+    return '💻'
   }
 
-  const projects = [
+  // Helper function to get project image based on name
+  const getProjectImage = (name) => {
+    const nameLower = name.toLowerCase()
+    if (nameLower.includes('mobile')) {
+      return '/images/projects/ecommerce-mobile.png'
+    }
+    if (nameLower.includes('multi')) {
+      return '/images/projects/ecommerce-multi-agent.png'
+    }
+    if (nameLower.includes('ai') || nameLower.includes('agent')) {
+      return '/images/projects/ecommerce-ai-agent.png'
+    }
+    if (nameLower.includes('ecommerce') || nameLower.includes('web')) {
+      return '/images/projects/ecommerce-web.png'
+    }
+    return '/images/projects/ecommerce-web.png'
+  }
+
+  // Helper function to get gradient based on index
+  const getProjectGradient = (index) => {
+    const gradients = [
+      'from-emerald-400 via-teal-500 to-cyan-600',
+      'from-violet-400 via-purple-500 to-fuchsia-600',
+      'from-blue-400 via-indigo-500 to-purple-600',
+      'from-pink-400 via-rose-500 to-red-600'
+    ]
+    return gradients[index % gradients.length]
+  }
+
+  // Helper function to get glow color based on index
+  const getProjectGlowColor = (index) => {
+    const colors = ['emerald', 'purple', 'blue', 'pink']
+    return colors[index % colors.length]
+  }
+
+  // Fallback projects if API fails
+  const getFallbackProjects = () => [
     {
       id: 1,
       title: 'E-Commerce Web Application',
-      description: 'Build a complete e-commerce platform with modern technologies including React, Node.js, and PostgreSQL. Learn full-stack development through hands-on project experience.',
-      shortDescription: 'Full-stack e-commerce platform with React, Node.js, and PostgreSQL',
+      description: 'Build a complete, production-ready e-commerce platform from scratch. Learn full-stack development with React, Node.js, and PostgreSQL through hands-on experience.',
+      shortDescription: 'Full-stack e-commerce platform with modern technologies',
       difficulty: 'Intermediate',
       duration: '40 hours',
       phases: 5,
       icon: '🛒',
-      gradient: 'from-emerald-500 to-cyan-500',
+      gradient: 'from-emerald-400 via-teal-500 to-cyan-600',
+      glowColor: 'emerald',
+      technologies: ['React', 'Node.js', 'PostgreSQL', 'Express.js', 'Tailwind CSS'],
       phasesList: [
-        'BRD (Business Requirements Document)',
-        'UI/UX Design',
-        'Development',
+        'Business Requirements Document (BRD)',
+        'UI/UX Design & Prototyping',
+        'Full-Stack Development',
         'Testing & Quality Assurance',
         'Deployment & Launch'
       ],
-      technologies: ['React', 'Node.js', 'PostgreSQL', 'Express.js', 'JWT Auth'],
-      color: 'emerald',
-      bgPattern: 'bg-emerald-50',
-      textColor: 'text-emerald-900'
+      highlights: [
+        'User authentication & authorization',
+        'Product catalog & search',
+        'Shopping cart & checkout',
+        'Payment integration',
+        'Admin dashboard'
+      ]
     },
     {
       id: 2,
-      title: 'Data Analytics Dashboard',
-      description: 'Create an interactive data analytics dashboard using modern visualization libraries and real-time data processing. Learn data science and visualization techniques.',
-      shortDescription: 'Interactive data analytics dashboard with real-time visualization',
-      difficulty: 'Intermediate',
-      duration: '35 hours',
+      title: 'E-Commerce AI Agent',
+      description: 'Extend your e-commerce platform with an intelligent AI shopping assistant. Learn to integrate AI/ML capabilities, natural language processing, and create conversational interfaces.',
+      shortDescription: 'AI-powered shopping assistant extension',
+      difficulty: 'Advanced',
+      duration: '30 hours',
       phases: 5,
-      icon: '📊',
-      gradient: 'from-violet-500 to-purple-500',
+      icon: '🤖',
+      gradient: 'from-violet-400 via-purple-500 to-fuchsia-600',
+      glowColor: 'purple',
+      technologies: ['Python', 'LangChain', 'OpenAI API', 'FastAPI', 'React'],
       phasesList: [
-        'BRD (Business Requirements Document)',
-        'UI/UX Design',
-        'Development',
-        'Testing & Quality Assurance',
-        'Deployment & Launch'
+        'AI Agent Architecture Design',
+        'Natural Language Processing Setup',
+        'Agent Development & Training',
+        'Frontend Integration',
+        'Testing & Optimization'
       ],
-      technologies: ['D3.js', 'Python', 'Pandas', 'Chart.js', 'REST APIs'],
-      color: 'violet',
-      bgPattern: 'bg-violet-50',
-      textColor: 'text-violet-900'
+      highlights: [
+        'Conversational shopping assistant',
+        'Product recommendations',
+        'Natural language search',
+        'Order tracking via chat',
+        'Personalized suggestions'
+      ],
+      isExtension: true,
+      extensionOf: 'E-Commerce Web Application'
     },
     {
       id: 3,
-      title: 'AI-Powered Learning Assistant',
-      description: 'Develop an intelligent learning assistant using AI and machine learning technologies. Learn about natural language processing and AI integration.',
-      shortDescription: 'Intelligent learning assistant with AI and machine learning',
+      title: 'E-Commerce Mobile Application',
+      description: 'Transform your e-commerce platform into a native mobile experience. Learn React Native, mobile UI/UX patterns, and build a cross-platform mobile app with offline capabilities.',
+      shortDescription: 'Native mobile app for iOS and Android',
+      difficulty: 'Intermediate',
+      duration: '35 hours',
+      phases: 5,
+      icon: '📱',
+      gradient: 'from-blue-400 via-indigo-500 to-purple-600',
+      glowColor: 'blue',
+      technologies: ['React Native', 'Expo', 'AsyncStorage', 'Push Notifications', 'Mobile UI'],
+      phasesList: [
+        'Mobile App Architecture',
+        'UI/UX Design for Mobile',
+        'Core Features Development',
+        'Offline Capabilities',
+        'Testing & Deployment'
+      ],
+      highlights: [
+        'Cross-platform mobile app',
+        'Offline mode support',
+        'Push notifications',
+        'Mobile payment integration',
+        'Biometric authentication'
+      ],
+      isExtension: true,
+      extensionOf: 'E-Commerce Web Application'
+    },
+    {
+      id: 4,
+      title: 'E-Commerce Multi-Agent System',
+      description: 'Build an advanced multi-agent AI system for e-commerce. Learn agent orchestration, task delegation, and create a sophisticated AI team that handles customer service, inventory, and analytics.',
+      shortDescription: 'Advanced multi-agent AI orchestration system',
       difficulty: 'Advanced',
       duration: '45 hours',
       phases: 5,
       icon: '🤖',
-      gradient: 'from-rose-500 to-pink-500',
+      gradient: 'from-pink-400 via-rose-500 to-red-600',
+      glowColor: 'pink',
+      technologies: ['LangGraph', 'Python', 'Multi-Agent Systems', 'FastAPI', 'Redis'],
       phasesList: [
-        'BRD (Business Requirements Document)',
-        'UI/UX Design',
-        'Development',
-        'Testing & Quality Assurance',
-        'Deployment & Launch'
+        'Multi-Agent Architecture Design',
+        'Agent Development & Specialization',
+        'Agent Orchestration & Communication',
+        'Integration & Testing',
+        'Deployment & Monitoring'
       ],
-      technologies: ['Python', 'TensorFlow', 'NLP', 'OpenAI API', 'Flask'],
-      color: 'rose',
-      bgPattern: 'bg-rose-50',
-      textColor: 'text-rose-900'
+      highlights: [
+        'Customer service agent',
+        'Inventory management agent',
+        'Analytics & insights agent',
+        'Agent coordination system',
+        'Real-time decision making'
+      ],
+      isExtension: true,
+      extensionOf: 'E-Commerce AI Agent'
     }
   ]
 
   const handleProjectClick = (projectId) => {
-    navigate(`/student/realtime-projects/${projectId}`)
+    // Store intended destination
+    localStorage.setItem('redirectAfterLogin', '/student/realtime-projects')
+    navigate('/login')
   }
 
   const handleGetStarted = () => {
-    navigate('/student/realtime-projects')
+    localStorage.setItem('redirectAfterLogin', '/student/realtime-projects')
+    navigate('/login')
+  }
+
+  // Show loading state
+  if (loading) {
+    return (
+      <div className="min-h-screen bg-gradient-to-br from-indigo-50 via-white to-purple-50 flex items-center justify-center">
+        <div className="text-center">
+          <div className="animate-spin rounded-full h-16 w-16 border-b-4 border-indigo-600 mx-auto mb-4"></div>
+          <p className="text-gray-600 text-lg">Loading projects...</p>
+        </div>
+      </div>
+    )
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-indigo-50 via-white to-cyan-50">
+    <div className="min-h-screen bg-gradient-to-br from-indigo-50 via-white to-purple-50">
       <Header />
-      
-      {/* Hero Section with Floating Elements */}
-      <section className="relative overflow-hidden pt-20 pb-32">
-        {/* Floating Background Elements */}
-        <div className="absolute inset-0">
-          <div className="absolute top-20 left-10 w-32 h-32 bg-gradient-to-r from-blue-400 to-purple-500 rounded-full opacity-20 animate-bounce"></div>
-          <div className="absolute top-40 right-20 w-24 h-24 bg-gradient-to-r from-pink-400 to-rose-500 rounded-full opacity-20 animate-pulse"></div>
-          <div className="absolute bottom-20 left-1/4 w-40 h-40 bg-gradient-to-r from-green-400 to-teal-500 rounded-full opacity-20 animate-ping"></div>
-          <div className="absolute top-60 right-1/3 w-28 h-28 bg-gradient-to-r from-yellow-400 to-orange-500 rounded-full opacity-20 animate-bounce"></div>
-        </div>
 
-        <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      {/* Hero Section */}
+      <section className="relative overflow-hidden">
+        <div className="absolute inset-0 bg-gradient-to-r from-indigo-600/10 to-purple-600/10"></div>
+        <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20">
           <motion.div
             initial={{ opacity: 0, y: 30 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8 }}
             className="text-center"
           >
-            {/* Main Title with Creative Typography */}
+            {/* Main Title */}
             <div className="mb-8">
-              <h1 className="text-6xl md:text-8xl font-black bg-gradient-to-r from-indigo-600 via-purple-600 to-pink-600 bg-clip-text text-transparent mb-4 leading-tight">
-                BUILD
-              </h1>
-              <h2 className="text-4xl md:text-6xl font-bold text-gray-800 mb-6">
-                Real Projects
-              </h2>
-              <div className="flex items-center justify-center space-x-4 mb-8">
-                <div className="h-1 w-20 bg-gradient-to-r from-blue-500 to-purple-500 rounded-full"></div>
-                <span className="text-2xl">🚀</span>
-                <div className="h-1 w-20 bg-gradient-to-r from-purple-500 to-pink-500 rounded-full"></div>
-              </div>
+              <motion.h1
+                initial={{ opacity: 0, scale: 0.9 }}
+                animate={{ opacity: 1, scale: 1 }}
+                transition={{ duration: 0.8, delay: 0.2 }}
+                className="text-5xl md:text-6xl font-bold text-gray-900 mb-6 leading-tight"
+              >
+                Build Real{' '}
+                <span className="text-transparent bg-clip-text bg-gradient-to-r from-indigo-600 to-purple-600">
+                  Projects
+                </span>
+              </motion.h1>
+
+              <motion.div
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                transition={{ duration: 0.8, delay: 0.4 }}
+                className="flex items-center justify-center space-x-4 mb-8"
+              >
+                <div className="h-1 w-20 bg-gradient-to-r from-indigo-500 to-purple-500 rounded-full"></div>
+                <span className="text-2xl">⚡</span>
+                <div className="h-1 w-20 bg-gradient-to-r from-indigo-500 to-purple-500 rounded-full"></div>
+              </motion.div>
             </div>
 
             {/* Subtitle */}
-            <p className="text-xl md:text-2xl text-gray-600 max-w-4xl mx-auto leading-relaxed mb-12">
-              Learn by doing with <span className="font-bold text-indigo-600">realtime projects</span> that build real-world skills through hands-on experience
-            </p>
+            <motion.p
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.8, delay: 0.6 }}
+              className="text-lg md:text-xl text-gray-600 max-w-4xl mx-auto leading-relaxed mb-12"
+            >
+              Learn by Doing • Master Real-World Skills • Build Your Portfolio
+            </motion.p>
 
-            {/* CTA Buttons with Creative Design */}
-            <div className="flex justify-center items-center">
-              <motion.button
-                whileHover={{ scale: 1.05, rotate: 1 }}
-                whileTap={{ scale: 0.95 }}
-                onClick={handleGetStarted}
-                className="group relative px-8 py-4 bg-gradient-to-r from-indigo-600 to-purple-600 text-white font-bold rounded-2xl shadow-2xl hover:shadow-purple-500/25 transition-all duration-300 overflow-hidden"
+            {/* CTA Button */}
+            <motion.button
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.8, delay: 0.8 }}
+              whileHover={{ scale: 1.05 }}
+              whileTap={{ scale: 0.95 }}
+              onClick={handleGetStarted}
+              className="group relative px-10 py-4 bg-gradient-to-r from-indigo-600 to-purple-600 text-white rounded-xl font-bold text-lg shadow-lg hover:shadow-xl transition-all duration-300"
+            >
+              <span className="relative z-10 flex items-center gap-3">
+                <span>Start Learning</span>
+                <span className="text-xl group-hover:translate-x-1 transition-transform">→</span>
+              </span>
+            </motion.button>
+          </motion.div>
+        </div>
+      </section>
+
+      {/* Featured Projects Section */}
+      <section className="py-20 bg-white relative overflow-hidden">
+        {/* Background Pattern */}
+        <div className="absolute inset-0 opacity-5">
+          <div className="absolute inset-0" style={{
+            backgroundImage: 'radial-gradient(circle at 1px 1px, rgb(99 102 241) 1px, transparent 0)',
+            backgroundSize: '40px 40px'
+          }}></div>
+        </div>
+
+        <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.8 }}
+            className="text-center mb-16"
+          >
+            <h2 className="text-4xl md:text-5xl font-black text-gray-900 mb-6">
+              Featured{' '}
+              <span className="bg-gradient-to-r from-violet-600 via-purple-600 to-indigo-600 bg-clip-text text-transparent">
+                Projects
+              </span>
+            </h2>
+            <p className="text-lg text-gray-600 max-w-3xl mx-auto">
+              Start with our comprehensive e-commerce projects and learn full-stack development with AI integration
+            </p>
+          </motion.div>
+
+          {/* Project Cards Grid */}
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+            {projects.map((project, index) => (
+              <motion.div
+                key={project.id}
+                initial={{ opacity: 0, y: 30 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ duration: 0.8, delay: index * 0.2 }}
+                className="group relative"
               >
-                <div className="absolute inset-0 bg-gradient-to-r from-purple-600 to-pink-600 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
-                <span className="relative flex items-center space-x-2">
-                  <span>Start Learning by Doing</span>
-                  <span className="text-xl">⚡</span>
-                </span>
-              </motion.button>
+                {/* Gradient Border Glow */}
+                <div className={`absolute -inset-0.5 bg-gradient-to-r ${project.gradient} rounded-3xl blur opacity-0 group-hover:opacity-75 transition duration-500`}></div>
+
+                {/* Card Content */}
+                <div className="relative bg-white rounded-3xl p-8 shadow-xl border border-gray-100 transform group-hover:scale-[1.02] transition duration-500">
+                  {/* Extension Badge */}
+                  {project.isExtension && (
+                    <div className="absolute top-4 right-4">
+                      <span className="px-3 py-1 bg-gradient-to-r from-purple-500 to-pink-500 text-white text-xs font-bold rounded-full shadow-lg">
+                        Extension Project
+                      </span>
+                    </div>
+                  )}
+
+                  {/* Project Image */}
+                  <div className="flex items-start gap-6 mb-6">
+                    <div className="flex-shrink-0 w-32 h-32 rounded-2xl overflow-hidden shadow-2xl group-hover:shadow-3xl transition duration-500">
+                      <img
+                        src={project.image}
+                        alt={project.title}
+                        className="w-full h-full object-cover transform group-hover:scale-110 transition duration-700"
+                      />
+                    </div>
+                    <div className="flex-1">
+                      <h3 className="text-2xl font-bold text-gray-900 mb-2">
+                        {project.title}
+                      </h3>
+                      <p className="text-gray-600">
+                        {project.shortDescription}
+                      </p>
+                    </div>
+                  </div>
+
+                  {/* Description */}
+                  <p className="text-gray-700 leading-relaxed mb-6">
+                    {project.description}
+                  </p>
+
+                  {/* Tags */}
+                  <div className="flex flex-wrap gap-2 mb-6">
+                    <span className={`px-3 py-1 bg-gradient-to-r ${project.gradient} text-white rounded-full text-sm font-bold shadow-lg`}>
+                      {project.difficulty}
+                    </span>
+                    <span className="px-3 py-1 bg-gray-100 text-gray-700 rounded-full text-sm font-bold">
+                      {project.duration}
+                    </span>
+                    <span className="px-3 py-1 bg-gray-100 text-gray-700 rounded-full text-sm font-bold">
+                      {project.phases} Phases
+                    </span>
+                  </div>
+
+                  {/* Technologies */}
+                  <div className="mb-6">
+                    <h4 className="text-sm font-bold text-gray-500 uppercase tracking-wide mb-3">
+                      Technologies You'll Master
+                    </h4>
+                    <div className="flex flex-wrap gap-2">
+                      {project.technologies.map((tech, techIndex) => (
+                        <span key={techIndex} className="px-3 py-1 bg-gray-50 text-gray-700 text-sm rounded-lg font-medium border border-gray-200">
+                          {tech}
+                        </span>
+                      ))}
+                    </div>
+                  </div>
+
+                  {/* Key Highlights */}
+                  <div className="mb-6">
+                    <h4 className="text-sm font-bold text-gray-500 uppercase tracking-wide mb-3">
+                      What You'll Build
+                    </h4>
+                    <div className="space-y-2">
+                      {project.highlights.map((highlight, hIndex) => (
+                        <div key={hIndex} className="flex items-center text-gray-700">
+                          <div className={`w-1.5 h-1.5 bg-gradient-to-r ${project.gradient} rounded-full mr-3`}></div>
+                          <span className="text-sm">{highlight}</span>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+
+                  {/* Action Button */}
+                  <motion.button
+                    whileHover={{ scale: 1.02 }}
+                    whileTap={{ scale: 0.98 }}
+                    onClick={() => handleProjectClick(project.id)}
+                    className={`w-full py-4 bg-gradient-to-r ${project.gradient} text-white font-bold rounded-xl shadow-lg hover:shadow-xl transition-all duration-300 text-lg`}
+                  >
+                    🚀 Start This Project
+                  </motion.button>
+                </div>
+              </motion.div>
+            ))}
+          </div>
+
+          {/* More Projects Hint */}
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.8, delay: 0.4 }}
+            className="mt-16"
+          >
+            <div className="relative bg-gradient-to-r from-indigo-50 via-purple-50 to-pink-50 rounded-2xl p-8 border border-indigo-100 overflow-hidden">
+              {/* Subtle background pattern */}
+              <div className="absolute inset-0 opacity-5">
+                <div className="absolute inset-0" style={{
+                  backgroundImage: 'radial-gradient(circle at 2px 2px, rgb(99 102 241) 1px, transparent 0)',
+                  backgroundSize: '32px 32px'
+                }}></div>
+              </div>
+
+              <div className="relative z-10 text-center">
+                <div className="flex items-center justify-center gap-3 mb-4">
+                  <div className="flex -space-x-2">
+                    <div className="w-10 h-10 rounded-full bg-gradient-to-br from-blue-400 to-indigo-500 flex items-center justify-center text-white font-bold text-sm shadow-lg">
+
+                    </div>
+                    <div className="w-10 h-10 rounded-full bg-gradient-to-br from-purple-400 to-pink-500 flex items-center justify-center text-white font-bold text-sm shadow-lg">
+
+                    </div>
+                    <div className="w-10 h-10 rounded-full bg-gradient-to-br from-green-400 to-teal-500 flex items-center justify-center text-white font-bold text-sm shadow-lg">
+
+                    </div>
+                    <div className="w-10 h-10 rounded-full bg-gradient-to-br from-orange-400 to-red-500 flex items-center justify-center text-white font-bold text-sm shadow-lg">
+
+                    </div>
+                    <div className="w-10 h-10 rounded-full bg-gradient-to-br from-yellow-400 to-amber-500 flex items-center justify-center text-gray-700 font-bold text-sm shadow-lg">
+                      +5
+                    </div>
+                  </div>
+                </div>
+
+                <h3 className="text-2xl md:text-3xl font-bold text-gray-900 mb-3">
+                  More Projects Available
+                </h3>
+
+                <p className="text-gray-600 mb-6 max-w-2xl mx-auto">
+                  Unlock access to <span className="font-bold text-indigo-600">5+ additional projects</span> including Mobile Apps, Blockchain, Social Media, IoT, and more
+                </p>
+
+                <motion.button
+                  whileHover={{ scale: 1.05 }}
+                  whileTap={{ scale: 0.95 }}
+                  onClick={handleGetStarted}
+                  className="group relative px-8 py-3 bg-gradient-to-r from-indigo-600 to-purple-600 text-white font-bold rounded-xl shadow-lg hover:shadow-xl transition-all duration-300"
+                >
+                  <span className="flex items-center gap-2">
+                    <span> View All Projects</span>
+                    <span className="text-sm group-hover:translate-x-1 transition-transform"></span>
+                  </span>
+                </motion.button>
+
+                <p className="text-sm text-gray-500 mt-4">
+                  Sign in to access all projects
+                </p>
+              </div>
             </div>
           </motion.div>
         </div>
       </section>
 
-      {/* Quick Glimpse Section */}
-      <section className="py-16 bg-white">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8, delay: 0.3 }}
-            className="text-center mb-12"
-          >
-            <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-4">
-              Realtime Projects <span className="text-transparent bg-clip-text bg-gradient-to-r from-indigo-600 to-purple-600">Learn by Doing</span>
-            </h2>
-            <p className="text-lg text-gray-600 max-w-2xl mx-auto">
-              Three hands-on realtime projects designed for learning by doing. Pick one and start building while you learn.
-            </p>
-          </motion.div>
-
-          {/* Quick Project Cards */}
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-            {projects.map((project, index) => (
-              <motion.div
-                key={project.id}
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.8, delay: 0.4 + index * 0.1 }}
-                className="group cursor-pointer"
-                onClick={() => handleProjectClick(project.id)}
-              >
-                <div className="bg-white rounded-2xl p-6 shadow-lg hover:shadow-2xl transition-all duration-300 border border-gray-100 hover:border-indigo-200 transform hover:-translate-y-1">
-                  <div className="text-center">
-                    <div className={`w-16 h-16 bg-gradient-to-r ${project.gradient} rounded-2xl flex items-center justify-center text-3xl mx-auto mb-4 group-hover:scale-110 transition-transform duration-300`}>
-                      {project.icon}
-                    </div>
-                    <h3 className="text-xl font-bold text-gray-900 mb-2">{project.title}</h3>
-                    <p className="text-gray-600 text-sm mb-4">{project.shortDescription}</p>
-                    <div className="flex justify-center space-x-2 mb-4">
-                      <span className={`px-3 py-1 bg-gradient-to-r ${project.gradient} text-white rounded-full text-xs font-bold`}>
-                        {project.difficulty}
-                      </span>
-                      <span className="px-3 py-1 bg-gray-100 text-gray-700 rounded-full text-xs font-bold">
-                        {project.duration}
-                      </span>
-                    </div>
-                    <div className="text-center">
-                      <span className="text-sm text-gray-500">Learn by doing →</span>
-                    </div>
-                  </div>
-                </div>
-              </motion.div>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* Why Choose Section with Card Grid */}
-      <section className="py-20 bg-white">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8, delay: 0.2 }}
-            className="text-center mb-16"
-          >
-            <h2 className="text-4xl md:text-5xl font-bold text-gray-900 mb-6">
-              Why <span className="text-transparent bg-clip-text bg-gradient-to-r from-indigo-600 to-purple-600">Learn by Doing</span> Works
-            </h2>
-            <p className="text-xl text-gray-600 max-w-3xl mx-auto">
-              Realtime projects that teach you through hands-on experience. Learn by doing, not just watching.
-            </p>
-          </motion.div>
-
-          {/* Feature Cards with Unique Design */}
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-            {[
-              {
-                icon: '🎯',
-                title: 'Realtime Learning',
-                description: 'Learn by doing with projects that update in real-time as you build them.',
-                color: 'from-blue-500 to-cyan-500'
-              },
-              {
-                icon: '⚡',
-                title: 'Hands-On Experience',
-                description: 'Stop watching tutorials. Start building. Our realtime projects are 100% hands-on.',
-                color: 'from-purple-500 to-pink-500'
-              },
-              {
-                icon: '🏆',
-                title: 'Learn While Building',
-                description: 'Build real projects while learning. Every step teaches you something new.',
-                color: 'from-green-500 to-teal-500'
-              }
-            ].map((feature, index) => (
-              <motion.div
-                key={index}
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.8, delay: 0.3 + index * 0.1 }}
-                className="group relative"
-              >
-                <div className="bg-white rounded-3xl p-8 shadow-xl hover:shadow-2xl transition-all duration-300 border border-gray-100 hover:border-indigo-200 transform hover:-translate-y-2">
-                  <div className={`w-16 h-16 bg-gradient-to-r ${feature.color} rounded-2xl flex items-center justify-center text-3xl mb-6 group-hover:scale-110 transition-transform duration-300`}>
-                    {feature.icon}
-                  </div>
-                  <h3 className="text-2xl font-bold text-gray-900 mb-4">{feature.title}</h3>
-                  <p className="text-gray-600 leading-relaxed">{feature.description}</p>
-                </div>
-              </motion.div>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* Projects Showcase with Creative Layout */}
+      {/* Why Learn By Doing Section */}
       <section className="py-20 bg-gradient-to-br from-gray-50 to-blue-50">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8, delay: 0.4 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.8 }}
             className="text-center mb-16"
           >
-            <h2 className="text-4xl md:text-5xl font-bold text-gray-900 mb-6">
-              Start <span className="text-transparent bg-clip-text bg-gradient-to-r from-purple-600 to-pink-600">Learning by Doing</span>
+            <h2 className="text-4xl md:text-5xl font-black text-gray-900 mb-6">
+              Why{' '}
+              <span className="bg-gradient-to-r from-violet-600 to-indigo-600 bg-clip-text text-transparent">
+                Learn by Doing
+              </span>
             </h2>
-            <p className="text-xl text-gray-600 max-w-3xl mx-auto">
-              Three realtime projects designed for hands-on learning. Pick one and start learning by doing.
+            <p className="text-lg text-gray-600 max-w-3xl mx-auto">
+              Hands-on projects that teach you real-world skills through practical experience
             </p>
           </motion.div>
 
-          {/* Projects Grid with Unique Card Design */}
-          <div className="space-y-12">
-            {projects.map((project, index) => (
-              <motion.div
-                key={project.id}
-                initial={{ opacity: 0, x: index % 2 === 0 ? -50 : 50 }}
-                animate={{ opacity: 1, x: 0 }}
-                transition={{ duration: 0.8, delay: 0.5 + index * 0.2 }}
-                className={`flex flex-col ${index % 2 === 0 ? 'lg:flex-row' : 'lg:flex-row-reverse'} items-center gap-12`}
-              >
-                {/* Project Image/Icon Section */}
-                <div className="flex-1">
-                  <div className={`relative ${project.bgPattern} rounded-3xl p-12 shadow-2xl`}>
-                    <div className="text-center">
-                      <div className={`w-32 h-32 bg-gradient-to-r ${project.gradient} rounded-3xl flex items-center justify-center text-6xl mx-auto mb-8 shadow-xl`}>
-                        {project.icon}
-                      </div>
-                      <div className={`text-4xl font-black ${project.textColor} mb-4`}>
-                        {project.title}
-                      </div>
-                      <div className={`text-lg ${project.textColor} opacity-80`}>
-                        {project.shortDescription}
-                      </div>
-                    </div>
-                    
-                    {/* Floating Elements */}
-                    <div className="absolute top-4 right-4 w-8 h-8 bg-white rounded-full shadow-lg flex items-center justify-center">
-                      <span className="text-sm font-bold text-gray-600">{project.phases}</span>
-                    </div>
-                    <div className="absolute bottom-4 left-4 px-4 py-2 bg-white rounded-full shadow-lg">
-                      <span className="text-sm font-bold text-gray-600">{project.duration}</span>
-                    </div>
-                  </div>
-                </div>
-
-                {/* Project Details Section */}
-                <div className="flex-1">
-                  <div className="bg-white rounded-3xl p-8 shadow-xl">
-                    <div className="mb-6">
-                      <div className="flex items-center space-x-4 mb-4">
-                        <span className={`px-4 py-2 bg-gradient-to-r ${project.gradient} text-white rounded-full text-sm font-bold`}>
-                          {project.difficulty}
-                        </span>
-                        <span className="px-4 py-2 bg-gray-100 text-gray-700 rounded-full text-sm font-bold">
-                          {project.phases} Phases
-                        </span>
-                      </div>
-                      <p className="text-gray-600 leading-relaxed mb-6">{project.description}</p>
-                    </div>
-
-                    {/* Technologies */}
-                    <div className="mb-6">
-                      <h4 className="text-lg font-bold text-gray-900 mb-3">🛠️ Technologies You'll Master:</h4>
-                      <div className="flex flex-wrap gap-2">
-                        {project.technologies.map((tech, techIndex) => (
-                          <span key={techIndex} className="px-3 py-1 bg-gray-100 text-gray-700 text-sm rounded-full font-medium">
-                            {tech}
-                          </span>
-                        ))}
-                      </div>
-                    </div>
-
-                    {/* Learning Phases */}
-                    <div className="mb-8">
-                      <h4 className="text-lg font-bold text-gray-900 mb-3">📚 Your Learning Journey:</h4>
-                      <div className="space-y-2">
-                        {project.phasesList.map((phase, phaseIndex) => (
-                          <div key={phaseIndex} className="flex items-center text-gray-600">
-                            <div className={`w-6 h-6 bg-gradient-to-r ${project.gradient} rounded-full flex items-center justify-center text-white text-xs font-bold mr-3`}>
-                              {phaseIndex + 1}
-                            </div>
-                            {phase}
-                          </div>
-                        ))}
-                      </div>
-                    </div>
-
-                    {/* Action Button */}
-                    <motion.button
-                      whileHover={{ scale: 1.02 }}
-                      whileTap={{ scale: 0.98 }}
-                      onClick={() => handleProjectClick(project.id)}
-                      className={`w-full py-4 bg-gradient-to-r ${project.gradient} text-white font-bold rounded-2xl shadow-lg hover:shadow-xl transition-all duration-300 text-lg`}
-                    >
-                      🚀 Learn by Doing
-                    </motion.button>
-                  </div>
-                </div>
-              </motion.div>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* Stats Section with Creative Design */}
-      <section className="py-20 bg-gradient-to-r from-indigo-600 to-purple-600">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8, delay: 0.6 }}
-            className="text-center mb-16"
-          >
-            <h2 className="text-4xl md:text-5xl font-bold text-white mb-6">
-              Join the <span className="text-yellow-300">Learn by Doing</span> Community
-            </h2>
-            <p className="text-xl text-indigo-100 max-w-3xl mx-auto">
-              Thousands of students are learning by doing with our realtime projects. Start your hands-on journey today.
-            </p>
-          </motion.div>
-
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-8">
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
             {[
-              { number: '3', label: 'Realtime Projects', icon: '🎯' },
-              { number: '15', label: 'Learning Phases', icon: '📚' },
-              { number: '120+', label: 'Hours of Doing', icon: '⏰' },
-              { number: '100%', label: 'Learn by Doing', icon: '💪' }
-            ].map((stat, index) => (
+              {
+                icon: '🎯',
+                title: 'Real-World Projects',
+                description: 'Build actual applications that you can showcase in your portfolio and use in job interviews.',
+                gradient: 'from-blue-500 to-cyan-500'
+              },
+              {
+                icon: '⚡',
+                title: 'Hands-On Learning',
+                description: 'Stop watching tutorials. Start building. Learn by doing with step-by-step guidance.',
+                gradient: 'from-purple-500 to-pink-500'
+              },
+              {
+                icon: '🏆',
+                title: 'Industry Standards',
+                description: 'Follow best practices and industry standards used by top tech companies worldwide.',
+                gradient: 'from-green-500 to-teal-500'
+              }
+            ].map((feature, index) => (
               <motion.div
                 key={index}
-                initial={{ opacity: 0, scale: 0.8 }}
-                animate={{ opacity: 1, scale: 1 }}
-                transition={{ duration: 0.8, delay: 0.7 + index * 0.1 }}
-                className="text-center bg-white/10 backdrop-blur-sm rounded-3xl p-8 border border-white/20"
+                initial={{ opacity: 0, y: 30 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ duration: 0.8, delay: index * 0.2 }}
+                className="group relative"
               >
-                <div className="text-4xl mb-4">{stat.icon}</div>
-                <div className="text-5xl font-black text-white mb-2">{stat.number}</div>
-                <div className="text-indigo-100 font-medium">{stat.label}</div>
+                {/* Animated gradient border */}
+                <div className={`absolute -inset-0.5 bg-gradient-to-r ${feature.gradient} rounded-3xl opacity-0 group-hover:opacity-100 blur transition duration-500`}></div>
+
+                {/* Card */}
+                <div className="relative bg-white rounded-3xl p-8 shadow-xl transform group-hover:-translate-y-2 transition duration-500">
+                  <motion.div
+                    whileHover={{ scale: 1.1, rotate: 10 }}
+                    transition={{ duration: 0.3 }}
+                    className="text-6xl mb-6"
+                  >
+                    {feature.icon}
+                  </motion.div>
+
+                  <h3 className="text-2xl font-bold text-gray-900 mb-4">
+                    {feature.title}
+                  </h3>
+
+                  <p className="text-gray-600 leading-relaxed">
+                    {feature.description}
+                  </p>
+                </div>
               </motion.div>
             ))}
           </div>
@@ -429,24 +593,34 @@ const RealtimeProjectsLandingPage = () => {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8, delay: 0.8 }}
-            className="text-center"
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.8 }}
+            className="relative bg-gradient-to-r from-indigo-600 to-purple-600 rounded-3xl p-12 md:p-16 overflow-hidden"
           >
-            <div className="bg-gradient-to-r from-indigo-50 to-purple-50 rounded-3xl p-12 border border-indigo-100">
-              <h2 className="text-4xl md:text-5xl font-bold text-gray-900 mb-6">
-                Ready to <span className="text-transparent bg-clip-text bg-gradient-to-r from-indigo-600 to-purple-600">Learn by Doing</span>?
+
+            <div className="relative z-10 text-center">
+              <h2 className="text-3xl md:text-5xl font-black text-white mb-6">
+                Ready to{' '}
+                <span className="bg-gradient-to-r from-yellow-300 to-pink-300 bg-clip-text text-transparent">
+                  Start Building
+                </span>
+                ?
               </h2>
-              <p className="text-xl text-gray-600 max-w-3xl mx-auto mb-8">
-                Stop watching tutorials. Start learning by doing. Join thousands of students who are already building realtime projects.
+
+              <p className="text-lg md:text-xl text-white/90 max-w-3xl mx-auto mb-10">
+                Join thousands of students learning by doing. Build real projects, master real skills.
               </p>
+
               <motion.button
                 whileHover={{ scale: 1.05 }}
                 whileTap={{ scale: 0.95 }}
                 onClick={handleGetStarted}
-                className="px-12 py-6 bg-gradient-to-r from-indigo-600 to-purple-600 text-white font-bold rounded-2xl shadow-2xl hover:shadow-purple-500/25 transition-all duration-300 text-xl"
+                className="px-10 py-4 bg-white text-purple-600 rounded-xl font-bold text-lg shadow-2xl shadow-white/20 hover:shadow-white/40 transition-all duration-300"
               >
-                🚀 Start Learning by Doing
+                <span className="flex items-center gap-3">
+                  <span>🚀 Start Your Journey</span>
+                </span>
               </motion.button>
             </div>
           </motion.div>

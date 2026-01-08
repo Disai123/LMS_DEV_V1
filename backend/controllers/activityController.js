@@ -21,7 +21,7 @@ const getMyActivities = async (req, res, next) => {
         {
           model: CourseChapter,
           as: 'chapter',
-          attributes: ['id', 'title', 'chapter_number']
+          attributes: ['id', 'title', 'chapter_order']
         },
         {
           model: CourseTest,
@@ -36,7 +36,7 @@ const getMyActivities = async (req, res, next) => {
     // Format activities for frontend
     const formattedActivities = activities.map(activity => {
       const timeAgo = getTimeAgo(activity.created_at);
-      
+
       return {
         id: activity.id,
         type: activity.activity_type,
@@ -53,7 +53,7 @@ const getMyActivities = async (req, res, next) => {
         chapter: activity.chapter ? {
           id: activity.chapter.id,
           title: activity.chapter.title,
-          chapterNumber: activity.chapter.chapter_number
+          chapterNumber: activity.chapter.chapter_order
         } : null,
         test: activity.test ? {
           id: activity.test.id,
@@ -108,7 +108,7 @@ const getMyActivityStats = async (req, res, next) => {
     // Get recent activity streak (last 7 days)
     const sevenDaysAgo = new Date();
     sevenDaysAgo.setDate(sevenDaysAgo.getDate() - 7);
-    
+
     const recentActivities = await ActivityLog.count({
       where: {
         student_id: studentId,
@@ -143,7 +143,7 @@ const getMyActivityStats = async (req, res, next) => {
 function getTimeAgo(date) {
   const now = new Date();
   const diffInSeconds = Math.floor((now - new Date(date)) / 1000);
-  
+
   if (diffInSeconds < 60) {
     return 'Just now';
   } else if (diffInSeconds < 3600) {

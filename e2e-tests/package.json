@@ -1,0 +1,35 @@
+{
+  "name": "lms-e2e-tests",
+  "version": "1.0.0",
+  "description": "End-to-End Test Suite for LMS Demo Course Flow",
+  "main": "run-all-tests.js",
+  "scripts": {
+    "test": "playwright test",
+    "test:all": "playwright test --reporter=html,json",
+    "test:headed": "playwright test --headed",
+    "test:debug": "playwright test --debug",
+    "test:registration": "playwright test tests/01-user-registration.spec.js",
+    "test:login": "playwright test tests/02-user-login.spec.js",
+    "test:enrollment": "playwright test tests/03-course-enrollment.spec.js",
+    "test:content": "playwright test tests/04-content-access.spec.js",
+    "test:test-completion": "playwright test tests/05-test-completion.spec.js",
+    "test:certificate": "playwright test tests/06-certificate-download.spec.js",
+    "test:logout": "playwright test tests/07-user-logout.spec.js",
+    "test:ui": "playwright test --ui",
+    "report": "playwright show-report",
+    "install:browsers": "playwright install chromium"
+  },
+  "keywords": [
+    "e2e",
+    "testing",
+    "playwright",
+    "lms",
+    "automation"
+  ],
+  "author": "LMS Development Team",
+  "license": "MIT",
+  "devDependencies": {
+    "@playwright/test": "^1.40.0",
+    "dotenv": "^16.3.1"
+  }
+}
