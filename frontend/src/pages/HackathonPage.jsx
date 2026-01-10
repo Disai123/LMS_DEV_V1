@@ -7,6 +7,7 @@ import HackathonDetailsModal from '../components/HackathonDetailsModal';
 import StudentHackathonCard from '../components/hackathon/StudentHackathonCard';
 import AccessDenied from '../components/common/AccessDenied';
 import { usePermissions } from '../hooks/usePermissions';
+import { FiSearch } from 'react-icons/fi';
 
 const HackathonPage = () => {
   const [hackathons, setHackathons] = useState([]);
@@ -14,6 +15,9 @@ const HackathonPage = () => {
   const [error, setError] = useState(null);
   const [selectedHackathon, setSelectedHackathon] = useState(null);
   const [showDetailsModal, setShowDetailsModal] = useState(false);
+  const [searchTerm, setSearchTerm] = useState('');
+  const [filterStatus, setFilterStatus] = useState('all');
+  const [filterDifficulty, setFilterDifficulty] = useState('all');
   const navigate = useNavigate();
   const { permissions, loading: permissionsLoading, hasAccess, isAdmin } = usePermissions();
 
@@ -34,7 +38,7 @@ const HackathonPage = () => {
   const fetchHackathons = async () => {
     try {
       setLoading(true);
-      
+
       // Get token from multiple sources
       let token = localStorage.getItem('accessToken');
       if (!token) {
@@ -46,8 +50,8 @@ const HackathonPage = () => {
       if (!token) {
         token = sessionStorage.getItem('token');
       }
-      
-      
+
+
       const apiUrl = import.meta.env.VITE_API_URL || 'http://localhost:5000';
       const response = await fetch(`${apiUrl}/api/hackathons`, {
         headers: {
@@ -135,10 +139,20 @@ const HackathonPage = () => {
     );
   }
 
+  // Filter hackathons based on search and filters
+  const filteredHackathons = hackathons.filter(hackathon => {
+    const matchesSearch = hackathon.name?.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      hackathon.description?.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      hackathon.technology?.toLowerCase().includes(searchTerm.toLowerCase())
+    const matchesStatus = filterStatus === 'all' || hackathon.status === filterStatus
+    const matchesDifficulty = filterDifficulty === 'all' || hackathon.difficulty === filterDifficulty
+    return matchesSearch && matchesStatus && matchesDifficulty
+  });
+
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-50 via-blue-50 to-indigo-100">
       <Header />
-      
+
       <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
         <motion.div
           initial={{ opacity: 0, y: 20 }}
@@ -154,7 +168,62 @@ const HackathonPage = () => {
           </p>
         </motion.div>
 
-        {hackathons.length === 0 ? (
+        {/* Filters */}
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.6, delay: 0.1 }}
+          className="bg-white rounded-lg shadow-sm border border-gray-200 p-6 mb-8"
+        >
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+            {/* Search */}
+            <div className="relative">
+              <FiSearch className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-5 h-5" />
+              <input
+                type="text"
+                placeholder="Search hackathons..."
+                value={searchTerm}
+                onChange={(e) => setSearchTerm(e.target.value)}
+                className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500"
+              />
+            </div>
+
+            {/* Status Filter */}
+            <div>
+              <select
+                value={filterStatus}
+                onChange={(e) => setFilterStatus(e.target.value)}
+                className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500"
+              >
+                <option value="all">All Status</option>
+                <option value="upcoming">Upcoming</option>
+                <option value="active">Active</option>
+                <option value="completed">Completed</option>
+              </select>
+            </div>
+
+            {/* Difficulty Filter */}
+            <div>
+              <select
+                value={filterDifficulty}
+                onChange={(e) => setFilterDifficulty(e.target.value)}
+                className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500"
+              >
+                <option value="all">All Difficulty</option>
+                <option value="beginner">Beginner</option>
+                <option value="intermediate">Intermediate</option>
+                <option value="advanced">Advanced</option>
+              </select>
+            </div>
+          </div>
+
+          {/* Results count */}
+          <div className="mt-4 text-sm text-gray-600">
+            Showing {filteredHackathons.length} of {hackathons.length} hackathons
+          </div>
+        </motion.div>
+
+        {filteredHackathons.length === 0 ? (
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
@@ -178,7 +247,7 @@ const HackathonPage = () => {
             transition={{ duration: 0.6, delay: 0.2 }}
             className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8"
           >
-            {hackathons.map((hackathon, index) => (
+            {filteredHackathons.map((hackathon, index) => (
               <StudentHackathonCard
                 key={hackathon.id}
                 hackathon={hackathon}

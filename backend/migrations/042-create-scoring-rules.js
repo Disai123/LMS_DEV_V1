@@ -68,28 +68,28 @@ module.exports = {
 
     // Seed default scoring rules
     const defaultRules = [
-      // Course completion points
-      { rule_type: 'course_completion', rule_key: 'default', points: 50, is_active: true },
-      { rule_type: 'course_completion', rule_key: 'beginner', points: 40, is_active: true },
-      { rule_type: 'course_completion', rule_key: 'intermediate', points: 60, is_active: true },
-      { rule_type: 'course_completion', rule_key: 'advanced', points: 80, is_active: true },
-      
-      // Project approval points
-      { rule_type: 'project_approval', rule_key: 'default', points: 200, is_active: true },
-      { rule_type: 'project_approval', rule_key: 'beginner', points: 150, is_active: true },
-      { rule_type: 'project_approval', rule_key: 'intermediate', points: 250, is_active: true },
-      { rule_type: 'project_approval', rule_key: 'advanced', points: 350, is_active: true },
-      
-      // Hackathon approval points
-      { rule_type: 'hackathon_approval', rule_key: 'participation', points: 200, is_active: true },
-      { rule_type: 'hackathon_approval', rule_key: 'ranking_1', points: 1000, is_active: true },
-      { rule_type: 'hackathon_approval', rule_key: 'ranking_2', points: 750, is_active: true },
-      { rule_type: 'hackathon_approval', rule_key: 'ranking_3', points: 500, is_active: true },
-      { rule_type: 'hackathon_approval', rule_key: 'top_10', points: 400, is_active: true },
-      { rule_type: 'hackathon_approval', rule_key: 'top_20', points: 300, is_active: true },
-      
-      // Master certificate bonus
-      { rule_type: 'master_certificate', rule_key: 'default', points: 500, is_active: true }
+      // Course completion points - SIMPLIFIED
+      { rule_type: 'course_completion', rule_key: 'default', points: 20, is_active: true },
+      { rule_type: 'course_completion', rule_key: 'beginner', points: 10, is_active: true },
+      { rule_type: 'course_completion', rule_key: 'intermediate', points: 20, is_active: true },
+      { rule_type: 'course_completion', rule_key: 'advanced', points: 30, is_active: true },
+
+      // Project approval points - SIMPLIFIED
+      { rule_type: 'project_approval', rule_key: 'default', points: 50, is_active: true },
+      { rule_type: 'project_approval', rule_key: 'beginner', points: 40, is_active: true },
+      { rule_type: 'project_approval', rule_key: 'intermediate', points: 50, is_active: true },
+      { rule_type: 'project_approval', rule_key: 'advanced', points: 60, is_active: true },
+
+      // Hackathon approval points - SIMPLIFIED (all 50 points)
+      { rule_type: 'hackathon_approval', rule_key: 'participation', points: 50, is_active: true },
+      { rule_type: 'hackathon_approval', rule_key: 'ranking_1', points: 50, is_active: true },
+      { rule_type: 'hackathon_approval', rule_key: 'ranking_2', points: 50, is_active: true },
+      { rule_type: 'hackathon_approval', rule_key: 'ranking_3', points: 50, is_active: true },
+      { rule_type: 'hackathon_approval', rule_key: 'top_10', points: 50, is_active: true },
+      { rule_type: 'hackathon_approval', rule_key: 'top_20', points: 50, is_active: true },
+
+      // Master certificate bonus - SIMPLIFIED
+      { rule_type: 'master_certificate', rule_key: 'default', points: 100, is_active: true }
     ];
 
     await queryInterface.bulkInsert('scoring_rules', defaultRules.map(rule => ({

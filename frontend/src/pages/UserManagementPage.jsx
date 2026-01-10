@@ -7,13 +7,17 @@ import Header from '../components/common/Header'
 import LoadingSpinner from '../components/common/LoadingSpinner'
 import CreateUserModal from '../components/admin/CreateUserModal'
 import EditUserModal from '../components/admin/EditUserModal'
+import { FiSearch } from 'react-icons/fi'
 
 const UserManagementPage = () => {
   const { user, isAuthenticated } = useAuth()
   const [isCreateModalOpen, setIsCreateModalOpen] = useState(false)
   const [isEditModalOpen, setIsEditModalOpen] = useState(false)
   const [selectedUser, setSelectedUser] = useState(null)
-  
+  const [searchTerm, setSearchTerm] = useState('')
+  const [filterRole, setFilterRole] = useState('all')
+  const [filterStatus, setFilterStatus] = useState('all')
+
   const { data: usersData, isLoading } = useQuery(
     'admin-users',
     () => userService.getUsers({ limit: 100 }),
@@ -34,6 +38,17 @@ const UserManagementPage = () => {
 
   const users = usersData?.data?.users || []
 
+  // Filter users based on search and filters
+  const filteredUsers = users.filter(user => {
+    const matchesSearch = user.name?.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      user.email?.toLowerCase().includes(searchTerm.toLowerCase())
+    const matchesRole = filterRole === 'all' || user.role === filterRole
+    const matchesStatus = filterStatus === 'all' ||
+      (filterStatus === 'active' && user.is_active) ||
+      (filterStatus === 'inactive' && !user.is_active)
+    return matchesSearch && matchesRole && matchesStatus
+  })
+
   const handleEditUser = (user) => {
     setSelectedUser(user)
     setIsEditModalOpen(true)
@@ -47,7 +62,7 @@ const UserManagementPage = () => {
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-50 via-blue-50 to-indigo-100">
       <Header />
-      
+
       <main className="py-8">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <motion.div
@@ -61,12 +76,61 @@ const UserManagementPage = () => {
                 <h2 className="text-2xl font-bold text-gray-900">User Management</h2>
                 <p className="text-gray-600 mt-1">Manage student accounts and permissions</p>
               </div>
-              <button 
+              <button
                 onClick={() => setIsCreateModalOpen(true)}
                 className="btn-primary mt-4 sm:mt-0"
               >
                 Add New User
               </button>
+            </div>
+
+            {/* Filters */}
+            <div className="card p-6">
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                {/* Search */}
+                <div className="relative">
+                  <FiSearch className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-5 h-5" />
+                  <input
+                    type="text"
+                    placeholder="Search by name or email..."
+                    value={searchTerm}
+                    onChange={(e) => setSearchTerm(e.target.value)}
+                    className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500"
+                  />
+                </div>
+
+                {/* Role Filter */}
+                <div>
+                  <select
+                    value={filterRole}
+                    onChange={(e) => setFilterRole(e.target.value)}
+                    className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500"
+                  >
+                    <option value="all">All Roles</option>
+                    <option value="admin">Admin</option>
+                    <option value="hr">HR</option>
+                    <option value="student">Student</option>
+                  </select>
+                </div>
+
+                {/* Status Filter */}
+                <div>
+                  <select
+                    value={filterStatus}
+                    onChange={(e) => setFilterStatus(e.target.value)}
+                    className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500"
+                  >
+                    <option value="all">All Status</option>
+                    <option value="active">Active</option>
+                    <option value="inactive">Inactive</option>
+                  </select>
+                </div>
+              </div>
+
+              {/* Results count */}
+              <div className="mt-4 text-sm text-gray-600">
+                Showing {filteredUsers.length} of {users.length} users
+              </div>
             </div>
 
             {/* Users Table */}
@@ -96,7 +160,7 @@ const UserManagementPage = () => {
                     </tr>
                   </thead>
                   <tbody className="bg-white divide-y divide-gray-200">
-                    {users.map((user, index) => (
+                    {filteredUsers.map((user, index) => (
                       <motion.tr
                         key={user.id}
                         initial={{ opacity: 0, y: 20 }}
@@ -122,20 +186,18 @@ const UserManagementPage = () => {
                           </div>
                         </td>
                         <td className="px-6 py-4 whitespace-nowrap">
-                          <span className={`px-2 py-1 text-xs font-medium rounded-full ${
-                            user.role === 'admin' 
+                          <span className={`px-2 py-1 text-xs font-medium rounded-full ${user.role === 'admin'
                               ? 'bg-purple-100 text-purple-800'
                               : 'bg-blue-100 text-blue-800'
-                          }`}>
+                            }`}>
                             {user.role}
                           </span>
                         </td>
                         <td className="px-6 py-4 whitespace-nowrap">
-                          <span className={`px-2 py-1 text-xs font-medium rounded-full ${
-                            user.is_active 
+                          <span className={`px-2 py-1 text-xs font-medium rounded-full ${user.is_active
                               ? 'bg-green-100 text-green-800'
                               : 'bg-red-100 text-red-800'
-                          }`}>
+                            }`}>
                             {user.is_active ? 'Active' : 'Inactive'}
                           </span>
                         </td>
@@ -161,7 +223,7 @@ const UserManagementPage = () => {
                         </td>
                         <td className="px-6 py-4 whitespace-nowrap text-sm font-medium">
                           <div className="flex space-x-2">
-                            <button 
+                            <button
                               onClick={() => handleEditUser(user)}
                               className="text-indigo-600 hover:text-indigo-500"
                             >
@@ -177,7 +239,7 @@ const UserManagementPage = () => {
             </div>
 
             {/* Empty State */}
-            {users.length === 0 && (
+            {filteredUsers.length === 0 && (
               <motion.div
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
@@ -188,7 +250,7 @@ const UserManagementPage = () => {
                 </svg>
                 <h3 className="text-lg font-medium text-gray-900 mb-2">No users found</h3>
                 <p className="text-gray-500 mb-6">Get started by adding your first user</p>
-                <button 
+                <button
                   onClick={() => setIsCreateModalOpen(true)}
                   className="btn-primary"
                 >

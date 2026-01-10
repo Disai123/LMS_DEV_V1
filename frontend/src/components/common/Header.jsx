@@ -73,14 +73,14 @@ const Header = () => {
               Courses
             </Link>
             <Link
-              to={user?.role === 'student' ? '/student/realtime-projects' : '/realtime-projects'}
+              to="/student/realtime-projects"
               onClick={(e) => handleNavClick(e, '/student/realtime-projects', !isAuthenticated)}
               className="text-gray-700 hover:text-indigo-600 font-medium transition-colors duration-200"
             >
               Realtime Projects
             </Link>
             <Link
-              to="/hackathons"
+              to="/student/hackathons"
               onClick={(e) => handleNavClick(e, '/student/hackathons', !isAuthenticated)}
               className="text-gray-700 hover:text-indigo-600 font-medium transition-colors duration-200"
             >
@@ -199,14 +199,14 @@ const Header = () => {
                   Courses
                 </Link>
                 <Link
-                  to={user?.role === 'student' ? '/student/realtime-projects' : '/realtime-projects'}
+                  to="/student/realtime-projects"
                   onClick={(e) => { handleNavClick(e, '/student/realtime-projects', !isAuthenticated); setIsMenuOpen(false) }}
                   className="block px-4 py-4 text-gray-700 hover:bg-white/20 rounded-lg transition-colors duration-200 min-h-[44px] flex items-center"
                 >
                   Realtime Projects
                 </Link>
                 <Link
-                  to="/hackathons"
+                  to="/student/hackathons"
                   onClick={(e) => { handleNavClick(e, '/student/hackathons', !isAuthenticated); setIsMenuOpen(false) }}
                   className="block px-4 py-4 text-gray-700 hover:bg-white/20 rounded-lg transition-colors duration-200 min-h-[44px] flex items-center"
                 >

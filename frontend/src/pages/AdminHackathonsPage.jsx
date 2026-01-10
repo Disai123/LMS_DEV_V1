@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import { useNavigate, useLocation } from 'react-router-dom';
-import { FiPlus, FiEdit, FiEye, FiTrash2, FiUsers, FiCalendar, FiAward, FiFileText } from 'react-icons/fi';
+import { FiPlus, FiEdit, FiEye, FiTrash2, FiUsers, FiCalendar, FiAward, FiFileText, FiSearch } from 'react-icons/fi';
 import LoadingSpinner from '../components/common/LoadingSpinner';
 import EditHackathonModal from '../components/EditHackathonModal';
 import HackathonSubmissionsManagement from '../components/admin/HackathonSubmissionsManagement';
@@ -21,6 +21,10 @@ const AdminHackathonsPage = () => {
   const [selectedHackathonForSubmissions, setSelectedHackathonForSubmissions] = useState(null);
   const [showJoinRequests, setShowJoinRequests] = useState(false);
   const [selectedHackathonForJoinRequests, setSelectedHackathonForJoinRequests] = useState(null);
+  const [searchTerm, setSearchTerm] = useState('');
+  const [filterStatus, setFilterStatus] = useState('all');
+  const [filterDifficulty, setFilterDifficulty] = useState('all');
+  const [filterPublished, setFilterPublished] = useState('all');
   const navigate = useNavigate();
   const location = useLocation();
 
@@ -45,7 +49,7 @@ const AdminHackathonsPage = () => {
   const fetchHackathons = async () => {
     try {
       setLoading(true);
-      
+
       // Get token from multiple sources (same as CreateHackathonPage)
       let token = localStorage.getItem('accessToken');
       if (!token) {
@@ -57,13 +61,13 @@ const AdminHackathonsPage = () => {
       if (!token) {
         token = sessionStorage.getItem('token');
       }
-      
+
       console.log('AdminHackathonsPage - Token found:', token ? `${token.substring(0, 20)}...` : 'null');
-      
+
       if (!token) {
         throw new Error('Authentication token not found. Please login again.');
       }
-      
+
       const response = await api.get('/hackathons');
 
       console.log('AdminHackathonsPage - Response status:', response.status);
@@ -102,14 +106,14 @@ const AdminHackathonsPage = () => {
       if (!token) {
         token = sessionStorage.getItem('token');
       }
-      
+
       if (!token) {
         throw new Error('Authentication token not found');
       }
 
       console.log('AdminHackathonsPage - Sending update request for hackathon:', selectedHackathon.id);
       console.log('AdminHackathonsPage - Update data:', updatedData);
-      
+
       const response = await api.put(`/hackathons/${selectedHackathon.id}`, updatedData);
 
       console.log('AdminHackathonsPage - Response status:', response.status);
@@ -134,13 +138,13 @@ const AdminHackathonsPage = () => {
       // Close modal first to show success
       setShowEditModal(false);
       setSelectedHackathon(null);
-      
+
       // Refresh the hackathons list in background (don't await to prevent blocking)
       fetchHackathons().catch(err => {
         console.error('Error refreshing hackathons list:', err);
         // Don't show error to user as the update was successful
       });
-      
+
     } catch (error) {
       console.error('Error updating hackathon:', error);
       alert(`Failed to update hackathon: ${error.message}`);
@@ -164,11 +168,11 @@ const AdminHackathonsPage = () => {
       if (!token) {
         token = sessionStorage.getItem('token');
       }
-      
+
       if (!token) {
         throw new Error('Authentication token not found');
       }
-      
+
       const response = await api.delete(`/hackathons/${hackathonId}`);
 
       if (!response.data.success) {
@@ -206,11 +210,11 @@ const AdminHackathonsPage = () => {
       if (!token) {
         token = sessionStorage.getItem('token');
       }
-      
+
       if (!token) {
         throw new Error('Authentication token not found');
       }
-      
+
       const response = await api.put(`/hackathons/${hackathon.id}/publish`, {
         is_published: !hackathon.is_published
       });
@@ -220,8 +224,8 @@ const AdminHackathonsPage = () => {
       }
 
       // Update local state
-      setHackathons(hackathons.map(h => 
-        h.id === hackathon.id 
+      setHackathons(hackathons.map(h =>
+        h.id === hackathon.id
           ? { ...h, is_published: !h.is_published, published_at: !h.is_published ? new Date().toISOString() : null }
           : h
       ));
@@ -257,6 +261,19 @@ const AdminHackathonsPage = () => {
       day: 'numeric'
     });
   };
+
+  // Filter hackathons based on search and filters
+  const filteredHackathons = hackathons.filter(hackathon => {
+    const matchesSearch = hackathon.name?.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      hackathon.description?.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      hackathon.technology?.toLowerCase().includes(searchTerm.toLowerCase())
+    const matchesStatus = filterStatus === 'all' || hackathon.status === filterStatus
+    const matchesDifficulty = filterDifficulty === 'all' || hackathon.difficulty === filterDifficulty
+    const matchesPublished = filterPublished === 'all' ||
+      (filterPublished === 'published' && hackathon.is_published) ||
+      (filterPublished === 'draft' && !hackathon.is_published)
+    return matchesSearch && matchesStatus && matchesDifficulty && matchesPublished
+  });
 
   if (loading) {
     return (
@@ -294,8 +311,72 @@ const AdminHackathonsPage = () => {
           </div>
         )}
 
+        {/* Filters */}
+        <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-6 mb-6">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+            {/* Search */}
+            <div className="relative">
+              <FiSearch className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-5 h-5" />
+              <input
+                type="text"
+                placeholder="Search hackathons..."
+                value={searchTerm}
+                onChange={(e) => setSearchTerm(e.target.value)}
+                className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500"
+              />
+            </div>
+
+            {/* Status Filter */}
+            <div>
+              <select
+                value={filterStatus}
+                onChange={(e) => setFilterStatus(e.target.value)}
+                className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500"
+              >
+                <option value="all">All Status</option>
+                <option value="upcoming">Upcoming</option>
+                <option value="active">Active</option>
+                <option value="completed">Completed</option>
+                <option value="cancelled">Cancelled</option>
+              </select>
+            </div>
+
+            {/* Difficulty Filter */}
+            <div>
+              <select
+                value={filterDifficulty}
+                onChange={(e) => setFilterDifficulty(e.target.value)}
+                className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500"
+              >
+                <option value="all">All Difficulty</option>
+                <option value="beginner">Beginner</option>
+                <option value="intermediate">Intermediate</option>
+                <option value="advanced">Advanced</option>
+              </select>
+            </div>
+
+            {/* Published Filter */}
+            <div>
+              <select
+                value={filterPublished}
+                onChange={(e) => setFilterPublished(e.target.value)}
+                className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500"
+              >
+                <option value="all">All (Published & Draft)</option>
+                <option value="published">Published Only</option>
+                <option value="draft">Draft Only</option>
+              </select>
+            </div>
+          </div>
+
+          {/* Results count */}
+          <div className="mt-4 text-sm text-gray-600">
+            Showing {filteredHackathons.length} of {hackathons.length} hackathons
+          </div>
+        </div>
+
         {/* Hackathons Grid */}
-        {hackathons.length === 0 ? (
+        {filteredHackathons.length === 0 ? (
           <div className="text-center py-12">
             <div className="text-gray-400 mb-4">
               <FiAward className="w-16 h-16 mx-auto" />
@@ -314,7 +395,7 @@ const AdminHackathonsPage = () => {
           </div>
         ) : (
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-            {hackathons.map((hackathon, index) => (
+            {filteredHackathons.map((hackathon, index) => (
               <motion.div
                 key={hackathon.id}
                 initial={{ opacity: 0, y: 20 }}
@@ -398,11 +479,10 @@ const AdminHackathonsPage = () => {
 
                   {/* Published Status */}
                   <div className="mb-4">
-                    <span className={`inline-flex items-center px-2 py-1 rounded-full text-xs font-medium ${
-                      hackathon.is_published 
-                        ? 'bg-green-100 text-green-800' 
+                    <span className={`inline-flex items-center px-2 py-1 rounded-full text-xs font-medium ${hackathon.is_published
+                        ? 'bg-green-100 text-green-800'
                         : 'bg-gray-100 text-gray-800'
-                    }`}>
+                      }`}>
                       {hackathon.is_published ? 'Published' : 'Draft'}
                     </span>
                   </div>
@@ -433,16 +513,15 @@ const AdminHackathonsPage = () => {
                         <span className="text-xs">Join Requests</span>
                       </button>
                     </div>
-                    
+
                     {/* Second Row - Publish/Delete Actions */}
                     <div className="flex space-x-2">
                       <button
                         onClick={() => handleTogglePublish(hackathon)}
-                        className={`flex-1 py-2 px-3 rounded-lg transition-colors duration-200 flex items-center justify-center space-x-1 text-xs ${
-                          hackathon.is_published
+                        className={`flex-1 py-2 px-3 rounded-lg transition-colors duration-200 flex items-center justify-center space-x-1 text-xs ${hackathon.is_published
                             ? 'bg-yellow-100 text-yellow-700 hover:bg-yellow-200'
                             : 'bg-green-100 text-green-700 hover:bg-green-200'
-                        }`}
+                          }`}
                       >
                         {hackathon.is_published ? 'Unpublish' : 'Publish'}
                       </button>

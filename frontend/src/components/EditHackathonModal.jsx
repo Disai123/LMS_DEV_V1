@@ -49,11 +49,11 @@ const EditHackathonModal = ({ hackathon, preservedFormData, onClose, onSave }) =
         video_url: dataToUse.video_url || '',
         pdf_url: dataToUse.pdf_url || ''
       });
-      
+
       // Don't set selected groups here - let fetchHackathonGroups handle it
       // This prevents race conditions between hackathon.groups and API data
     }
-    
+
     // Fetch students and hackathon groups
     fetchStudents();
     fetchHackathonGroups();
@@ -73,13 +73,13 @@ const EditHackathonModal = ({ hackathon, preservedFormData, onClose, onSave }) =
       if (!token) {
         token = sessionStorage.getItem('token');
       }
-      
+
       if (!token) {
         throw new Error('Authentication token not found. Please login again.');
       }
 
       const apiUrl = import.meta.env.VITE_API_URL || 'http://localhost:5000';
-      const response = await fetch(`${apiUrl}/api/users?role=student`, {
+      const response = await fetch(`${apiUrl}/api/users?role=student&limit=1000`, {
         headers: {
           'Authorization': `Bearer ${token}`,
           'Content-Type': 'application/json'
@@ -108,7 +108,7 @@ const EditHackathonModal = ({ hackathon, preservedFormData, onClose, onSave }) =
 
   const fetchHackathonGroups = async () => {
     if (!hackathon?.id) return;
-    
+
     try {
       setLoadingGroups(true);
       // Get token from multiple sources
@@ -122,7 +122,7 @@ const EditHackathonModal = ({ hackathon, preservedFormData, onClose, onSave }) =
       if (!token) {
         token = sessionStorage.getItem('token');
       }
-      
+
       if (!token) {
         throw new Error('Authentication token not found. Please login again.');
       }
@@ -148,13 +148,13 @@ const EditHackathonModal = ({ hackathon, preservedFormData, onClose, onSave }) =
       }
 
       const data = await response.json();
-      
+
       if (data.success && data.data) {
         // Convert hackathon groups to the format expected by the UI
         const groupsWithMembers = data.data.map(group => {
           // Ensure groupMembers is an array and handle edge cases
           const groupMembers = Array.isArray(group.groupMembers) ? group.groupMembers : [];
-          
+
           return {
             id: group.id,
             name: group.name,
@@ -188,7 +188,7 @@ const EditHackathonModal = ({ hackathon, preservedFormData, onClose, onSave }) =
       ...prev,
       [name]: value
     }));
-    
+
     // Clear error when user starts typing
     if (errors[name]) {
       setErrors(prev => ({
@@ -226,7 +226,7 @@ const EditHackathonModal = ({ hackathon, preservedFormData, onClose, onSave }) =
 
   // Update group details
   const updateGroup = (groupId, updates) => {
-    setHackathonGroups(prev => prev.map(group => 
+    setHackathonGroups(prev => prev.map(group =>
       group.id === groupId ? { ...group, ...updates } : group
     ));
   };
@@ -261,7 +261,7 @@ const EditHackathonModal = ({ hackathon, preservedFormData, onClose, onSave }) =
   const getFilteredStudents = (groupStudentIds = []) => {
     return students.filter(student => {
       const matchesSearch = student.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-                           student.email.toLowerCase().includes(searchTerm.toLowerCase());
+        student.email.toLowerCase().includes(searchTerm.toLowerCase());
       const notInGroup = !groupStudentIds.includes(student.id);
       return matchesSearch && notInGroup;
     });
@@ -294,28 +294,28 @@ const EditHackathonModal = ({ hackathon, preservedFormData, onClose, onSave }) =
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    
+
     if (!validateForm()) {
       return;
     }
 
     setLoading(true);
     try {
-        const updateData = {
-          ...formData,
-          groups: hackathonGroups.filter(group => group.name && group.student_ids && group.student_ids.length > 0)
-        };
-        
-        console.log('EditHackathonModal - Sending groups data:', updateData.groups);
-        console.log('EditHackathonModal - Total groups to send:', updateData.groups.length);
-        
-        // Validate groups before sending
-        for (const group of updateData.groups) {
-          if (!group.name || !group.student_ids || group.student_ids.length === 0) {
-            throw new Error(`Group "${group.name || 'Unnamed'}" is missing required information`);
-          }
+      const updateData = {
+        ...formData,
+        groups: hackathonGroups.filter(group => group.name && group.student_ids && group.student_ids.length > 0)
+      };
+
+      console.log('EditHackathonModal - Sending groups data:', updateData.groups);
+      console.log('EditHackathonModal - Total groups to send:', updateData.groups.length);
+
+      // Validate groups before sending
+      for (const group of updateData.groups) {
+        if (!group.name || !group.student_ids || group.student_ids.length === 0) {
+          throw new Error(`Group "${group.name || 'Unnamed'}" is missing required information`);
         }
-        
+      }
+
       await onSave(updateData);
     } catch (error) {
       console.error('Error saving hackathon:', error);
@@ -350,9 +350,8 @@ const EditHackathonModal = ({ hackathon, preservedFormData, onClose, onSave }) =
                 name="name"
                 value={formData.name}
                 onChange={handleInputChange}
-                className={`w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-500 ${
-                  errors.name ? 'border-red-500' : 'border-gray-300'
-                }`}
+                className={`w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-500 ${errors.name ? 'border-red-500' : 'border-gray-300'
+                  }`}
                 placeholder="Enter hackathon name"
               />
               {errors.name && <p className="text-red-500 text-sm mt-1">{errors.name}</p>}
@@ -396,9 +395,8 @@ const EditHackathonModal = ({ hackathon, preservedFormData, onClose, onSave }) =
               value={formData.description}
               onChange={handleInputChange}
               rows={4}
-              className={`w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-500 ${
-                errors.description ? 'border-red-500' : 'border-gray-300'
-              }`}
+              className={`w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-500 ${errors.description ? 'border-red-500' : 'border-gray-300'
+                }`}
               placeholder="Describe the hackathon..."
             />
             {errors.description && <p className="text-red-500 text-sm mt-1">{errors.description}</p>}
@@ -415,9 +413,8 @@ const EditHackathonModal = ({ hackathon, preservedFormData, onClose, onSave }) =
                 name="start_date"
                 value={formData.start_date}
                 onChange={handleInputChange}
-                className={`w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-500 ${
-                  errors.start_date ? 'border-red-500' : 'border-gray-300'
-                }`}
+                className={`w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-500 ${errors.start_date ? 'border-red-500' : 'border-gray-300'
+                  }`}
               />
               {errors.start_date && <p className="text-red-500 text-sm mt-1">{errors.start_date}</p>}
             </div>
@@ -431,9 +428,8 @@ const EditHackathonModal = ({ hackathon, preservedFormData, onClose, onSave }) =
                 name="end_date"
                 value={formData.end_date}
                 onChange={handleInputChange}
-                className={`w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-500 ${
-                  errors.end_date ? 'border-red-500' : 'border-gray-300'
-                }`}
+                className={`w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-500 ${errors.end_date ? 'border-red-500' : 'border-gray-300'
+                  }`}
               />
               {errors.end_date && <p className="text-red-500 text-sm mt-1">{errors.end_date}</p>}
             </div>
@@ -562,7 +558,7 @@ const EditHackathonModal = ({ hackathon, preservedFormData, onClose, onSave }) =
             <p className="text-sm text-gray-500 mb-6">
               Manage groups specifically for this hackathon. Each group is tied exclusively to this hackathon.
             </p>
-            
+
             {/* Create New Group Button */}
             <div className="mb-6">
               <button
@@ -577,7 +573,7 @@ const EditHackathonModal = ({ hackathon, preservedFormData, onClose, onSave }) =
                 Create groups specifically for this hackathon
               </p>
             </div>
-            
+
             {loadingGroups ? (
               <div className="text-center py-8">
                 <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-indigo-600 mx-auto"></div>
@@ -613,7 +609,7 @@ const EditHackathonModal = ({ hackathon, preservedFormData, onClose, onSave }) =
                             <FiTrash2 className="w-5 h-5" />
                           </button>
                         </div>
-                        
+
                         <textarea
                           value={group.description || ''}
                           onChange={(e) => updateGroup(group.id, { description: e.target.value })}
@@ -627,7 +623,7 @@ const EditHackathonModal = ({ hackathon, preservedFormData, onClose, onSave }) =
                             <FiUsers className="w-4 h-4 mr-2 text-indigo-600" />
                             <span className="font-medium">{group.student_ids?.length || 0}</span>
                             <span className="ml-1">member{(group.student_ids?.length || 0) !== 1 ? 's' : ''}</span>
-                              </span>
+                          </span>
                           <div className="flex items-center space-x-2">
                             <label className="text-gray-600">Max:</label>
                             <input
@@ -649,7 +645,7 @@ const EditHackathonModal = ({ hackathon, preservedFormData, onClose, onSave }) =
                               {getStudentsInGroup(group.student_ids).length} selected
                             </div>
                           </div>
-                          
+
                           {/* Search Bar */}
                           <div className="relative">
                             <FiSearch className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-4 h-4" />
@@ -687,7 +683,7 @@ const EditHackathonModal = ({ hackathon, preservedFormData, onClose, onSave }) =
                             <div>
                               <div className="text-sm font-medium text-gray-700 mb-2">
                                 Available Students ({getFilteredStudents(group.student_ids).length}):
-                        </div>
+                              </div>
                               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-2 max-h-40 overflow-y-auto">
                                 {getFilteredStudents(group.student_ids).map((student) => (
                                   <button
@@ -700,16 +696,16 @@ const EditHackathonModal = ({ hackathon, preservedFormData, onClose, onSave }) =
                                     <div className="text-xs text-gray-500">{student.email}</div>
                                   </button>
                                 ))}
-                </div>
-              </div>
-            )}
-            
+                              </div>
+                            </div>
+                          )}
+
                           {getFilteredStudents(group.student_ids).length === 0 && searchTerm && (
                             <div className="text-center py-4 text-gray-500 text-sm">
                               No students found matching "{searchTerm}"
-                  </div>
-                )}
-              </div>
+                            </div>
+                          )}
+                        </div>
                       </div>
                     </div>
                   </div>

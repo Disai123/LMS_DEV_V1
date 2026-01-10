@@ -7,21 +7,21 @@ const { Op } = require('sequelize');
  */
 const getAllHackathons = async (req, res, next) => {
   try {
-    const { 
-      q, 
-      status, 
-      difficulty, 
-      page = 1, 
-      limit = 10, 
-      sort = 'created_at', 
-      order = 'desc' 
+    const {
+      q,
+      status,
+      difficulty,
+      page = 1,
+      limit = 10,
+      sort = 'created_at',
+      order = 'desc'
     } = req.query;
 
     const offset = (page - 1) * limit;
-    
+
     // Apply filters
     const conditions = [];
-    
+
     // Try to authenticate user if token is provided (optional authentication)
     let user = req.user;
     if (!user && req.headers.authorization) {
@@ -30,7 +30,7 @@ const getAllHackathons = async (req, res, next) => {
         const token = req.headers.authorization.replace('Bearer ', '');
         const jwt = require('jsonwebtoken');
         const decoded = jwt.verify(token, process.env.JWT_SECRET || 'your-secret-key');
-        
+
         // Get user from database
         const User = require('../models').User;
         user = await User.findByPk(decoded.id);
@@ -39,7 +39,7 @@ const getAllHackathons = async (req, res, next) => {
         console.log('Optional auth failed, proceeding as public user');
       }
     }
-    
+
     // Base condition for published hackathons or admin access
     if (user && user.role === 'admin') {
       // Admin sees all hackathons - no base condition needed
@@ -49,17 +49,17 @@ const getAllHackathons = async (req, res, next) => {
       conditions.push({ is_published: true });
       console.log('getAllHackathons - Public access - showing only published hackathons');
     }
-    
+
     // Add status filter
     if (status) {
       conditions.push({ status: status });
     }
-    
+
     // Add difficulty filter
     if (difficulty) {
       conditions.push({ difficulty: difficulty });
     }
-    
+
     // Add search condition
     if (q) {
       conditions.push({
@@ -70,10 +70,10 @@ const getAllHackathons = async (req, res, next) => {
         ]
       });
     }
-    
+
     // Build final where clause
     const finalWhereClause = conditions.length > 0 ? { [Op.and]: conditions } : {};
-    
+
     console.log('getAllHackathons - User role:', user?.role || 'none');
     console.log('getAllHackathons - Where clause:', JSON.stringify(finalWhereClause, null, 2));
 
@@ -95,7 +95,7 @@ const getAllHackathons = async (req, res, next) => {
       limit: parseInt(limit),
       offset: parseInt(offset)
     });
-    
+
     console.log('getAllHackathons - Found count:', count);
     console.log('getAllHackathons - Found hackathons:', hackathons.length);
 
@@ -259,7 +259,7 @@ const createHackathon = async (req, res, next) => {
   console.log('=== HACKATHON CREATION START ===');
   console.log('Request body:', JSON.stringify(req.body, null, 2));
   console.log('User:', req.user);
-  
+
   try {
     const {
       name,
@@ -319,7 +319,7 @@ const createHackathon = async (req, res, next) => {
       end_date: endDate,
       created_by: req.user.id
     });
-    
+
     const hackathonData = {
       name,
       description,
@@ -346,7 +346,7 @@ const createHackathon = async (req, res, next) => {
     }
 
     const hackathon = await Hackathon.create(hackathonData);
-    
+
     console.log('Hackathon created successfully with ID:', hackathon.id);
     console.log('Hackathon data:', JSON.stringify(hackathon.toJSON(), null, 2));
 
@@ -355,15 +355,15 @@ const createHackathon = async (req, res, next) => {
     console.log('Groups type:', typeof groups);
     console.log('Groups isArray:', Array.isArray(groups));
     console.log('Groups length:', groups ? groups.length : 'null');
-    
+
     if (groups && groups.length > 0) {
       console.log('Processing groups:', JSON.stringify(groups, null, 2));
       let totalParticipants = 0;
-      
+
       try {
         for (const groupData of groups) {
           console.log('Processing group:', groupData);
-          
+
           // Validate student IDs exist and are students
           const students = await User.findAll({
             where: {
@@ -408,17 +408,17 @@ const createHackathon = async (req, res, next) => {
             });
           }
           console.log('Members created successfully:', groupData.student_ids.length);
-          
+
           // Update the current_members count in the group
           await HackathonGroup.update(
             { current_members: groupData.student_ids.length },
             { where: { id: group.id } }
           );
           console.log('Updated group member count to:', groupData.student_ids.length);
-          
+
           totalParticipants += groupData.student_ids.length;
         }
-        
+
         // Update current_participants count
         hackathon.current_participants = totalParticipants;
         await hackathon.save();
@@ -471,24 +471,24 @@ const createHackathon = async (req, res, next) => {
       sql: error.sql,
       original: error.original
     });
-    
+
     // Log error details
-    
+
     if (error.name === 'SequelizeValidationError') {
       console.log('Validation error:', error.errors);
       return next(new AppError(error.errors[0].message, 400));
     }
-    
+
     if (error.name === 'SequelizeForeignKeyConstraintError') {
       console.log('Foreign key constraint error');
       return next(new AppError('Invalid reference to user or hackathon', 400));
     }
-    
+
     if (error.name === 'SequelizeUniqueConstraintError') {
       console.log('Unique constraint error');
       return next(new AppError('A hackathon with this name already exists', 400));
     }
-    
+
     console.log('Generic error, returning 500');
     next(new AppError('Failed to create hackathon', 500));
   }
@@ -501,14 +501,14 @@ const updateHackathon = async (req, res, next) => {
   try {
     const { id } = req.params;
     const updateData = req.body;
-    
+
     // Add updated_by field
     updateData.updated_by = req.user.id;
 
     // Remove fields that shouldn't be updated directly
     delete updateData.created_by;
     delete updateData.current_participants;
-    
+
     // Fix empty strings for integer fields
     if (updateData.max_participants === '') updateData.max_participants = null;
     if (updateData.max_groups === '') updateData.max_groups = null;
@@ -534,10 +534,10 @@ const updateHackathon = async (req, res, next) => {
     console.log('Received updateData.groups:', updateData.groups);
     console.log('updateData.groups type:', typeof updateData.groups);
     console.log('updateData.groups isArray:', Array.isArray(updateData.groups));
-    
+
     if (updateData.groups && Array.isArray(updateData.groups)) {
       console.log('Processing groups for update:', updateData.groups);
-      
+
       // Delete existing groups for this hackathon using raw SQL
       await sequelize.query(`
         DELETE FROM hackathon_group_members 
@@ -546,18 +546,18 @@ const updateHackathon = async (req, res, next) => {
         replacements: { hackathon_id: id },
         type: sequelize.QueryTypes.DELETE
       });
-      
+
       await HackathonGroup.destroy({
         where: { hackathon_id: id }
       });
       console.log('Deleted existing groups');
-      
+
       // Create new groups
       let totalParticipants = 0;
       for (const groupData of updateData.groups) {
         if (groupData.name && groupData.student_ids && Array.isArray(groupData.student_ids) && groupData.student_ids.length > 0) {
           console.log('Creating group:', groupData.name);
-          
+
           // Validate student IDs exist and are students
           const students = await User.findAll({
             where: {
@@ -583,37 +583,37 @@ const updateHackathon = async (req, res, next) => {
             created_by: req.user.id
           });
 
-            // Add members to the group using raw SQL
-            for (let index = 0; index < groupData.student_ids.length; index++) {
-              const student_id = groupData.student_ids[index];
-              await sequelize.query(`
+          // Add members to the group using raw SQL
+          for (let index = 0; index < groupData.student_ids.length; index++) {
+            const student_id = groupData.student_ids[index];
+            await sequelize.query(`
                 INSERT INTO hackathon_group_members 
                 (group_id, student_id, created_at, updated_at)
                 VALUES (:group_id, :student_id, :created_at, :updated_at)
               `, {
-                replacements: {
-                  group_id: group.id,
-                  student_id: student_id,
-                  created_at: new Date(),
-                  updated_at: new Date()
-                },
-                type: sequelize.QueryTypes.INSERT
-              });
-            }
-            console.log('Members created successfully:', groupData.student_ids.length);
-            
-            // Update the current_members count in the group
-            await HackathonGroup.update(
-              { current_members: groupData.student_ids.length },
-              { where: { id: group.id } }
-            );
-            console.log('Updated group member count to:', groupData.student_ids.length);
-            
+              replacements: {
+                group_id: group.id,
+                student_id: student_id,
+                created_at: new Date(),
+                updated_at: new Date()
+              },
+              type: sequelize.QueryTypes.INSERT
+            });
+          }
+          console.log('Members created successfully:', groupData.student_ids.length);
+
+          // Update the current_members count in the group
+          await HackathonGroup.update(
+            { current_members: groupData.student_ids.length },
+            { where: { id: group.id } }
+          );
+          console.log('Updated group member count to:', groupData.student_ids.length);
+
           totalParticipants += groupData.student_ids.length;
           console.log('Group created with ID:', group.id);
         }
       }
-      
+
       // Update current_participants count
       hackathon.current_participants = totalParticipants;
       await hackathon.save();
@@ -658,24 +658,24 @@ const updateHackathon = async (req, res, next) => {
       sql: error.sql,
       original: error.original
     });
-    
+
     if (error.name === 'SequelizeValidationError') {
       return next(new AppError(error.errors[0].message, 400));
     }
-    
+
     if (error.name === 'SequelizeForeignKeyConstraintError') {
       return next(new AppError('Invalid reference to user or hackathon', 400));
     }
-    
+
     if (error.name === 'SequelizeUniqueConstraintError') {
       return next(new AppError('A group with this name already exists for this hackathon', 400));
     }
-    
+
     // Return the actual error message if it's a custom error
     if (error.message && error.message.includes('student IDs')) {
       return next(new AppError(error.message, 400));
     }
-    
+
     next(new AppError('Failed to update hackathon', 500));
   }
 };
@@ -981,13 +981,13 @@ const getHackathonGroups = async (req, res, next) => {
     }
 
     console.log('Hackathon found, fetching groups...');
-    
+
     // First, let's check if there are any groups at all
     const groupCount = await HackathonGroup.count({
       where: { hackathon_id: id }
     });
     console.log('Total groups found for hackathon:', groupCount);
-    
+
     const groups = await HackathonGroup.findAll({
       where: { hackathon_id: id },
       attributes: {
@@ -1002,7 +1002,7 @@ const getHackathonGroups = async (req, res, next) => {
     // Fetch group members separately for each group using raw SQL
     for (let group of groups) {
       console.log(`Fetching members for group ${group.id} (${group.name})`);
-      
+
       // Use raw SQL to fetch members - simple fallback query
       let memberResults;
       try {
@@ -1046,9 +1046,9 @@ const getHackathonGroups = async (req, res, next) => {
           type: sequelize.QueryTypes.SELECT
         });
       }
-      
+
       console.log(`Found ${memberResults.length} members for group ${group.id}`);
-      
+
       // Fix discrepancy: if current_members count doesn't match actual members
       if (group.current_members !== memberResults.length) {
         console.log(`Fixing member count discrepancy: current_members=${group.current_members}, actual_members=${memberResults.length}`);
@@ -1058,7 +1058,7 @@ const getHackathonGroups = async (req, res, next) => {
         );
         group.current_members = memberResults.length;
       }
-      
+
       // Transform the raw SQL results to match expected format
       const transformedMembers = memberResults.map((member, index) => ({
         id: `gm_${member.group_id}_${member.student_id}_${index}`, // Generate unique ID
@@ -1076,7 +1076,7 @@ const getHackathonGroups = async (req, res, next) => {
           email: member.student_email || ''
         }
       }));
-      
+
       group.dataValues.groupMembers = transformedMembers;
     }
 
@@ -1094,15 +1094,15 @@ const getHackathonGroups = async (req, res, next) => {
       sql: error.sql,
       original: error.original
     });
-    
+
     if (error.name === 'SequelizeValidationError') {
       return next(new AppError(error.errors[0].message, 400));
     }
-    
+
     if (error.name === 'SequelizeForeignKeyConstraintError') {
       return next(new AppError('Invalid reference to hackathon', 400));
     }
-    
+
     next(new AppError('Failed to fetch hackathon groups', 500));
   }
 };
@@ -1450,7 +1450,7 @@ const createOrUpdateSubmission = async (req, res, next) => {
     console.log(`Hackathon ID: ${id}`);
     console.log(`User ID: ${req.user.id}`);
     console.log(`User Email: ${req.user.email}`);
-    
+
     const participant = await HackathonParticipant.findOne({
       where: {
         hackathon_id: id,
@@ -1465,10 +1465,10 @@ const createOrUpdateSubmission = async (req, res, next) => {
 
     // If not directly enrolled, check if student is part of a group that's enrolled in this hackathon
     let isEligible = !!participant;
-    
+
     if (!isEligible) {
       console.log(`Checking group membership for user ${req.user.id} in hackathon ${id}`);
-      
+
       // Use raw SQL to check group membership
       const [groupMembership] = await sequelize.query(`
         SELECT hgm.group_id, hgm.student_id, hg.name as group_name, hg.hackathon_id
@@ -1483,7 +1483,7 @@ const createOrUpdateSubmission = async (req, res, next) => {
         },
         type: sequelize.QueryTypes.SELECT
       });
-      
+
       console.log(`Group membership found:`, !!groupMembership);
       if (groupMembership) {
         console.log(`Group membership details:`, {
@@ -1506,7 +1506,7 @@ const createOrUpdateSubmission = async (req, res, next) => {
             }
           }]
         });
-        
+
         console.log(`Available groups for hackathon ${id}:`, hackathonGroups.length);
         hackathonGroups.forEach((group, index) => {
           console.log(`  Group ${index + 1}: ${group.name} (ID: ${group.id})`);
@@ -1515,7 +1515,7 @@ const createOrUpdateSubmission = async (req, res, next) => {
             console.log(`      - ${member.name} (ID: ${member.id})`);
           });
         });
-        
+
         // Let's also check if user is in any groups at all using raw SQL
         const userGroups = await sequelize.query(`
           SELECT hgm.group_id, hgm.student_id, hg.name as group_name, hg.hackathon_id
@@ -1528,22 +1528,22 @@ const createOrUpdateSubmission = async (req, res, next) => {
           },
           type: sequelize.QueryTypes.SELECT
         });
-        
+
         console.log(`User ${req.user.id} is in ${userGroups.length} groups total:`);
         userGroups.forEach((membership, index) => {
           console.log(`  Group ${index + 1}: ${membership.group_name} (Hackathon ID: ${membership.hackathon_id})`);
         });
       }
-      
+
       isEligible = !!groupMembership;
     }
 
     console.log(`Final eligibility result: ${isEligible}`);
-    
+
     // If not eligible, check if user is in any group for this hackathon
     if (!isEligible) {
       console.log(`User not enrolled, checking group membership...`);
-      
+
       try {
         // Simple direct query: check if user is in any group for this hackathon using raw SQL
         const [userGroupMembership] = await sequelize.query(`
@@ -1559,9 +1559,9 @@ const createOrUpdateSubmission = async (req, res, next) => {
           },
           type: sequelize.QueryTypes.SELECT
         });
-        
+
         console.log(`Group membership found:`, !!userGroupMembership);
-        
+
         if (userGroupMembership) {
           console.log(`User is in group: ${userGroupMembership.group_name} for hackathon ${id}`);
           isEligible = true;
@@ -1574,7 +1574,7 @@ const createOrUpdateSubmission = async (req, res, next) => {
         // Don't set isEligible = true if there's an error
       }
     }
-    
+
     console.log(`=== END ELIGIBILITY CHECK ===\n`);
 
     if (!isEligible) {
@@ -1669,7 +1669,7 @@ const submitSubmission = async (req, res, next) => {
 
     // If not directly enrolled, check if student is part of a group that's enrolled in this hackathon
     let isEligible = !!participant;
-    
+
     if (!isEligible) {
       // Use raw SQL to check group membership
       const [groupMembership] = await sequelize.query(`
@@ -1685,7 +1685,7 @@ const submitSubmission = async (req, res, next) => {
         },
         type: sequelize.QueryTypes.SELECT
       });
-      
+
       isEligible = !!groupMembership;
     }
 
@@ -1822,12 +1822,12 @@ const reviewSubmission = async (req, res, next) => {
 
     if (status === 'accepted') {
       await submission.accept(req.user.id, review_notes, score);
-      
+
       // Award points for hackathon approval
       try {
         const scoringService = require('../services/scoringService');
         const ranking = submission.ranking || null; // Get ranking if set
-        
+
         await scoringService.awardHackathonPoints({
           studentId: submission.student_id,
           hackathonId: id,
@@ -1873,7 +1873,7 @@ const setSubmissionWinner = async (req, res, next) => {
     }
 
     await submission.setWinner(prize, ranking);
-    
+
     // Update points if ranking changed (recalculate)
     if (ranking && submission.status === 'accepted') {
       try {
@@ -1916,7 +1916,7 @@ const submitJoinRequest = async (req, res, next) => {
     }
 
     // Validate team members
-    const validMembers = teamMembers.filter(member => 
+    const validMembers = teamMembers.filter(member =>
       member.name && member.email && member.name.trim() && member.email.trim()
     );
 
@@ -1962,7 +1962,7 @@ const submitJoinRequest = async (req, res, next) => {
     console.error('Error name:', error.name);
     console.error('Error message:', error.message);
     console.error('Error stack:', error.stack);
-    
+
     if (error.name === 'SequelizeValidationError') {
       return next(new AppError(error.errors[0].message, 400));
     }

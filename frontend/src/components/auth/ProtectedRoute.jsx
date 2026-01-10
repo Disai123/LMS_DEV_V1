@@ -19,7 +19,14 @@ const ProtectedRoute = ({ children, requiredRole = null }) => {
   }
 
   if (requiredRole && user.role !== requiredRole) {
-    return <Navigate to="/unauthorized" replace />
+    // Redirect to the user's appropriate dashboard based on their role
+    const dashboardRoutes = {
+      student: '/dashboard',
+      hr: '/hr/dashboard',
+      admin: '/admin/dashboard'
+    }
+    const redirectTo = dashboardRoutes[user.role] || '/'
+    return <Navigate to={redirectTo} replace />
   }
 
   return children

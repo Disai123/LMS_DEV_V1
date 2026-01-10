@@ -7,7 +7,7 @@ module.exports = {
             {
                 rule_type: 'realtime_project_completion',
                 rule_key: 'beginner',
-                points: 200,
+                points: 40,
                 is_active: true,
                 metadata: JSON.stringify({ description: 'Points for completing a beginner realtime project' }),
                 created_at: new Date(),
@@ -16,7 +16,7 @@ module.exports = {
             {
                 rule_type: 'realtime_project_completion',
                 rule_key: 'intermediate',
-                points: 350,
+                points: 50,
                 is_active: true,
                 metadata: JSON.stringify({ description: 'Points for completing an intermediate realtime project' }),
                 created_at: new Date(),
@@ -25,7 +25,7 @@ module.exports = {
             {
                 rule_type: 'realtime_project_completion',
                 rule_key: 'advanced',
-                points: 500,
+                points: 60,
                 is_active: true,
                 metadata: JSON.stringify({ description: 'Points for completing an advanced realtime project' }),
                 created_at: new Date(),
