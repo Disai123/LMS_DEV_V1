@@ -1595,20 +1595,25 @@ const createOrUpdateSubmission = async (req, res, next) => {
       }
     });
 
+    // Clean up URLs to ensure empty strings are treated as null (avoids isUrl validation errors on empty strings)
+    const cleanUrl = (url) => (url && url.trim() !== '' ? url.trim() : null);
+
+    const submissionData = {
+      project_title,
+      project_description,
+      github_url: cleanUrl(github_url),
+      live_url: cleanUrl(live_url),
+      demo_video_url: cleanUrl(demo_video_url),
+      presentation_url: cleanUrl(presentation_url),
+      documentation_url: cleanUrl(documentation_url),
+      additional_files_url: cleanUrl(additional_files_url),
+      submission_notes,
+      status: 'draft'
+    };
+
     if (submission) {
       // Update existing submission
-      await submission.update({
-        project_title,
-        project_description,
-        github_url,
-        live_url,
-        demo_video_url,
-        presentation_url,
-        documentation_url,
-        additional_files_url,
-        submission_notes,
-        status: 'draft' // Reset to draft when updating
-      });
+      await submission.update(submissionData);
 
       res.json({
         success: true,
@@ -1617,20 +1622,10 @@ const createOrUpdateSubmission = async (req, res, next) => {
       });
     } else {
       // Create new submission
-      submission = await HackathonSubmission.create({
-        hackathon_id: id,
-        student_id: req.user.id,
-        project_title,
-        project_description,
-        github_url,
-        live_url,
-        demo_video_url,
-        presentation_url,
-        documentation_url,
-        additional_files_url,
-        submission_notes,
-        status: 'draft'
-      });
+      submissionData.hackathon_id = id;
+      submissionData.student_id = req.user.id;
+
+      submission = await HackathonSubmission.create(submissionData);
 
       res.status(201).json({
         success: true,
@@ -1639,10 +1634,17 @@ const createOrUpdateSubmission = async (req, res, next) => {
       });
     }
   } catch (error) {
+    console.error('Error in createOrUpdateSubmission:', error);
+
     if (error.name === 'SequelizeValidationError') {
       return next(new AppError(error.errors[0].message, 400));
     }
-    next(new AppError('Failed to create/update submission', 500));
+
+    if (error.name === 'SequelizeUniqueConstraintError') {
+      return next(new AppError('You have already submitted a project for this hackathon', 400));
+    }
+
+    next(new AppError(`Failed to create/update submission: ${error.message}`, 500));
   }
 };
 

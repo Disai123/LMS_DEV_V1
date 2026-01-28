@@ -73,15 +73,13 @@ const Header = () => {
               Courses
             </Link>
             <Link
-              to="/student/realtime-projects"
-              onClick={(e) => handleNavClick(e, '/student/realtime-projects', !isAuthenticated)}
+              to={isAuthenticated ? '/student/realtime-projects' : '/realtime-projects'}
               className="text-gray-700 hover:text-indigo-600 font-medium transition-colors duration-200"
             >
               Realtime Projects
             </Link>
             <Link
-              to="/student/hackathons"
-              onClick={(e) => handleNavClick(e, '/student/hackathons', !isAuthenticated)}
+              to={isAuthenticated ? '/student/hackathons' : '/hackathons'}
               className="text-gray-700 hover:text-indigo-600 font-medium transition-colors duration-200"
             >
               Hackathons
@@ -199,15 +197,15 @@ const Header = () => {
                   Courses
                 </Link>
                 <Link
-                  to="/student/realtime-projects"
-                  onClick={(e) => { handleNavClick(e, '/student/realtime-projects', !isAuthenticated); setIsMenuOpen(false) }}
+                  to={isAuthenticated ? '/student/realtime-projects' : '/realtime-projects'}
+                  onClick={() => setIsMenuOpen(false)}
                   className="block px-4 py-4 text-gray-700 hover:bg-white/20 rounded-lg transition-colors duration-200 min-h-[44px] flex items-center"
                 >
                   Realtime Projects
                 </Link>
                 <Link
-                  to="/student/hackathons"
-                  onClick={(e) => { handleNavClick(e, '/student/hackathons', !isAuthenticated); setIsMenuOpen(false) }}
+                  to={isAuthenticated ? '/student/hackathons' : '/hackathons'}
+                  onClick={() => setIsMenuOpen(false)}
                   className="block px-4 py-4 text-gray-700 hover:bg-white/20 rounded-lg transition-colors duration-200 min-h-[44px] flex items-center"
                 >
                   Hackathons

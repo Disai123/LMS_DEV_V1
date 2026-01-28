@@ -154,7 +154,7 @@ const AdminProjectSubmissionsPage = () => {
     const filteredSubmissions = submissions.filter(sub =>
         searchQuery === '' ||
         sub.project_name.toLowerCase().includes(searchQuery.toLowerCase()) ||
-        sub.student?.username?.toLowerCase().includes(searchQuery.toLowerCase())
+        sub.student?.name?.toLowerCase().includes(searchQuery.toLowerCase())
     );
 
     if (loading && !submissions.length) {
@@ -301,7 +301,7 @@ const AdminProjectSubmissionsPage = () => {
                                             <tr key={submission.id} className="hover:bg-gray-50 transition">
                                                 <td className="px-6 py-4">
                                                     <div>
-                                                        <div className="font-medium text-gray-900">{submission.student?.username || 'Unknown'}</div>
+                                                        <div className="font-medium text-gray-900">{submission.student?.name || 'Unknown'}</div>
                                                         <div className="text-sm text-gray-500">{submission.student?.email}</div>
                                                     </div>
                                                 </td>
@@ -381,7 +381,7 @@ const AdminProjectSubmissionsPage = () => {
                                 <div>
                                     <h2 className="text-2xl font-bold text-gray-900 mb-2">{selectedSubmission.project_name}</h2>
                                     <p className="text-gray-600">
-                                        Submitted by {selectedSubmission.student?.username} on {new Date(selectedSubmission.submitted_at).toLocaleDateString()}
+                                        Submitted by {selectedSubmission.student?.name} on {new Date(selectedSubmission.submitted_at).toLocaleDateString()}
                                     </p>
                                     <div className="mt-2">{getStatusBadge(selectedSubmission.status)}</div>
                                 </div>

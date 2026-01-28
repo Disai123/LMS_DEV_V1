@@ -86,8 +86,6 @@ Thumbs.db
 *.sqlite3
 
 # Uploads directory (if storing files locally)
-uploads/
-public/uploads/
 
 # Temporary files
 tmp/

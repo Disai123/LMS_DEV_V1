@@ -96,5 +96,47 @@ export const authService = {
     } catch (error) {
       throw new Error(error.response?.data?.message || 'Failed to delete account')
     }
+  },
+
+  // Password Reset Methods
+
+  // Request password reset email
+  requestPasswordReset: async (email) => {
+    try {
+      const response = await api.post('/password-reset/request', { email })
+      return response.data
+    } catch (error) {
+      throw new Error(error.response?.data?.message || 'Failed to send reset email')
+    }
+  },
+
+  // Validate reset token
+  validateResetToken: async (token) => {
+    try {
+      const response = await api.get(`/password-reset/validate/${token}`)
+      return response.data
+    } catch (error) {
+      throw new Error(error.response?.data?.message || 'Failed to validate token')
+    }
+  },
+
+  // Get user info for reset token
+  getResetTokenInfo: async (token) => {
+    try {
+      const response = await api.get(`/password-reset/token-info/${token}`)
+      return response.data
+    } catch (error) {
+      throw new Error(error.response?.data?.message || 'Failed to get token info')
+    }
+  },
+
+  // Reset password with token
+  resetPassword: async (token, newPassword) => {
+    try {
+      const response = await api.post('/password-reset/reset', { token, newPassword })
+      return response.data
+    } catch (error) {
+      throw new Error(error.response?.data?.message || 'Failed to reset password')
+    }
   }
 }

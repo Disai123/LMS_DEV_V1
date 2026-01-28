@@ -135,8 +135,8 @@ const LoginPage = () => {
   if (loading) {
     return (
       <div className={`min-h-screen flex items-center justify-center ${userType === 'admin'
-          ? 'bg-gradient-to-br from-slate-900 via-gray-800 to-slate-900'
-          : 'bg-gradient-to-br from-slate-50 via-blue-50 to-indigo-100'
+        ? 'bg-gradient-to-br from-slate-900 via-gray-800 to-slate-900'
+        : 'bg-gradient-to-br from-slate-50 via-blue-50 to-indigo-100'
         }`}>
         <motion.div
           initial={{ opacity: 0, scale: 0.8 }}
@@ -156,8 +156,8 @@ const LoginPage = () => {
 
   return (
     <div className={`min-h-screen flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8 ${userType === 'admin'
-        ? 'bg-gradient-to-br from-slate-900 via-gray-800 to-slate-900'
-        : 'bg-gradient-to-br from-slate-50 via-blue-50 to-indigo-100'
+      ? 'bg-gradient-to-br from-slate-900 via-gray-800 to-slate-900'
+      : 'bg-gradient-to-br from-slate-50 via-blue-50 to-indigo-100'
       }`}>
       <motion.div
         initial={{ opacity: 0, y: 20 }}
@@ -166,8 +166,8 @@ const LoginPage = () => {
         className="max-w-md w-full space-y-8"
       >
         <div className={`p-8 rounded-2xl shadow-2xl ${userType === 'admin'
-            ? 'bg-white/10 backdrop-blur-sm border border-white/20'
-            : 'bg-white shadow-xl'
+          ? 'bg-white/10 backdrop-blur-sm border border-white/20'
+          : 'bg-white shadow-xl'
           }`}>
           {/* Header */}
           <div className="text-center mb-8">
@@ -193,19 +193,19 @@ const LoginPage = () => {
 
           {/* Login Type Toggle */}
           <div className={`flex rounded-lg p-1 mb-6 ${userType === 'admin'
-              ? 'bg-white/10 backdrop-blur-sm'
-              : 'bg-gray-100'
+            ? 'bg-white/10 backdrop-blur-sm'
+            : 'bg-gray-100'
             }`}>
             <button
               type="button"
               onClick={() => setLoginType('traditional')}
               className={`flex-1 py-2 px-4 rounded-md text-sm font-medium transition-colors duration-200 ${loginType === 'traditional'
-                  ? userType === 'admin'
-                    ? 'bg-white/20 text-white shadow-sm'
-                    : 'bg-white text-indigo-600 shadow-sm'
-                  : userType === 'admin'
-                    ? 'text-gray-300 hover:text-white'
-                    : 'text-gray-600 hover:text-gray-900'
+                ? userType === 'admin'
+                  ? 'bg-white/20 text-white shadow-sm'
+                  : 'bg-white text-indigo-600 shadow-sm'
+                : userType === 'admin'
+                  ? 'text-gray-300 hover:text-white'
+                  : 'text-gray-600 hover:text-gray-900'
                 }`}
             >
               Email & Password
@@ -214,12 +214,12 @@ const LoginPage = () => {
               type="button"
               onClick={() => setLoginType('google')}
               className={`flex-1 py-2 px-4 rounded-md text-sm font-medium transition-colors duration-200 ${loginType === 'google'
-                  ? userType === 'admin'
-                    ? 'bg-white/20 text-white shadow-sm'
-                    : 'bg-white text-indigo-600 shadow-sm'
-                  : userType === 'admin'
-                    ? 'text-gray-300 hover:text-white'
-                    : 'text-gray-600 hover:text-gray-900'
+                ? userType === 'admin'
+                  ? 'bg-white/20 text-white shadow-sm'
+                  : 'bg-white text-indigo-600 shadow-sm'
+                : userType === 'admin'
+                  ? 'text-gray-300 hover:text-white'
+                  : 'text-gray-600 hover:text-gray-900'
                 }`}
             >
               Google Sign-In
@@ -249,8 +249,8 @@ const LoginPage = () => {
                     onChange={handleInputChange}
                     required
                     className={`w-full px-4 py-3 rounded-lg transition-colors duration-200 ${userType === 'admin'
-                        ? 'bg-white/10 border border-white/20 text-white placeholder-gray-400 focus:ring-2 focus:ring-gray-400 focus:border-gray-400'
-                        : 'border border-gray-300 focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500'
+                      ? 'bg-white/10 border border-white/20 text-white placeholder-gray-400 focus:ring-2 focus:ring-gray-400 focus:border-gray-400'
+                      : 'border border-gray-300 focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500'
                       }`}
                     placeholder="Enter your email address"
                   />
@@ -269,20 +269,32 @@ const LoginPage = () => {
                     onChange={handleInputChange}
                     required
                     className={`w-full px-4 py-3 rounded-lg transition-colors duration-200 ${userType === 'admin'
-                        ? 'bg-white/10 border border-white/20 text-white placeholder-gray-400 focus:ring-2 focus:ring-gray-400 focus:border-gray-400'
-                        : 'border border-gray-300 focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500'
+                      ? 'bg-white/10 border border-white/20 text-white placeholder-gray-400 focus:ring-2 focus:ring-gray-400 focus:border-gray-400'
+                      : 'border border-gray-300 focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500'
                       }`}
                     placeholder="Enter your password"
                   />
                 </div>
               </div>
 
+              {/* Forgot Password Link - Only for students */}
+              {userType === 'student' && (
+                <div className="text-right">
+                  <Link
+                    to="/forgot-password"
+                    className="text-sm font-medium text-indigo-600 hover:text-indigo-500"
+                  >
+                    Forgot password?
+                  </Link>
+                </div>
+              )}
+
               <button
                 type="submit"
                 disabled={loading}
                 className={`w-full py-3 px-4 rounded-lg font-medium focus:outline-none focus:ring-2 focus:ring-offset-2 transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed ${userType === 'admin'
-                    ? 'bg-gradient-to-r from-gray-600 to-gray-800 text-white hover:from-gray-700 hover:to-gray-900 focus:ring-gray-400'
-                    : 'bg-gradient-to-r from-indigo-600 to-purple-600 text-white hover:from-indigo-700 hover:to-purple-700 focus:ring-indigo-500'
+                  ? 'bg-gradient-to-r from-gray-600 to-gray-800 text-white hover:from-gray-700 hover:to-gray-900 focus:ring-gray-400'
+                  : 'bg-gradient-to-r from-indigo-600 to-purple-600 text-white hover:from-indigo-700 hover:to-purple-700 focus:ring-indigo-500'
                   }`}
               >
                 {loading ? (
@@ -342,8 +354,8 @@ const LoginPage = () => {
             <Link
               to="/"
               className={`text-sm font-medium mt-2 inline-block ${userType === 'admin'
-                  ? 'text-gray-300 hover:text-white'
-                  : 'text-indigo-600 hover:text-indigo-500'
+                ? 'text-gray-300 hover:text-white'
+                : 'text-indigo-600 hover:text-indigo-500'
                 }`}
             >
               ← Back to Home
@@ -357,15 +369,15 @@ const LoginPage = () => {
             }`}>
             By signing in, you agree to our{' '}
             <a href="#" className={`hover:underline ${userType === 'admin'
-                ? 'text-gray-300 hover:text-white'
-                : 'text-indigo-600 hover:text-indigo-500'
+              ? 'text-gray-300 hover:text-white'
+              : 'text-indigo-600 hover:text-indigo-500'
               }`}>
               Terms of Service
             </a>{' '}
             and{' '}
             <a href="#" className={`hover:underline ${userType === 'admin'
-                ? 'text-gray-300 hover:text-white'
-                : 'text-indigo-600 hover:text-indigo-500'
+              ? 'text-gray-300 hover:text-white'
+              : 'text-indigo-600 hover:text-indigo-500'
               }`}>
               Privacy Policy
             </a>
