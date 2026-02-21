@@ -1,0 +1,63 @@
+<div class="content-body">
+    <div class="content-section">
+        <h3 class="content-heading">Backend Development</h3>
+        <p style="color: #4b5563; line-height: 1.75; margin-bottom: 2rem;">
+            The backend is powered by <strong>FastAPI</strong>, a high-performance Python framework. We focus on type
+            safety, automatic documentation, and efficient asynchronous processing.
+        </p>
+
+        <div style="display: flex; flex-direction: column; gap: 2rem;">
+            <!-- FastAPI Features -->
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem;">
+                <div style="border: 1px solid #e5e7eb; border-radius: 12px; padding: 1.5rem;">
+                    <h4 style="font-weight: 700; color: #111827; margin-bottom: 0.75rem;">FastAPI Router</h4>
+                    <p style="color: #4b5563; font-size: 0.9rem; line-height: 1.6;">
+                        Routes are organized into logical groups. For the Todo App, we use a single
+                        <code>tasks.py</code> router to handle all CRUD endpoints.
+                    </p>
+                </div>
+                <div style="border: 1px solid #e5e7eb; border-radius: 12px; padding: 1.5rem;">
+                    <h4 style="font-weight: 700; color: #111827; margin-bottom: 0.75rem;">Pydantic Schemas</h4>
+                    <p style="color: #4b5563; font-size: 0.9rem; line-height: 1.6;">
+                        Schemas define the input and output data structures. This ensures the frontend and backend
+                        strictly adhere to the agreed-upon data types.
+                    </p>
+                </div>
+            </div>
+
+            <!-- Code Snippet -->
+            <div style="background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 12px; padding: 1.5rem;">
+                <h4 style="font-weight: 700; color: #334155; margin-bottom: 1rem;">Code Implementation: Task Creation
+                </h4>
+                <div
+                    style="background: #1e293b; border-radius: 8px; padding: 1.5rem; font-family: 'Fira Code', monospace; font-size: 0.85rem; color: #fff; overflow-x: auto;">
+                    <pre><code><span style="color: #94a3b8;"># main.py</span>
+<span style="color: #fca5a5;">from</span> fastapi <span style="color: #fca5a5;">import</span> FastAPI
+<span style="color: #fca5a5;">from</span> . <span style="color: #fca5a5;">import</span> models, schemas
+
+app = FastAPI()
+
+<span style="color: #6ee7b7;">@app.post("/tasks/", response_model=schemas.Todo)</span>
+<span style="color: #fca5a5;">async def</span> create_task(task: schemas.TodoCreate, db: Session = Depends(get_db)):
+    db_task = models.Todo(**task.dict())
+    db.add(db_task)
+    db.commit()
+    db.refresh(db_task)
+    <span style="color: #fca5a5;">return</span> db_task</code></pre>
+                </div>
+            </div>
+
+            <!-- CORS -->
+            <div style="background: #fffbeb; border-radius: 12px; padding: 1.5rem; border: 1px solid #fde68a;">
+                <h4
+                    style="font-weight: 700; color: #92400e; margin-bottom: 0.5rem; display: flex; align-items: center; gap: 8px;">
+                    <span>💡</span> Implementation Note
+                </h4>
+                <p style="color: #a16207; font-size: 0.9rem;">
+                    We use <code>CORSMiddleware</code> to allow the React development server (running on port 5173) to
+                    communicate with the FastAPI server during local development.
+                </p>
+            </div>
+        </div>
+    </div>
+</div>

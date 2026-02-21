@@ -1,0 +1,47 @@
+<div class="content-body">
+    <div class="content-section">
+        <h3 class="content-heading">Unit Testing</h3>
+        <p style="color: #4b5563; line-height: 1.75; margin-bottom: 2rem;">
+            Unit tests focus on the smallest testable parts of the application in isolation. This allows us to catch
+            logic errors early.
+        </p>
+
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 2rem;">
+            <!-- Backend Unit Tests -->
+            <div>
+                <h4
+                    style="font-size: 1.125rem; font-weight: 600; color: #7c2d12; margin-bottom: 1rem; display: flex; align-items: center; gap: 10px;">
+                    <span style="background: #ffedd5; padding: 6px; border-radius: 6px;">🐍</span> Backend (Pytest)
+                </h4>
+                <div
+                    style="background: #1e293b; border-radius: 8px; padding: 1rem; font-family: monospace; font-size: 0.8rem; color: #fff; margin-bottom: 1rem;">
+                    <span style="color: #94a3b8;"># test_logic.py</span><br>
+                    <span style="color: #fca5a5;">def</span> <span
+                        style="color: #6ee7b7;">test_task_title_required</span>():<br>
+                    &nbsp;&nbsp;with pytest.raises(ValidationError):<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;TodoCreate(title="")
+                </div>
+                <p style="font-size: 0.85rem; color: #4b5563;">Testing Pydantic model validation and database utility
+                    functions.</p>
+            </div>
+
+            <!-- Frontend Unit Tests -->
+            <div>
+                <h4
+                    style="font-size: 1.125rem; font-weight: 600; color: #1e3a8a; margin-bottom: 1rem; display: flex; align-items: center; gap: 10px;">
+                    <span style="background: #dbeafe; padding: 6px; border-radius: 6px;">⚛️</span> Frontend (Vitest)
+                </h4>
+                <div
+                    style="background: #1e293b; border-radius: 8px; padding: 1rem; font-family: monospace; font-size: 0.8rem; color: #fff; margin-bottom: 1rem;">
+                    <span style="color: #94a3b8;">// TaskItem.test.jsx</span><br>
+                    it(<span style="color: #93c5fd;">'renders title correctly'</span>, () => {<br>
+                    &nbsp;&nbsp;render(&lt;TaskItem title="Test" /&gt;);<br>
+                    &nbsp;&nbsp;expect(screen.getByText("Test")).toBeDefined();<br>
+                    });
+                </div>
+                <p style="font-size: 0.85rem; color: #4b5563;">Testing individual React components with React Testing
+                    Library.</p>
+            </div>
+        </div>
+    </div>
+</div>

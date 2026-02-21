@@ -64,117 +64,91 @@ function logInfo(message) {
 /**
  * Parse .env file and extract credentials from specific line ranges
  */
+/**
+ * Parse .env file and extract credentials based on section headers
+ */
 function parseEnvCredentials() {
   const envPath = path.join(__dirname, '.env');
-  
+
   if (!fs.existsSync(envPath)) {
     throw new Error('.env file not found in backend directory');
   }
 
   const envContent = fs.readFileSync(envPath, 'utf8');
-  // Handle both Windows (\r\n) and Unix (\n) line endings
   const lines = envContent.replace(/\r\n/g, '\n').split('\n');
 
-  // Extract Dev credentials (lines 13-17, 0-indexed: 12-16)
-  // slice(12, 17) gives indices 12-16 which are lines 13-17
-  const devLinesRaw = lines.slice(12, 17);
-  const devLines = devLinesRaw.filter(line => line.trim() && !line.trim().startsWith('#'));
-  // Extract Prod credentials (lines 51-55, 0-indexed: 50-54)
-  // slice(50, 55) gives indices 50-54 which are lines 51-55
-  const prodLinesRaw = lines.slice(50, 55);
-  const prodLines = prodLinesRaw.filter(line => line.trim() && !line.trim().startsWith('#'));
+  // Helper to parse a block of lines until next empty line or section
+  const parseBlock = (startIndex) => {
+    const config = {};
+    for (let i = startIndex + 1; i < lines.length; i++) {
+      const line = lines[i].trim();
 
-  const devCreds = {};
-  const prodCreds = {};
+      // Stop at empty line or next section header
+      if (!line || (line.startsWith('#') && line.includes('Configuration'))) {
+        break;
+      }
 
-  // Parse dev credentials
-  devLines.forEach(line => {
-    const trimmed = line.trim();
-    // Handle both KEY=value and KEY = value formats, and skip comments
-    if (trimmed && !trimmed.startsWith('#') && trimmed.includes('=')) {
-      const equalIndex = trimmed.indexOf('=');
-      const key = trimmed.substring(0, equalIndex).trim();
-      const value = trimmed.substring(equalIndex + 1).trim().replace(/^["']|["']$/g, ''); // Remove quotes
-      if (key && value) {
-        devCreds[key] = value;
+      // Handle commented lines (strip leading #)
+      const cleanLine = line.replace(/^#\s*/, '');
+
+      if (cleanLine.includes('=')) {
+        const [key, ...values] = cleanLine.split('=');
+        if (key && values.length > 0) {
+          const val = values.join('=').trim().replace(/^["']|["']$/g, '');
+          config[key.trim()] = val;
+        }
       }
     }
-  });
-
-  // Parse prod credentials
-  prodLines.forEach(line => {
-    const trimmed = line.trim();
-    // Handle both KEY=value and KEY = value formats, and skip comments
-    if (trimmed && !trimmed.startsWith('#') && trimmed.includes('=')) {
-      const equalIndex = trimmed.indexOf('=');
-      const key = trimmed.substring(0, equalIndex).trim();
-      const value = trimmed.substring(equalIndex + 1).trim().replace(/^["']|["']$/g, ''); // Remove quotes
-      if (key && value) {
-        prodCreds[key] = value;
-      }
-    }
-  });
-  
-  // Debug: Log what was parsed
-  if (Object.keys(prodCreds).length === 0 && prodLines.length > 0) {
-    logInfo(`\n⚠️  Warning: ${prodLines.length} production lines found but none were parsed.`);
-    prodLines.forEach((line, idx) => {
-      logInfo(`   Line ${idx + 1}: "${line.trim()}" (length: ${line.trim().length})`);
-    });
-  }
-
-  // Map to standard format
-  const dev = {
-    host: devCreds.DB_HOST || devCreds.DATABASE_HOST || 'localhost',
-    port: parseInt(devCreds.DB_PORT || devCreds.DATABASE_PORT || '5432'),
-    user: devCreds.DB_USER || devCreds.DATABASE_USER || devCreds.POSTGRES_USER || 'postgres',
-    password: devCreds.DB_PASSWORD || devCreds.DATABASE_PASSWORD || devCreds.POSTGRES_PASSWORD || '',
-    database: devCreds.DB_DATABASE || devCreds.DB_NAME || devCreds.DATABASE_NAME || devCreds.POSTGRES_DB || 'LMS_Dev'
+    return config;
   };
 
+  // Find sections
+  let localConfig = {};
+  let remoteConfig = {};
+
+  lines.forEach((line, index) => {
+    if (line.includes('Database Configuration(local setup)')) {
+      localConfig = parseBlock(index);
+    }
+    if (line.includes('Database Configuration(Dev setup) latest')) {
+      remoteConfig = parseBlock(index);
+    }
+  });
+
+  // Map to script format
+  // PROD object in script = SOURCE (Remote AWS DB)
   const prod = {
-    host: prodCreds.DB_HOST || prodCreds.DATABASE_HOST,
-    port: parseInt(prodCreds.DB_PORT || prodCreds.DATABASE_PORT || '5432'),
-    user: prodCreds.DB_USER || prodCreds.DATABASE_USER || prodCreds.POSTGRES_USER,
-    password: prodCreds.DB_PASSWORD || prodCreds.DATABASE_PASSWORD || prodCreds.POSTGRES_PASSWORD,
-    database: prodCreds.DB_DATABASE || prodCreds.DB_NAME || prodCreds.DATABASE_NAME || prodCreds.POSTGRES_DB
+    host: remoteConfig.DB_HOST,
+    user: remoteConfig.DB_USER,
+    password: remoteConfig.DB_PASSWORD,
+    database: remoteConfig.DB_DATABASE,
+    port: parseInt(remoteConfig.DB_PORT || '5432')
   };
 
-  // Validate required fields with detailed error messages
-  if (!prod.host || !prod.user || !prod.database) {
-    logError('\n❌ Production credentials parsing failed:');
-    logError(`   Parsed credential keys: ${Object.keys(prodCreds).join(', ') || 'NONE'}`);
-    logError(`   Found credentials: ${JSON.stringify(prodCreds, null, 2)}`);
-    logError(`   Mapped values: host=${prod.host || 'MISSING'}, user=${prod.user || 'MISSING'}, database=${prod.database || 'MISSING'}`);
-    logError(`   Lines after filtering (${prodLines.length} lines):`);
-    prodLines.forEach((line, idx) => {
-      logError(`     ${line.trim()}`);
-    });
-    logError(`   Raw lines from .env (lines 51-55):`);
-    prodLinesRaw.forEach((line, idx) => {
-      const lineNum = 51 + idx;
-      const status = line.trim().startsWith('#') ? '(COMMENTED OUT)' : line.trim() ? '(ACTIVE)' : '(EMPTY)';
-      logError(`     Line ${lineNum}: ${line.trim() || '(empty)'} ${status}`);
-    });
-    throw new Error('Production credentials incomplete. Could not parse DB_HOST, DB_USER, or DB_DATABASE from lines 51-55');
-  }
+  // DEV object in script = DESTINATION (Localhost)
+  const dev = {
+    host: localConfig.DB_HOST || 'localhost',
+    user: localConfig.DB_USER || 'postgres',
+    password: localConfig.DB_PASSWORD,
+    database: localConfig.DB_DATABASE || 'postgres',
+    port: parseInt(localConfig.DB_PORT || '5432')
+  };
 
-  if (!dev.host || !dev.user || !dev.database) {
-    logError('\n❌ Development credentials parsing failed:');
-    logError(`   Parsed credential keys: ${Object.keys(devCreds).join(', ') || 'NONE'}`);
-    logError(`   Found credentials: ${JSON.stringify(devCreds, null, 2)}`);
-    logError(`   Mapped values: host=${dev.host || 'MISSING'}, user=${dev.user || 'MISSING'}, database=${dev.database || 'MISSING'}`);
-    logError(`   Lines after filtering (${devLines.length} lines):`);
-    devLines.forEach((line, idx) => {
-      logError(`     ${line.trim()}`);
-    });
-    logError(`   Raw lines from .env (lines 13-17):`);
-    devLinesRaw.forEach((line, idx) => {
-      const lineNum = 13 + idx;
-      const status = line.trim().startsWith('#') ? '(COMMENTED OUT)' : line.trim() ? '(ACTIVE)' : '(EMPTY)';
-      logError(`     Line ${lineNum}: ${line.trim() || '(empty)'} ${status}`);
-    });
-    throw new Error('Development credentials incomplete. Could not parse DB_HOST, DB_USER, or DB_DATABASE from lines 13-17');
+  // Validation
+  const validate = (config, name) => {
+    if (!config.host || !config.user || !config.database) {
+      throw new Error(`Incomplete configuration for ${name}. Found: ${JSON.stringify(config)}`);
+    }
+  };
+
+  try {
+    validate(prod, 'Production (Source)');
+    validate(dev, 'Development (Target)');
+  } catch (error) {
+    logError('Parsing Failed. Debug Info:');
+    logError('Local Parsed: ' + JSON.stringify(localConfig));
+    logError('Remote Parsed: ' + JSON.stringify(remoteConfig));
+    throw error;
   }
 
   return { dev, prod };
@@ -186,10 +160,10 @@ function parseEnvCredentials() {
  */
 function getSSLConfig(config) {
   // Check if it's a remote database (not localhost)
-  const isRemote = config.host !== 'localhost' && 
-                   config.host !== '127.0.0.1' && 
-                   !config.host.startsWith('192.168.') &&
-                   !config.host.startsWith('10.');
+  const isRemote = config.host !== 'localhost' &&
+    config.host !== '127.0.0.1' &&
+    !config.host.startsWith('192.168.') &&
+    !config.host.startsWith('10.');
   return isRemote ? { rejectUnauthorized: false } : false;
 }
 
@@ -214,7 +188,7 @@ async function testConnection(config, name) {
     return true;
   } catch (error) {
     logError(`Failed to connect to ${name} database: ${error.message}`);
-    await client.end().catch(() => {});
+    await client.end().catch(() => { });
     return false;
   }
 }
@@ -245,7 +219,7 @@ async function getTables(config, name) {
     return result.rows.map(row => row.table_name);
   } catch (error) {
     logError(`Failed to get tables from ${name}: ${error.message}`);
-    await client.end().catch(() => {});
+    await client.end().catch(() => { });
     return [];
   }
 }
@@ -270,7 +244,7 @@ async function getRowCount(config, tableName, name) {
     return parseInt(result.rows[0].count);
   } catch (error) {
     logWarning(`Could not count rows in ${tableName}: ${error.message}`);
-    await client.end().catch(() => {});
+    await client.end().catch(() => { });
     return 0;
   }
 }
@@ -286,7 +260,7 @@ function findPgTool(toolName = 'pg_dump') {
     `C:\\Program Files (x86)\\PostgreSQL\\18\\bin\\${toolName}.exe`,
     `C:\\Program Files (x86)\\PostgreSQL\\17\\bin\\${toolName}.exe`,
   ];
-  
+
   // Check specific paths first (prioritize newer versions)
   for (const toolPath of possiblePaths) {
     if (fs.existsSync(toolPath)) {
@@ -304,13 +278,13 @@ function findPgTool(toolName = 'pg_dump') {
       }
     }
   }
-  
+
   // Fall back to system PATH (but warn if it's an old version)
   try {
     const versionOutput = execSync(`${toolName} --version`, { encoding: 'utf8', timeout: 5000 });
     const version = versionOutput.trim();
     logInfo(`Using ${toolName} from PATH: ${version}`);
-    
+
     // Check if version is too old
     const versionMatch = version.match(/(\d+)\.(\d+)/);
     if (versionMatch) {
@@ -321,7 +295,7 @@ function findPgTool(toolName = 'pg_dump') {
         logWarning(`⚠️  Please ensure PostgreSQL 18 is in your PATH, or the script will use it automatically`);
       }
     }
-    
+
     return toolName;
   } catch (e) {
     logError(`${toolName} not found in PATH or standard locations`);
@@ -341,14 +315,14 @@ function findPgDump() {
  */
 async function exportProductionData(prodConfig, backupFile) {
   logInfo('Exporting data from production (READ-ONLY operation - production is safe)...');
-  
+
   // Find pg_dump executable (prioritize PostgreSQL 18+)
   logInfo('Auto-detecting pg_dump executable...');
   const pgDumpPath = findPgDump();
-  
+
   // Determine if remote database (requires SSL)
   const isRemote = prodConfig.host !== 'localhost' && prodConfig.host !== '127.0.0.1';
-  
+
   // Build pg_dump command with separate parameters (more reliable than connection string)
   // Using FULL backup (schema + data) so we create tables AND import data in one go
   const dumpArgs = [
@@ -362,7 +336,7 @@ async function exportProductionData(prodConfig, backupFile) {
     '--clean',  // Drop existing objects before recreating
     '--if-exists'  // Only drop if exists (safer)
   ];
-  
+
   // Set environment variables for password and SSL
   const env = { ...process.env };
   env.PGPASSWORD = prodConfig.password;
@@ -370,28 +344,28 @@ async function exportProductionData(prodConfig, backupFile) {
     env.PGSSLMODE = 'require';
     logInfo('SSL: ENABLED (required for AWS RDS)');
   }
-  
+
   logInfo(`Executing: pg_dump (schema + data)...`);
-  
+
   return new Promise((resolve, reject) => {
     const outputStream = fs.createWriteStream(backupFile);
     const dumpProcess = spawn(dumpArgs[0], dumpArgs.slice(1), {
       env: env,
       stdio: ['ignore', 'pipe', 'pipe']
     });
-    
+
     dumpProcess.stdout.pipe(outputStream);
-    
+
     let stderr = '';
     dumpProcess.stderr.on('data', (data) => {
       const errorText = data.toString();
       stderr += errorText;
       process.stderr.write(data); // Show errors to user in real-time
     });
-    
+
     dumpProcess.on('close', (code) => {
       outputStream.end();
-      
+
       // Small delay to ensure file is fully written
       setTimeout(() => {
         if (code !== 0) {
@@ -399,7 +373,7 @@ async function exportProductionData(prodConfig, backupFile) {
           if (stderr) {
             logError(`Error details: ${stderr.trim()}`);
           }
-          
+
           // Clean up failed backup file
           if (fs.existsSync(backupFile)) {
             try {
@@ -408,7 +382,7 @@ async function exportProductionData(prodConfig, backupFile) {
               // Ignore cleanup errors
             }
           }
-          
+
           reject(new Error(`pg_dump failed: ${stderr || 'Unknown error'}`));
         } else {
           // Verify backup file was created and has content
@@ -426,7 +400,7 @@ async function exportProductionData(prodConfig, backupFile) {
         }
       }, 500);
     });
-    
+
     dumpProcess.on('error', (error) => {
       outputStream.end();
       logError(`pg_dump process error: ${error.message}`);
@@ -444,14 +418,14 @@ async function exportProductionData(prodConfig, backupFile) {
  */
 async function importToDevelopment(devConfig, backupFile) {
   logInfo('Importing data to development database...');
-  
+
   // Find psql executable (prioritize PostgreSQL 18+)
   logInfo('Auto-detecting psql executable...');
   const psqlPath = findPgTool('psql');
-  
+
   // Determine if remote database (requires SSL)
   const isRemote = devConfig.host !== 'localhost' && devConfig.host !== '127.0.0.1';
-  
+
   // Set environment variables for password and SSL
   const env = { ...process.env };
   env.PGPASSWORD = devConfig.password;
@@ -459,10 +433,10 @@ async function importToDevelopment(devConfig, backupFile) {
     env.PGSSLMODE = 'require';
     logInfo('SSL: ENABLED (required for AWS RDS)');
   }
-  
+
   // Simple import - just pipe SQL file into psql
   logInfo('Importing data from backup file...');
-  
+
   return new Promise((resolve, reject) => {
     const inputStream = fs.createReadStream(backupFile);
     const psqlArgs = [
@@ -471,20 +445,20 @@ async function importToDevelopment(devConfig, backupFile) {
       '-U', devConfig.user,
       '-d', devConfig.database
     ];
-    
+
     const psqlProcess = spawn(psqlPath, psqlArgs, {
       env: env,
       stdio: ['pipe', 'pipe', 'pipe']
     });
-    
+
     inputStream.pipe(psqlProcess.stdin);
-    
+
     let stderr = '';
-    
+
     psqlProcess.stdout.on('data', (data) => {
       process.stdout.write(data);
     });
-    
+
     psqlProcess.stderr.on('data', (data) => {
       const text = data.toString();
       stderr += text;
@@ -493,24 +467,24 @@ async function importToDevelopment(devConfig, backupFile) {
         // Ignore expected errors:
         // - "does not exist" (from DROP IF EXISTS)
         // - "already exists" (might happen in some edge cases)
-        const isExpectedError = text.includes('does not exist') || 
-                                text.includes('already exists') ||
-                                text.includes('constraint') && text.includes('does not exist');
+        const isExpectedError = text.includes('does not exist') ||
+          text.includes('already exists') ||
+          text.includes('constraint') && text.includes('does not exist');
         if (!isExpectedError) {
           process.stderr.write(data);
         }
       }
     });
-    
+
     psqlProcess.on('close', (code) => {
       inputStream.close();
-      
+
       // Check if errors are just expected ones
-      const expectedErrors = (stderr.match(/does not exist/g) || []).length + 
-                            (stderr.match(/already exists/g) || []).length;
+      const expectedErrors = (stderr.match(/does not exist/g) || []).length +
+        (stderr.match(/already exists/g) || []).length;
       const totalErrors = (stderr.match(/ERROR/g) || []).length;
       const unexpectedErrors = totalErrors - expectedErrors;
-      
+
       if (code !== 0) {
         if (unexpectedErrors === 0) {
           // Only expected errors - import likely succeeded
@@ -525,11 +499,11 @@ async function importToDevelopment(devConfig, backupFile) {
         }
         return;
       }
-      
+
       logSuccess('Schema and data imported successfully');
       resolve(true);
     });
-    
+
     psqlProcess.on('error', (error) => {
       inputStream.close();
       logError(`psql error: ${error.message}`);
@@ -544,7 +518,7 @@ async function importToDevelopment(devConfig, backupFile) {
 
 async function resetSequences(devConfig) {
   logInfo('Resetting sequences...');
-  
+
   const client = new Client({
     host: devConfig.host,
     port: devConfig.port,
@@ -556,7 +530,7 @@ async function resetSequences(devConfig) {
 
   try {
     await client.connect();
-    
+
     // Get all sequences
     const sequencesResult = await client.query(`
       SELECT sequence_name, 
@@ -572,7 +546,7 @@ async function resetSequences(devConfig) {
         // Check if table exists and get max id
         const maxResult = await client.query(`SELECT MAX(id) as max_id FROM "${tableName}"`);
         const maxId = maxResult.rows[0].max_id || 0;
-        
+
         if (maxId > 0) {
           await client.query(`SELECT setval('${seq.sequence_name}', ${maxId}, true)`);
           logInfo(`Reset sequence ${seq.sequence_name} to ${maxId}`);
@@ -581,13 +555,13 @@ async function resetSequences(devConfig) {
         logWarning(`Could not reset sequence ${seq.sequence_name}: ${err.message}`);
       }
     }
-    
+
     await client.end();
     logSuccess('Sequences reset successfully');
     return true;
   } catch (error) {
     logError(`Failed to reset sequences: ${error.message}`);
-    await client.end().catch(() => {});
+    await client.end().catch(() => { });
     return false;
   }
 }
@@ -597,24 +571,24 @@ async function resetSequences(devConfig) {
  */
 async function verifyMigration(prodConfig, devConfig) {
   logStep('Verification', 'Comparing data between production and development');
-  
+
   const prodTables = await getTables(prodConfig, 'production');
   const devTables = await getTables(devConfig, 'development');
-  
+
   logInfo(`Production tables: ${prodTables.length}`);
   logInfo(`Development tables: ${devTables.length}`);
-  
+
   let allMatch = true;
   const comparison = [];
-  
+
   for (const table of prodTables) {
     if (devTables.includes(table)) {
       const prodCount = await getRowCount(prodConfig, table, 'production');
       const devCount = await getRowCount(devConfig, table, 'development');
-      
+
       const match = prodCount === devCount;
       comparison.push({ table, prodCount, devCount, match });
-      
+
       if (match) {
         logSuccess(`${table}: ${prodCount} rows (match)`);
       } else {
@@ -626,7 +600,7 @@ async function verifyMigration(prodConfig, devConfig) {
       allMatch = false;
     }
   }
-  
+
   return allMatch;
 }
 
@@ -637,7 +611,7 @@ async function main() {
   log('\n' + '='.repeat(60), 'cyan');
   log('🚀 PRODUCTION TO DEVELOPMENT DATA MIGRATION', 'bright');
   log('='.repeat(60), 'cyan');
-  
+
   logWarning('IMPORTANT: This script only READS from production database.');
   logInfo('Production data will NOT be modified or affected in any way.\n');
 
@@ -645,55 +619,55 @@ async function main() {
     // Step 1: Parse credentials
     logStep(1, 'Parsing database credentials from .env file');
     const { dev, prod } = parseEnvCredentials();
-    
+
     logInfo(`Production: ${prod.database} @ ${prod.host}:${prod.port}`);
     logInfo(`Development: ${dev.database} @ ${dev.host}:${dev.port}`);
-    
+
     // Step 2: Test connections
     logStep(2, 'Testing database connections');
     const prodConnected = await testConnection(prod, 'production');
     const devConnected = await testConnection(dev, 'development');
-    
+
     if (!prodConnected || !devConnected) {
       throw new Error('Failed to connect to one or both databases');
     }
-    
+
     // Step 3: Confirm migration
     logStep(4, 'Migration confirmation');
     logWarning('This will REPLACE all data in the development database!');
     logInfo('Press Ctrl+C to cancel, or wait 5 seconds to continue...');
-    
+
     await new Promise(resolve => setTimeout(resolve, 5000));
-    
+
     // Step 4: Create backup directory
     const backupDir = path.join(__dirname, 'migration-backup');
     if (!fs.existsSync(backupDir)) {
       fs.mkdirSync(backupDir, { recursive: true });
     }
-    
+
     const timestamp = new Date().toISOString().replace(/[:.]/g, '-').split('T')[0];
     const backupFile = path.join(backupDir, `prod-to-dev-${timestamp}.sql`);
-    
+
     // Step 5: Export from production (schema + data)
     logStep(4, 'Exporting schema and data from production (READ-ONLY)');
     try {
       await exportProductionData(prod, backupFile);
-      
+
       // Verify backup file was created
       if (!fs.existsSync(backupFile)) {
         throw new Error('Backup file was not created');
       }
-      
+
       const stats = fs.statSync(backupFile);
       if (stats.size === 0) {
         throw new Error('Backup file is empty');
       }
-      
+
       logSuccess(`Backup created: ${backupFile} (${(stats.size / 1024 / 1024).toFixed(2)} MB)`);
     } catch (error) {
       throw new Error(`Failed to export data from production: ${error.message}`);
     }
-    
+
     // Step 6: Import to development (schema + data)
     logStep(5, 'Importing schema and data to development');
     try {
@@ -701,15 +675,15 @@ async function main() {
     } catch (error) {
       throw new Error(`Failed to import data to development: ${error.message}`);
     }
-    
+
     // Step 7: Reset sequences
     logStep(6, 'Resetting sequences');
     await resetSequences(dev);
-    
+
     // Step 8: Verify migration
     logStep(7, 'Verifying migration');
     const verified = await verifyMigration(prod, dev);
-    
+
     if (verified) {
       logSuccess('\n✅ Migration completed successfully!');
       logInfo(`Backup file saved at: ${backupFile}`);
@@ -717,11 +691,11 @@ async function main() {
       logWarning('\n⚠️  Migration completed with some discrepancies');
       logInfo('Please review the verification results above');
     }
-    
+
     log('\n' + '='.repeat(60), 'green');
     log('✨ Migration process completed!', 'green');
     log('='.repeat(60), 'green');
-    
+
   } catch (error) {
     logError(`\n❌ Migration failed: ${error.message}`);
     logError(error.stack);

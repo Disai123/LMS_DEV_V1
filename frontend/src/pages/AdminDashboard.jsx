@@ -6,6 +6,7 @@ import { useAuth } from '../context/AuthContext'
 import { courseService } from '../services/courseService'
 import { userService } from '../services/userService'
 import { enrollmentService } from '../services/enrollmentService'
+import { paymentService } from '../services/api'
 import Header from '../components/common/Header'
 import LoadingSpinner from '../components/common/LoadingSpinner'
 import toast from 'react-hot-toast'
@@ -21,6 +22,7 @@ import EditCourse from '../components/admin/EditCourse'
 import AdminProjectsPage from './AdminProjectsPage'
 import AdminHackathonsPage from './AdminHackathonsPage'
 import RBACManagementPage from './RBACManagementPage'
+import SubscriptionManagement from '../components/admin/SubscriptionManagement'
 
 const AdminDashboard = () => {
   const { user, isAuthenticated } = useAuth()
@@ -58,6 +60,16 @@ const AdminDashboard = () => {
     }
   )
 
+  const { data: subscriptionStats, isLoading: subStatsLoading } = useQuery(
+    'admin-subs-stats',
+    () => paymentService.getSubscriptionStats(),
+    {
+      enabled: isAuthenticated && user?.role === 'admin',
+      refetchOnWindowFocus: false,
+      staleTime: 5 * 60 * 1000
+    }
+  )
+
   const isLoading = coursesLoading || usersLoading || statsLoading
 
   const navigation = [
@@ -66,6 +78,7 @@ const AdminDashboard = () => {
     { name: 'Create Course', href: '/admin/courses/create', icon: 'add', current: location.pathname === '/admin/courses/create' },
     // Realtime Projects - COMMENTED OUT (Admin side removed, but kept for students)
     // { name: 'Realtime Projects', href: '/admin/projects', icon: 'projects', current: location.pathname.startsWith('/admin/projects') },
+    { name: 'Subscriptions', href: '/admin/subscriptions', icon: 'subscriptions', current: location.pathname.startsWith('/admin/subscriptions') },
     { name: 'Hackathons', href: '/admin/hackathons', icon: 'hackathons', current: location.pathname.startsWith('/admin/hackathons') },
     { name: 'Project Submissions', href: '/admin/project-submissions', icon: 'submissions', current: location.pathname.startsWith('/admin/project-submissions') },
     { name: 'RBAC Management', href: '/admin/rbac', icon: 'rbac', current: location.pathname.startsWith('/admin/rbac') },
@@ -119,13 +132,13 @@ const AdminDashboard = () => {
       )
     },
     {
-      name: 'Completion Rate',
-      value: `${Math.round((statsData?.data?.stats?.completionRate || 0))}%`,
-      change: '+3%',
-      changeType: 'positive',
+      name: 'Subscriptions',
+      value: subscriptionStats?.data?.data?.total || 0,
+      change: null,
+      changeType: 'neutral',
       icon: (
         <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6" />
+          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 10h18M7 15h1m4 0h1m-7 4h12a3 3 0 003-3V8a3 3 0 00-3-3H6a3 3 0 00-3 3v8a3 3 0 003 3z" />
         </svg>
       )
     }
@@ -252,6 +265,10 @@ const AdminDashboard = () => {
                 <Route
                   path="/rbac"
                   element={<RBACManagementPage />}
+                />
+                <Route
+                  path="/subscriptions"
+                  element={<SubscriptionManagement />}
                 />
               </Routes>
             </div>

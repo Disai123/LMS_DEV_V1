@@ -26,7 +26,7 @@ const CourseListPage = () => {
         page: currentPage,
         limit: COURSES_PER_PAGE
       }
-      
+
       if (filters.search && filters.search.trim()) {
         params.q = filters.search
       }
@@ -36,7 +36,7 @@ const CourseListPage = () => {
       if (filters.difficulty && filters.difficulty !== '') {
         params.difficulty = filters.difficulty
       }
-      
+
       return courseService.getCourses(params)
     },
     {
@@ -74,7 +74,7 @@ const CourseListPage = () => {
     <ErrorBoundary>
       <div className="min-h-screen bg-gradient-to-br from-slate-900 via-purple-900 to-slate-900">
         <Header />
-        
+
         <main className="py-12">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             {/* Header */}
@@ -87,10 +87,10 @@ const CourseListPage = () => {
                 <div className="absolute inset-0 bg-gradient-to-r from-blue-600 via-purple-600 to-pink-600 rounded-3xl blur-3xl opacity-20"></div>
                 <div className="relative bg-white/10 backdrop-blur-sm rounded-3xl p-6 border border-white/20">
                   <h1 className="text-3xl md:text-5xl font-bold bg-gradient-to-r from-blue-400 via-purple-400 to-pink-400 bg-clip-text text-transparent mb-4">
-                    Explore AI-Enhanced Courses
+                    Explore AI-Adaptive Learning Courses
                   </h1>
                   <p className="text-lg text-gray-300 max-w-4xl mx-auto leading-relaxed">
-                    Discover our comprehensive collection of AI-powered courses designed to accelerate your learning journey. 
+                    Discover our comprehensive collection of AI adaptive learning courses designed to accelerate your learning journey.
                     From beginner to advanced levels, experience personalized education like never before.
                   </p>
                 </div>
@@ -98,14 +98,14 @@ const CourseListPage = () => {
             </motion.div>
 
             {/* Filters */}
-            <CourseFilters 
+            <CourseFilters
               onFilterChange={handleFilterChange}
               filters={filters}
               categories={categories}
             />
 
             {/* Courses List */}
-            <CourseList 
+            <CourseList
               courses={courses}
               isLoading={isLoading}
               error={error}

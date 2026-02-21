@@ -5,27 +5,6 @@ const ProjectFilters = ({ filters, categories, onFilterChange, onClearFilters })
   return (
     <div className="bg-white rounded-lg border border-gray-200 p-4 mb-6">
       <div className="flex flex-col lg:flex-row gap-4">
-        {/* Search */}
-        <div className="flex-1">
-          <div className="relative">
-            <FiSearch className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-5 h-5" />
-            <input
-              type="text"
-              placeholder="Search projects..."
-              value={filters.search || ''}
-              onChange={(e) => onFilterChange({ search: e.target.value })}
-              className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500"
-            />
-            {filters.search && (
-              <button
-                onClick={() => onFilterChange({ search: '' })}
-                className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400 hover:text-gray-600"
-              >
-                <FiX className="w-4 h-4" />
-              </button>
-            )}
-          </div>
-        </div>
 
         {/* Category Filter */}
         <div className="lg:w-48">

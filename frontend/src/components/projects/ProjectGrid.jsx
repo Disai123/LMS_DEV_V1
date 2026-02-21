@@ -2,10 +2,10 @@ import React from 'react';
 import ProjectCard from './ProjectCard';
 import LoadingSpinner from '../common/LoadingSpinner';
 
-const ProjectGrid = ({ projects, isLoading }) => {
+const ProjectGrid = ({ projects, isLoading, locked }) => {
   if (isLoading) {
     return (
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
         {[...Array(8)].map((_, index) => (
           <div key={index} className="bg-white rounded-lg border border-gray-200 shadow-sm animate-pulse">
             <div className="h-48 bg-gray-200"></div>
@@ -35,9 +35,9 @@ const ProjectGrid = ({ projects, isLoading }) => {
   }
 
   return (
-    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
       {projects.map((project) => (
-        <ProjectCard key={project.id} project={project} />
+        <ProjectCard key={project.id} project={project} locked={project.isLocked !== undefined ? project.isLocked : locked} />
       ))}
     </div>
   );

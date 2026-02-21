@@ -1,0 +1,67 @@
+<div class="content-body">
+    <div class="content-section">
+        <h3 class="content-heading">System Architecture</h3>
+        <p style="color: #4b5563; line-height: 1.75; margin-bottom: 2rem;">
+            The system is designed for high cohesion and low coupling. Here we break down the internal structure of both
+            the Frontend and Backend.
+        </p>
+
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 2rem;">
+            <!-- Frontend Architecture -->
+            <div style="border: 1px solid #e5e7eb; border-radius: 12px; padding: 1.5rem;">
+                <h4
+                    style="font-size: 1.25rem; font-weight: 600; color: #3b82f6; margin-bottom: 1rem; display: flex; align-items: center; gap: 10px;">
+                    <span style="font-size: 1.5rem;">⚛️</span> Frontend (Client)
+                </h4>
+                <div style="display: flex; flex-direction: column; gap: 1rem;">
+                    <div
+                        style="background: #f9fafb; padding: 1rem; border-radius: 8px; border-left: 4px solid #3b82f6;">
+                        <div style="font-weight: 600; margin-bottom: 0.25rem;">Views/Pages</div>
+                        <p style="font-size: 0.85rem; color: #6b7280;">Single Source of Truth (Dashboard). Uses React
+                            State for local data management.</p>
+                    </div>
+                    <div
+                        style="background: #f9fafb; padding: 1rem; border-radius: 8px; border-left: 4px solid #3b82f6;">
+                        <div style="font-weight: 600; margin-bottom: 0.25rem;">Components</div>
+                        <p style="font-size: 0.85rem; color: #6b7280;">Stateless UI components for individual tasks,
+                            filtering, and input areas.</p>
+                    </div>
+                    <div
+                        style="background: #f9fafb; padding: 1rem; border-radius: 8px; border-left: 4px solid #3b82f6;">
+                        <div style="font-weight: 600; margin-bottom: 0.25rem;">API Service</div>
+                        <p style="font-size: 0.85rem; color: #6b7280;">Axios/Fetch layer to communicate with the FastAPI
+                            backend via async/await.</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Backend Architecture -->
+            <div style="border: 1px solid #e5e7eb; border-radius: 12px; padding: 1.5rem;">
+                <h4
+                    style="font-size: 1.25rem; font-weight: 600; color: #d946ef; margin-bottom: 1rem; display: flex; align-items: center; gap: 10px;">
+                    <span style="font-size: 1.5rem;">🐍</span> Backend (Server)
+                </h4>
+                <div style="display: flex; flex-direction: column; gap: 1rem;">
+                    <div
+                        style="background: #f9fafb; padding: 1rem; border-radius: 8px; border-left: 4px solid #d946ef;">
+                        <div style="font-weight: 600; margin-bottom: 0.25rem;">FastAPI Router</div>
+                        <p style="font-size: 0.85rem; color: #6b7280;">Handles incoming HTTP requests and directs them
+                            to the correct controller logic.</p>
+                    </div>
+                    <div
+                        style="background: #f9fafb; padding: 1rem; border-radius: 8px; border-left: 4px solid #d946ef;">
+                        <div style="font-weight: 600; margin-bottom: 0.25rem;">CRUD Logic</div>
+                        <p style="font-size: 0.85rem; color: #6b7280;">Business logic layer for processing task data
+                            before database operations.</p>
+                    </div>
+                    <div
+                        style="background: #f9fafb; padding: 1rem; border-radius: 8px; border-left: 4px solid #d946ef;">
+                        <div style="font-weight: 600; margin-bottom: 0.25rem;">SQLAlchemy/Lite</div>
+                        <p style="font-size: 0.85rem; color: #6b7280;">ORM layer for interacting with the SQLite
+                            database file (`todo.db`).</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

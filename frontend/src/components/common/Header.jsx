@@ -44,7 +44,7 @@ const Header = () => {
     <motion.header
       initial={{ y: -100 }}
       animate={{ y: 0 }}
-      className="sticky top-0 z-40 bg-white/80 backdrop-blur-xl border-b border-gray-200 overflow-visible"
+      className="sticky top-0 z-40 bg-gray-100/90 backdrop-blur-xl border-b border-gray-300/60 overflow-visible"
     >
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex justify-between items-center h-16 sm:h-20 py-2">
@@ -62,34 +62,40 @@ const Header = () => {
           <nav className="hidden md:flex items-center space-x-8">
             <Link
               to="/"
-              className="text-gray-700 hover:text-indigo-600 font-medium transition-colors duration-200"
+              className="text-gray-700 hover:text-amber-600 font-medium transition-colors duration-200"
             >
               Home
             </Link>
             <Link
               to="/courses"
-              className="text-gray-700 hover:text-indigo-600 font-medium transition-colors duration-200"
+              className="text-gray-700 hover:text-amber-600 font-medium transition-colors duration-200"
             >
               Courses
             </Link>
             <Link
               to={isAuthenticated ? '/student/realtime-projects' : '/realtime-projects'}
-              className="text-gray-700 hover:text-indigo-600 font-medium transition-colors duration-200"
+              className="text-gray-700 hover:text-amber-600 font-medium transition-colors duration-200"
             >
               Realtime Projects
             </Link>
             <Link
               to={isAuthenticated ? '/student/hackathons' : '/hackathons'}
-              className="text-gray-700 hover:text-indigo-600 font-medium transition-colors duration-200"
+              className="text-gray-700 hover:text-amber-600 font-medium transition-colors duration-200"
             >
               Hackathons
+            </Link>
+            <Link
+              to="/pricing"
+              className="text-gray-700 hover:text-amber-600 font-medium transition-colors duration-200"
+            >
+              Pricing
             </Link>
 
             {user ? (
               <div className="flex items-center space-x-4">
                 <Link
                   to={user.role === 'admin' ? '/admin' : '/student'}
-                  className="text-gray-700 hover:text-indigo-600 font-medium transition-colors duration-200"
+                  className="text-gray-700 hover:text-amber-600 font-medium transition-colors duration-200"
                 >
                   Dashboard
                 </Link>
@@ -101,7 +107,7 @@ const Header = () => {
                     className="flex items-center space-x-2 p-2 rounded-lg hover:bg-white/20 transition-colors duration-200"
                   >
                     <img
-                      src={user.avatar || `https://ui-avatars.com/api/?name=${user.name}&background=6366f1&color=fff`}
+                      src={user.avatar || `https://ui-avatars.com/api/?name=${user.name}&background=0d9488&color=fff`}
                       alt={user.name}
                       className="w-8 h-8 rounded-full"
                     />
@@ -209,6 +215,13 @@ const Header = () => {
                   className="block px-4 py-4 text-gray-700 hover:bg-white/20 rounded-lg transition-colors duration-200 min-h-[44px] flex items-center"
                 >
                   Hackathons
+                </Link>
+                <Link
+                  to="/pricing"
+                  onClick={() => setIsMenuOpen(false)}
+                  className="block px-4 py-4 text-gray-700 hover:bg-white/20 rounded-lg transition-colors duration-200 min-h-[44px] flex items-center"
+                >
+                  Pricing
                 </Link>
 
                 {user ? (

@@ -1,0 +1,48 @@
+<div class="content-body">
+    <div class="content-section">
+        <h3 class="content-heading">Integration Testing</h3>
+        <p style="color: #4b5563; line-height: 1.75; margin-bottom: 2rem;">
+            Integration testing verifies that different modules of the application work together correctly,
+            specifically the communication between the React frontend and the FastAPI backend.
+        </p>
+
+        <div style="display: flex; flex-direction: column; gap: 2rem;">
+            <!-- API Flow -->
+            <div style="background: #ffffff; border: 1px solid #e5e7eb; border-radius: 12px; padding: 1.5rem;">
+                <h4 style="font-weight: 700; color: #111827; margin-bottom: 1.5rem;">The "Add-Complete-Delete" Flow</h4>
+                <div
+                    style="display: flex; align-items: center; justify-content: center; gap: 1.5rem; position: relative; padding: 1rem 0;">
+                    <div
+                        style="background: #f8fafc; border: 1px solid #cbd5e1; border-radius: 8px; padding: 1rem; width: 120px; text-align: center; font-size: 0.85rem; font-weight: 600;">
+                        Post Task</div>
+                    <div style="color: #94a3b8;">→</div>
+                    <div
+                        style="background: #f8fafc; border: 1px solid #cbd5e1; border-radius: 8px; padding: 1rem; width: 120px; text-align: center; font-size: 0.85rem; font-weight: 600;">
+                        Update Status</div>
+                    <div style="color: #94a3b8;">→</div>
+                    <div
+                        style="background: #f8fafc; border: 1px solid #cbd5e1; border-radius: 8px; padding: 1rem; width: 120px; text-align: center; font-size: 0.85rem; font-weight: 600;">
+                        Delete Item</div>
+                </div>
+                <p style="color: #4b5563; font-size: 0.9rem; margin-top: 1.5rem; line-height: 1.6;">
+                    We use automated scripts to verify that these three operations successfully modify the SQLite
+                    database and that changes are correctly reflected in the frontend state.
+                </p>
+            </div>
+
+            <!-- CORS & Header -->
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem;">
+                <div style="border: 1px solid #e5e7eb; border-radius: 12px; padding: 1.5rem;">
+                    <h5 style="font-weight: 600; margin-bottom: 0.5rem;">CORS Validation</h5>
+                    <p style="color: #6b7280; font-size: 0.85rem;">Ensures the backend only accepts requests from our
+                        specific frontend origin.</p>
+                </div>
+                <div style="border: 1px solid #e5e7eb; border-radius: 12px; padding: 1.5rem;">
+                    <h5 style="font-weight: 600; margin-bottom: 0.5rem;">JSON Validation</h5>
+                    <p style="color: #6b7280; font-size: 0.85rem;">Ensures the API returns consistent JSON objects that
+                        match the Pydantic schemas.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

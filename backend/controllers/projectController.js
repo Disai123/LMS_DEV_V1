@@ -1,4 +1,4 @@
-const { Project, Document, User, Video, ProjectProgress, ProjectPhase } = require('../models');
+const { Project, Document, User, Video, ProjectProgress, ProjectPhase, Subscription, Plan } = require('../models');
 const { Op } = require('sequelize');
 const logger = require('../utils/logger');
 const { AppError } = require('../middleware/errorHandler');
@@ -8,16 +8,16 @@ const scoringService = require('../services/scoringService');
 const getAllProjects = async (req, res) => {
   try {
     const { status, difficulty, category, isPublished, page = 1, limit = 10 } = req.query;
-    
+
     const whereClause = {};
-    
+
     if (status) whereClause.status = status;
     if (difficulty) whereClause.difficulty = difficulty;
     if (category) whereClause.category = category;
     if (isPublished !== undefined) whereClause.is_published = isPublished === 'true';
 
     const offset = (page - 1) * limit;
-    
+
     const projects = await Project.findAndCountAll({
       where: whereClause,
       include: [
@@ -50,16 +50,73 @@ const getAllProjects = async (req, res) => {
       distinct: true
     });
 
+    // Determine user's plan and lock status
+    let userPlan = 'starter';
+    const userId = req.user ? req.user.id : null;
+    const userRole = req.user ? req.user.role : null;
+
+    if (userRole === 'admin') {
+      userPlan = 'admin';
+    } else if (userId) {
+      // Fetch active subscription
+      const sub = await Subscription.findOne({
+        where: {
+          user_id: userId,
+          status: 'active',
+          end_date: { [Op.gte]: new Date() }
+        },
+        include: [{
+          model: Plan,
+          as: 'plan',
+          attributes: ['name']
+        }]
+      });
+
+      if (sub && sub.plan) {
+        userPlan = sub.plan.name; // 'starter', 'basic', 'pro'
+      }
+    }
+
+    // Process projects to add locking status
+    const projectsWithLockStatus = projects.rows.map((project, index) => {
+      const p = project.toJSON();
+      const globalIndex = parseInt(offset) + index;
+
+      // Locking Logic
+      // Admin: All Unlocked
+      // Pro: All Unlocked (10 projects)
+      // Basic: First 3 Unlocked
+      // Starter/Free: All Locked (0 projects)
+
+      let isLocked = true;
+
+      if (userPlan === 'admin' || userPlan === 'pro') {
+        isLocked = false;
+      } else if (userPlan === 'basic') {
+        // Unlock first 3 projects (Global Index 0, 1, 2)
+        if (globalIndex < 3) {
+          isLocked = false;
+        }
+      } else {
+        // Starter or no plan -> All Locked
+        isLocked = true;
+      }
+
+      p.isLocked = isLocked;
+      return p;
+    });
+
     res.json({
       success: true,
       data: {
-        projects: projects.rows,
+        projects: projectsWithLockStatus,
         pagination: {
           total: projects.count,
           page: parseInt(page),
           limit: parseInt(limit),
           pages: Math.ceil(projects.count / limit)
-        }
+        },
+        userPlan // Optional: Return plan info for frontend debug/UI
       }
     });
   } catch (error) {
@@ -76,7 +133,7 @@ const getAllProjects = async (req, res) => {
 const getProjectById = async (req, res) => {
   try {
     const { id } = req.params;
-    
+
     const project = await Project.findByPk(id, {
       include: [
         {
@@ -187,7 +244,7 @@ const updateProject = async (req, res) => {
   try {
     const { id } = req.params;
     const updateData = req.body;
-    
+
     // Add updatedBy to the update data
     updateData.updatedBy = req.user.id;
 
@@ -237,7 +294,7 @@ const updateProject = async (req, res) => {
 const deleteProject = async (req, res) => {
   try {
     const { id } = req.params;
-    
+
     const deletedRowsCount = await Project.destroy({
       where: { id }
     });
@@ -268,9 +325,9 @@ const toggleProjectStatus = async (req, res) => {
   try {
     const { id } = req.params;
     const { is_published } = req.body;
-    
+
     const project = await Project.findByPk(id);
-    
+
     if (!project) {
       return res.status(404).json({
         success: false,
@@ -311,7 +368,7 @@ const getProjectStats = async (req, res) => {
     const totalProjects = await Project.count();
     const publishedProjects = await Project.count({ where: { is_published: true } });
     const activeProjects = await Project.count({ where: { status: 'active' } });
-    
+
     const projectsByDifficulty = await Project.findAll({
       attributes: [
         'difficulty',
@@ -355,7 +412,7 @@ const seedProjects = async (req, res) => {
   try {
     const seedProjectsScript = require('../seed-projects');
     await seedProjectsScript();
-    
+
     res.json({
       success: true,
       message: 'Projects seeded successfully'

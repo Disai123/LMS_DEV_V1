@@ -1,0 +1,42 @@
+<div class="content-body">
+    <div class="content-section">
+        <h3 class="content-heading">Environment Setup</h3>
+        <p style="color: #4b5563; line-height: 1.75; margin-bottom: 2rem;">
+            Environment variables are used to securely store configuration details that differ between local development
+            and production.
+        </p>
+
+        <div style="display: flex; flex-direction: column; gap: 2rem;">
+            <!-- Backend Env -->
+            <div style="background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 12px; padding: 1.5rem;">
+                <h4 style="font-weight: 700; color: #1e293b; margin-bottom: 1.25rem;">Backend Variables (Render
+                    Dashboard)</h4>
+                <div style="display: grid; gap: 1rem;">
+                    <div style="background: #ffffff; border: 1px solid #e5e7eb; padding: 1rem; border-radius: 8px;">
+                        <code style="color: #6366f1; font-weight: 600; font-size: 1rem;">CORS_ORIGINS</code>
+                        <p style="font-size: 0.85rem; color: #6b7280; margin-top: 0.25rem;">Set to your frontend Render
+                            URL (e.g., https://todo-app-ui.onrender.com)</p>
+                    </div>
+                    <div style="background: #ffffff; border: 1px solid #e5e7eb; padding: 1rem; border-radius: 8px;">
+                        <code style="color: #6366f1; font-weight: 600; font-size: 1rem;">DATABASE_URL</code>
+                        <p style="font-size: 0.85rem; color: #6b7280; margin-top: 0.25rem;">sqlite:///./data/todos.db
+                            (Paths must be absolute in production)</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Disk Storage -->
+            <div style="background: #f0fdf4; border: 1px solid #bbf7d0; border-radius: 12px; padding: 1.5rem;">
+                <h4
+                    style="font-weight: 700; color: #166534; margin-bottom: 0.75rem; display: flex; align-items: center; gap: 10px;">
+                    <span>📦</span> Persistent Disk Storage
+                </h4>
+                <p style="color: #15803d; font-size: 0.95rem; line-height: 1.6;">
+                    Render Web Services are ephemeral (data is lost on restart). We must mount a <strong>Render
+                        Disk</strong> at <code>/data</code> to ensure our SQLite database file persists across
+                    deployments.
+                </p>
+            </div>
+        </div>
+    </div>
+</div>

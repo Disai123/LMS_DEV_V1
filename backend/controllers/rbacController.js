@@ -62,6 +62,8 @@ const getStudentPermissions = async (req, res) => {
           realtimeProjects: true
         };
       }
+      // Force realtimeProjects to true
+      permissions[student.id].realtimeProjects = true;
     });
 
     console.log('Returning permissions to frontend:', permissions);
@@ -267,6 +269,9 @@ const getStudentPermission = async (req, res) => {
       realtimeProjects: true
     };
 
+    // Force realtimeProjects to true
+    if (permissions) permissions.realtimeProjects = true;
+
     res.json({
       success: true,
       data: {
@@ -461,6 +466,11 @@ const getMyPermissions = async (req, res) => {
         hackathons: true,
         realtimeProjects: true
       };
+
+      // Force realtimeProjects to true as it's now controlled by plan-based locking
+      if (permissions) {
+        permissions.realtimeProjects = true;
+      }
 
       return res.json({
         success: true,

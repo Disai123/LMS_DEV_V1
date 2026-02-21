@@ -1,0 +1,55 @@
+<div class="content-body">
+    <div class="content-section">
+        <h3 class="content-heading">Database Implementation</h3>
+        <p style="color: #4b5563; line-height: 1.75; margin-bottom: 2rem;">
+            We use <strong>SQLAlchemy</strong> as our ORM (Object-Relational Mapper) to interact with
+            <strong>SQLite</strong>. This allows us to work with Python objects instead of writing raw SQL.
+        </p>
+
+        <div style="display: flex; flex-direction: column; gap: 2rem;">
+            <!-- Connection Logic -->
+            <div style="background: #ffffff; border: 1px solid #e5e7eb; border-radius: 12px; padding: 1.5rem;">
+                <h4 style="font-weight: 700; color: #111827; margin-bottom: 1rem;">1. Database Connection</h4>
+                <p style="color: #4b5563; font-size: 0.9rem; margin-bottom: 1rem;">
+                    The backend establishes a connection to a local <code>todos.db</code> file. SQLite's
+                    <code>check_same_thread</code> is disabled because FastAPI handles multiple concurrent threads.
+                </p>
+                <div
+                    style="background: #f1f5f9; border-radius: 8px; padding: 1rem; font-family: monospace; font-size: 0.85rem; color: #1e293b;">
+                    SQLALCHEMY_DATABASE_URL = "sqlite:///./todos.db"<br>
+                    engine = create_engine(SQLALCHEMY_DATABASE_URL, connect_args={"check_same_thread": False})
+                </div>
+            </div>
+
+            <!-- Model Definition -->
+            <div style="background: #ffffff; border: 1px solid #e5e7eb; border-radius: 12px; padding: 1.5rem;">
+                <h4 style="font-weight: 700; color: #111827; margin-bottom: 1rem;">2. Model Definition</h4>
+                <p style="color: #4b5563; font-size: 0.9rem; margin-bottom: 1rem;">
+                    Models are translated into database tables automatically via SQLAlchemy's
+                    <code>Base.metadata.create_all(bind=engine)</code> command during startup.
+                </p>
+                <div
+                    style="background: #f1f5f9; border-radius: 8px; padding: 1rem; font-family: monospace; font-size: 0.85rem; color: #1e293b;">
+                    class Todo(Base):<br>
+                    &nbsp;&nbsp;__tablename__ = "todos"<br>
+                    &nbsp;&nbsp;id = Column(Integer, primary_key=True, index=True)<br>
+                    &nbsp;&nbsp;title = Column(String)<br>
+                    &nbsp;&nbsp;description = Column(String)<br>
+                    &nbsp;&nbsp;completed = Column(Boolean, default=False)
+                </div>
+            </div>
+
+            <!-- Session Management -->
+            <div style="background: #f0fdf9; border-radius: 12px; padding: 1.5rem; border: 1px solid #a7f3d0;">
+                <h4
+                    style="font-weight: 700; color: #065f46; margin-bottom: 0.5rem; display: flex; align-items: center; gap: 8px;">
+                    <span>🛠️</span> Session Injection
+                </h4>
+                <p style="color: #064e3b; font-size: 0.9rem;">
+                    We use a <code>get_db</code> dependency to ensure each API request gets its own database session,
+                    which is automatically closed once the request is complete.
+                </p>
+            </div>
+        </div>
+    </div>
+</div>

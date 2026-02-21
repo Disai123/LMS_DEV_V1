@@ -44,6 +44,7 @@ import CreateGroupPage from './pages/CreateGroupPage'
 // import AdminChatPage from './pages/AdminChatPage'
 import RealtimeProjectsLandingPage from './pages/RealtimeProjectsLandingPage'
 import HackathonLandingPage from './pages/HackathonLandingPage'
+import PricingPage from './pages/PricingPage'
 import NotFoundPage from './pages/NotFoundPage'
 
 // Components
@@ -99,6 +100,7 @@ function App() {
               <Route path="/forgot-password" element={<ForgotPasswordPage />} />
               <Route path="/reset-password/:token" element={<ResetPasswordPage />} />
               <Route path="/auth/callback" element={<AuthCallbackPage />} />
+              <Route path="/pricing" element={<PricingPage />} />
 
               {/* Protected Routes */}
               <Route

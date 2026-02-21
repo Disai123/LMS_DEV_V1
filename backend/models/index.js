@@ -62,6 +62,10 @@ const StudentAchievement = require('./StudentAchievement')(sequelize, Sequelize.
 const StudentScore = require('./StudentScore')(sequelize, Sequelize.DataTypes);
 const ScoringRule = require('./ScoringRule')(sequelize, Sequelize.DataTypes);
 const RealtimeProjectSubmission = require('./RealtimeProjectSubmission')(sequelize, Sequelize.DataTypes);
+const Plan = require('./Plan')(sequelize, Sequelize.DataTypes);
+const Subscription = require('./Subscription')(sequelize, Sequelize.DataTypes);
+const Coupon = require('./Coupon')(sequelize, Sequelize.DataTypes);
+const PaymentRequest = require('./PaymentRequest')(sequelize, Sequelize.DataTypes);
 
 // Define associations
 const defineAssociations = () => {
@@ -753,6 +757,68 @@ const defineAssociations = () => {
     onDelete: 'CASCADE'
   });
 
+  // Plan associations
+  Plan.hasMany(Subscription, {
+    foreignKey: 'plan_id',
+    as: 'subscriptions'
+  });
+  Plan.hasMany(Coupon, {
+    foreignKey: 'plan_id',
+    as: 'coupons'
+  });
+
+  // Subscription associations
+  Subscription.belongsTo(User, {
+    foreignKey: 'user_id',
+    as: 'user'
+  });
+  Subscription.belongsTo(Plan, {
+    foreignKey: 'plan_id',
+    as: 'plan'
+  });
+
+  User.hasMany(Subscription, {
+    foreignKey: 'user_id',
+    as: 'subscriptions'
+  });
+
+  User.hasOne(Subscription, {
+    foreignKey: 'user_id',
+    as: 'activeSubscription',
+    scope: {
+      status: 'active'
+    }
+  });
+
+  // Coupon associations
+  Coupon.belongsTo(Plan, {
+    foreignKey: 'plan_id',
+    as: 'plan'
+  });
+
+  // PaymentRequest associations
+  PaymentRequest.belongsTo(User, {
+    foreignKey: 'user_id',
+    as: 'user'
+  });
+  PaymentRequest.belongsTo(Plan, {
+    foreignKey: 'plan_id',
+    as: 'plan'
+  });
+  PaymentRequest.belongsTo(User, {
+    foreignKey: 'approved_by',
+    as: 'approvedByUser'
+  });
+  User.hasMany(PaymentRequest, {
+    foreignKey: 'user_id',
+    as: 'paymentRequests',
+    onDelete: 'CASCADE'
+  });
+  Plan.hasMany(PaymentRequest, {
+    foreignKey: 'plan_id',
+    as: 'paymentRequests'
+  });
+
 };
 
 // Define associations
@@ -795,5 +861,9 @@ module.exports = {
   StudentAchievement,
   StudentScore,
   ScoringRule,
-  RealtimeProjectSubmission
+  RealtimeProjectSubmission,
+  Plan,
+  Subscription,
+  Coupon,
+  PaymentRequest
 };

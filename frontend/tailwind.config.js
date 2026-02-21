@@ -8,109 +8,106 @@ export default {
   theme: {
     extend: {
       colors: {
-        // Disney Magic Blue (inspired by Disney castle)
+        // Professional Deep Navy (primary brand color)
         primary: {
-          DEFAULT: '#0066CC',
-          hover: '#0052A3',
-          pressed: '#003D7A',
-          light: '#E6F2FF',
-          dark: '#002952',
-          // Backward compatibility scale (approximate matches to new hue)
-          50: '#E6F2FF',
-          100: '#CCE6FF',
-          200: '#99CCFF',
-          300: '#66B3FF',
-          400: '#3399FF',
-          500: '#0066CC',
-          600: '#0052A3',
-          700: '#003D7A',
-          800: '#002952',
-          900: '#001429',
+          DEFAULT: '#1e3a5f',
+          hover: '#16304f',
+          pressed: '#0f2540',
+          light: '#e8edf5',
+          dark: '#0f2540',
+          50: '#e8edf5',
+          100: '#c5d3e8',
+          200: '#9fb8d9',
+          300: '#789cca',
+          400: '#5a86be',
+          500: '#1e3a5f',
+          600: '#16304f',
+          700: '#0f2540',
+          800: '#091a30',
+          900: '#040e1f',
         },
-        // Disney Purple (magical, whimsical)
+        // Classic Academic Gold (secondary accent — Ivy League)
         secondary: {
-          DEFAULT: '#8B5CF6',
-          hover: '#7C3AED',
-          light: '#EDE9FE',
-          dark: '#5B21B6',
-          // Backward compatibility scale
-          50: '#F5F3FF',
-          100: '#EDE9FE',
-          200: '#DDD6FE',
-          300: '#C4B5FD',
-          400: '#A78BFA',
-          500: '#8B5CF6',
-          600: '#7C3AED',
-          700: '#6D28D9',
-          800: '#5B21B6',
-          900: '#4C1D95',
+          DEFAULT: '#c9a227',
+          hover: '#a88520',
+          light: '#fdf6dc',
+          dark: '#7a5f0f',
+          50: '#fefce8',
+          100: '#fdf6dc',
+          200: '#faedb0',
+          300: '#f5df78',
+          400: '#eecb40',
+          500: '#c9a227',
+          600: '#a88520',
+          700: '#7a5f0f',
+          800: '#5a4408',
+          900: '#3d2e04',
         },
-        // Disney Gold (sparkle, premium)
+        // Warm Amber (premium accent — keep gold feel)
         accent: {
-          DEFAULT: '#FFD700',
-          hover: '#FFC700',
-          light: '#FFF9E6',
-          dark: '#B8860B',
-          // Backward compatibility scale
-          50: '#FFFBEB',
-          100: '#FEF3C7',
-          200: '#FDE68A',
-          300: '#FCD34D',
-          400: '#FBBF24',
-          500: '#F59E0B',
-          600: '#D97706',
-          700: '#B45309',
-          800: '#92400E',
-          900: '#78350F',
+          DEFAULT: '#f59e0b',
+          hover: '#d97706',
+          light: '#fef3c7',
+          dark: '#92400e',
+          50: '#fffbeb',
+          100: '#fef3c7',
+          200: '#fde68a',
+          300: '#fcd34d',
+          400: '#fbbf24',
+          500: '#f59e0b',
+          600: '#d97706',
+          700: '#b45309',
+          800: '#92400e',
+          900: '#78350f',
         },
-        // Success (Disney green)
+        // Success (professional green)
         success: {
           DEFAULT: '#10B981',
           hover: '#059669',
           light: '#D1FAE5'
         },
-        // Warning (Disney orange/amber)
+        // Warning (amber)
         warning: {
           DEFAULT: '#F59E0B',
           hover: '#D97706',
           light: '#FEF3C7'
         },
-        // Error (Disney red)
+        // Error (red)
         error: {
           DEFAULT: '#EF4444',
           hover: '#DC2626',
           light: '#FEE2E2'
         },
-        // Disney Pink (playful)
-        pink: {
-          DEFAULT: '#EC4899',
-          hover: '#DB2777',
-          light: '#FCE7F3'
+        // Cyan (supporting accent)
+        cyan: {
+          DEFAULT: '#06b6d4',
+          hover: '#0891b2',
+          light: '#cffafe'
         },
-        // Magical gradients
+        // Academic highlights
         magic: {
-          blue: '#4F46E5',
-          purple: '#7C3AED',
-          pink: '#EC4899'
+          blue: '#1e3a5f',
+          purple: '#c9a227',
+          pink: '#eecb40'
         },
-        // Neutral grays (softer, warmer)
+        // Neutral grays
         gray: {
-          50: '#FAFAFA',
-          100: '#F5F5F5',
-          200: '#E5E5E5',
-          300: '#D4D4D4',
-          400: '#A3A3A3',
-          500: '#737373',
-          600: '#525252',
-          700: '#404040',
-          800: '#262626',
-          900: '#171717'
+          50: '#f8fafc',
+          100: '#f1f5f9',
+          200: '#e2e8f0',
+          300: '#cbd5e1',
+          400: '#94a3b8',
+          500: '#64748b',
+          600: '#475569',
+          700: '#334155',
+          800: '#1e293b',
+          900: '#0f172a'
         }
       },
       fontFamily: {
-        sans: ['Poppins', 'Inter', 'system-ui', 'sans-serif'],
-        display: ['Fredoka', 'Poppins', 'sans-serif'], // Playful Disney-style font
-        body: ['Poppins', 'sans-serif'],
+        sans: ['Inter', 'system-ui', 'sans-serif'],
+        display: ['"Playfair Display"', 'Georgia', 'serif'],
+        body: ['Inter', 'system-ui', 'sans-serif'],
         mono: ['JetBrains Mono', 'Fira Code', 'monospace'],
       },
       fontSize: {
@@ -229,10 +226,10 @@ export default {
         'gradient-conic': 'conic-gradient(from 180deg at 50% 50%, var(--tw-gradient-stops))',
         'glass': 'linear-gradient(135deg, rgba(255, 255, 255, 0.25), rgba(255, 255, 255, 0.1))',
         'glass-dark': 'linear-gradient(135deg, rgba(0, 0, 0, 0.25), rgba(0, 0, 0, 0.1))',
-        'gradient-magic': 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
-        'gradient-disney': 'linear-gradient(135deg, #0066CC 0%, #8B5CF6 100%)',
-        'gradient-gold': 'linear-gradient(135deg, #FFD700 0%, #FFA500 100%)',
-        'gradient-rainbow': 'linear-gradient(90deg, #FF6B6B, #4ECDC4, #45B7D1, #96CEB4, #FFEAA7, #DFE6E9)',
+        'gradient-magic': 'linear-gradient(135deg, #1e3a5f 0%, #c9a227 100%)',
+        'gradient-disney': 'linear-gradient(135deg, #1e3a5f 0%, #c9a227 100%)',
+        'gradient-gold': 'linear-gradient(135deg, #c9a227 0%, #a88520 100%)',
+        'gradient-rainbow': 'linear-gradient(90deg, #1e3a5f, #c9a227, #eecb40, #f5df78, #faedb0)',
         'shimmer': 'linear-gradient(90deg, transparent, rgba(255,255,255,0.3), transparent)'
       },
     },

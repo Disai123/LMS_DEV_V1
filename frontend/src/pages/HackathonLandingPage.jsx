@@ -1,26 +1,187 @@
 import React, { useState, useEffect } from 'react';
-import { motion } from 'framer-motion';
+import { motion, AnimatePresence } from 'framer-motion';
 import { useNavigate } from 'react-router-dom';
 import {
-  FiCalendar,
-  FiUsers,
-  FiAward,
-  FiClock,
-  FiCode,
-  FiStar,
-  FiArrowRight,
-  FiX,
-  FiCheck,
-  FiSend,
-  FiMail,
-  FiUser,
-  FiUsers as FiTeam
+  FiCalendar, FiUsers, FiAward, FiClock, FiCode,
+  FiArrowRight, FiX, FiCheck, FiSend, FiUser, FiZap
 } from 'react-icons/fi';
 import { hackathonService } from '../services/hackathonService';
 import { useAuth } from '../context/AuthContext';
 import { usePermissions } from '../hooks/usePermissions';
 import Header from '../components/common/Header';
 
+// ─── Status helpers ──────────────────────────────────────────────────────────
+const statusConfig = {
+  upcoming: { label: 'Upcoming', bg: 'bg-blue-100 text-blue-800 border-blue-200' },
+  active: { label: 'Live Now', bg: 'bg-green-100 text-green-800 border-green-200' },
+};
+const difficultyConfig = {
+  beginner: 'bg-emerald-100 text-emerald-700',
+  intermediate: 'bg-amber-100 text-amber-700',
+  advanced: 'bg-rose-100 text-rose-700',
+};
+
+const CARD_ACCENTS = [
+  'border-l-blue-500',
+  'border-l-amber-500',
+  'border-l-violet-500',
+  'border-l-emerald-500',
+  'border-l-rose-500',
+  'border-l-cyan-500',
+]
+
+const formatDate = (d) => new Date(d).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
+const formatTime = (d) => new Date(d).toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit' });
+
+// ─── Join Modal ──────────────────────────────────────────────────────────────
+const JoinModal = ({ hackathon, onClose }) => {
+  const [formData, setFormData] = useState({
+    teamName: '',
+    teamMembers: [{ name: '', email: '' }, { name: '', email: '' }],
+    message: ''
+  });
+  const [submitting, setSubmitting] = useState(false);
+  const [submitted, setSubmitted] = useState(false);
+
+  const addMember = () => setFormData(p => ({ ...p, teamMembers: [...p.teamMembers, { name: '', email: '' }] }));
+  const removeMember = (i) => formData.teamMembers.length > 1 && setFormData(p => ({ ...p, teamMembers: p.teamMembers.filter((_, j) => j !== i) }));
+  const updateMember = (i, field, val) => setFormData(p => ({ ...p, teamMembers: p.teamMembers.map((m, j) => j === i ? { ...m, [field]: val } : m) }));
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    setSubmitting(true);
+    try {
+      const valid = formData.teamMembers.filter(m => m.name.trim() && m.email.trim());
+      if (!valid.length) { alert('Add at least one team member.'); return; }
+      await hackathonService.submitJoinRequest(hackathon.id, {
+        teamName: formData.teamName,
+        teamMembers: valid,
+        message: formData.message
+      });
+      setSubmitted(true);
+    } catch (err) {
+      alert(err.response?.data?.message || 'Failed to submit. Try again.');
+    } finally {
+      setSubmitting(false);
+    }
+  };
+
+  return (
+    <div className="fixed inset-0 bg-black/60 backdrop-blur-sm flex items-center justify-center p-4 z-50">
+      <motion.div
+        initial={{ opacity: 0, scale: 0.95, y: 20 }}
+        animate={{ opacity: 1, scale: 1, y: 0 }}
+        exit={{ opacity: 0, scale: 0.95, y: 20 }}
+        className="bg-white rounded-3xl shadow-2xl max-w-xl w-full max-h-[90vh] overflow-y-auto"
+      >
+        {/* Modal header stripe */}
+        <div className="h-1.5 bg-gradient-to-r from-amber-400 via-amber-500 to-amber-400 rounded-t-3xl" />
+
+        <div className="p-8">
+          {submitted ? (
+            <div className="text-center py-10">
+              <div className="w-16 h-16 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-5">
+                <FiCheck className="w-8 h-8 text-green-600" />
+              </div>
+              <h3 className="text-2xl font-black text-slate-900 mb-3">Request Sent!</h3>
+              <p className="text-gray-500 mb-6 max-w-xs mx-auto text-sm">
+                Your team request for <strong>{hackathon.name}</strong> has been sent. You'll be notified once approved.
+              </p>
+              <button onClick={onClose} className="px-8 py-3 bg-amber-400 text-slate-900 font-bold rounded-xl hover:bg-amber-500 transition-colors">
+                Done
+              </button>
+            </div>
+          ) : (
+            <>
+              <div className="flex items-start justify-between mb-6">
+                <div>
+                  <h3 className="text-xl font-black text-slate-900 mb-1">Join Hackathon</h3>
+                  <p className="text-gray-400 text-sm">{hackathon.name}</p>
+                </div>
+                <button onClick={onClose} className="p-2 hover:bg-gray-100 rounded-full transition-colors">
+                  <FiX className="w-5 h-5 text-gray-400" />
+                </button>
+              </div>
+
+              <form onSubmit={handleSubmit} className="space-y-5">
+                <div>
+                  <label className="block text-xs font-bold text-gray-500 uppercase tracking-wide mb-2">Team Name *</label>
+                  <input
+                    type="text" required value={formData.teamName}
+                    onChange={e => setFormData(p => ({ ...p, teamName: e.target.value }))}
+                    className="w-full px-4 py-3 border border-gray-200 rounded-xl focus:ring-2 focus:ring-amber-400 focus:border-transparent outline-none text-sm"
+                    placeholder="Enter your team name"
+                  />
+                </div>
+
+                <div>
+                  <label className="block text-xs font-bold text-gray-500 uppercase tracking-wide mb-3">Team Members *</label>
+                  <div className="space-y-3">
+                    {formData.teamMembers.map((member, i) => (
+                      <div key={i} className="flex gap-2 items-center">
+                        <div className="flex-1 grid grid-cols-2 gap-2">
+                          <input
+                            type="text" value={member.name}
+                            onChange={e => updateMember(i, 'name', e.target.value)}
+                            className="px-3 py-2.5 border border-gray-200 rounded-lg focus:ring-2 focus:ring-amber-400 focus:border-transparent outline-none text-sm"
+                            placeholder="Full Name"
+                          />
+                          <input
+                            type="email" value={member.email}
+                            onChange={e => updateMember(i, 'email', e.target.value)}
+                            className="px-3 py-2.5 border border-gray-200 rounded-lg focus:ring-2 focus:ring-amber-400 focus:border-transparent outline-none text-sm"
+                            placeholder="Email"
+                          />
+                        </div>
+                        {formData.teamMembers.length > 1 && (
+                          <button type="button" onClick={() => removeMember(i)} className="p-2 text-red-400 hover:bg-red-50 rounded-lg transition-colors flex-shrink-0">
+                            <FiX className="w-4 h-4" />
+                          </button>
+                        )}
+                      </div>
+                    ))}
+                  </div>
+                  <button type="button" onClick={addMember}
+                    className="mt-3 flex items-center gap-2 text-amber-600 hover:text-amber-700 font-semibold text-sm">
+                    <FiUser className="w-4 h-4" /> Add Member
+                  </button>
+                </div>
+
+                <div>
+                  <label className="block text-xs font-bold text-gray-500 uppercase tracking-wide mb-2">Message to Admin</label>
+                  <textarea
+                    value={formData.message}
+                    onChange={e => setFormData(p => ({ ...p, message: e.target.value }))}
+                    rows={3}
+                    className="w-full px-4 py-3 border border-gray-200 rounded-xl focus:ring-2 focus:ring-amber-400 focus:border-transparent outline-none text-sm resize-none"
+                    placeholder="Tell us about your team's experience..."
+                  />
+                </div>
+
+                <div className="flex gap-3 pt-2">
+                  <button type="button" onClick={onClose}
+                    className="flex-1 py-3 border border-gray-200 text-gray-600 font-semibold rounded-xl hover:bg-gray-50 transition-colors text-sm">
+                    Cancel
+                  </button>
+                  <motion.button
+                    type="submit" disabled={submitting}
+                    whileHover={{ scale: submitting ? 1 : 1.02 }}
+                    className="flex-1 py-3 bg-amber-400 text-slate-900 font-black rounded-xl hover:bg-amber-500 transition-colors flex items-center justify-center gap-2 disabled:opacity-50 text-sm"
+                  >
+                    {submitting ? <div className="w-4 h-4 border-2 border-slate-900 border-t-transparent rounded-full animate-spin" /> : <FiSend className="w-4 h-4" />}
+                    {submitting ? 'Sending...' : 'Send Request'}
+                  </motion.button>
+                </div>
+              </form>
+            </>
+          )}
+        </div>
+      </motion.div>
+    </div>
+  );
+};
+
+// ─── Main Component ──────────────────────────────────────────────────────────
 const HackathonLandingPage = () => {
   const navigate = useNavigate();
   const { isAuthenticated, user } = useAuth();
@@ -30,626 +191,303 @@ const HackathonLandingPage = () => {
   const [enrolledHackathons, setEnrolledHackathons] = useState([]);
   const [loading, setLoading] = useState(true);
   const [selectedHackathon, setSelectedHackathon] = useState(null);
-  const [showJoinForm, setShowJoinForm] = useState(false);
-  const [joinFormData, setJoinFormData] = useState({
-    teamName: '',
-    teamMembers: [
-      { name: '', email: '' },
-      { name: '', email: '' },
-      { name: '', email: '' }
-    ],
-    message: ''
-  });
-  const [submitting, setSubmitting] = useState(false);
-  const [submitted, setSubmitted] = useState(false);
 
-  useEffect(() => {
-    fetchHackathons();
-  }, [isAuthenticated]);
+  useEffect(() => { fetchHackathons(); }, [isAuthenticated]);
 
   const fetchHackathons = async () => {
     try {
       setLoading(true);
-
-      // Always fetch all hackathons (public access)
-      const response = await hackathonService.getAllHackathons({
-        sort: 'start_date',
-        order: 'desc',
-        limit: 15
-      });
-      console.log('Hackathons response:', response);
-
-      // Sort hackathons by start_date (latest first)
-      const sortedHackathons = (response.data.hackathons || []).sort((a, b) => {
-        return new Date(b.start_date) - new Date(a.start_date);
-      });
-
-      setHackathons(sortedHackathons);
-
-      // If user is logged in, also fetch enrolled hackathons
+      const res = await hackathonService.getAllHackathons({ sort: 'start_date', order: 'desc', limit: 15 });
+      const sorted = (res.data.hackathons || []).sort((a, b) => new Date(b.start_date) - new Date(a.start_date));
+      setHackathons(sorted);
       if (isAuthenticated && user) {
         try {
-          const enrolledResponse = await hackathonService.getMyHackathons();
-          console.log('Enrolled hackathons response:', enrolledResponse);
-          setEnrolledHackathons(enrolledResponse.data?.hackathons || []);
-        } catch (error) {
-          console.error('Error fetching enrolled hackathons:', error);
-          // If fails, just show all hackathons (silent fail)
-        }
+          const enrolled = await hackathonService.getMyHackathons();
+          setEnrolledHackathons(enrolled.data?.hackathons || []);
+        } catch { /* silent */ }
       }
-    } catch (error) {
-      console.error('Error fetching hackathons:', error);
+    } catch (err) {
+      console.error(err);
     } finally {
       setLoading(false);
     }
   };
 
-  const handleJoinRequest = (hackathon) => {
-    // Allow both authenticated and unauthenticated users to submit join requests
-    setSelectedHackathon(hackathon);
-    setShowJoinForm(true);
-    setSubmitted(false);
-    setJoinFormData({
-      teamName: '',
-      teamMembers: [
-        { name: '', email: '' },
-        { name: '', email: '' },
-        { name: '', email: '' }
-      ],
-      message: ''
-    });
-  };
-
-  const handleFormSubmit = async (e) => {
-    e.preventDefault();
-    setSubmitting(true);
-
-    try {
-      // Filter out empty team members
-      const validMembers = joinFormData.teamMembers.filter(member =>
-        member.name.trim() && member.email.trim()
-      );
-
-      if (validMembers.length === 0) {
-        alert('Please add at least one team member');
-        return;
-      }
-
-      // Send the actual join request to the backend
-      const joinRequestData = {
-        teamName: joinFormData.teamName,
-        teamMembers: validMembers,
-        message: joinFormData.message
-      };
-
-      await hackathonService.submitJoinRequest(selectedHackathon.id, joinRequestData);
-
-      setSubmitted(true);
-    } catch (error) {
-      console.error('Error submitting join request:', error);
-      alert(error.response?.data?.message || 'Failed to submit request. Please try again.');
-    } finally {
-      setSubmitting(false);
-    }
-  };
-
-  const addTeamMember = () => {
-    setJoinFormData(prev => ({
-      ...prev,
-      teamMembers: [...prev.teamMembers, { name: '', email: '' }]
-    }));
-  };
-
-  const removeTeamMember = (index) => {
-    if (joinFormData.teamMembers.length > 1) {
-      setJoinFormData(prev => ({
-        ...prev,
-        teamMembers: prev.teamMembers.filter((_, i) => i !== index)
-      }));
-    }
-  };
-
-  const updateTeamMember = (index, field, value) => {
-    setJoinFormData(prev => ({
-      ...prev,
-      teamMembers: prev.teamMembers.map((member, i) =>
-        i === index ? { ...member, [field]: value } : member
-      )
-    }));
-  };
-
-  const formatDate = (dateString) => {
-    const date = new Date(dateString);
-    return date.toLocaleDateString('en-US', {
-      month: 'long',
-      day: 'numeric',
-      year: 'numeric'
-    });
-  };
-
-  const getStatusColor = (status) => {
-    switch (status) {
-      case 'upcoming':
-        return 'bg-blue-100 text-blue-800 border-blue-200';
-      case 'active':
-        return 'bg-green-100 text-green-800 border-green-200';
-      default:
-        return 'bg-gray-100 text-gray-800 border-gray-200';
-    }
-  };
-
-  const getStatusText = (status) => {
-    switch (status) {
-      case 'upcoming':
-        return 'Upcoming';
-      case 'active':
-        return 'Active';
-      default:
-        return status;
-    }
-  };
-
-  const getDifficultyColor = (difficulty) => {
-    switch (difficulty) {
-      case 'beginner':
-        return 'bg-green-100 text-green-800';
-      case 'intermediate':
-        return 'bg-yellow-100 text-yellow-800';
-      case 'advanced':
-        return 'bg-red-100 text-red-800';
-      default:
-        return 'bg-gray-100 text-gray-800';
-    }
-  };
-
   if (loading) {
     return (
-      <div className="min-h-screen bg-gradient-to-br from-indigo-50 via-white to-purple-50 flex items-center justify-center">
+      <div className="min-h-screen bg-stone-50 flex items-center justify-center">
         <div className="text-center">
-          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-indigo-600 mx-auto mb-4"></div>
-          <p className="text-gray-600">Loading hackathons...</p>
+          <div className="w-10 h-10 border-3 border-amber-500 border-t-transparent rounded-full animate-spin mx-auto mb-4" />
+          <p className="text-gray-400 text-sm">Loading events...</p>
         </div>
       </div>
     );
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-indigo-50 via-white to-purple-50">
+    <div className="min-h-screen bg-[#FAF9F6]">
       <Header />
-      {/* Hero Section */}
-      <section className="relative overflow-hidden">
-        <div className="absolute inset-0 bg-gradient-to-r from-indigo-600/10 to-purple-600/10"></div>
-        <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20">
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8 }}
-            className="text-center"
-          >
-            <div className="flex justify-center items-center mb-8">
-              <div className="flex items-center space-x-4">
-                <span className="text-6xl">🏆</span>
-                <div className="h-1 w-20 bg-gradient-to-r from-indigo-500 to-purple-500 rounded-full"></div>
-                <span className="text-6xl">⚡</span>
+
+      {/* ── POSTER HERO ────────────────────────────────────────────────────── */}
+      <section className="relative bg-slate-900 overflow-hidden">
+        {/* Grain texture overlay */}
+        <div className="absolute inset-0 opacity-20" style={{
+          backgroundImage: `url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='1'/%3E%3C/svg%3E")`,
+        }} />
+
+        {/* Amber diagonal stripe */}
+        <div className="absolute top-0 right-0 w-1/3 h-full bg-amber-400 opacity-[0.07] skew-x-12 origin-top-right" />
+
+        <div className="relative max-w-7xl mx-auto px-6 lg:px-12 py-20 md:py-28">
+          <div className="flex flex-col md:flex-row items-start md:items-end justify-between gap-10">
+
+            {/* Left — Poster title */}
+            <div className="max-w-2xl">
+              <div className="flex items-center gap-3 mb-8">
+                <span className="w-2 h-2 rounded-full bg-amber-400 animate-pulse" />
+                <span className="text-amber-400 text-xs font-bold tracking-[0.25em] uppercase font-mono">GNANAM · Hackathon Series</span>
               </div>
+
+              <h1 className="text-6xl sm:text-7xl md:text-8xl font-black text-white leading-[0.88] tracking-tight mb-6">
+                HACK.<br />
+                <span className="text-amber-400">BUILD.</span><br />
+                WIN.
+              </h1>
+
+              <p className="text-slate-400 text-base leading-relaxed max-w-md">
+                Compete with talented developers, ship innovative solutions in
+                limited time, and prove what you can build under real pressure.
+              </p>
             </div>
 
-            <h1 className="text-5xl md:text-6xl font-bold text-gray-900 mb-6">
-              Join Amazing <span className="text-transparent bg-clip-text bg-gradient-to-r from-indigo-600 to-purple-600">Hackathons</span>
-            </h1>
-
-            <p className="text-xl md:text-2xl text-gray-600 max-w-4xl mx-auto leading-relaxed mb-12">
-              Compete with talented developers, build innovative solutions, and win amazing prizes in our exciting hackathons
-            </p>
-
-            <div className="flex justify-center items-center space-x-8 mb-12">
-              <div className="text-center">
-                <div className="text-3xl font-bold text-indigo-600">{hackathons.length}</div>
-                <div className="text-sm text-gray-600">Available Hackathons</div>
+            {/* Right — Live stats board */}
+            <div className="bg-white/5 border border-white/10 rounded-2xl p-6 w-full md:w-64 flex-shrink-0">
+              <div className="text-xs font-mono text-slate-500 mb-5 uppercase tracking-widest">Event Dashboard</div>
+              <div className="space-y-5">
+                {[
+                  { label: 'Total Events', value: hackathons.length, color: 'text-white' },
+                  { label: 'Active Now', value: hackathons.filter(h => h.status === 'active').length, color: 'text-green-400' },
+                  { label: 'Upcoming', value: hackathons.filter(h => h.status === 'upcoming').length, color: 'text-blue-400' },
+                ].map((s, i) => (
+                  <div key={i} className="flex items-center justify-between">
+                    <span className="text-slate-500 text-sm">{s.label}</span>
+                    <span className={`text-2xl font-black ${s.color}`}>{s.value}</span>
+                  </div>
+                ))}
               </div>
-              <div className="w-px h-12 bg-gray-300"></div>
-              <div className="text-center">
-                <div className="text-3xl font-bold text-purple-600">24/7</div>
-                <div className="text-sm text-gray-600">Support</div>
-              </div>
-              <div className="w-px h-12 bg-gray-300"></div>
-              <div className="text-center">
-                <div className="text-3xl font-bold text-green-600">100%</div>
-                <div className="text-sm text-gray-600">Fun</div>
+              <div className="mt-5 pt-5 border-t border-white/10">
+                <div className="flex items-center gap-2 text-xs text-slate-500">
+                  <FiZap className="w-3 h-3 text-amber-400" />
+                  24/7 Support Available
+                </div>
               </div>
             </div>
-          </motion.div>
+          </div>
+        </div>
+
+        {/* Bottom zigzag border */}
+        <div className="relative h-8">
+          <svg viewBox="0 0 1200 32" preserveAspectRatio="none" className="absolute inset-0 w-full h-full fill-[#FAF9F6]">
+            <polygon points="0,32 100,0 200,32 300,0 400,32 500,0 600,32 700,0 800,32 900,0 1000,32 1100,0 1200,32 1200,32 0,32" />
+          </svg>
         </div>
       </section>
 
-      {/* Hackathons Section */}
-      <section className="py-20">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      {/* ── ENROLLED (if logged in) ────────────────────────────────────────── */}
+      {isAuthenticated && enrolledHackathons.length > 0 && (
+        <section className="py-16 px-6 lg:px-12 max-w-7xl mx-auto">
+          <div className="flex items-center gap-3 mb-8">
+            <div className="h-px w-6 bg-green-500" />
+            <span className="text-xs font-bold text-green-600 uppercase tracking-widest">Your Active Events</span>
+          </div>
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
+            {enrolledHackathons.map((h, i) => (
+              <motion.div
+                key={h.id}
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: i * 0.08 }}
+                className="bg-white rounded-2xl shadow-sm border border-green-100 border-l-4 border-l-green-500 p-6"
+              >
+                <div className="flex items-center justify-between mb-4">
+                  <span className="text-xs font-bold text-green-700 bg-green-100 px-2.5 py-1 rounded-full">Enrolled</span>
+                  {h.difficulty && <span className={`text-xs font-medium px-2 py-1 rounded-full ${difficultyConfig[h.difficulty] || 'bg-gray-100 text-gray-600'}`}>{h.difficulty}</span>}
+                </div>
+                <h3 className="font-black text-slate-900 mb-2 text-lg">{h.name}</h3>
+                <p className="text-gray-500 text-sm line-clamp-2 mb-4">{h.description}</p>
+                <div className="text-xs text-gray-400 flex items-center gap-1.5 mb-4">
+                  <FiCalendar className="w-3.5 h-3.5" />
+                  {formatDate(h.start_date)} — {formatDate(h.end_date)}
+                </div>
+                <button
+                  onClick={() => navigate('/student/hackathons')}
+                  className="w-full py-2.5 bg-green-600 text-white font-bold rounded-xl hover:bg-green-700 transition-colors text-sm flex items-center justify-center gap-2"
+                >
+                  View Details <FiArrowRight className="w-4 h-4" />
+                </button>
+              </motion.div>
+            ))}
+          </div>
+        </section>
+      )}
 
-          {/* My Enrolled Hackathons Section (only show if logged in and has enrollments) */}
-          {isAuthenticated && enrolledHackathons.length > 0 && (
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.8, delay: 0.2 }}
-              className="mb-16"
-            >
-              <div className="text-center mb-12">
-                <h2 className="text-4xl md:text-5xl font-bold text-gray-900 mb-6">
-                  My <span className="text-transparent bg-clip-text bg-gradient-to-r from-green-600 to-emerald-600">Enrolled Hackathons</span>
-                </h2>
-                <p className="text-xl text-gray-600 max-w-3xl mx-auto">
-                  Hackathons you're currently participating in
-                </p>
-              </div>
-
-              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-                {enrolledHackathons.map((hackathon, index) => (
-                  <motion.div
-                    key={hackathon.id}
-                    initial={{ opacity: 0, y: 20 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    transition={{ duration: 0.6, delay: index * 0.1 }}
-                    className="group relative bg-gradient-to-br from-green-50 to-emerald-50 rounded-2xl shadow-lg hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-2 overflow-hidden border-2 border-green-200"
-                  >
-                    <div className="absolute inset-0 bg-gradient-to-br from-green-500/5 to-emerald-500/5 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
-
-                    <div className="relative p-8">
-                      <div className="flex justify-between items-start mb-6">
-                        <span className="px-4 py-2 rounded-full text-sm font-medium bg-green-100 text-green-800 border border-green-200">
-                          Enrolled
-                        </span>
-                        <span className={`px-3 py-1 rounded-full text-xs font-medium ${getDifficultyColor(hackathon.difficulty)}`}>
-                          {hackathon.difficulty}
-                        </span>
-                      </div>
-
-                      <div className="mb-6">
-                        <h3 className="text-2xl font-bold text-gray-900 mb-3 group-hover:text-green-600 transition-colors duration-200">
-                          {hackathon.name}
-                        </h3>
-                        <p className="text-gray-600 line-clamp-3 mb-4">
-                          {hackathon.description}
-                        </p>
-                      </div>
-
-                      {hackathon.technology && (
-                        <div className="flex items-center space-x-2 mb-4">
-                          <FiCode className="w-5 h-5 text-green-500" />
-                          <span className="text-sm font-medium text-gray-700">{hackathon.technology}</span>
-                        </div>
-                      )}
-
-                      <div className="space-y-3 mb-6">
-                        <div className="flex items-center space-x-3">
-                          <FiCalendar className="w-5 h-5 text-gray-400" />
-                          <span className="text-sm text-gray-600">
-                            {formatDate(hackathon.start_date)} - {formatDate(hackathon.end_date)}
-                          </span>
-                        </div>
-                        <div className="flex items-center space-x-3">
-                          <FiClock className="w-5 h-5 text-gray-400" />
-                          <span className="text-sm text-gray-600">
-                            {new Date(hackathon.start_date).toLocaleTimeString('en-US', {
-                              hour: '2-digit',
-                              minute: '2-digit'
-                            })} - {new Date(hackathon.end_date).toLocaleTimeString('en-US', {
-                              hour: '2-digit',
-                              minute: '2-digit'
-                            })}
-                          </span>
-                        </div>
-                      </div>
-
-                      <div className="flex items-center space-x-3 mb-6">
-                        <FiUsers className="w-5 h-5 text-gray-400" />
-                        <span className="text-sm text-gray-600">
-                          {hackathon.current_participants || 0} participants
-                        </span>
-                        {hackathon.max_groups && (
-                          <span className="text-sm text-gray-500">
-                            • Max {hackathon.max_groups} groups
-                          </span>
-                        )}
-                      </div>
-
-                      <motion.button
-                        whileHover={{ scale: 1.02 }}
-                        whileTap={{ scale: 0.98 }}
-                        onClick={() => navigate('/student/hackathons')}
-                        className="w-full py-4 bg-gradient-to-r from-green-600 to-emerald-600 text-white font-bold rounded-xl shadow-lg hover:shadow-xl transition-all duration-300 text-lg flex items-center justify-center space-x-2"
-                      >
-                        <span>View Details</span>
-                        <FiArrowRight className="w-5 h-5" />
-                      </motion.button>
-                    </div>
-                  </motion.div>
-                ))}
-              </div>
-            </motion.div>
-          )}
-
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8, delay: 0.2 }}
-            className="text-center mb-16"
-          >
-            <h2 className="text-4xl md:text-5xl font-bold text-gray-900 mb-6">
-              Available <span className="text-transparent bg-clip-text bg-gradient-to-r from-indigo-600 to-purple-600">Hackathons</span>
-            </h2>
-            <p className="text-xl text-gray-600 max-w-3xl mx-auto">
-              Choose from our exciting hackathons and join with your team to compete and win amazing prizes
-            </p>
-          </motion.div>
-
-          {hackathons.length === 0 ? (
-            <div className="text-center py-20">
-              <div className="text-6xl mb-4">😔</div>
-              <h3 className="text-2xl font-bold text-gray-900 mb-4">No Active Hackathons</h3>
-              <p className="text-gray-600">Check back later for exciting hackathons!</p>
+      {/* ── ALL HACKATHONS ─────────────────────────────────────────────────── */}
+      <section className="py-16 px-6 lg:px-12 max-w-7xl mx-auto">
+        <div className="flex items-center justify-between mb-10">
+          <div>
+            <div className="flex items-center gap-3 mb-3">
+              <div className="h-px w-6 bg-amber-400" />
+              <span className="text-xs font-bold text-amber-600 uppercase tracking-widest">Open Events</span>
             </div>
-          ) : (
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-              {hackathons.map((hackathon, index) => (
+            <h2 className="text-4xl font-black text-slate-900">Available Hackathons</h2>
+          </div>
+          <div className="text-right text-sm text-gray-400 hidden md:block">
+            <div className="font-bold text-slate-900">{hackathons.length}</div>
+            <div>Events</div>
+          </div>
+        </div>
+
+        {hackathons.length === 0 ? (
+          <div className="text-center py-24 bg-white rounded-3xl border border-gray-100">
+            <div className="text-6xl mb-4">🏆</div>
+            <h3 className="text-xl font-black text-slate-900 mb-2">No Active Hackathons</h3>
+            <p className="text-gray-400 text-sm">Check back soon — new events are added monthly.</p>
+          </div>
+        ) : (
+          <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-5">
+            {hackathons.map((hackathon, index) => {
+              const status = statusConfig[hackathon.status] || { label: hackathon.status, bg: 'bg-gray-100 text-gray-700 border-gray-200' };
+              const isActive = hackathon.status === 'active';
+              return (
                 <motion.div
                   key={hackathon.id}
                   initial={{ opacity: 0, y: 20 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ duration: 0.6, delay: index * 0.1 }}
-                  className="group relative bg-white rounded-2xl shadow-lg hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-2 overflow-hidden"
+                  whileInView={{ opacity: 1, y: 0 }}
+                  viewport={{ once: true }}
+                  transition={{ delay: index * 0.06 }}
+                  className={`group bg-white rounded-2xl shadow-sm border border-gray-100 border-l-4 ${CARD_ACCENTS[index % CARD_ACCENTS.length]} overflow-hidden hover:shadow-xl hover:-translate-y-1 transition-all duration-300`}
                 >
-                  <div className="absolute inset-0 bg-gradient-to-br from-indigo-500/5 to-purple-500/5 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+                  {/* Active ribbon */}
+                  {isActive && (
+                    <div className="bg-green-500 text-white text-xs font-black text-center py-1.5 tracking-widest uppercase">
+                      🔴 Live Now
+                    </div>
+                  )}
 
-                  <div className="relative p-8">
-                    {/* Status Badge */}
-                    <div className="flex justify-between items-start mb-6">
-                      <span className={`px-4 py-2 rounded-full text-sm font-medium border ${getStatusColor(hackathon.status)}`}>
-                        {getStatusText(hackathon.status)}
-                      </span>
-                      <span className={`px-3 py-1 rounded-full text-xs font-medium ${getDifficultyColor(hackathon.difficulty)}`}>
-                        {hackathon.difficulty}
-                      </span>
+                  <div className="p-6">
+                    {/* Status + difficulty */}
+                    <div className="flex items-center justify-between mb-4">
+                      <span className={`text-xs font-bold px-2.5 py-1 rounded-full border ${status.bg}`}>{status.label}</span>
+                      {hackathon.difficulty && (
+                        <span className={`text-xs font-medium px-2 py-1 rounded-full ${difficultyConfig[hackathon.difficulty] || 'bg-gray-100 text-gray-600'}`}>
+                          {hackathon.difficulty}
+                        </span>
+                      )}
                     </div>
 
-                    {/* Hackathon Info */}
-                    <div className="mb-6">
-                      <h3 className="text-2xl font-bold text-gray-900 mb-3 group-hover:text-indigo-600 transition-colors duration-200">
-                        {hackathon.name}
-                      </h3>
-                      <p className="text-gray-600 line-clamp-3 mb-4">
-                        {hackathon.description}
-                      </p>
-                    </div>
+                    <h3 className="text-xl font-black text-slate-900 mb-2 group-hover:text-amber-600 transition-colors">{hackathon.name}</h3>
+                    <p className="text-gray-500 text-sm line-clamp-3 mb-5 leading-relaxed">{hackathon.description}</p>
 
-                    {/* Technology */}
                     {hackathon.technology && (
-                      <div className="flex items-center space-x-2 mb-4">
-                        <FiCode className="w-5 h-5 text-indigo-500" />
-                        <span className="text-sm font-medium text-gray-700">{hackathon.technology}</span>
+                      <div className="flex items-center gap-2 mb-4">
+                        <FiCode className="w-3.5 h-3.5 text-amber-500" />
+                        <span className="text-xs font-medium text-gray-600">{hackathon.technology}</span>
                       </div>
                     )}
 
-                    {/* Date and Time */}
-                    <div className="space-y-3 mb-6">
-                      <div className="flex items-center space-x-3">
-                        <FiCalendar className="w-5 h-5 text-gray-400" />
-                        <span className="text-sm text-gray-600">
-                          {formatDate(hackathon.start_date)} - {formatDate(hackathon.end_date)}
-                        </span>
+                    {/* Dates */}
+                    <div className="space-y-2 mb-5 bg-gray-50 rounded-xl p-3">
+                      <div className="flex items-center gap-2 text-xs text-gray-600">
+                        <FiCalendar className="w-3.5 h-3.5 text-gray-400" />
+                        {formatDate(hackathon.start_date)} — {formatDate(hackathon.end_date)}
                       </div>
-                      <div className="flex items-center space-x-3">
-                        <FiClock className="w-5 h-5 text-gray-400" />
-                        <span className="text-sm text-gray-600">
-                          {new Date(hackathon.start_date).toLocaleTimeString('en-US', {
-                            hour: '2-digit',
-                            minute: '2-digit'
-                          })} - {new Date(hackathon.end_date).toLocaleTimeString('en-US', {
-                            hour: '2-digit',
-                            minute: '2-digit'
-                          })}
-                        </span>
+                      <div className="flex items-center gap-2 text-xs text-gray-600">
+                        <FiClock className="w-3.5 h-3.5 text-gray-400" />
+                        {formatTime(hackathon.start_date)} — {formatTime(hackathon.end_date)}
                       </div>
-                    </div>
-
-                    {/* Participants */}
-                    <div className="flex items-center space-x-3 mb-6">
-                      <FiUsers className="w-5 h-5 text-gray-400" />
-                      <span className="text-sm text-gray-600">
+                      <div className="flex items-center gap-2 text-xs text-gray-600">
+                        <FiUsers className="w-3.5 h-3.5 text-gray-400" />
                         {hackathon.current_participants || 0} participants
-                      </span>
-                      {hackathon.max_groups && (
-                        <span className="text-sm text-gray-500">
-                          • Max {hackathon.max_groups} groups
-                        </span>
-                      )}
+                        {hackathon.max_groups && ` · Max ${hackathon.max_groups} groups`}
+                      </div>
                     </div>
 
                     {/* Prize */}
                     {hackathon.prize_description && (
-                      <div className="mb-6 p-4 bg-gradient-to-r from-yellow-50 to-orange-50 rounded-xl border border-yellow-200">
-                        <div className="flex items-center space-x-2 mb-2">
-                          <FiAward className="w-5 h-5 text-yellow-600" />
-                          <span className="text-sm font-bold text-yellow-800">Prize</span>
-                        </div>
-                        <p className="text-sm text-yellow-700">{hackathon.prize_description}</p>
+                      <div className="mb-5 flex items-start gap-3 bg-amber-50 border border-amber-100 rounded-xl p-3">
+                        <FiAward className="w-4 h-4 text-amber-500 flex-shrink-0 mt-0.5" />
+                        <p className="text-xs text-amber-700 leading-relaxed">{hackathon.prize_description}</p>
                       </div>
                     )}
 
-                    {/* Join Button */}
-                    <motion.button
-                      whileHover={{ scale: 1.02 }}
-                      whileTap={{ scale: 0.98 }}
-                      onClick={() => handleJoinRequest(hackathon)}
-                      className="w-full py-4 bg-gradient-to-r from-indigo-600 to-purple-600 text-white font-bold rounded-xl shadow-lg hover:shadow-xl transition-all duration-300 text-lg flex items-center justify-center space-x-2"
+                    <button
+                      onClick={() => setSelectedHackathon(hackathon)}
+                      className="w-full py-3 bg-slate-900 text-white font-black rounded-xl hover:bg-amber-500 hover:text-slate-900 transition-all duration-300 text-sm flex items-center justify-center gap-2"
                     >
-                      <span>{isAuthenticated ? 'Join Hackathon' : 'Request to Join'}</span>
-                      <FiArrowRight className="w-5 h-5" />
-                    </motion.button>
+                      {isAuthenticated ? 'Join Hackathon' : 'Request to Join'}
+                      <FiArrowRight className="w-4 h-4" />
+                    </button>
                   </div>
                 </motion.div>
-              ))}
+              );
+            })}
+          </div>
+        )}
+      </section>
+
+      {/* ── WHY JOIN ──────────────────────────────────────────────────────── */}
+      <section className="py-16 bg-slate-900 mt-8">
+        {/* Zigzag top */}
+        <div className="relative -mt-8 mb-12 h-8">
+          <svg viewBox="0 0 1200 32" preserveAspectRatio="none" className="absolute inset-0 w-full h-full fill-slate-900">
+            <polygon points="0,0 100,32 200,0 300,32 400,0 500,32 600,0 700,32 800,0 900,32 1000,0 1100,32 1200,0 1200,32 0,32" />
+          </svg>
+        </div>
+
+        <div className="max-w-7xl mx-auto px-6 lg:px-12">
+          <div className="text-center mb-14">
+            <div className="flex items-center justify-center gap-3 mb-5">
+              <div className="h-px w-10 bg-amber-400" />
+              <span className="text-amber-400 text-xs font-bold tracking-[0.2em] uppercase">Why Join</span>
+              <div className="h-px w-10 bg-amber-400" />
             </div>
-          )}
+            <h2 className="text-4xl font-black text-white">The GNANAM Edge</h2>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+            {[
+              { icon: <FiZap className="w-6 h-6" />, title: 'Build Under Pressure', body: 'Time-boxed challenges force you to make real engineering decisions fast — the most valuable skill you can build.' },
+              { icon: <FiUsers className="w-6 h-6" />, title: 'Real Team Dynamics', body: 'Collaborate with developers across different skill levels. Learn to delegate, communicate, and ship together.' },
+              { icon: <FiAward className="w-6 h-6" />, title: 'Win Recognition', body: 'Top performers receive prizes, certificates, and social proof that stands out on any resume or portfolio.' },
+            ].map((item, i) => (
+              <motion.div
+                key={i}
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ delay: i * 0.1 }}
+                className="bg-white/5 border border-white/10 rounded-2xl p-7 hover:bg-white/8 transition-colors"
+              >
+                <div className="w-12 h-12 bg-amber-400/10 border border-amber-400/20 rounded-xl flex items-center justify-center text-amber-400 mb-5">
+                  {item.icon}
+                </div>
+                <h3 className="font-black text-white text-lg mb-3">{item.title}</h3>
+                <p className="text-slate-400 text-sm leading-relaxed">{item.body}</p>
+              </motion.div>
+            ))}
+          </div>
         </div>
       </section>
 
-      {/* Join Request Modal */}
-      {showJoinForm && selectedHackathon && (
-        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50">
-          <motion.div
-            initial={{ opacity: 0, scale: 0.9 }}
-            animate={{ opacity: 1, scale: 1 }}
-            className="bg-white rounded-2xl shadow-2xl max-w-2xl w-full max-h-[90vh] overflow-y-auto"
-          >
-            <div className="p-8">
-              {/* Header */}
-              <div className="flex justify-between items-start mb-6">
-                <div>
-                  <h3 className="text-2xl font-bold text-gray-900 mb-2">
-                    Join {selectedHackathon.name}
-                  </h3>
-                  <p className="text-gray-600">
-                    Fill out the form below to request joining this hackathon with your team
-                  </p>
-                </div>
-                <button
-                  onClick={() => setShowJoinForm(false)}
-                  className="p-2 hover:bg-gray-100 rounded-full transition-colors duration-200"
-                >
-                  <FiX className="w-6 h-6 text-gray-500" />
-                </button>
-              </div>
-
-              {submitted ? (
-                <div className="text-center py-12">
-                  <div className="w-16 h-16 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-6">
-                    <FiCheck className="w-8 h-8 text-green-600" />
-                  </div>
-                  <h4 className="text-xl font-bold text-gray-900 mb-4">Request Submitted!</h4>
-                  <p className="text-gray-600 mb-6">
-                    Your request to join <strong>{selectedHackathon.name}</strong> has been sent to the admin.
-                    You'll be notified once your team is approved.
-                  </p>
-                  <button
-                    onClick={() => setShowJoinForm(false)}
-                    className="px-6 py-3 bg-indigo-600 text-white font-medium rounded-lg hover:bg-indigo-700 transition-colors duration-200"
-                  >
-                    Close
-                  </button>
-                </div>
-              ) : (
-                <form onSubmit={handleFormSubmit} className="space-y-6">
-                  {/* Team Name */}
-                  <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-2">
-                      Team Name *
-                    </label>
-                    <input
-                      type="text"
-                      required
-                      value={joinFormData.teamName}
-                      onChange={(e) => setJoinFormData(prev => ({ ...prev, teamName: e.target.value }))}
-                      className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-transparent"
-                      placeholder="Enter your team name"
-                    />
-                  </div>
-
-                  {/* Team Members */}
-                  <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-3">
-                      Team Members *
-                    </label>
-                    <div className="space-y-4">
-                      {joinFormData.teamMembers.map((member, index) => (
-                        <div key={index} className="flex items-center space-x-3">
-                          <div className="flex-1 grid grid-cols-2 gap-3">
-                            <input
-                              type="text"
-                              value={member.name}
-                              onChange={(e) => updateTeamMember(index, 'name', e.target.value)}
-                              className="px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-transparent"
-                              placeholder="Full Name"
-                            />
-                            <input
-                              type="email"
-                              value={member.email}
-                              onChange={(e) => updateTeamMember(index, 'email', e.target.value)}
-                              className="px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-transparent"
-                              placeholder="Email Address"
-                            />
-                          </div>
-                          {joinFormData.teamMembers.length > 1 && (
-                            <button
-                              type="button"
-                              onClick={() => removeTeamMember(index)}
-                              className="p-2 text-red-500 hover:bg-red-50 rounded-lg transition-colors duration-200"
-                            >
-                              <FiX className="w-4 h-4" />
-                            </button>
-                          )}
-                        </div>
-                      ))}
-                    </div>
-                    <button
-                      type="button"
-                      onClick={addTeamMember}
-                      className="mt-3 flex items-center space-x-2 text-indigo-600 hover:text-indigo-700 font-medium"
-                    >
-                      <FiUser className="w-4 h-4" />
-                      <span>Add Team Member</span>
-                    </button>
-                  </div>
-
-                  {/* Message */}
-                  <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-2">
-                      Message to Admin
-                    </label>
-                    <textarea
-                      value={joinFormData.message}
-                      onChange={(e) => setJoinFormData(prev => ({ ...prev, message: e.target.value }))}
-                      rows={4}
-                      className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-transparent"
-                      placeholder="Tell the admin about your team's experience and why you want to join this hackathon..."
-                    />
-                  </div>
-
-                  {/* Submit Button */}
-                  <div className="flex justify-end space-x-4 pt-6">
-                    <button
-                      type="button"
-                      onClick={() => setShowJoinForm(false)}
-                      className="px-6 py-3 border border-gray-300 text-gray-700 font-medium rounded-lg hover:bg-gray-50 transition-colors duration-200"
-                    >
-                      Cancel
-                    </button>
-                    <motion.button
-                      type="submit"
-                      disabled={submitting}
-                      whileHover={{ scale: submitting ? 1 : 1.02 }}
-                      whileTap={{ scale: submitting ? 1 : 0.98 }}
-                      className="px-6 py-3 bg-gradient-to-r from-indigo-600 to-purple-600 text-white font-medium rounded-lg hover:from-indigo-700 hover:to-purple-700 transition-all duration-200 flex items-center space-x-2 disabled:opacity-50 disabled:cursor-not-allowed"
-                    >
-                      {submitting ? (
-                        <>
-                          <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-white"></div>
-                          <span>Submitting...</span>
-                        </>
-                      ) : (
-                        <>
-                          <FiSend className="w-4 h-4" />
-                          <span>Send Request</span>
-                        </>
-                      )}
-                    </motion.button>
-                  </div>
-                </form>
-              )}
-            </div>
-          </motion.div>
-        </div>
-      )}
+      {/* ── Join Modal ─────────────────────────────────────────────────────── */}
+      <AnimatePresence>
+        {selectedHackathon && (
+          <JoinModal
+            hackathon={selectedHackathon}
+            onClose={() => setSelectedHackathon(null)}
+          />
+        )}
+      </AnimatePresence>
     </div>
   );
 };

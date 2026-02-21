@@ -1,4 +1,4 @@
-const { User, StudentPermission } = require('../models');
+const { User, StudentPermission, Plan, Subscription } = require('../models');
 const { generateTokenPair, verifyToken } = require('../utils/jwt');
 const logger = require('../utils/logger');
 const { AppError } = require('../middleware/errorHandler');
@@ -51,8 +51,22 @@ const register = async (req, res, next) => {
         realtime_projects: true
       });
       logger.info(`Permissions created for new student: ${email}`);
+
+      // Auto-subscribe to Free Plan
+      const freePlan = await Plan.findOne({ where: { name: 'free' } });
+      if (freePlan) {
+        await Subscription.create({
+          user_id: user.id,
+          plan_id: freePlan.id,
+          status: 'active',
+          start_date: new Date(),
+          payment_id: 'FREE_TIER_AUTO'
+        });
+        logger.info(`Free plan assigned to new student: ${email}`);
+      }
+
     } catch (permError) {
-      logger.error('Error creating permissions for new student:', permError);
+      logger.error('Error creating permissions/subscription for new student:', permError);
       // Don't fail registration if permission creation fails
     }
 
@@ -147,6 +161,25 @@ const login = async (req, res, next) => {
 
       // Update last login
       await user.update({ last_login: new Date() });
+
+      // Check for active subscription and assign Free plan if missing (Legacy support)
+      const activeSub = await Subscription.findOne({
+        where: { user_id: user.id, status: 'active' }
+      });
+
+      if (!activeSub) {
+        const freePlan = await Plan.findOne({ where: { name: 'free' } });
+        if (freePlan) {
+          await Subscription.create({
+            user_id: user.id,
+            plan_id: freePlan.id,
+            status: 'active',
+            start_date: new Date(),
+            payment_id: 'FREE_TIER_LEGACY'
+          });
+          logger.info(`Free plan assigned to legacy user: ${user.email}`);
+        }
+      }
 
       // Generate tokens
       const tokens = generateTokenPair(user);

@@ -1,23 +1,43 @@
 const fs = require('fs');
 const path = require('path');
 const projectDiscoveryService = require('../services/projectDiscoveryService');
-const { StudentPermission } = require('../models');
+const { StudentPermission, Plan, Subscription } = require('../models');
 const { AppError } = require('../middleware/errorHandler');
 
 /**
  * Check if student has access to realtime projects
  */
-const checkProjectAccess = async (userId, userRole) => {
+const checkProjectAccess = async (userId, userRole, projectId = null) => {
   if (userRole === 'admin') {
     return true;
   }
 
   try {
-    const permission = await StudentPermission.findOne({
-      where: { student_id: userId }
+    // 1. Check active subscription
+    const subscription = await Subscription.findOne({
+      where: { user_id: userId, status: 'active' },
+      include: [{ model: Plan, as: 'plan' }]
     });
 
-    return permission ? permission.realtime_projects : false;
+    const planName = subscription?.plan?.name?.toLowerCase() || 'starter';
+    const normalizedPid = projectId ? projectId.toLowerCase().replace(/[-_]/g, '') : null;
+
+    // Pro Plan: Access to everything
+    if (planName.includes('pro')) {
+      return true;
+    }
+
+    // Basic Plan (499): Access to Todo, Ecommerce Web, and AI Agent
+    if (planName.includes('basic')) {
+      if (!projectId) return true; // Allow access to list
+      const allowed = ['todoapp', 'ecommerceweb', 'ecommerceaiagent'];
+      return allowed.includes(normalizedPid);
+    }
+
+    // Starter/Free Plan: Access to Todo App only
+    if (!projectId) return true; // Allow access to list
+    return normalizedPid === 'todoapp';
+
   } catch (error) {
     console.error('Error checking project access:', error);
     return false;
@@ -34,7 +54,7 @@ const getProjectsList = async (req, res, next) => {
 
     // Check access permission
     const hasAccess = await checkProjectAccess(userId, userRole);
-    
+
     if (!hasAccess) {
       return res.status(403).json({
         success: false,
@@ -44,6 +64,38 @@ const getProjectsList = async (req, res, next) => {
 
     // Discover all projects
     const projects = await projectDiscoveryService.discoverProjects();
+
+    // Determine user plan
+    const subscription = await Subscription.findOne({
+      where: { user_id: userId, status: 'active' },
+      include: [{ model: Plan, as: 'plan' }]
+    });
+    const planName = subscription?.plan?.name?.toLowerCase() || 'starter';
+
+    // Attach isLocked status based on tiered rules
+    projects.forEach((p) => {
+      const pIdNormalized = p.id.toLowerCase().replace(/[-_]/g, '');
+      let isLocked = true;
+
+      // Admin or Pro can see everything
+      if (userRole === 'admin' || planName.includes('pro')) {
+        isLocked = false;
+      }
+      // Basic Plan (499)
+      else if (planName.includes('basic')) {
+        const allowed = ['todoapp', 'ecommerceweb', 'ecommerceaiagent'];
+        if (allowed.includes(pIdNormalized)) {
+          isLocked = false;
+        }
+      }
+      // Starter / Free Plan
+      else {
+        if (pIdNormalized === 'todoapp') {
+          isLocked = false;
+        }
+      }
+      p.isLocked = isLocked;
+    });
 
     // Apply filters if provided
     let filteredProjects = [...projects];
@@ -59,7 +111,7 @@ const getProjectsList = async (req, res, next) => {
 
     if (search) {
       const searchLower = search.toLowerCase();
-      filteredProjects = filteredProjects.filter(p => 
+      filteredProjects = filteredProjects.filter(p =>
         p.name.toLowerCase().includes(searchLower) ||
         p.description.toLowerCase().includes(searchLower) ||
         p.tags.some(tag => tag.toLowerCase().includes(searchLower))
@@ -74,17 +126,17 @@ const getProjectsList = async (req, res, next) => {
           break;
         case 'difficulty':
           const diffOrder = { beginner: 1, intermediate: 2, advanced: 3 };
-          filteredProjects.sort((a, b) => 
+          filteredProjects.sort((a, b) =>
             (diffOrder[a.difficulty] || 999) - (diffOrder[b.difficulty] || 999)
           );
           break;
         case 'newest':
-          filteredProjects.sort((a, b) => 
+          filteredProjects.sort((a, b) =>
             new Date(b.createdAt) - new Date(a.createdAt)
           );
           break;
         case 'oldest':
-          filteredProjects.sort((a, b) => 
+          filteredProjects.sort((a, b) =>
             new Date(a.createdAt) - new Date(b.createdAt)
           );
           break;
@@ -122,7 +174,7 @@ const getProjectInfo = async (req, res, next) => {
 
     // Check access permission
     const hasAccess = await checkProjectAccess(userId, userRole);
-    
+
     if (!hasAccess) {
       return res.status(403).json({
         success: false,
@@ -155,35 +207,47 @@ const serveProjectMainPage = async (req, res, next) => {
     const subPath = req.params[0] || ''; // This will be undefined if no sub-path
     const userId = req.user?.id;
     const userRole = req.user?.role;
-    
+
     console.log(`[serveProjectMainPage] Request for project: ${projectId}, subPath: ${subPath || 'none'}`);
     console.log(`[serveProjectMainPage] User ID: ${userId}, Role: ${userRole}`);
 
     // Check access permission
     const hasAccess = await checkProjectAccess(userId, userRole);
     console.log(`[serveProjectMainPage] Has access: ${hasAccess}`);
-    
+
     if (!hasAccess) {
       return res.status(403).send(`
         <!DOCTYPE html>
         <html>
         <head>
           <title>Access Denied</title>
+          <meta http-equiv="refresh" content="3;url=/pricing" />
           <style>
-            body { font-family: Arial, sans-serif; display: flex; justify-content: center; align-items: center; height: 100vh; margin: 0; }
-            .error { text-align: center; padding: 20px; }
+            body { font-family: Arial, sans-serif; display: flex; justify-content: center; align-items: center; height: 100vh; margin: 0; background-color: #f8f9fa; }
+            .card { background: white; padding: 40px; border-radius: 8px; box-shadow: 0 4px 12px rgba(0,0,0,0.1); text-align: center; max-width: 500px; }
+            h1 { color: #dc3545; margin-bottom: 20px; }
+            p { color: #6c757d; margin-bottom: 30px; line-height: 1.5; }
+            .btn { display: inline-block; background: #0d6efd; color: white; padding: 12px 24px; text-decoration: none; border-radius: 4px; font-weight: 600; transition: background 0.2s; }
+            .btn:hover { background: #0b5ed7; }
           </style>
+          <script>
+            setTimeout(function() {
+              window.top.location.href = '/pricing';
+            }, 3000);
+          </script>
         </head>
         <body>
-          <div class="error">
-            <h1>Access Denied</h1>
-            <p>You do not have permission to access this project.</p>
-            <p>Please contact your administrator.</p>
+          <div class="card">
+            <h1>Premium Content</h1>
+            <p>This project is available on the Basic Plan.</p>
+            <p>Redirecting you to pricing...</p>
+            <a href="/pricing" class="btn" onclick="window.top.location.href='/pricing'; return false;">View Plans</a>
           </div>
         </body>
         </html>
       `);
     }
+
 
     console.log(`[serveProjectMainPage] Looking for project: ${projectId}`);
     const project = await projectDiscoveryService.getProjectById(projectId);
@@ -220,7 +284,7 @@ const serveProjectMainPage = async (req, res, next) => {
 
     // Determine the file to serve based on sub-path
     let filePath;
-    
+
     if (!subPath || subPath.trim() === '') {
       // No sub-path - serve index.html
       filePath = path.join(project.path, 'index.html');
@@ -228,14 +292,14 @@ const serveProjectMainPage = async (req, res, next) => {
     } else {
       // Remove leading slash if present and normalize path separators
       let cleanSubPath = subPath.replace(/^\/+/, '').replace(/\\/g, '/');
-      
+
       // Prevent directory traversal
       const safePath = path.normalize(cleanSubPath).replace(/^(\.\.(\/|\\|$))+/, '');
       const safeFilePath = path.join(project.path, safePath);
-      
+
       console.log(`[serveProjectMainPage] Checking file: ${safeFilePath}`);
       console.log(`[serveProjectMainPage] File exists: ${fs.existsSync(safeFilePath)}`);
-      
+
       // Ensure file is within project directory
       if (!safeFilePath.startsWith(path.resolve(project.path))) {
         console.error(`[serveProjectMainPage] Path traversal attempt: ${safeFilePath}`);
@@ -244,7 +308,7 @@ const serveProjectMainPage = async (req, res, next) => {
           message: 'Access denied'
         });
       }
-      
+
       // Check if file exists
       if (fs.existsSync(safeFilePath) && fs.statSync(safeFilePath).isFile()) {
         filePath = safeFilePath;
@@ -276,10 +340,10 @@ const serveProjectMainPage = async (req, res, next) => {
             // It's a path like BRD_phase/Overview.html
             const parentDir = path.join(project.path, pathParts.slice(0, -1).join('/'));
             const fileName = pathParts[pathParts.length - 1];
-            
+
             console.log(`[serveProjectMainPage] Checking parent directory: ${parentDir}`);
             console.log(`[serveProjectMainPage] Looking for file: ${fileName} in ${parentDir}`);
-            
+
             if (fs.existsSync(parentDir) && fs.statSync(parentDir).isDirectory()) {
               const fullFilePath = path.join(parentDir, fileName);
               if (fs.existsSync(fullFilePath) && fs.statSync(fullFilePath).isFile()) {
@@ -308,7 +372,7 @@ const serveProjectMainPage = async (req, res, next) => {
         }
       }
     }
-    
+
     console.log(`[serveProjectMainPage] Final file path: ${filePath}`);
 
     if (!fs.existsSync(filePath)) {
@@ -336,11 +400,11 @@ const serveProjectMainPage = async (req, res, next) => {
     // Check if this is an HTML file or an asset file
     const ext = path.extname(filePath).toLowerCase();
     const isHtmlFile = ext === '.html' || ext === '.htm';
-    
+
     // If it's not an HTML file, serve it directly as a static asset
     if (!isHtmlFile) {
       console.log(`[serveProjectMainPage] Serving static asset: ${filePath}`);
-      
+
       // Determine content type
       const contentTypes = {
         '.css': 'text/css',
@@ -374,12 +438,12 @@ const serveProjectMainPage = async (req, res, next) => {
     try {
       html = fs.readFileSync(filePath, 'utf8');
       console.log(`[serveProjectMainPage] HTML file read successfully, size: ${html.length} characters`);
-      
+
       // Validate HTML is not empty
       if (!html || html.trim().length === 0) {
         throw new Error('HTML file is empty');
       }
-      
+
       // Log first 500 characters to see what we're serving
       console.log(`[serveProjectMainPage] HTML preview (first 500 chars): ${html.substring(0, 500)}`);
     } catch (readError) {
@@ -444,7 +508,7 @@ const serveProjectMainPage = async (req, res, next) => {
     // Set base tag to fix relative paths - now everything uses the same route structure
     // Extract token from query string, Authorization header, or it might be in the URL
     let token = req.query.token || (req.headers.authorization ? req.headers.authorization.replace('Bearer ', '') : '');
-    
+
     // If no token found, try to extract from referer URL (in case it's embedded in iframe)
     if (!token && req.get('referer')) {
       try {
@@ -454,7 +518,7 @@ const serveProjectMainPage = async (req, res, next) => {
         // Ignore referer parsing errors
       }
     }
-    
+
     // Use absolute URL for base tag - dynamically detect from request
     // Supports both local development and production deployments
     // CRITICAL: Use backend API URL from environment variable, not frontend host
@@ -474,13 +538,13 @@ const serveProjectMainPage = async (req, res, next) => {
       // CRITICAL: When request comes from iframe, use the request's origin (which is the backend)
       // When request comes from frontend, we need to determine backend URL
       let host = req.get('host') || 'localhost:5000';
-      
+
       // Log for debugging
       console.log(`[serveProjectMainPage] Request host: ${host}`);
       console.log(`[serveProjectMainPage] Request protocol (from req): ${req.protocol}`);
       console.log(`[serveProjectMainPage] Request URL: ${req.url}`);
       console.log(`[serveProjectMainPage] Request referer: ${req.get('referer') || 'none'}`);
-      
+
       // CRITICAL: For localhost, ensure we use the backend port (5000), not frontend port (3000)
       // If host is localhost:3000 or 127.0.0.1:3000, change to port 5000
       if (host.includes('localhost:3000') || host.includes('127.0.0.1:3000')) {
@@ -496,7 +560,7 @@ const serveProjectMainPage = async (req, res, next) => {
       else if (host.includes(':5000')) {
         console.log(`[serveProjectMainPage] Request is from backend (port 5000), using as-is: ${host}`);
       }
-      
+
       // CRITICAL: Determine protocol - ALWAYS use HTTP for localhost, regardless of req.protocol
       // req.protocol might be 'https' if behind a proxy, but localhost never uses HTTPS
       let protocol = 'http';
@@ -516,28 +580,28 @@ const serveProjectMainPage = async (req, res, next) => {
           protocol = req.protocol || (req.secure ? 'https' : 'http');
         }
       }
-      
+
       console.log(`[serveProjectMainPage] Determined protocol: ${protocol} (host: ${host})`);
-      
+
       backendUrl = `${protocol}://${host}`;
       console.log(`[serveProjectMainPage] Final constructed backendUrl: ${backendUrl}`);
     }
-    
+
     // Base href points to the project root - all files (HTML, CSS, JS, images) use the same route
     // IMPORTANT: Base href must end with a slash for proper resolution
     const baseHref = `${backendUrl}/api/realtime-projects/${projectId}/`;
-    
+
     // Remove any existing base tags first
     html = html.replace(/<base[^>]*>/gi, '');
-    
+
     // Add our base tag right after <head> or before </head>
     const baseTag = `<base href="${baseHref}">`;
-    
+
     // Fix paths in HTML to work correctly with base tag
     // CRITICAL: Convert relative paths to ABSOLUTE paths WITH TOKEN BEFORE base tag injection
     // This ensures scripts load correctly even if base tag hasn't taken effect yet
     // CRITICAL: Add token to all asset URLs so browser requests include authentication
-    
+
     // Helper function to add token to URL
     const addTokenToUrl = (url) => {
       if (!token) return url;
@@ -546,14 +610,14 @@ const serveProjectMainPage = async (req, res, next) => {
       const separator = url.includes('?') ? '&' : '?';
       return url + separator + 'token=' + encodeURIComponent(token);
     };
-    
+
     // 1. Convert absolute paths like /shared/styles.css to full absolute URLs WITH TOKEN
     html = html.replace(/(href|src)\s*=\s*(["'])\/(shared|assets|images|js|css|fonts|scripts|styles)\//gi, (match, attr, quote, dir) => {
       const newPath = addTokenToUrl(`${baseHref}${dir}/`);
       console.log(`[Path Fix] Converting absolute path: ${match} -> ${attr}=${quote}${newPath}${quote}`);
       return `${attr}=${quote}${newPath}${quote}`;
     });
-    
+
     // 2. Convert relative paths that go up directories (../shared/navigation.js, etc.)
     // Convert to FULL ABSOLUTE URLs with projectId included AND TOKEN
     // Match: src="../shared/navigation.js" or href="../../shared/styles.css"
@@ -566,7 +630,7 @@ const serveProjectMainPage = async (req, res, next) => {
       console.log(`[Path Fix] Converting relative path: ${match} -> ${attr}=${quote}${absolutePath}${quote}`);
       return `${attr}=${quote}${absolutePath}${quote}`;
     });
-    
+
     // 2b. Also handle relative paths without quotes (rare but possible)
     html = html.replace(/(href|src)\s*=\s*([^\s>]+)(\.\.\/)+(shared|assets|images|js|css|fonts|scripts|styles)\/([^\s>]*)/gi, (match, attr, prefix, upDirs, dir, filePath) => {
       // Only process if it looks like a path (not already absolute)
@@ -578,7 +642,7 @@ const serveProjectMainPage = async (req, res, next) => {
       }
       return match;
     });
-    
+
     // 3. Also fix any paths in style tags or inline styles that reference URLs
     html = html.replace(/url\((["']?)(\.\.\/)+(shared|assets|images|js|css|fonts|scripts|styles)\/([^"')]*?)\1\)/gi, (match, quote, upDirs, dir, filePath) => {
       const quoteChar = quote || '"';
@@ -587,7 +651,7 @@ const serveProjectMainPage = async (req, res, next) => {
       console.log(`[Path Fix] Converting CSS url: ${match} -> url(${quoteChar}${absolutePath}${quoteChar})`);
       return `url(${quoteChar}${absolutePath}${quoteChar})`;
     });
-    
+
     // 4. Handle relative paths starting with ./ (current directory)
     html = html.replace(/(href|src)\s*=\s*(["'])\.\/(shared|assets|images|js|css|fonts|scripts|styles)\/([^"']*?)\2/gi, (match, attr, quote, dir, filePath) => {
       const fullPath = `${dir}/${filePath}`;
@@ -595,7 +659,7 @@ const serveProjectMainPage = async (req, res, next) => {
       console.log(`[Path Fix] Converting current dir relative path: ${match} -> ${attr}=${quote}${absolutePath}${quote}`);
       return `${attr}=${quote}${absolutePath}${quote}`;
     });
-    
+
     // 5. Handle relative paths for HTML navigation (e.g., BRD_phase/Overview.html, UI_UX_phase/Overview.html)
     // These are phase folder paths that should be converted to absolute URLs
     // Match: href="BRD_phase/Overview.html" or href="UI_UX_phase/Overview.html"
@@ -605,7 +669,7 @@ const serveProjectMainPage = async (req, res, next) => {
       // Check for patterns like: BRD_phase/, UI_UX_phase/, Development Phase/, etc.
       const isPhasePath = fullPath.match(/([^\/]+_(phase|Phase)\/|([A-Z][a-zA-Z]+\s*(Phase|phase))\/)/i);
       const isRelative = !fullPath.startsWith('http') && !fullPath.startsWith('//') && !fullPath.startsWith('/api/realtime-projects/');
-      
+
       if (isPhasePath && isRelative) {
         const absolutePath = addTokenToUrl(`${baseHref}${fullPath}`);
         console.log(`[Path Fix] Converting phase navigation path: ${match} -> ${attr}=${quote}${absolutePath}${quote}`);
@@ -613,7 +677,7 @@ const serveProjectMainPage = async (req, res, next) => {
       }
       return match;
     });
-    
+
     // 6. Handle any other relative HTML file paths (fallback for navigation links)
     // This catches paths like "BRD_phase/Overview.html", "UI_UX_phase/Overview.html", etc.
     html = html.replace(/(href)\s*=\s*(["'])([^"']+\.html)\2/gi, (match, attr, quote, filePath) => {
@@ -631,7 +695,7 @@ const serveProjectMainPage = async (req, res, next) => {
       console.log(`[Path Fix] Converting HTML navigation path: ${match} -> ${attr}=${quote}${absolutePath}${quote}`);
       return `${attr}=${quote}${absolutePath}${quote}`;
     });
-    
+
     // 7. Also handle onclick handlers that might contain navigation (less common but possible)
     html = html.replace(/onclick\s*=\s*(["'])[^"']*location\.(href|replace)\s*=\s*["']([^"']+\.html)["'][^"']*\1/gi, (match, quote, method, filePath) => {
       if (!filePath.startsWith('http') && !filePath.startsWith('//') && !filePath.includes('/api/realtime-projects/')) {
@@ -642,7 +706,7 @@ const serveProjectMainPage = async (req, res, next) => {
       }
       return match;
     });
-    
+
     // Create token injection script that runs IMMEDIATELY (before any other scripts)
     // This must run synchronously to intercept fetch calls from navigation.js
     // CRITICAL: Use JSON.stringify for safe string escaping in JavaScript
@@ -902,7 +966,7 @@ const serveProjectMainPage = async (req, res, next) => {
         })();
       </script>
     `;
-    
+
     // Add a script to fix CSS/JS/image paths dynamically after page load
     // This is a fallback to ensure all resources load correctly
     const pathFixScript = `
@@ -1054,7 +1118,7 @@ const serveProjectMainPage = async (req, res, next) => {
         })();
       </script>
     `;
-    
+
     // Inject token interceptor, base tag, and path fix script at the very beginning of <head>
     if (html.includes('<head>')) {
       html = html.replace('<head>', '<head>' + tokenInterceptorScript + baseTag + pathFixScript);
@@ -1065,11 +1129,11 @@ const serveProjectMainPage = async (req, res, next) => {
     } else if (!html.includes('<html')) {
       html = tokenInterceptorScript + baseTag + pathFixScript + html;
     }
-    
+
     // Also ensure all relative links work correctly by updating href/src attributes
     // This helps with projects that have internal navigation
     // Note: We're using base tag, so this might not be necessary, but helps with some edge cases
-    
+
     // Inject a script to handle path rewriting and token injection
     // This script fixes HTML navigation paths and adds tokens to requests
     if (token) {
@@ -1271,7 +1335,7 @@ const serveProjectMainPage = async (req, res, next) => {
         })();
       </script>
       `;
-      
+
       if (html.includes('</head>')) {
         html = html.replace('</head>', pathRewriteScript + '</head>');
       } else if (html.includes('<body')) {
@@ -1444,7 +1508,7 @@ const serveProjectMainPage = async (req, res, next) => {
         })();
       </script>
       `;
-      
+
       if (html.includes('</head>')) {
         html = html.replace('</head>', noTokenPathScript + '</head>');
       } else if (html.includes('<body')) {
@@ -1461,11 +1525,11 @@ const serveProjectMainPage = async (req, res, next) => {
       if (referer) {
         refererOrigin = new URL(referer).origin;
       }
-  } catch (error) {
+    } catch (error) {
       // Invalid URL, ignore
       console.log(`[serveProjectMainPage] Could not parse referer origin: ${referer}`);
     }
-    
+
     // Build frame-ancestors list - support both configured and dynamically detected origins
     const frameAncestorsList = [
       "'self'",
@@ -1483,7 +1547,7 @@ const serveProjectMainPage = async (req, res, next) => {
       // Add dynamically detected origin if different from configured
       ...(refererOrigin && refererOrigin !== frontendUrl ? [refererOrigin] : [])
     ].filter(Boolean).join(' ');
-    
+
     // Validate HTML before sending
     if (!html || html.trim().length === 0) {
       console.error(`[serveProjectMainPage] ERROR: HTML is empty after processing!`);
@@ -1506,7 +1570,7 @@ const serveProjectMainPage = async (req, res, next) => {
         </html>
       `);
     }
-    
+
     res.setHeader('Content-Type', 'text/html; charset=utf-8');
     // Use CSP frame-ancestors to allow embedding (modern standard)
     // Supports both local development and production deployments
@@ -1526,7 +1590,7 @@ const serveProjectMainPage = async (req, res, next) => {
       host: req.get('host'),
       referer: req.get('referer')
     });
-    
+
     // Return a proper error page instead of letting it go to error handler
     // This ensures the iframe always gets valid HTML
     return res.status(500).send(`
@@ -1573,7 +1637,7 @@ const serveProjectFile = async (req, res, next) => {
 
     // Check access permission
     const hasAccess = await checkProjectAccess(userId, userRole);
-    
+
     if (!hasAccess) {
       console.log(`[serveProjectFile] Access denied for user: ${userId}`);
       return res.status(403).json({
@@ -1613,7 +1677,7 @@ const serveProjectFile = async (req, res, next) => {
         message: 'File not found'
       });
     }
-    
+
     console.log(`[serveProjectFile] Serving file: ${fullPath}`);
 
     // Determine content type
@@ -1683,9 +1747,9 @@ const getProjectStats = async (req, res, next) => {
  */
 const diagnoseProjects = async (req, res, next) => {
   try {
-    const projectsPath = projectDiscoveryService.projectsPath || 
-                         path.join(__dirname, '../../Realtime_projects');
-    
+    const projectsPath = projectDiscoveryService.projectsPath ||
+      path.join(__dirname, '../../Realtime_projects');
+
     const diagnostics = {
       projectsPath: projectsPath,
       pathExists: fs.existsSync(projectsPath),

@@ -38,6 +38,7 @@ const activityRoutes = require('./routes/activities');
 const achievementRoutes = require('./routes/achievements');
 const scoreRoutes = require('./routes/scores');
 const passwordResetRoutes = require('./routes/passwordReset');
+const paymentRoutes = require('./routes/payment');
 const { errorHandler } = require('./middleware/errorHandler');
 const logger = require('./utils/logger');
 const SocketServer = require('./socket/socketServer');
@@ -287,6 +288,7 @@ app.use('/api/activities', activityRoutes);
 app.use('/api/achievements', achievementRoutes);
 app.use('/api/scores', scoreRoutes);
 app.use('/api/password-reset', passwordResetRoutes);
+app.use('/api/payment', paymentRoutes);
 app.use('/api', progressRoutes);
 
 // Debug: Log all registered routes

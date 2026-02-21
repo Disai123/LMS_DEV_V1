@@ -1,0 +1,58 @@
+<div class="content-body">
+    <div class="content-section">
+        <h3 class="content-heading">Component Design</h3>
+        <p style="color: #4b5563; line-height: 1.75; margin-bottom: 2rem;">
+            The application is built using reusable React components, each with its own scoped styles and interaction
+            logic.
+        </p>
+
+        <div style="display: flex; flex-direction: column; gap: 2rem;">
+            <!-- Task Card -->
+            <div
+                style="background: #ffffff; border: 1px solid #e5e7eb; border-radius: 12px; padding: 1.5rem; display: grid; grid-template-columns: 1fr 2fr; gap: 1.5rem;">
+                <div>
+                    <h4 style="font-weight: 600; color: #111827; margin-bottom: 0.5rem;">Task Card</h4>
+                    <p style="font-size: 0.85rem; color: #6b7280;">The primary unit of data presentation. Features a
+                        hover-reveal delete button and custom checkbox.</p>
+                </div>
+                <div
+                    style="background: #1e293b; padding: 1rem; border-radius: 8px; color: #fff; display: flex; align-items: center; gap: 1rem;">
+                    <div style="width: 20px; height: 20px; border: 2px solid #6366f1; border-radius: 4px;"></div>
+                    <span style="font-size: 0.95rem;">Understand modern web design</span>
+                </div>
+            </div>
+
+            <!-- Input Field -->
+            <div
+                style="background: #ffffff; border: 1px solid #e5e7eb; border-radius: 12px; padding: 1.5rem; display: grid; grid-template-columns: 1fr 2fr; gap: 1.5rem;">
+                <div>
+                    <h4 style="font-weight: 600; color: #111827; margin-bottom: 0.5rem;">Glass Input</h4>
+                    <p style="font-size: 0.85rem; color: #6b7280;">Utilizes semi-transparency and box-shadow to appear
+                        as if floating above the background.</p>
+                </div>
+                <div style="background: #1e293b; padding: 1rem; border-radius: 8px; color: #fff;">
+                    <div
+                        style="background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.2); padding: 0.75rem; border-radius: 6px; color: #94a3b8; font-size: 0.9rem;">
+                        What needs to be done?</div>
+                </div>
+            </div>
+
+            <!-- Filter Tabs -->
+            <div
+                style="background: #ffffff; border: 1px solid #e5e7eb; border-radius: 12px; padding: 1.5rem; display: grid; grid-template-columns: 1fr 2fr; gap: 1.5rem;">
+                <div>
+                    <h4 style="font-weight: 600; color: #111827; margin-bottom: 0.5rem;">Filter Pills</h4>
+                    <p style="font-size: 0.85rem; color: #6b7280;">Interactive tabs using Framer Motion for sliding
+                        highlight transitions between states.</p>
+                </div>
+                <div style="display: flex; gap: 10px; align-items: center; justify-content: center;">
+                    <div
+                        style="background: #6366f1; color: #fff; padding: 6px 16px; border-radius: 20px; font-size: 0.85rem; font-weight: 500;">
+                        All</div>
+                    <div style="color: #64748b; padding: 6px 12px; font-size: 0.85rem;">Active</div>
+                    <div style="color: #64748b; padding: 6px 12px; font-size: 0.85rem;">Completed</div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

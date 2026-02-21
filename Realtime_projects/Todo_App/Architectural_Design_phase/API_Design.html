@@ -1,0 +1,65 @@
+<div class="content-body">
+    <div class="content-section">
+        <h3 class="content-heading">API Design</h3>
+        <p style="color: #4b5563; line-height: 1.75; margin-bottom: 2rem;">
+            The application communicates via a standard RESTful API. Below are the key endpoints used for task
+            orchestration.
+        </p>
+
+        <div style="display: flex; flex-direction: column; gap: 1rem;">
+            <!-- GET -->
+            <div style="background: #ffffff; border: 1px solid #e5e7eb; border-radius: 8px; overflow: hidden;">
+                <div
+                    style="background: #f8fafc; padding: 0.75rem 1.25rem; border-bottom: 1px solid #e5e7eb; display: flex; align-items: center; gap: 12px;">
+                    <span
+                        style="background: #3b82f6; color: #fff; padding: 2px 8px; border-radius: 4px; font-weight: 700; font-size: 0.75rem; font-family: monospace;">GET</span>
+                    <code style="color: #1f2937; font-weight: 600;">/tasks/</code>
+                </div>
+                <div style="padding: 1rem 1.25rem; font-size: 0.9rem; color: #4b5563;">
+                    Retrieves all tasks stored in the SQLite database. Supports optional query parameters for filtering
+                    (skipped in MVP).
+                </div>
+            </div>
+
+            <!-- POST -->
+            <div style="background: #ffffff; border: 1px solid #e5e7eb; border-radius: 8px; overflow: hidden;">
+                <div
+                    style="background: #f8fafc; padding: 0.75rem 1.25rem; border-bottom: 1px solid #e5e7eb; display: flex; align-items: center; gap: 12px;">
+                    <span
+                        style="background: #10b981; color: #fff; padding: 2px 8px; border-radius: 4px; font-weight: 700; font-size: 0.75rem; font-family: monospace;">POST</span>
+                    <code style="color: #1f2937; font-weight: 600;">/tasks/</code>
+                </div>
+                <div style="padding: 1rem 1.25rem; font-size: 0.9rem; color: #4b5563;">
+                    Creates a new task. Required JSON body: <code
+                        style="color: #6366f1;">{"title": "string", "description": "string"}</code>.
+                </div>
+            </div>
+
+            <!-- PUT -->
+            <div style="background: #ffffff; border: 1px solid #e5e7eb; border-radius: 8px; overflow: hidden;">
+                <div
+                    style="background: #f8fafc; padding: 0.75rem 1.25rem; border-bottom: 1px solid #e5e7eb; display: flex; align-items: center; gap: 12px;">
+                    <span
+                        style="background: #f59e0b; color: #fff; padding: 2px 8px; border-radius: 4px; font-weight: 700; font-size: 0.75rem; font-family: monospace;">PUT</span>
+                    <code style="color: #1f2937; font-weight: 600;">/tasks/{id}</code>
+                </div>
+                <div style="padding: 1rem 1.25rem; font-size: 0.9rem; color: #4b5563;">
+                    Updates task status or content. Primarily used for toggling "completed" status.
+                </div>
+            </div>
+
+            <!-- DELETE -->
+            <div style="background: #ffffff; border: 1px solid #e5e7eb; border-radius: 8px; overflow: hidden;">
+                <div
+                    style="background: #f8fafc; padding: 0.75rem 1.25rem; border-bottom: 1px solid #e5e7eb; display: flex; align-items: center; gap: 12px;">
+                    <span
+                        style="background: #ef4444; color: #fff; padding: 2px 8px; border-radius: 4px; font-weight: 700; font-size: 0.75rem; font-family: monospace;">DELETE</span>
+                    <code style="color: #1f2937; font-weight: 600;">/tasks/{id}</code>
+                </div>
+                <div style="padding: 1rem 1.25rem; font-size: 0.9rem; color: #4b5563;">
+                    Permanently deletes the specified task from the database.
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

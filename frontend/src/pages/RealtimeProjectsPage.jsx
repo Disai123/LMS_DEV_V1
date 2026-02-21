@@ -101,7 +101,7 @@ const RealtimeProjectsPage = () => {
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-50 via-blue-50 to-indigo-100">
       <Header />
-      
+
       <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
         <motion.div
           initial={{ opacity: 0, y: 20 }}
@@ -135,34 +135,90 @@ const RealtimeProjectsPage = () => {
             </p>
           </motion.div>
         ) : (
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6, delay: 0.2 }}
-            className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8"
-          >
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
             {(projects || []).map((project, index) => (
-              <div key={project.id} className="bg-white rounded-lg shadow-lg p-6">
-                <h3 className="text-xl font-semibold text-gray-900 mb-2">
-                  {project.title}
-                </h3>
-                <p className="text-gray-600 mb-4">
-                  {project.description}
-                </p>
-                <div className="flex flex-wrap gap-2">
-                  <span className="px-3 py-1 bg-blue-100 text-blue-800 rounded-full text-sm">
-                    {project.difficulty}
-                  </span>
-                  <span className="px-3 py-1 bg-green-100 text-green-800 rounded-full text-sm">
-                    {project.duration}
-                  </span>
-                  <span className="px-3 py-1 bg-purple-100 text-purple-800 rounded-full text-sm">
-                    {project.phases} phases
-                  </span>
+              <motion.div
+                key={project.id}
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.6, delay: index * 0.1 }}
+                whileHover={{ y: -6, scale: 1.01 }}
+                className="relative bg-white/90 backdrop-blur-sm rounded-xl hover:bg-white transition-all duration-300 overflow-hidden group border border-gray-200 shadow-lg hover:shadow-indigo-500/20 w-full"
+              >
+                {/* Lock Overlay */}
+                {project.isLocked && (
+                  <div className="absolute inset-0 bg-gray-900/70 backdrop-blur-[2px] z-50 flex flex-col items-center justify-center text-center p-6 transition-all duration-300">
+                    <div className="w-14 h-14 bg-gray-800 rounded-full flex items-center justify-center mb-4 shadow-lg border border-gray-700">
+                      <svg className="w-7 h-7 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" /></svg>
+                    </div>
+                    <h3 className="text-xl font-bold text-white mb-2">Locked</h3>
+                    <p className="text-gray-300 text-sm mb-6 max-w-xs">
+                      Upgrade plan to unlock this project.
+                    </p>
+                    <button
+                      onClick={(e) => { e.stopPropagation(); window.location.href = '/pricing'; }}
+                      className="px-6 py-2 bg-white text-gray-900 font-bold rounded-lg hover:bg-gray-100 transition-all"
+                    >
+                      View Plans
+                    </button>
+                  </div>
+                )}
+                {/* Project Image/Thumbnail */}
+                <div className="relative overflow-hidden">
+                  <div className="w-full h-32 sm:h-40 bg-gradient-to-br from-indigo-500 via-purple-500 to-pink-500 flex items-center justify-center group-hover:scale-105 transition-transform duration-500">
+                    <div className="text-white text-4xl font-bold">
+                      {project.title?.charAt(0)}
+                    </div>
+                  </div>
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/40 via-transparent to-transparent"></div>
+
+                  {/* Difficulty Badge */}
+                  <div className="absolute top-4 right-4">
+                    <span className={`px-2 py-1 text-xs font-bold rounded-full backdrop-blur-sm ${project.difficulty?.toLowerCase() === 'beginner'
+                      ? 'bg-green-500/80 text-white'
+                      : project.difficulty?.toLowerCase() === 'intermediate'
+                        ? 'bg-yellow-500/80 text-white'
+                        : 'bg-red-500/80 text-white'
+                      }`}>
+                      {project.difficulty}
+                    </span>
+                  </div>
                 </div>
-              </div>
+
+                {/* Card Content */}
+                <div className="p-4">
+                  {/* Title */}
+                  <h3 className="text-lg font-bold text-gray-900 mb-2 line-clamp-2 group-hover:text-indigo-600 transition-colors">
+                    {project.title}
+                  </h3>
+
+                  {/* Description */}
+                  <p className="text-gray-600 text-sm mb-4 line-clamp-2">
+                    {project.description}
+                  </p>
+
+                  {/* Project Info */}
+                  <div className="flex items-center justify-between">
+                    <div className="flex flex-wrap gap-2">
+                      {project.duration && (
+                        <span className="px-2 py-1 bg-indigo-100 text-indigo-800 rounded-full text-xs font-medium flex items-center">
+                          <svg className="w-3 h-3 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+                          </svg>
+                          {project.duration}
+                        </span>
+                      )}
+                      {project.phases && (
+                        <span className="px-2 py-1 bg-purple-100 text-purple-800 rounded-full text-xs font-medium">
+                          {project.phases} phases
+                        </span>
+                      )}
+                    </div>
+                  </div>
+                </div>
+              </motion.div>
             ))}
-          </motion.div>
+          </div>
         )}
       </main>
     </div>

@@ -189,7 +189,7 @@ const ResetPasswordPage = () => {
                         <div className="space-y-3">
                             <Link
                                 to="/forgot-password"
-                                className="block w-full py-3 px-4 rounded-lg font-medium bg-gradient-to-r from-indigo-600 to-purple-600 text-white hover:from-indigo-700 hover:to-purple-700 transition-all duration-200"
+                                className="block w-full py-3 px-4 rounded-lg font-medium bg-gradient-to-r from-amber-500 to-amber-600 text-white hover:from-amber-600 hover:to-amber-700 transition-all duration-200"
                             >
                                 Request New Reset Link
                             </Link>
@@ -230,7 +230,7 @@ const ResetPasswordPage = () => {
                         </h2>
                         {userInfo && (
                             <p className="text-gray-600">
-                                Setting new password for <span className="font-semibold text-indigo-600">{userInfo.email}</span>
+                                Setting new password for <span className="font-semibold text-amber-600">{userInfo.email}</span>
                             </p>
                         )}
                     </div>
@@ -249,7 +249,7 @@ const ResetPasswordPage = () => {
                                     value={formData.newPassword}
                                     onChange={handleInputChange}
                                     required
-                                    className="w-full px-4 py-3 pr-12 rounded-lg border border-gray-300 focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition-colors duration-200"
+                                    className="w-full px-4 py-3 pr-12 rounded-lg border border-gray-300 focus:ring-2 focus:ring-amber-500 focus:border-amber-500 transition-colors duration-200"
                                     placeholder="Enter new password"
                                 />
                                 <button
@@ -276,8 +276,8 @@ const ResetPasswordPage = () => {
                                     <div className="flex items-center justify-between mb-1">
                                         <span className="text-xs text-gray-600">Password Strength:</span>
                                         <span className={`text-xs font-semibold ${passwordStrength.score <= 2 ? 'text-red-600' :
-                                                passwordStrength.score <= 4 ? 'text-yellow-600' :
-                                                    passwordStrength.score <= 5 ? 'text-blue-600' : 'text-green-600'
+                                            passwordStrength.score <= 4 ? 'text-yellow-600' :
+                                                passwordStrength.score <= 5 ? 'text-blue-600' : 'text-green-600'
                                             }`}>
                                             {passwordStrength.label}
                                         </span>
@@ -303,7 +303,7 @@ const ResetPasswordPage = () => {
                                 value={formData.confirmPassword}
                                 onChange={handleInputChange}
                                 required
-                                className="w-full px-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition-colors duration-200"
+                                className="w-full px-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-amber-500 focus:border-amber-500 transition-colors duration-200"
                                 placeholder="Confirm new password"
                             />
                             {formData.confirmPassword && formData.newPassword !== formData.confirmPassword && (
@@ -314,7 +314,7 @@ const ResetPasswordPage = () => {
                         <button
                             type="submit"
                             disabled={loading || formData.newPassword !== formData.confirmPassword}
-                            className="w-full py-3 px-4 rounded-lg font-medium bg-gradient-to-r from-indigo-600 to-purple-600 text-white hover:from-indigo-700 hover:to-purple-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed"
+                            className="w-full py-3 px-4 rounded-lg font-medium bg-gradient-to-r from-amber-500 to-amber-600 text-white hover:from-amber-600 hover:to-amber-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-amber-500 transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed"
                         >
                             {loading ? (
                                 <div className="flex items-center justify-center">
@@ -331,7 +331,7 @@ const ResetPasswordPage = () => {
                     <div className="mt-6 text-center">
                         <Link
                             to="/login"
-                            className="text-sm font-medium text-indigo-600 hover:text-indigo-500 inline-flex items-center"
+                            className="text-sm font-medium text-amber-600 hover:text-amber-500 inline-flex items-center"
                         >
                             <svg
                                 className="w-4 h-4 mr-1"

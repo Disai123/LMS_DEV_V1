@@ -10,6 +10,7 @@ import { hackathonService } from '../services/hackathonService'
 import { scoreService } from '../services/scoreService'
 import { usePermissions } from '../hooks/usePermissions'
 import { useRealtimeProjects } from '../hooks/useRealtimeProjects'
+import { paymentService } from '../services/api'
 import ProjectCard from '../components/projects/ProjectCard'
 // import { chatService } from '../services/chatService'
 import Header from '../components/common/Header'
@@ -28,6 +29,16 @@ const StudentDashboard = () => {
   const queryClient = useQueryClient()
   const navigate = useNavigate()
   const { user } = useAuth()
+
+  // Fetch Subscription Data
+  const { data: subscriptionResponse } = useQuery(
+    'my-subscription',
+    () => paymentService.getMySubscription(),
+    { enabled: !!user && user.role !== 'admin' }
+  );
+  const subscription = subscriptionResponse?.data?.data;
+  const planName = subscription?.plan?.name?.toLowerCase();
+  const isPremiumUser = user?.role === 'admin' || planName === 'basic' || planName === 'pro';
 
   const { data: coursesData, isLoading: coursesLoading, error: coursesError } = useQuery(
     'student-courses',
@@ -160,9 +171,9 @@ const StudentDashboard = () => {
     switch (activityType) {
       case 'enrollment':
         return {
-          bgColor: 'from-blue-50 to-indigo-50',
+          bgColor: 'from-blue-50 to-slate-50',
           borderColor: 'border-blue-200',
-          iconBg: 'from-blue-500 to-indigo-600',
+          iconBg: 'from-blue-500 to-slate-600',
           icon: (
             <svg className="w-4 h-4 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.746 0 3.332.477 4.5 1.253v13C19.832 18.477 18.246 18 16.5 18c-1.746 0-3.332.477-4.5 1.253" />
@@ -188,17 +199,17 @@ const StudentDashboard = () => {
         }
       case 'test_passed':
         return {
-          bgColor: 'from-purple-50 to-violet-50',
-          borderColor: 'border-purple-200',
-          iconBg: 'from-purple-500 to-violet-600',
+          bgColor: 'from-amber-50 to-yellow-50',
+          borderColor: 'border-amber-200',
+          iconBg: 'from-amber-500 to-yellow-600',
           icon: (
             <svg className="w-4 h-4 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
             </svg>
           ),
-          badgeColor: 'bg-purple-100 text-purple-800',
+          badgeColor: 'bg-amber-100 text-amber-800',
           badgeText: 'Passed',
-          dotColor: 'bg-purple-500'
+          dotColor: 'bg-amber-500'
         }
       case 'test_attempted':
         return {
@@ -294,7 +305,7 @@ const StudentDashboard = () => {
 
   if (isLoading) {
     return (
-      <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-slate-50 via-blue-50 to-indigo-100">
+      <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-slate-50 via-gray-50 to-teal-50">
         <LoadingSpinner size="lg" />
       </div>
     )
@@ -303,7 +314,7 @@ const StudentDashboard = () => {
   // Handle API errors gracefully
   if (coursesError || enrollmentsError) {
     return (
-      <div className="min-h-screen bg-gradient-to-br from-slate-50 via-blue-50 to-indigo-100">
+      <div className="min-h-screen bg-gradient-to-br from-slate-50 via-amber-50/30 to-stone-100">
         <Header />
         <div className="flex items-center justify-center py-20">
           <div className="text-center">
@@ -316,7 +327,7 @@ const StudentDashboard = () => {
             <p className="text-gray-600 mb-6">There was an error loading your dashboard data. Please try refreshing the page.</p>
             <button
               onClick={() => window.location.reload()}
-              className="inline-flex items-center px-6 py-3 bg-indigo-600 text-white font-semibold rounded-xl hover:bg-indigo-700 transition-all duration-200"
+              className="inline-flex items-center px-6 py-3 bg-amber-600 text-white font-semibold rounded-xl hover:bg-amber-700 transition-all duration-200"
             >
               <svg className="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
@@ -334,7 +345,7 @@ const StudentDashboard = () => {
   const totalProgress = (enrollments || []).reduce((sum, e) => sum + (e.progress || 0), 0) / Math.max((enrollments || []).length, 1)
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-50 via-blue-50 to-indigo-100">
+    <div className="min-h-screen bg-gradient-to-br from-slate-50 via-gray-50 to-teal-50">
       <Header />
 
       <main className="py-8">
@@ -349,7 +360,7 @@ const StudentDashboard = () => {
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.2 }}
-              className="relative overflow-hidden bg-gradient-to-r from-indigo-600 via-purple-600 to-pink-600 rounded-2xl shadow-2xl"
+              className="relative overflow-hidden bg-gradient-to-r from-slate-800 via-slate-700 to-amber-700 rounded-2xl shadow-2xl"
             >
               <div className="absolute inset-0 bg-black/10"></div>
               <div className="absolute top-0 right-0 w-32 h-32 bg-white/10 rounded-full -translate-y-16 translate-x-16"></div>
@@ -371,14 +382,35 @@ const StudentDashboard = () => {
                           <span className="text-yellow-200 text-xs font-semibold">Master</span>
                         </div>
                       )}
+
+                      {/* Plan Badge */}
+                      <div className={`flex items-center gap-1.5 px-2.5 py-1 rounded-full border ${isPremiumUser
+                        ? 'bg-amber-500/30 border-amber-300/50 text-amber-100'
+                        : 'bg-white/20 border-white/30 text-white'
+                        }`}>
+                        <span className="text-xs font-semibold uppercase tracking-wide">
+                          {isPremiumUser ? 'Premium Plan' : 'Free Plan'}
+                        </span>
+                      </div>
                     </div>
-                    <p className="text-sm text-indigo-100 mb-3">
+                    <p className="text-sm text-amber-100 mb-3">
                       Continue your learning journey and explore new courses.
                     </p>
                     <div className="flex flex-wrap gap-2">
+                      {!isPremiumUser && (
+                        <button
+                          onClick={() => navigate('/pricing')}
+                          className="inline-flex items-center justify-center px-3 py-1.5 bg-gradient-to-r from-amber-400 to-amber-500 text-white text-sm font-bold rounded-lg hover:from-amber-500 hover:to-amber-600 transition-all duration-200 shadow-lg hover:shadow-xl animate-pulse"
+                        >
+                          <svg className="w-3.5 h-3.5 mr-1.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 7l5 5m0 0l-5 5m5-5H6" />
+                          </svg>
+                          Upgrade Now
+                        </button>
+                      )}
                       <button
                         onClick={() => navigate('/courses')}
-                        className="inline-flex items-center justify-center px-3 py-1.5 bg-white text-indigo-600 text-sm font-semibold rounded-lg hover:bg-indigo-50 transition-all duration-200 shadow-md hover:shadow-lg"
+                        className="inline-flex items-center px-3 py-1.5 bg-white text-slate-700 text-sm font-semibold rounded-lg hover:bg-amber-50 transition-all duration-200 shadow-md hover:shadow-lg"
                       >
                         <svg className="w-3.5 h-3.5 mr-1.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                           <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.746 0 3.332.477 4.5 1.253v13C19.832 18.477 18.246 18 16.5 18c-1.746 0-3.332.477-4.5 1.253" />
@@ -560,11 +592,11 @@ const StudentDashboard = () => {
                 transition={{ delay: 0.4 }}
                 className="group relative overflow-hidden bg-white rounded-xl shadow-md hover:shadow-lg transition-all duration-300 transform hover:-translate-y-1"
               >
-                <div className="absolute inset-0 bg-gradient-to-br from-purple-500 to-pink-500 opacity-0 group-hover:opacity-5 transition-opacity duration-300"></div>
+                <div className="absolute inset-0 bg-gradient-to-br from-teal-500 to-cyan-500 opacity-0 group-hover:opacity-5 transition-opacity duration-300"></div>
                 <div className="relative p-4">
                   <div className="flex items-center justify-between">
                     <div className="flex items-center">
-                      <div className="p-3 bg-gradient-to-br from-purple-500 to-pink-500 rounded-lg shadow-md">
+                      <div className="p-3 bg-gradient-to-br from-teal-500 to-cyan-500 rounded-lg shadow-md">
                         <svg className="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                           <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 10V3L4 14h7v7l9-11h-7z" />
                         </svg>
@@ -577,7 +609,7 @@ const StudentDashboard = () => {
                     <div className="text-right">
                       <div className="w-12 h-1.5 bg-gray-200 rounded-full overflow-hidden">
                         <div
-                          className="h-full bg-gradient-to-r from-purple-500 to-pink-500 rounded-full transition-all duration-1000"
+                          className="h-full bg-gradient-to-r from-teal-500 to-cyan-500 rounded-full transition-all duration-1000"
                           style={{ width: `${totalProgress}%` }}
                         ></div>
                       </div>
@@ -597,7 +629,7 @@ const StudentDashboard = () => {
                 transition={{ delay: 0.5 }}
                 className="group relative overflow-hidden bg-white rounded-xl shadow-md hover:shadow-lg transition-all duration-300 lg:col-span-1"
               >
-                <div className="absolute top-0 right-0 w-16 h-16 bg-gradient-to-br from-indigo-500 to-purple-600 rounded-full -translate-y-8 translate-x-8 opacity-10"></div>
+                <div className="absolute top-0 right-0 w-16 h-16 bg-gradient-to-br from-teal-500 to-slate-600 rounded-full -translate-y-8 translate-x-8 opacity-10"></div>
                 <div className="relative p-6">
                   <div className="flex items-center justify-between mb-6">
                     <div>
@@ -627,8 +659,8 @@ const StudentDashboard = () => {
 
                     {enrollments.length === 0 && (
                       <div className="text-center py-12">
-                        <div className="w-24 h-24 bg-gradient-to-br from-indigo-100 to-purple-100 rounded-full flex items-center justify-center mx-auto mb-6">
-                          <svg className="w-12 h-12 text-indigo-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <div className="w-24 h-24 bg-gradient-to-br from-teal-100 to-slate-100 rounded-full flex items-center justify-center mx-auto mb-6">
+                          <svg className="w-12 h-12 text-teal-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.746 0 3.332.477 4.5 1.253v13C19.832 18.477 18.246 18 16.5 18c-1.746 0-3.332.477-4.5 1.253" />
                           </svg>
                         </div>
@@ -636,7 +668,7 @@ const StudentDashboard = () => {
                         <p className="text-gray-600 mb-6">Start your learning journey by enrolling in courses</p>
                         <button
                           onClick={() => navigate('/courses')}
-                          className="inline-flex items-center px-8 py-4 bg-indigo-600 text-white font-semibold rounded-xl hover:bg-indigo-700 transition-all duration-200 shadow-lg hover:shadow-xl transform hover:-translate-y-1"
+                          className="inline-flex items-center px-8 py-4 bg-teal-700 text-white font-semibold rounded-xl hover:bg-teal-800 transition-all duration-200 shadow-lg hover:shadow-xl transform hover:-translate-y-1"
                         >
                           <svg className="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.746 0 3.332.477 4.5 1.253v13C19.832 18.477 18.246 18 16.5 18c-1.746 0-3.332.477-4.5 1.253" />
@@ -673,7 +705,7 @@ const StudentDashboard = () => {
                   <div className="relative">
                     {enrollments.length > 0 ? (
                       <div className="relative group">
-                        <div className="aspect-video bg-gradient-to-br from-indigo-500 via-purple-600 to-pink-600 rounded-xl overflow-hidden shadow-lg">
+                        <div className="aspect-video bg-gradient-to-br from-slate-700 via-teal-700 to-teal-600 rounded-xl overflow-hidden shadow-lg">
                           <div className="w-full h-full flex items-center justify-center">
                             <div className="text-center">
                               <div className="w-20 h-20 bg-white/20 rounded-full flex items-center justify-center mx-auto mb-4 group-hover:scale-110 transition-transform duration-300">
@@ -684,7 +716,7 @@ const StudentDashboard = () => {
                               <h4 className="text-xl font-bold text-white mb-2">
                                 {enrollments[0]?.course?.title}
                               </h4>
-                              <p className="text-indigo-200 text-sm">
+                              <p className="text-teal-200 text-sm">
                                 Chapter 1: Introduction
                               </p>
                             </div>
@@ -693,7 +725,7 @@ const StudentDashboard = () => {
                         <div className="absolute inset-0 bg-black/20 rounded-xl opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center">
                           <button
                             onClick={() => navigate(`/courses/${enrollments[0]?.course?.id}`)}
-                            className="inline-flex items-center px-6 py-3 bg-white text-indigo-600 font-semibold rounded-lg hover:bg-indigo-50 transition-all duration-200 shadow-lg hover:shadow-xl transform hover:-translate-y-1"
+                            className="inline-flex items-center px-6 py-3 bg-white text-teal-700 font-semibold rounded-lg hover:bg-teal-50 transition-all duration-200 shadow-lg hover:shadow-xl transform hover:-translate-y-1"
                           >
                             <svg className="w-5 h-5 mr-2" fill="currentColor" viewBox="0 0 24 24">
                               <path d="M8 5v14l11-7z" />
@@ -714,7 +746,7 @@ const StudentDashboard = () => {
                           <p className="text-gray-600 mb-4">Enroll in a course to start learning</p>
                           <button
                             onClick={() => navigate('/courses')}
-                            className="inline-flex items-center px-6 py-3 bg-indigo-600 text-white font-semibold rounded-lg hover:bg-indigo-700 transition-all duration-200 shadow-lg hover:shadow-xl transform hover:-translate-y-1"
+                            className="inline-flex items-center px-6 py-3 bg-teal-700 text-white font-semibold rounded-lg hover:bg-teal-800 transition-all duration-200 shadow-lg hover:shadow-xl transform hover:-translate-y-1"
                           >
                             <svg className="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.746 0 3.332.477 4.5 1.253v13C19.832 18.477 18.246 18 16.5 18c-1.746 0-3.332.477-4.5 1.253" />
