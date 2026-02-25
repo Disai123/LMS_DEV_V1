@@ -1,0 +1,44 @@
+<div class="content-body">
+    <div class="content-section">
+        <h3 class="content-heading">Environment Setup</h3>
+        <p style="color: #4b5563; line-height: 1.75; margin-bottom: 2rem;">
+            The production environment requires a specific set of variables to enable the agentic
+            workflows. Follow these steps to prepare your cloud environment.
+        </p>
+
+        <!-- Setup Steps -->
+        <div style="display: flex; flex-direction: column; gap: 1.5rem;">
+            <div style="background: white; border: 1px solid #e2e8f0; border-radius: 12px; padding: 1.5rem;">
+                <h4 style="font-size: 1rem; font-weight: 700; color: #1e293b; margin-bottom: 0.75rem;">1. Database
+                    Initialization</h4>
+                <p style="font-size: 0.85rem; color: #64748b; margin-bottom: 1rem;">Create a PostgreSQL instance and run
+                    the migrations to initialize the product catalog and checkpoint tables.</p>
+                <div
+                    style="background: #f8fafc; border-radius: 6px; padding: 0.75rem; font-family: monospace; font-size: 0.75rem; color: #475569;">
+                    alembic upgrade head
+                </div>
+            </div>
+
+            <div style="background: white; border: 1px solid #e2e8f0; border-radius: 12px; padding: 1.5rem;">
+                <h4 style="font-size: 1rem; font-weight: 700; color: #1e293b; margin-bottom: 0.75rem;">2. Secret
+                    Configuration</h4>
+                <p style="font-size: 0.85rem; color: #64748b; margin-bottom: 1rem;">Configure the following secrets in
+                    your cloud provider's secret manager.</p>
+                <div
+                    style="background: #1e293b; border-radius: 6px; padding: 1rem; color: #cbd5e1; font-family: monospace; font-size: 0.8rem;">
+                    # .env (Production)
+                    OPENAI_API_KEY=sk-proj-...
+                    LANGCHAIN_API_KEY=lsv2_...
+                    DATABASE_URL=postgresql://user:pass@host:5432/db
+                </div>
+            </div>
+
+            <div style="background: white; border: 1px solid #e2e8f0; border-radius: 12px; padding: 1.5rem;">
+                <h4 style="font-size: 1rem; font-weight: 700; color: #1e293b; margin-bottom: 0.75rem;">3. SSE
+                    Configuration</h4>
+                <p style="font-size: 0.85rem; color: #64748b;">Ensure your load balancer supports persistent HTTP
+                    connections with no timeout for the <code>/api/v1/chat</code> streaming endpoint.</p>
+            </div>
+        </div>
+    </div>
+</div>

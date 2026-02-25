@@ -1,0 +1,61 @@
+<div class="content-body">
+    <div class="content-section">
+        <h3 class="content-heading">Agentic Development Phase</h3>
+        <p style="color: #4b5563; line-height: 1.75; margin-bottom: 2rem;">
+            Development in this project focuses on merging traditional API patterns with <strong>Probabilistic
+                Logic</strong>.
+            We build the deterministic tools first, followed by the orchestrator graph that decides when to use them.
+        </p>
+
+        <!-- Development Timeline -->
+        <div
+            style="background: white; border: 1px solid #e5e7eb; border-radius: 12px; padding: 1.5rem; margin-bottom: 2rem; box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);">
+            <h4 style="font-size: 1.125rem; font-weight: 600; color: #1f2937; margin-bottom: 1.5rem;">Development Steps
+            </h4>
+            <div style="display: flex; flex-direction: column; gap: 1.25rem;">
+                <div style="display: flex; gap: 12px;">
+                    <div
+                        style="width: 24px; height: 24px; background: #f97316; color: #fff; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 0.75rem; flex-shrink: 0;">
+                        1</div>
+                    <div>
+                        <div style="font-weight: 600; font-size: 0.9rem;">Tool Development</div>
+                        <div style="font-size: 0.8rem; color: #6b7280;">Implementing Search, Cart, and User Profiler
+                            tools using Pydantic.</div>
+                    </div>
+                </div>
+                <div style="display: flex; gap: 12px;">
+                    <div
+                        style="width: 24px; height: 24px; background: #6366f1; color: #fff; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 0.75rem; flex-shrink: 0;">
+                        2</div>
+                    <div>
+                        <div style="font-weight: 600; font-size: 0.9rem;">LangGraph Pipeline</div>
+                        <div style="font-weight: 400; font-size: 0.8rem; color: #6b7280;">Wiring the Supervisor and
+                            Workers into a stateful, cyclic graph.</div>
+                    </div>
+                </div>
+                <div style="display: flex; gap: 12px;">
+                    <div
+                        style="width: 24px; height: 24px; background: #10b981; color: #fff; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 0.75rem; flex-shrink: 0;">
+                        3</div>
+                    <div>
+                        <div style="font-weight: 600; font-size: 0.9rem;">Reactive UI Widget</div>
+                        <div style="font-size: 0.8rem; color: #6b7280;">Integrating the React components with SSE
+                            streams for token-by-token rendering.</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div style="background: #fff7ed; border-radius: 12px; padding: 1.5rem; border: 1px solid #ffedd5;">
+            <h4 style="font-size: 1rem; font-weight: 600; color: #9a3412; margin-bottom: 0.75rem;">Quality Standards
+            </h4>
+            <ul
+                style="list-style: none; display: flex; flex-direction: column; gap: 0.75rem; font-size: 0.9rem; color: #7c2d12;">
+                <li>✅ Pydantic-validated Tool Input</li>
+                <li>✅ Secure user_id injection</li>
+                <li>✅ Reasoning latency < 3s</li>
+                <li>✅ Thread-safe persistence</li>
+            </ul>
+        </div>
+    </div>
+</div>

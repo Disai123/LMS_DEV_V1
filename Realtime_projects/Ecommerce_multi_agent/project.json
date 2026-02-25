@@ -1,0 +1,29 @@
+{
+    "id": "ecommerce_multi_agent",
+    "name": "Ecommerce Multi-Agent Assistant",
+    "description": "An advanced project implementing a multi-agent system using LangGraph and FastAPI for a delegated shopping experience.",
+    "category": "Real-time AI Project",
+    "level": "Advanced",
+    "duration": "4 Weeks",
+    "stack": [
+        "LangGraph",
+        "FastAPI",
+        "React",
+        "OpenAI",
+        "PostgreSQL"
+    ],
+    "tags": [
+        "AI Agents",
+        "Multi-Agent System",
+        "E-commerce",
+        "Full Stack"
+    ],
+    "phases": [
+        "BRD_phase",
+        "UI_UX_phase",
+        "Architectural_Design_phase",
+        "Development Phase",
+        "Testing_phase",
+        "Deployment Phase"
+    ]
+}

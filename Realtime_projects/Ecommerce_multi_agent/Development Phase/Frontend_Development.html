@@ -1,0 +1,72 @@
+<div class="content-body">
+    <div class="content-section">
+        <h3 class="content-heading">Frontend Development</h3>
+        <p style="color: #4b5563; line-height: 1.75; margin-bottom: 2rem;">
+            The frontend is built with <strong>React 18</strong> and <strong>Vite</strong>. It provides a
+            high-fidelity, reactive interface that synchronizes with the agent's internal state.
+        </p>
+
+        <!-- Dynamic Interface Cards -->
+        <div style="display: grid; grid-template-columns: 1fr; gap: 1.5rem; margin-bottom: 2.5rem;">
+            <div
+                style="background: #ffffff; border: 1px solid #e5e7eb; border-radius: 16px; padding: 1.5rem; box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05); border-top: 4px solid #6366f1;">
+                <h4 style="font-size: 1.1rem; font-weight: 700; color: #1e293b; margin-bottom: 1rem;">Conversational SSE
+                    Integration</h4>
+                <p style="font-size: 0.9rem; color: #64748b; line-height: 1.6; margin-bottom: 1.25rem;">
+                    Instead of traditional JSON polling, we use <code>EventSource</code> to stream agent responses.
+                    Tokens are rendered instantly, creating a fluid, human-like typing experience.
+                </p>
+                <div style="background: #f8fafc; border-radius: 8px; padding: 1rem;">
+                    <div style="font-weight: 600; font-size: 0.85rem; color: #334155; margin-bottom: 0.5rem;">SSE
+                        Message Handler</div>
+                    <pre style="font-size: 0.8rem; color: #475569; margin: 0; font-family: monospace;">
+eventSource.onmessage = (event) => {
+    const data = JSON.parse(event.data);
+    if (data.type === 'token') {
+        setCurrentResponse(prev => prev + data.content);
+    }
+};
+</pre>
+                </div>
+            </div>
+
+            <div
+                style="background: #ffffff; border: 1px solid #e5e7eb; border-radius: 16px; padding: 1.5rem; box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05); border-top: 4px solid #10b981;">
+                <h4 style="font-size: 1.1rem; font-weight: 700; color: #1e293b; margin-bottom: 1rem;">Reactive Component
+                    State</h4>
+                <p style="font-size: 0.9rem; color: #64748b; line-height: 1.6; margin-bottom: 1.25rem;">
+                    The global cart state is automatically updated whenever the agent confirms a successful tool call.
+                    This ensures the UI stays "Proactive" without requiring manual page refreshes.
+                </p>
+                <div style="display: flex; gap: 1rem;">
+                    <div
+                        style="background: #f0fdf4; border: 1px solid #b794f4; padding: 0.75rem 1rem; border-radius: 8px; flex: 1; text-align: center;">
+                        <span style="font-weight: 700; color: #15803d; font-size: 0.8rem;">State Syncing</span>
+                    </div>
+                    <div
+                        style="background: #f0fdf4; border: 1px solid #b794f4; padding: 0.75rem 1rem; border-radius: 8px; flex: 1; text-align: center;">
+                        <span style="font-weight: 700; color: #15803d; font-size: 0.8rem;">Context Ready</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- UI Library -->
+        <h4 style="font-size: 1.25rem; font-weight: 600; color: #1e293b; margin-bottom: 1rem;">Frontend Stack</h4>
+        <div style="display: flex; flex-wrap: wrap; gap: 0.75rem;">
+            <span
+                style="background: #eef2ff; color: #4338ca; padding: 6px 16px; border-radius: 20px; font-weight: 600; font-size: 0.85rem; border: 1px solid #c7d2fe;">React
+                18</span>
+            <span
+                style="background: #eef2ff; color: #4338ca; padding: 6px 16px; border-radius: 20px; font-weight: 600; font-size: 0.85rem; border: 1px solid #c7d2fe;">Vite</span>
+            <span
+                style="background: #eef2ff; color: #4338ca; padding: 6px 16px; border-radius: 20px; font-weight: 600; font-size: 0.85rem; border: 1px solid #c7d2fe;">Lucide
+                Icons</span>
+            <span
+                style="background: #eef2ff; color: #4338ca; padding: 6px 16px; border-radius: 20px; font-weight: 600; font-size: 0.85rem; border: 1px solid #c7d2fe;">Framer
+                Motion</span>
+            <span
+                style="background: #eef2ff; color: #4338ca; padding: 6px 16px; border-radius: 20px; font-weight: 600; font-size: 0.85rem; border: 1px solid #c7d2fe;">Axios</span>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,55 @@
+<div class="content-body">
+    <div class="content-section">
+        <h3 class="content-heading">API Design</h3>
+        <p style="color: #4b5563; line-height: 1.75; margin-bottom: 2rem;">
+            The system utilizes a <strong>Streaming-First API</strong> design.
+            Interaction occurs over standard HTTP endpoints, but agent responses are delivered via
+            server-sent events (SSE) for real-time interactivity.
+        </p>
+
+        <!-- API Endpoint Card 1 -->
+        <div
+            style="background: white; border: 1px solid #e5e7eb; border-radius: 12px; padding: 1.5rem; margin-bottom: 2rem;">
+            <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 1rem;">
+                <div style="display: flex; align-items: center; gap: 12px;">
+                    <span
+                        style="background: #10b981; color: white; padding: 4px 12px; border-radius: 6px; font-weight: 700; font-size: 0.8rem;">POST</span>
+                    <span style="font-family: monospace; font-weight: 600; color: #1e293b;">/api/v1/chat</span>
+                </div>
+                <span style="color: #64748b; font-size: 0.75rem;">Main Chat Stream</span>
+            </div>
+            <div style="background: #f8fafc; border-radius: 8px; padding: 1rem; margin-bottom: 1rem;">
+                <div style="font-weight: 600; font-size: 0.85rem; color: #334155; margin-bottom: 0.5rem;">Request Body
+                </div>
+                <pre style="font-size: 0.8rem; color: #475569; margin: 0;">{
+  "message": "Find waterproof boots",
+  "thread_id": "8b9cad-0e1f-2031",
+  "user_id": 101
+}</pre>
+            </div>
+            <div style="background: #fdf2f8; border-radius: 8px; padding: 1rem;">
+                <div style="font-weight: 600; font-size: 0.85rem; color: #be185d; margin-bottom: 0.5rem;">SSE Streaming
+                    Events</div>
+                <ul style="list-style: none; font-size: 0.85rem; color: #64748b; padding: 0; margin: 0;">
+                    <li>• <code>node:supervisor</code> - Orchestrator reasoning</li>
+                    <li>• <code>node:search_worker</code> - Specialized search tokens</li>
+                    <li>• <code>token:...</code> - Chunk of the final response body</li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- API Endpoint Card 2 -->
+        <div style="background: white; border: 1px solid #e5e7eb; border-radius: 12px; padding: 1.5rem;">
+            <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 1rem;">
+                <div style="display: flex; align-items: center; gap: 12px;">
+                    <span
+                        style="background: #6366f1; color: white; padding: 4px 12px; border-radius: 6px; font-weight: 700; font-size: 0.8rem;">GET</span>
+                    <span style="font-family: monospace; font-weight: 600; color: #1e293b;">/api/v1/cart</span>
+                </div>
+                <span style="color: #64748b; font-size: 0.75rem;">Cart Fetch</span>
+            </div>
+            <p style="font-size: 0.85rem; color: #64748b; margin-bottom: 0;">Returns the current state of a user's cart,
+                often used for UI synchronization after an agent-driven cart modification.</p>
+        </div>
+    </div>
+</div>

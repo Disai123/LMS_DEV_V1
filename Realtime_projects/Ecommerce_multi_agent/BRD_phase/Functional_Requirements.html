@@ -1,0 +1,93 @@
+<div class="content-body">
+    <div class="content-section">
+        <h3 class="content-heading">Functional Requirements</h3>
+        <p style="color: #4b5563; line-height: 1.75; margin-bottom: 2rem;">
+            The Multi-Agent E-commerce Assistant must satisfy a range of functional requirements to ensure an
+            intelligent, autonomous, and secure user experience. These requirements are categorized into core
+            agent orchestration and specific shopping functionalities.
+        </p>
+
+        <div style="display: grid; grid-template-columns: 1fr; gap: 1.5rem; margin-bottom: 2rem;">
+            <!-- Requirement Set 1 -->
+            <div
+                style="background: #ffffff; border: 1px solid #e5e7eb; border-radius: 12px; padding: 1.5rem; box-shadow: 0 1px 3px rgba(0,0,0,0.1);">
+                <div style="display: flex; align-items: center; gap: 12px; margin-bottom: 1rem;">
+                    <div
+                        style="background: #e0f2fe; color: #0ea5e9; width: 32px; height: 32px; border-radius: 8px; display: flex; align-items: center; justify-content: center; font-weight: bold;">
+                        01</div>
+                    <h4 style="font-size: 1.1rem; font-weight: 600; color: #1f2937;">Agent Orchestration</h4>
+                </div>
+                <ul
+                    style="list-style: none; display: flex; flex-direction: column; gap: 0.75rem; color: #4b5563; font-size: 0.95rem;">
+                    <li style="display: flex; gap: 8px;">
+                        <span style="color: #10b981;">✔</span>
+                        <span>Supervisor agent must correctly route user queries to specialized workers (Search, Cart,
+                            Support).</span>
+                    </li>
+                    <li style="display: flex; gap: 8px;">
+                        <span style="color: #10b981;">✔</span>
+                        <span>Workers must report back to the supervisor or transition back to the entry state upon
+                            completion.</span>
+                    </li>
+                    <li style="display: flex; gap: 8px;">
+                        <span style="color: #10b981;">✔</span>
+                        <span>The system must maintain thread-safe conversation history for multi-turn reasoning.</span>
+                    </li>
+                </ul>
+            </div>
+
+            <!-- Requirement Set 2 -->
+            <div
+                style="background: #ffffff; border: 1px solid #e5e7eb; border-radius: 12px; padding: 1.5rem; box-shadow: 0 1px 3px rgba(0,0,0,0.1);">
+                <div style="display: flex; align-items: center; gap: 12px; margin-bottom: 1rem;">
+                    <div
+                        style="background: #fef3c7; color: #d97706; width: 32px; height: 32px; border-radius: 8px; display: flex; align-items: center; justify-content: center; font-weight: bold;">
+                        02</div>
+                    <h4 style="font-size: 1.1rem; font-weight: 600; color: #1f2937;">Tool Execution & Security</h4>
+                </div>
+                <ul
+                    style="list-style: none; display: flex; flex-direction: column; gap: 0.75rem; color: #4b5563; font-size: 0.95rem;">
+                    <li style="display: flex; gap: 8px;">
+                        <span style="color: #10b981;">✔</span>
+                        <span>Agents must only access tools through a secure, Pydantic-validated interface.</span>
+                    </li>
+                    <li style="display: flex; gap: 8px;">
+                        <span style="color: #10b981;">✔</span>
+                        <span>Sensitive data (like `user_id`) must beprogrammatically injected, never provided by the
+                            LLM.</span>
+                    </li>
+                    <li style="display: flex; gap: 8px;">
+                        <span style="color: #10b981;">✔</span>
+                        <span>Graph recursion limits must prevent infinite agent loops.</span>
+                    </li>
+                </ul>
+            </div>
+
+            <!-- Requirement Set 3 -->
+            <div
+                style="background: #ffffff; border: 1px solid #e5e7eb; border-radius: 12px; padding: 1.5rem; box-shadow: 0 1px 3px rgba(0,0,0,0.1);">
+                <div style="display: flex; align-items: center; gap: 12px; margin-bottom: 1rem;">
+                    <div
+                        style="background: #ecfdf5; color: #059669; width: 32px; height: 32px; border-radius: 8px; display: flex; align-items: center; justify-content: center; font-weight: bold;">
+                        03</div>
+                    <h4 style="font-size: 1.1rem; font-weight: 600; color: #1f2937;">Shopping Capabilities</h4>
+                </div>
+                <ul
+                    style="list-style: none; display: flex; flex-direction: column; gap: 0.75rem; color: #4b5563; font-size: 0.95rem;">
+                    <li style="display: flex; gap: 8px;">
+                        <span style="color: #10b981;">✔</span>
+                        <span>Autonomous product search with filtering based on natural language descriptors.</span>
+                    </li>
+                    <li style="display: flex; gap: 8px;">
+                        <span style="color: #10b981;">✔</span>
+                        <span>Proactive cart management (adding/removing items) verified by user confirmation.</span>
+                    </li>
+                    <li style="display: flex; gap: 8px;">
+                        <span style="color: #10b981;">✔</span>
+                        <span>Real-time persistence of shopping sessions across different user devices.</span>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>

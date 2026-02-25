@@ -1,0 +1,41 @@
+<div class="content-body">
+    <div class="content-section">
+        <h3 class="content-heading">Production Deployment Phase</h3>
+        <p style="color: #4b5563; line-height: 1.75; margin-bottom: 2rem;">
+            The Deployment phase focuses on transitioning the Multi-Agent E-commerce Assistant from a local
+            development environment to a scalable, cloud-native production infrastructure.
+        </p>
+
+        <!-- Deployment Cards -->
+        <div
+            style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 1.5rem; margin-bottom: 2rem;">
+            <div
+                style="background: white; border: 1px solid #e2e8f0; border-radius: 12px; padding: 1.5rem; box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05); border-left: 4px solid #6366f1;">
+                <h4 style="font-size: 1rem; font-weight: 700; color: #1e293b; margin-bottom: 0.5rem;">Containerized
+                    Units</h4>
+                <p style="font-size: 0.85rem; color: #64748b; line-height: 1.5;">We use Docker to package the FastAPI
+                    backend and React frontend into immutable containers for consistent deployment.</p>
+            </div>
+            <div
+                style="background: white; border: 1px solid #e2e8f0; border-radius: 12px; padding: 1.5rem; box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05); border-left: 4px solid #10b981;">
+                <h4 style="font-size: 1rem; font-weight: 700; color: #1e293b; margin-bottom: 0.5rem;">Serverless
+                    Persistence</h4>
+                <p style="font-size: 0.85rem; color: #64748b; line-height: 1.5;">PostgreSQL is deployed on managed
+                    instances to ensure high availability for agent checkpoints and project data.</p>
+            </div>
+        </div>
+
+        <div style="background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 12px; padding: 1.5rem;">
+            <h4 style="font-size: 1.125rem; font-weight: 600; color: #1e293b; margin-bottom: 1rem;">Final Objectives
+            </h4>
+            <ul
+                style="list-style: square; list-style-position: inside; color: #475569; font-size: 0.95rem; display: flex; flex-direction: column; gap: 0.75rem;">
+                <li>Configure production environment variables for LLM APIs.</li>
+                <li>Setup Automated CI/CD pipelines via GitHub Actions.</li>
+                <li>Implement centralized logging for agent reasoning monitoring.</li>
+                <li>Establish SSL/TLS encryption for all streaming endpoints.</li>
+                <li>Final testing on staging before the global production roll-out.</li>
+            </ul>
+        </div>
+    </div>
+</div>

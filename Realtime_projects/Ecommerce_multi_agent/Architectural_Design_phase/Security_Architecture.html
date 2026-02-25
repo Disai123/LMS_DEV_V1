@@ -1,0 +1,54 @@
+<div class="content-body">
+    <div class="content-section">
+        <h3 class="content-heading">Security Architecture</h3>
+        <p style="color: #4b5563; line-height: 1.75; margin-bottom: 2rem;">
+            Security in an agentic system is paramount. We implement a <strong>Zero-Trust Agents</strong> model,
+            where workers are never given direct access to raw infrastructure without a strict middleman layer.
+        </p>
+
+        <!-- Security Principles Grid -->
+        <div style="display: grid; grid-template-columns: 1fr; gap: 1rem; margin-bottom: 2.5rem;">
+            <div
+                style="display: flex; gap: 1.5rem; background: #ffffff; border: 1px solid #e5e7eb; border-radius: 12px; padding: 1.5rem; box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);">
+                <div
+                    style="background: #fee2e2; color: #ef4444; width: 44px; height: 44px; border-radius: 10px; display: flex; align-items: center; justify-content: center; font-size: 1.25rem; flex-shrink: 0;">
+                    🛡️</div>
+                <div>
+                    <h4 style="font-size: 1rem; font-weight: 600; color: #1f2937; margin-bottom: 0.5rem;">Tool
+                        Sandboxing</h4>
+                    <p style="font-size: 0.85rem; color: #6b7280; line-height: 1.5;">Every tool call is validated via
+                        Pydantic schemas. Agents only provide the <em>arguments</em>, never the execution logic.
+                        Programmatic overrides ensure `user_id` cannot be hijacked by the LLM.</p>
+                </div>
+            </div>
+
+            <div
+                style="display: flex; gap: 1.5rem; background: #ffffff; border: 1px solid #e5e7eb; border-radius: 12px; padding: 1.5rem; box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);">
+                <div
+                    style="background: #eef2ff; color: #6366f1; width: 44px; height: 44px; border-radius: 10px; display: flex; align-items: center; justify-content: center; font-size: 1.25rem; flex-shrink: 0;">
+                    🔑</div>
+                <div>
+                    <h4 style="font-size: 1rem; font-weight: 600; color: #1f2937; margin-bottom: 0.5rem;">User Context
+                        Injection</h4>
+                    <p style="font-size: 0.85rem; color: #6b7280; line-height: 1.5;">The system retrieves the
+                        authenticated user's ID from the request headers and injects it into the LangGraph
+                        `Configurable` state, ensuring cart actions are only performed for the logged-in user.</p>
+                </div>
+            </div>
+
+            <div
+                style="display: flex; gap: 1.5rem; background: #ffffff; border: 1px solid #e5e7eb; border-radius: 12px; padding: 1.5rem; box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);">
+                <div
+                    style="background: #ecfdf5; color: #10b981; width: 44px; height: 44px; border-radius: 10px; display: flex; align-items: center; justify-content: center; font-size: 1.25rem; flex-shrink: 0;">
+                    🔄</div>
+                <div>
+                    <h4 style="font-size: 1rem; font-weight: 600; color: #1f2937; margin-bottom: 0.5rem;">Recursion
+                        Limits</h4>
+                    <p style="font-size: 0.85rem; color: #6b7280; line-height: 1.5;">To prevent infinite agent loops and
+                        resource exhaustion, the orchestrator graph implements a hard recursion limit (e.g., 20 steps
+                        per turn), returning a fallback error if reached.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,59 @@
+<div class="content-body">
+    <div class="content-section">
+        <h3 class="content-heading">Performance Testing</h3>
+        <p style="color: #4b5563; line-height: 1.75; margin-bottom: 2rem;">
+            Performance testing focuses on <strong>Reasoning Latency</strong> and <strong>Throughput</strong>.
+            Agentic systems are resource-intensive, so we must optimize token usage and reasoning-step efficiency.
+        </p>
+
+        <!-- Metrics Grid -->
+        <div
+            style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 1.5rem; margin-bottom: 2rem;">
+            <div
+                style="background: white; border: 1px solid #e2e8f0; border-radius: 12px; padding: 1.5rem; text-align: center;">
+                <div style="font-size: 2rem; margin-bottom: 0.5rem;">⏱️</div>
+                <h4 style="font-size: 0.9rem; font-weight: 700; color: #1e293b; margin-bottom: 0.25rem;">Wall-Clock Time
+                </h4>
+                <p style="font-size: 0.75rem; color: #64748b;">Avg time for first token streaming.</p>
+                <div style="font-size: 1.25rem; font-weight: 700; color: #6366f1; margin-top: 0.5rem;">1.2s</div>
+            </div>
+            <div
+                style="background: white; border: 1px solid #e2e8f0; border-radius: 12px; padding: 1.5rem; text-align: center;">
+                <div style="font-size: 2rem; margin-bottom: 0.5rem;">📉</div>
+                <h4 style="font-size: 0.9rem; font-weight: 700; color: #1e293b; margin-bottom: 0.25rem;">Token
+                    Efficiency</h4>
+                <p style="font-size: 0.75rem; color: #64748b;">Tokens consumed per successful turn.</p>
+                <div style="font-size: 1.25rem; font-weight: 700; color: #10b981; margin-top: 0.5rem;">240</div>
+            </div>
+            <div
+                style="background: white; border: 1px solid #e2e8f0; border-radius: 12px; padding: 1.5rem; text-align: center;">
+                <div style="font-size: 2rem; margin-bottom: 0.5rem;">🏢</div>
+                <h4 style="font-size: 0.9rem; font-weight: 700; color: #1e293b; margin-bottom: 0.25rem;">Concurrent
+                    Streams</h4>
+                <p style="font-size: 0.75rem; color: #64748b;">Max simultaneous chat sessions.</p>
+                <div style="font-size: 1.25rem; font-weight: 700; color: #f59e0b; margin-top: 0.5rem;">500+</div>
+            </div>
+        </div>
+
+        <div style="background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 12px; padding: 1.5rem;">
+            <h4 style="font-size: 1.125rem; font-weight: 600; color: #1e293b; margin-bottom: 1rem;">Optimization
+                Strategies</h4>
+            <ul
+                style="list-style: none; display: flex; flex-direction: column; gap: 0.75rem; color: #475569; font-size: 0.9rem;">
+                <li style="display: flex; gap: 10px; align-items: flex-start;">
+                    <span style="color: #6366f1; font-weight: bold;">⚡</span>
+                    <span><strong>Prompt Compression:</strong> Stripping history tokens for long-running threads.</span>
+                </li>
+                <li style="display: flex; gap: 10px; align-items: flex-start;">
+                    <span style="color: #6366f1; font-weight: bold;">⚡</span>
+                    <span><strong>Parallel Tooling:</strong> Executing multiple search results simultaneously using
+                        asyncio.</span>
+                </li>
+                <li style="display: flex; gap: 10px; align-items: flex-start;">
+                    <span style="color: #6366f1; font-weight: bold;">⚡</span>
+                    <span><strong>Aggressive Caching:</strong> Using Redis to cache product embedding Lookups.</span>
+                </li>
+            </ul>
+        </div>
+    </div>
+</div>

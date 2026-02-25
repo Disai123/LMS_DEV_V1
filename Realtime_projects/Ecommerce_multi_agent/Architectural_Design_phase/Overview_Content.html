@@ -1,0 +1,55 @@
+<div class="content-body">
+    <div class="content-section">
+        <h3 class="content-heading">Architectural Design Phase</h3>
+        <p style="color: #4b5563; line-height: 1.75; margin-bottom: 2rem;">
+            The Architectural Design phase defines the skeletal structure of the Multi-Agent E-commerce Assistant.
+            We transition from requirements to a robust, scalable system design using a Supervisor-Worker
+            orchestration pattern.
+        </p>
+
+        <div
+            style="background: #f0f9ff; border: 1px solid #bae6fd; border-radius: 12px; padding: 1.5rem; margin-bottom: 2rem;">
+            <h4 style="font-size: 1.125rem; font-weight: 600; color: #0369a1; margin-bottom: 0.75rem;">Key Architecture
+                Components</h4>
+            <div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 1.25rem;">
+                <div style="background: white; padding: 1rem; border-radius: 8px; border: 1px solid #e0f2fe;">
+                    <div style="font-weight: 600; font-size: 0.9rem; margin-bottom: 4px; color: #0369a1;">LangGraph
+                        Orchestrator</div>
+                    <p style="font-size: 0.8rem; color: #64748b;">Manages agent state, state-transitions, and multi-turn
+                        reasoning cycles.</p>
+                </div>
+                <div style="background: white; padding: 1rem; border-radius: 8px; border: 1px solid #e0f2fe;">
+                    <div style="font-weight: 600; font-size: 0.9rem; margin-bottom: 4px; color: #0369a1;">FastAPI
+                        Backend</div>
+                    <p style="font-size: 0.8rem; color: #64748b;">High-performance REST API for streaming agent
+                        responses and handling store logic.</p>
+                </div>
+                <div style="background: white; padding: 1rem; border-radius: 8px; border: 1px solid #e0f2fe;">
+                    <div style="font-weight: 600; font-size: 0.9rem; margin-bottom: 4px; color: #0369a1;">PostgreSQL
+                        Persistence</div>
+                    <p style="font-size: 0.8rem; color: #64748b;">Durable storage for product catalogs, user profiles,
+                        and agent checkpoints.</p>
+                </div>
+                <div style="background: white; padding: 1rem; border-radius: 8px; border: 1px solid #e0f2fe;">
+                    <div style="font-weight: 600; font-size: 0.9rem; margin-bottom: 4px; color: #0369a1;">React & SSE
+                        Streams</div>
+                    <p style="font-size: 0.8rem; color: #64748b;">Reactive frontend integration with Server-Sent Events
+                        for real-time token streaming.</p>
+                </div>
+            </div>
+        </div>
+
+        <div style="background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 12px; padding: 1.5rem;">
+            <h4 style="font-size: 1.125rem; font-weight: 600; color: #1e293b; margin-bottom: 1rem;">Phase Objectives
+            </h4>
+            <ul
+                style="list-style: disc; list-style-position: inside; display: flex; flex-direction: column; gap: 0.75rem; color: #475569; font-size: 0.95rem;">
+                <li>Design the Supervisor-Worker state graph and transition logic.</li>
+                <li>Define the tool-use protocols and secure execution boundaries.</li>
+                <li>Architect the relational schema for catalogs and agent state.</li>
+                <li>Outline the security model for zero-trust tool calling.</li>
+                <li>Establish the performance benchmarks and scalability roadmap.</li>
+            </ul>
+        </div>
+    </div>
+</div>
