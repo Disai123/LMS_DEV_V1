@@ -60,10 +60,7 @@ const StudentRealtimeProjectsPage = () => {
   }
 
   // Split projects into Free and Premium
-  const freeProjects = projects.filter(p => {
-    const pid = p.id?.toLowerCase()?.replace(/[-_]/g, '');
-    return pid === 'todoapp' || pid === 'ecommercemultiagent';
-  });
+  const freeProjects = projects.filter(p => p.id?.toLowerCase()?.replace(/[-_]/g, '') === 'todoapp');
   const premiumProjects = projects.filter(p => p.id?.toLowerCase()?.replace(/[-_]/g, '') !== 'todoapp');
 
   const badgeText = planName ? `${planName.charAt(0).toUpperCase() + planName.slice(1)} Plan` : 'Free Plan';

@@ -1,0 +1,42 @@
+<div class="content-body">
+    <div class="content-section">
+        <h3 class="content-heading">Test Planning & Strategy</h3>
+        <p style="color: #4b5563; line-height: 1.75; margin-bottom: 2rem;">
+            Testing an agentic system like the Trip Planner requires a multi-layered strategy that covers not just
+            code correctness, but reasoning accuracy and tool reliability.
+        </p>
+
+        <div
+            style="background: #ffffff; border: 1px solid #e5e7eb; border-radius: 12px; padding: 2rem; margin-bottom: 2.5rem;">
+            <h4 style="font-weight: 700; color: #111827; margin-bottom: 1.5rem;">QA Categories</h4>
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1rem;">
+                <div style="padding: 1rem; background: #fef2f2; border-radius: 8px; border: 1px solid #fee2e2;">
+                    <h5 style="font-weight: 700; color: #991b1b; margin-bottom: 0.5rem;">Agent Eval</h5>
+                    <p style="font-size: 0.8125rem; color: #b91c1c;">Verifying that the LLM picks the right tool for the
+                        right query (e.g., "Paris" -> OSM Tool).</p>
+                </div>
+                <div style="padding: 1rem; background: #f0fdf4; border-radius: 8px; border: 1px solid #dcfce7;">
+                    <h5 style="font-weight: 700; color: #166534; margin-bottom: 0.5rem;">Mock MCP</h5>
+                    <p style="font-size: 0.8125rem; color: #15803d;">Using mock servers to test agent recovery when a
+                        tool (like Open-Meteo) is down.</p>
+                </div>
+                <div style="padding: 1rem; background: #eff6ff; border-radius: 8px; border: 1px solid #dbeafe;">
+                    <h5 style="font-weight: 700; color: #1e40af; margin-bottom: 0.5rem;">Visual Map QA</h5>
+                    <p style="font-size: 0.8125rem; color: #1d4ed8;">Automated tests for marker clustering and popup
+                        rendering correctness.</p>
+                </div>
+            </div>
+        </div>
+
+        <div style="background: #f8fafc; padding: 1.5rem; border-radius: 12px; border: 1px solid #e2e8f0;">
+            <h5 style="font-weight: 700; color: #1e293b; margin-bottom: 0.5rem;">Test Success Criteria:</h5>
+            <ul
+                style="list-style: none; padding: 0; display: flex; flex-direction: column; gap: 0.5rem; font-size: 0.875rem; color: #475569;">
+                <li>✓ 95% + Trajectory accuracy for common travel queries.</li>
+                <li>✓ Less than 1s latency for tool dispatch.</li>
+                <li>✓ Zero secret leakage in LLM logs.</li>
+                <li>✓ Responsive map tiles across mobile and desktop.</li>
+            </ul>
+        </div>
+    </div>
+</div>

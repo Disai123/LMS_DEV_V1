@@ -1,5 +1,6 @@
 import { useState, useEffect, useRef } from 'react'
 import { motion } from 'framer-motion'
+import { FiSearch, FiX } from 'react-icons/fi'
 
 const CourseFilters = ({ onFilterChange, filters = {}, categories = [] }) => {
   const [localFilters, setLocalFilters] = useState({
@@ -8,10 +9,8 @@ const CourseFilters = ({ onFilterChange, filters = {}, categories = [] }) => {
     search: ''
   })
 
-  // Use ref to store timeout ID so it persists across renders
   const searchTimeoutRef = useRef(null)
 
-  // Sync local filters with parent filters
   useEffect(() => {
     setLocalFilters({
       category: filters.category || '',
@@ -20,67 +19,47 @@ const CourseFilters = ({ onFilterChange, filters = {}, categories = [] }) => {
     })
   }, [filters])
 
-  // Cleanup timeout on unmount
   useEffect(() => {
     return () => {
-      if (searchTimeoutRef.current) {
-        clearTimeout(searchTimeoutRef.current)
-      }
+      if (searchTimeoutRef.current) clearTimeout(searchTimeoutRef.current)
     }
   }, [])
 
-  // Add "All Categories" option to the beginning of the categories array
   const categoryOptions = ['All Categories', ...categories]
-
-  const difficulties = [
-    'All Levels',
-    'Beginner',
-    'Intermediate',
-    'Advanced'
-  ]
-
+  const difficulties = ['All Levels', 'Beginner', 'Intermediate', 'Advanced']
 
   const handleFilterChange = (key, value) => {
     const newFilters = { ...localFilters, [key]: value }
     setLocalFilters(newFilters)
 
-    // Debounce search input to prevent too many API calls
     if (key === 'search') {
-      // Clear existing timeout
-      if (searchTimeoutRef.current) {
-        clearTimeout(searchTimeoutRef.current)
-      }
-      // Set new timeout
+      if (searchTimeoutRef.current) clearTimeout(searchTimeoutRef.current)
       searchTimeoutRef.current = setTimeout(() => {
         onFilterChange(newFilters)
-      }, 300) // 300ms delay for search
+      }, 300)
     } else {
       onFilterChange(newFilters)
     }
   }
 
   const clearFilters = () => {
-    const clearedFilters = {
-      category: '',
-      difficulty: '',
-      search: ''
-    }
+    const clearedFilters = { category: '', difficulty: '', search: '' }
     setLocalFilters(clearedFilters)
     onFilterChange(clearedFilters)
   }
 
-  const hasActiveFilters = Object.values(localFilters).some(value => value !== '')
+  const hasActiveFilters = Object.values(localFilters).some(v => v !== '')
 
   return (
     <motion.div
       initial={{ opacity: 0, y: -20 }}
       animate={{ opacity: 1, y: 0 }}
-      className="bg-white/10 backdrop-blur-sm rounded-xl p-4 mb-6 border border-white/20 shadow-xl"
+      className="bg-white border border-gray-200 rounded-2xl p-5 mb-8 shadow-sm"
     >
       <div className="space-y-4">
         {/* Search */}
         <div>
-          <label className="block text-xs sm:text-sm font-medium text-gray-300 mb-2">
+          <label className="block text-xs font-bold text-slate-700 mb-2 tracking-[0.1em] uppercase">
             Search Courses
           </label>
           <div className="relative">
@@ -89,16 +68,9 @@ const CourseFilters = ({ onFilterChange, filters = {}, categories = [] }) => {
               value={localFilters.search}
               onChange={(e) => handleFilterChange('search', e.target.value)}
               placeholder="Search by title, instructor, or keywords..."
-              className="w-full px-3 py-3 pl-10 bg-white/10 border border-white/20 rounded-lg text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-transparent backdrop-blur-sm min-h-[38px] text-sm"
+              className="w-full px-4 py-3 pl-10 bg-stone-50 border border-gray-200 rounded-xl text-slate-800 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-amber-400 focus:border-amber-400 transition-all text-sm"
             />
-            <svg
-              className="absolute left-3 top-1/2 transform -translate-y-1/2 w-4 h-4 text-gray-400"
-              fill="none"
-              stroke="currentColor"
-              viewBox="0 0 24 24"
-            >
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
-            </svg>
+            <FiSearch className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400" />
           </div>
         </div>
 
@@ -106,16 +78,16 @@ const CourseFilters = ({ onFilterChange, filters = {}, categories = [] }) => {
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
           {/* Category Filter */}
           <div>
-            <label className="block text-xs sm:text-sm font-medium text-gray-300 mb-2">
+            <label className="block text-xs font-bold text-slate-700 mb-2 tracking-[0.1em] uppercase">
               Category
             </label>
             <select
               value={localFilters.category}
               onChange={(e) => handleFilterChange('category', e.target.value)}
-              className="w-full px-3 py-3 bg-white/10 border border-white/20 rounded-lg text-white focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-transparent backdrop-blur-sm min-h-[38px] text-sm"
+              className="w-full px-4 py-3 bg-stone-50 border border-gray-200 rounded-xl text-slate-800 focus:outline-none focus:ring-2 focus:ring-amber-400 focus:border-amber-400 transition-all text-sm appearance-none cursor-pointer"
             >
               {categoryOptions.map((category) => (
-                <option key={category} value={category === 'All Categories' ? '' : category} className="bg-gray-800 text-white">
+                <option key={category} value={category === 'All Categories' ? '' : category}>
                   {category}
                 </option>
               ))}
@@ -124,54 +96,54 @@ const CourseFilters = ({ onFilterChange, filters = {}, categories = [] }) => {
 
           {/* Difficulty Filter */}
           <div>
-            <label className="block text-xs sm:text-sm font-medium text-gray-300 mb-2">
+            <label className="block text-xs font-bold text-slate-700 mb-2 tracking-[0.1em] uppercase">
               Difficulty
             </label>
             <select
               value={localFilters.difficulty}
               onChange={(e) => handleFilterChange('difficulty', e.target.value)}
-              className="w-full px-3 py-3 bg-white/10 border border-white/20 rounded-lg text-white focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-transparent backdrop-blur-sm min-h-[38px] text-sm"
+              className="w-full px-4 py-3 bg-stone-50 border border-gray-200 rounded-xl text-slate-800 focus:outline-none focus:ring-2 focus:ring-amber-400 focus:border-amber-400 transition-all text-sm appearance-none cursor-pointer"
             >
               {difficulties.map((difficulty) => (
-                <option key={difficulty} value={difficulty === 'All Levels' ? '' : difficulty.toLowerCase()} className="bg-gray-800 text-white">
+                <option key={difficulty} value={difficulty === 'All Levels' ? '' : difficulty.toLowerCase()}>
                   {difficulty}
                 </option>
               ))}
             </select>
           </div>
-
         </div>
 
-        {/* Filter Actions */}
+        {/* Active Filters */}
         {hasActiveFilters && (
           <motion.div
             initial={{ opacity: 0, height: 0 }}
             animate={{ opacity: 1, height: 'auto' }}
-            className="flex items-center justify-between pt-4 border-t border-white/20"
+            className="flex items-center justify-between pt-4 border-t border-gray-100"
           >
-            <div className="flex items-center space-x-3">
-              <span className="text-xs sm:text-sm text-gray-300">Active filters:</span>
+            <div className="flex items-center gap-2 flex-wrap">
+              <span className="text-xs text-gray-500 font-medium">Active filters:</span>
               {localFilters.category && (
-                <span className="px-2 py-1 text-xs font-medium bg-gradient-to-r from-purple-500 to-pink-500 text-white rounded-full">
+                <span className="px-2.5 py-1 text-xs font-bold bg-amber-100 text-amber-700 rounded-full border border-amber-200">
                   {localFilters.category}
                 </span>
               )}
               {localFilters.difficulty && (
-                <span className="px-2 py-1 text-xs font-medium bg-gradient-to-r from-blue-500 to-purple-500 text-white rounded-full">
+                <span className="px-2.5 py-1 text-xs font-bold bg-slate-100 text-slate-700 rounded-full border border-slate-200">
                   {localFilters.difficulty}
                 </span>
               )}
               {localFilters.search && (
-                <span className="px-2 py-1 text-xs font-medium bg-gradient-to-r from-pink-500 to-red-500 text-white rounded-full">
-                  "{localFilters.search}"
+                <span className="px-2.5 py-1 text-xs font-bold bg-stone-100 text-stone-700 rounded-full border border-stone-200">
+                  &ldquo;{localFilters.search}&rdquo;
                 </span>
               )}
             </div>
             <button
               onClick={clearFilters}
-              className="text-xs sm:text-sm text-purple-400 hover:text-purple-300 font-medium transition-colors duration-200 min-h-[38px] px-3 py-2 rounded-md hover:bg-purple-500/10"
+              className="flex items-center gap-1.5 text-xs text-gray-500 hover:text-slate-900 font-bold transition-colors duration-200 px-3 py-1.5 rounded-lg hover:bg-gray-100"
             >
-              Clear all filters
+              <FiX className="w-3.5 h-3.5" />
+              Clear all
             </button>
           </motion.div>
         )}

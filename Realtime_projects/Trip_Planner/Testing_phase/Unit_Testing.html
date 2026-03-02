@@ -1,0 +1,43 @@
+<div class="content-body">
+    <div class="content-section">
+        <h3 class="content-heading">Unit Testing & Tool Validation</h3>
+        <p style="color: #4b5563; line-height: 1.75; margin-bottom: 2rem;">
+            Unit tests focus on the individual components of our system: the MCP tool wrappers, the FastAPI routers,
+            and the react utility components.
+        </p>
+
+        <div style="background: #1e293b; border-radius: 12px; padding: 2rem; margin-bottom: 2.5rem; color: #e2e8f0;">
+            <h4 style="font-weight: 700; color: #10b981; margin-bottom: 1.5rem;">Backend Unit Tests (Pytest)</h4>
+            <pre style="font-family: 'Fira Code', monospace; font-size: 0.8125rem; line-height: 1.6; margin: 0;">
+import pytest
+from app.tools import weather_tool
+
+@pytest.mark.asyncio
+async def test_weather_tool_valid_coords():
+    # Test with Paris coordinates
+    result = await weather_tool.invoke({"lat": 48.8566, "lon": 2.3522})
+    assert "temperature" in result
+    assert result["status"] == "success"
+
+def test_pydantic_schema_validation():
+    # Ensure tool inputs are strictly validated
+    with pytest.raises(ValidationError):
+        weather_tool.invoke({"lat": "invalid_string"})
+            </pre>
+        </div>
+
+        <div
+            style="grid: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 1.5rem; display: grid;">
+            <div style="background: #ffffff; border: 1px solid #e5e7eb; border-radius: 12px; padding: 1.5rem;">
+                <h5 style="font-weight: 700; color: #111827; margin-bottom: 0.75rem;">Tool Sandbox Isolation</h5>
+                <p style="font-size: 0.875rem; color: #4b5563;">Unit tests verify that tools cannot access filesystem or
+                    environment variables outside their strict definition.</p>
+            </div>
+            <div style="background: #ffffff; border: 1px solid #e5e7eb; border-radius: 12px; padding: 1.5rem;">
+                <h5 style="font-weight: 700; color: #111827; margin-bottom: 0.75rem;">FastAPI Router Tests</h5>
+                <p style="font-size: 0.875rem; color: #4b5563;">Using <code>TestClient</code> to ensure that headers,
+                    CORS, and auth tokens are correctly handled by our proxy.</p>
+            </div>
+        </div>
+    </div>
+</div>

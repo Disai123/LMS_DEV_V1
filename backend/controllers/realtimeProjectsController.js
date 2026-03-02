@@ -30,7 +30,7 @@ const checkProjectAccess = async (userId, userRole, projectId = null) => {
     // Basic Plan (499): Access to Todo, Ecommerce Web, and AI Agent
     if (planName.includes('basic')) {
       if (!projectId) return true; // Allow access to list
-      const allowed = ['todoapp', 'ecommerceweb', 'ecommerceaiagent', 'ecommercemultiagent'];
+      const allowed = ['todoapp', 'ecommerceweb', 'ecommerceaiagent', 'ecommercemultiagent', 'tripplanner'];
       return allowed.includes(normalizedPid);
     }
 
@@ -83,7 +83,7 @@ const getProjectsList = async (req, res, next) => {
       }
       // Basic Plan (499)
       else if (planName.includes('basic')) {
-        const allowed = ['todoapp', 'ecommerceweb', 'ecommerceaiagent', 'ecommercemultiagent'];
+        const allowed = ['todoapp', 'ecommerceweb', 'ecommerceaiagent', 'ecommercemultiagent', 'tripplanner'];
         if (allowed.includes(pIdNormalized)) {
           isLocked = false;
         }

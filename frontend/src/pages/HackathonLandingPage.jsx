@@ -229,14 +229,19 @@ const HackathonLandingPage = () => {
       <Header />
 
       {/* ── POSTER HERO ────────────────────────────────────────────────────── */}
-      <section className="relative bg-slate-900 overflow-hidden">
-        {/* Grain texture overlay */}
-        <div className="absolute inset-0 opacity-20" style={{
+      <section className="relative bg-slate-950 overflow-hidden">
+        {/* Amber radial spotlight glow — breaks the matte flatness */}
+        <div className="absolute inset-0 pointer-events-none" style={{
+          background: 'radial-gradient(ellipse at 20% 50%, rgba(251,191,36,0.18) 0%, rgba(251,191,36,0.05) 45%, transparent 70%)'
+        }} />
+
+        {/* Grain texture overlay — boosted opacity */}
+        <div className="absolute inset-0 opacity-[0.35]" style={{
           backgroundImage: `url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='1'/%3E%3C/svg%3E")`,
         }} />
 
-        {/* Amber diagonal stripe */}
-        <div className="absolute top-0 right-0 w-1/3 h-full bg-amber-400 opacity-[0.07] skew-x-12 origin-top-right" />
+        {/* Amber diagonal stripe — more visible */}
+        <div className="absolute top-0 right-0 w-1/3 h-full bg-amber-400 opacity-[0.18] skew-x-12 origin-top-right" />
 
         <div className="relative max-w-7xl mx-auto px-6 lg:px-12 py-20 md:py-28">
           <div className="flex flex-col md:flex-row items-start md:items-end justify-between gap-10">
@@ -261,8 +266,11 @@ const HackathonLandingPage = () => {
             </div>
 
             {/* Right — Live stats board */}
-            <div className="bg-white/5 border border-white/10 rounded-2xl p-6 w-full md:w-64 flex-shrink-0">
-              <div className="text-xs font-mono text-slate-500 mb-5 uppercase tracking-widest">Event Dashboard</div>
+            <div className="bg-slate-800 border border-slate-700 rounded-2xl p-6 w-full md:w-64 flex-shrink-0 shadow-xl shadow-black/30">
+              <div className="flex items-center gap-2 mb-5">
+                <div className="w-1.5 h-1.5 rounded-full bg-amber-400 animate-pulse" />
+                <span className="text-xs font-mono text-slate-400 uppercase tracking-widest">Event Dashboard</span>
+              </div>
               <div className="space-y-5">
                 {[
                   { label: 'Total Events', value: hackathons.length, color: 'text-white' },

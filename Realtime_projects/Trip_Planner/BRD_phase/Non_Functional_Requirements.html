@@ -1,0 +1,59 @@
+<div class="content-body">
+    <div class="content-section">
+        <h3 class="content-heading">Non-Functional Requirements</h3>
+        <p style="color: #4b5563; line-height: 1.75; margin-bottom: 2rem;">
+            Non-functional requirements specify the quality attributes and constraints of the system, ensuring it is
+            performant, reliable, and provides a premium user experience.
+        </p>
+
+        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 1.5rem;">
+            <div
+                style="background: #fff; border: 1px solid #e2e8f0; border-radius: 12px; padding: 1.5rem; border-top: 4px solid #0ea5e9;">
+                <h4 style="font-size: 1.1rem; font-weight: 600; color: #1f2937; margin-bottom: 1rem;">Performance &
+                    Latency</h4>
+                <ul
+                    style="list-style: none; padding: 0; color: #4b5563; font-size: 0.95rem; display: flex; flex-direction: column; gap: 0.75rem;">
+                    <li>• MCP tool calls must return results within 3-5 seconds.</li>
+                    <li>• LLM-generated travel insights should be streamed or returned under 8 seconds.</li>
+                    <li>• Map rendering and interactivity must remain fluid (60 FPS target).</li>
+                </ul>
+            </div>
+
+            <div
+                style="background: #fff; border: 1px solid #e2e8f0; border-radius: 12px; padding: 1.5rem; border-top: 4px solid #10b981;">
+                <h4 style="font-size: 1.1rem; font-weight: 600; color: #1f2937; margin-bottom: 1rem;">Reliability &
+                    Fault Tolerance</h4>
+                <ul
+                    style="list-style: none; padding: 0; color: #4b5563; font-size: 0.95rem; display: flex; flex-direction: column; gap: 0.75rem;">
+                    <li>• Graceful handling of external API failures (OSM, Weather) with fallbacks.</li>
+                    <li>• Backend services should be stateless to support horizontal scaling.</li>
+                    <li>• Comprehensive error boundary in React to catch visualization glitches.</li>
+                </ul>
+            </div>
+
+            <div
+                style="background: #fff; border: 1px solid #e2e8f0; border-radius: 12px; padding: 1.5rem; border-top: 4px solid #f59e0b;">
+                <h4 style="font-size: 1.1rem; font-weight: 600; color: #1f2937; margin-bottom: 1rem;">Usability &
+                    Aesthetics</h4>
+                <ul
+                    style="list-style: none; padding: 0; color: #4b5563; font-size: 0.95rem; display: flex; flex-direction: column; gap: 0.75rem;">
+                    <li>• Fully responsive design supporting mobile and desktop users.</li>
+                    <li>• Premium "Glassmorphism" UI with smooth transitions and micro-animations.</li>
+                    <li>• Accessibility compliance for interactive map elements and tables.</li>
+                </ul>
+            </div>
+
+            <div
+                style="background: #fff; border: 1px solid #e2e8f0; border-radius: 12px; padding: 1.5rem; border-top: 4px solid #6366f1;">
+                <h4 style="font-size: 1.1rem; font-weight: 600; color: #1f2937; margin-bottom: 1rem;">Scalability &
+                    Security</h4>
+                <ul
+                    style="list-style: none; padding: 0; color: #4b5563; font-size: 0.95rem; display: flex; flex-direction: column; gap: 0.75rem;">
+                    <li>• Fast API architecture for handling concurrent MCP tool orchestration.</li>
+                    <li>• Secure handling of user input and sanitization to prevent prompt injection.</li>
+                    <li>• Efficient caching of static map data and weather frequent requests.</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>

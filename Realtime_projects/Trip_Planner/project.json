@@ -1,0 +1,30 @@
+{
+    "id": "tripplanner",
+    "name": "Trip Planner",
+    "description": "Build a next-generation travel assistant that integrates real-time maps, weather, and flight data using the Model Context Protocol (MCP) and LLM-driven insights.",
+    "category": "Real-time AI Project",
+    "level": "Intermediate",
+    "duration": "4 Weeks",
+    "stack": [
+        "React",
+        "FastAPI",
+        "MCP (Model Context Protocol)",
+        "Leaflet/OSM",
+        "OpenMeteo API"
+    ],
+    "tags": [
+        "AI Agents",
+        "Travel Tech",
+        "Full Stack",
+        "Real-time Data"
+    ],
+    "phases": [
+        "BRD_phase",
+        "UI_UX_phase",
+        "Architectural_Design_phase",
+        "Development Phase",
+        "Testing_phase",
+        "Deployment Phase"
+    ],
+    "order": 5
+}

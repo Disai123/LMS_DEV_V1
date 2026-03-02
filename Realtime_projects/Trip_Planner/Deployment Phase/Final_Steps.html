@@ -1,0 +1,105 @@
+<div class="content-body">
+    <div class="content-section">
+        <h3 class="content-heading">Final Steps & Verification</h3>
+        <p style="color: #4b5563; line-height: 1.75; margin-bottom: 2rem;">
+            Once the Smart MCP Trip Planner services are live, we perform a series of post-deployment checks to ensure
+            the
+            agent, map interface, and MCP tools are functioning correctly in the production cloud environment.
+        </p>
+
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem; margin-bottom: 2.5rem;">
+            <div style="background: #ffffff; border: 1px solid #e5e7eb; border-radius: 12px; padding: 1.5rem;">
+                <h4 style="font-weight: 700; color: #111827; margin-bottom: 1rem;">1. Agent Heartbeat</h4>
+                <p style="color: #4b5563; font-size: 0.9rem;">Verify that the FastAPI health endpoint returns 200 and
+                    the LangGraph state is correctly initialized via the React frontend.</p>
+            </div>
+            <div style="background: #ffffff; border: 1px solid #e5e7eb; border-radius: 12px; padding: 1.5rem;">
+                <h4 style="font-weight: 700; color: #111827; margin-bottom: 1rem;">2. MCP Sync</h4>
+                <p style="color: #4b5563; font-size: 0.9rem;">Ensure that the tool connection remains stable for the
+                    duration
+                    of the agent's travel planning reasoning cycles.</p>
+            </div>
+        </div>
+
+        <div
+            style="background: linear-gradient(to right, #eff6ff, #e0e7ff); border-radius: 12px; padding: 2.5rem; border: 1px solid #bfdbfe; text-align: center; margin-bottom: 2.5rem;">
+            <h4 style="font-size: 1.75rem; font-weight: 800; color: #1e293b; margin-bottom: 1rem;">Download Your
+                Trip Planner Project</h4>
+            <p style="color: #64748b; max-width: 500px; margin: 0 auto 2.5rem;">
+                Your complete Smart MCP Trip Planner is ready! Download the source code
+                and launch your own AI-powered travel discovery assistant.
+            </p>
+
+            <div style="display: flex; flex-wrap: wrap; gap: 1rem; justify-content: center;">
+                <a href="https://github.com/Disai123/SMART_MCP_TRIP_PLANNER" target="_blank"
+                    style="padding: 1rem 2rem; background: #0ea5e9; color: #ffffff; border-radius: 0.5rem; border: none; cursor: pointer; font-weight: 500; font-size: 1.125rem; display: flex; align-items: center; gap: 0.75rem; transition: background 0.2s; text-decoration: none; box-shadow: 0 10px 15px -3px rgba(14, 165, 233, 0.4); position: relative; z-index: 10;"
+                    onmouseover="this.style.background='#0284c7'" onmouseout="this.style.background='#0ea5e9'">
+                    <svg style="width: 1.5rem; height: 1.5rem;" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                            d="M10 20l4-16m4 4l4 4-4 4M6 16l-4-4 4-4" />
+                    </svg>
+                    Download Source Code
+                </a>
+                <a href="https://github.com/Disai123/SMART_MCP_TRIP_PLANNER/blob/main/Deployment_Guide.md"
+                    target="_blank"
+                    style="padding: 1rem 2rem; background: #e5e7eb; color: #374151; border-radius: 0.5rem; border: none; cursor: pointer; font-weight: 500; font-size: 1.125rem; display: flex; align-items: center; gap: 0.75rem; transition: background 0.2s; text-decoration: none; position: relative; z-index: 10;"
+                    onmouseover="this.style.background='#d1d5db'" onmouseout="this.style.background='#e5e7eb'">
+                    <svg style="width: 1.5rem; height: 1.5rem;" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                            d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+                    </svg>
+                    Download Deployment Guide
+                </a>
+            </div>
+            <div style="margin-top: 1.5rem; font-size: 0.875rem; color: #64748b;">
+                <p>Includes: FastAPI Agent, React Discovery UI, MCP Tool Servers, and Deployment Templates</p>
+            </div>
+        </div>
+
+        <div
+            style="margin-top: 3rem; padding: 2rem; background: linear-gradient(135deg, #fef3c7 0%, #fde68a 100%); border-left: 6px solid #f59e0b; border-radius: 0.75rem; box-shadow: 0 4px 6px rgba(0,0,0,0.1); margin-bottom: 2rem; text-align: left;">
+            <div style="display: flex; align-items: start; gap: 1rem;">
+                <div style="flex-shrink: 0;">
+                    <svg style="width: 3rem; height: 3rem; color: #f59e0b;" fill="none" stroke="currentColor"
+                        viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                            d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
+                    </svg>
+                </div>
+                <div style="flex: 1;">
+                    <h3
+                        style="font-size: 1.5rem; font-weight: 800; color: #92400e; margin-bottom: 0.75rem; display: flex; align-items: center; gap: 0.5rem;">
+                        ⚠️ IMPORTANT: Submit Your Project to Earn Points!
+                    </h3>
+                    <p style="font-size: 1rem; color: #78350f; margin-bottom: 1rem; line-height: 1.6;">
+                        <strong>You must submit your completed Trip Planner to receive points and
+                            certification.</strong>
+                        Simply completing the modules is not enough!
+                    </p>
+                    <div
+                        style="background: rgba(255, 255, 255, 0.7); padding: 1.25rem; border-radius: 0.5rem; border: 2px dashed #f59e0b;">
+                        <p style="font-size: 0.95rem; color: #92400e; margin-bottom: 0.75rem; font-weight: 600;">
+                            📍 How to Submit:
+                        </p>
+                        <ol style="margin: 0; padding-left: 1.5rem; color: #78350f; line-height: 1.8;">
+                            <li><strong>Look for the green circular button</strong> with a checkmark icon in the
+                                <strong>bottom-right corner</strong> of your screen
+                            </li>
+                            <li><strong>Click the assistant icon</strong> to open the submission form</li>
+                            <li><strong>Fill in your project details</strong> (GitHub URL, description, screenshots)
+                            </li>
+                            <li><strong>Submit for review</strong> and wait for admin approval</li>
+                        </ol>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div style="text-align: center;">
+            <button onclick="window.location.href='../index.html'"
+                style="background: #e5e7eb; color: #374151; padding: 12px 32px; border-radius: 30px; border: none; font-weight: 700; cursor: pointer; font-size: 1.1rem; transition: background 0.2s;">
+                Back to Project Overview
+            </button>
+        </div>
+    </div>
+</div>

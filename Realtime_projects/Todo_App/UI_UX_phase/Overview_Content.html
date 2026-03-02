@@ -1,69 +1,227 @@
 <div class="content-body">
     <div class="content-section">
         <h3 class="content-heading">Design Overview</h3>
+
+        <!-- Phase Video -->
+        <div style="margin-bottom: 2rem;">
+            <h4 style="font-size: 1.125rem; font-weight: 600; color: #1f2937; margin-bottom: 1rem;">Phase Overview Video
+            </h4>
+            <div
+                style="background: #ffffff; border: 1px solid #e5e7eb; border-radius: 0.75rem; padding: 1.5rem; box-shadow: 0 1px 3px rgba(0,0,0,0.1);">
+                <div
+                    style="position: relative; padding-bottom: 56.25%; height: 0; overflow: hidden; border-radius: 0.5rem; background: #000;">
+                    <iframe src="https://drive.google.com/file/d/1K3lDGsPomZFCrdLn4_O_2hr5PRSD3qPA/preview"
+                        style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; border: none;"
+                        allow="autoplay; encrypted-media" allowfullscreen>
+                    </iframe>
+                </div>
+                <div style="text-align: center; margin-top: 1rem;">
+                    <p style="color: #6b7280; font-size: 0.875rem;">UI/UX design walkthrough — "Ethereal Focus" design
+                        system, color palette, glassmorphism and component design.</p>
+                </div>
+            </div>
+        </div>
+
         <p style="color: #4b5563; line-height: 1.75; margin-bottom: 2rem;">
             The UI/UX phase, titled <strong>"Ethereal Focus,"</strong> is dedicated to creating a serene and
             distraction-free environment for task management.
             By combining dark aesthetics with modern glassmorphism, we provide a premium experience that encourages
-            productivity.
+            productivity. See the <strong>live result</strong> at:
+            <a href="https://to-do-app-official-frontend.onrender.com" target="_blank"
+                style="color: #6366f1; font-weight: 700; text-decoration: none; border-bottom: 2px solid #6366f1; padding-bottom: 1px;">
+                to-do-app-official-frontend.onrender.com ↗
+            </a>
         </p>
 
         <div
             style="background: #ffffff; border: 1px solid #e5e7eb; border-radius: 12px; padding: 2rem; margin-bottom: 2rem; text-align: center;">
             <h4 style="font-size: 1.25rem; font-weight: 600; color: #111827; margin-bottom: 1.5rem;">Design Concept:
                 Ethereal Focus</h4>
-            <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 1rem;">
+            <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 1rem; margin-bottom: 1.5rem;">
                 <div style="background: #111827; color: #fff; padding: 1.5rem; border-radius: 8px;">
                     <div style="font-size: 1.5rem; margin-bottom: 0.5rem;">🌑</div>
                     <div style="font-weight: 600;">Dark Base</div>
+                    <div style="font-size: 0.75rem; color: #94a3b8; margin-top: 0.5rem;">#0f172a / #1e293b</div>
                 </div>
                 <div
-                    style="background: rgba(255,255,255,0.05); border: 1px solid rgba(0,0,0,0.1); backdrop-filter: blur(10px); color: #111827; padding: 1.5rem; border-radius: 8px;">
+                    style="background: rgba(99,102,241,0.12); border: 1px solid rgba(99,102,241,0.3); backdrop-filter: blur(10px); color: #111827; padding: 1.5rem; border-radius: 8px;">
                     <div style="font-size: 1.5rem; margin-bottom: 0.5rem;">💎</div>
                     <div style="font-weight: 600;">Glass Panels</div>
+                    <div style="font-size: 0.75rem; color: #4b5563; margin-top: 0.5rem;">backdrop-filter: blur</div>
                 </div>
                 <div
                     style="background: linear-gradient(135deg, #6366f1, #a855f7); color: #fff; padding: 1.5rem; border-radius: 8px;">
                     <div style="font-size: 1.5rem; margin-bottom: 0.5rem;">✨</div>
                     <div style="font-weight: 600;">Neon Accents</div>
+                    <div style="font-size: 0.75rem; color: #e9d5ff; margin-top: 0.5rem;">#6366f1 / #a855f7</div>
                 </div>
+            </div>
+        </div>
+
+        <!-- UI Wireframes Section -->
+        <div
+            style="background: linear-gradient(135deg, #f0f4ff 0%, #fdf4ff 100%); border: 1px solid #e0e7ff; border-radius: 12px; padding: 1.5rem; margin-bottom: 2rem;">
+            <h4
+                style="font-size: 1.125rem; font-weight: 700; color: #3730a3; margin-bottom: 0.5rem; display: flex; align-items: center; gap: 8px;">
+                🎨 UI/UX Wireframes
+            </h4>
+            <p style="color: #4b5563; font-size: 0.875rem; margin-bottom: 1.25rem; line-height: 1.6;">
+                The following wireframes illustrate the layout and interaction design of the TaskFlow application —
+                covering the main dashboard and the task creation modal.
+            </p>
+
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;">
+                <!-- Wireframe 1: Main Dashboard -->
+                <div
+                    style="background: white; border: 1px solid #e5e7eb; border-radius: 10px; overflow: hidden; box-shadow: 0 2px 8px rgba(0,0,0,0.06);">
+                    <div
+                        style="background: #0f172a; padding: 1.25rem; border-radius: 8px; margin: 0.75rem; display: flex; align-items: center; justify-content: space-between;">
+                        <div style="display: flex; align-items: center; gap: 8px;">
+                            <div style="width: 10px; height: 10px; background: #6366f1; border-radius: 2px;"></div>
+                            <span style="color: #e2e8f0; font-size: 0.75rem; font-weight: 600;">TaskFlow</span>
+                        </div>
+                        <div
+                            style="background: #6366f1; color: white; font-size: 0.65rem; padding: 3px 8px; border-radius: 12px;">
+                            + Add Task</div>
+                    </div>
+                    <div
+                        style="display: flex; gap: 0; height: 160px; margin: 0 0.75rem 0.75rem 0.75rem; border-radius: 8px; overflow: hidden; background: #0f172a;">
+                        <div
+                            style="width: 35%; background: #1e293b; padding: 0.5rem; display: flex; flex-direction: column; gap: 4px;">
+                            <div
+                                style="background: #6366f1; height: 12px; border-radius: 3px; width: 80%; opacity: 0.9;">
+                            </div>
+                            <div
+                                style="height: 6px; background: rgba(255,255,255,0.15); border-radius: 2px; width: 60%; margin-top: 4px;">
+                            </div>
+                            <div
+                                style="height: 6px; background: rgba(255,255,255,0.1); border-radius: 2px; width: 50%;">
+                            </div>
+                            <div
+                                style="height: 6px; background: rgba(255,255,255,0.1); border-radius: 2px; width: 55%;">
+                            </div>
+                            <div
+                                style="height: 6px; background: rgba(255,255,255,0.1); border-radius: 2px; width: 45%; margin-top: 2px;">
+                            </div>
+                            <div
+                                style="margin-top: auto; height: 4px; background: #6366f1; border-radius: 2px; width: 40%;">
+                            </div>
+                        </div>
+                        <div style="flex: 1; padding: 0.5rem; display: flex; flex-direction: column; gap: 4px;">
+                            <div
+                                style="height: 12px; background: rgba(255,255,255,0.2); border-radius: 3px; width: 90%;">
+                            </div>
+                            <div
+                                style="height: 28px; background: #1e293b; border-radius: 6px; border-left: 3px solid #6366f1; margin-top: 4px;">
+                            </div>
+                            <div
+                                style="height: 28px; background: #1e293b; border-radius: 6px; border-left: 3px solid #a855f7;">
+                            </div>
+                            <div
+                                style="height: 28px; background: #1e293b; border-radius: 6px; border-left: 3px solid #64748b; opacity: 0.5;">
+                            </div>
+                        </div>
+                    </div>
+                    <div style="padding: 0.75rem 1rem 1rem; text-align: center;">
+                        <div style="font-weight: 700; color: #111827; font-size: 0.85rem;">Main Dashboard</div>
+                        <div style="color: #6b7280; font-size: 0.75rem;">Sidebar + Task List Layout</div>
+                    </div>
+                </div>
+
+                <!-- Wireframe 2: Add Task Modal -->
+                <div
+                    style="background: white; border: 1px solid #e5e7eb; border-radius: 10px; overflow: hidden; box-shadow: 0 2px 8px rgba(0,0,0,0.06);">
+                    <div
+                        style="background: #0f172a; padding: 1.25rem; border-radius: 8px; margin: 0.75rem; position: relative; display: flex; align-items: center; justify-content: center;">
+                        <div
+                            style="background: #1e293b; border: 1px solid rgba(99,102,241,0.3); border-radius: 8px; padding: 0.75rem; width: 85%;">
+                            <div style="display: flex; align-items: center; gap: 6px; margin-bottom: 0.5rem;">
+                                <span style="color: #f59e0b; font-size: 0.7rem;">✨</span>
+                                <span style="color: #e2e8f0; font-size: 0.65rem; font-weight: 700;">New Task</span>
+                            </div>
+                            <div
+                                style="height: 14px; background: rgba(255,255,255,0.1); border-radius: 3px; margin-bottom: 6px;">
+                            </div>
+                            <div
+                                style="height: 30px; background: rgba(255,255,255,0.06); border-radius: 3px; margin-bottom: 6px;">
+                            </div>
+                            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 4px; margin-bottom: 6px;">
+                                <div style="height: 14px; background: rgba(255,255,255,0.08); border-radius: 3px;">
+                                </div>
+                                <div style="height: 14px; background: rgba(255,255,255,0.08); border-radius: 3px;">
+                                </div>
+                            </div>
+                            <div style="display: flex; gap: 4px; justify-content: flex-end;">
+                                <div
+                                    style="height: 12px; width: 30%; background: rgba(255,255,255,0.1); border-radius: 12px;">
+                                </div>
+                                <div style="height: 12px; width: 30%; background: #6366f1; border-radius: 12px;"></div>
+                            </div>
+                        </div>
+                    </div>
+                    <div style="padding: 0.75rem 1rem 1rem; text-align: center;">
+                        <div style="font-weight: 700; color: #111827; font-size: 0.85rem;">Add Task Modal</div>
+                        <div style="color: #6b7280; font-size: 0.75rem;">Form with Category & Priority</div>
+                    </div>
+                </div>
+            </div>
+
+            <div style="margin-top: 1rem; text-align: center;">
+                <a href="https://to-do-app-official-frontend.onrender.com" target="_blank"
+                    style="display: inline-flex; align-items: center; gap: 6px; color: #6366f1; font-weight: 600; text-decoration: none; font-size: 0.875rem; border: 1px solid #6366f1; padding: 6px 16px; border-radius: 20px; transition: all 0.2s;"
+                    onmouseover="this.style.background='#6366f1'; this.style.color='white'"
+                    onmouseout="this.style.background='transparent'; this.style.color='#6366f1'">
+                    <svg width="14" height="14" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                            d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
+                    </svg>
+                    See Real Implementation Live ↗
+                </a>
             </div>
         </div>
 
         <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem;">
             <div style="background: #fdf2f8; border-radius: 12px; padding: 1.5rem;">
-                <h4 style="font-size: 1.125rem; font-weight: 600; color: #9d174d; margin-bottom: 1rem;">Key Features
-                </h4>
+                <h4 style="font-size: 1.125rem; font-weight: 600; color: #9d174d; margin-bottom: 1rem;">Key Design
+                    Features</h4>
                 <ul style="list-style: none; display: flex; flex-direction: column; gap: 0.75rem;">
                     <li style="display: flex; align-items: flex-start; gap: 10px; color: #701a75;">
                         <span style="color: #ec4899; font-weight: bold;">✓</span>
-                        Distraction-free minimalist interface
+                        Distraction-free minimalist interface with dark navy base
                     </li>
                     <li style="display: flex; align-items: flex-start; gap: 10px; color: #701a75;">
                         <span style="color: #ec4899; font-weight: bold;">✓</span>
-                        High-contrast dark mode for eye comfort
+                        High-contrast dark mode with indigo/purple accent system
                     </li>
                     <li style="display: flex; align-items: flex-start; gap: 10px; color: #701a75;">
                         <span style="color: #ec4899; font-weight: bold;">✓</span>
-                        Smooth transition and hover effects
+                        Smooth transitions and animated progress tracking
+                    </li>
+                    <li style="display: flex; align-items: flex-start; gap: 10px; color: #701a75;">
+                        <span style="color: #ec4899; font-weight: bold;">✓</span>
+                        Color-coded categories with badge labeling system
                     </li>
                 </ul>
             </div>
             <div style="background: #eff6ff; border-radius: 12px; padding: 1.5rem;">
                 <h4 style="font-size: 1.125rem; font-weight: 600; color: #1e40af; margin-bottom: 1rem;">Design Tools
-                </h4>
+                    Used</h4>
                 <ul style="list-style: none; display: flex; flex-direction: column; gap: 0.75rem;">
                     <li style="display: flex; align-items: flex-start; gap: 10px; color: #1e3a8a;">
                         <span style="color: #3b82f6; font-weight: bold;">•</span>
-                        Figma for wireframing
+                        <strong>Figma</strong> — Wireframing & component design
                     </li>
                     <li style="display: flex; align-items: flex-start; gap: 10px; color: #1e3a8a;">
                         <span style="color: #3b82f6; font-weight: bold;">•</span>
-                        LucidChart for interaction flows
+                        <strong>LucidChart</strong> — User flow & interaction diagrams
                     </li>
                     <li style="display: flex; align-items: flex-start; gap: 10px; color: #1e3a8a;">
                         <span style="color: #3b82f6; font-weight: bold;">•</span>
-                        Adobe Color for palette selection
+                        <strong>Adobe Color</strong> — Palette validation & contrast check
+                    </li>
+                    <li style="display: flex; align-items: flex-start; gap: 10px; color: #1e3a8a;">
+                        <span style="color: #3b82f6; font-weight: bold;">•</span>
+                        <strong>React + Vite</strong> — Production implementation
                     </li>
                 </ul>
             </div>

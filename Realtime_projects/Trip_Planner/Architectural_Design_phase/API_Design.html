@@ -1,0 +1,49 @@
+<div class="content-body">
+    <div class="content-section">
+        <h3 class="content-heading">API Design & Resource Definitions</h3>
+        <p style="color: #4b5563; line-height: 1.75; margin-bottom: 2rem;">
+            The Trip Planner API acts as the secure gateway between the frontend discovery dashboard and the
+            underlying agentic logic. We utilize FastAPI for its native support for asynchronous streaming.
+        </p>
+
+        <div style="display: flex; flex-direction: column; gap: 1.5rem; margin-bottom: 2.5rem;">
+            <div style="background: white; border: 1px solid #e5e7eb; border-radius: 12px; overflow: hidden;">
+                <div
+                    style="background: #f8fafc; padding: 0.75rem 1.25rem; border-bottom: 1px solid #e5e7eb; display: flex; justify-content: space-between; align-items: center;">
+                    <code style="font-weight: 700; color: #0ea5e9;">POST /api/chat/stream</code>
+                    <span
+                        style="font-size: 0.75rem; color: #6b7280; background: #e0f2fe; padding: 0.25rem 0.5rem; border-radius: 4px;">SSE</span>
+                </div>
+                <div style="padding: 1.25rem;">
+                    <p style="font-size: 0.875rem; color: #4b5563; margin-bottom: 1rem;">The primary endpoint for
+                        natural language discovery. Supports token-by-token streaming of agent reasoning.</p>
+                    <div style="font-size: 0.8125rem; background: #fafafa; padding: 1rem; border-radius: 6px;">
+                        <span style="font-weight: 600;">Payload:</span>
+                        <code>{ "query": "Find me a hotel in Paris", "thread_id": "uuid" }</code>
+                    </div>
+                </div>
+            </div>
+
+            <div style="background: white; border: 1px solid #e5e7eb; border-radius: 12px; overflow: hidden;">
+                <div
+                    style="background: #f8fafc; padding: 0.75rem 1.25rem; border-bottom: 1px solid #e5e7eb; display: flex; justify-content: space-between; align-items: center;">
+                    <code style="font-weight: 700; color: #10b981;">GET /api/tools/manifest</code>
+                    <span
+                        style="font-size: 0.75rem; color: #6b7280; background: #d1fae5; padding: 0.25rem 0.5rem; border-radius: 4px;">REST</span>
+                </div>
+                <div style="padding: 1.25rem;">
+                    <p style="font-size: 0.875rem; color: #4b5563; margin-bottom: 1rem;">Exposes available MCP tools to
+                        the frontend, including their schema and UI rendering hints.</p>
+                </div>
+            </div>
+        </div>
+
+        <div style="background: #fef2f2; border: 1px solid #fee2e2; border-radius: 12px; padding: 1.5rem;">
+            <h5 style="font-weight: 700; color: #991b1b; margin-bottom: 0.5rem;">Security Note:</h5>
+            <p style="font-size: 0.875rem; color: #b91c1c;">
+                All API endpoints are protected by Pydantic validation and a zero-trust proxy layer that sanitizes tool
+                inputs before they reach the MCP servers.
+            </p>
+        </div>
+    </div>
+</div>

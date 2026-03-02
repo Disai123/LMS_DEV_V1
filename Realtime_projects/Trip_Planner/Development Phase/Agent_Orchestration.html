@@ -1,0 +1,58 @@
+<div class="content-body">
+    <div class="content-section">
+        <h3 class="content-heading">Agent Orchestration with LangGraph</h3>
+        <p style="color: #4b5563; line-height: 1.75; margin-bottom: 2rem;">
+            The core logic of the Trip Planner is built on LangGraph. This allows us to define cyclic graphs where
+            the agent can reason, call tools, and re-evaluate its plan based on tool outputs.
+        </p>
+
+        <div style="background: #1e293b; border-radius: 12px; padding: 2rem; margin-bottom: 2.5rem; color: #e2e8f0;">
+            <h4 style="font-weight: 700; color: #fbbf24; margin-bottom: 1.5rem;">Orchestration Implementation</h4>
+            <pre style="font-family: 'Fira Code', monospace; font-size: 0.8125rem; line-height: 1.6; margin: 0;">
+from langgraph.graph import StateGraph, END
+
+# Define the state for our agent
+class AgentState(TypedDict):
+    messages: Annotated[Sequence[BaseMessage], operator.add]
+    itinerary_draft: dict
+    current_weather: dict
+
+# Initialize the graph
+workflow = StateGraph(AgentState)
+
+# Add reasoning and tool nodes
+workflow.add_node("agent", call_model)
+workflow.add_node("tools", tool_node)
+
+# Define edges and cycles
+workflow.set_entry_point("agent")
+workflow.add_conditional_edges(
+    "agent",
+    should_continue,
+    {
+        "continue": "tools",
+        "end": END
+    }
+)
+workflow.add_edge("tools", "agent")
+
+# Compile the graph
+app = workflow.compile(checkpointer=memory)
+            </pre>
+        </div>
+
+        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 1.5rem;">
+            <div style="background: white; border: 1px solid #e5e7eb; border-radius: 12px; padding: 1.5rem;">
+                <h5 style="font-weight: 700; color: #111827; margin-bottom: 0.75rem;">State Management</h5>
+                <p style="font-size: 0.875rem; color: #4b5563;">The <code>AgentState</code> keeps track of the evolving
+                    itinerary. Any tool results (like weather) are automatically merged into the shared state.</p>
+            </div>
+            <div style="background: white; border: 1px solid #e5e7eb; border-radius: 12px; padding: 1.5rem;">
+                <h5 style="font-weight: 700; color: #111827; margin-bottom: 0.75rem;">Conditional Routing</h5>
+                <p style="font-size: 0.875rem; color: #4b5563;">The <code>should_continue</code> function analyzes the
+                    LLM's last message. If a tool call is requested, it routes to <code>tools</code>; otherwise, it ends
+                    the turn.</p>
+            </div>
+        </div>
+    </div>
+</div>

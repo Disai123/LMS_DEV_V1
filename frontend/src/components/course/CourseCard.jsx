@@ -1,166 +1,160 @@
 import { motion } from 'framer-motion'
 import { Link } from 'react-router-dom'
 import useCourseLogo from '../../hooks/useCourseLogo'
+import { FiStar, FiUsers, FiClock, FiArrowRight } from 'react-icons/fi'
 
-const CourseCard = ({ course, showInstructor = true, showRating = true }) => {
-  const { logoUrl, loading: logoLoading, error: logoError } = useCourseLogo(course.id, !!course.logo)
-  
-  // Debug logging
-  console.log(`CourseCard - Course ${course.id} (${course.title}):`, {
-    hasLogo: !!course.logo,
-    logoUrl,
-    logoLoading,
-    logoError
-  })
+const difficultyConfig = {
+  beginner: { label: 'Beginner', class: 'bg-green-500/15 text-green-400 border-green-500/20' },
+  intermediate: { label: 'Intermediate', class: 'bg-amber-400/15 text-amber-400 border-amber-400/20' },
+  advanced: { label: 'Advanced', class: 'bg-red-500/15 text-red-400 border-red-500/20' },
+}
+
+// Subtle tinted left-border accent per card index cycle — injected by CourseList
+const ACCENT_BORDERS = [
+  'border-l-blue-500',
+  'border-l-amber-400',
+  'border-l-emerald-500',
+  'border-l-violet-500',
+  'border-l-rose-500',
+  'border-l-cyan-500',
+]
+
+const CourseCard = ({ course, index = 0, showInstructor = true, showRating = true }) => {
+  const { logoUrl } = useCourseLogo(course.id, !!course.logo)
+
+  const difficulty = difficultyConfig[course.difficulty] || difficultyConfig['beginner']
+  const thumbnail = (course.logo && logoUrl) ? logoUrl : course.thumbnail || null
+  const accent = ACCENT_BORDERS[index % ACCENT_BORDERS.length]
+
+  const numericRating = (() => {
+    const r = course.average_rating
+    return r && typeof r === 'number' && !isNaN(r) ? r : 0
+  })()
+
   return (
     <motion.div
       whileHover={{ y: -6, scale: 1.01 }}
-      className="bg-white/10 backdrop-blur-sm rounded-xl hover:bg-white/20 transition-all duration-300 overflow-hidden group border border-white/20 shadow-xl hover:shadow-purple-500/20 w-full"
+      transition={{ duration: 0.22 }}
+      className={`bg-slate-900 border border-slate-800 border-l-4 ${accent} rounded-2xl overflow-hidden group hover:border-slate-700 hover:shadow-2xl hover:shadow-black/30 transition-all duration-300 flex flex-col w-full`}
     >
-      <Link to={`/courses/${course.id}`} className="block">
-        <div className="relative overflow-hidden">
-          {course.logo && logoUrl ? (
+      <Link to={`/courses/${course.id}`} className="flex flex-col flex-1">
+
+        {/* Thumbnail */}
+        <div className="relative overflow-hidden h-44">
+          {thumbnail ? (
             <img
-              src={logoUrl}
+              src={thumbnail}
               alt={course.title}
-              className="w-full h-32 sm:h-40 object-cover group-hover:scale-105 transition-transform duration-500"
+              className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500 opacity-90 group-hover:opacity-100"
             />
-          ) : course.logo && logoLoading ? (
-            <div className="w-full h-32 sm:h-40 bg-gradient-to-br from-purple-600 to-blue-600 flex items-center justify-center">
-              <div className="animate-pulse text-white text-xl font-bold">
-                {course.title?.charAt(0)}
-              </div>
-            </div>
-          ) : course.logo && logoError ? (
-            <div className="w-full h-32 sm:h-40 bg-gradient-to-br from-red-600 to-pink-600 flex items-center justify-center">
-              <div className="text-white text-xl font-bold">
-                {course.title?.charAt(0)}
-              </div>
-            </div>
           ) : (
-            <img
-              src={course.thumbnail || `https://via.placeholder.com/400x225/6366f1/ffffff?text=${course.title?.charAt(0)}`}
-              alt={course.title}
-              className="w-full h-32 sm:h-40 object-cover group-hover:scale-105 transition-transform duration-500"
-            />
+            /* Premium dark fallback with amber dot-grid & glow */
+            <div className="w-full h-full flex items-center justify-center relative overflow-hidden" style={{ background: '#0A0F1E' }}>
+              <div className="absolute inset-0 opacity-[0.07]" style={{
+                backgroundImage: 'radial-gradient(circle, #fbbf24 1px, transparent 1px)',
+                backgroundSize: '22px 22px'
+              }} />
+              <div className="absolute inset-0" style={{
+                background: 'radial-gradient(ellipse at 50% 70%, rgba(251,191,36,0.14) 0%, transparent 65%)'
+              }} />
+              <div className="relative z-10">
+                <div
+                  className="w-16 h-16 rounded-xl flex items-center justify-center mx-auto"
+                  style={{ background: 'rgba(251,191,36,0.08)', border: '1px solid rgba(251,191,36,0.18)' }}
+                >
+                  <span className="text-3xl font-black text-amber-400">{course.title?.charAt(0)}</span>
+                </div>
+              </div>
+            </div>
           )}
-          <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent"></div>
-          <div className="absolute top-4 right-4">
-            <span className={`px-2 py-1 text-[10px] font-bold rounded-full backdrop-blur-sm ${
-              course.difficulty === 'beginner' 
-                ? 'bg-green-500/80 text-white'
-                : course.difficulty === 'intermediate'
-                ? 'bg-yellow-500/80 text-white'
-                : 'bg-red-500/80 text-white'
-            }`}>
-              {course.difficulty}
+
+          {/* Overlay gradient */}
+          <div className="absolute inset-0 bg-gradient-to-t from-slate-900/80 via-transparent to-transparent" />
+
+          {/* Difficulty badge */}
+          <div className="absolute top-3 left-3">
+            <span className={`px-2 py-1 text-[10px] font-bold rounded-lg border backdrop-blur-sm ${difficulty.class}`}>
+              {difficulty.label}
             </span>
           </div>
-          <div className="absolute top-4 left-4">
-            <span className={`px-2 py-1 text-[10px] font-bold rounded-full backdrop-blur-sm ${
-              course.is_published 
-                ? 'bg-blue-500/80 text-white'
-                : 'bg-gray-500/80 text-white'
-            }`}>
-              {course.is_published ? 'Published' : 'Draft'}
+
+          {/* Live/Draft badge */}
+          <div className="absolute top-3 right-3">
+            <span className={`px-2 py-1 text-[10px] font-bold rounded-lg backdrop-blur-sm ${course.is_published
+              ? 'bg-green-500/20 text-green-400 border border-green-500/30'
+              : 'bg-slate-700 text-slate-400 border border-slate-600'
+              }`}>
+              {course.is_published ? '● Live' : 'Draft'}
             </span>
           </div>
         </div>
-        
-        <div className="p-3 sm:p-4">
-          <div className="flex items-center justify-between mb-2">
-            <div className="flex items-center space-x-2">
-              {course.logo && (
-                <>
-                  {logoLoading && (
-                    <div className="w-7 h-7 rounded-lg border border-white/20 bg-gray-600 animate-pulse flex items-center justify-center">
-                      <span className="text-[10px] text-white">...</span>
-                    </div>
-                  )}
-                  {logoUrl && !logoLoading && (
-                    <img
-                      src={logoUrl}
-                      alt={`${course.title} logo`}
-                      className="w-7 h-7 rounded-lg object-cover border border-white/20"
-                      onLoad={() => console.log('Logo loaded successfully for course:', course.title)}
-                    />
-                  )}
-                  {logoError && !logoLoading && (
-                    <div className="w-7 h-7 rounded-lg border border-white/20 bg-gray-600 flex items-center justify-center">
-                      <span className="text-[10px] text-white" title={`Logo error: ${logoError}`}>!</span>
-                    </div>
-                  )}
-                </>
-              )}
-              <span className="text-xs text-purple-400 font-semibold bg-purple-500/20 px-2 py-1 rounded-full">
-                {course.category}
-              </span>
-            </div>
-            <span className="text-xs text-gray-300 bg-white/10 px-2 py-1 rounded-full">
-              {course.enrollment_count || 0} students
+
+        {/* Card Body */}
+        <div className="p-5 flex flex-col flex-1">
+
+          {/* Category + student count */}
+          <div className="flex items-center justify-between mb-3">
+            <span className="text-xs font-black text-amber-400 bg-amber-400/10 border border-amber-400/15 px-2.5 py-1 rounded-full tracking-wide">
+              {course.category}
+            </span>
+            <span className="flex items-center gap-1 text-xs text-slate-500">
+              <FiUsers className="w-3 h-3" />
+              {course.enrollment_count || 0}
             </span>
           </div>
-          
-          <h3 className="text-base sm:text-lg font-bold text-white mb-2 line-clamp-2 group-hover:text-purple-300 transition-colors">
+
+          {/* Title */}
+          <h3 className="text-[15px] font-black text-white mb-2 line-clamp-2 group-hover:text-amber-400 transition-colors duration-200 leading-tight">
             {course.title}
           </h3>
-          
-          <p className="text-gray-300 text-xs sm:text-sm mb-3 line-clamp-2">
+
+          {/* Description */}
+          <p className="text-slate-400 text-xs mb-4 line-clamp-2 leading-relaxed flex-1">
             {course.description}
           </p>
-          
+
+          {/* Instructor */}
           {showInstructor && course.instructor && (
-            <div className="flex items-center mb-3">
+            <div className="flex items-center gap-2 mb-4 pb-4 border-b border-slate-800">
               <img
-                src={course.instructor.avatar || `https://ui-avatars.com/api/?name=${course.instructor.name}&background=6366f1&color=fff`}
+                src={course.instructor.avatar || `https://ui-avatars.com/api/?name=${course.instructor.name}&background=0f172a&color=fbbf24&bold=true`}
                 alt={course.instructor.name}
-                className="w-7 h-7 rounded-full mr-2 border border-white/20"
+                className="w-6 h-6 rounded-full object-cover border border-slate-700"
               />
-              <span className="text-xs sm:text-sm text-gray-300">
-                {course.instructor.name}
-              </span>
+              <span className="text-xs text-slate-400 font-medium">{course.instructor.name}</span>
             </div>
           )}
-          
-          {showRating && (
-            <div className="flex items-center justify-between">
-              <div className="flex items-center">
-                <div className="flex items-center">
-                  {[...Array(5)].map((_, i) => {
-                    const rating = course.average_rating;
-                    const numericRating = rating && typeof rating === 'number' && !isNaN(rating) ? rating : 0;
-                    return (
-                      <svg
-                        key={i}
-                        className={`w-3.5 h-3.5 ${
-                          i < Math.floor(numericRating)
-                            ? 'text-yellow-400'
-                            : 'text-gray-500'
-                        }`}
-                        fill="currentColor"
-                        viewBox="0 0 20 20"
-                      >
-                        <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
-                      </svg>
-                    );
-                  })}
-                  <span className="ml-1.5 text-xs sm:text-sm text-gray-300 font-medium">
-                    {(() => {
-                      const rating = course.average_rating;
-                      if (rating && typeof rating === 'number' && !isNaN(rating)) {
-                        return rating.toFixed(1);
-                      }
-                      return '0.0';
-                    })()}
-                  </span>
-                </div>
-                <span className="text-xs sm:text-sm text-gray-400 ml-2.5">
-                  ({course.total_ratings || 0})
+
+          {/* Footer: Rating + Duration + Arrow */}
+          <div className="flex items-center justify-between mt-auto gap-2">
+            {showRating && (
+              <div className="flex items-center gap-0.5">
+                {[...Array(5)].map((_, i) => (
+                  <FiStar
+                    key={i}
+                    className={`w-3 h-3 ${i < Math.floor(numericRating) ? 'text-amber-400' : 'text-slate-700'}`}
+                    style={{ fill: i < Math.floor(numericRating) ? 'currentColor' : 'none' }}
+                  />
+                ))}
+                <span className="text-xs text-white font-bold ml-1">{numericRating.toFixed(1)}</span>
+                <span className="text-xs text-slate-600 ml-0.5">({course.total_ratings || 0})</span>
+              </div>
+            )}
+
+            <div className="flex items-center gap-3 ml-auto">
+              {course.estimated_duration && (
+                <span className="flex items-center gap-1 text-xs text-slate-500">
+                  <FiClock className="w-3 h-3" />
+                  {course.estimated_duration}h
                 </span>
+              )}
+              <div className="w-7 h-7 bg-amber-400/10 border border-amber-400/15 rounded-lg flex items-center justify-center group-hover:bg-amber-400 group-hover:border-amber-400 transition-all duration-300">
+                <FiArrowRight className="w-3.5 h-3.5 text-amber-400 group-hover:text-slate-900 transition-colors" />
               </div>
             </div>
-          )}
+          </div>
         </div>
+
       </Link>
     </motion.div>
   )
