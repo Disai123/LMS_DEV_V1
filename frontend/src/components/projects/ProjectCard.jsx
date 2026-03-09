@@ -32,17 +32,21 @@ const ProjectCard = ({ project, locked }) => {
   };
 
   const getCategoryIcon = (category) => {
-    if (category?.toLowerCase().includes('web')) return '🌐';
-    if (category?.toLowerCase().includes('mobile')) return '📱';
-    if (category?.toLowerCase().includes('data')) return '📊';
+    const c = category?.toLowerCase() || '';
+    if (c.includes('web') || c.includes('e-commerce') || c.includes('ecommerce')) return '🛒';
+    if (c.includes('mobile')) return '📱';
+    if (c.includes('data')) return '📊';
+    if (c.includes('ai') || c.includes('machine learning') || c.includes('agent')) return '🤖';
+    if (c.includes('travel') || c.includes('mcp') || c.includes('trip')) return '✈️';
+    if (c.includes('multi')) return '🧠';
     return '💻';
   };
 
   // Get static project image based on project name
   const getProjectImage = (name) => {
     const nameLower = name?.toLowerCase() || '';
-    if (nameLower.includes('mobile')) {
-      return '/images/projects/ecommerce-mobile.png';
+    if (nameLower.includes('todo') || nameLower.includes('task')) {
+      return '/images/projects/todo-app.png';
     }
     if (nameLower.includes('multi')) {
       return '/images/projects/ecommerce-multi-agent.png';
@@ -50,7 +54,10 @@ const ProjectCard = ({ project, locked }) => {
     if (nameLower.includes('ai') || nameLower.includes('agent')) {
       return '/images/projects/ecommerce-ai-agent.png';
     }
-    if (nameLower.includes('ecommerce') || nameLower.includes('web')) {
+    if (nameLower.includes('trip') || nameLower.includes('travel') || nameLower.includes('planner')) {
+      return '/images/projects/trip-planner.png';
+    }
+    if (nameLower.includes('ecommerce') || nameLower.includes('web') || nameLower.includes('mobile')) {
       return '/images/projects/ecommerce-web.png';
     }
     return '/images/projects/ecommerce-web.png';
@@ -86,7 +93,10 @@ const ProjectCard = ({ project, locked }) => {
           alt={project.name}
           className="w-full h-32 sm:h-40 object-cover group-hover:scale-105 transition-transform duration-500"
           onError={(e) => {
-            e.target.src = '/images/projects/ecommerce-web.png';
+            const fallbackSrc = getProjectImage(project.name);
+            if (e.target.src !== fallbackSrc && !e.target.src.includes(fallbackSrc)) {
+              e.target.src = fallbackSrc;
+            }
           }}
         />
         <div className="absolute inset-0 bg-gradient-to-t from-black/40 via-transparent to-transparent"></div>

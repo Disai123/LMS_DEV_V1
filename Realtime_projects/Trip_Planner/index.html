@@ -11,7 +11,7 @@
     <link
         href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Poppins:wght@300;400;500;600;700;800;900&display=swap"
         rel="stylesheet">
-    <link rel="stylesheet" href="shared/styles.css">
+    <link rel="stylesheet" href="./shared/styles.css">
     <style>
         * {
             margin: 0;
@@ -273,8 +273,277 @@
             </p>
         </div>
 
+        <!-- Live Application Section -->
+        <div class="overview-section" style="animation-delay: 0.3s;">
+            <h2 class="section-title">🌐 Live Application</h2>
+
+            <!-- Live URL Banner -->
+            <div
+                style="background: linear-gradient(135deg, #0c1a2e 0%, #0d2137 50%, #0c1a2e 100%); border-radius: 12px; padding: 20px 28px; margin-bottom: 28px; border: 1px solid rgba(14,165,233,0.4); display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 16px; box-shadow: 0 0 30px rgba(14,165,233,0.15);">
+                <div style="display: flex; align-items: center; gap: 14px;">
+                    <div
+                        style="width: 12px; height: 12px; background: #22c55e; border-radius: 50%; box-shadow: 0 0 8px #22c55e; animation: tp-pulse 2s ease-in-out infinite; flex-shrink: 0;">
+                    </div>
+                    <div>
+                        <div
+                            style="color: #7dd3fc; font-size: 0.75rem; font-weight: 600; letter-spacing: 0.1em; text-transform: uppercase; margin-bottom: 4px;">
+                            ✈️ Trip Planner Deployed on Render.com</div>
+                        <div
+                            style="color: #e2e8f0; font-size: 1rem; font-weight: 600; font-family: 'SF Mono','Fira Code',monospace;">
+                            https://travel-mcp-official-frontend.onrender.com</div>
+                    </div>
+                </div>
+                <a href="https://travel-mcp-official-frontend.onrender.com" target="_blank" rel="noopener noreferrer"
+                    style="display: inline-flex; align-items: center; gap: 8px; background: linear-gradient(135deg, #0ea5e9, #2563eb); color: white; padding: 12px 24px; border-radius: 50px; text-decoration: none; font-weight: 700; font-size: 0.95rem; box-shadow: 0 8px 24px rgba(14,165,233,0.4); transition: all 0.3s ease; white-space: nowrap;"
+                    onmouseover="this.style.transform='translateY(-2px)'; this.style.boxShadow='0 12px 32px rgba(14,165,233,0.5)'"
+                    onmouseout="this.style.transform='translateY(0)'; this.style.boxShadow='0 8px 24px rgba(14,165,233,0.4)'">
+                    <svg width="16" height="16" fill="none" stroke="currentColor" viewBox="0 0 24 24"
+                        style="flex-shrink:0;">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                            d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
+                    </svg>
+                    Try Live App
+                </a>
+            </div>
+
+            <style>
+                @keyframes tp-pulse {
+
+                    0%,
+                    100% {
+                        box-shadow: 0 0 6px #22c55e;
+                        opacity: 1;
+                    }
+
+                    50% {
+                        box-shadow: 0 0 14px #22c55e;
+                        opacity: 0.7;
+                    }
+                }
+
+                .tp-slider-wrapper {
+                    position: relative;
+                    margin-bottom: 24px;
+                    user-select: none;
+                }
+
+                .tp-track-outer {
+                    overflow: hidden;
+                    border-radius: 12px;
+                    border: 1px solid rgba(14, 165, 233, 0.3);
+                    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.18);
+                    background: #0c1a2e;
+                    cursor: pointer;
+                }
+
+                .tp-track {
+                    display: flex;
+                    transition: transform 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+                    will-change: transform;
+                }
+
+                .tp-slide {
+                    min-width: 100%;
+                    display: flex;
+                    flex-direction: column;
+                }
+
+                .tp-slide-visual {
+                    width: 100%;
+                    height: 340px;
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                    overflow: hidden;
+                }
+
+                .tp-slide-inner {
+                    width: 92%;
+                    max-width: 700px;
+                    background: #ffffff;
+                    border-radius: 10px;
+                    overflow: hidden;
+                    box-shadow: 0 4px 32px rgba(0, 0, 0, 0.4);
+                    border: 1px solid rgba(14, 165, 233, 0.15);
+                }
+
+                .tp-slide-caption {
+                    background: #0f2744;
+                    border-top: 1px solid rgba(14, 165, 233, 0.2);
+                    padding: 12px 20px;
+                    color: #bae6fd;
+                    font-size: 0.85rem;
+                    font-weight: 500;
+                    display: flex;
+                    align-items: center;
+                    gap: 8px;
+                }
+
+                .tp-btn {
+                    position: absolute;
+                    top: 50%;
+                    transform: translateY(-50%);
+                    z-index: 10;
+                    width: 44px;
+                    height: 44px;
+                    border-radius: 50%;
+                    background: rgba(14, 165, 233, 0.85);
+                    border: 2px solid rgba(255, 255, 255, 0.2);
+                    color: white;
+                    cursor: pointer;
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.35);
+                    transition: all 0.25s ease;
+                    outline: none;
+                }
+
+                .tp-btn:hover {
+                    background: rgba(14, 165, 233, 1);
+                    transform: translateY(-50%) scale(1.1);
+                }
+
+                .tp-btn.prev {
+                    left: -18px;
+                }
+
+                .tp-btn.next {
+                    right: -18px;
+                }
+
+                .tp-dots {
+                    display: flex;
+                    justify-content: center;
+                    gap: 8px;
+                    margin-top: 16px;
+                }
+
+                .tp-dot {
+                    width: 8px;
+                    height: 8px;
+                    border-radius: 50%;
+                    background: rgba(14, 165, 233, 0.3);
+                    cursor: pointer;
+                    transition: all 0.3s ease;
+                    border: none;
+                    padding: 0;
+                    outline: none;
+                }
+
+                .tp-dot.active {
+                    background: #0ea5e9;
+                    transform: scale(1.4);
+                    box-shadow: 0 0 8px rgba(14, 165, 233, 0.6);
+                }
+            </style>
+
+            <p style="color: #4b5563; margin-bottom: 20px; font-size: 0.95rem; line-height: 1.7;">
+                The <strong>Smart MCP Trip Planner</strong> is <strong>live and fully deployed</strong> on Render.com.
+                Below are screenshots from the production app showcasing AI-powered travel planning — destination
+                search, flight discovery, hotel recommendations, and full itinerary generation. Click any slide to try
+                it!
+            </p>
+
+            <!-- Screenshot Slider -->
+            <div class="tp-slider-wrapper">
+                <button class="tp-btn prev" onclick="tpMove(-1)" aria-label="Previous slide">
+                    <svg width="18" height="18" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M15 19l-7-7 7-7" />
+                    </svg>
+                </button>
+
+                <div class="tp-track-outer"
+                    onclick="window.open('https://travel-mcp-official-frontend.onrender.com','_blank')">
+                    <div class="tp-track" id="tpTrack">
+
+                        <!-- Slide 1: Trip Planner Home -->
+                        <div class="tp-slide">
+                            <div class="tp-slide-visual">
+                                <img src="./assets/screenshot1.jpg" alt="Trip Planner Home"
+                                    style="width: 100%; height: 100%; object-fit: cover;" />
+                            </div>
+                            <div class="tp-slide-caption"><span style="font-size:1.1rem;">🌍</span> <strong
+                                    style="color:#7dd3fc;">Trip Planner Home</strong> — Modern travel planning interface
+                                with smart destination entry</div>
+                        </div>
+
+                        <!-- Slide 2: Destination Discovery -->
+                        <div class="tp-slide">
+                            <div class="tp-slide-visual">
+                                <img src="./assets/screenshot2.jpg" alt="Destination Discovery"
+                                    style="width: 100%; height: 100%; object-fit: cover;" />
+                            </div>
+                            <div class="tp-slide-caption"><span style="font-size:1.1rem;">🗺️</span> <strong
+                                    style="color:#7dd3fc;">Destination Discovery</strong> — Interactive map integration
+                                for real-time location exploring</div>
+                        </div>
+
+                        <!-- Slide 3: Real-time Weather -->
+                        <div class="tp-slide">
+                            <div class="tp-slide-visual">
+                                <img src="./assets/screenshot3.jpg" alt="Real-time Weather"
+                                    style="width: 100%; height: 100%; object-fit: cover;" />
+                            </div>
+                            <div class="tp-slide-caption"><span style="font-size:1.1rem;">☁️</span> <strong
+                                    style="color:#7dd3fc;">Real-time Weather</strong> — Detailed environmental insights
+                                for your selected destination via MCP</div>
+                        </div>
+
+                        <!-- Slide 4: Flight Intelligence -->
+                        <div class="tp-slide">
+                            <div class="tp-slide-visual">
+                                <img src="./assets/screenshot4.png" alt="Flight Intelligence"
+                                    style="width: 100%; height: 100%; object-fit: cover;" />
+                            </div>
+                            <div class="tp-slide-caption"><span style="font-size:1.1rem;">✈️</span> <strong
+                                    style="color:#7dd3fc;">Flight Intelligence</strong> — Live flight status and
+                                scheduling integrated directly into your itinerary</div>
+                        </div>
+
+                    </div>
+                </div>
+
+                <button class="tp-btn next" onclick="tpMove(1)" aria-label="Next slide">
+                    <svg width="18" height="18" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M9 5l7 7-7 7" />
+                    </svg>
+                </button>
+            </div>
+
+            <!-- Dot Indicators -->
+            <div class="tp-dots" id="tpDots">
+                <button class="tp-dot active" onclick="tpGoTo(0)" aria-label="Slide 1"></button>
+                <button class="tp-dot" onclick="tpGoTo(1)" aria-label="Slide 2"></button>
+                <button class="tp-dot" onclick="tpGoTo(2)" aria-label="Slide 3"></button>
+                <button class="tp-dot" onclick="tpGoTo(3)" aria-label="Slide 4"></button>
+            </div>
+
+            <div style="text-align: center; margin-top: 12px;">
+                <a href="https://travel-mcp-official-frontend.onrender.com" target="_blank"
+                    style="color: #0ea5e9; font-size: 0.875rem; text-decoration: none; font-weight: 600;">
+                    Click any slide to open the live Trip Planner and plan your next adventure →
+                </a>
+            </div>
+
+            <script>
+                (function () {
+                    let cur = 0, total = 4, timer;
+                    function update() {
+                        document.getElementById('tpTrack').style.transform = 'translateX(-' + (cur * 100) + '%)';
+                        document.querySelectorAll('.tp-dot').forEach(function (d, i) { d.classList.toggle('active', i === cur); });
+                    }
+                    window.tpMove = function (d) { cur = (cur + d + total) % total; update(); reset(); };
+                    window.tpGoTo = function (i) { cur = i; update(); reset(); };
+                    function reset() { clearInterval(timer); timer = setInterval(function () { cur = (cur + 1) % total; update(); }, 4000); }
+                    reset();
+                })();
+            </script>
+        </div>
+
         <div class="overview-section">
             <h2 class="section-title">Key Innovations</h2>
+
             <div class="features-grid">
                 <div class="feature-card">
                     <div class="feature-icon">⚓</div>
@@ -332,7 +601,7 @@
         </div>
     </div>
 
-    <script src="shared/navigation.js"></script>
+    <script src="./shared/navigation.js"></script>
 </body>
 
 </html>

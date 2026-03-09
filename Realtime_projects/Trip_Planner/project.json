@@ -2,7 +2,7 @@
     "id": "tripplanner",
     "name": "Trip Planner",
     "description": "Build a next-generation travel assistant that integrates real-time maps, weather, and flight data using the Model Context Protocol (MCP) and LLM-driven insights.",
-    "category": "Real-time AI Project",
+    "category": "MCP Travel Agent",
     "level": "Intermediate",
     "duration": "4 Weeks",
     "stack": [
