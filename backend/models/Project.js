@@ -64,6 +64,12 @@ module.exports = (sequelize, DataTypes) => {
     allowNull: false,
     defaultValue: false
   },
+  required_plan: {
+    type: DataTypes.ENUM('free', 'basic', 'pro'),
+    allowNull: false,
+    defaultValue: 'free',
+    comment: 'Minimum plan required to access this project'
+  },
   published_at: {
     type: DataTypes.DATE,
     allowNull: true

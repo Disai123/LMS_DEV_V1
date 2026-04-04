@@ -73,7 +73,7 @@ const ProjectsUpsell = () => {
                     </button>
 
                     <p className="mt-4 text-sm text-gray-500">
-                        Starting at just <span className="font-bold text-gray-900">₹499/month</span>
+                        Starting at just <span className="font-bold text-gray-900">₹999/year</span>
                     </p>
                 </div>
             </motion.div>

@@ -14,6 +14,7 @@ const AdminProjectSubmissionsPage = () => {
     const [showReviewModal, setShowReviewModal] = useState(false);
     const [feedback, setFeedback] = useState('');
     const [actionLoading, setActionLoading] = useState(false);
+    const [activeTab, setActiveTab] = useState('projects'); // 'projects' or 'internships'
 
     // Filters
     const [statusFilter, setStatusFilter] = useState('all');
@@ -24,7 +25,7 @@ const AdminProjectSubmissionsPage = () => {
     useEffect(() => {
         fetchSubmissions();
         fetchStats();
-    }, [statusFilter, currentPage]);
+    }, [statusFilter, currentPage, activeTab]);
 
     const fetchSubmissions = async () => {
         try {
@@ -35,15 +36,19 @@ const AdminProjectSubmissionsPage = () => {
                 limit: 10
             };
             if (statusFilter !== 'all') params.status = statusFilter;
+            
+            const endpoint = activeTab === 'projects' 
+                ? '/realtime-project-submissions/admin/all' 
+                : '/internships/admin/submissions/all';
 
-            console.log('Fetching submissions with params:', params);
-            const response = await api.get('/realtime-project-submissions/admin/all', { params });
-            console.log('Submissions response:', response.data);
+            console.log(`Fetching ${activeTab} submissions with params:`, params);
+            const response = await api.get(endpoint, { params });
+            console.log(`${activeTab} Submissions response:`, response.data);
 
             setSubmissions(response.data.data || []);
             setPagination(response.data.pagination);
         } catch (err) {
-            console.error('Error fetching submissions:', err);
+            console.error(`Error fetching ${activeTab} submissions:`, err);
             const errorMessage = err.response?.data?.message || err.message || 'Failed to load submissions';
             setError(errorMessage);
         } finally {
@@ -53,10 +58,15 @@ const AdminProjectSubmissionsPage = () => {
 
     const fetchStats = async () => {
         try {
-            const response = await api.get('/realtime-project-submissions/admin/stats');
+            const endpoint = activeTab === 'projects'
+                ? '/realtime-project-submissions/admin/stats'
+                : '/internships/admin/submissions/stats';
+            
+            const response = await api.get(endpoint);
             setStats(response.data.data);
         } catch (err) {
             console.error('Failed to load stats:', err);
+            setStats(null);
         }
     };
 
@@ -65,7 +75,11 @@ const AdminProjectSubmissionsPage = () => {
 
         setActionLoading(true);
         try {
-            await api.post(`/realtime-project-submissions/${selectedSubmission.id}/approve`, {
+            const endpoint = activeTab === 'projects'
+                ? `/realtime-project-submissions/${selectedSubmission.id}/approve`
+                : `/internships/admin/submissions/${selectedSubmission.id}/approve`;
+
+            await api.post(endpoint, {
                 feedback: feedback || 'Great work!'
             });
 
@@ -74,7 +88,7 @@ const AdminProjectSubmissionsPage = () => {
             setFeedback('');
             fetchSubmissions();
             fetchStats();
-            alert('Submission approved and points awarded!');
+            alert(`${activeTab === 'projects' ? 'Project' : 'Internship'} approved and points awarded!`);
         } catch (err) {
             alert(err.response?.data?.message || 'Failed to approve submission');
         } finally {
@@ -90,7 +104,11 @@ const AdminProjectSubmissionsPage = () => {
 
         setActionLoading(true);
         try {
-            await api.post(`/realtime-project-submissions/${selectedSubmission.id}/reject`, {
+            const endpoint = activeTab === 'projects'
+                ? `/realtime-project-submissions/${selectedSubmission.id}/reject`
+                : `/internships/admin/submissions/${selectedSubmission.id}/reject`;
+
+            await api.post(endpoint, {
                 feedback
             });
 
@@ -99,7 +117,7 @@ const AdminProjectSubmissionsPage = () => {
             setFeedback('');
             fetchSubmissions();
             fetchStats();
-            alert('Submission rejected');
+            alert(`${activeTab === 'projects' ? 'Project' : 'Internship'} rejected`);
         } catch (err) {
             alert(err.response?.data?.message || 'Failed to reject submission');
         } finally {
@@ -151,11 +169,14 @@ const AdminProjectSubmissionsPage = () => {
         );
     };
 
-    const filteredSubmissions = submissions.filter(sub =>
-        searchQuery === '' ||
-        sub.project_name.toLowerCase().includes(searchQuery.toLowerCase()) ||
-        sub.student?.name?.toLowerCase().includes(searchQuery.toLowerCase())
-    );
+    const filteredSubmissions = submissions.filter(sub => {
+        const studentName = sub.student?.name || '';
+        const title = activeTab === 'projects' ? (sub.project_name || '') : (sub.internship_title || '');
+        
+        return searchQuery === '' ||
+            title.toLowerCase().includes(searchQuery.toLowerCase()) ||
+            studentName.toLowerCase().includes(searchQuery.toLowerCase());
+    });
 
     if (loading && !submissions.length) {
         return (
@@ -183,9 +204,31 @@ const AdminProjectSubmissionsPage = () => {
                         animate={{ opacity: 1, y: 0 }}
                         className="mb-8"
                     >
-                        <h1 className="text-4xl font-bold text-gray-900 mb-2">Project Submissions</h1>
-                        <p className="text-gray-600">Review and approve student project submissions</p>
+                        <h1 className="text-4xl font-bold text-gray-900 mb-2">Submissions Dashboard</h1>
+                        <p className="text-gray-600">Review and approve student submissions</p>
                     </motion.div>
+
+                    {/* Tab Switcher */}
+                    <div className="flex gap-4 mb-8">
+                        <button
+                            onClick={() => { setActiveTab('projects'); setCurrentPage(1); setStatusFilter('all'); }}
+                            className={`flex-1 py-4 rounded-xl font-bold text-lg shadow-lg transition-all ${activeTab === 'projects'
+                                ? 'bg-indigo-600 text-white transform scale-105'
+                                : 'bg-white text-gray-600 hover:bg-gray-50'
+                                }`}
+                        >
+                            Realtime Projects
+                        </button>
+                        <button
+                            onClick={() => { setActiveTab('internships'); setCurrentPage(1); setStatusFilter('all'); }}
+                            className={`flex-1 py-4 rounded-xl font-bold text-lg shadow-lg transition-all ${activeTab === 'internships'
+                                ? 'bg-indigo-600 text-white transform scale-105'
+                                : 'bg-white text-gray-600 hover:bg-gray-50'
+                                }`}
+                        >
+                            Internships
+                        </button>
+                    </div>
 
                     {/* Statistics Cards */}
                     {stats && (
@@ -306,11 +349,13 @@ const AdminProjectSubmissionsPage = () => {
                                                     </div>
                                                 </td>
                                                 <td className="px-6 py-4">
-                                                    <div className="font-medium text-gray-900">{submission.project_name}</div>
+                                                    <div className="font-medium text-gray-900">
+                                                        {activeTab === 'projects' ? submission.project_name : submission.internship_title}
+                                                    </div>
                                                 </td>
                                                 <td className="px-6 py-4">
                                                     <span className="px-2 py-1 bg-gray-100 rounded text-xs font-medium text-gray-700">
-                                                        {submission.difficulty}
+                                                        {activeTab === 'projects' ? submission.difficulty : (submission.internship?.duration || 'Final Task')}
                                                     </span>
                                                 </td>
                                                 <td className="px-6 py-4 text-sm text-gray-600">
@@ -379,7 +424,9 @@ const AdminProjectSubmissionsPage = () => {
                             {/* Header */}
                             <div className="flex items-start justify-between mb-6">
                                 <div>
-                                    <h2 className="text-2xl font-bold text-gray-900 mb-2">{selectedSubmission.project_name}</h2>
+                                    <h2 className="text-2xl font-bold text-gray-900 mb-2">
+                                        {activeTab === 'projects' ? selectedSubmission.project_name : selectedSubmission.internship_title}
+                                    </h2>
                                     <p className="text-gray-600">
                                         Submitted by {selectedSubmission.student?.name} on {new Date(selectedSubmission.submitted_at).toLocaleDateString()}
                                     </p>

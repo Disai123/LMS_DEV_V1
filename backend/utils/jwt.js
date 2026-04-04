@@ -10,9 +10,7 @@ const JWT_EXPIRE = process.env.JWT_EXPIRE || '7d';
  */
 const generateToken = (payload) => {
   return jwt.sign(payload, JWT_SECRET, {
-    expiresIn: JWT_EXPIRE,
-    issuer: 'lms-api',
-    audience: 'lms-client'
+    expiresIn: JWT_EXPIRE
   });
 };
 
@@ -23,10 +21,7 @@ const generateToken = (payload) => {
  */
 const verifyToken = (token) => {
   try {
-    return jwt.verify(token, JWT_SECRET, {
-      issuer: 'lms-api',
-      audience: 'lms-client'
-    });
+    return jwt.verify(token, JWT_SECRET);
   } catch (error) {
     throw new Error('Invalid token');
   }
@@ -48,9 +43,7 @@ const decodeToken = (token) => {
  */
 const generateRefreshToken = (payload) => {
   return jwt.sign(payload, JWT_SECRET, {
-    expiresIn: '30d',
-    issuer: 'lms-api',
-    audience: 'lms-client'
+    expiresIn: '30d'
   });
 };
 

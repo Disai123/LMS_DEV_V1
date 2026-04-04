@@ -9,6 +9,9 @@ import { usePermissions } from '../hooks/usePermissions';
 import { useProjectProgress } from '../context/ProjectProgressContext';
 import { projectService } from '../services/projectService';
 import LoadingSpinner from '../components/common/LoadingSpinner';
+import usePlanAccess from '../hooks/usePlanAccess';
+import { useAuth } from '../context/AuthContext';
+import LockedContentOverlay from '../components/LockedContentOverlay';
 
 const RealtimeProjectsPageSimple = () => {
   const { projectId } = useParams();
@@ -16,6 +19,9 @@ const RealtimeProjectsPageSimple = () => {
   const navigate = useNavigate();
   const { initializeProject } = useProjectProgress();
   const { permissions, loading: permissionsLoading, hasAccess, isAdmin } = usePermissions();
+  const { user } = useAuth();
+  const { tierOrder: planTierOrder } = usePlanAccess(user?.role);
+  const TIER_ORDER = { free: 0, basic: 1, pro: 2 };
 
   // Fetch projects from API
   const { data: projectsData, isLoading: loading, error } = useQuery(
@@ -159,40 +165,56 @@ const RealtimeProjectsPageSimple = () => {
             className="mb-8"
           >
             <div className="flex flex-col md:flex-row gap-4 justify-center items-center">
-              {projects.map((project, index) => (
-              <motion.button
-                key={project.id}
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.4, delay: index * 0.1 }}
-                whileHover={{ scale: 1.05 }}
-                whileTap={{ scale: 0.95 }}
-                onClick={() => handleProjectSelect(project)}
-                className={`
-                  relative px-8 py-4 rounded-2xl font-semibold text-lg transition-all duration-300
-                  ${selectedProject?.id === project.id
-                    ? 'bg-gradient-to-r from-blue-600 to-blue-700 text-white shadow-lg shadow-blue-500/25'
-                    : 'bg-white/80 text-blue-600 hover:bg-blue-50 hover:text-blue-700 shadow-md hover:shadow-lg'
-                  }
-                  backdrop-blur-sm border border-white/20
-                `}
-              >
-                <span className="relative z-10">
-                  {project.title}
-                </span>
-                
-                {/* Project number badge */}
-                <div className={`
-                  absolute -top-2 -right-2 w-8 h-8 rounded-full flex items-center justify-center text-sm font-bold
-                  ${selectedProject?.id === project.id
-                    ? 'bg-white text-blue-600'
-                    : 'bg-blue-600 text-white'
-                  }
-                `}>
-                  {index + 1}
+              {projects.map((project, index) => {
+                const requiredTier = TIER_ORDER[project.required_plan] ?? 0;
+                const isProjectLocked = !!user && !isAdmin && planTierOrder < requiredTier;
+                return (
+                <div key={project.id} className="relative">
+                  <motion.button
+                    initial={{ opacity: 0, y: 20 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ duration: 0.4, delay: index * 0.1 }}
+                    whileHover={{ scale: 1.05 }}
+                    whileTap={{ scale: 0.95 }}
+                    onClick={() => !isProjectLocked && handleProjectSelect(project)}
+                    className={`
+                      relative px-8 py-4 rounded-2xl font-semibold text-lg transition-all duration-300
+                      ${selectedProject?.id === project.id
+                        ? 'bg-gradient-to-r from-blue-600 to-blue-700 text-white shadow-lg shadow-blue-500/25'
+                        : 'bg-white/80 text-blue-600 hover:bg-blue-50 hover:text-blue-700 shadow-md hover:shadow-lg'
+                      }
+                      backdrop-blur-sm border border-white/20
+                      ${isProjectLocked ? 'opacity-60 cursor-not-allowed' : ''}
+                    `}
+                  >
+                    <span className="relative z-10">
+                      {project.title}
+                      {isProjectLocked && <span className="ml-2 text-sm">🔒</span>}
+                    </span>
+
+                    {/* Project number badge */}
+                    <div className={`
+                      absolute -top-2 -right-2 w-8 h-8 rounded-full flex items-center justify-center text-sm font-bold
+                      ${selectedProject?.id === project.id
+                        ? 'bg-white text-blue-600'
+                        : 'bg-blue-600 text-white'
+                      }
+                    `}>
+                      {index + 1}
+                    </div>
+                  </motion.button>
+                  {isProjectLocked && (
+                    <div className="absolute inset-0 rounded-2xl overflow-hidden pointer-events-auto">
+                      <LockedContentOverlay
+                        requiredPlan={project.required_plan || 'basic'}
+                        contentType="project"
+                        compact={true}
+                      />
+                    </div>
+                  )}
                 </div>
-              </motion.button>
-              ))}
+                );
+              })}
             </div>
           </motion.div>
         )}

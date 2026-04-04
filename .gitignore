@@ -229,3 +229,9 @@ tmp/
 
 # Exclude Dakshath folder (separate project)
 Dakshath/
+
+# Exclude other projects
+e2e_tests/
+Realtime_projects/
+todo_app/
+Mobile_App_Ecommerce/

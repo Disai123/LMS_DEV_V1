@@ -84,14 +84,14 @@
             transform: translateX(-50%);
             width: 100px;
             height: 4px;
-            background: linear-gradient(90deg, transparent, #0ea5e9, #3b82f6, transparent);
+            background: linear-gradient(90deg, transparent, #1e3a5f, #c9a227, transparent);
             border-radius: 2px;
         }
 
         .header h1 {
             font-size: 3rem;
             font-weight: 900;
-            background: linear-gradient(135deg, #0ea5e9 0%, #2563eb 50%, #0369a1 100%);
+            background: linear-gradient(135deg, #1e3a5f 0%, #c9a227 50%, #1e3a5f 100%);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
             background-clip: text;
@@ -143,7 +143,7 @@
             content: '';
             width: 4px;
             height: 28px;
-            background: linear-gradient(180deg, #0ea5e9 0%, #2563eb 100%);
+            background: linear-gradient(180deg, #1e3a5f 0%, #c9a227 100%);
             border-radius: 2px;
         }
 
@@ -224,18 +224,18 @@
             font-size: 1.5rem;
             font-weight: 800;
             color: white;
-            background: linear-gradient(135deg, #0ea5e9 0%, #2563eb 100%);
+            background: linear-gradient(135deg, #1e3a5f 0%, #c9a227 100%);
             border: none;
             border-radius: 50px;
             cursor: pointer;
             transition: all 0.3s ease;
             text-decoration: none;
-            box-shadow: 0 20px 40px rgba(14, 165, 233, 0.3);
+            box-shadow: 0 20px 40px rgba(30, 58, 95, 0.3);
         }
 
         .begin-journey-btn:hover {
             transform: translateY(-5px) scale(1.02);
-            box-shadow: 0 25px 50px rgba(14, 165, 233, 0.4);
+            box-shadow: 0 25px 50px rgba(30, 58, 95, 0.4);
         }
 
         @keyframes fadeInDown {
@@ -250,19 +250,244 @@
             }
         }
 
-        @media (max-width: 768px) {
-            .header h1 {
-                font-size: 2.2rem;
-            }
-
-            .container {
-                padding: 20px;
+        @media (max-width: 480px) {
+            .features-grid {
+                grid-template-columns: 1fr;
             }
         }
-    </style>
+
+        /* Footer Styles */
+        footer {
+            background: linear-gradient(135deg, #0f172a 0%, #1e3a5f 100%);
+            background-size: 200% 200%;
+            animation: footer-gradient-shift 10s ease infinite;
+            color: white;
+            padding: 3rem 1rem;
+            position: relative;
+            overflow: hidden;
+            margin-top: 50px;
+        }
+
+        footer::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: radial-gradient(circle at 20% 50%, rgba(30, 58, 95, 0.3), transparent 50%),
+                radial-gradient(circle at 80% 80%, rgba(201, 162, 39, 0.1), transparent 50%);
+            pointer-events: none;
+        }
+
+        @keyframes footer-gradient-shift {
+            0%, 100% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+        }
+
+        .footer-container {
+            max-width: 1280px;
+            margin: 0 auto;
+        }
+
+        .footer-grid {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 2rem;
+            margin-bottom: 2rem;
+        }
+
+        @media (min-width: 768px) {
+            .footer-grid {
+                grid-template-columns: 2fr 1fr;
+            }
+        }
+
+        .footer-logo {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            text-decoration: none;
+            margin-bottom: 1rem;
+        }
+
+        .footer-logo img {
+            height: 32px;
+            width: auto;
+        }
+
+        .footer-description {
+            color: #d1d5db;
+            margin-bottom: 1.5rem;
+            max-width: 28rem;
+        }
+
+        .footer-social {
+            display: flex;
+            gap: 1rem;
+        }
+
+        .social-link {
+            width: 40px;
+            height: 40px;
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(8px);
+            border-radius: 0.75rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            text-decoration: none;
+            color: white;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .social-link::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 0;
+            height: 0;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.2);
+            transform: translate(-50%, -50%);
+            transition: width 0.4s, height 0.4s;
+        }
+
+        .social-link:hover {
+            background: rgba(255, 255, 255, 0.2);
+            transform: translateY(-2px) scale(1.1);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+            border-color: rgba(255, 255, 255, 0.3);
+        }
+
+        .social-link:hover::before {
+            width: 100px;
+            height: 100px;
+        }
+
+        .footer-links-title {
+            font-size: 1.125rem;
+            font-weight: 600;
+            margin-bottom: 1rem;
+        }
+
+        .footer-links-list {
+            list-style: none;
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+        }
+
+        .footer-links-list a {
+            color: #d1d5db;
+            text-decoration: none;
+            transition: color 0.2s;
+        }
+
+        .footer-links-list a:hover {
+            color: white;
+        }
+
+        .footer-bottom {
+            border-top: 1px solid rgba(255, 255, 255, 0.2);
+            padding-top: 2rem;
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        @media (min-width: 768px) {
+            .footer-bottom {
+                flex-direction: row;
+            }
+        }
+
+        .footer-copyright {
+            color: #d1d5db;
+            font-size: 0.875rem;
+        }
+
+        .footer-policies {
+            display: flex;
+            gap: 1.5rem;
+        }
+
+        .footer-policies a {
+            color: #d1d5db;
+            text-decoration: none;
+            font-size: 0.875rem;
+            transition: color 0.2s;
+        }
+
+        .footer-policies a:hover {
+            color: white;
+        }
+
+        /* Particles */
+        .particles {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+            z-index: 1;
+            pointer-events: none;
+        }
+
+        .particle {
+            position: absolute;
+            width: 3px;
+            height: 3px;
+            background: rgba(30, 58, 95, 0.3);
+            border-radius: 50%;
+            animation: tp-float 25s infinite linear;
+        }
+
+        @keyframes tp-float {
+            0% { transform: translateY(100vh) translateX(0); opacity: 0; }
+            10% { opacity: 0.5; }
+            90% { opacity: 0.5; }
+            100% { transform: translateY(-100px) translateX(100px); opacity: 0; }
+        }
+  
+    /* Project Lifecycle & Overview Features */
+    .lifecycle-wrapper { margin-bottom: 40px; }
+    .lifecycle-container { display: flex; flex-direction: column; gap: 0; position: relative; padding: 20px 0; max-width: 900px; margin: 0 auto; }
+    .step-box { background: rgba(255, 255, 255, 0.95); backdrop-filter: blur(10px); border-radius: 12px; padding: 20px; border: 1px solid rgba(229, 231, 235, 0.8); position: relative; z-index: 2; display: flex; align-items: flex-start; gap: 20px; transition: all 0.3s ease; box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05); }
+    .step-box:hover { transform: translateX(5px) translateY(-2px); box-shadow: 0 12px 25px rgba(99, 102, 241, 0.15); border-color: rgba(99, 102, 241, 0.3); }
+    .step-box.prerequisite { background: linear-gradient(135deg, rgba(238, 242, 255, 0.95), rgba(224, 231, 255, 0.95)); border: 1px solid rgba(165, 180, 252, 0.8); }
+    .step-number-container { display: flex; flex-direction: column; align-items: center; justify-content: flex-start; min-width: 60px; }
+    .step-number { width: 40px; height: 40px; border-radius: 50%; background: linear-gradient(135deg, #6366f1, #8b5cf6); color: white; display: flex; align-items: center; justify-content: center; font-size: 1.2rem; font-weight: 800; box-shadow: 0 4px 10px rgba(99, 102, 241, 0.3); margin-bottom: 5px; }
+    .step-box.prerequisite .step-number { background: linear-gradient(135deg, #f59e0b, #ef4444); box-shadow: 0 4px 10px rgba(245, 158, 11, 0.3); }
+    .step-label { font-size: 0.7rem; font-weight: 700; color: #6b7280; text-transform: uppercase; letter-spacing: 0.05em; }
+    .step-info { flex: 1; text-align: left; }
+    .step-info h4 { font-size: 1.15rem; font-weight: 700; color: #1f2937; margin-bottom: 6px; display: flex; align-items: center; gap: 8px; }
+    .step-info p { font-size: 0.9rem; color: #4b5563; line-height: 1.5; margin-bottom: 0; }
+    .badge-prereq { font-size: 0.65rem; background: #fee2e2; color: #b91c1c; padding: 2px 8px; border-radius: 12px; font-weight: 700; letter-spacing: 0.05em; text-transform: uppercase; margin-left: auto; }
+    .step-io-grid { display: flex; flex-direction: column; gap: 8px; min-width: 250px; background: rgba(249, 250, 251, 0.8); border-radius: 8px; padding: 12px; border: 1px solid rgba(229, 231, 235, 0.5); text-align: left;}
+    .step-io-box { display: flex; flex-direction: column; gap: 4px; }
+    .io-label { font-size: 0.7rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.05em; }
+    .io-in { color: #2563eb; }
+    .io-out { color: #16a34a; }
+    .io-content { font-size: 0.85rem; color: #374151; font-weight: 500; background: white; padding: 6px 10px; border-radius: 6px; border: 1px solid #e5e7eb; }
+    .step-arrow { position: relative; height: 30px; width: 100%; display: flex; justify-content: center; }
+    .step-arrow::after { content: '↓'; position: absolute; font-size: 20px; color: #9ca3af; font-weight: 900; line-height: 30px; animation: bounce 2s infinite; }
+    @keyframes bounce { 0%, 20%, 50%, 80%, 100% { transform: translateY(0); } 40% { transform: translateY(-5px); } 60% { transform: translateY(-3px); } }
+    @media (max-width: 768px) { .step-box { flex-direction: column; gap: 12px; padding: 16px; } .step-number-container { flex-direction: row; gap: 10px; align-items: center; width: 100%; justify-content: flex-start; border-bottom: 1px solid #e5e7eb; padding-bottom: 10px; } .step-number { margin-bottom: 0; } .step-io-grid { width: 100%; } .badge-prereq { margin-left: 0; }}
+
+  </style>
 </head>
 
 <body>
+    <!-- Floating Particles -->
+    <div class="particles" id="particles"></div>
     <div class="container">
         <div class="header">
             <h1>🌍 Smart MCP Trip Planner</h1>
@@ -576,7 +801,9 @@
             </div>
         </div>
 
-        <!-- Video Section -->
+    
+
+\n\n    <!-- Video Section -->
         <div class="video-section">
             <h2 class="section-title" style="margin-bottom: 20px;">Project Demonstration</h2>
             <div class="video-container">
@@ -601,7 +828,74 @@
         </div>
     </div>
 
+    <footer>
+        <div class="footer-container">
+            <div class="footer-grid">
+                <div>
+                    <a href="/" class="footer-logo">
+                        <img src="lms_logo.svg" alt="GNANAM AI">
+                    </a>
+                    <p class="footer-description">
+                        Empowering digital learning with our comprehensive Learning Management System.
+                        Create, manage, and deliver engaging educational experiences.
+                    </p>
+                    <div class="footer-social">
+                        <a href="#" class="social-link" aria-label="Twitter">
+                            <svg width="20" height="20" fill="currentColor" viewBox="0 0 24 24">
+                                <path
+                                    d="M23.953 4.57a10 10 0 01-2.825.775 4.958 4.958 0 002.163-2.723c-.951.555-2.005.959-3.127 1.184a4.92 4.92 0 00-8.384 4.482C7.69 8.095 4.067 6.13 1.64 3.162a4.822 4.822 0 00-.666 2.475c0 1.71.87 3.213 2.188 4.096a4.904 4.904 0 01-2.228-.616v.06a4.923 4.923 0 003.946 4.827 4.996 4.996 0 01-2.212.085 4.936 4.936 0 004.604 3.417 9.867 9.867 0 01-6.102 2.105c-.39 0-.779-.023-1.17-.067a13.995 13.995 0 007.557 2.209c9.053 0 13.998-7.496 13.998-13.985 0-.21 0-.42-.015-.63A9.935 9.935 0 0024 4.59z" />
+                            </svg>
+                        </a>
+                        <a href="#" class="social-link" aria-label="LinkedIn">
+                            <svg width="20" height="20" fill="currentColor" viewBox="0 0 24 24">
+                                <path
+                                    d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433c-1.144 0-2.063-.926-2.063-2.065 0-1.138.92-2.063 2.063-2.063 1.14 0 2.064.925 2.064 2.063 0 1.139-.925 2.065-2.064 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z" />
+                            </svg>
+                        </a>
+                        <a href="#" class="social-link" aria-label="GitHub">
+                            <svg width="20" height="20" fill="currentColor" viewBox="0 0 24 24">
+                                <path
+                                    d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z" />
+                            </svg>
+                        </a>
+                    </div>
+                </div>
+                <div>
+                    <h3 class="footer-links-title">Quick Links</h3>
+                    <ul class="footer-links-list">
+                        <li><a href="/courses">Browse Courses</a></li>
+                        <li><a href="/about">About Us</a></li>
+                        <li><a href="/contact">Contact</a></li>
+                        <li><a href="/help">Help Center</a></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p class="footer-copyright">© 2025 LMS Platform. All rights reserved.</p>
+                <div class="footer-policies">
+                    <a href="#">Privacy Policy</a>
+                    <a href="#">Terms of Service</a>
+                    <a href="#">Cookie Policy</a>
+                </div>
+            </div>
+        </div>
+    </footer>
+
     <script src="./shared/navigation.js"></script>
+    <script>
+        // Create floating particles - subtle
+        const particlesContainer = document.getElementById('particles');
+        const particleCount = 20;
+
+        for (let i = 0; i < particleCount; i++) {
+            const particle = document.createElement('div');
+            particle.className = 'particle';
+            particle.style.left = Math.random() * 100 + '%';
+            particle.style.animationDelay = Math.random() * 25 + 's';
+            particle.style.animationDuration = (20 + Math.random() * 10) + 's';
+            particlesContainer.appendChild(particle);
+        }
+    </script>
 </body>
 
 </html>

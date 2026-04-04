@@ -1,4 +1,4 @@
-const { Course, User, Enrollment, CourseChapter, CourseTest, ChapterProgress, ActivityLog, FileUpload, TestQuestion, TestQuestionOption, TestAttempt, TestAnswer, Certificate, Achievement, sequelize } = require('../models');
+const { Course, User, Enrollment, CourseChapter, CourseTest, ChapterProgress, ActivityLog, FileUpload, TestQuestion, TestQuestionOption, TestAttempt, TestAnswer, Certificate, Achievement, Subscription, Plan, sequelize } = require('../models');
 const logger = require('../utils/logger');
 const { AppError } = require('../middleware/errorHandler');
 const { Op } = require('sequelize');
@@ -8,18 +8,19 @@ const { Op } = require('sequelize');
  */
 const getCourses = async (req, res, next) => {
   try {
-    const { 
-      q, 
-      category, 
-      difficulty, 
-      page = 1, 
-      limit = 10, 
-      sort = 'created_at', 
-      order = 'desc' 
+    const {
+      q,
+      category,
+      difficulty,
+      is_free,
+      page = 1,
+      limit = 10,
+      sort = 'created_at',
+      order = 'desc'
     } = req.query;
 
     const offset = (page - 1) * limit;
-    
+
     // Debug logging
     console.log('=== COURSE FILTERING DEBUG ===');
     console.log('req.user:', req.user ? { id: req.user.id, role: req.user.role, name: req.user.name } : 'No user');
@@ -27,24 +28,29 @@ const getCourses = async (req, res, next) => {
 
     // Apply filters - build conditions array to avoid circular references
     const conditions = [];
-    
+
     // Base condition for published courses or admin access
     if (req.user && req.user.role === 'admin') {
       // Admin sees all courses - no base condition needed
     } else {
       conditions.push({ is_published: true });
     }
-    
+
     // Add category filter
     if (category) {
       conditions.push({ category: category });
     }
-    
+
     // Add difficulty filter
     if (difficulty) {
       conditions.push({ difficulty: difficulty });
     }
-    
+
+    // Add is_free filter
+    if (is_free !== undefined && is_free !== '') {
+      conditions.push({ is_free: is_free === 'true' });
+    }
+
     // Add search condition
     if (q) {
       conditions.push({
@@ -59,10 +65,10 @@ const getCourses = async (req, res, next) => {
         ]
       });
     }
-    
+
     // Build final where clause
     const finalWhereClause = conditions.length > 0 ? { [Op.and]: conditions } : {};
-    
+
     console.log('conditions:', conditions);
     console.log('finalWhereClause:', JSON.stringify(finalWhereClause, null, 2));
     console.log('==============================');
@@ -207,7 +213,7 @@ const getTopRatedCourses = async (req, res, next) => {
     const { limit = 10 } = req.query;
 
     const courses = await Course.findAll({
-      where: { 
+      where: {
         is_published: true,
         total_ratings: { [Op.gte]: 1 }
       },
@@ -323,7 +329,7 @@ const getCourseById = async (req, res, next) => {
     // Check for any enrollment status except 'dropped' (enrolled, in-progress, completed)
     let enrollment = null;
     const isAuthenticated = !!req.user;
-    
+
     if (req.user) {
       enrollment = await Enrollment.findOne({
         where: {
@@ -337,17 +343,39 @@ const getCourseById = async (req, res, next) => {
     }
 
     // Determine access level: 'preview' (no auth), 'authenticated' (auth but not enrolled), 'enrolled' (auth + enrolled)
-    // User has full access if they have any enrollment (not dropped)
-    const hasFullAccess = isAuthenticated && enrollment && enrollment.status !== 'dropped';
+    // Locked for free users on premium courses
+    const isPremiumCourse = !course.is_free;
+    const isAdmin = isAuthenticated && req.user.role === 'admin';
+
+    let isFreeUser = isAuthenticated && req.user.plan_type === 'free';
+    if (isAuthenticated && isFreeUser) {
+      const activeSub = await Subscription.findOne({
+        where: { user_id: req.user.id, status: 'active' },
+        include: [{ model: Plan, as: 'plan' }]
+      });
+      if (activeSub && activeSub.plan) {
+        const planName = activeSub.plan.name.toLowerCase();
+        if (!planName.includes('free')) {
+          isFreeUser = false;
+        }
+      }
+    }
+
+    // User has full access if they have any enrollment (not dropped) OR if they are admin
+    const hasFullAccess = isAdmin || (isAuthenticated && enrollment && enrollment.status !== 'dropped');
+
+    // If premium course and free user (not admin), they can only see preview even if by some logic they got enrolled
+    const accessLocked = !isAdmin && isPremiumCourse && isFreeUser;
+
 
     // Combine chapters and tests into a single content array
     const allContent = [];
-    
+
     // Add chapters
     if (course.chapters) {
       course.chapters.forEach(chapter => {
         const chapterInfo = chapter.getPublicInfo();
-        
+
         // For preview mode, exclude content URLs but keep metadata
         if (!hasFullAccess) {
           // Return preview data only (metadata without content URLs)
@@ -373,7 +401,7 @@ const getCourseById = async (req, res, next) => {
         }
       });
     }
-    
+
     // Add tests as the last items (only show test metadata in preview, not test content)
     if (course.tests) {
       course.tests.forEach(test => {
@@ -400,7 +428,7 @@ const getCourseById = async (req, res, next) => {
         }
       });
     }
-    
+
     // Sort by chapter_order
     allContent.sort((a, b) => a.chapter_order - b.chapter_order);
 
@@ -419,7 +447,8 @@ const getCourseById = async (req, res, next) => {
           enrolled_at: enrollment.enrolled_at,
           completed_at: enrollment.completed_at
         } : null,
-        accessLevel: hasFullAccess ? 'enrolled' : (isAuthenticated ? 'authenticated' : 'preview')
+        accessLevel: accessLocked ? 'locked' : (hasFullAccess ? 'enrolled' : (isAuthenticated ? 'authenticated' : 'preview')),
+        isPremium: isPremiumCourse
       }
     };
 
@@ -440,7 +469,7 @@ const getCourseById = async (req, res, next) => {
 const createCourse = async (req, res, next) => {
   try {
     // Clean learning objectives - filter out empty strings
-    const cleanedLearningObjectives = req.body.learning_objectives 
+    const cleanedLearningObjectives = req.body.learning_objectives
       ? req.body.learning_objectives.filter(obj => obj && obj.trim() !== '')
       : [];
 
@@ -525,10 +554,10 @@ const updateCourse = async (req, res, next) => {
  */
 const deleteCourse = async (req, res, next) => {
   let transaction;
-  
+
   try {
     const { id } = req.params;
-    
+
     // Validate course ID
     if (!id || isNaN(parseInt(id))) {
       throw new AppError('Invalid course ID', 400);
@@ -536,9 +565,9 @@ const deleteCourse = async (req, res, next) => {
 
     // Start transaction
     transaction = await sequelize.transaction();
-    
+
     // Find course within transaction
-    const course = await Course.findByPk(id, { 
+    const course = await Course.findByPk(id, {
       transaction
     });
 
@@ -712,7 +741,7 @@ const deleteCourse = async (req, res, next) => {
     if (transaction && !transaction.finished) {
       await transaction.rollback();
     }
-    
+
     logger.error('Delete course error:', {
       error: error.message,
       stack: error.stack,
@@ -720,7 +749,7 @@ const deleteCourse = async (req, res, next) => {
       userId: req.user?.id,
       errorName: error.name
     });
-    
+
     // If it's a foreign key constraint error, provide a more helpful message
     if (error.name === 'SequelizeForeignKeyConstraintError') {
       const appError = new AppError(
@@ -729,7 +758,7 @@ const deleteCourse = async (req, res, next) => {
       );
       return next(appError);
     }
-    
+
     next(error);
   }
 };
@@ -836,24 +865,24 @@ const uploadCourseLogo = async (req, res, next) => {
     const logoFile = req.file;
     const fs = require('fs');
     const path = require('path');
-    
+
     // Create uploads/logos directory if it doesn't exist
     const uploadDir = path.join(__dirname, '../uploads/logos');
     if (!fs.existsSync(uploadDir)) {
       fs.mkdirSync(uploadDir, { recursive: true });
     }
-    
+
     // Generate a unique filename
     const fileExtension = logoFile.originalname.split('.').pop();
     const fileName = `course-${id}-logo-${Date.now()}.${fileExtension}`;
     const filePath = path.join(uploadDir, fileName);
-    
+
     // Save file to disk
     fs.writeFileSync(filePath, logoFile.buffer);
-    
+
     // Create URL for the uploaded file
     const logoUrl = `/uploads/logos/${fileName}`;
-    
+
     // Update course with logo URL
     await course.update({ logo: logoUrl });
 
@@ -879,7 +908,7 @@ const getCourseLogo = async (req, res, next) => {
     console.log('Request headers:', req.headers);
     console.log('Request method:', req.method);
     console.log('Request URL:', req.originalUrl);
-    
+
     const course = await Course.findByPk(id);
 
     if (!course) {
@@ -896,13 +925,13 @@ const getCourseLogo = async (req, res, next) => {
 
     const fs = require('fs');
     const path = require('path');
-    
+
     // Extract filename from logo URL
     const logoPath = course.logo.startsWith('/') ? course.logo.substring(1) : course.logo;
     const fullPath = path.join(__dirname, '..', logoPath);
-    
+
     console.log('Full logo path:', fullPath);
-    
+
     // Check if file exists
     if (!fs.existsSync(fullPath)) {
       console.log('Logo file not found at path:', fullPath);
@@ -914,7 +943,7 @@ const getCourseLogo = async (req, res, next) => {
     // Read file and convert to base64
     const fileBuffer = fs.readFileSync(fullPath);
     const base64String = fileBuffer.toString('base64');
-    
+
     // Determine MIME type based on file extension
     const ext = path.extname(fullPath).toLowerCase();
     let mimeType = 'image/jpeg';
@@ -922,10 +951,10 @@ const getCourseLogo = async (req, res, next) => {
     else if (ext === '.gif') mimeType = 'image/gif';
     else if (ext === '.webp') mimeType = 'image/webp';
     else if (ext === '.svg') mimeType = 'image/svg+xml';
-    
+
     console.log('MIME type:', mimeType);
     console.log('Base64 length:', base64String.length);
-    
+
     // Return base64 data URL
     const response = {
       success: true,
@@ -933,15 +962,15 @@ const getCourseLogo = async (req, res, next) => {
         logoUrl: `data:${mimeType};base64,${base64String}`
       }
     };
-    
+
     console.log('Sending JSON response with base64 data URL');
-    
+
     // Set cache-busting headers
     res.setHeader('Cache-Control', 'no-cache, no-store, must-revalidate');
     res.setHeader('Pragma', 'no-cache');
     res.setHeader('Expires', '0');
     res.setHeader('Content-Type', 'application/json');
-    
+
     res.json(response);
   } catch (error) {
     console.error('Get course logo error:', error);
@@ -966,7 +995,7 @@ const deleteCourseFile = async (req, res, next) => {
 const getCourseContent = async (req, res, next) => {
   try {
     const { id } = req.params;
-    
+
     const course = await Course.findByPk(id, {
       include: [
         {
@@ -1006,6 +1035,25 @@ const getCourseContent = async (req, res, next) => {
       throw new AppError('Course not found', 404);
     }
 
+    // Protection: Prevent free users from getting premium course content
+    if (req.user && req.user.role !== 'admin' && req.user.plan_type === 'free' && !course.is_free) {
+      const activeSub = await Subscription.findOne({
+        where: { user_id: req.user.id, status: 'active' },
+        include: [{ model: Plan, as: 'plan' }]
+      });
+      let isActuallyFree = true;
+      if (activeSub && activeSub.plan) {
+         const planName = activeSub.plan.name.toLowerCase();
+         if (!planName.includes('free')) {
+           isActuallyFree = false;
+         }
+      }
+      if (isActuallyFree) {
+        throw new AppError('This is a premium course. Please upgrade your plan to access this content.', 403);
+      }
+    }
+
+
     // Check if user is enrolled (for students)
     if (req.user.role === 'student' && !req.enrollment) {
       throw new AppError('You must enroll in this course to access its content', 403);
@@ -1023,7 +1071,7 @@ const getCourseContent = async (req, res, next) => {
 
     // Combine chapters and tests into a single content array
     const allContent = [];
-    
+
     // Add all published chapters
     if (course.chapters) {
       course.chapters.forEach(chapter => {
@@ -1033,10 +1081,10 @@ const getCourseContent = async (req, res, next) => {
         });
       });
     }
-    
+
     // Sort by chapter_order
     allContent.sort((a, b) => a.chapter_order - b.chapter_order);
-    
+
     console.log('Final content array length:', allContent.length);
     console.log('Content types:', allContent.map(item => ({ type: item.type, title: item.title })));
     console.log('================================');
@@ -1080,6 +1128,25 @@ const enrollInCourse = async (req, res, next) => {
       throw new AppError('Course is not published', 400);
     }
 
+    // Check if free user is trying to enroll in a premium course
+    if (!course.is_free && req.user.plan_type === 'free' && req.user.role !== 'admin') {
+      const activeSub = await Subscription.findOne({
+        where: { user_id: req.user.id, status: 'active' },
+        include: [{ model: Plan, as: 'plan' }]
+      });
+      let isActuallyFree = true;
+      if (activeSub && activeSub.plan) {
+         const planName = activeSub.plan.name.toLowerCase();
+         if (!planName.includes('free')) {
+           isActuallyFree = false;
+         }
+      }
+      if (isActuallyFree) {
+        throw new AppError('This is a premium course. Please upgrade your plan to enroll.', 403);
+      }
+    }
+
+
     // Check if already enrolled (check for any status except 'dropped')
     const existingEnrollment = await Enrollment.findOne({
       where: {
@@ -1095,7 +1162,7 @@ const enrollInCourse = async (req, res, next) => {
       // User is already enrolled (status: enrolled, in-progress, or completed)
       throw new AppError('Already enrolled in this course', 400);
     }
-    
+
     // Check if user previously dropped the course and wants to re-enroll
     const droppedEnrollment = await Enrollment.findOne({
       where: {
@@ -1104,7 +1171,7 @@ const enrollInCourse = async (req, res, next) => {
         status: 'dropped'
       }
     });
-    
+
     if (droppedEnrollment) {
       // Re-enroll by updating the dropped enrollment
       await droppedEnrollment.update({
@@ -1113,10 +1180,10 @@ const enrollInCourse = async (req, res, next) => {
         progress: 0,
         completed_at: null
       });
-      
+
       // Update course enrollment count
       await course.updateEnrollmentCount();
-      
+
       // Log re-enrollment activity
       try {
         await ActivityLog.createActivity(
@@ -1137,9 +1204,9 @@ const enrollInCourse = async (req, res, next) => {
       } catch (activityError) {
         console.error('Failed to log re-enrollment activity:', activityError);
       }
-      
+
       logger.info(`User ${req.user.email} re-enrolled in course "${course.title}"`);
-      
+
       return res.status(200).json({
         success: true,
         message: 'Successfully re-enrolled in course',
@@ -1393,7 +1460,7 @@ const getCourseCertificates = async (req, res, next) => {
 
     // Get all certificates for this course with user and enrollment details
     const certificates = await Certificate.findAll({
-      where: { 
+      where: {
         course_id: id,
         is_valid: true // Only show valid certificates
       },

@@ -1,11 +1,13 @@
 import React, { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
-import { FiClock, FiCheckCircle, FiXCircle, FiAlertCircle, FiGithub, FiGlobe, FiVideo, FiEye, FiEdit, FiTrash2 } from 'react-icons/fi';
+import { FiClock, FiCheckCircle, FiXCircle, FiAlertCircle, FiGithub, FiGlobe, FiVideo, FiEye, FiEdit, FiTrash2, FiAward } from 'react-icons/fi';
 import api from '../services/api';
 import Header from '../components/common/Header';
 import Footer from '../components/common/Footer';
 
 const MyProjectSubmissionsPage = () => {
+    const navigate = useNavigate();
     const [submissions, setSubmissions] = useState([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState('');
@@ -209,12 +211,28 @@ const MyProjectSubmissionsPage = () => {
                                             )}
                                         </div>
 
-                                        {/* Points Awarded */}
-                                        {submission.status === 'approved' && submission.points_awarded > 0 && (
-                                            <div className="bg-green-50 border border-green-200 rounded-lg p-3 mb-4">
-                                                <p className="text-green-800 font-semibold">
-                                                    🎉 Earned {submission.points_awarded} points!
-                                                </p>
+                                        {/* Points Awarded + Certificate */}
+                                        {submission.status === 'approved' && (
+                                            <div className="space-y-2 mb-4">
+                                                {submission.points_awarded > 0 && (
+                                                    <div className="bg-green-50 border border-green-200 rounded-lg p-3">
+                                                        <p className="text-green-800 font-semibold">
+                                                            🎉 Earned {submission.points_awarded} points!
+                                                        </p>
+                                                    </div>
+                                                )}
+                                                <div className="bg-purple-50 border border-purple-200 rounded-lg p-3 flex items-center justify-between">
+                                                    <p className="text-purple-800 font-semibold text-sm">
+                                                        🎓 Certificate issued for this project!
+                                                    </p>
+                                                    <button
+                                                        onClick={() => navigate('/student/certificates')}
+                                                        className="inline-flex items-center gap-1.5 px-3 py-1.5 bg-purple-600 text-white text-xs font-semibold rounded-lg hover:bg-purple-700 transition"
+                                                    >
+                                                        <FiAward size={13} />
+                                                        View Certificate
+                                                    </button>
+                                                </div>
                                             </div>
                                         )}
 

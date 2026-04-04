@@ -46,6 +46,12 @@ module.exports = {
         type: Sequelize.DATE,
         defaultValue: Sequelize.NOW
       },
+      plan_type: {
+        type: Sequelize.ENUM('free', 'premium'),
+        defaultValue: 'free',
+        allowNull: false,
+        comment: 'Student subscription plan type'
+      },
       created_at: {
         type: Sequelize.DATE,
         allowNull: false,
@@ -66,7 +72,7 @@ module.exports = {
         throw error;
       }
     }
-    
+
     try {
       await queryInterface.addIndex('users', ['google_id'], { name: 'users_google_id' });
     } catch (error) {
@@ -74,7 +80,7 @@ module.exports = {
         throw error;
       }
     }
-    
+
     try {
       await queryInterface.addIndex('users', ['role'], { name: 'users_role' });
     } catch (error) {
@@ -82,7 +88,7 @@ module.exports = {
         throw error;
       }
     }
-    
+
     try {
       await queryInterface.addIndex('users', ['is_active'], { name: 'users_is_active' });
     } catch (error) {

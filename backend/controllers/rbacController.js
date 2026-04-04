@@ -497,11 +497,38 @@ const getMyPermissions = async (req, res) => {
   }
 };
 
+// Get the current user's plan access info (for students)
+const getMyPlanAccess = async (req, res) => {
+  try {
+    const userId = req.user.id;
+    const userRole = req.user.role;
+
+    if (userRole === 'admin') {
+      return res.json({
+        success: true,
+        data: { planName: 'pro', tierOrder: 2, features: {} }
+      });
+    }
+
+    const { getStudentPlanInfo } = require('../middleware/planAccessMiddleware');
+    const planInfo = await getStudentPlanInfo(userId);
+
+    return res.json({
+      success: true,
+      data: planInfo
+    });
+  } catch (error) {
+    console.error('Error fetching plan access:', error);
+    res.status(500).json({ success: false, message: 'Failed to fetch plan access' });
+  }
+};
+
 module.exports = {
   getStudentPermissions,
   updateStudentPermissions,
   getStudentPermission,
   updateStudentPermission,
   checkStudentAccess,
-  getMyPermissions
+  getMyPermissions,
+  getMyPlanAccess
 };

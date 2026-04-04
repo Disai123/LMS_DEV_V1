@@ -65,6 +65,11 @@ module.exports = (sequelize, DataTypes) => {
       type: DataTypes.DATE,
       allowNull: true
     },
+    plan_type: {
+      type: DataTypes.ENUM('free', 'premium'),
+      defaultValue: 'free',
+      allowNull: false
+    },
   }, {
     tableName: 'users',
     indexes: [
@@ -133,10 +138,12 @@ module.exports = (sequelize, DataTypes) => {
       email: this.email,
       avatar: this.avatar,
       role: this.role,
+      plan_type: this.plan_type,
       is_active: this.is_active,
       last_login: this.last_login,
       created_at: this.created_at,
-      updated_at: this.updated_at
+      updated_at: this.updated_at,
+      permissions: this.permissions || null
     };
   };
 

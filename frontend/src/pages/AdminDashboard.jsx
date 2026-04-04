@@ -7,6 +7,7 @@ import { courseService } from '../services/courseService'
 import { userService } from '../services/userService'
 import { enrollmentService } from '../services/enrollmentService'
 import { paymentService } from '../services/api'
+import { contactService } from '../services/contactService'
 import Header from '../components/common/Header'
 import LoadingSpinner from '../components/common/LoadingSpinner'
 import toast from 'react-hot-toast'
@@ -21,8 +22,11 @@ import CreateCourse from '../components/admin/CreateCourse'
 import EditCourse from '../components/admin/EditCourse'
 import AdminProjectsPage from './AdminProjectsPage'
 import AdminHackathonsPage from './AdminHackathonsPage'
+import AdminInternshipsPage from './AdminInternshipsPage'
 import RBACManagementPage from './RBACManagementPage'
 import SubscriptionManagement from '../components/admin/SubscriptionManagement'
+import ContactMessages from '../components/admin/ContactMessages'
+import PackageManagementPage from '../components/admin/PackageManagementPage'
 
 const AdminDashboard = () => {
   const { user, isAuthenticated } = useAuth()
@@ -70,21 +74,31 @@ const AdminDashboard = () => {
     }
   )
 
-  const isLoading = coursesLoading || usersLoading || statsLoading
+  const { data: messagesData, isLoading: messagesLoading } = useQuery(
+    'admin-messages',
+    () => contactService.getMessages(),
+    {
+      enabled: isAuthenticated && user?.role === 'admin',
+      refetchOnWindowFocus: false,
+      staleTime: 1 * 60 * 1000
+    }
+  )
+
+  const isLoading = coursesLoading || usersLoading || statsLoading || messagesLoading
 
   const navigation = [
     { name: 'Dashboard', href: '/admin', icon: 'dashboard', current: location.pathname === '/admin' },
     { name: 'Courses', href: '/admin/courses', icon: 'courses', current: location.pathname.startsWith('/admin/courses') },
     { name: 'Create Course', href: '/admin/courses/create', icon: 'add', current: location.pathname === '/admin/courses/create' },
-    // Realtime Projects - COMMENTED OUT (Admin side removed, but kept for students)
-    // { name: 'Realtime Projects', href: '/admin/projects', icon: 'projects', current: location.pathname.startsWith('/admin/projects') },
+    { name: 'Package Management', href: '/admin/packages', icon: 'packages', current: location.pathname.startsWith('/admin/packages') },
     { name: 'Subscriptions', href: '/admin/subscriptions', icon: 'subscriptions', current: location.pathname.startsWith('/admin/subscriptions') },
     { name: 'Hackathons', href: '/admin/hackathons', icon: 'hackathons', current: location.pathname.startsWith('/admin/hackathons') },
+    { name: 'Internships', href: '/admin/internships', icon: 'internships', current: location.pathname.startsWith('/admin/internships') },
     { name: 'Project Submissions', href: '/admin/project-submissions', icon: 'submissions', current: location.pathname.startsWith('/admin/project-submissions') },
     { name: 'RBAC Management', href: '/admin/rbac', icon: 'rbac', current: location.pathname.startsWith('/admin/rbac') },
-    // { name: 'Chat Management', href: '/admin/chat', icon: 'chat', current: location.pathname.startsWith('/admin/chat') },
     { name: 'Users', href: '/admin/users', icon: 'users', current: location.pathname.startsWith('/admin/users') },
     { name: 'User Analytics', href: '/admin/analytics', icon: 'analytics', current: location.pathname === '/admin/analytics' },
+    { name: 'Notifications', href: '/admin/notifications', icon: 'notifications', current: location.pathname.startsWith('/admin/notifications') },
   ]
 
   const stats = [
@@ -132,13 +146,13 @@ const AdminDashboard = () => {
       )
     },
     {
-      name: 'Subscriptions',
-      value: subscriptionStats?.data?.data?.total || 0,
+      name: 'Notifications',
+      value: messagesData?.data?.messages?.length || 0,
       change: null,
       changeType: 'neutral',
       icon: (
         <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 10h18M7 15h1m4 0h1m-7 4h12a3 3 0 003-3V8a3 3 0 00-3-3H6a3 3 0 00-3 3v8a3 3 0 003 3z" />
+          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9" />
         </svg>
       )
     }
@@ -263,12 +277,24 @@ const AdminDashboard = () => {
                   element={<AdminHackathonsPage />}
                 />
                 <Route
+                  path="/internships"
+                  element={<AdminInternshipsPage />}
+                />
+                <Route
                   path="/rbac"
                   element={<RBACManagementPage />}
                 />
                 <Route
                   path="/subscriptions"
                   element={<SubscriptionManagement />}
+                />
+                <Route
+                  path="/packages"
+                  element={<PackageManagementPage />}
+                />
+                <Route
+                  path="/notifications"
+                  element={<ContactMessages />}
                 />
               </Routes>
             </div>

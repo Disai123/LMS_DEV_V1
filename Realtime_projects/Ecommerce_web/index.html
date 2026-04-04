@@ -1,4 +1,4 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en">
 
 <head>
@@ -126,14 +126,14 @@
       transform: translateX(-50%);
       width: 100px;
       height: 4px;
-      background: linear-gradient(90deg, transparent, #6366f1, #9333ea, transparent);
+      background: linear-gradient(90deg, transparent, #1e3a5f, #c9a227, transparent);
       border-radius: 2px;
     }
 
     .header h1 {
       font-size: 3rem;
       font-weight: 900;
-      background: linear-gradient(135deg, #6366f1 0%, #9333ea 50%, #3b82f6 100%);
+      background: linear-gradient(135deg, #1e3a5f 0%, #c9a227 50%, #1e3a5f 100%);
       -webkit-background-clip: text;
       -webkit-text-fill-color: transparent;
       background-clip: text;
@@ -189,8 +189,8 @@
     .overview-section:hover {
       transform: translateY(-5px);
       box-shadow:
-        0 20px 60px rgba(99, 102, 241, 0.15),
-        0 8px 24px rgba(147, 51, 234, 0.1),
+        0 20px 60px rgba(30, 58, 95, 0.15),
+        0 8px 24px rgba(201, 162, 39, 0.1),
         inset 0 1px 0 rgba(255, 255, 255, 1);
     }
 
@@ -209,9 +209,9 @@
       content: '';
       width: 4px;
       height: 28px;
-      background: linear-gradient(180deg, #6366f1 0%, #9333ea 100%);
+      background: linear-gradient(180deg, #1e3a5f 0%, #c9a227 100%);
       border-radius: 2px;
-      box-shadow: 0 0 8px rgba(99, 102, 241, 0.4);
+      box-shadow: 0 0 8px rgba(30, 58, 95, 0.4);
     }
 
     .project-description {
@@ -397,15 +397,15 @@
       font-size: 1.25rem;
       font-weight: 700;
       color: white;
-      background: linear-gradient(135deg, #6366f1 0%, #9333ea 50%, #3b82f6 100%);
+      background: linear-gradient(135deg, #1e3a5f 0%, #c9a227 50%, #1e3a5f 100%);
       border: none;
       border-radius: 50px;
       cursor: pointer;
       transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
       box-shadow:
-        0 20px 60px rgba(99, 102, 241, 0.4),
-        0 10px 30px rgba(147, 51, 234, 0.3),
-        0 0 0 0 rgba(99, 102, 241, 0.5),
+        0 20px 60px rgba(30, 58, 95, 0.4),
+        0 10px 30px rgba(201, 162, 39, 0.3),
+        0 0 0 0 rgba(30, 58, 95, 0.5),
         inset 0 1px 0 rgba(255, 255, 255, 0.3);
       text-decoration: none;
       font-family: inherit;
@@ -435,9 +435,9 @@
     .begin-journey-btn:hover {
       transform: translateY(-6px) scale(1.05);
       box-shadow:
-        0 30px 80px rgba(99, 102, 241, 0.5),
-        0 15px 40px rgba(147, 51, 234, 0.4),
-        0 0 0 8px rgba(99, 102, 241, 0.15),
+        0 30px 80px rgba(30, 58, 95, 0.5),
+        0 15px 40px rgba(201, 162, 39, 0.4),
+        0 0 0 8px rgba(30, 58, 95, 0.15),
         inset 0 1px 0 rgba(255, 255, 255, 0.4);
     }
 
@@ -563,7 +563,7 @@
 
     /* Footer Styles */
     footer {
-      background: linear-gradient(135deg, #1e1b4b 0%, #312e81 25%, #3730a3 50%, #4338ca 75%, #4f46e5 100%);
+      background: linear-gradient(135deg, #0f172a 0%, #1e3a5f 100%);
       background-size: 200% 200%;
       animation: gradient-shift 10s ease infinite;
       color: white;
@@ -579,8 +579,8 @@
       left: 0;
       right: 0;
       bottom: 0;
-      background: radial-gradient(circle at 20% 50%, rgba(99, 102, 241, 0.3), transparent 50%),
-        radial-gradient(circle at 80% 80%, rgba(147, 51, 234, 0.3), transparent 50%);
+      background: radial-gradient(circle at 20% 50%, rgba(30, 58, 95, 0.3), transparent 50%),
+        radial-gradient(circle at 80% 80%, rgba(201, 162, 39, 0.1), transparent 50%);
       pointer-events: none;
     }
 
@@ -743,6 +743,199 @@
     .footer-policies a:hover {
       color: white;
     }
+
+    /* ── Project Lifecycle Flowchart ── */
+    .lifecycle-wrapper {
+      margin-top: 20px;
+      padding: 10px 0;
+      position: relative;
+    }
+
+    .lifecycle-container {
+      display: flex;
+      flex-direction: column;
+      gap: 0;
+      align-items: center;
+      max-width: 950px;
+      margin: 0 auto;
+    }
+
+    .step-box {
+      width: 100%;
+      background: white;
+      border-radius: 16px;
+      padding: 24px;
+      border: 1px solid rgba(99, 102, 241, 0.15);
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.04);
+      position: relative;
+      display: grid;
+      grid-template-columns: 70px 1.5fr 1fr;
+      gap: 24px;
+      align-items: center;
+      transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    }
+
+    .step-box:hover {
+      transform: translateY(-5px) scale(1.01);
+      box-shadow: 0 20px 40px rgba(99, 102, 241, 0.12);
+      border-color: rgba(99, 102, 241, 0.4);
+      background: #ffffff;
+      z-index: 10;
+    }
+
+    .step-box.prerequisite {
+      background: linear-gradient(135deg, #f0fdf4 0%, #ffffff 100%);
+      border: 2px dashed #22c55e;
+    }
+
+    .step-number-container {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .step-number {
+      width: 44px;
+      height: 44px;
+      background: linear-gradient(135deg, #6366f1, #9333ea);
+      color: white;
+      border-radius: 12px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 800;
+      font-size: 1.1rem;
+      box-shadow: 0 8px 16px rgba(99, 102, 241, 0.25);
+      transform: rotate(-5deg);
+      transition: transform 0.3s ease;
+    }
+
+    .step-box:hover .step-number {
+      transform: rotate(0deg) scale(1.1);
+    }
+
+    .prerequisite .step-number {
+      background: linear-gradient(135deg, #22c55e, #16a34a);
+      box-shadow: 0 8px 16px rgba(34, 197, 94, 0.25);
+    }
+
+    .step-label {
+      font-size: 0.65rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      color: #6b7280;
+    }
+
+    .step-info h4 {
+      font-size: 1.2rem;
+      font-weight: 800;
+      color: #1f2937;
+      margin-bottom: 6px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .step-info p {
+      font-size: 0.9rem;
+      color: #4b5563;
+      line-height: 1.6;
+    }
+
+    .step-io-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+    }
+
+    .step-io-box {
+      background: #f8fafc;
+      padding: 12px;
+      border-radius: 12px;
+      border: 1px solid #e2e8f0;
+      transition: all 0.3s ease;
+    }
+
+    .step-box:hover .step-io-box {
+      background: #f1f5f9;
+      border-color: #cbd5e1;
+    }
+
+    .io-label {
+      font-weight: 800;
+      font-size: 0.6rem;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      margin-bottom: 6px;
+      display: flex;
+      align-items: center;
+      gap: 4px;
+    }
+
+    .io-in {
+      color: #6366f1;
+    }
+
+    .io-out {
+      color: #9333ea;
+    }
+
+    .io-content {
+      font-size: 0.75rem;
+      color: #334155;
+      font-weight: 500;
+      line-height: 1.4;
+    }
+
+    .step-arrow {
+      height: 60px;
+      width: 3px;
+      background: linear-gradient(to bottom, #6366f1, #9333ea);
+      position: relative;
+      margin: -2px 0;
+      opacity: 0.6;
+    }
+
+    .step-arrow::after {
+      content: '';
+      position: absolute;
+      bottom: -2px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 0;
+      height: 0;
+      border-left: 8px solid transparent;
+      border-right: 8px solid transparent;
+      border-top: 12px solid #9333ea;
+    }
+
+    .badge-prereq {
+      background: #dcfce7;
+      color: #166534;
+      padding: 2px 8px;
+      border-radius: 4px;
+      font-size: 0.65rem;
+      font-weight: 700;
+    }
+
+    @media (max-width: 900px) {
+      .step-box {
+        grid-template-columns: 1fr;
+        gap: 16px;
+      }
+
+      .step-number-container {
+        flex-direction: row;
+        justify-content: flex-start;
+      }
+
+      .step-io-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+
   </style>
 </head>
 
@@ -768,7 +961,7 @@
 
       <!-- Live URL Banner -->
       <div
-        style="background: linear-gradient(135deg, #0f172a 0%, #1e1b4b 50%, #0f172a 100%); border-radius: 12px; padding: 20px 28px; margin-bottom: 28px; border: 1px solid rgba(99,102,241,0.4); display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 16px; box-shadow: 0 0 30px rgba(99,102,241,0.15);">
+        style="background: linear-gradient(135deg, #0f172a 0%, #1e3a5f 50%, #0f172a 100%); border-radius: 12px; padding: 20px 28px; margin-bottom: 28px; border: 1px solid rgba(30, 58, 95, 0.4); display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 16px; box-shadow: 0 0 30px rgba(30, 58, 95, 0.15);">
         <div style="display: flex; align-items: center; gap: 14px;">
           <div
             style="width: 12px; height: 12px; background: #22c55e; border-radius: 50%; box-shadow: 0 0 8px #22c55e; animation: pulse-green 2s ease-in-out infinite; flex-shrink: 0;">
@@ -783,9 +976,9 @@
           </div>
         </div>
         <a href="https://ecommerce-frontend-hwbf.onrender.com" target="_blank" rel="noopener noreferrer"
-          style="display: inline-flex; align-items: center; gap: 8px; background: linear-gradient(135deg, #6366f1, #9333ea); color: white; padding: 12px 24px; border-radius: 50px; text-decoration: none; font-weight: 700; font-size: 0.95rem; box-shadow: 0 8px 24px rgba(99,102,241,0.4); transition: all 0.3s ease; white-space: nowrap;"
-          onmouseover="this.style.transform='translateY(-2px)'; this.style.boxShadow='0 12px 32px rgba(99,102,241,0.5)'"
-          onmouseout="this.style.transform='translateY(0)'; this.style.boxShadow='0 8px 24px rgba(99,102,241,0.4)'">
+          style="display: inline-flex; align-items: center; gap: 8px; background: linear-gradient(135deg, #1e3a5f, #c9a227); color: white; padding: 12px 24px; border-radius: 50px; text-decoration: none; font-weight: 700; font-size: 0.95rem; box-shadow: 0 8px 24px rgba(30, 58, 95, 0.4); transition: all 0.3s ease; white-space: nowrap;"
+          onmouseover="this.style.transform='translateY(-2px)'; this.style.boxShadow='0 12px 32px rgba(30,58,95,0.5)'"
+          onmouseout="this.style.transform='translateY(0)'; this.style.boxShadow='0 8px 24px rgba(30,58,95,0.4)'">
           <svg width="16" height="16" fill="none" stroke="currentColor" viewBox="0 0 24 24" style="flex-shrink:0;">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
               d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
@@ -1278,7 +1471,185 @@
       </div>
     </div>
 
-    <!-- Video Section -->
+
+    <!-- Project Lifecycle & Overview Section -->
+    <div class="overview-section" id="lifecycle-section">
+      <h2 class="section-title">📊 End-to-End Project Lifecycle (SDLC)</h2>
+      <p class="project-description" style="margin-bottom: 30px;">
+        Understand how this project was built from scratch. This flowchart details the complete 
+        Software Development Lifecycle (SDLC), from initializing the AI Agent workforce to final deployment. 
+        Each phase includes specific inputs and outputs to guide your learning.
+      </p>
+
+      <div class="lifecycle-wrapper">
+        <div class="lifecycle-container">
+          
+          <!-- Step 0: Prerequisites -->
+          <div class="step-box prerequisite">
+            <div class="step-number-container">
+              <div class="step-number">0</div>
+              <div class="step-label">Prereq</div>
+            </div>
+            <div class="step-info">
+              <h4>🤖 AI Agent Workforce <span class="badge-prereq">Mandatory</span></h4>
+              <p>Before any coding starts, we initialize the AI Agent team. These agents act as the prerequisites for automating the project generation.</p>
+            </div>
+            <div class="step-io-grid">
+              <div class="step-io-box">
+                <div class="io-label io-out">📤 Pre-defined</div>
+                <div class="io-content">Ready-to-Work Agent Workforce (BA, UI, Architect)</div>
+              </div>
+            </div>
+          </div>
+
+          <div class="step-arrow"></div>
+
+          <!-- Step 1: BRD -->
+          <div class="step-box">
+            <div class="step-number-container">
+              <div class="step-number">1</div>
+              <div class="step-label">Phase</div>
+            </div>
+            <div class="step-info">
+              <h4>📝 Requirements (BRD)</h4>
+              <p>The Business Analyst (BA) Agent defines the E-commerce scope: Product Management, User Authentication, Shopping Cart logic, and Secure Checkout requirements.</p>
+            </div>
+            <div class="step-io-grid">
+              <div class="step-io-box">
+                <div class="io-label io-in">📥 Input</div>
+                <div class="io-content">Client Requirements + E-commerce Skill + BRD Script</div>
+              </div>
+              <div class="step-io-box">
+                <div class="io-label io-out">📤 Output</div>
+                <div class="io-content">Ecommerce Business Requirement Document (BRD)</div>
+              </div>
+            </div>
+          </div>
+
+          <div class="step-arrow"></div>
+
+          <!-- Step 2: UI/UX -->
+          <div class="step-box">
+            <div class="step-number-container">
+              <div class="step-number">2</div>
+              <div class="step-label">Phase</div>
+            </div>
+            <div class="step-info">
+              <h4>🎨 UI/UX Design</h4>
+              <p>The UI Architect Agent designs the storefront: Product Grids, Search Interfaces, Mobile-responsive Cart, and intuitive Checkout flows.</p>
+            </div>
+            <div class="step-io-grid">
+              <div class="step-io-box">
+                <div class="io-label io-in">📥 Input</div>
+                <div class="io-content">Ecommerce BRD + Design Tokens + UI Script</div>
+              </div>
+              <div class="step-io-box">
+                <div class="io-label io-out">📤 Output</div>
+                <div class="io-content">High-fidelity Storefront Wireframes & Prototypes</div>
+              </div>
+            </div>
+          </div>
+
+          <div class="step-arrow"></div>
+
+          <!-- Step 3: Architecture -->
+          <div class="step-box">
+            <div class="step-number-container">
+              <div class="step-number">3</div>
+              <div class="step-label">Phase</div>
+            </div>
+            <div class="step-info">
+              <h4>🏗️ System Architecture</h4>
+              <p>The System Architect Agent designs the E-commerce data layer: Product Catalog schema, User Order history, and Payment Gateway API integration.</p>
+            </div>
+            <div class="step-io-grid">
+              <div class="step-io-box">
+                <div class="io-label io-in">📥 Input</div>
+                <div class="io-content">Ecommerce BRD + UI Mockups + Architecture Script</div>
+              </div>
+              <div class="step-io-box">
+                <div class="io-label io-out">📤 Output</div>
+                <div class="io-content">DB Schema (Products/Users/Orders) & API Collection</div>
+              </div>
+            </div>
+          </div>
+
+          <div class="step-arrow"></div>
+
+          <!-- Step 4: Development -->
+          <div class="step-box">
+            <div class="step-number-container">
+              <div class="step-number">4</div>
+              <div class="step-label">Phase</div>
+            </div>
+            <div class="step-info">
+              <h4>💻 Core Development</h4>
+              <p>The Lead Developer Agent (and your coding effort) implements the storefront logic, connecting the search engine, cart, and payment APIs.</p>
+            </div>
+            <div class="step-io-grid">
+              <div class="step-io-box">
+                <div class="io-label io-in">📥 Input</div>
+                <div class="io-content">Architecture Spec + Coding Skill + Coding Script</div>
+              </div>
+              <div class="step-io-box">
+                <div class="io-label io-out">📤 Output</div>
+                <div class="io-content">Functional Ecommerce Platform Source Code</div>
+              </div>
+            </div>
+          </div>
+
+          <div class="step-arrow"></div>
+
+          <!-- Step 5: Testing -->
+          <div class="step-box">
+            <div class="step-number-container">
+              <div class="step-number">5</div>
+              <div class="step-label">Phase</div>
+            </div>
+            <div class="step-info">
+              <h4>🧪 Quality Assurance</h4>
+              <p>The QA Agent runs tests to ensure the application is bug-free and meets all the original requirements from the BRD.</p>
+            </div>
+            <div class="step-io-grid">
+              <div class="step-io-box">
+                <div class="io-label io-in">📥 Input</div>
+                <div class="io-content">Completed Source Code + Test Cases</div>
+              </div>
+              <div class="step-io-box">
+                <div class="io-label io-out">📤 Output</div>
+                <div class="io-content">QA Report & Stable Release Candidate</div>
+              </div>
+            </div>
+          </div>
+
+          <div class="step-arrow"></div>
+
+          <!-- Step 6: Deployment -->
+          <div class="step-box">
+            <div class="step-number-container">
+              <div class="step-number">6</div>
+              <div class="step-label">Phase</div>
+            </div>
+            <div class="step-info">
+              <h4>🚀 Production Deployment</h4>
+              <p>The final step where the tested code is pushed to production (Render.com) making it live for the entire world.</p>
+            </div>
+            <div class="step-io-grid">
+              <div class="step-io-box">
+                <div class="io-label io-in">📥 Input</div>
+                <div class="io-content">Stable Build + Environment Configs</div>
+              </div>
+              <div class="step-io-box">
+                <div class="io-label io-out">📤 Output</div>
+                <div class="io-content">Live Application URL (Production State)</div>
+              </div>
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </div>
+\n\n    <!-- Video Section -->
 
     <div class="video-section">
       <h2 class="section-title">Project Video</h2>
@@ -1296,7 +1667,7 @@
 
     <!-- Begin Journey Button -->
     <div class="begin-journey-section">
-      <a href="BRD_phase/Overview.html" class="begin-journey-btn">
+      <a href="Agent_Skills_phase/Overview.html" class="begin-journey-btn">
         <span>🚀</span>
         <span>Begin Your Journey</span>
         <span>→</span>

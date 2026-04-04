@@ -26,6 +26,7 @@ exports.getPlans = async (req, res, next) => {
  * Student: Submit UPI Transaction ID for a plan
  */
 exports.submitPaymentRequest = async (req, res, next) => {
+    const transaction = await sequelize.transaction();
     try {
         const { plan_id, transaction_id } = req.body;
         const userId = req.user.id;
@@ -34,7 +35,7 @@ exports.submitPaymentRequest = async (req, res, next) => {
             throw new AppError('Plan and Transaction ID are required', 400);
         }
 
-        // Validate transaction ID format (basic check — alphanumeric, 8-30 chars)
+        // Validate transaction ID format
         const trimmedTxn = transaction_id.trim().toUpperCase();
         if (trimmedTxn.length < 8 || trimmedTxn.length > 50) {
             throw new AppError('Invalid Transaction ID. Please enter a valid UPI Transaction ID.', 400);
@@ -60,30 +61,72 @@ exports.submitPaymentRequest = async (req, res, next) => {
             throw new AppError('You already have a pending payment request. Please wait for admin approval.', 400);
         }
 
-        // Check if user already has an active subscription
-        const activeSub = await Subscription.findOne({
-            where: {
-                user_id: userId,
-                status: 'active',
-                end_date: { [Op.gt]: new Date() }
-            }
-        });
-        if (activeSub) {
-            throw new AppError('You already have an active subscription.', 400);
-        }
-
-        // Create payment request
+        // Create pending payment request
         const paymentRequest = await PaymentRequest.create({
             user_id: userId,
             plan_id: plan.id,
             transaction_id: trimmedTxn,
             amount: plan.price,
             status: 'pending'
+        }, { transaction });
+
+        // OPTIMISTIC ACTIVATION: Automatically activate student's plan
+        
+        // Cancel any existing active subscriptions
+        await Subscription.update(
+            { status: 'cancelled', end_date: new Date() },
+            {
+                where: { user_id: userId, status: 'active' },
+                transaction
+            }
+        );
+
+        // Create new lifetime subscription immediately
+        await Subscription.create({
+            user_id: userId,
+            plan_id: plan.id,
+            status: 'active',
+            start_date: new Date(),
+            end_date: null, // Lifetime access
+            payment_id: `UPI_${trimmedTxn}`
+        }, { transaction });
+
+        // Update RBAC permissions immediately based on plan
+        const StudentPermission = require('../models').StudentPermission;
+        const planName = plan.name.toLowerCase();
+        const hackathonsAccess = (planName === 'basic' || planName === 'pro');
+
+        const existingPerm = await StudentPermission.findOne({
+            where: { student_id: userId },
+            transaction
         });
+
+        if (existingPerm) {
+            await existingPerm.update({
+                courses: true,
+                hackathons: hackathonsAccess,
+                realtime_projects: true
+            }, { transaction });
+        } else {
+            await StudentPermission.create({
+                student_id: userId,
+                courses: true,
+                hackathons: hackathonsAccess,
+                realtime_projects: true
+            }, { transaction });
+        }
+
+        // Sync User plan_type for fallback legacy checks
+        await User.update(
+            { plan_type: 'premium' },
+            { where: { id: userId }, transaction }
+        );
+
+        await transaction.commit();
 
         res.status(201).json({
             success: true,
-            message: 'Payment request submitted successfully! Admin will verify and activate your subscription within 24 hours.',
+            message: 'Payment request submitted! Your account has been upgraded optimistically. Admin will verify the transaction.',
             data: {
                 id: paymentRequest.id,
                 transaction_id: paymentRequest.transaction_id,
@@ -94,6 +137,7 @@ exports.submitPaymentRequest = async (req, res, next) => {
         });
 
     } catch (error) {
+        await transaction.rollback();
         if (error.name === 'SequelizeUniqueConstraintError') {
             return next(new AppError('This Transaction ID has already been submitted.', 400));
         }
@@ -150,6 +194,48 @@ exports.getPaymentRequests = async (req, res, next) => {
  * Admin: Approve a payment request → create subscription
  */
 exports.approvePaymentRequest = async (req, res, next) => {
+    try {
+        if (req.user.role !== 'admin') {
+            return next(new AppError('Not authorized', 403));
+        }
+
+        const { id } = req.params;
+        const { admin_notes } = req.body;
+
+        const paymentRequest = await PaymentRequest.findByPk(id, {
+            include: [{ model: Plan, as: 'plan' }]
+        });
+
+        if (!paymentRequest) {
+            throw new AppError('Payment request not found', 404);
+        }
+
+        if (paymentRequest.status !== 'pending') {
+            throw new AppError(`This request is already ${paymentRequest.status}`, 400);
+        }
+
+        // Verify the payment request and add admin notes. 
+        // Subscription and permissions were already activated optimistically in submitPaymentRequest.
+        await paymentRequest.update({
+            status: 'approved',
+            admin_notes: admin_notes || null,
+            approved_by: req.user.id
+        });
+
+        res.json({
+            success: true,
+            message: `Payment approved. Transaction verified for ${paymentRequest.plan.name} plan.`
+        });
+
+    } catch (error) {
+        next(error);
+    }
+};
+
+/**
+ * Admin: Reject a payment request
+ */
+exports.rejectPaymentRequest = async (req, res, next) => {
     const transaction = await sequelize.transaction();
     try {
         if (req.user.role !== 'admin') {
@@ -171,126 +257,48 @@ exports.approvePaymentRequest = async (req, res, next) => {
             throw new AppError(`This request is already ${paymentRequest.status}`, 400);
         }
 
-        // Calculate subscription end date based on plan
-        const startDate = new Date();
-        let endDate = new Date();
-        const planName = paymentRequest.plan.name.toLowerCase();
-
-        if (planName === 'monthly') {
-            endDate.setDate(endDate.getDate() + 30);
-        } else if (planName === 'yearly') {
-            endDate.setDate(endDate.getDate() + 365);
-        } else {
-            // Fallback: 30 days
-            endDate.setDate(endDate.getDate() + 30);
-        }
-
-        // Cancel any existing active subscription for this user
-        await Subscription.update(
-            { status: 'cancelled', end_date: new Date() },
-            {
-                where: { user_id: paymentRequest.user_id, status: 'active' },
-                transaction
-            }
-        );
-
-        // Create new active subscription
-        await Subscription.create({
-            user_id: paymentRequest.user_id,
-            plan_id: paymentRequest.plan_id,
-            status: 'active',
-            start_date: startDate,
-            end_date: endDate,
-            payment_id: `UPI_${paymentRequest.transaction_id}`
-        }, { transaction });
-
-        // Update payment request status
-        // Update payment request status
+        // Mark payment as rejected
         await paymentRequest.update({
-            status: 'approved',
+            status: 'rejected',
             admin_notes: admin_notes || null,
             approved_by: req.user.id
         }, { transaction });
 
-        // AUTOMATICALLY UPDATE RBAC PERMISSIONS based on plan
-        // Basic/Pro -> Grant Hackathons & Realtime Projects access
-        // Starter -> Revoke Hackathons (if logic existed), but here we are upgrading
+        // Revoke the exact subscription created during optimistic activation
+        await Subscription.update(
+            { status: 'cancelled', end_date: new Date() },
+            {
+                where: { 
+                    user_id: paymentRequest.user_id, 
+                    plan_id: paymentRequest.plan_id,
+                    status: 'active' 
+                },
+                transaction
+            }
+        );
+
+        // Downgrade permissions back to default 'free' (no hackathons)
         const StudentPermission = require('../models').StudentPermission;
+        await StudentPermission.update(
+            { hackathons: false },
+            { where: { student_id: paymentRequest.user_id }, transaction }
+        );
 
-        let hackathonsAccess = false;
-        // Grant hackathons for both Basic and Pro
-        if (planName === 'basic' || planName === 'pro') {
-            hackathonsAccess = true;
-        }
-
-        // Check if permission record exists
-        const existingPerm = await StudentPermission.findOne({
-            where: { student_id: paymentRequest.user_id },
-            transaction
-        });
-
-        if (existingPerm) {
-            await existingPerm.update({
-                courses: true, // Always true
-                hackathons: hackathonsAccess,
-                realtime_projects: true // Always true (list access, locking handled by content)
-            }, { transaction });
-        } else {
-            await StudentPermission.create({
-                student_id: paymentRequest.user_id,
-                courses: true,
-                hackathons: hackathonsAccess,
-                realtime_projects: true
-            }, { transaction });
-        }
+        // Reset User plan_type
+        await User.update(
+            { plan_type: 'free' },
+            { where: { id: paymentRequest.user_id }, transaction }
+        );
 
         await transaction.commit();
 
         res.json({
             success: true,
-            message: `Payment approved. ${paymentRequest.plan.name} subscription activated until ${endDate.toLocaleDateString('en-IN')}.`
+            message: 'Payment request rejected. The student\'s premium access has been reliably revoked.'
         });
 
     } catch (error) {
         await transaction.rollback();
-        next(error);
-    }
-};
-
-/**
- * Admin: Reject a payment request
- */
-exports.rejectPaymentRequest = async (req, res, next) => {
-    try {
-        if (req.user.role !== 'admin') {
-            return next(new AppError('Not authorized', 403));
-        }
-
-        const { id } = req.params;
-        const { admin_notes } = req.body;
-
-        const paymentRequest = await PaymentRequest.findByPk(id);
-
-        if (!paymentRequest) {
-            throw new AppError('Payment request not found', 404);
-        }
-
-        if (paymentRequest.status !== 'pending') {
-            throw new AppError(`This request is already ${paymentRequest.status}`, 400);
-        }
-
-        await paymentRequest.update({
-            status: 'rejected',
-            admin_notes: admin_notes || null,
-            approved_by: req.user.id
-        });
-
-        res.json({
-            success: true,
-            message: 'Payment request rejected.'
-        });
-
-    } catch (error) {
         next(error);
     }
 };
@@ -369,8 +377,8 @@ exports.getSubscriptionStats = async (req, res, next) => {
 
         const stats = {
             free: 0,
-            monthly: 0,
-            yearly: 0,
+            basic: 0,
+            pro: 0,
             total: subscriptions.length,
             pendingPayments: pendingCount
         };
@@ -378,8 +386,8 @@ exports.getSubscriptionStats = async (req, res, next) => {
         subscriptions.forEach(sub => {
             const planName = sub.plan?.name?.toLowerCase();
             if (planName === 'free') stats.free++;
-            if (planName === 'monthly') stats.monthly++;
-            if (planName === 'yearly') stats.yearly++;
+            if (planName === 'basic') stats.basic++;
+            if (planName === 'pro') stats.pro++;
         });
 
         res.json({
@@ -410,7 +418,7 @@ exports.getAllSubscriptions = async (req, res, next) => {
                 {
                     model: Plan,
                     as: 'plan',
-                    attributes: ['name', 'price', 'currency']
+                    attributes: ['name', 'price', 'currency', 'tier_order']
                 }
             ],
             order: [['created_at', 'DESC']]
@@ -422,5 +430,128 @@ exports.getAllSubscriptions = async (req, res, next) => {
         });
     } catch (error) {
         next(new AppError('Failed to fetch subscriptions', 500));
+    }
+};
+
+/**
+ * Get package stats (plans distribution + revenue)
+ */
+exports.getPackageStats = async (req, res, next) => {
+    try {
+        if (req.user.role !== 'admin') {
+            return next(new AppError('Not authorized', 403));
+        }
+
+        const plans = await Plan.findAll({
+            where: { is_active: true },
+            attributes: ['id', 'name', 'price', 'tier_order'],
+            order: [['tier_order', 'ASC']]
+        });
+
+        const activeSubs = await Subscription.findAll({
+            where: {
+                status: 'active',
+                [Op.or]: [{ end_date: null }, { end_date: { [Op.gt]: new Date() } }]
+            },
+            include: [{ model: Plan, as: 'plan', attributes: ['name', 'price', 'tier_order'] }]
+        });
+
+        const pendingCount = await PaymentRequest.count({ where: { status: 'pending' } });
+        const approvedRequests = await PaymentRequest.findAll({
+            where: { status: 'approved' },
+            include: [{ model: Plan, as: 'plan', attributes: ['price'] }]
+        });
+
+        const totalRevenue = approvedRequests.reduce((sum, r) => sum + parseFloat(r.amount || 0), 0);
+
+        const totalStudentsCount = await User.count({ where: { role: 'student' } });
+        
+        const distribution = { free: 0, basic: 0, pro: 0 };
+        activeSubs.forEach(sub => {
+            const planName = sub.plan?.name?.toLowerCase();
+            if (planName === 'basic' || planName === 'pro') {
+                distribution[planName]++;
+            }
+        });
+
+        // Any student NOT in basic or pro is automatically a free member for stats purposes
+        distribution.free = Math.max(0, totalStudentsCount - distribution.basic - distribution.pro);
+
+        res.json({
+            success: true,
+            data: {
+                distribution,
+                totalActiveSubscriptions: activeSubs.length,
+                pendingPayments: pendingCount,
+                totalRevenue
+            }
+        });
+    } catch (error) {
+        next(new AppError('Failed to fetch package stats', 500));
+    }
+};
+
+/**
+ * Admin: Manually assign a plan to a student (no payment required)
+ */
+exports.manualUpgrade = async (req, res, next) => {
+    const transaction = await sequelize.transaction();
+    try {
+        if (req.user.role !== 'admin') {
+            return next(new AppError('Not authorized', 403));
+        }
+
+        const { student_id, plan_name } = req.body;
+
+        if (!student_id || !plan_name) {
+            throw new AppError('student_id and plan_name are required', 400);
+        }
+
+        const validPlans = ['free', 'basic', 'pro'];
+        if (!validPlans.includes(plan_name.toLowerCase())) {
+            throw new AppError('Invalid plan_name. Must be free, basic, or pro.', 400);
+        }
+
+        const student = await User.findOne({ where: { id: student_id, role: 'student' } });
+        if (!student) throw new AppError('Student not found', 404);
+
+        const plan = await Plan.findOne({ where: { name: plan_name.toLowerCase(), is_active: true } });
+        if (!plan) throw new AppError('Plan not found', 404);
+
+        // Cancel current subscriptions
+        await Subscription.update(
+            { status: 'cancelled', end_date: new Date() },
+            { where: { user_id: student_id, status: 'active' }, transaction }
+        );
+
+        // Create new lifetime subscription
+        await Subscription.create({
+            user_id: student_id,
+            plan_id: plan.id,
+            status: 'active',
+            start_date: new Date(),
+            end_date: null, // lifetime
+            payment_id: `MANUAL_ADMIN_${req.user.id}_${Date.now()}`
+        }, { transaction });
+
+        // Update RBAC permissions
+        const StudentPermission = require('../models').StudentPermission;
+        const hackathonsAccess = plan_name !== 'free';
+        const [perm] = await StudentPermission.findOrCreate({
+            where: { student_id },
+            defaults: { student_id, courses: true, hackathons: hackathonsAccess, realtime_projects: true },
+            transaction
+        });
+        await perm.update({ hackathons: hackathonsAccess, courses: true, realtime_projects: true }, { transaction });
+
+        await transaction.commit();
+
+        res.json({
+            success: true,
+            message: `Student "${student.name}" has been manually upgraded to the ${plan_name} plan.`
+        });
+    } catch (error) {
+        await transaction.rollback();
+        next(error);
     }
 };

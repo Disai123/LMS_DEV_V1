@@ -65,7 +65,7 @@ module.exports = (sequelize, DataTypes) => {
             // Allow relative paths starting with /uploads/ or full URLs
             const isRelativePath = value.startsWith('/uploads/');
             const isFullUrl = value.startsWith('http://') || value.startsWith('https://');
-            
+
             if (!isRelativePath && !isFullUrl) {
               throw new Error('Logo must be a valid file path starting with /uploads/ or a full URL');
             }
@@ -103,6 +103,17 @@ module.exports = (sequelize, DataTypes) => {
       type: DataTypes.ARRAY(DataTypes.TEXT),
       defaultValue: []
     },
+    is_free: {
+      type: DataTypes.BOOLEAN,
+      defaultValue: false,
+      allowNull: false
+    },
+    required_plan: {
+      type: DataTypes.ENUM('free', 'basic', 'pro'),
+      allowNull: false,
+      defaultValue: 'free',
+      comment: 'Minimum plan required to access this course'
+    },
   }, {
     tableName: 'courses',
     indexes: [
@@ -132,12 +143,12 @@ module.exports = (sequelize, DataTypes) => {
   });
 
   // Instance methods
-  Course.prototype.toJSON = function() {
+  Course.prototype.toJSON = function () {
     const values = Object.assign({}, this.get());
     return values;
   };
 
-  Course.prototype.getPublicInfo = function() {
+  Course.prototype.getPublicInfo = function () {
     return {
       id: this.id,
       title: this.title,
@@ -153,7 +164,9 @@ module.exports = (sequelize, DataTypes) => {
       tags: this.tags,
       learning_objectives: this.learning_objectives,
       is_published: this.is_published,
+      is_free: this.is_free,
       instructor: this.instructor || null,
+      required_plan: this.required_plan,
       // Exclude chapters from public info to prevent circular references
       // chapters: this.chapters,
       created_at: this.created_at,
@@ -161,27 +174,27 @@ module.exports = (sequelize, DataTypes) => {
     };
   };
 
-  Course.prototype.publish = function() {
+  Course.prototype.publish = function () {
     this.is_published = true;
     return this.save();
   };
 
-  Course.prototype.unpublish = function() {
+  Course.prototype.unpublish = function () {
     this.is_published = false;
     return this.save();
   };
 
-  Course.prototype.updateEnrollmentCount = async function() {
+  Course.prototype.updateEnrollmentCount = async function () {
     const count = await this.countEnrollments();
     this.enrollment_count = count;
     return this.save();
   };
 
-  Course.prototype.updateRating = async function() {
+  Course.prototype.updateRating = async function () {
     const enrollments = await this.getEnrollments({
       where: { rating: { [sequelize.Sequelize.Op.ne]: null } }
     });
-    
+
     if (enrollments.length > 0) {
       const totalRating = enrollments.reduce((sum, enrollment) => sum + enrollment.rating, 0);
       this.average_rating = (totalRating / enrollments.length).toFixed(2);
@@ -190,33 +203,33 @@ module.exports = (sequelize, DataTypes) => {
       this.average_rating = 0;
       this.total_ratings = 0;
     }
-    
+
     return this.save();
   };
 
   // Class methods
-  Course.findPublished = function() {
-    return this.findAll({ 
+  Course.findPublished = function () {
+    return this.findAll({
       where: { is_published: true },
       order: [['created_at', 'DESC']]
     });
   };
 
-  Course.findByCategory = function(category) {
-    return this.findAll({ 
+  Course.findByCategory = function (category) {
+    return this.findAll({
       where: { category, is_published: true },
       order: [['created_at', 'DESC']]
     });
   };
 
-  Course.findByDifficulty = function(difficulty) {
-    return this.findAll({ 
+  Course.findByDifficulty = function (difficulty) {
+    return this.findAll({
       where: { difficulty, is_published: true },
       order: [['created_at', 'DESC']]
     });
   };
 
-  Course.search = function(searchTerm) {
+  Course.search = function (searchTerm) {
     return this.findAll({
       where: {
         is_published: true,
@@ -234,7 +247,7 @@ module.exports = (sequelize, DataTypes) => {
     });
   };
 
-  Course.getPopular = function(limit = 10) {
+  Course.getPopular = function (limit = 10) {
     return this.findAll({
       where: { is_published: true },
       order: [['enrollment_count', 'DESC']],
@@ -242,9 +255,9 @@ module.exports = (sequelize, DataTypes) => {
     });
   };
 
-  Course.getTopRated = function(limit = 10) {
+  Course.getTopRated = function (limit = 10) {
     return this.findAll({
-      where: { 
+      where: {
         is_published: true,
         total_ratings: { [sequelize.Sequelize.Op.gte]: 1 }
       },

@@ -33,6 +33,12 @@ module.exports = (sequelize, DataTypes) => {
         is_active: {
             type: DataTypes.BOOLEAN,
             defaultValue: true
+        },
+        tier_order: {
+            type: DataTypes.INTEGER,
+            allowNull: false,
+            defaultValue: 0,
+            comment: '0=free, 1=basic, 2=pro'
         }
     }, {
         tableName: 'plans',

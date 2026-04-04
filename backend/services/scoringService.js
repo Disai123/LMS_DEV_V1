@@ -224,6 +224,53 @@ class ScoringService {
   }
 
   /**
+   * Award points for internship completion
+   */
+  async awardInternshipPoints({ studentId, internshipId, internshipTitle, points = 100, approvedBy }) {
+    const transaction = await sequelize.transaction();
+
+    try {
+      // Check if achievement already exists
+      const existing = await StudentAchievement.checkExists(
+        studentId,
+        'internship_completion',
+        internshipId
+      );
+
+      if (existing) {
+        logger.info(`Internship completion achievement already exists for student ${studentId}, internship ${internshipId}`);
+        await transaction.rollback();
+        return existing;
+      }
+
+      // Create achievement record
+      const achievement = await StudentAchievement.create({
+        student_id: studentId,
+        achievement_type: 'internship_completion',
+        source_id: String(internshipId),
+        source_type: 'internship',
+        points_awarded: points,
+        awarded_by: approvedBy,
+        metadata: {
+          internship_title: internshipTitle
+        }
+      }, { transaction });
+
+      // Recalculate student scores
+      await this.recalculateStudentScores(studentId, transaction);
+
+      await transaction.commit();
+      logger.info(`Awarded ${points} points for internship completion: student ${studentId}, internship ${internshipId}`);
+
+      return achievement;
+    } catch (error) {
+      await transaction.rollback();
+      logger.error('Error awarding internship points:', error);
+      throw error;
+    }
+  }
+
+  /**
    * Award points for realtime project completion
    */
   async awardRealtimeProjectPoints({ studentId, projectId, projectName, difficulty = 'intermediate' }) {
@@ -348,15 +395,20 @@ class ScoringService {
         } else if (ach.achievement_type === 'hackathon_approval') {
           acc.hackathon_points += ach.points_awarded;
           acc.hackathons_count++;
+        } else if (ach.achievement_type === 'internship_completion') {
+          acc.internship_points += ach.points_awarded;
+          acc.internships_count++;
         }
         return acc;
       }, {
         course_points: 0,
         project_points: 0,
         hackathon_points: 0,
+        internship_points: 0,
         courses_count: 0,
         projects_count: 0,
-        hackathons_count: 0
+        hackathons_count: 0,
+        internships_count: 0
       });
 
       // Get or create student score
@@ -367,14 +419,17 @@ class ScoringService {
         total_course_points: totals.course_points,
         total_project_points: totals.project_points,
         total_hackathon_points: totals.hackathon_points,
-        total_points: totals.course_points + totals.project_points + totals.hackathon_points,
+        total_internship_points: totals.internship_points,
+        total_points: totals.course_points + totals.project_points + totals.hackathon_points + totals.internship_points,
+        pq_score: Math.min(( (totals.course_points + totals.project_points + totals.hackathon_points + totals.internship_points) / 60), 10),
         courses_completed_count: totals.courses_count,
         projects_approved_count: totals.projects_count,
         hackathons_approved_count: totals.hackathons_count,
+        internships_completed_count: totals.internships_count,
         last_calculated_at: new Date()
       }, { transaction });
 
-      logger.info(`Recalculated scores for student ${studentId}: Total = ${totals.course_points + totals.project_points + totals.hackathon_points}`);
+      logger.info(`Recalculated scores for student ${studentId}: Total = ${totals.course_points + totals.project_points + totals.hackathon_points + totals.internship_points}, PQ = ${Math.min(( (totals.course_points + totals.project_points + totals.hackathon_points + totals.internship_points) / 60), 10).toFixed(2)}`);
 
       return studentScore;
     } catch (error) {

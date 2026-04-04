@@ -1,18 +1,40 @@
 import { useState } from 'react'
 import { motion } from 'framer-motion'
 import { FiSearch, FiFilter, FiMoreVertical, FiEdit, FiTrash2, FiUserCheck, FiUserX } from 'react-icons/fi'
+import { useMutation, useQueryClient } from 'react-query'
+import { userService } from '../../services/userService'
 import toast from 'react-hot-toast'
+
 
 const UserManagement = ({ users = [] }) => {
   const [searchTerm, setSearchTerm] = useState('')
   const [filterRole, setFilterRole] = useState('all')
   const [sortBy, setSortBy] = useState('name')
+  const queryClient = useQueryClient()
+
+  // Update plan mutation
+  const updatePlanMutation = useMutation(
+    ({ id, plan_type }) => userService.updateUserPlan(id, plan_type),
+    {
+      onSuccess: () => {
+        queryClient.invalidateQueries('admin-users')
+        toast.success('User plan updated successfully')
+      },
+      onError: (error) => {
+        toast.error(error.message)
+      }
+    }
+  )
+
+  const handleUpdatePlan = (id, plan_type) => {
+    updatePlanMutation.mutate({ id, plan_type })
+  }
 
   // Filter and search users
   const filteredUsers = users
     .filter(user => {
       const matchesSearch = user.name?.toLowerCase().includes(searchTerm.toLowerCase()) ||
-                           user.email?.toLowerCase().includes(searchTerm.toLowerCase())
+        user.email?.toLowerCase().includes(searchTerm.toLowerCase())
       const matchesRole = filterRole === 'all' || user.role === filterRole
       return matchesSearch && matchesRole
     })
@@ -131,6 +153,10 @@ const UserManagement = ({ users = [] }) => {
                 <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                   Role
                 </th>
+
+                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                  Plan
+                </th>
                 <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                   Status
                 </th>
@@ -174,9 +200,22 @@ const UserManagement = ({ users = [] }) => {
                     </span>
                   </td>
                   <td className="px-6 py-4 whitespace-nowrap">
-                    <span className={`inline-flex px-2 py-1 text-xs font-semibold rounded-full ${
-                      user.isActive !== false ? 'bg-green-100 text-green-800' : 'bg-red-100 text-red-800'
-                    }`}>
+                    <select
+                      value={user.plan_type || 'free'}
+                      onChange={(e) => handleUpdatePlan(user.id, e.target.value)}
+                      disabled={updatePlanMutation.isLoading}
+                      className={`text-xs font-bold rounded-lg border px-2 py-1 focus:outline-none transition-all ${user.plan_type === 'premium'
+                        ? 'bg-violet-50 text-violet-700 border-violet-200'
+                        : 'bg-emerald-50 text-emerald-700 border-emerald-200'
+                        }`}
+                    >
+                      <option value="free">Free</option>
+                      <option value="premium">Premium</option>
+                    </select>
+                  </td>
+                  <td className="px-6 py-4 whitespace-nowrap">
+                    <span className={`inline-flex px-2 py-1 text-xs font-semibold rounded-full ${user.isActive !== false ? 'bg-green-100 text-green-800' : 'bg-red-100 text-red-800'
+                      }`}>
                       {user.isActive !== false ? 'Active' : 'Inactive'}
                     </span>
                   </td>
@@ -221,8 +260,8 @@ const UserManagement = ({ users = [] }) => {
             </div>
             <h3 className="text-lg font-medium text-gray-900 mb-2">No users found</h3>
             <p className="text-gray-500">
-              {searchTerm || filterRole !== 'all' 
-                ? 'Try adjusting your search or filter criteria.' 
+              {searchTerm || filterRole !== 'all'
+                ? 'Try adjusting your search or filter criteria.'
                 : 'No users have been added yet.'}
             </p>
           </div>

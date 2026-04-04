@@ -1,9 +1,15 @@
 import { motion } from 'framer-motion'
 import CourseCard from './CourseCard'
 import LoadingSpinner from '../common/LoadingSpinner'
+import LockedContentOverlay from '../LockedContentOverlay'
 import { FiAlertCircle, FiBookOpen } from 'react-icons/fi'
+import { useAuth } from '../../context/AuthContext'
 
-const CourseList = ({ courses, isLoading, error, showInstructor = true, showRating = true }) => {
+const TIER_ORDER = { free: 0, basic: 1, pro: 2 }
+
+const CourseList = ({ courses, isLoading, error, showInstructor = true, showRating = true, planTierOrder = 0 }) => {
+  const { user } = useAuth();
+
   if (isLoading) {
     return (
       <div className="flex justify-center py-16">
@@ -48,21 +54,35 @@ const CourseList = ({ courses, isLoading, error, showInstructor = true, showRati
 
   return (
     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
-      {courses.map((course, index) => (
-        <motion.div
-          key={course.id}
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: index * 0.08 }}
-        >
-          <CourseCard
-            course={course}
-            index={index}
-            showInstructor={showInstructor}
-            showRating={showRating}
-          />
-        </motion.div>
-      ))}
+      {courses.map((course, index) => {
+        const requiredTier = TIER_ORDER[course.required_plan] ?? 0
+        const isLocked = !!user && (planTierOrder < requiredTier)
+
+        return (
+          <motion.div
+            key={course.id}
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: index * 0.08 }}
+            className="relative"
+          >
+            <CourseCard
+              course={course}
+              index={index}
+              showInstructor={showInstructor}
+              showRating={showRating}
+              isLocked={isLocked}
+            />
+            {isLocked && (
+              <LockedContentOverlay
+                requiredPlan={course.required_plan || 'basic'}
+                contentType="course"
+                compact={true}
+              />
+            )}
+          </motion.div>
+        )
+      })}
     </div>
   )
 }

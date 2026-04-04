@@ -4,6 +4,12 @@ const projectDiscoveryService = require('../services/projectDiscoveryService');
 const { StudentPermission, Plan, Subscription } = require('../models');
 const { AppError } = require('../middleware/errorHandler');
 
+// Cache for processed HTML files to reduce S3 latency
+// key: s3Key, value: { html, timestamp, contentType }
+const htmlCache = new Map();
+const CACHE_TTL = 30000; // 30 seconds TTL for "realtime" updates
+const CACHE_MAX_SIZE = 100; // Prevent memory leak
+
 /**
  * Check if student has access to realtime projects
  */
@@ -19,7 +25,7 @@ const checkProjectAccess = async (userId, userRole, projectId = null) => {
       include: [{ model: Plan, as: 'plan' }]
     });
 
-    const planName = subscription?.plan?.name?.toLowerCase() || 'starter';
+    const planName = subscription?.plan?.name?.toLowerCase() || 'free';
     const normalizedPid = projectId ? projectId.toLowerCase().replace(/[-_]/g, '') : null;
 
     // Pro Plan: Access to everything
@@ -27,11 +33,11 @@ const checkProjectAccess = async (userId, userRole, projectId = null) => {
       return true;
     }
 
-    // Basic Plan (499): Access to Todo, Ecommerce Web, and AI Agent
+    // Basic Plan (499): Access to Todo App and Ecommerce Web
     if (planName.includes('basic')) {
       if (!projectId) return true; // Allow access to list
-      const allowed = ['todoapp', 'ecommerceweb', 'ecommerceaiagent', 'ecommercemultiagent', 'tripplanner'];
-      return allowed.includes(normalizedPid);
+      const basicAllowed = ['todoapp', 'ecommerceweb'];
+      return basicAllowed.includes(normalizedPid);
     }
 
     // Starter/Free Plan: Access to Todo App only
@@ -70,35 +76,48 @@ const getProjectsList = async (req, res, next) => {
       where: { user_id: userId, status: 'active' },
       include: [{ model: Plan, as: 'plan' }]
     });
-    const planName = subscription?.plan?.name?.toLowerCase() || 'starter';
+    const planName = subscription?.plan?.name?.toLowerCase() || 'free';
 
-    // Attach isLocked status based on tiered rules
-    projects.forEach((p) => {
+    // Attach isLocked status based on fresh objects to avoid cache contamination
+    const processedProjects = projects.map((project, index) => {
+      const p = { ...project }; // Fresh copy
       const pIdNormalized = p.id.toLowerCase().replace(/[-_]/g, '');
       let isLocked = true;
 
       // Admin or Pro can see everything
-      if (userRole === 'admin' || planName.includes('pro')) {
+      if (userRole === 'admin' || (planName && planName.includes('pro'))) {
         isLocked = false;
       }
-      // Basic Plan (499)
-      else if (planName.includes('basic')) {
-        const allowed = ['todoapp', 'ecommerceweb', 'ecommerceaiagent', 'ecommercemultiagent', 'tripplanner'];
-        if (allowed.includes(pIdNormalized)) {
+      // Basic Plan (499): Unlock Todo and Ecommerce
+      else if (planName && planName.includes('basic')) {
+        const basicAllowed = ['todoapp', 'ecommerceweb'];
+        if (basicAllowed.includes(pIdNormalized)) {
           isLocked = false;
         }
       }
-      // Starter / Free Plan
+      // Free Plan: Unlock only Todo App
       else {
         if (pIdNormalized === 'todoapp') {
           isLocked = false;
         }
       }
+
       p.isLocked = isLocked;
+      
+      // Debug logging for the user
+      if (index === 0) {
+        console.log(`[REALTIME-ACCESS] Processing for User: ${userId}, Role: ${userRole}, Plan: ${planName}`);
+      }
+      console.log(`[REALTIME-ACCESS] Project [${index}] ${p.id}: isLocked = ${isLocked}`);
+      
+      return p;
     });
 
+    // Replace original projects with processed ones
+    const projectsToReturn = processedProjects;
+
     // Apply filters if provided
-    let filteredProjects = [...projects];
+    let filteredProjects = [...projectsToReturn];
     const { category, difficulty, search, sort } = req.query;
 
     if (category && category !== 'all') {
@@ -205,6 +224,15 @@ const serveProjectMainPage = async (req, res, next) => {
     const { projectId } = req.params;
     // Get any sub-path (for SPA routing like /ecommerce/home, /ecommerce/products, etc.)
     const subPath = req.params[0] || ''; // This will be undefined if no sub-path
+    
+    // Redirect to trailing slash if it's a project root and missing the slash
+    // This is critical for relative path resolution (e.g., BRD_phase/Overview.html)
+    if (!subPath && !req.path.endsWith('/')) {
+      const query = req.url.includes('?') ? req.url.substring(req.url.indexOf('?')) : '';
+      console.log(`[serveProjectMainPage] Redirecting to trailing slash: ${req.path}/`);
+      return res.redirect(301, `${req.path}/${query}`);
+    }
+
     const userId = req.user?.id;
     const userRole = req.user?.role;
 
@@ -282,130 +310,38 @@ const serveProjectMainPage = async (req, res, next) => {
       `);
     }
 
-    // Determine the file to serve based on sub-path
-    let filePath;
+    // Determine the S3 key to serve based on sub-path
+    let s3Key;
+    const cleanSubPath = (subPath || '').replace(/^\/+/, '').replace(/\\/g, '/');
 
-    if (!subPath || subPath.trim() === '') {
+    if (!cleanSubPath) {
       // No sub-path - serve index.html
-      filePath = path.join(project.path, 'index.html');
+      s3Key = `${project.path}/index.html`;
       console.log(`[serveProjectMainPage] No sub-path, serving index.html`);
     } else {
-      // Remove leading slash if present and normalize path separators
-      let cleanSubPath = subPath.replace(/^\/+/, '').replace(/\\/g, '/');
-
       // Prevent directory traversal
-      const safePath = path.normalize(cleanSubPath).replace(/^(\.\.(\/|\\|$))+/, '');
-      const safeFilePath = path.join(project.path, safePath);
-
-      console.log(`[serveProjectMainPage] Checking file: ${safeFilePath}`);
-      console.log(`[serveProjectMainPage] File exists: ${fs.existsSync(safeFilePath)}`);
-
-      // Ensure file is within project directory
-      if (!safeFilePath.startsWith(path.resolve(project.path))) {
-        console.error(`[serveProjectMainPage] Path traversal attempt: ${safeFilePath}`);
-        return res.status(403).json({
-          success: false,
-          message: 'Access denied'
-        });
-      }
-
-      // Check if file exists
-      if (fs.existsSync(safeFilePath) && fs.statSync(safeFilePath).isFile()) {
-        filePath = safeFilePath;
-        console.log(`[serveProjectMainPage] Serving file: ${filePath}`);
-      } else {
-        // Check if it's a directory - if so, try Overview.html first, then index.html
-        if (fs.existsSync(safeFilePath) && fs.statSync(safeFilePath).isDirectory()) {
-          // For phase directories (BRD_phase, UI_UX_phase, etc.), try Overview.html first
-          const overviewFile = path.join(safeFilePath, 'Overview.html');
-          if (fs.existsSync(overviewFile)) {
-            filePath = overviewFile;
-            console.log(`[serveProjectMainPage] Serving Overview.html from phase directory: ${filePath}`);
-          } else {
-            const indexInDir = path.join(safeFilePath, 'index.html');
-            if (fs.existsSync(indexInDir)) {
-              filePath = indexInDir;
-              console.log(`[serveProjectMainPage] Serving index.html from directory: ${filePath}`);
-            } else {
-              // It's likely an SPA route, serve index.html and let the app handle routing
-              filePath = path.join(project.path, 'index.html');
-              console.log(`[serveProjectMainPage] Directory without index.html, serving root index.html for SPA routing`);
-            }
-          }
-        } else {
-          // File doesn't exist - check if it's a request for a phase directory (e.g., BRD_phase/Overview.html)
-          // Try to find the file by checking if the parent directory exists
-          const pathParts = cleanSubPath.split('/');
-          if (pathParts.length >= 2) {
-            // It's a path like BRD_phase/Overview.html
-            const parentDir = path.join(project.path, pathParts.slice(0, -1).join('/'));
-            const fileName = pathParts[pathParts.length - 1];
-
-            console.log(`[serveProjectMainPage] Checking parent directory: ${parentDir}`);
-            console.log(`[serveProjectMainPage] Looking for file: ${fileName} in ${parentDir}`);
-
-            if (fs.existsSync(parentDir) && fs.statSync(parentDir).isDirectory()) {
-              const fullFilePath = path.join(parentDir, fileName);
-              if (fs.existsSync(fullFilePath) && fs.statSync(fullFilePath).isFile()) {
-                filePath = fullFilePath;
-                console.log(`[serveProjectMainPage] Found file in parent directory: ${filePath}`);
-              } else {
-                // Try Overview.html if the requested file doesn't exist
-                const overviewFile = path.join(parentDir, 'Overview.html');
-                if (fs.existsSync(overviewFile)) {
-                  filePath = overviewFile;
-                  console.log(`[serveProjectMainPage] Serving Overview.html instead: ${filePath}`);
-                } else {
-                  filePath = path.join(project.path, 'index.html');
-                  console.log(`[serveProjectMainPage] File not found, serving index.html for SPA routing`);
-                }
-              }
-            } else {
-              filePath = path.join(project.path, 'index.html');
-              console.log(`[serveProjectMainPage] Parent directory not found, serving index.html for SPA routing`);
-            }
-          } else {
-            // It's likely an SPA route, serve index.html and let the app handle routing
-            filePath = path.join(project.path, 'index.html');
-            console.log(`[serveProjectMainPage] File not found, serving index.html for SPA routing`);
-          }
-        }
-      }
+      const safePath = path.posix.normalize(cleanSubPath).replace(/^(\.\.(\/|$))+/, '');
+      s3Key = `${project.path}/${safePath}`;
     }
 
-    console.log(`[serveProjectMainPage] Final file path: ${filePath}`);
+    console.log(`[serveProjectMainPage] Final S3 key: ${s3Key}`);
 
-    if (!fs.existsSync(filePath)) {
-      console.error(`[serveProjectMainPage] File not found: ${filePath}`);
-      return res.status(404).send(`
-        <!DOCTYPE html>
-        <html>
-        <head>
-          <title>File Not Found</title>
-          <style>
-            body { font-family: Arial, sans-serif; display: flex; justify-content: center; align-items: center; height: 100vh; margin: 0; }
-            .error { text-align: center; padding: 20px; }
-          </style>
-        </head>
-        <body>
-          <div class="error">
-            <h1>File Not Found</h1>
-            <p>The requested file was not found in the project.</p>
-          </div>
-        </body>
-        </html>
-      `);
-    }
+    // Determine if it's an HTML file or static asset
+    const extRaw = path.extname(s3Key).toLowerCase();
+    const isHtmlFileRaw = extRaw === '.html' || extRaw === '.htm';
 
-    // Check if this is an HTML file or an asset file
-    const ext = path.extname(filePath).toLowerCase();
-    const isHtmlFile = ext === '.html' || ext === '.htm';
+    // 1. Serve static assets directly
+    if (!isHtmlFileRaw) {
+      // (Assets are streamed, caching them in memory might be too much memory, 
+      // so we rely on S3 directly + browser cache headers)
+      console.log(`[serveProjectMainPage] Serving static asset: ${s3Key}`);
+      const fileData = await require('../services/s3Service').getFileStream(s3Key);
 
-    // If it's not an HTML file, serve it directly as a static asset
-    if (!isHtmlFile) {
-      console.log(`[serveProjectMainPage] Serving static asset: ${filePath}`);
+      if (!fileData) {
+        console.error(`[serveProjectMainPage] Asset not found in S3 or error: ${s3Key}`);
+        return res.status(404).send('Asset not found');
+      }
 
-      // Determine content type
       const contentTypes = {
         '.css': 'text/css',
         '.js': 'application/javascript',
@@ -422,57 +358,96 @@ const serveProjectMainPage = async (req, res, next) => {
         '.eot': 'application/vnd.ms-fontobject'
       };
 
-      const contentType = contentTypes[ext] || 'application/octet-stream';
+      const contentType = contentTypes[extRaw] || fileData.contentType || 'application/octet-stream';
       res.setHeader('Content-Type', contentType);
       res.setHeader('Cache-Control', 'public, max-age=3600');
+      if (fileData.contentLength) {
+        res.setHeader('Content-Length', fileData.contentLength);
+      }
 
-      // Send file
-      const fileStream = fs.createReadStream(filePath);
-      fileStream.pipe(res);
+      fileData.stream.pipe(res);
       return;
     }
 
-    // It's an HTML file - process it
-    console.log(`[serveProjectMainPage] Reading HTML file from: ${filePath}...`);
-    let html;
-    try {
-      html = fs.readFileSync(filePath, 'utf8');
-      console.log(`[serveProjectMainPage] HTML file read successfully, size: ${html.length} characters`);
+    // 2. It's an HTML file - Check Cache first
+    const now = Date.now();
+    const cachedItem = htmlCache.get(s3Key);
+    if (cachedItem && (now - cachedItem.timestamp < CACHE_TTL)) {
+      console.log(`[serveProjectMainPage] Serving from cache: ${s3Key} (Cache age: ${Math.round((now - cachedItem.timestamp) / 1000)}s)`);
+      res.setHeader('Content-Type', 'text/html');
+      res.setHeader('Cache-Control', 'public, max-age=30'); // Short browser cache for dynamic content
+      return res.send(cachedItem.html);
+    }
 
-      // Validate HTML is not empty
-      if (!html || html.trim().length === 0) {
-        throw new Error('HTML file is empty');
+    // 3. Cache miss - Fetch and handle fallbacks
+    console.log(`[serveProjectMainPage] Reading HTML file from S3: ${s3Key}...`);
+    let html = await require('../services/s3Service').getFileString(s3Key);
+
+    if (!html) {
+      console.log(`[serveProjectMainPage] Exact file not found: ${s3Key}. Trying fallbacks.`);
+      let foundFallback = false;
+
+      // Fallback logic for SPAs and phases
+      // 1. Try Overview.html in the directory
+      let overviewKey = s3Key.endsWith('/') ? `${s3Key}Overview.html` : `${s3Key}/Overview.html`;
+      html = await require('../services/s3Service').getFileString(overviewKey);
+      if (html) {
+        s3Key = overviewKey;
+        foundFallback = true;
+        console.log(`[serveProjectMainPage] Fallback success: Served Overview.html`);
       }
 
-      // Log first 500 characters to see what we're serving
-      console.log(`[serveProjectMainPage] HTML preview (first 500 chars): ${html.substring(0, 500)}`);
-    } catch (readError) {
-      console.error(`[serveProjectMainPage] Error reading HTML file: ${readError.message}`);
-      return res.status(500).send(`
-        <!DOCTYPE html>
-        <html>
-        <head>
-          <title>Error Loading Project</title>
-          <style>
-            body { font-family: Arial, sans-serif; display: flex; justify-content: center; align-items: center; height: 100vh; margin: 0; }
-            .error { text-align: center; padding: 20px; }
-          </style>
-        </head>
-        <body>
-          <div class="error">
-            <h1>Error Loading Project</h1>
-            <p>Failed to read project file: ${readError.message}</p>
-            <p>File path: ${filePath}</p>
-          </div>
-        </body>
-        </html>
-      `);
+      // 2. Try index.html in the directory
+      if (!foundFallback) {
+        let indexKey = s3Key.endsWith('/') ? `${s3Key}index.html` : `${s3Key}/index.html`;
+        html = await require('../services/s3Service').getFileString(indexKey);
+        if (html) {
+          s3Key = indexKey;
+          foundFallback = true;
+          console.log(`[serveProjectMainPage] Fallback success: Served index.html from dir`);
+        }
+      }
+
+      // 3. Try parent folder Overview.html
+      if (!foundFallback) {
+        const pathParts = cleanSubPath.split('/');
+        if (pathParts.length >= 2) {
+          const parentDir = pathParts.slice(0, -1).join('/');
+          const parentOverviewKey = `${project.path}/${parentDir}/Overview.html`;
+          html = await require('../services/s3Service').getFileString(parentOverviewKey);
+          if (html) {
+            s3Key = parentOverviewKey;
+            foundFallback = true;
+            console.log(`[serveProjectMainPage] Fallback success: Served parent Overview.html`);
+          }
+        }
+      }
+
+      // 4. Ultimate SPA Fallback
+      if (!foundFallback) {
+        const rootIndexKey = `${project.path}/index.html`;
+        html = await require('../services/s3Service').getFileString(rootIndexKey);
+        if (html) {
+          s3Key = rootIndexKey;
+          foundFallback = true;
+          console.log(`[serveProjectMainPage] Fallback success: Served SPA root index.html`);
+        }
+      }
+
+      if (!foundFallback || !html) {
+        console.error(`[serveProjectMainPage] File completely not found in S3: ${s3Key}`);
+        return res.status(404).send('Project file not found');
+      }
     }
+
+
+    // 3. Process the HTML (footer hiding, token injection, path fixing)
 
     // Always remove any previously injected footer-hider styles to ensure footer visibility by default
     html = html.replace(/<style id="lms-footer-hider">[\s\S]*?<\/style>/gi, '');
 
-    if (project.hideFooter === true) {
+    // Hide footer if explicitly requested OR if we're in LMS mode (token present)
+    if (project.hideFooter === true || (req.query && (req.query.token || req.query.accessToken))) {
       const hideFooterCSS = `
         <style id="lms-footer-hider">
           footer,
@@ -484,13 +459,23 @@ const serveProjectMainPage = async (req, res, next) => {
           #site-footer,
           .main-footer,
           .footer-container,
-          [role="contentinfo"] {
+          [role="contentinfo"],
+          header:not(.lms-header),
+          .header:not(.lms-header),
+          #header:not(.lms-header),
+          .nav-container:not(.phase-nav-container) {
             display: none !important;
             visibility: hidden !important;
             height: 0 !important;
             overflow: hidden !important;
             margin: 0 !important;
             padding: 0 !important;
+          }
+          
+          /* Ensure body doesn't have extra padding for hidden elements */
+          body {
+            padding-top: 0 !important;
+            padding-bottom: 0 !important;
           }
         </style>
       `;
@@ -1578,6 +1563,14 @@ const serveProjectMainPage = async (req, res, next) => {
     res.setHeader('Cache-Control', 'no-cache, no-store, must-revalidate');
     res.setHeader('X-Content-Type-Options', 'nosniff');
     console.log(`[serveProjectMainPage] Sending HTML response, length: ${html.length}, backendUrl: ${backendUrl}`);
+    
+    // Store in cache for future requests
+    if (htmlCache.size >= CACHE_MAX_SIZE) {
+      const firstKey = htmlCache.keys().next().value;
+      htmlCache.delete(firstKey);
+    }
+    htmlCache.set(s3Key, { html, timestamp: Date.now() });
+
     res.send(html);
   } catch (error) {
     console.error('[serveProjectMainPage] Error serving project page:', error);

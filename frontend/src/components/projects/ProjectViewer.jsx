@@ -46,7 +46,7 @@ const ProjectViewer = () => {
 
   // Construct project URL only if projectId is valid
   const projectUrl = projectId
-    ? `${apiUrl}/api/realtime-projects/${projectId}${token ? `?token=${encodeURIComponent(token)}` : ''}`
+    ? `${apiUrl}/api/realtime-projects/${projectId}/${token ? `?token=${encodeURIComponent(token)}` : ''}`
     : null;
 
   // Debug logging
@@ -183,7 +183,7 @@ const ProjectViewer = () => {
       </div>
 
       {/* Project iframe - Takes all remaining space */}
-      <div className="flex-1 relative overflow-hidden" style={{ height: 0 }}>
+      <div className="flex-1 relative overflow-hidden">
         {iframeLoading && (
           <div className="absolute inset-0 flex items-center justify-center bg-gray-100 z-10">
             <div className="text-center">
@@ -208,7 +208,7 @@ const ProjectViewer = () => {
             // The backend handles all content rendering and the iframe will work properly.
           }}
           onError={handleIframeError}
-          sandbox="allow-same-origin allow-scripts allow-forms allow-popups allow-modals allow-top-navigation"
+          sandbox="allow-same-origin allow-scripts allow-forms allow-popups allow-popups-to-escape-sandbox allow-modals allow-top-navigation allow-downloads"
           allow="fullscreen"
         />
       </div>

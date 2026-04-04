@@ -66,6 +66,10 @@ const Plan = require('./Plan')(sequelize, Sequelize.DataTypes);
 const Subscription = require('./Subscription')(sequelize, Sequelize.DataTypes);
 const Coupon = require('./Coupon')(sequelize, Sequelize.DataTypes);
 const PaymentRequest = require('./PaymentRequest')(sequelize, Sequelize.DataTypes);
+const ContactMessage = require('./ContactMessage')(sequelize, Sequelize.DataTypes);
+const Internship = require('./Internship')(sequelize, Sequelize.DataTypes);
+const InternshipRegistration = require('./InternshipRegistration')(sequelize, Sequelize.DataTypes);
+const InternshipSubmission = require('./InternshipSubmission')(sequelize, Sequelize.DataTypes);
 
 // Define associations
 const defineAssociations = () => {
@@ -364,6 +368,16 @@ const defineAssociations = () => {
   Certificate.belongsTo(TestAttempt, {
     foreignKey: 'test_attempt_id',
     as: 'testAttempt'
+  });
+
+  Certificate.belongsTo(RealtimeProjectSubmission, {
+    foreignKey: 'realtime_project_submission_id',
+    as: 'realtimeProjectSubmission'
+  });
+
+  RealtimeProjectSubmission.hasOne(Certificate, {
+    foreignKey: 'realtime_project_submission_id',
+    as: 'certificate'
   });
 
   // ActivityLog associations
@@ -757,6 +771,7 @@ const defineAssociations = () => {
     onDelete: 'CASCADE'
   });
 
+
   // Plan associations
   Plan.hasMany(Subscription, {
     foreignKey: 'plan_id',
@@ -790,6 +805,37 @@ const defineAssociations = () => {
     }
   });
 
+  // InternshipSubmission associations
+  InternshipSubmission.belongsTo(User, {
+    foreignKey: 'student_id',
+    as: 'student',
+    onDelete: 'CASCADE'
+  });
+
+  InternshipSubmission.belongsTo(Internship, {
+    foreignKey: 'internship_id',
+    as: 'internship',
+    onDelete: 'CASCADE'
+  });
+
+  InternshipSubmission.belongsTo(User, {
+    foreignKey: 'reviewed_by',
+    as: 'reviewer',
+    onDelete: 'SET NULL'
+  });
+
+  User.hasMany(InternshipSubmission, {
+    foreignKey: 'student_id',
+    as: 'internshipSubmissions',
+    onDelete: 'CASCADE'
+  });
+
+  Internship.hasMany(InternshipSubmission, {
+    foreignKey: 'internship_id',
+    as: 'submissions',
+    onDelete: 'CASCADE'
+  });
+
   // Coupon associations
   Coupon.belongsTo(Plan, {
     foreignKey: 'plan_id',
@@ -818,6 +864,18 @@ const defineAssociations = () => {
     foreignKey: 'plan_id',
     as: 'paymentRequests'
   });
+
+  // Internship associations
+  Internship.belongsTo(User, { foreignKey: 'created_by', as: 'creator' });
+  Internship.belongsTo(User, { foreignKey: 'updated_by', as: 'updater' });
+  Internship.hasMany(InternshipRegistration, { foreignKey: 'internship_id', as: 'registrations', onDelete: 'CASCADE' });
+  Internship.belongsToMany(User, { through: InternshipRegistration, foreignKey: 'internship_id', otherKey: 'student_id', as: 'registeredStudents' });
+
+  InternshipRegistration.belongsTo(Internship, { foreignKey: 'internship_id', as: 'internship' });
+  InternshipRegistration.belongsTo(User, { foreignKey: 'student_id', as: 'student' });
+
+  User.hasMany(InternshipRegistration, { foreignKey: 'student_id', as: 'internshipRegistrations', onDelete: 'CASCADE' });
+  User.belongsToMany(Internship, { through: InternshipRegistration, foreignKey: 'student_id', otherKey: 'internship_id', as: 'internships' });
 
 };
 
@@ -865,5 +923,9 @@ module.exports = {
   Plan,
   Subscription,
   Coupon,
-  PaymentRequest
+  PaymentRequest,
+  ContactMessage,
+  Internship,
+  InternshipRegistration,
+  InternshipSubmission
 };

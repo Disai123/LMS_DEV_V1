@@ -33,10 +33,20 @@ module.exports = (sequelize, DataTypes) => {
       defaultValue: 0,
       comment: 'Aggregated from student_achievements'
     },
+    total_internship_points: {
+      type: DataTypes.INTEGER,
+      defaultValue: 0,
+      comment: 'Aggregated from student_achievements'
+    },
     total_points: {
       type: DataTypes.INTEGER,
       defaultValue: 0,
-      comment: 'Sum of course + project + hackathon points'
+      comment: 'Sum of course + project + hackathon + internship points'
+    },
+    pq_score: {
+      type: DataTypes.DECIMAL(4, 2),
+      defaultValue: 0.00,
+      comment: 'Project Quotient score (0-10)'
     },
     courses_completed_count: {
       type: DataTypes.INTEGER,
@@ -47,6 +57,10 @@ module.exports = (sequelize, DataTypes) => {
       defaultValue: 0
     },
     hackathons_approved_count: {
+      type: DataTypes.INTEGER,
+      defaultValue: 0
+    },
+    internships_completed_count: {
       type: DataTypes.INTEGER,
       defaultValue: 0
     },
@@ -88,7 +102,9 @@ module.exports = (sequelize, DataTypes) => {
         // Calculate total_points automatically
         score.total_points = (score.total_course_points || 0) + 
                             (score.total_project_points || 0) + 
-                            (score.total_hackathon_points || 0);
+                            (score.total_hackathon_points || 0) +
+                            (score.total_internship_points || 0);
+        score.pq_score = Math.min(score.total_points / 60, 10);
         score.last_calculated_at = new Date();
       }
     }
@@ -106,10 +122,13 @@ module.exports = (sequelize, DataTypes) => {
       total_course_points: this.total_course_points,
       total_project_points: this.total_project_points,
       total_hackathon_points: this.total_hackathon_points,
+      total_internship_points: this.total_internship_points,
       total_points: this.total_points,
+      pq_score: this.pq_score,
       courses_completed_count: this.courses_completed_count,
       projects_approved_count: this.projects_approved_count,
       hackathons_approved_count: this.hackathons_approved_count,
+      internships_completed_count: this.internships_completed_count,
       master_certificate_issued: this.master_certificate_issued,
       master_certificate_issued_at: this.master_certificate_issued_at,
       last_calculated_at: this.last_calculated_at
@@ -134,10 +153,13 @@ module.exports = (sequelize, DataTypes) => {
         total_course_points: 0,
         total_project_points: 0,
         total_hackathon_points: 0,
+        total_internship_points: 0,
         total_points: 0,
+        pq_score: 0.0,
         courses_completed_count: 0,
         projects_approved_count: 0,
-        hackathons_approved_count: 0
+        hackathons_approved_count: 0,
+        internships_completed_count: 0
       });
     }
 

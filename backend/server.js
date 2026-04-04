@@ -28,6 +28,7 @@ const progressRoutes = require('./routes/progress-simple');
 // Realtime projects routes (for students with permission)
 const realtimeProjectsRoutes = require('./routes/realtimeProjects');
 const hackathonRoutes = require('./routes/hackathons');
+const internshipRoutes = require('./routes/internships');
 const groupRoutes = require('./routes/groups');
 // const chatRoutes = require('./routes/chat');
 const testRoutes = require('./routes/tests');
@@ -39,6 +40,7 @@ const achievementRoutes = require('./routes/achievements');
 const scoreRoutes = require('./routes/scores');
 const passwordResetRoutes = require('./routes/passwordReset');
 const paymentRoutes = require('./routes/payment');
+const contactRoutes = require('./routes/contact');
 const { errorHandler } = require('./middleware/errorHandler');
 const logger = require('./utils/logger');
 const SocketServer = require('./socket/socketServer');
@@ -278,6 +280,7 @@ app.use('/api/realtime-projects', realtimeProjectsRoutes);
 const realtimeProjectSubmissionsRoutes = require('./routes/realtimeProjectSubmissions');
 app.use('/api/realtime-project-submissions', realtimeProjectSubmissionsRoutes);
 app.use('/api/hackathons', hackathonRoutes);
+app.use('/api/internships', internshipRoutes);
 app.use('/api/groups', groupRoutes);
 // app.use('/api/chat', chatRoutes);
 app.use('/api/tests', testRoutes);
@@ -289,6 +292,7 @@ app.use('/api/achievements', achievementRoutes);
 app.use('/api/scores', scoreRoutes);
 app.use('/api/password-reset', passwordResetRoutes);
 app.use('/api/payment', paymentRoutes);
+app.use('/api/contact', contactRoutes);
 app.use('/api', progressRoutes);
 
 // Debug: Log all registered routes

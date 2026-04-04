@@ -77,10 +77,19 @@ export const paymentService = {
   submitTransaction: (planId, transactionId) => api.post('/payment/submit-transaction', { plan_id: planId, transaction_id: transactionId }),
   getMySubscription: () => api.get('/payment/subscription'),
   getSubscriptionStats: () => api.get('/payment/admin/stats'),
+  getPackageStats: () => api.get('/payment/admin/package-stats'),
   getAllSubscriptions: () => api.get('/payment/admin/subscriptions/all'),
   getPaymentRequests: (status) => api.get(`/payment/admin/payment-requests${status ? `?status=${status}` : ''}`),
   approvePaymentRequest: (id, adminNotes) => api.post(`/payment/admin/payment-requests/${id}/approve`, { admin_notes: adminNotes }),
   rejectPaymentRequest: (id, adminNotes) => api.post(`/payment/admin/payment-requests/${id}/reject`, { admin_notes: adminNotes }),
+  manualUpgrade: (studentId, planName) => api.patch('/payment/admin/manual-upgrade', { student_id: studentId, plan_name: planName }),
+};
+
+export const rbacService = {
+  getMyPlanAccess: () => api.get('/rbac/my-plan-access'),
+  getMyPermissions: () => api.get('/rbac/my-permissions'),
+  getStudentPermissions: () => api.get('/rbac/permissions'),
+  updateStudentPermission: (studentId, permissions) => api.put(`/rbac/permissions/${studentId}`, permissions),
 };
 
 export default api;

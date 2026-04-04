@@ -15,9 +15,11 @@ router.post('/submit-transaction', paymentController.submitPaymentRequest);
 
 // Admin routes
 router.get('/admin/stats', paymentController.getSubscriptionStats);
+router.get('/admin/package-stats', paymentController.getPackageStats);
 router.get('/admin/subscriptions/all', paymentController.getAllSubscriptions);
 router.get('/admin/payment-requests', paymentController.getPaymentRequests);
 router.post('/admin/payment-requests/:id/approve', paymentController.approvePaymentRequest);
 router.post('/admin/payment-requests/:id/reject', paymentController.rejectPaymentRequest);
+router.patch('/admin/manual-upgrade', paymentController.manualUpgrade);
 
 module.exports = router;

@@ -48,4 +48,10 @@ router.get('/my-permissions',
   rbacController.getMyPermissions
 );
 
+// Get current user's plan access (plan tier, features)
+router.get('/my-plan-access',
+  authenticate,
+  rbacController.getMyPlanAccess
+);
+
 module.exports = router;

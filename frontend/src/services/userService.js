@@ -109,5 +109,16 @@ export const userService = {
     } catch (error) {
       throw new Error(error.response?.data?.message || 'Failed to get user enrollments')
     }
+  },
+
+  // Update user plan type (admin only)
+  updateUserPlan: async (id, plan_type) => {
+    try {
+      const response = await api.put(`/users/${id}/plan-type`, { plan_type })
+      return response.data
+    } catch (error) {
+      throw new Error(error.response?.data?.message || 'Failed to update user plan')
+    }
   }
 }
+

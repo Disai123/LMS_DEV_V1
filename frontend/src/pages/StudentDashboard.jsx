@@ -10,6 +10,7 @@ import { hackathonService } from '../services/hackathonService'
 import { scoreService } from '../services/scoreService'
 import { usePermissions } from '../hooks/usePermissions'
 import { useRealtimeProjects } from '../hooks/useRealtimeProjects'
+import internshipService from '../services/internshipService'
 import { paymentService } from '../services/api'
 import ProjectCard from '../components/projects/ProjectCard'
 // import { chatService } from '../services/chatService'
@@ -19,10 +20,8 @@ import AllCoursesModal from '../components/course/AllCoursesModal'
 import EnrolledCoursesModal from '../components/course/EnrolledCoursesModal'
 import StudentCourseCard from '../components/course/StudentCourseCard'
 import EnrolledCourseCard from '../components/course/EnrolledCourseCard'
-import StudentHackathonCard from '../components/hackathon/StudentHackathonCard'
-import StudentHackathonDetailsModal from '../components/hackathon/StudentHackathonDetailsModal'
-// import ChatRoomsList from '../components/chat/ChatRoomsList'
-// import ChatRoom from '../components/chat/ChatRoom'
+import InternshipSubmissionModal from '../components/internship/InternshipSubmissionModal'
+import { Send } from 'lucide-react'
 import toast from 'react-hot-toast'
 
 const StudentDashboard = () => {
@@ -38,7 +37,8 @@ const StudentDashboard = () => {
   );
   const subscription = subscriptionResponse?.data?.data;
   const planName = subscription?.plan?.name?.toLowerCase();
-  const isPremiumUser = user?.role === 'admin' || planName === 'basic' || planName === 'pro';
+  const isPremiumUser = user?.role === 'admin' || user?.plan_type === 'premium' || (subscription && subscription.status === 'active' && planName && !planName.includes('free'));
+  const displayPlanName = user?.role === 'admin' ? 'Admin' : (subscription?.plan?.name || (isPremiumUser ? 'Premium Plan' : 'Free Plan'));
 
   const { data: coursesData, isLoading: coursesLoading, error: coursesError } = useQuery(
     'student-courses',
@@ -106,6 +106,15 @@ const StudentDashboard = () => {
     }
   )
 
+  const { data: myInternshipsData, isLoading: internshipsLoading } = useQuery(
+    'my-internships',
+    () => internshipService.getMyInternships(),
+    {
+      enabled: !!user,
+      staleTime: 5 * 60 * 1000
+    }
+  )
+
   // const { data: chatRoomsData, isLoading: chatRoomsLoading, error: chatRoomsError } = useQuery(
   //   'student-chat-rooms',
   //   () => chatService.getMyChatRooms(),
@@ -151,15 +160,13 @@ const StudentDashboard = () => {
   // Modal state
   const [isAllCoursesModalOpen, setIsAllCoursesModalOpen] = useState(false)
   const [isEnrolledCoursesModalOpen, setIsEnrolledCoursesModalOpen] = useState(false)
-  const [selectedHackathon, setSelectedHackathon] = useState(null)
-  const [isHackathonDetailsModalOpen, setIsHackathonDetailsModalOpen] = useState(false)
-  // const [selectedChatRoom, setSelectedChatRoom] = useState(null)
-  // const [isChatModalOpen, setIsChatModalOpen] = useState(false)
+  const [selectedInternship, setSelectedInternship] = useState(null)
+  const [isSubmissionModalOpen, setIsSubmissionModalOpen] = useState(false)
 
   const { hasAccess } = usePermissions()
   const { projects: realtimeProjects = [], hasAccess: hasProjectsAccess = false } = useRealtimeProjects({ category: 'all', difficulty: 'all', sort: 'name' })
 
-  const isLoading = coursesLoading || enrollmentsLoading || activitiesLoading || hackathonsLoading || scoreLoading
+  const isLoading = coursesLoading || enrollmentsLoading || activitiesLoading || hackathonsLoading || scoreLoading || internshipsLoading
   const courses = coursesData?.data?.courses || []
   const enrollments = enrollmentsData?.data?.enrollments || []
   const activities = activitiesData?.data?.activities || []
@@ -239,6 +246,20 @@ const StudentDashboard = () => {
           badgeText: 'Certificate',
           dotColor: 'bg-yellow-500'
         }
+      case 'internship_completed':
+        return {
+          bgColor: 'from-purple-50 to-indigo-50',
+          borderColor: 'border-purple-200',
+          iconBg: 'from-purple-500 to-indigo-600',
+          icon: (
+            <svg className="w-4 h-4 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+            </svg>
+          ),
+          badgeColor: 'bg-purple-100 text-purple-800',
+          badgeText: 'Internship Done',
+          dotColor: 'bg-purple-500'
+        }
       default:
         return {
           bgColor: 'from-gray-50 to-slate-50',
@@ -267,17 +288,6 @@ const StudentDashboard = () => {
     return enrolled
   }
 
-  // Handle hackathon details view
-  const handleViewHackathonDetails = async (hackathonId) => {
-    try {
-      const hackathon = await hackathonService.getHackathonById(hackathonId)
-      setSelectedHackathon(hackathon.data)
-      setIsHackathonDetailsModalOpen(true)
-    } catch (error) {
-      console.error('Error fetching hackathon details:', error)
-      toast.error('Failed to load hackathon details')
-    }
-  }
 
   // const handleSelectChatRoom = (hackathon, group) => {
   //   setSelectedChatRoom({ hackathon, group })
@@ -289,15 +299,25 @@ const StudentDashboard = () => {
   //   setIsChatModalOpen(false)
   // }
 
-  const handleEnroll = async (courseId) => {
+  const handleEnroll = async (courseData) => {
+    const courseId = typeof courseData === 'object' ? courseData.id : courseData;
+    const isFreeCourse = typeof courseData === 'object' ? courseData.is_free : true;
+
+    // Check if it's a premium course and user is not premium
+    if (!isFreeCourse && !isPremiumUser) {
+      toast.error('This is a premium course. Redirecting to pricing...');
+      setTimeout(() => navigate('/pricing'), 1500);
+      return;
+    }
+
     try {
       setEnrollingCourseId(courseId);
       await enrollMutation.mutateAsync(courseId);
-      toast.success('Successfully enrolled in course!');
+      // Success toast is handled by mutation onSuccess
       queryClient.invalidateQueries('student-enrollments');
     } catch (error) {
+      // Error toast is handled by mutation onError
       console.error('Enrollment error:', error);
-      toast.error('Failed to enroll in course');
     } finally {
       setEnrollingCourseId(null);
     }
@@ -389,7 +409,7 @@ const StudentDashboard = () => {
                         : 'bg-white/20 border-white/30 text-white'
                         }`}>
                         <span className="text-xs font-semibold uppercase tracking-wide">
-                          {isPremiumUser ? 'Premium Plan' : 'Free Plan'}
+                          {displayPlanName}
                         </span>
                       </div>
                     </div>
@@ -440,59 +460,77 @@ const StudentDashboard = () => {
 
                   {/* Right: Academic Score Display - Always show, even if data is loading/null */}
                   <div className="lg:col-span-2 border-l-0 lg:border-l border-white/20 pl-0 lg:pl-5">
-                    <h2 className="text-lg font-bold text-white mb-3">Your Academic Score</h2>
+                    <div className="flex flex-col md:flex-row gap-5">
+                      {/* Left Side: Points stats */}
+                      <div className="flex-1 space-y-5">
+                        {/* Summary Header: Total Points */}
+                        <div className="bg-gradient-to-br from-amber-500/20 to-orange-500/10 backdrop-blur-md rounded-xl p-4 border border-amber-500/30 shadow-lg shadow-amber-900/20">
+                          <p className="text-amber-300 text-[10px] font-bold uppercase tracking-[0.15em] mb-1">Cumulative Mastery</p>
+                          <div className="flex items-baseline gap-2">
+                            <span className="text-4xl font-black text-white tabular-nums">{scoreData?.data?.total_points || 0}</span>
+                            <span className="text-amber-400 font-bold text-xs uppercase tracking-tighter">Total Points</span>
+                          </div>
+                        </div>
 
-                    <div className="grid grid-cols-2 md:grid-cols-4 gap-2.5 mb-3">
-                      <div className="bg-white/10 backdrop-blur-sm rounded-lg p-2.5 text-center border border-white/20 hover:bg-white/15 transition-colors">
-                        <p className="text-white/80 text-xs mb-0.5">Total Points</p>
-                        <p className="text-2xl font-bold text-white">
-                          {scoreData?.data?.total_points || 0}
-                          {scoreData?.data?.max_total_points > 0 && (
-                            <span className="text-sm font-normal text-white/70"> / {scoreData.data.max_total_points}</span>
-                          )}
-                        </p>
+                        {/* Category Breakdown */}
+                        <div>
+                          <h2 className="text-[10px] font-bold text-white/40 mb-3 uppercase tracking-[0.2em] px-1">Growth Matrix</h2>
+                          <div className="grid grid-cols-2 md:grid-cols-4 gap-2.5">
+                            {[
+                              { label: 'Courses', value: scoreData?.data?.total_course_points || 0, color: 'border-blue-500/30' },
+                              { label: 'Projects', value: scoreData?.data?.total_project_points || 0, color: 'border-emerald-500/30' },
+                              { label: 'Hackathons', value: scoreData?.data?.total_hackathon_points || 0, color: 'border-indigo-500/30' },
+                              { label: 'Internships', value: scoreData?.data?.total_internship_points || 0, color: 'border-purple-500/30' },
+                            ].map((stat, i) => (
+                              <div key={i} className={`bg-white/5 backdrop-blur-sm rounded-lg p-2.5 text-center border ${stat.color} hover:bg-white/10 transition-colors`}>
+                                <p className="text-white/40 text-[9px] font-bold uppercase tracking-tighter mb-1">{stat.label}</p>
+                                <p className="text-lg font-black text-white tabular-nums">
+                                  {stat.value}
+                                </p>
+                              </div>
+                            ))}
+                          </div>
+                        </div>
                       </div>
-                      <div className="bg-white/10 backdrop-blur-sm rounded-lg p-2.5 text-center border border-white/20 hover:bg-white/15 transition-colors">
-                        <p className="text-white/80 text-xs mb-0.5">Course Points</p>
-                        <p className="text-xl font-bold text-white">
-                          {scoreData?.data?.total_course_points || 0}
-                          {scoreData?.data?.max_course_points > 0 && (
-                            <span className="text-sm font-normal text-white/70"> / {scoreData.data.max_course_points}</span>
-                          )}
-                        </p>
-                      </div>
-                      <div className="bg-white/10 backdrop-blur-sm rounded-lg p-2.5 text-center border border-white/20 hover:bg-white/15 transition-colors">
-                        <p className="text-white/80 text-xs mb-0.5">Project Points</p>
-                        <p className="text-xl font-bold text-white">
-                          {scoreData?.data?.total_project_points || 0}
-                          {scoreData?.data?.max_project_points > 0 && (
-                            <span className="text-sm font-normal text-white/70"> / {scoreData.data.max_project_points}</span>
-                          )}
-                        </p>
-                      </div>
-                      <div className="bg-white/10 backdrop-blur-sm rounded-lg p-2.5 text-center border border-white/20 hover:bg-white/15 transition-colors">
-                        <p className="text-white/80 text-xs mb-0.5">Hackathon Points</p>
-                        <p className="text-xl font-bold text-white">
-                          {scoreData?.data?.total_hackathon_points || 0}
-                          {scoreData?.data?.max_hackathon_points > 0 && (
-                            <span className="text-sm font-normal text-white/70"> / {scoreData.data.max_hackathon_points}</span>
-                          )}
-                        </p>
-                      </div>
-                    </div>
 
-                    <div className="grid grid-cols-3 gap-2.5">
-                      <div className="text-center bg-white/5 rounded-lg py-2">
-                        <p className="text-white/70 text-xs mb-0.5">Courses Completed</p>
-                        <p className="text-base font-bold text-white">{scoreData?.data?.courses_completed_count || 0}</p>
-                      </div>
-                      <div className="text-center bg-white/5 rounded-lg py-2">
-                        <p className="text-white/70 text-xs mb-0.5">Projects Approved</p>
-                        <p className="text-base font-bold text-white">{scoreData?.data?.projects_approved_count || 0}</p>
-                      </div>
-                      <div className="text-center bg-white/5 rounded-lg py-2">
-                        <p className="text-white/70 text-xs mb-0.5">Hackathons</p>
-                        <p className="text-base font-bold text-white">{scoreData?.data?.hackathons_approved_count || 0}</p>
+                      {/* Right Side: PQ Score */}
+                      <div className="md:w-48 flex flex-col items-center justify-center bg-white/10 backdrop-blur-md rounded-xl border border-white/30 p-4 relative overflow-hidden group">
+                        <div className="absolute inset-0 bg-gradient-to-br from-amber-500/10 to-emerald-500/10 opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
+                        <h2 className="text-sm font-bold text-yellow-300 mb-2 uppercase tracking-tight">PERFORMANCE SCORE</h2>
+                        <div className="relative">
+                          <svg className="w-24 h-24 transform -rotate-90">
+                            <circle
+                              cx="48"
+                              cy="48"
+                              r="40"
+                              stroke="currentColor"
+                              strokeWidth="8"
+                              fill="transparent"
+                              className="text-white/10"
+                            />
+                            <circle
+                              cx="48"
+                              cy="48"
+                              r="40"
+                              stroke="currentColor"
+                              strokeWidth="8"
+                              fill="transparent"
+                              strokeDasharray={251.2}
+                              strokeDashoffset={251.2 - (251.2 * (scoreData?.data?.pq_score || 0)) / 10}
+                              strokeLinecap="round"
+                              className="text-yellow-400 drop-shadow-[0_0_8px_rgba(250,204,21,0.5)] transition-all duration-1000 ease-out"
+                            />
+                          </svg>
+                          <div className="absolute inset-0 flex flex-col items-center justify-center">
+                            <span className="text-3xl font-black text-white leading-none">
+                              {parseFloat(scoreData?.data?.pq_score || 0).toFixed(1)}
+                            </span>
+                            <span className="text-[12px] text-white font-black uppercase mt-1">/ 10</span>
+                          </div>
+                        </div>
+                        <p className="mt-3 text-[10px] font-medium text-white/70 text-center leading-tight">
+                          Performance Quotient
+                        </p>
                       </div>
                     </div>
                   </div>
@@ -530,33 +568,6 @@ const StudentDashboard = () => {
                 </div>
               </motion.div>
 
-              <motion.div
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: 0.2 }}
-                className="group relative overflow-hidden bg-white rounded-xl shadow-md hover:shadow-lg transition-all duration-300 transform hover:-translate-y-1"
-              >
-                <div className="absolute inset-0 bg-gradient-to-br from-green-500 to-green-600 opacity-0 group-hover:opacity-5 transition-opacity duration-300"></div>
-                <div className="relative p-4">
-                  <div className="flex items-center justify-between">
-                    <div className="flex items-center">
-                      <div className="p-3 bg-gradient-to-br from-green-500 to-green-600 rounded-lg shadow-md">
-                        <svg className="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
-                        </svg>
-                      </div>
-                      <div className="ml-3">
-                        <p className="text-xs font-medium text-gray-600">Completed</p>
-                        <p className="text-xl font-bold text-gray-900">{completedCourses}</p>
-                      </div>
-                    </div>
-                    <div className="text-right">
-                      <div className="text-lg font-bold text-green-600">{Math.round((completedCourses / Math.max(enrollments.length, 1)) * 100)}%</div>
-                      <div className="text-xs text-gray-500">Success</div>
-                    </div>
-                  </div>
-                </div>
-              </motion.div>
 
               <motion.div
                 initial={{ opacity: 0, y: 20 }}
@@ -793,7 +804,7 @@ const StudentDashboard = () => {
                         index={index}
                         isEnrolled={isEnrolled(course.id)}
                         enrollingCourseId={enrollingCourseId}
-                        onEnroll={handleEnroll}
+                        onEnroll={() => handleEnroll(course)}
                       />
                     ))}
                   </div>
@@ -801,129 +812,76 @@ const StudentDashboard = () => {
               </motion.div>
             </div>
 
-            {/* Enhanced Recent Activity - COMMENTED OUT */}
-            {/* <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 0.8 }}
-              className="group relative overflow-hidden bg-white rounded-xl shadow-md hover:shadow-lg transition-all duration-300"
-            >
-              <div className="absolute top-0 right-0 w-16 h-16 bg-gradient-to-br from-yellow-500 to-orange-500 rounded-full -translate-y-8 translate-x-8 opacity-10"></div>
-              <div className="relative p-6">
-                <div className="flex items-center justify-between mb-6">
-                  <div>
-                    <h3 className="text-lg font-bold text-gray-900 mb-1">Recent Activity</h3>
-                    <p className="text-sm text-gray-600">Your learning journey updates</p>
+            {/* My Internships Section */}
+            {myInternshipsData?.data?.data?.registrations?.length > 0 && (
+              <motion.div
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: 0.75 }}
+                className="group relative overflow-hidden bg-white rounded-xl shadow-md hover:shadow-lg transition-all duration-300"
+              >
+                <div className="absolute top-0 right-0 w-16 h-16 bg-gradient-to-br from-primary to-secondary rounded-full -translate-y-8 translate-x-8 opacity-10"></div>
+                <div className="relative p-6">
+                  <div className="flex items-center justify-between mb-6">
+                    <div>
+                      <h3 className="text-lg font-bold text-gray-900 mb-1">My Internships</h3>
+                      <p className="text-sm text-gray-600">Track your professional journey</p>
+                    </div>
+                    <button
+                      onClick={() => navigate('/internships')}
+                      className="inline-flex items-center px-3 py-1.5 bg-primary/10 text-primary rounded-lg hover:bg-primary/20 transition-colors duration-200 font-medium text-sm"
+                    >
+                      Browse More
+                    </button>
                   </div>
-                  <div className="w-8 h-8 bg-gradient-to-br from-yellow-500 to-orange-500 rounded-full flex items-center justify-center">
-                    <svg className="w-4 h-4 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 10V3L4 14h7v7l9-11h-7z" />
-                    </svg>
-                  </div>
-                </div>
-                
-                <div className="space-y-4">
-                  {activities.length > 0 ? (
-                    activities.map((activity, index) => {
-                      const style = getActivityStyle(activity.type)
-                      return (
-                        <motion.div
-                          key={activity.id}
-                          initial={{ opacity: 0, x: -20 }}
-                          animate={{ opacity: 1, x: 0 }}
-                          transition={{ delay: 0.8 + index * 0.1 }}
-                          className={`flex items-center space-x-4 p-4 bg-gradient-to-r ${style.bgColor} rounded-lg border ${style.borderColor} hover:shadow-sm transition-all duration-200`}
-                        >
-                          <div className={`p-3 bg-gradient-to-br ${style.iconBg} rounded-lg shadow-md`}>
-                            {style.icon}
-                          </div>
-                          <div className="flex-1">
-                            <p className="text-sm font-semibold text-gray-900">{activity.title}</p>
-                            <p className="text-xs text-gray-600">{activity.description}</p>
-                            <div className="mt-1 flex items-center space-x-2">
-                              <span className={`px-2 py-1 ${style.badgeColor} text-xs font-medium rounded-full`}>
-                                {style.badgeText}
-                              </span>
-                              {activity.pointsEarned > 0 && (
-                                <span className="text-xs text-gray-500">+{activity.pointsEarned} XP</span>
-                              )}
-                            </div>
-                          </div>
-                          <div className="text-right">
-                            <div className={`w-2 h-2 ${style.dotColor} rounded-full ${index === 0 ? 'animate-pulse' : ''}`}></div>
-                          </div>
-                        </motion.div>
-                      )
-                    })
-                  ) : (
-                    <div className="text-center py-8">
-                      <div className="w-16 h-16 bg-gradient-to-br from-gray-100 to-gray-200 rounded-full flex items-center justify-center mx-auto mb-4">
-                        <svg className="w-8 h-8 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 10V3L4 14h7v7l9-11h-7z" />
-                        </svg>
-                      </div>
-                      <h3 className="text-lg font-semibold text-gray-900 mb-2">No recent activity</h3>
-                      <p className="text-gray-600 mb-4">Start learning to see your activity here</p>
-                      <button 
-                        onClick={() => navigate('/courses')}
-                        className="inline-flex items-center px-6 py-3 bg-indigo-600 text-white font-semibold rounded-lg hover:bg-indigo-700 transition-all duration-200 shadow-lg hover:shadow-xl transform hover:-translate-y-1"
+
+                  <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                    {myInternshipsData.data.data.registrations.map((reg, index) => (
+                      <motion.div
+                        key={reg.id}
+                        initial={{ opacity: 0, scale: 0.95 }}
+                        animate={{ opacity: 1, scale: 1 }}
+                        transition={{ delay: 0.8 + index * 0.1 }}
+                        className="bg-gray-50 rounded-xl p-4 border border-gray-100 hover:border-primary/30 transition-all cursor-pointer group/card"
+                        onClick={() => navigate('/internships')}
                       >
-                        <svg className="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.746 0 3.332.477 4.5 1.253v13C19.832 18.477 18.246 18 16.5 18c-1.746 0-3.332.477-4.5 1.253" />
-                        </svg>
-                        Browse Courses
-                      </button>
-                    </div>
-                  )}
-                </div>
-              </div>
-            </motion.div> */}
-          </motion.div>
+                        <div className="flex items-center gap-3 mb-3">
+                          <div className="w-10 h-10 rounded-lg bg-primary flex items-center justify-center text-lg text-white">
+                            {reg.internship?.logo || '📖'}
+                          </div>
+                          <div>
+                            <h4 className="font-bold text-gray-900 text-sm line-clamp-1">{reg.internship?.title}</h4>
+                            <span className={`text-[10px] uppercase font-bold tracking-wider ${reg.status === 'completed' ? 'text-green-600' : 'text-primary'
+                              }`}>
+                              {reg.status?.replace('_', ' ')}
+                            </span>
+                          </div>
+                        </div>
+                        <div className="flex flex-col gap-2 mt-4">
+                          <div className="flex items-center justify-between">
+                            <span className="text-xs text-gray-400">Duration: {reg.internship?.duration}</span>
+                            <span className="text-primary text-xs font-bold group-hover/card:underline">View Syllabus →</span>
+                          </div>
 
-          {/* Hackathons Section - COMMENTED OUT */}
-          {/* <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.8 }}
-            className="group relative overflow-hidden bg-white rounded-xl shadow-md hover:shadow-lg transition-all duration-300"
-          >
-            <div className="absolute top-0 right-0 w-16 h-16 bg-gradient-to-br from-purple-500 to-pink-600 rounded-full -translate-y-8 translate-x-8 opacity-10"></div>
-            <div className="relative p-6">
-              <div className="flex items-center justify-between mb-6">
-                <div>
-                  <h3 className="text-lg font-bold text-gray-900 mb-1">My Hackathons</h3>
-                  <p className="text-sm text-gray-600">Participate in coding competitions</p>
-                </div>
-                <div className="flex items-center space-x-2">
-                  <div className="w-2 h-2 bg-purple-500 rounded-full animate-pulse"></div>
-                  <span className="text-xs text-gray-500">Live</span>
-                </div>
-              </div>
-
-              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-                {hackathons.length > 0 ? (
-                  hackathons.slice(0, 6).map((hackathon, index) => (
-                    <StudentHackathonCard
-                      key={hackathon.id}
-                      hackathon={hackathon}
-                      index={index}
-                      onViewDetails={handleViewHackathonDetails}
-                    />
-                  ))
-                ) : (
-                  <div className="col-span-full text-center py-12">
-                    <div className="w-24 h-24 bg-gradient-to-br from-purple-100 to-pink-100 rounded-full flex items-center justify-center mx-auto mb-6">
-                      <svg className="w-12 h-12 text-purple-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z" />
-                      </svg>
-                    </div>
-                    <h3 className="text-xl font-semibold text-gray-900 mb-2">No hackathons available</h3>
-                    <p className="text-gray-600 mb-6">You're not currently eligible for any hackathons. Check back later!</p>
+                          <button
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              setSelectedInternship(reg.internship);
+                              setIsSubmissionModalOpen(true);
+                            }}
+                            className="w-full py-2 bg-primary/10 hover:bg-primary/20 text-primary text-xs font-bold rounded-lg transition-colors flex items-center justify-center gap-1.5 border border-primary/20"
+                          >
+                            <Send size={12} />
+                            Submit Completion Task
+                          </button>
+                        </div>
+                      </motion.div>
+                    ))}
                   </div>
-                )}
-              </div>
-            </div>
-          </motion.div> */}
+                </div>
+              </motion.div>
+            )}
+          </motion.div>
 
           {/* Group Chats Section - COMMENTED OUT */}
           {/* <motion.div
@@ -964,14 +922,16 @@ const StudentDashboard = () => {
         onClose={() => setIsEnrolledCoursesModalOpen(false)}
       />
 
-      {/* Hackathon Details Modal */}
-      <StudentHackathonDetailsModal
-        hackathon={selectedHackathon}
-        onClose={() => {
-          setIsHackathonDetailsModalOpen(false)
-          setSelectedHackathon(null)
+      <InternshipSubmissionModal
+        isOpen={isSubmissionModalOpen}
+        onClose={() => setIsSubmissionModalOpen(false)}
+        internship={selectedInternship}
+        onSuccess={() => {
+          queryClient.invalidateQueries(['student-score']);
+          queryClient.invalidateQueries(['my-internships']);
         }}
       />
+
 
       {/* Chat Room Modal - COMMENTED OUT */}
       {/* {isChatModalOpen && selectedChatRoom && (

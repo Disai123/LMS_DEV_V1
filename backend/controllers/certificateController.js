@@ -1,6 +1,57 @@
-const { Certificate, TestAttempt, CourseTest, Course, User } = require('../models');
+const { Certificate, TestAttempt, CourseTest, Course, User, RealtimeProjectSubmission } = require('../models');
 const logger = require('../utils/logger');
 const { AppError } = require('../middleware/errorHandler');
+
+/**
+ * Issue a certificate for an approved realtime project submission (called internally at approval)
+ */
+const issueRealtimeProjectCertificate = async (submission, student) => {
+  try {
+    // Idempotency: check if already issued
+    const existing = await Certificate.findOne({
+      where: { realtime_project_submission_id: submission.id }
+    });
+    if (existing) {
+      logger.info(`Certificate already exists for realtime project submission ${submission.id}`);
+      return existing;
+    }
+
+    const certificateNumber = await Certificate.generateCertificateNumber(
+      submission.student_id,
+      submission.project_id,
+      'realtime_project'
+    );
+    const verificationCode = Certificate.generateVerificationCode();
+
+    const certificate = await Certificate.create({
+      student_id: submission.student_id,
+      course_id: null,
+      realtime_project_submission_id: submission.id,
+      certificate_type: 'realtime_project',
+      certificate_number: certificateNumber,
+      verification_code: verificationCode,
+      issued_date: new Date(),
+      is_valid: true,
+      metadata: {
+        certificateType: 'realtime_project',
+        projectName: submission.project_name,
+        projectId: submission.project_id,
+        difficulty: submission.difficulty,
+        pointsAwarded: submission.points_awarded,
+        technologies: submission.technologies_used || [],
+        githubUrl: submission.github_url,
+        deployedUrl: submission.deployed_url,
+        studentName: student ? student.name : 'Learner'
+      }
+    });
+
+    logger.info(`Realtime project certificate ${certificateNumber} issued for student ${submission.student_id}, project ${submission.project_name}`);
+    return certificate;
+  } catch (error) {
+    logger.error('Error issuing realtime project certificate:', error);
+    throw error;
+  }
+};
 
 /**
  * Generate certificate for a test attempt
@@ -12,9 +63,9 @@ const generateCertificate = async (req, res, next) => {
 
     // Get the test attempt
     const attempt = await TestAttempt.findOne({
-      where: { 
+      where: {
         id: test_attempt_id,
-        student_id: studentId 
+        student_id: studentId
       },
       include: [
         {
@@ -45,9 +96,9 @@ const generateCertificate = async (req, res, next) => {
 
     // CRITICAL: Get the specific course ID for this test attempt
     const courseIdForCertificate = attempt.test.course_id;
-    
+
     logger.info(`Checking for existing certificate: student_id=${studentId}, course_id=${courseIdForCertificate}, test_attempt_id=${test_attempt_id}`);
-    
+
     // Check if certificate already exists for THIS SPECIFIC COURSE
     const existingCertificate = await Certificate.findOne({
       where: {
@@ -70,7 +121,7 @@ const generateCertificate = async (req, res, next) => {
 
     // Generate certificate ONLY for the specific course that was completed
     logger.info(`Generating certificate for student ${studentId} and course ${courseIdForCertificate}`);
-    
+
     const certificateNumber = await Certificate.generateCertificateNumber(studentId, courseIdForCertificate);
     const verificationCode = Certificate.generateVerificationCode();
 
@@ -125,12 +176,20 @@ const getMyCertificates = async (req, res, next) => {
         {
           model: Course,
           as: 'course',
-          attributes: ['id', 'title', 'category', 'difficulty', 'logo']
+          attributes: ['id', 'title', 'category', 'difficulty', 'logo'],
+          required: false
         },
         {
           model: TestAttempt,
           as: 'testAttempt',
-          attributes: ['id', 'score', 'completed_at']
+          attributes: ['id', 'score', 'completed_at'],
+          required: false
+        },
+        {
+          model: RealtimeProjectSubmission,
+          as: 'realtimeProjectSubmission',
+          attributes: ['id', 'project_name', 'project_id', 'difficulty', 'github_url', 'deployed_url'],
+          required: false
         }
       ],
       order: [['issued_date', 'DESC']]
@@ -143,7 +202,8 @@ const getMyCertificates = async (req, res, next) => {
         certificates: certificates.map(cert => ({
           ...cert.getPublicInfo(),
           course: cert.course,
-          testAttempt: cert.testAttempt
+          testAttempt: cert.testAttempt,
+          realtimeProjectSubmission: cert.realtimeProjectSubmission
         }))
       }
     });
@@ -162,9 +222,9 @@ const getCertificateById = async (req, res, next) => {
     const studentId = req.user.id;
 
     const certificate = await Certificate.findOne({
-      where: { 
+      where: {
         id: id,
-        student_id: studentId 
+        student_id: studentId
       },
       include: [
         {
@@ -210,15 +270,22 @@ const downloadCertificate = async (req, res, next) => {
     const studentId = req.user.id;
 
     const certificate = await Certificate.findOne({
-      where: { 
+      where: {
         id: id,
-        student_id: studentId 
+        student_id: studentId
       },
       include: [
         {
           model: Course,
           as: 'course',
-          attributes: ['id', 'title', 'category', 'difficulty']
+          attributes: ['id', 'title', 'category', 'difficulty'],
+          required: false
+        },
+        {
+          model: RealtimeProjectSubmission,
+          as: 'realtimeProjectSubmission',
+          attributes: ['id', 'project_name', 'project_id', 'difficulty', 'github_url', 'deployed_url'],
+          required: false
         }
       ]
     });
@@ -231,7 +298,7 @@ const downloadCertificate = async (req, res, next) => {
       throw new AppError('Certificate has been revoked', 400);
     }
 
-    // Return certificate data (PDF generation would happen here in production)
+    // Return certificate data (PDF generation happens on frontend)
     res.json({
       success: true,
       message: 'Certificate data retrieved successfully',
@@ -239,7 +306,8 @@ const downloadCertificate = async (req, res, next) => {
         certificate: {
           ...certificate.getPublicInfo(),
           course: certificate.course,
-          studentName: req.user.name
+          realtimeProjectSubmission: certificate.realtimeProjectSubmission,
+          studentName: req.user.name || `${req.user.first_name || ''} ${req.user.last_name || ''}`.trim() || req.user.username
         }
       }
     });
@@ -404,6 +472,7 @@ const renewCertificate = async (req, res, next) => {
 };
 
 module.exports = {
+  issueRealtimeProjectCertificate,
   generateCertificate,
   getMyCertificates,
   getCertificateById,

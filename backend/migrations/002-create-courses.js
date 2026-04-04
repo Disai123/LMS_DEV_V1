@@ -66,6 +66,12 @@ module.exports = {
         type: Sequelize.ARRAY(Sequelize.TEXT),
         defaultValue: []
       },
+      is_free: {
+        type: Sequelize.BOOLEAN,
+        defaultValue: false,
+        allowNull: false,
+        comment: 'Free course accessible to all users; false = premium only'
+      },
       logo: {
         type: Sequelize.TEXT,
         allowNull: true,

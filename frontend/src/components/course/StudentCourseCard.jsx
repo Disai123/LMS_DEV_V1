@@ -3,7 +3,7 @@ import useCourseLogo from '../../hooks/useCourseLogo'
 
 const StudentCourseCard = ({ course, index, isEnrolled, enrollingCourseId, onEnroll }) => {
   const { logoUrl, loading: logoLoading, error: logoError } = useCourseLogo(course.id, !!course.logo)
-  
+
   return (
     <motion.div
       key={course.id}
@@ -46,7 +46,7 @@ const StudentCourseCard = ({ course, index, isEnrolled, enrollingCourseId, onEnr
             </svg>
           </div>
         </div>
-        
+
         {/* Course Info */}
         <div className="flex-1 min-w-0">
           <h4 className="text-base font-semibold text-gray-900 group-hover:text-green-600 transition-colors duration-200 leading-tight mb-1">
@@ -55,7 +55,7 @@ const StudentCourseCard = ({ course, index, isEnrolled, enrollingCourseId, onEnr
           <p className="text-sm text-gray-600 mb-2">
             by {course.instructor?.name}
           </p>
-          
+
           {/* Rating and Meta Info */}
           <div className="flex items-center justify-between">
             <div className="flex items-center space-x-3">
@@ -63,11 +63,10 @@ const StudentCourseCard = ({ course, index, isEnrolled, enrollingCourseId, onEnr
                 {[...Array(5)].map((_, i) => (
                   <svg
                     key={i}
-                    className={`w-3 h-3 ${
-                      i < Math.floor(course.average_rating || 0)
+                    className={`w-3 h-3 ${i < Math.floor(course.average_rating || 0)
                         ? 'text-yellow-400'
                         : 'text-gray-300'
-                    }`}
+                      }`}
                     fill="currentColor"
                     viewBox="0 0 20 20"
                   >
@@ -79,8 +78,14 @@ const StudentCourseCard = ({ course, index, isEnrolled, enrollingCourseId, onEnr
                 </span>
               </div>
             </div>
-            
+
             <div className="flex items-center space-x-2">
+              <span className={`px-2 py-1 rounded-full text-[10px] font-bold border ${course.is_free
+                  ? 'bg-emerald-500/10 text-emerald-600 border-emerald-500/20'
+                  : 'bg-violet-500/10 text-violet-600 border-violet-500/20'
+                }`}>
+                {course.is_free ? 'Free' : 'Premium'}
+              </span>
               <span className="px-2 py-1 bg-gray-200 rounded-full text-xs font-medium text-gray-700">
                 {course.difficulty}
               </span>
@@ -91,16 +96,15 @@ const StudentCourseCard = ({ course, index, isEnrolled, enrollingCourseId, onEnr
 
         {/* Action Button */}
         <div className="flex-shrink-0">
-          <button 
+          <button
             onClick={() => onEnroll(course.id)}
             disabled={isEnrolled || enrollingCourseId === course.id}
-            className={`inline-flex items-center justify-center w-10 h-10 rounded-full transition-all duration-200 shadow-sm hover:shadow-md transform hover:-translate-y-0.5 ${
-              isEnrolled 
-                ? 'bg-green-600 text-white hover:bg-green-700' 
-                : enrollingCourseId === course.id 
-                  ? 'bg-gray-400 text-white cursor-not-allowed' 
+            className={`inline-flex items-center justify-center w-10 h-10 rounded-full transition-all duration-200 shadow-sm hover:shadow-md transform hover:-translate-y-0.5 ${isEnrolled
+                ? 'bg-green-600 text-white hover:bg-green-700'
+                : enrollingCourseId === course.id
+                  ? 'bg-gray-400 text-white cursor-not-allowed'
                   : 'bg-green-600 text-white hover:bg-green-700'
-            }`}
+              }`}
           >
             {isEnrolled ? (
               <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">

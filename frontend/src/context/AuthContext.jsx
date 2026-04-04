@@ -269,6 +269,22 @@ export function AuthProvider({ children }) {
     }
   }
 
+  const refreshUser = async () => {
+    try {
+      const response = await authService.getCurrentUser()
+      if (response.success) {
+        dispatch({ 
+          type: 'AUTH_SUCCESS', 
+          payload: { user: response.data.user } 
+        })
+        return { success: true, user: response.data.user }
+      }
+    } catch (error) {
+      console.error('Failed to refresh user:', error)
+    }
+    return { success: false }
+  }
+
   const clearError = () => {
     dispatch({ type: 'AUTH_CLEAR_ERROR' })
   }
@@ -278,6 +294,7 @@ export function AuthProvider({ children }) {
     login,
     logout,
     refreshToken,
+    refreshUser,
     updateProfile,
     deleteAccount,
     clearError

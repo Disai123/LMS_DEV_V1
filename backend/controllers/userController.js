@@ -258,7 +258,7 @@ const deleteUser = async (req, res, next) => {
 
     // Delete related records before deleting user to avoid foreign key constraint errors
     const { TestAttempt, TestAnswer, Enrollment, ChapterProgress } = require('../models');
-    
+
     // Find all enrollments for this user
     const enrollments = await Enrollment.findAll({
       where: { student_id: id },
@@ -278,7 +278,7 @@ const deleteUser = async (req, res, next) => {
     await Enrollment.destroy({
       where: { student_id: id }
     });
-    
+
     // Find all test attempt IDs for this user
     const testAttempts = await TestAttempt.findAll({
       where: { student_id: id },
@@ -461,6 +461,44 @@ const getUserEnrollments = async (req, res, next) => {
     next(error);
   }
 };
+/**
+ * Update user plan type (Admin only)
+ */
+const updateUserPlan = async (req, res, next) => {
+  try {
+    const { id } = req.params;
+    const { plan_type } = req.body;
+
+    if (!['free', 'premium'].includes(plan_type)) {
+      throw new AppError('Invalid plan type. Must be "free" or "premium"', 400);
+    }
+
+    const user = await User.findByPk(id);
+    if (!user) {
+      throw new AppError('User not found', 404);
+    }
+
+    await user.update({ plan_type });
+
+    logger.info(`Admin ${req.user.email} updated user ${user.email} plan to ${plan_type}`);
+
+    res.json({
+      success: true,
+      message: `User plan updated to ${plan_type} successfully`,
+      data: {
+        user: {
+          id: user.id,
+          name: user.name,
+          email: user.email,
+          plan_type: user.plan_type
+        }
+      }
+    });
+  } catch (error) {
+    logger.error('Update user plan error:', error);
+    next(error);
+  }
+};
 
 module.exports = {
   getUsers,
@@ -473,5 +511,7 @@ module.exports = {
   activateUser,
   deactivateUser,
   getUserCourses,
-  getUserEnrollments
+  getUserEnrollments,
+  updateUserPlan
 };
+

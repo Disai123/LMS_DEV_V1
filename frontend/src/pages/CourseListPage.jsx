@@ -8,6 +8,8 @@ import Footer from '../components/common/Footer'
 import CourseList from '../components/course/CourseList'
 import Pagination from '../components/common/Pagination'
 import ErrorBoundary from '../components/common/ErrorBoundary'
+import usePlanAccess from '../hooks/usePlanAccess'
+import { useAuth } from '../context/AuthContext'
 import {
   FiSearch, FiX, FiArrowRight, FiSliders,
   FiBookOpen, FiAward, FiZap, FiUsers
@@ -20,22 +22,34 @@ const DIFFICULTIES = [
   { key: 'advanced', label: 'Advanced' },
 ]
 
+const PLANS = [
+  { key: '', label: 'All Plans' },
+  { key: 'true', label: 'Free' },
+  { key: 'false', label: 'Premium' },
+]
+
+import { getCourseMetadata } from '../utils/courseManifest'
+
 const CourseListPage = () => {
   const navigate = useNavigate()
+  const { user } = useAuth()
+  const { tierOrder: planTierOrder } = usePlanAccess(user)
   const [search, setSearch] = useState('')
   const [activeCategory, setActiveCategory] = useState('')
   const [activeDifficulty, setActiveDifficulty] = useState('')
+  const [activePlan, setActivePlan] = useState('')
   const [currentPage, setCurrentPage] = useState(1)
-  const [showDifficulty, setShowDifficulty] = useState(false)
-  const COURSES_PER_PAGE = 9
+  const [showFilters, setShowFilters] = useState(false)
+  const COURSES_PER_PAGE = 12 // Increased to show more courses
 
   const { data: coursesData, isLoading, error } = useQuery(
-    ['courses', search, activeCategory, activeDifficulty, currentPage],
+    ['courses', search, activeCategory, activeDifficulty, activePlan, currentPage],
     () => {
       const params = { page: currentPage, limit: COURSES_PER_PAGE }
       if (search.trim()) params.q = search
       if (activeCategory) params.category = activeCategory
       if (activeDifficulty) params.difficulty = activeDifficulty
+      if (activePlan !== '') params.is_free = activePlan
       return courseService.getCourses(params)
     },
     { refetchOnWindowFocus: false, staleTime: 5 * 60 * 1000 }
@@ -48,6 +62,22 @@ const CourseListPage = () => {
   )
 
   const courses = coursesData?.data?.courses || []
+  
+  // Apply Manual Ordering and Plan Overrides
+  const processedCourses = courses.map(course => {
+    const meta = getCourseMetadata(course.title);
+    if (meta) {
+      return {
+        ...course,
+        required_plan: meta.plan,
+        is_free: meta.plan === 'free',
+        sequence: meta.sequence
+      };
+    }
+    return { ...course, sequence: 999 }; // Unknown courses go to end
+  });
+
+  const sortedCourses = [...processedCourses].sort((a, b) => a.sequence - b.sequence);
   const categories = categoriesData?.data?.categories || []
   const pagination = coursesData?.data?.pagination || {}
   const totalItems = pagination.totalItems ?? courses.length
@@ -71,10 +101,11 @@ const CourseListPage = () => {
     setSearch('')
     setActiveCategory('')
     setActiveDifficulty('')
+    setActivePlan('')
     setCurrentPage(1)
   }
 
-  const hasFilters = search || activeCategory || activeDifficulty
+  const hasFilters = search || activeCategory || activeDifficulty || activePlan
 
   return (
     <ErrorBoundary>
@@ -262,16 +293,19 @@ const CourseListPage = () => {
                 </div>
 
                 <button
-                  onClick={() => setShowDifficulty(f => !f)}
-                  className={`flex items-center gap-2 px-4 py-2.5 rounded-xl text-xs font-bold transition-all border shadow-sm ${showDifficulty || activeDifficulty
+                  onClick={() => setShowFilters(f => !f)}
+                  className={`flex items-center gap-2 px-4 py-2.5 rounded-xl text-xs font-bold transition-all border shadow-sm ${showFilters || activeDifficulty || activePlan
                     ? 'bg-slate-900 text-amber-400 border-slate-900'
                     : 'bg-white text-gray-600 border-gray-200 hover:border-gray-300'
                     }`}
                 >
                   <FiSliders className="w-3.5 h-3.5" />
-                  Level
-                  {activeDifficulty && (
-                    <span className="text-[10px] font-black text-amber-400">· {activeDifficulty}</span>
+                  Filters
+                  {(activeDifficulty || activePlan) && (
+                    <span className="text-[10px] font-black text-amber-400">
+                      · {activePlan === 'true' ? 'Free' : activePlan === 'false' ? 'Premium' : ''}
+                      {activeDifficulty && `${activePlan ? ', ' : ''}${activeDifficulty}`}
+                    </span>
                   )}
                 </button>
 
@@ -321,27 +355,51 @@ const CourseListPage = () => {
 
               {/* Expandable difficulty row */}
               <AnimatePresence>
-                {showDifficulty && (
+                {showFilters && (
                   <motion.div
                     initial={{ height: 0, opacity: 0 }}
                     animate={{ height: 'auto', opacity: 1 }}
                     exit={{ height: 0, opacity: 0 }}
                     className="overflow-hidden"
                   >
-                    <div className="flex items-center gap-2 py-3 border-t border-gray-100">
-                      <span className="text-[10px] font-bold text-gray-400 uppercase tracking-widest mr-1">Level:</span>
-                      {DIFFICULTIES.map(d => (
-                        <button
-                          key={d.key}
-                          onClick={() => setDiffLevel(d.key)}
-                          className={`px-3 py-1.5 rounded-lg text-xs font-bold transition-all border ${activeDifficulty === d.key
-                            ? 'bg-slate-900 text-amber-400 border-slate-900 shadow-sm'
-                            : 'bg-white text-gray-500 border-gray-200 hover:border-gray-300'
-                            }`}
-                        >
-                          {d.label}
-                        </button>
-                      ))}
+                    <div className="flex flex-col py-4 border-t border-gray-100 gap-4">
+                      {/* Plan Filter */}
+                      <div className="flex items-center gap-2">
+                        <span className="text-[10px] font-bold text-gray-400 uppercase tracking-widest w-16">Plan:</span>
+                        <div className="flex flex-wrap gap-2">
+                          {PLANS.map(p => (
+                            <button
+                              key={p.key}
+                              onClick={() => { setActivePlan(p.key); setCurrentPage(1) }}
+                              className={`px-3 py-1.5 rounded-lg text-xs font-bold transition-all border ${activePlan === p.key
+                                ? 'bg-amber-400 text-slate-900 border-amber-400 shadow-sm'
+                                : 'bg-white text-gray-500 border-gray-200 hover:border-gray-300'
+                                }`}
+                            >
+                              {p.label}
+                            </button>
+                          ))}
+                        </div>
+                      </div>
+
+                      {/* Difficulty filter */}
+                      <div className="flex items-center gap-2">
+                        <span className="text-[10px] font-bold text-gray-400 uppercase tracking-widest w-16">Level:</span>
+                        <div className="flex flex-wrap gap-2">
+                          {DIFFICULTIES.map(d => (
+                            <button
+                              key={d.key}
+                              onClick={() => setDiffLevel(d.key)}
+                              className={`px-3 py-1.5 rounded-lg text-xs font-bold transition-all border ${activeDifficulty === d.key
+                                ? 'bg-slate-900 text-amber-400 border-slate-900 shadow-sm'
+                                : 'bg-white text-gray-500 border-gray-200 hover:border-gray-300'
+                                }`}
+                            >
+                              {d.label}
+                            </button>
+                          ))}
+                        </div>
+                      </div>
                     </div>
                   </motion.div>
                 )}
@@ -384,11 +442,12 @@ const CourseListPage = () => {
             </AnimatePresence>
 
             <CourseList
-              courses={courses}
+              courses={sortedCourses}
               isLoading={isLoading}
               error={error}
               showInstructor={true}
               showRating={true}
+              planTierOrder={planTierOrder}
             />
 
             {!isLoading && !error && courses.length > 0 && (

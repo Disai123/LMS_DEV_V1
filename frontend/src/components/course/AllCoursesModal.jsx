@@ -1,16 +1,19 @@
 import { useState, useEffect } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import { useQuery, useMutation, useQueryClient } from 'react-query'
+import { useNavigate } from 'react-router-dom'
+import { useAuth } from '../../context/AuthContext'
 import { courseService } from '../../services/courseService'
 import { enrollmentService } from '../../services/enrollmentService'
 import useCourseLogo from '../../hooks/useCourseLogo'
+import { paymentService } from '../../services/api'
 import LoadingSpinner from '../common/LoadingSpinner'
 import toast from 'react-hot-toast'
 
 // Component for course image with logo support
 const CourseImage = ({ course }) => {
   const { logoUrl, loading: logoLoading, error: logoError } = useCourseLogo(course.id, !!course.logo)
-  
+
   if (course.logo && logoUrl) {
     return (
       <img
@@ -39,8 +42,20 @@ const CourseImage = ({ course }) => {
 }
 
 const AllCoursesModal = ({ isOpen, onClose }) => {
+  const { user } = useAuth()
+  const navigate = useNavigate()
   const queryClient = useQueryClient()
   const [enrollingCourseId, setEnrollingCourseId] = useState(null)
+
+  // Fetch Subscription Data for premium check
+  const { data: subscriptionResponse } = useQuery(
+    'my-subscription-modal',
+    () => paymentService.getMySubscription(),
+    { enabled: isOpen && !!user && user.role !== 'admin' }
+  );
+  const subscription = subscriptionResponse?.data?.data;
+  const planName = subscription?.plan?.name?.toLowerCase();
+  const isPremiumUser = user?.role === 'admin' || user?.plan_type === 'premium' || (subscription && subscription.status === 'active' && planName && !planName.includes('free'));
 
   // Fetch all courses
   const { data: coursesData, isLoading: coursesLoading } = useQuery(
@@ -91,7 +106,19 @@ const AllCoursesModal = ({ isOpen, onClose }) => {
   }
 
   // Handle enrollment
-  const handleEnroll = async (courseId) => {
+  const handleEnroll = async (course) => {
+    const courseId = course.id;
+
+    // Check if it's a premium course and user is not premium
+    if (!course.is_free && !isPremiumUser) {
+      toast.error('This is a premium course. Redirecting to pricing...');
+      setTimeout(() => {
+        onClose();
+        navigate('/pricing');
+      }, 1500);
+      return;
+    }
+
     setEnrollingCourseId(courseId)
     try {
       await enrollMutation.mutateAsync(courseId)
@@ -141,18 +168,18 @@ const AllCoursesModal = ({ isOpen, onClose }) => {
         >
           <div className="bg-white px-4 pt-5 pb-4 sm:px-8 sm:pt-8 sm:pb-6">
             <div className="flex items-center justify-between mb-4 sm:mb-6 sticky top-0 bg-white z-10 pb-4 border-b border-gray-100">
-                <h3 className="text-2xl font-bold text-gray-900">
-                  All Available Courses
-                </h3>
-                <button
-                  onClick={onClose}
-                  className="text-gray-400 hover:text-gray-600 transition-colors"
-                >
-                  <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
-                  </svg>
-                </button>
-              </div>
+              <h3 className="text-2xl font-bold text-gray-900">
+                All Available Courses
+              </h3>
+              <button
+                onClick={onClose}
+                className="text-gray-400 hover:text-gray-600 transition-colors"
+              >
+                <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+                </svg>
+              </button>
+            </div>
 
             <div className="max-h-[70vh] overflow-y-auto pr-1 sm:pr-2">
               {coursesLoading ? (
@@ -172,18 +199,17 @@ const AllCoursesModal = ({ isOpen, onClose }) => {
                       <div className="relative">
                         <CourseImage course={course} />
                         <div className="absolute top-2 right-2">
-                          <span className={`px-2 py-1 text-xs font-medium rounded-full ${
-                            course.difficulty === 'beginner' 
-                              ? 'bg-green-100 text-green-800'
-                              : course.difficulty === 'intermediate'
+                          <span className={`px-2 py-1 text-xs font-medium rounded-full ${course.difficulty === 'beginner'
+                            ? 'bg-green-100 text-green-800'
+                            : course.difficulty === 'intermediate'
                               ? 'bg-yellow-100 text-yellow-800'
                               : 'bg-red-100 text-red-800'
-                          }`}>
+                            }`}>
                             {course.difficulty}
                           </span>
                         </div>
                       </div>
-                      
+
                       <div className="p-4">
                         <div className="flex items-center justify-between mb-2">
                           <span className="text-sm text-indigo-600 font-medium">
@@ -193,15 +219,15 @@ const AllCoursesModal = ({ isOpen, onClose }) => {
                             {course.enrollment_count || 0} students
                           </span>
                         </div>
-                        
+
                         <h4 className="text-lg font-semibold text-gray-900 mb-2 line-clamp-2">
                           {course.title}
                         </h4>
-                        
+
                         <p className="text-gray-600 text-sm mb-4 line-clamp-2">
                           {course.description}
                         </p>
-                        
+
                         {course.instructor && (
                           <div className="flex items-center mb-4">
                             <img
@@ -214,7 +240,7 @@ const AllCoursesModal = ({ isOpen, onClose }) => {
                             </span>
                           </div>
                         )}
-                        
+
                         <div className="flex items-center justify-between">
                           <div className="flex items-center">
                             <div className="flex items-center">
@@ -224,11 +250,10 @@ const AllCoursesModal = ({ isOpen, onClose }) => {
                                 return (
                                   <svg
                                     key={i}
-                                    className={`w-3 h-3 ${
-                                      i < Math.floor(numericRating)
-                                        ? 'text-yellow-400'
-                                        : 'text-gray-300'
-                                    }`}
+                                    className={`w-3 h-3 ${i < Math.floor(numericRating)
+                                      ? 'text-yellow-400'
+                                      : 'text-gray-300'
+                                      }`}
                                     fill="currentColor"
                                     viewBox="0 0 20 20"
                                   >
@@ -251,24 +276,23 @@ const AllCoursesModal = ({ isOpen, onClose }) => {
                             </span>
                           </div>
                         </div>
-                        
+
                         <div className="mt-4">
                           <button
-                            onClick={() => handleEnroll(course.id)}
+                            onClick={() => handleEnroll(course)}
                             disabled={isEnrolled(course.id) || enrollingCourseId === course.id}
-                            className={`w-full py-2 px-4 rounded-lg text-sm font-medium transition-colors ${
-                              isEnrolled(course.id)
-                                ? 'bg-green-600 hover:bg-green-700 text-white'
-                                : enrollingCourseId === course.id
+                            className={`w-full py-2 px-4 rounded-lg text-sm font-medium transition-colors ${isEnrolled(course.id)
+                              ? 'bg-green-600 hover:bg-green-700 text-white'
+                              : enrollingCourseId === course.id
                                 ? 'bg-gray-400 text-white cursor-not-allowed'
                                 : 'bg-gradient-to-r from-indigo-500 to-purple-600 hover:from-indigo-600 hover:to-purple-700 text-white'
-                            }`}
+                              }`}
                           >
                             {isEnrolled(course.id)
                               ? 'Enrolled'
                               : enrollingCourseId === course.id
-                              ? 'Enrolling...'
-                              : 'Enroll'
+                                ? 'Enrolling...'
+                                : 'Enroll'
                             }
                           </button>
                         </div>

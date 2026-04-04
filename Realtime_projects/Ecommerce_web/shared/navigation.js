@@ -60,6 +60,15 @@ class PhaseNavigation {
   loadSubphases() {
     // Define subphases for each phase based on folder structure
     const phaseSubphases = {
+      'agent-skills': [
+        { id: 'overview', file: 'Overview_Content.html', label: 'Overview', icon: '🤖' },
+        { id: 'business-analyst', file: 'Business_Analyst.html', label: 'Business Analyst', icon: '🧠' },
+        { id: 'ui-ux-designer', file: 'UI_UX_Designer.html', label: 'UI/UX Designer', icon: '🎨' },
+        { id: 'solution-architect', file: 'Solution_Architect.html', label: 'Solution Architect', icon: '🏗️' },
+        { id: 'software-engineer', file: 'Software_Engineer.html', label: 'Software Engineer', icon: '💻' },
+        { id: 'qa-engineer', file: 'QA_Engineer.html', label: 'QA Engineer', icon: '🧪' },
+        { id: 'devops-agent', file: 'DevOps_Agent.html', label: 'DevOps Agent', icon: '🚀' }
+      ],
       'brd': [
         { id: 'overview', file: 'Overview_Content.html', label: 'Overview', icon: '📋' },
         { id: 'functional-requirements', file: 'Functional_Requirements.html', label: 'Functional Requirements', icon: '⚙️' },
@@ -172,7 +181,13 @@ class PhaseNavigation {
       'performance-testing': 'Load testing and performance optimization',
       'deployment-planning': 'Deployment possibilities and setup strategies',
       'environment-setup': 'Local and cloud environment configuration',
-      'final-steps': 'Project completion and code download'
+      'final-steps': 'Project completion and code download',
+      'business-analyst': 'Requirements gathering and analysis',
+      'ui-ux-designer': 'User interface and experience design',
+      'solution-architect': 'System architecture and technical design',
+      'software-engineer': 'Full-stack application development',
+      'devops-agent': 'Deployment and production setup',
+      'qa-engineer': 'Testing and quality assurance'
     };
     return descriptions[id] || '';
   }
@@ -214,23 +229,60 @@ class PhaseNavigation {
     this.loadContent(tabId);
     this.updateProgress();
     
-    // Hide next button on conclusion/final-steps
+    // Handle next button visibility and text
     const nextBtn = document.getElementById('next-btn');
     if (nextBtn) {
+      const currentIndex = this.subphases.findIndex(s => s.id === tabId);
+      const isLastSubphase = currentIndex === this.subphases.length - 1;
+      
       if (tabId === 'conclusion' || tabId === 'final-steps') {
         nextBtn.style.display = 'none';
+      } else if (this.currentPhase === 'agent-skills' && isLastSubphase) {
+        // Special case for last agent: show "Go to Project Overview"
+        nextBtn.style.display = 'flex';
+        const span = nextBtn.querySelector('span:first-child');
+        if (span) span.textContent = 'Go to Project Overview';
       } else {
-        // Check if there's a next module
-        const currentIndex = this.subphases.findIndex(s => s.id === tabId);
         const hasNext = currentIndex < this.subphases.length - 1;
         nextBtn.style.display = hasNext ? 'flex' : 'none';
+        // Reset text if it was changed
+        const span = nextBtn.querySelector('span:first-child');
+        if (span && span.textContent === 'Go to Project Overview') {
+          span.textContent = this.currentPhase === 'agent-skills' ? 'Next Agent' : 'Next Step';
+        }
       }
     }
   }
 
   goToNext() {
     const currentIndex = this.subphases.findIndex(s => s.id === this.currentTab);
-    if (currentIndex < this.subphases.length - 1) {
+    const isLastSubphase = currentIndex === this.subphases.length - 1;
+
+    if (this.currentPhase === 'agent-skills' && isLastSubphase) {
+      // Redirect to BRD phase overview instead of root index.html
+      // Using a more robust way to construct the URL based on the project ID
+      const pathParts = window.location.pathname.split('/').filter(p => p);
+      const projectIndex = pathParts.findIndex(p => p === 'realtime-projects');
+      
+      let nextUrl;
+      if (projectIndex >= 0 && projectIndex + 1 < pathParts.length) {
+        const projectId = pathParts[projectIndex + 1];
+        nextUrl = `/api/realtime-projects/${projectId}/BRD_phase/Overview.html`;
+      } else {
+        // Fallback to relative navigation if path structure is unexpected
+        nextUrl = '../BRD_phase/Overview.html';
+      }
+
+      const urlParams = new URLSearchParams(window.location.search);
+      const token = urlParams.get('token');
+      if (token) {
+        nextUrl += (nextUrl.includes('?') ? '&' : '?') + `token=${encodeURIComponent(token)}`;
+      }
+      window.location.href = nextUrl;
+      return;
+    }
+
+    if (!isLastSubphase) {
       const nextSubphase = this.subphases[currentIndex + 1];
       this.switchTab(nextSubphase.id);
       
@@ -391,6 +443,7 @@ class PhaseNavigation {
         
         // Map phase ID to folder name
         const phaseFolders = {
+          'agent-skills': 'Agent_Skills_phase',
           'brd': 'BRD_phase',
           'uiux': 'UI_UX_phase',
           'architectural': 'Architectural_Design_phase',
@@ -795,6 +848,7 @@ class PhaseNavigation {
   navigateToPhase(phaseId) {
     // Map phase IDs to folder names
     const phaseFolders = {
+      'agent-skills': 'Agent_Skills_phase',
       'brd': 'BRD_phase',
       'uiux': 'UI_UX_phase',
       'architectural': 'Architectural_Design_phase',

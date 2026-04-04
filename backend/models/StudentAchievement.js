@@ -18,7 +18,7 @@ module.exports = (sequelize, DataTypes) => {
       onDelete: 'CASCADE'
     },
     achievement_type: {
-      type: DataTypes.ENUM('course_completion', 'project_approval', 'hackathon_approval', 'realtime_project_completion', 'master_certificate'),
+      type: DataTypes.ENUM('course_completion', 'project_approval', 'hackathon_approval', 'realtime_project_completion', 'master_certificate', 'internship_completion'),
       allowNull: false
     },
     source_id: {

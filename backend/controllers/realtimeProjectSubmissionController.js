@@ -1,5 +1,6 @@
 const { RealtimeProjectSubmission, User } = require('../models');
 const scoringService = require('../services/scoringService');
+const { issueRealtimeProjectCertificate } = require('./certificateController');
 const logger = require('../utils/logger');
 const { Op } = require('sequelize');
 
@@ -355,11 +356,23 @@ exports.approveSubmission = async (req, res) => {
 
         logger.info(`Awarded ${points} points for realtime project: ${submission.project_name} to student ${submission.student_id}`);
 
+        // Issue certificate simultaneously with points award
+        let certificate = null;
+        try {
+            const student = await User.findByPk(submission.student_id);
+            certificate = await issueRealtimeProjectCertificate(submission, student);
+            logger.info(`Certificate issued for realtime project: ${submission.project_name} to student ${submission.student_id}`);
+        } catch (certError) {
+            // Don't fail the approval if cert issuance fails — log and continue
+            logger.error('Certificate issuance failed (non-critical):', certError);
+        }
+
         res.json({
             success: true,
             message: 'Submission approved successfully',
             data: submission,
-            points_awarded: points
+            points_awarded: points,
+            certificate: certificate ? certificate.getPublicInfo() : null
         });
     } catch (error) {
         logger.error('Error approving submission:', error);

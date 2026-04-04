@@ -1,5 +1,5 @@
 import { motion, useScroll, useTransform } from 'framer-motion'
-import { Link, useNavigate } from 'react-router-dom'
+import { Link, useNavigate, useLocation } from 'react-router-dom'
 import { useAuth } from '../context/AuthContext'
 import Header from '../components/common/Header'
 import Footer from '../components/common/Footer'
@@ -107,6 +107,7 @@ const HeroMockup = () => (
 const LandingPage = () => {
   const { isAuthenticated, user } = useAuth()
   const navigate = useNavigate()
+  const location = useLocation()
   const heroRef = useRef(null)
   const { scrollYProgress } = useScroll({ target: heroRef, offset: ['start start', 'end start'] })
   const heroY = useTransform(scrollYProgress, [0, 1], ['0%', '30%'])
@@ -443,7 +444,7 @@ const LandingPage = () => {
 
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6 items-stretch">
 
-            {/* Starter */}
+            {/* Free */}
             <motion.div
               initial={{ opacity: 0, y: 30 }}
               whileInView={{ opacity: 1, y: 0 }}
@@ -455,28 +456,53 @@ const LandingPage = () => {
                 <div className="w-12 h-12 bg-gray-100 rounded-2xl flex items-center justify-center mb-6 group-hover:bg-gray-200 transition-colors">
                   <FiZap className="w-6 h-6 text-gray-600" />
                 </div>
-                <h3 className="text-xl font-black text-slate-900 mb-1">Starter</h3>
+                <h3 className="text-xl font-black text-slate-900 mb-1">Free</h3>
                 <p className="text-gray-400 text-sm mb-6">For explorers</p>
                 <div className="flex items-baseline gap-1">
                   <span className="text-5xl font-black text-slate-900">Free</span>
                 </div>
                 <p className="text-xs text-gray-400 mt-1">Forever · No card required</p>
               </div>
-              <div className="space-y-3 flex-grow mb-8">
-                {['Access to Free Courses', 'Community Support', 'Limited Platform Access', 'Valid for 1 Month'].map((f, i) => (
-                  <div key={i} className="flex items-center gap-3">
-                    <div className="w-5 h-5 rounded-full bg-gray-100 flex items-center justify-center flex-shrink-0">
-                      <FiCheck className="w-3 h-3 text-gray-500" />
-                    </div>
-                    <span className="text-gray-600 text-sm">{f}</span>
+              <div className="space-y-4 flex-grow mb-6">
+                <div>
+                  <p className="text-[10px] font-black text-slate-400 uppercase tracking-widest mb-1.5">Courses</p>
+                  <div className="space-y-1">
+                    {['Python for Beginners', 'Machine Learning'].map((f, i) => (
+                      <div key={i} className="flex items-center gap-3">
+                        <FiCheck className="w-4 h-4 text-slate-400" />
+                        <span className="text-gray-600 text-sm">{f}</span>
+                      </div>
+                    ))}
                   </div>
-                ))}
+                </div>
+                <div>
+                  <p className="text-[10px] font-black text-slate-400 uppercase tracking-widest mb-1.5">Projects</p>
+                  <div className="space-y-1">
+                    {['Todo Application'].map((f, i) => (
+                      <div key={i} className="flex items-center gap-3">
+                        <FiCheck className="w-4 h-4 text-slate-400" />
+                        <span className="text-gray-600 text-sm">{f}</span>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+                <div>
+                  <p className="text-[10px] font-black text-slate-400 uppercase tracking-widest mb-1.5">Extras</p>
+                  <div className="space-y-1">
+                    {['Community Forum Access', 'Course Certificates', 'Hackathon Access'].map((f, i) => (
+                      <div key={i} className="flex items-center gap-3">
+                        <FiCheck className="w-4 h-4 text-slate-400" />
+                        <span className="text-gray-600 text-sm">{f}</span>
+                      </div>
+                    ))}
+                  </div>
+                </div>
               </div>
               <button
                 onClick={() => navigate('/login')}
                 className="w-full py-3.5 rounded-xl border-2 border-gray-200 text-gray-700 font-bold hover:border-slate-900 hover:text-slate-900 transition-all duration-300 text-sm"
               >
-                Get Started
+                Get Free Access
               </button>
             </motion.div>
 
@@ -500,27 +526,60 @@ const LandingPage = () => {
                 </div>
                 <h3 className="text-xl font-black text-white mb-1">Basic</h3>
                 <p className="text-white/50 text-sm mb-6">For motivated learners</p>
-                <div className="flex items-baseline gap-1">
+                <div className="flex items-baseline gap-2 flex-wrap">
                   <span className="text-2xl font-bold text-white/60">₹</span>
-                  <span className="text-5xl font-black text-white">499</span>
-                  <span className="text-white/50 text-sm ml-1">/ month</span>
+                  <span className="text-5xl font-black text-white">299</span>
+                  <span className="text-lg text-white/40 line-through">₹999</span>
+                  <span className="text-xs font-bold bg-amber-400 text-slate-900 px-2 py-0.5 rounded-full">Save 70%</span>
+                </div>
+                <p className="text-white/50 text-xs mt-2 font-medium">One-time · No hidden charges</p>
+              </div>
+              <div className="space-y-4 flex-grow mb-6">
+                <div>
+                  <p className="text-[10px] font-black text-amber-400/60 uppercase tracking-widest mb-1.5">Courses</p>
+                  <div className="space-y-1">
+                    {['Everything in Free plan', 'Deep Learning', 'NLP', 'GenAI'].map((f, i) => (
+                      <div key={i} className="flex items-center gap-3">
+                        <FiCheck className="w-4 h-4 text-amber-400" />
+                        <span className="text-white/80 text-sm">{f}</span>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+                <div>
+                  <p className="text-[10px] font-black text-amber-400/60 uppercase tracking-widest mb-1.5">Projects</p>
+                  <div className="space-y-1">
+                    {['Everything in Free plan', 'Ecommerce Web - Full Stack'].map((f, i) => (
+                      <div key={i} className="flex items-center gap-3">
+                        <FiCheck className="w-4 h-4 text-amber-400" />
+                        <span className="text-white/80 text-sm">{f}</span>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+                <div>
+                  <p className="text-[10px] font-black text-amber-400/60 uppercase tracking-widest mb-1.5">Extras</p>
+                  <div className="space-y-1">
+                    {['Project Certificate', 'Priority Support'].map((f, i) => (
+                      <div key={i} className="flex items-center gap-3">
+                        <FiCheck className="w-4 h-4 text-amber-400" />
+                        <span className="text-white/80 text-sm">{f}</span>
+                      </div>
+                    ))}
+                  </div>
                 </div>
               </div>
-              <div className="space-y-3 flex-grow mb-8">
-                {['Unlock 3 Realtime Projects', 'Full Idea Management', 'Learning Resources', 'Mentorship Support', 'Valid for 1 Month'].map((f, i) => (
-                  <div key={i} className="flex items-center gap-3">
-                    <div className="w-5 h-5 rounded-full bg-amber-400/20 flex items-center justify-center flex-shrink-0">
-                      <FiCheck className="w-3 h-3 text-amber-400" />
-                    </div>
-                    <span className="text-white/80 text-sm">{f}</span>
-                  </div>
-                ))}
-              </div>
               <button
-                onClick={() => navigate('/pricing')}
+                onClick={() => {
+                  if (isAuthenticated) {
+                    navigate('/pricing');
+                  } else {
+                    navigate('/login', { state: { from: location } });
+                  }
+                }}
                 className="w-full py-3.5 rounded-xl bg-amber-400 text-slate-900 font-black hover:bg-amber-300 transition-all duration-300 text-sm shadow-lg shadow-amber-400/20"
               >
-                Subscribe Now
+                Get Basic Access
               </button>
             </motion.div>
 
@@ -542,24 +601,57 @@ const LandingPage = () => {
                 </div>
                 <h3 className="text-xl font-black text-white mb-1">Pro</h3>
                 <p className="text-gray-500 text-sm mb-6">For professionals & teams</p>
-                <div className="flex items-baseline gap-1">
+                <div className="flex items-baseline gap-2 flex-wrap">
                   <span className="text-2xl font-bold text-gray-500">₹</span>
-                  <span className="text-5xl font-black text-white">999</span>
-                  <span className="text-gray-500 text-sm ml-1">/ month</span>
+                  <span className="text-5xl font-black text-white">799</span>
+                  <span className="text-lg text-gray-600 line-through">₹1999</span>
+                  <span className="text-xs font-bold bg-yellow-400/20 text-yellow-400 border border-yellow-400/30 px-2 py-0.5 rounded-full">Save 60%</span>
+                </div>
+                <p className="text-gray-500 text-xs mt-2 font-medium">One-time · No hidden charges</p>
+              </div>
+              <div className="space-y-4 flex-grow mb-6">
+                <div>
+                  <p className="text-[10px] font-black text-gray-500 uppercase tracking-widest mb-1.5">Courses</p>
+                  <div className="space-y-1">
+                    {['Everything in Basic plan', 'RAG', 'AI Agents', 'MCP'].map((f, i) => (
+                      <div key={i} className="flex items-center gap-3">
+                        <FiCheck className="w-4 h-4 text-yellow-400" />
+                        <span className="text-gray-300 text-sm">{f}</span>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+                <div>
+                  <p className="text-[10px] font-black text-gray-500 uppercase tracking-widest mb-1.5">Projects</p>
+                  <div className="space-y-1">
+                    {['Everything in Basic plan', 'Retail - Single Agent', 'Retail - Multi Agent', 'Travel - MCP'].map((f, i) => (
+                      <div key={i} className="flex items-center gap-3">
+                        <FiCheck className="w-4 h-4 text-yellow-400" />
+                        <span className="text-gray-300 text-sm">{f}</span>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+                <div>
+                  <p className="text-[10px] font-black text-gray-500 uppercase tracking-widest mb-1.5">Extras</p>
+                  <div className="space-y-1">
+                    {['Mentor Support'].map((f, i) => (
+                      <div key={i} className="flex items-center gap-3">
+                        <FiCheck className="w-4 h-4 text-yellow-400" />
+                        <span className="text-gray-300 text-sm">{f}</span>
+                      </div>
+                    ))}
+                  </div>
                 </div>
               </div>
-              <div className="space-y-3 flex-grow mb-8">
-                {['All 10 Realtime Projects', 'Full Idea Management Suite', 'Priority Mentorship', 'Certification Support', 'Valid for 1 Month'].map((f, i) => (
-                  <div key={i} className="flex items-center gap-3">
-                    <div className="w-5 h-5 rounded-full bg-yellow-400/10 flex items-center justify-center flex-shrink-0">
-                      <FiCheck className="w-3 h-3 text-yellow-400" />
-                    </div>
-                    <span className="text-gray-300 text-sm">{f}</span>
-                  </div>
-                ))}
-              </div>
               <button
-                onClick={() => navigate('/pricing')}
+                onClick={() => {
+                  if (isAuthenticated) {
+                    navigate('/pricing');
+                  } else {
+                    navigate('/login', { state: { from: location } });
+                  }
+                }}
                 className="w-full py-3.5 rounded-xl border-2 border-white/20 text-white font-black hover:bg-white hover:text-slate-900 transition-all duration-300 text-sm"
               >
                 Get Pro Access

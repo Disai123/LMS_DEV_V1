@@ -41,13 +41,31 @@ const StudentRealtimeProjectsPage = () => {
   console.log('Subscription Data:', subscription);
   console.log('Plan Name:', subscription?.plan?.name);
 
-  // Check if premium: Admin OR has active monthly/yearly subscription
+  // Check if premium: Admin OR has active subscription OR has student permissions
   const planName = subscription?.plan?.name?.toLowerCase();
-  const isPremiumUser = user?.role === 'admin' || planName === 'monthly' || planName === 'yearly';
-  console.log('Is Premium User:', isPremiumUser);
+  
+  // Use permissions from AuthContext as the primary source of truth for optimistic activation
+  const hasCoursesPerm = user?.permissions?.courses || false;
+  const hasProjectsPerm = user?.permissions?.realtime_projects || false;
+  
+  // isPaid true if any paid plan or admin or has explicit project permissions
+  const isPaid = user?.role === 'admin' || 
+                 ['basic', 'pro', 'monthly', 'yearly'].includes(planName) || 
+                 hasProjectsPerm;
+
+  const isPremiumUser = isPaid; // Simplified: if you paid, you're premium
+  
+  console.log('User Permissions:', user?.permissions);
+  console.log('Is Paid (Access Granted):', isPaid);
+
+  const badgeText = planName ? `${planName.charAt(0).toUpperCase() + planName.slice(1)} Plan` : (isPaid ? 'Premium Plan' : 'Free Plan');
+
+  // Split projects into Free and Premium
+  const freeProjects = projects.filter(p => p.id?.toLowerCase()?.replace(/[-_]/g, '') === 'todoapp');
+  const premiumProjects = projects.filter(p => p.id?.toLowerCase()?.replace(/[-_]/g, '') !== 'todoapp');
 
   // Show access denied if no permission
-  if (!hasAccess && !isLoading) {
+  if (!hasAccess && !isLoading && !isPaid) {
     return (
       <>
         <Header />
@@ -58,13 +76,6 @@ const StudentRealtimeProjectsPage = () => {
       </>
     );
   }
-
-  // Split projects into Free and Premium
-  const freeProjects = projects.filter(p => p.id?.toLowerCase()?.replace(/[-_]/g, '') === 'todoapp');
-  const premiumProjects = projects.filter(p => p.id?.toLowerCase()?.replace(/[-_]/g, '') !== 'todoapp');
-
-  const badgeText = planName ? `${planName.charAt(0).toUpperCase() + planName.slice(1)} Plan` : 'Free Plan';
-  const isPaid = ['basic', 'pro', 'monthly', 'yearly'].includes(planName);
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-50 via-blue-50 to-indigo-100 flex flex-col">

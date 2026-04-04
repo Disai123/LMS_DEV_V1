@@ -51,7 +51,7 @@ const getAllProjects = async (req, res) => {
     });
 
     // Determine user's plan and lock status
-    let userPlan = 'starter';
+    let userPlan = 'free';
     const userId = req.user ? req.user.id : null;
     const userRole = req.user ? req.user.role : null;
 
@@ -73,7 +73,7 @@ const getAllProjects = async (req, res) => {
       });
 
       if (sub && sub.plan) {
-        userPlan = sub.plan.name; // 'starter', 'basic', 'pro'
+        userPlan = sub.plan.name; // 'free', 'basic', 'pro'
       }
     }
 
@@ -86,7 +86,7 @@ const getAllProjects = async (req, res) => {
       // Admin: All Unlocked
       // Pro: All Unlocked (10 projects)
       // Basic: First 3 Unlocked
-      // Starter/Free: All Locked (0 projects)
+      // Free: All Locked (0 projects)
 
       let isLocked = true;
 
@@ -98,7 +98,7 @@ const getAllProjects = async (req, res) => {
           isLocked = false;
         }
       } else {
-        // Starter or no plan -> All Locked
+        // Free or no plan -> All Locked
         isLocked = true;
       }
 

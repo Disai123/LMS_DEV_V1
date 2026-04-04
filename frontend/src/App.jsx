@@ -35,7 +35,8 @@ import MyProjectSubmissionsPage from './pages/MyProjectSubmissionsPage';
 // import DeploymentPhasePage from './pages/DeploymentPhasePage'
 // Admin Projects pages - COMMENTED OUT (Admin side removed, but kept for students)
 // import AdminProjectsPage from './pages/AdminProjectsPage'
-// import AdminProjectManagementPage from './pages/AdminProjectManagementPage'
+import StudentInternshipsPage from './pages/StudentInternshipsPage'
+import AdminProjectManagementPage from './pages/AdminProjectManagementPage'
 import ProjectManagementDetailPage from './pages/ProjectManagementDetailPage'
 import AdminHackathonsPage from './pages/AdminHackathonsPage';
 import AdminProjectSubmissionsPage from './pages/AdminProjectSubmissionsPage';
@@ -45,7 +46,10 @@ import CreateGroupPage from './pages/CreateGroupPage'
 import RealtimeProjectsLandingPage from './pages/RealtimeProjectsLandingPage'
 import HackathonLandingPage from './pages/HackathonLandingPage'
 import PricingPage from './pages/PricingPage'
+import ContactPage from './pages/ContactPage'
 import NotFoundPage from './pages/NotFoundPage'
+import InternshipsLandingPage from './pages/InternshipsLandingPage'
+import AdminInternshipsPage from './pages/AdminInternshipsPage'
 
 // Components
 import ProtectedRoute from './components/auth/ProtectedRoute'
@@ -101,6 +105,7 @@ function App() {
               <Route path="/reset-password/:token" element={<ResetPasswordPage />} />
               <Route path="/auth/callback" element={<AuthCallbackPage />} />
               <Route path="/pricing" element={<PricingPage />} />
+              <Route path="/contact" element={<ContactPage />} />
 
               {/* Protected Routes */}
               <Route
@@ -137,6 +142,7 @@ function App() {
               <Route path="/realtime-projects" element={<RealtimeProjectsLandingPage />} />
               <Route path="/realtime-projects/diagnostics" element={<ProjectDiagnostics />} />
               <Route path="/hackathons" element={<HackathonLandingPage />} />
+              <Route path="/internships" element={<InternshipsLandingPage />} />
               <Route path="/admin/hackathons" element={<AdminHackathonsPage />} />
               <Route path="/admin/project-submissions" element={<AdminProjectSubmissionsPage />} />
               <Route path="/admin/hackathons/create" element={<CreateHackathonPage />} />
@@ -167,6 +173,16 @@ function App() {
                 element={
                   <ProtectedRoute>
                     <HackathonPage />
+                  </ProtectedRoute>
+                }
+              />
+
+              {/* Student Internships Route */}
+              <Route
+                path="/student/internships"
+                element={
+                  <ProtectedRoute>
+                    <StudentInternshipsPage />
                   </ProtectedRoute>
                 }
               />
@@ -290,6 +306,16 @@ function App() {
                 </ProtectedRoute>
               }
             /> */}
+
+              {/* Admin Internships Route */}
+              <Route
+                path="/admin/internships"
+                element={
+                  <ProtectedRoute requiredRole="admin">
+                    <AdminInternshipsPage />
+                  </ProtectedRoute>
+                }
+              />
 
               {/* Hackathon Admin Routes */}
               <Route

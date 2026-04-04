@@ -270,6 +270,23 @@ const verifyGoogleCredential = async (req, res, next) => {
           last_login: new Date()
         });
         isNewUser = true;
+
+        // Auto-subscribe new Google user to Free Plan
+        try {
+          const freePlan = await Plan.findOne({ where: { name: 'free' } });
+          if (freePlan) {
+            await Subscription.create({
+              user_id: user.id,
+              plan_id: freePlan.id,
+              status: 'active',
+              start_date: new Date(),
+              payment_id: 'GOOGLE_AUTO_FREE'
+            });
+            logger.info(`Free plan assigned to new Google student: ${email}`);
+          }
+        } catch (subError) {
+          logger.error('Error assigning free plan to new Google user:', subError);
+        }
       }
     }
 
@@ -387,7 +404,8 @@ const logout = async (req, res, next) => {
 const getCurrentUser = async (req, res, next) => {
   try {
     const user = await User.findByPk(req.user.id, {
-      attributes: { exclude: ['google_id'] }
+      attributes: { exclude: ['google_id', 'password'] },
+      include: [{ model: StudentPermission, as: 'permissions' }]
     });
 
     if (!user) {

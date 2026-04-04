@@ -85,6 +85,12 @@ const Header = () => {
               Hackathons
             </Link>
             <Link
+              to={isAuthenticated ? '/student/internships' : '/internships'}
+              className="text-gray-700 hover:text-amber-600 font-medium transition-colors duration-200"
+            >
+              Internships
+            </Link>
+            <Link
               to="/pricing"
               className="text-gray-700 hover:text-amber-600 font-medium transition-colors duration-200"
             >
@@ -215,6 +221,13 @@ const Header = () => {
                   className="block px-4 py-4 text-gray-700 hover:bg-white/20 rounded-lg transition-colors duration-200 min-h-[44px] flex items-center"
                 >
                   Hackathons
+                </Link>
+                <Link
+                  to={isAuthenticated ? '/student/internships' : '/internships'}
+                  onClick={() => setIsMenuOpen(false)}
+                  className="block px-4 py-4 text-gray-700 hover:bg-white/20 rounded-lg transition-colors duration-200 min-h-[44px] flex items-center"
+                >
+                  Internships
                 </Link>
                 <Link
                   to="/pricing"

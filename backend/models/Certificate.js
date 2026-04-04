@@ -17,11 +17,24 @@ module.exports = (sequelize, DataTypes) => {
     },
     course_id: {
       type: DataTypes.INTEGER,
-      allowNull: false,
+      allowNull: true,
       references: {
         model: 'courses',
         key: 'id'
       }
+    },
+    realtime_project_submission_id: {
+      type: DataTypes.INTEGER,
+      allowNull: true,
+      references: {
+        model: 'realtime_project_submissions',
+        key: 'id'
+      }
+    },
+    certificate_type: {
+      type: DataTypes.ENUM('course', 'realtime_project'),
+      allowNull: false,
+      defaultValue: 'course'
     },
     test_attempt_id: {
       type: DataTypes.INTEGER,
@@ -72,6 +85,12 @@ module.exports = (sequelize, DataTypes) => {
         fields: ['course_id']
       },
       {
+        fields: ['realtime_project_submission_id']
+      },
+      {
+        fields: ['certificate_type']
+      },
+      {
         fields: ['test_attempt_id']
       },
       {
@@ -93,19 +112,22 @@ module.exports = (sequelize, DataTypes) => {
   };
 
   Certificate.prototype.getPublicInfo = function() {
+    const values = this.get();
     return {
-      id: this.id,
-      student_id: this.student_id,
-      course_id: this.course_id,
-      certificate_number: this.certificate_number,
-      issued_date: this.issued_date,
-      expiry_date: this.expiry_date,
-      certificate_url: this.certificate_url,
-      verification_code: this.verification_code,
-      is_valid: this.is_valid,
-      metadata: this.metadata,
-      created_at: this.created_at,
-      updated_at: this.updated_at
+      id: values.id,
+      student_id: values.student_id || values.studentId,
+      course_id: values.course_id || values.courseId,
+      realtime_project_submission_id: values.realtime_project_submission_id || values.realtimeProjectSubmissionId,
+      certificate_type: values.certificate_type || values.certificateType,
+      certificate_number: values.certificate_number || values.certificateNumber,
+      issued_date: values.issued_date || values.issuedDate,
+      expiry_date: values.expiry_date || values.expiryDate,
+      certificate_url: values.certificate_url || values.certificateUrl,
+      verification_code: values.verification_code || values.verificationCode,
+      is_valid: values.is_valid !== undefined ? values.is_valid : values.isValid,
+      metadata: values.metadata,
+      created_at: values.created_at || values.createdAt,
+      updated_at: values.updated_at || values.updatedAt
     };
   };
 
@@ -146,10 +168,11 @@ module.exports = (sequelize, DataTypes) => {
     });
   };
 
-  Certificate.generateCertificateNumber = async function(studentId, courseId) {
+  Certificate.generateCertificateNumber = async function(studentId, courseIdOrProjectId, type = 'course') {
     const timestamp = Date.now();
     const random = Math.floor(Math.random() * 1000);
-    return `CERT-${studentId}-${courseId}-${timestamp}-${random}`;
+    const prefix = type === 'realtime_project' ? 'CERT-RT' : 'CERT';
+    return `${prefix}-${studentId}-${courseIdOrProjectId}-${timestamp}-${random}`;
   };
 
   Certificate.generateVerificationCode = function() {

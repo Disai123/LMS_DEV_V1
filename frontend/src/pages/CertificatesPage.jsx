@@ -12,6 +12,7 @@ import toast from 'react-hot-toast'
 const CertificatesPage = () => {
   const [selectedCertificate, setSelectedCertificate] = useState(null)
   const [showCertificateModal, setShowCertificateModal] = useState(false)
+  const [activeTab, setActiveTab] = useState('course') // 'course' or 'realtime_project'
 
   // Fetch student's certificates
   const { data: certificatesData, isLoading, error } = useQuery(
@@ -44,11 +45,21 @@ const CertificatesPage = () => {
       const response = await certificateService.downloadCertificate(certificate.id)
       const certificateData = response.data.certificate
 
+      const isProject = (certificateData.certificate_type || certificateData.certificateType) === 'realtime_project' || certificateData.metadata?.certificateType === 'realtime_project'
       const studentName = certificateData.metadata?.studentName || certificateData.studentName || 'Student'
-      const courseName = certificateData.metadata?.courseName || certificateData.course?.title || 'Course'
-      const courseDuration = certificateData.metadata?.courseDuration || certificateData.course?.estimated_duration || null
-      const courseNameWithDuration = courseDuration ? `${courseName} (${courseDuration} Hrs)` : courseName
-      const score = certificateData.metadata?.score
+      const certTitle = isProject ? 'CERTIFICATE OF ACHIEVEMENT' : 'CERTIFICATE OF COMPLETION'
+      const certSubText = isProject
+        ? 'has successfully built and delivered the realtime project'
+        : 'has successfully completed the course'
+      const mainName = isProject
+        ? (certificateData.metadata?.projectName || 'Realtime Project')
+        : (() => {
+          const cn = certificateData.metadata?.courseName || certificateData.course?.title || 'Course'
+          const dur = certificateData.metadata?.courseDuration || certificateData.course?.estimated_duration || null
+          return dur ? `${cn} (${dur} Hrs)` : cn
+        })()
+      const score = !isProject ? certificateData.metadata?.score : null
+      const difficulty = isProject ? certificateData.metadata?.difficulty : null
       const certificateNumber = certificateData.certificate_number
       const verificationCode = certificateData.verification_code
       const issuedDate = new Date(certificateData.issued_date).toLocaleDateString('en-US', {
@@ -62,180 +73,265 @@ const CertificatesPage = () => {
       downloadContainer.style.position = 'fixed'
       downloadContainer.style.top = '0'
       downloadContainer.style.left = '0'
-      downloadContainer.style.width = '100vw'
-      downloadContainer.style.height = '100vh'
+      downloadContainer.style.width = '1200px'
+      downloadContainer.style.height = '850px'
       downloadContainer.style.pointerEvents = 'none'
       downloadContainer.style.opacity = '0'
       downloadContainer.style.zIndex = '-1'
+      
+      const themeColor = isProject ? '#1e3a8a' : '#0f172a' // Professional Deep Blue/Slate
+      const accentColor = '#6366f1' // Modern Indigo
+
       downloadContainer.innerHTML = `
         <style>
-          @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700;900&family=Inter:wght@400;500;600;700&display=swap');
+          @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Playfair+Display:wght@700&family=Alex+Brush&display=swap');
           
-          .download-wrapper {
+          .certificate-container {
             width: 1200px;
-            padding: 40px;
-            font-family: 'Inter', 'Arial', sans-serif;
-            background: #f5f5f5;
-          }
-          .certificate {
-            background: #ffffff;
-            padding: 80px 100px;
-            text-align: center;
-            max-width: 1120px;
-            margin: 0 auto;
+            height: 850px;
+            background: #fff;
+            padding: 0;
+            box-sizing: border-box;
             position: relative;
-            overflow: hidden;
-            min-height: 900px;
-            box-shadow: 0 4px 20px rgba(0,0,0,0.1);
-          }
-          .watermark {
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%) rotate(-45deg);
-            font-size: 180px;
-            font-weight: 900;
-            color: #e5e7eb;
-            opacity: 0.15;
-            z-index: 0;
-            pointer-events: none;
-            white-space: nowrap;
             font-family: 'Inter', sans-serif;
-            letter-spacing: 20px;
-          }
-          .logo-section {
-            margin-bottom: 50px;
-            position: relative;
-            z-index: 2;
-            text-align: left;
-          }
-          .logo-section img {
-            height: 80px;
-            width: auto;
-            display: block;
-          }
-          .certificate-title {
-            font-size: 42px;
-            font-weight: 900;
             color: #1e293b;
-            margin-bottom: 50px;
-            position: relative;
-            z-index: 2;
-            letter-spacing: 6px;
+            box-shadow: 0 0 50px rgba(0,0,0,0.1);
+            border: 20px solid #f8fafc;
+            overflow: hidden;
+          }
+
+          .accent-strip {
+             position: absolute;
+             top: 0;
+             left: 0;
+             width: 12px;
+             height: 100%;
+             background: linear-gradient(to bottom, ${themeColor}, ${accentColor});
+          }
+
+          .inner-content {
+            padding: 80px 100px;
+            height: 100%;
+            width: 100%;
+            box-sizing: border-box;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+          }
+
+          .header-row {
+            width: 100%;
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 60px;
+          }
+
+          .logo-box { text-align: left; }
+          .logo { height: 50px; }
+          
+          .cert-status {
+            text-align: right;
+            font-size: 10px;
+            letter-spacing: 3px;
             text-transform: uppercase;
-            font-family: 'Playfair Display', serif;
-            line-height: 1.2;
-            white-space: nowrap;
+            font-weight: 800;
+            color: #94a3b8;
           }
-          .certify-text {
-            font-size: 22px;
-            color: #475569;
-            margin: 40px 0;
-            position: relative;
-            z-index: 2;
-            line-height: 1.8;
-            font-weight: 400;
-            font-style: italic;
+
+          .main-title {
+            font-size: 58px;
+            font-weight: 900;
+            color: ${themeColor};
+            letter-spacing: -1.5px;
+            margin-bottom: 10px;
+            text-transform: uppercase;
+            line-height: 1;
+            text-align: center;
           }
+
+          .sub-title {
+            font-size: 18px;
+            letter-spacing: 8px;
+            color: ${accentColor};
+            font-weight: 600;
+            margin-bottom: 50px;
+            text-transform: uppercase;
+            text-align: center;
+          }
+
+          .recipient-section { margin: 20px 0 40px; text-align: center; }
+          .certify-text { font-size: 16px; color: #64748b; margin-bottom: 15px; font-weight: 500; }
           .student-name {
-            font-size: 48px;
-            font-weight: 700;
-            color: #1e293b;
-            margin: 50px 0 40px 0;
-            position: relative;
-            z-index: 2;
             font-family: 'Playfair Display', serif;
-            text-decoration: underline;
-            text-decoration-color: #6366f1;
-            text-decoration-thickness: 3px;
-            text-underline-offset: 10px;
+            font-size: 68px;
+            font-weight: 700;
+            color: #0f172a;
+            margin: 0;
+            line-height: 1.2;
           }
-          .course-text {
-            font-size: 24px;
+          
+          .divider {
+            width: 120px;
+            height: 4px;
+            background: ${accentColor};
+            margin: 25px auto;
+            border-radius: 2px;
+          }
+
+          .attainment-description {
+            font-size: 18px;
             color: #475569;
-            margin: 30px 0;
-            position: relative;
-            z-index: 2;
-            line-height: 1.8;
-            font-weight: 400;
-          }
-          .course-name {
-            font-size: 32px;
-            font-weight: 700;
-            color: #1e293b;
-            margin: 30px 0;
-            position: relative;
-            z-index: 2;
             line-height: 1.6;
+            max-width: 750px;
+            margin: 0 auto 30px;
+            text-align: center;
+            font-weight: 400;
           }
-          .score-display {
-            font-size: 36px;
-            font-weight: 700;
+
+          .course-title {
+            font-size: 32px;
+            font-weight: 800;
             color: #1e293b;
-            margin: 50px 0;
-            position: relative;
-            z-index: 2;
-            font-family: 'Playfair Display', serif;
+            margin-bottom: 40px;
+            text-align: center;
           }
-          .issue-date {
-            font-size: 20px;
-            color: #64748b;
-            margin-top: 70px;
-            position: relative;
-            z-index: 2;
-            font-weight: 500;
+
+          .stats-grid {
+            display: flex;
+            justify-content: center;
+            gap: 60px;
+            margin-bottom: 60px;
+            background: #f8fafc;
+            padding: 20px 40px;
+            border-radius: 12px;
           }
-          .certificate-id {
-            font-size: 14px;
-            color: #94a3b8;
-            margin-top: 30px;
-            font-family: 'Courier New', monospace;
-            position: relative;
-            z-index: 2;
-            font-weight: 400;
+
+          .stat-box { display: flex; flex-direction: column; align-items: center; }
+          .stat-label { font-size: 10px; text-transform: uppercase; letter-spacing: 2px; color: #64748b; margin-bottom: 4px; font-weight: 700; }
+          .stat-val { font-size: 18px; font-weight: 800; color: #0f172a; }
+
+          .footer-section {
+            margin-top: auto;
+            width: 100%;
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-end;
           }
-          .verification-code {
-            font-size: 14px;
-            color: #94a3b8;
-            margin-top: 10px;
-            font-family: 'Courier New', monospace;
-            position: relative;
-            z-index: 2;
-            font-weight: 400;
+
+          .signature-area { display: flex; gap: 80px; }
+          .signature-box { display: flex; flex-direction: column; align-items: center; min-width: 180px; }
+          .sign-img { font-family: 'Alex Brush', cursive; font-size: 36px; margin-bottom: 0px; color: #0f172a; }
+          .sign-line { width: 100%; height: 1.5px; background: #e2e8f0; margin-bottom: 8px; }
+          .sign-role { font-size: 11px; font-weight: 700; color: #94a3b8; text-transform: uppercase; letter-spacing: 1px; }
+
+          .verified-badge {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 12px 20px;
+            background: #fff;
+            border: 1px solid #e2e8f0;
+            border-radius: 12px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.03);
           }
+
+          .badge-icon {
+            width: 36px;
+            height: 36px;
+            background: ${themeColor};
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #fff;
+            font-size: 18px;
+          }
+
+          .badge-text { text-align: left; }
+          .badge-status { font-size: 10px; font-weight: 800; color: #10b981; margin-bottom: 1px; }
+          .badge-number { font-size: 9px; font-weight: 600; color: #94a3b8; font-family: monospace; }
+
         </style>
-        <div class="download-wrapper">
-          <div class="certificate certificate-download">
-            <div class="watermark">GNANAM AI</div>
-            <div class="logo-section">
-              <img src="${logoUrl}" alt="GNANAM AI" onerror="this.style.display='none'">
+        <div class="certificate-container">
+          <div class="accent-strip"></div>
+          <div class="inner-content">
+            <div class="header-row">
+              <div class="logo-box">
+                <img src="${logoUrl}" class="logo" />
+              </div>
+              <div class="cert-status">
+                OFFICIAL VERIFIED CERTIFICATION<br/>
+                ISSUED BY GNANAM AI ACADEMY
+              </div>
             </div>
-            <div class="certificate-title">CERTIFICATE OF COMPLETION</div>
-            <div class="certify-text">This is to certify that</div>
-            <div class="student-name">${studentName}</div>
-            <div class="course-text">has successfully completed the course</div>
-            <div class="course-name">${courseNameWithDuration}</div>
-            ${score ? `<div class="score-display">with a score of ${Math.round(score)}%</div>` : ''}
-            <div class="issue-date">Issued on ${issuedDate}</div>
-            <div class="certificate-id">Certificate ID: ${certificateNumber}</div>
-            <div class="verification-code">Verification Code: ${verificationCode}</div>
+
+            <h1 class="main-title">${certTitle.split(' ').slice(0, 2).join(' ')}</h1>
+            <h2 class="sub-title">${certTitle.split(' ').slice(2).join(' ')}</h2>
+
+            <div class="recipient-section">
+              <p class="certify-text">This certificate confirms that</p>
+              <h3 class="student-name">${studentName}</h3>
+              <div class="divider"></div>
+            </div>
+
+            <p class="attainment-description">${certSubText}</p>
+            <h4 class="course-title">${mainName}</h4>
+
+            <div class="stats-grid">
+              ${difficulty ? `
+                <div class="stat-box">
+                  <span class="stat-label">Project Difficulty</span>
+                  <span class="stat-val">${difficulty}</span>
+                </div>
+              ` : ''}
+              ${score ? `
+                <div class="stat-box">
+                  <span class="stat-label">Performance Score</span>
+                  <span class="stat-val">${Math.round(score)}%</span>
+                </div>
+              ` : ''}
+              <div class="stat-box">
+                  <span class="stat-label">Completion Date</span>
+                  <span class="stat-val">${issuedDate}</span>
+              </div>
+            </div>
+
+            <div class="footer-section">
+              <div class="verified-badge">
+                <div class="badge-icon">✓</div>
+                <div class="badge-text">
+                  <div class="badge-status">VALIDATED CERTIFICATE</div>
+                  <div class="badge-number">ID: ${certificateNumber}</div>
+                </div>
+              </div>
+
+              <div class="signature-area">
+                <div class="signature-box">
+                  <span class="sign-img">Vijay Gunti</span>
+                  <div class="sign-line"></div>
+                  <span class="sign-role">Education Director</span>
+                </div>
+              </div>
+            </div>
           </div>
         </div>
       `
 
       document.body.appendChild(downloadContainer)
 
-      const templateElement = downloadContainer.querySelector('.certificate-download')
+      const templateElement = downloadContainer.querySelector('.certificate-container')
       if (!templateElement) {
         throw new Error('Certificate template not found')
       }
 
-      await new Promise((resolve) => setTimeout(resolve, 100))
+      await new Promise((resolve) => setTimeout(resolve, 500)) 
 
       const canvas = await html2canvas(templateElement, {
-        scale: 2,
+        scale: 3, 
         useCORS: true,
-        backgroundColor: '#ffffff'
+        backgroundColor: '#ffffff',
+        logging: false
       })
 
       const imgData = canvas.toDataURL('image/png')
@@ -243,6 +339,7 @@ const CertificatesPage = () => {
       const pdfWidth = pdf.internal.pageSize.getWidth()
       const pdfHeight = pdf.internal.pageSize.getHeight()
 
+      // Calculate the correct aspect ratio to fit the page
       const imgWidth = pdfWidth
       const imgHeight = (canvas.height * imgWidth) / canvas.width
       const imgY = (pdfHeight - imgHeight) / 2
@@ -250,8 +347,9 @@ const CertificatesPage = () => {
       pdf.addImage(imgData, 'PNG', 0, imgY, imgWidth, imgHeight)
 
       const safeStudentName = studentName.replace(/\s+/g, '_')
-      const safeCourseName = courseName.replace(/\s+/g, '_')
-      const fileName = `${safeStudentName}_${safeCourseName}_certificate.pdf`
+      const safeMainName = mainName.replace(/\s+/g, '_').substring(0, 40)
+      const prefix = isProject ? 'Project_Certificate' : 'Course_Certificate'
+      const fileName = `${safeStudentName}_${prefix}_${safeMainName}.pdf`
       pdf.save(fileName)
 
       toast.success('Certificate downloaded successfully!')
@@ -289,12 +387,12 @@ const CertificatesPage = () => {
           <div className="text-center">
             <h1 className="text-2xl font-bold text-gray-900 mb-4">Error Loading Certificates</h1>
             <p className="text-gray-600 mb-6">
-              {error.message?.includes('401') 
+              {error.message?.includes('401')
                 ? 'Authentication required. Please log in to view your certificates.'
                 : 'Unable to load certificates. Please try again later.'
               }
             </p>
-            <button 
+            <button
               onClick={() => window.location.reload()}
               className="px-6 py-3 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 transition-colors"
             >
@@ -310,7 +408,7 @@ const CertificatesPage = () => {
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-50 via-blue-50 to-indigo-100">
       <Header />
-      
+
       <div className="container mx-auto px-4 py-8">
         <motion.div
           initial={{ opacity: 0, y: 20 }}
@@ -318,105 +416,179 @@ const CertificatesPage = () => {
           transition={{ duration: 0.6 }}
           className="mb-8"
         >
-          <h1 className="text-4xl font-bold text-gray-900 mb-4">My Certificates</h1>
-          <p className="text-lg text-gray-600">
-            View and download your course completion certificates
-          </p>
+          <div className="flex flex-col md:flex-row md:items-end justify-between gap-6">
+            <div>
+              <h1 className="text-4xl font-bold text-gray-900 mb-2">My Certificates</h1>
+              <p className="text-lg text-gray-600">
+                Manage and view your earned certifications
+              </p>
+            </div>
+
+            {/* Tab Navigation */}
+            <div className="flex p-1 bg-white/50 backdrop-blur-sm rounded-xl border border-white shadow-sm self-start">
+              <button
+                onClick={() => setActiveTab('course')}
+                className={`px-6 py-2.5 rounded-lg text-sm font-semibold transition-all duration-300 ${activeTab === 'course'
+                    ? 'bg-indigo-600 text-white shadow-md'
+                    : 'text-gray-600 hover:text-indigo-600'
+                  }`}
+              >
+                Course Certs
+              </button>
+              <button
+                onClick={() => setActiveTab('realtime_project')}
+                className={`px-6 py-2.5 rounded-lg text-sm font-semibold transition-all duration-300 ${activeTab === 'realtime_project'
+                    ? 'bg-purple-600 text-white shadow-md'
+                    : 'text-gray-600 hover:text-purple-600'
+                  }`}
+              >
+                Project Certs
+              </button>
+            </div>
+          </div>
         </motion.div>
 
-        {certificates.length === 0 ? (
-          <motion.div
-            initial={{ opacity: 0, scale: 0.9 }}
-            animate={{ opacity: 1, scale: 1 }}
-            transition={{ duration: 0.5 }}
-            className="text-center py-20"
-          >
-            <div className="w-24 h-24 bg-gray-100 rounded-full flex items-center justify-center mx-auto mb-6">
-              <svg className="w-12 h-12 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
-              </svg>
-            </div>
-            <h3 className="text-2xl font-bold text-gray-900 mb-4">No Certificates Yet</h3>
-            <p className="text-gray-600 mb-8 max-w-md mx-auto">
-              Complete courses and pass their tests to earn certificates. Your certificates will appear here once you've successfully completed a course.
-            </p>
-            <button 
-              onClick={() => window.location.href = '/student'}
-              className="px-8 py-3 bg-indigo-600 text-white font-semibold rounded-lg hover:bg-indigo-700 transition-all duration-200 shadow-lg hover:shadow-xl transform hover:-translate-y-1"
-            >
-              Browse Courses
-            </button>
-          </motion.div>
-        ) : (
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-            {certificates.map((certificate, index) => (
+        {(() => {
+          const filteredCerts = certificates.filter(c => (c.certificate_type || c.certificateType) === activeTab)
+
+          if (filteredCerts.length === 0) {
+            return (
               <motion.div
-                key={certificate.id}
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.5, delay: index * 0.1 }}
-                className="bg-white rounded-xl shadow-lg hover:shadow-xl transition-all duration-300 transform hover:-translate-y-2 overflow-hidden"
+                initial={{ opacity: 0, scale: 0.9 }}
+                animate={{ opacity: 1, scale: 1 }}
+                transition={{ duration: 0.5 }}
+                className="text-center py-20 bg-white/20 backdrop-blur-sm rounded-3xl border border-white/50"
               >
-                <div className="p-6">
-                  <div className="flex items-center justify-between mb-4">
-                    <div className="w-12 h-12 bg-gradient-to-br from-green-500 to-emerald-600 rounded-full flex items-center justify-center">
-                      <svg className="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
-                      </svg>
-                    </div>
-                    <span className="px-3 py-1 bg-green-100 text-green-800 text-sm font-medium rounded-full">
-                      Completed
-                    </span>
-                  </div>
-                  
-                  <h3 className="text-xl font-bold text-gray-900 mb-2 line-clamp-2">
-                    {certificate.metadata?.courseName || 'Course Certificate'}
-                  </h3>
-                  
-                  <p className="text-gray-600 mb-4 text-sm">
-                    Issued on {formatDate(certificate.issued_date)}
-                  </p>
-                  
-                  {certificate.metadata?.score && (
-                    <div className="mb-4">
-                      <div className="flex items-center justify-between text-sm text-gray-600 mb-1">
-                        <span>Score</span>
-                        <span className="font-semibold">{Math.round(certificate.metadata.score)}%</span>
-                      </div>
-                      <div className="w-full bg-gray-200 rounded-full h-2">
-                        <div 
-                          className="bg-gradient-to-r from-green-500 to-emerald-600 h-2 rounded-full transition-all duration-500"
-                          style={{ width: `${certificate.metadata.score}%` }}
-                        ></div>
-                      </div>
-                    </div>
+                <div className={`w-24 h-24 rounded-full flex items-center justify-center mx-auto mb-6 ${activeTab === 'course' ? 'bg-indigo-50 text-indigo-400' : 'bg-purple-50 text-purple-400'}`}>
+                  {activeTab === 'course' ? (
+                    <svg className="w-12 h-12" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253" />
+                    </svg>
+                  ) : (
+                    <svg className="w-12 h-12" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 20l4-16m4 4l4 4-4 4M6 16l-4-4 4-4" />
+                    </svg>
                   )}
-                  
-                  <div className="space-y-2">
-                    <button
-                      onClick={() => handleViewCertificate(certificate)}
-                      className="w-full px-4 py-2 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 transition-colors text-sm font-medium"
-                    >
-                      View Certificate
-                    </button>
-                    <button
-                      onClick={() => handleDownloadCertificate(certificate)}
-                      className="w-full px-4 py-2 bg-gray-100 text-gray-700 rounded-lg hover:bg-gray-200 transition-colors text-sm font-medium"
-                    >
-                      Download PDF
-                    </button>
-                  </div>
-                  
-                  <div className="mt-4 pt-4 border-t border-gray-100">
-                    <p className="text-xs text-gray-500">
-                      Certificate ID: {certificate.certificate_number}
-                    </p>
-                  </div>
                 </div>
+                <h3 className="text-2xl font-bold text-gray-900 mb-4">No {activeTab === 'course' ? 'Course' : 'Project'} Certificates</h3>
+                <p className="text-gray-600 mb-8 max-w-md mx-auto">
+                  {activeTab === 'course'
+                    ? "Complete courses and pass tests to earn certificates. Each certificate is unique and verifiable."
+                    : "Deliver high-quality projects and get them approved to earn project certificates."
+                  }
+                </p>
+                <button
+                  onClick={() => window.location.href = activeTab === 'course' ? '/student' : '/realtime-projects'}
+                  className={`px-8 py-3 text-white font-semibold rounded-lg transition-all duration-200 shadow-lg hover:shadow-xl transform hover:-translate-y-1 ${activeTab === 'course' ? 'bg-indigo-600 hover:bg-indigo-700' : 'bg-purple-600 hover:bg-purple-700'
+                    }`}
+                >
+                  {activeTab === 'course' ? 'Browse Courses' : 'Browse Projects'}
+                </button>
               </motion.div>
-            ))}
-          </div>
-        )}
+            )
+          }
+
+          return (
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+              {filteredCerts.map((certificate, index) => {
+                const isProject = (certificate.certificate_type || certificate.certificateType) === 'realtime_project'
+                const title = isProject
+                  ? (certificate.metadata?.projectName || certificate.realtimeProjectSubmission?.project_name || 'Project Certificate')
+                  : (certificate.metadata?.courseName || 'Course Certificate')
+                return (
+                  <motion.div
+                    key={certificate.id}
+                    initial={{ opacity: 0, y: 20 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ duration: 0.5, delay: index * 0.1 }}
+                    className="bg-white rounded-xl shadow-lg hover:shadow-xl transition-all duration-300 transform hover:-translate-y-2 overflow-hidden border border-gray-100"
+                  >
+                    <div className="p-6">
+                      <div className="flex items-center justify-between mb-4">
+                        <div className={`w-12 h-12 rounded-full flex items-center justify-center ${isProject ? 'bg-gradient-to-br from-purple-500 to-indigo-600' : 'bg-gradient-to-br from-green-500 to-emerald-600'}`}>
+                          {isProject ? (
+                            <svg className="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 20l4-16m4 4l4 4-4 4M6 16l-4-4 4-4" />
+                            </svg>
+                          ) : (
+                            <svg className="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+                            </svg>
+                          )}
+                        </div>
+                        <span className={`px-3 py-1 text-sm font-medium rounded-full ${isProject ? 'bg-purple-100 text-purple-800' : 'bg-green-100 text-green-800'
+                          }`}>
+                          {isProject ? '🚀 Project' : 'Course'}
+                        </span>
+                      </div>
+
+                      <h3 className="text-xl font-bold text-gray-900 mb-2 line-clamp-2">
+                        {title}
+                      </h3>
+
+                      {isProject && certificate.metadata?.difficulty && (
+                        <div className="flex gap-2 items-center mb-2">
+                          <span className="inline-block px-2 py-0.5 text-xs font-semibold rounded bg-indigo-50 text-indigo-700 capitalize border border-indigo-100">
+                            {certificate.metadata.difficulty}
+                          </span>
+                          <span className="text-xs text-slate-400">•</span>
+                          <span className="text-xs font-medium text-purple-600">
+                            ID: {certificate.id}
+                          </span>
+                        </div>
+                      )}
+
+                      <p className="text-gray-500 mb-4 text-sm">
+                        Earned on {formatDate(certificate.issued_date)}
+                      </p>
+
+                      {!isProject && (
+                        <div className="mb-4">
+                          <div className="flex items-center justify-between text-sm text-gray-600 mb-1">
+                            <span>Performance Record</span>
+                            <span className="font-semibold text-indigo-600">{Math.round(certificate.metadata.score || 0)}%</span>
+                          </div>
+                          <div className="w-full bg-gray-100 rounded-full h-1.5">
+                            <motion.div
+                              initial={{ width: 0 }}
+                              animate={{ width: `${certificate.metadata.score || 0}%` }}
+                              className="bg-gradient-to-r from-indigo-500 to-emerald-500 h-1.5 rounded-full"
+                            ></motion.div>
+                          </div>
+                        </div>
+                      )}
+
+                      {isProject && certificate.metadata?.pointsAwarded > 0 && (
+                        <div className="mb-4 flex items-center gap-2 px-3 py-2 bg-purple-50 rounded-lg border border-purple-100">
+                          <span className="text-lg">🏆</span>
+                          <span className="text-sm font-bold text-purple-700">
+                            {certificate.metadata.pointsAwarded} Credits Earned
+                          </span>
+                        </div>
+                      )}
+
+                      <div className="flex flex-col gap-2">
+                        <button
+                          onClick={() => handleViewCertificate(certificate)}
+                          className={`w-full py-2.5 text-white rounded-lg transition-all duration-300 text-sm font-bold shadow-sm hover:shadow-md ${isProject ? 'bg-indigo-600 hover:bg-indigo-700' : 'bg-indigo-600 hover:bg-indigo-700'
+                            }`}
+                        >
+                          View Preview
+                        </button>
+                        <button
+                          onClick={() => handleDownloadCertificate(certificate)}
+                          className="w-full py-2.5 bg-white text-gray-700 border border-gray-200 rounded-lg hover:bg-gray-50 transition-all text-sm font-bold"
+                        >
+                          Download Official PDF
+                        </button>
+                      </div>
+                    </div>
+                  </motion.div>
+                )
+              })}
+            </div>
+          )
+        })()}
       </div>
 
       {/* Certificate Modal */}
@@ -447,67 +619,92 @@ const CertificatesPage = () => {
               </button>
             </div>
 
-            <div className="relative bg-white px-16 md:px-20 py-16 md:py-20 shadow-lg overflow-hidden text-center" style={{ minHeight: '900px' }}>
-              {/* Watermark Background - Text */}
-              <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 -rotate-45 text-[180px] font-black text-gray-200 opacity-20 z-0 whitespace-nowrap tracking-[20px]" style={{ fontFamily: "'Inter', sans-serif" }}>
-                GNANAM AI
-              </div>
+            <div className="relative bg-white shadow-2xl overflow-hidden text-center" style={{ minHeight: '750px', padding: '0' }}>
+              <div className="absolute top-0 left-0 w-3 h-full" style={{ background: `linear-gradient(to bottom, ${(selectedCertificate.certificate_type || selectedCertificate.certificateType) === 'realtime_project' ? '#1e3a8a' : '#0f172a'}, #6366f1)` }}></div>
               
-              <div className="relative z-10">
-                {/* Logo */}
-                <div className="mb-12 text-left">
-                  <img src="/lms_logo.svg" alt="GNANAM AI" className="h-[80px] w-auto" onError={(e) => e.target.style.display = 'none'} />
-                </div>
-
-                {/* Certificate Title */}
-                <div className="text-[42px] font-black text-slate-800 mb-12 tracking-[6px] uppercase leading-tight whitespace-nowrap" style={{ fontFamily: "'Playfair Display', serif" }}>
-                  CERTIFICATE OF COMPLETION
-                </div>
-
-                {/* Certify Text */}
-                <div className="text-[22px] text-slate-600 my-10 leading-relaxed italic">
-                  This is to certify that
-                </div>
-
-                {/* Student Name */}
-                <div className="text-[48px] font-bold text-slate-800 my-12 underline decoration-indigo-600 decoration-[3px] underline-offset-[10px]" style={{ fontFamily: "'Playfair Display', serif" }}>
-                  {selectedCertificate.metadata?.studentName || 'Learner Name'}
-                </div>
-
-                {/* Course Text */}
-                <div className="text-[24px] text-slate-600 my-8 leading-relaxed">
-                  has successfully completed the course
-                </div>
-
-                {/* Course Name */}
-                <div className="text-[32px] font-bold text-slate-800 my-8 leading-relaxed">
-                  {(() => {
-                    const courseName = selectedCertificate.metadata?.courseName || 'Course'
-                    const courseDuration = selectedCertificate.metadata?.courseDuration || selectedCertificate.course?.estimated_duration
-                    return courseDuration ? `${courseName} (${courseDuration} Hrs)` : courseName
-                  })()}
-                </div>
-
-                {/* Score */}
-                {selectedCertificate.metadata?.score && (
-                  <div className="text-[36px] font-bold text-slate-800 my-12" style={{ fontFamily: "'Playfair Display', serif" }}>
-                    with a score of {Math.round(selectedCertificate.metadata.score)}%
+              <div className="inner-content p-16 h-full w-full flex flex-col items-center">
+                {/* Header Row */}
+                <div className="w-full flex justify-between items-start mb-12">
+                  <div className="text-left">
+                    <img src="/lms_logo.svg" alt="GNANAM AI" className="h-10 w-auto" />
                   </div>
-                )}
-
-                {/* Issue Date */}
-                <div className="text-xl text-slate-600 mt-20 font-medium">
-                  Issued on {formatDate(selectedCertificate.issued_date)}
+                  <div className="text-right text-[8px] tracking-[2px] font-extrabold text-slate-400 uppercase leading-relaxed">
+                    OFFICIAL VERIFIED CERTIFICATION<br/>
+                    ISSUED BY GNANAM AI ACADEMY
+                  </div>
                 </div>
 
-                {/* Certificate ID */}
-                <div className="text-sm text-slate-400 mt-8 font-mono">
-                  Certificate ID: {selectedCertificate.certificate_number}
+                {/* Title */}
+                <div className="mb-10">
+                  <h1 className="text-5xl font-black tracking-tighter uppercase mb-1" style={{ fontFamily: "'Inter', sans-serif", color: (selectedCertificate.certificate_type || selectedCertificate.certificateType) === 'realtime_project' ? '#1e3a8a' : '#0f172a' }}>
+                    {(selectedCertificate.certificate_type || selectedCertificate.certificateType) === 'realtime_project' ? 'CERTIFICATE OF' : 'CERTIFICATE OF'}
+                  </h1>
+                  <h2 className="text-lg font-bold tracking-[6px] uppercase text-indigo-500">
+                    {(selectedCertificate.certificate_type || selectedCertificate.certificateType) === 'realtime_project' ? 'ACHIEVEMENT' : 'COMPLETION'}
+                  </h2>
                 </div>
 
-                {/* Verification Code */}
-                <div className="text-sm text-slate-400 mt-3 font-mono">
-                  Verification Code: {selectedCertificate.verification_code}
+                <p className="text-sm font-semibold text-slate-400 uppercase tracking-widest mb-4">This certificate confirms that</p>
+                
+                <h3 className="text-6xl font-bold text-slate-900 mb-2" style={{ fontFamily: "'Playfair Display', serif" }}>
+                  {selectedCertificate.metadata?.studentName || selectedCertificate.studentName || 'Learner Name'}
+                </h3>
+                
+                <div className="w-24 h-1 bg-indigo-500 mx-auto mb-8 rounded-full"></div>
+
+                <p className="text-lg text-slate-600 mb-2 max-w-2xl">
+                  {(selectedCertificate.certificate_type || selectedCertificate.certificateType) === 'realtime_project'
+                    ? 'has successfully built and delivered the high-impact realtime project'
+                    : 'has successfully completed the comprehensive training course'
+                  }
+                </p>
+
+                <h4 className="text-3xl font-extrabold text-slate-800 mb-10">
+                  {(selectedCertificate.certificate_type || selectedCertificate.certificateType) === 'realtime_project'
+                    ? (selectedCertificate.metadata?.projectName || selectedCertificate.realtimeProjectSubmission?.project_name || 'Realtime Project')
+                    : (() => {
+                        const courseName = selectedCertificate.metadata?.courseName || 'Course'
+                        const courseDuration = selectedCertificate.metadata?.courseDuration || selectedCertificate.course?.estimated_duration
+                        return courseDuration ? `${courseName} (${courseDuration} Hrs)` : courseName
+                      })()
+                  }
+                </h4>
+
+                <div className="flex gap-12 mb-12 bg-slate-50 px-8 py-4 rounded-xl border border-slate-100">
+                  {(selectedCertificate.certificate_type || selectedCertificate.certificateType) === 'realtime_project' && selectedCertificate.metadata?.difficulty && (
+                    <div className="flex flex-col items-center">
+                      <span className="text-[9px] uppercase tracking-widest text-slate-400 font-bold mb-1">Project Level</span>
+                      <span className="text-base font-black text-slate-700 uppercase">{selectedCertificate.metadata.difficulty}</span>
+                    </div>
+                  )}
+                  {(selectedCertificate.certificate_type || selectedCertificate.certificateType) !== 'realtime_project' && selectedCertificate.metadata?.score && (
+                    <div className="flex flex-col items-center">
+                      <span className="text-[9px] uppercase tracking-widest text-slate-400 font-bold mb-1">Performance Score</span>
+                      <span className="text-base font-black text-slate-700">{Math.round(selectedCertificate.metadata.score)}%</span>
+                    </div>
+                  )}
+                  <div className="flex flex-col items-center">
+                    <span className="text-[9px] uppercase tracking-widest text-slate-400 font-bold mb-1">Completion Date</span>
+                    <span className="text-base font-black text-slate-700">{formatDate(selectedCertificate.issued_date)}</span>
+                  </div>
+                </div>
+
+                <div className="w-full flex justify-between items-end mt-4">
+                  <div className="flex items-center gap-4 p-4 bg-white border border-slate-100 rounded-xl shadow-sm">
+                    <div className="w-10 h-10 bg-slate-900 rounded-full flex items-center justify-center text-white text-xl">✓</div>
+                    <div className="text-left">
+                      <div className="text-[9px] font-black text-emerald-500 uppercase leading-none mb-1">VALIDATED CERTIFICATE</div>
+                      <div className="text-[8px] font-bold text-slate-400 font-mono">ID: {selectedCertificate.certificate_number}</div>
+                    </div>
+                  </div>
+
+                  <div className="flex gap-8">
+                    <div className="flex flex-col items-center min-w-[200px]">
+                      <span className="text-3xl mb-0 text-slate-900" style={{ fontFamily: "'Alex Brush', cursive" }}>Vijay Gunti</span>
+                      <div className="w-full h-[1px] bg-slate-200 mb-2"></div>
+                      <span className="text-[10px] font-black text-slate-400 uppercase tracking-tighter">Education Director</span>
+                    </div>
+                  </div>
                 </div>
               </div>
             </div>

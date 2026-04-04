@@ -25,10 +25,10 @@ module.exports = {
                 price: 0.00,
                 currency: 'INR',
                 features: JSON.stringify([
-                    'Access to Free Courses',
+                    'Access to two courses',
+                    'Access for limited Realtime Projects',
                     'Limited Platform Access',
-                    'Community Support',
-                    'Valid for 1 Month'
+                    'Community Support'
                 ]),
                 is_active: true,
                 created_at: new Date(),
@@ -38,14 +38,13 @@ module.exports = {
                 name: 'basic',
                 display_name: 'Basic Plan',
                 description: 'For learners and early innovators who want training + mentorship.',
-                price: 499.00,
+                price: 299.00,
                 currency: 'INR',
                 features: JSON.stringify([
-                    'Unlock 3 Realtime Projects',
-                    'Full Idea Management Features',
-                    'Access to Learning Resources',
-                    'Mentorship Support',
-                    'Valid for 1 Month'
+                    'Includes Starter Plan',
+                    'Unlock All courses',
+                    'Access to four Realtime Projects',
+                    'Full Management and Analytics Support'
                 ]),
                 is_active: true,
                 created_at: new Date(),
@@ -55,14 +54,14 @@ module.exports = {
                 name: 'pro',
                 display_name: 'Pro Plan',
                 description: 'Built for students, professionals, startups, and industries.',
-                price: 999.00,
+                price: 799.00,
                 currency: 'INR',
                 features: JSON.stringify([
-                    'Unlock All 10 Realtime Projects',
+                    'Includes Basic Plan & Starter Plan',
+                    'Unlock All 10 Realtime Projects & Free Workshops',
                     'Full Idea Management Suite',
-                    'Priority Mentorship',
-                    'Certification Support',
-                    'Valid for 1 Month'
+                    '1:1 Mentorship and Engagement',
+
                 ]),
                 is_active: true,
                 created_at: new Date(),

@@ -78,8 +78,19 @@ const CourseCard = ({ course, index = 0, showInstructor = true, showRating = tru
             </span>
           </div>
 
-          {/* Live/Draft badge */}
-          <div className="absolute top-3 right-3">
+          {/* Free/Premium badge */}
+          <div className="absolute top-3 right-3 flex flex-col gap-2 items-end">
+            <motion.span
+              animate={{ opacity: [1, 0.4, 1] }}
+              transition={{ repeat: Infinity, duration: 2, ease: "easeInOut" }}
+              className={`px-2 py-1 text-[10px] font-bold rounded-lg border backdrop-blur-sm ${course.is_free
+                ? 'bg-emerald-500/20 text-emerald-400 border-emerald-500/30'
+                : 'bg-violet-500/20 text-violet-400 border-violet-500/30'
+              }`}>
+              {course.is_free ? 'Free' : 'Premium'}
+            </motion.span>
+
+            {/* Live/Draft badge (only for admins or when needed) */}
             <span className={`px-2 py-1 text-[10px] font-bold rounded-lg backdrop-blur-sm ${course.is_published
               ? 'bg-green-500/20 text-green-400 border border-green-500/30'
               : 'bg-slate-700 text-slate-400 border border-slate-600'
