@@ -16,6 +16,8 @@ const {
 const {
   submitInternship,
   getMySubmissions,
+  getMySubmissionForInternship,
+  updateSubmission,
   getAllSubmissions,
   approveSubmission,
   rejectSubmission,
@@ -41,6 +43,8 @@ router.put('/:id/registrations/:regId', authenticate, requireAdmin, updateRegist
 // Internship Submissions
 router.post('/submissions', authenticate, submitInternship);
 router.get('/student/submissions', authenticate, getMySubmissions);
+router.get('/student/submissions/:internship_id', authenticate, getMySubmissionForInternship);
+router.put('/submissions/:id', authenticate, updateSubmission);
 
 // Admin: Internship Submissions
 router.get('/admin/submissions/all', authenticate, requireAdmin, getAllSubmissions);

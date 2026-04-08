@@ -1,8 +1,9 @@
 import { useState } from 'react'
-import { motion, AnimatePresence } from 'framer-motion'
-import { 
-  FiClock, FiGlobe, FiAward, FiCheckCircle, 
-  FiX, FiDownload, FiInfo, FiTrendingUp, FiCheck, FiArrowRight
+import { motion } from 'framer-motion'
+import {
+  FiClock, FiAward, FiCheckCircle,
+  FiX, FiDownload, FiInfo, FiArrowRight,
+  FiUsers, FiStar, FiCheck
 } from 'react-icons/fi'
 import { useAuth } from '../../context/AuthContext'
 import internshipService from '../../services/internshipService'
@@ -20,15 +21,13 @@ const InternshipDetailsModal = ({ internship, registration, onClose, onRegistere
 
   if (!internship) return null
 
-  const domainsOffered = internship.domains_offered || []
-  const keyFeatures = internship.key_features || []
-  const outcomes = internship.outcomes || []
+  const domainsOffered = Array.isArray(internship.domains_offered) ? internship.domains_offered : []
+  const keyFeatures    = Array.isArray(internship.key_features)    ? internship.key_features    : []
+  const outcomes       = Array.isArray(internship.outcomes)        ? internship.outcomes        : []
+  const highlights     = Array.isArray(internship.highlights)      ? internship.highlights      : []
 
   const handleRegister = async () => {
-    if (!user) {
-      window.location.href = '/login'
-      return
-    }
+    if (!user) { window.location.href = '/login'; return }
     setRegistering(true)
     setError('')
     try {
@@ -36,190 +35,254 @@ const InternshipDetailsModal = ({ internship, registration, onClose, onRegistere
       setLocalRegistered(true)
       onRegistered && onRegistered()
     } catch (err) {
-      setError(err.response?.data?.message || 'Failed to register. Please try again.')
+      setError(err.response?.data?.message || 'Failed to apply. Please try again.')
     } finally {
       setRegistering(false)
     }
   }
 
-  return (
-    <div className="fixed inset-0 z-[70] flex items-center justify-center p-4 bg-black bg-opacity-50 backdrop-blur-sm" onClick={onClose}>
-      <motion.div
-        initial={{ opacity: 0, scale: 0.95 }}
-        animate={{ opacity: 1, scale: 1 }}
-        exit={{ opacity: 0, scale: 0.95 }}
-        className="bg-white rounded-2xl shadow-2xl max-w-2xl w-full max-h-[90vh] overflow-y-auto relative"
-        onClick={e => e.stopPropagation()}
-      >
-        {/* Header (Hackathon Style) */}
-        <div className="relative bg-gradient-to-r from-indigo-600 via-purple-600 to-pink-600 text-white p-8 rounded-t-2xl">
+  // Determine which action button to show at the bottom
+  const renderActionButton = () => {
+    if (regStatus === 'completed') {
+      return (
+        <>
+          <div className="bg-emerald-50 border border-emerald-200 text-emerald-800 font-bold text-center py-3 rounded-xl text-sm flex items-center justify-center gap-2">
+            🏆 Program Completed — Well Done!
+          </div>
+          {registration?.certificate_url && (
+            <a
+              href={registration.certificate_url}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="w-full flex items-center justify-center gap-2 py-3 bg-indigo-600 text-white font-bold rounded-xl hover:bg-indigo-700 transition-colors text-sm"
+            >
+              <FiDownload /> Download Certificate
+            </a>
+          )}
+        </>
+      )
+    }
+
+    if (isAlreadyRegistered) {
+      return (
+        <>
+          <div className="bg-green-50 border border-green-200 text-green-800 font-semibold text-center py-2.5 rounded-xl text-sm flex items-center justify-center gap-2">
+            <FiCheck className="w-4 h-4" /> You have applied for this internship
+          </div>
           <button
-            onClick={onClose}
-            className="absolute top-4 right-4 p-2 hover:bg-white/20 rounded-lg transition-colors duration-200"
+            onClick={() => setShowSubmitModal(true)}
+            className="w-full py-3.5 bg-gradient-to-r from-emerald-500 to-emerald-600 text-white font-bold rounded-xl hover:from-emerald-600 hover:to-emerald-700 transition-all shadow-lg text-sm uppercase tracking-wide flex items-center justify-center gap-2"
           >
-            <FiX className="w-6 h-6" />
+            📝 View / Submit Work
           </button>
-          
-          <div className="flex items-center gap-4 mb-4">
-            <div className="w-12 h-12 bg-white/20 rounded-xl flex items-center justify-center text-2xl backdrop-blur-md">
-              {internship.logo || '💼'}
+        </>
+      )
+    }
+
+    return (
+      <button
+        onClick={handleRegister}
+        disabled={registering}
+        className="w-full py-3.5 bg-gradient-to-r from-indigo-600 to-purple-600 text-white font-bold rounded-xl hover:from-indigo-700 hover:to-purple-700 transition-all shadow-lg text-sm uppercase tracking-wide flex items-center justify-center gap-2 disabled:opacity-70 disabled:cursor-not-allowed"
+      >
+        {registering ? (
+          <>
+            <div className="w-4 h-4 border-2 border-white/20 border-t-white rounded-full animate-spin" />
+            Applying...
+          </>
+        ) : (
+          <>Apply for Internship <FiArrowRight /></>
+        )}
+      </button>
+    )
+  }
+
+  return (
+    <>
+      {/* Backdrop */}
+      <div
+        className="fixed inset-0 z-[70] flex items-center justify-center p-4 bg-black/50 backdrop-blur-sm"
+        onClick={onClose}
+      >
+        <motion.div
+          initial={{ opacity: 0, scale: 0.95, y: 20 }}
+          animate={{ opacity: 1, scale: 1, y: 0 }}
+          exit={{ opacity: 0, scale: 0.95, y: 20 }}
+          className="bg-white rounded-2xl shadow-2xl max-w-2xl w-full max-h-[90vh] overflow-y-auto relative"
+          onClick={e => e.stopPropagation()}
+        >
+          {/* Gradient Header */}
+          <div className="relative bg-gradient-to-r from-indigo-600 via-purple-600 to-pink-600 text-white p-8 rounded-t-2xl">
+            <button
+              onClick={onClose}
+              className="absolute top-4 right-4 p-2 hover:bg-white/20 rounded-lg transition-colors"
+            >
+              <FiX className="w-5 h-5" />
+            </button>
+
+            <div className="flex items-center gap-4 mb-4">
+              <div className="w-14 h-14 bg-white/20 rounded-xl flex items-center justify-center text-3xl backdrop-blur-md border border-white/20">
+                {internship.logo || '💼'}
+              </div>
+              <div>
+                <h2 className="text-2xl font-bold">{internship.title}</h2>
+                <p className="text-indigo-100 text-sm mt-0.5">Professional Virtual Internship</p>
+              </div>
             </div>
+
+            <div className="flex items-center gap-3 flex-wrap">
+              <span className="px-3 py-1 rounded-full text-xs font-semibold bg-white/20 border border-white/30">
+                {internship.status === 'active' ? '● Active' : '○ Upcoming'}
+              </span>
+              {internship.certificate_type && (
+                <span className="px-3 py-1 rounded-full text-xs font-semibold bg-white/20 border border-white/30">
+                  🎓 {internship.certificate_type} Certificate
+                </span>
+              )}
+              {internship.current_registrations != null && (
+                <span className="px-3 py-1 rounded-full text-xs font-semibold bg-white/20 border border-white/30 flex items-center gap-1">
+                  <FiUsers className="w-3 h-3" /> {internship.current_registrations} enrolled
+                </span>
+              )}
+            </div>
+          </div>
+
+          {/* Content */}
+          <div className="p-8 space-y-7">
+
+            {/* Stats Row */}
+            <div className="bg-gradient-to-r from-slate-50 to-indigo-50 rounded-xl p-5 border border-indigo-100">
+              <div className="grid grid-cols-2 gap-6">
+                <div className="text-center">
+                  <FiClock className="w-5 h-5 mx-auto mb-2 text-indigo-600" />
+                  <p className="text-[10px] font-bold text-slate-400 uppercase tracking-widest">Duration</p>
+                  <p className="text-sm font-bold text-slate-900 mt-1">{internship.duration || '4-12 Weeks'}</p>
+                </div>
+                <div className="text-center border-l border-indigo-100">
+                  <FiAward className="w-5 h-5 mx-auto mb-2 text-indigo-600" />
+                  <p className="text-[10px] font-bold text-slate-400 uppercase tracking-widest">Credential</p>
+                  <p className="text-sm font-bold text-slate-900 mt-1">{internship.certificate_type || 'Verified'}</p>
+                </div>
+              </div>
+            </div>
+
+            {/* Description / Overview */}
             <div>
-               <h2 className="text-2xl font-bold">{internship.title}</h2>
-               <p className="text-indigo-100 text-sm">Professional Virtual Internship</p>
+              <h3 className="text-base font-bold text-gray-900 flex items-center gap-2 mb-3">
+                <FiInfo className="w-4 h-4 text-indigo-600" /> Overview
+              </h3>
+              <p className="text-gray-600 leading-relaxed text-sm">
+                {internship.description || 'No description available.'}
+              </p>
             </div>
-          </div>
 
-          <div className="flex items-center space-x-4">
-            <span className={`px-3 py-1 rounded-full text-xs font-medium bg-white/20 text-white`}>
-              {internship.status === 'active' ? 'Active' : 'Upcoming'}
-            </span>
-            <div className="flex items-center space-x-2 text-sm">
-              <FiAward className="w-4 h-4" />
-              <span>{internship.domains_offered?.[0] || 'Software Engineering'}</span>
-            </div>
-          </div>
-        </div>
-
-        {/* Content */}
-        <div className="p-8 space-y-8">
-          {/* Schedule/Stats Box (Hackathon Style) */}
-          <div className="bg-gradient-to-r from-blue-50 to-indigo-50 rounded-xl p-6 border border-blue-100">
-            <div className="grid grid-cols-3 gap-4">
-              <div className="text-center group">
-                <FiClock className="w-5 h-5 mx-auto mb-2 text-indigo-600" />
-                <h4 className="text-xs font-bold text-slate-500 uppercase tracking-widest">Duration</h4>
-                <p className="text-sm font-bold text-slate-900 mt-1">{internship.duration || '4-12 Weeks'}</p>
+            {/* Highlights */}
+            {highlights.length > 0 && (
+              <div>
+                <h3 className="text-xs font-bold text-slate-500 uppercase tracking-wider mb-3">Highlights</h3>
+                <div className="flex flex-wrap gap-2">
+                  {highlights.map((h, i) => (
+                    <span key={i} className="px-3 py-1 text-xs font-semibold bg-indigo-50 text-indigo-700 rounded-full border border-indigo-100">
+                      {h}
+                    </span>
+                  ))}
+                </div>
               </div>
-              <div className="text-center group border-x border-indigo-100">
-                <FiGlobe className="w-5 h-5 mx-auto mb-2 text-indigo-600" />
-                <h4 className="text-xs font-bold text-slate-500 uppercase tracking-widest">Mode</h4>
-                <p className="text-sm font-bold text-slate-900 mt-1">{internship.mode || 'Online'}</p>
-              </div>
-              <div className="text-center group">
-                <FiAward className="w-5 h-5 mx-auto mb-2 text-indigo-600" />
-                <h4 className="text-xs font-bold text-slate-500 uppercase tracking-widest">Credential</h4>
-                <p className="text-sm font-bold text-slate-900 mt-1">Verified</p>
-              </div>
-            </div>
-          </div>
+            )}
 
-          {/* Overview */}
-          <div className="space-y-3">
-            <h3 className="text-lg font-bold text-gray-900 flex items-center">
-              <FiInfo className="w-5 h-5 mr-2 text-indigo-600" />
-              Overview
-            </h3>
-            <p className="text-gray-600 leading-relaxed text-sm">
-              {internship.description}
-            </p>
-          </div>
-
-          {/* Domains & Features */}
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+            {/* Domains Offered */}
             {domainsOffered.length > 0 && (
-              <div className="space-y-4">
-                <h3 className="text-sm font-bold text-slate-900 uppercase tracking-wider flex items-center gap-2">
-                   <div className="w-1.5 h-1.5 rounded-full bg-indigo-600" />
-                   Domains
+              <div>
+                <h3 className="text-xs font-bold text-slate-500 uppercase tracking-wider flex items-center gap-2 mb-3">
+                  <div className="w-1.5 h-1.5 rounded-full bg-indigo-600" /> Domains Offered
                 </h3>
-                <div className="space-y-2">
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
                   {domainsOffered.map((domain, i) => (
-                    <div key={i} className="flex items-center gap-2.5 text-xs font-semibold text-slate-600 bg-slate-50 p-2.5 rounded-lg border border-slate-100">
-                      <FiCheckCircle className="text-emerald-500 w-3.5 h-3.5" />
+                    <div key={i} className="flex items-center gap-2.5 text-xs font-semibold text-slate-700 bg-slate-50 p-2.5 rounded-lg border border-slate-100">
+                      <FiCheckCircle className="text-emerald-500 w-3.5 h-3.5 flex-shrink-0" />
                       {domain}
                     </div>
                   ))}
                 </div>
               </div>
             )}
-            
+
+            {/* Key Features */}
             {keyFeatures.length > 0 && (
-              <div className="space-y-4">
-                <h3 className="text-sm font-bold text-slate-900 uppercase tracking-wider flex items-center gap-2">
-                   <div className="w-1.5 h-1.5 rounded-full bg-pink-500" />
-                   Key Features
+              <div>
+                <h3 className="text-xs font-bold text-slate-500 uppercase tracking-wider flex items-center gap-2 mb-3">
+                  <div className="w-1.5 h-1.5 rounded-full bg-pink-500" /> Key Features
                 </h3>
-                <div className="space-y-2">
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
                   {keyFeatures.map((feature, i) => (
-                    <div key={i} className="flex items-center gap-2.5 text-xs font-semibold text-slate-600 bg-slate-50 p-2.5 rounded-lg border border-slate-100">
-                      <FiCheckCircle className="text-indigo-400 w-3.5 h-3.5" />
+                    <div key={i} className="flex items-center gap-2.5 text-xs font-semibold text-slate-700 bg-slate-50 p-2.5 rounded-lg border border-slate-100">
+                      <FiStar className="text-amber-400 w-3.5 h-3.5 flex-shrink-0" />
                       {feature}
                     </div>
                   ))}
                 </div>
               </div>
             )}
+
+            {/* Outcomes */}
+            {outcomes.length > 0 && (
+              <div>
+                <h3 className="text-xs font-bold text-slate-500 uppercase tracking-wider flex items-center gap-2 mb-3">
+                  <div className="w-1.5 h-1.5 rounded-full bg-emerald-500" /> What You'll Achieve
+                </h3>
+                <div className="space-y-2">
+                  {outcomes.map((outcome, i) => (
+                    <div key={i} className="flex items-start gap-2.5 text-xs font-semibold text-slate-700 bg-emerald-50 p-2.5 rounded-lg border border-emerald-100">
+                      <FiCheck className="text-emerald-500 w-3.5 h-3.5 flex-shrink-0 mt-0.5" />
+                      {outcome}
+                    </div>
+                  ))}
+                </div>
+              </div>
+            )}
+
+            {/* Eligibility note */}
+            {internship.max_registrations && (
+              <div className="bg-amber-50 border border-amber-100 rounded-xl p-4 text-xs text-amber-700 font-medium">
+                ⚡ Limited to {internship.max_registrations} seats —{' '}
+                {internship.current_registrations || 0} enrolled so far
+              </div>
+            )}
+
+            {/* Error */}
+            {error && (
+              <div className="p-4 bg-red-50 text-red-600 rounded-xl text-xs font-semibold border border-red-100">
+                ⚠️ {error}
+              </div>
+            )}
           </div>
 
-          {error && (
-            <div className="p-4 bg-red-50 text-red-600 rounded-xl text-xs font-semibold border border-red-100">
-              ⚠️ {error}
-            </div>
-          )}
-        </div>
-
-        {/* Footer actions */}
-        <div className="p-8 border-t border-gray-100 flex flex-col gap-3">
-          {regStatus === 'completed' ? (
-            <>
-               <div className="bg-emerald-100 text-emerald-800 font-bold text-center py-3 rounded-lg text-sm uppercase tracking-wider">
-                🏆 Program Completed
-              </div>
-              {registration?.certificate_url && (
-                <a
-                  href={registration.certificate_url}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="w-full flex items-center justify-center gap-2 py-3 bg-indigo-600 text-white font-bold rounded-lg hover:bg-indigo-700 transition-colors text-sm"
-                >
-                  <FiDownload /> Download Certificate
-                </a>
-              )}
-            </>
-          ) : isAlreadyRegistered ? (
+          {/* Footer */}
+          <div className="px-8 pb-8 flex flex-col gap-3">
+            {renderActionButton()}
             <button
-              onClick={() => setShowSubmitModal(true)}
-              className="w-full py-3 bg-emerald-600 text-white font-bold rounded-lg hover:bg-emerald-700 transition-colors text-sm uppercase tracking-wider shadow-md"
+              onClick={onClose}
+              className="w-full py-2.5 text-slate-400 font-semibold hover:text-slate-700 transition-colors text-sm"
             >
-              📝 Submit Final Work
+              Close
             </button>
-          ) : (
-            <button
-              onClick={handleRegister}
-              disabled={registering}
-              className="w-full py-3.5 bg-indigo-600 text-white font-bold rounded-lg hover:bg-indigo-700 transition-all shadow-lg text-sm uppercase tracking-wider flex items-center justify-center gap-2"
-            >
-              {registering ? (
-                <>
-                  <div className="w-4 h-4 border-2 border-white/20 border-t-white rounded-full animate-spin" />
-                  Processing...
-                </>
-              ) : (
-                <>Apply for Internship <FiArrowRight /></>
-              )}
-            </button>
-          )}
-          <button
-            onClick={onClose}
-            className="w-full py-3 text-slate-500 font-semibold hover:text-slate-900 transition-colors text-sm"
-          >
-            Close
-          </button>
-        </div>
-      </motion.div>
+          </div>
+        </motion.div>
+      </div>
 
-      {/* Submission Modal */}
-      <InternshipSubmissionModal
-        isOpen={showSubmitModal}
-        onClose={() => setShowSubmitModal(false)}
-        internship={internship}
-        onSuccess={() => {
-          setShowSubmitModal(false);
-          onRegistered && onRegistered();
-        }}
-      />
-    </div>
+      {/* Submission Modal — rendered outside details modal so it sits on top (z-[80]) */}
+      {showSubmitModal && (
+        <InternshipSubmissionModal
+          isOpen={showSubmitModal}
+          onClose={() => setShowSubmitModal(false)}
+          internship={internship}
+          onSuccess={() => {
+            setShowSubmitModal(false)
+            onRegistered && onRegistered()
+          }}
+        />
+      )}
+    </>
   )
 }
 

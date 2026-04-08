@@ -103,19 +103,7 @@ const HackathonSubmissionDetails = ({ submission, onClose, isAdmin = false }) =>
                 {getStatusIcon(submission.status)}
                 <span className="ml-1 capitalize">{submission.status.replace('_', ' ')}</span>
               </span>
-              {submission.is_winner && (
-                <span className="px-3 py-1 rounded-full text-sm font-medium bg-yellow-100 text-yellow-800 flex items-center">
-                  <FiAward className="w-4 h-4 mr-1" />
-                  Winner
-                </span>
-              )}
             </div>
-            {submission.ranking && (
-              <div className="text-right">
-                <p className="text-sm text-gray-600">Ranking</p>
-                <p className="text-2xl font-bold text-indigo-600">#{submission.ranking}</p>
-              </div>
-            )}
           </div>
 
           {/* Project Information */}
@@ -265,13 +253,6 @@ const HackathonSubmissionDetails = ({ submission, onClose, isAdmin = false }) =>
                     <p className="text-gray-700 bg-gray-50 p-4 rounded-lg">
                       {submission.review_notes}
                     </p>
-                  </div>
-                )}
-
-                {submission.prize && (
-                  <div className="mb-4">
-                    <p className="text-sm font-medium text-gray-700 mb-1">Prize</p>
-                    <p className="text-lg font-semibold text-yellow-600">{submission.prize}</p>
                   </div>
                 )}
               </div>

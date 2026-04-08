@@ -15,7 +15,6 @@ const StudentInternshipsPage = () => {
   const [selectedInternship, setSelectedInternship] = useState(null)
   const [myRegistrations, setMyRegistrations] = useState([])
   const [search, setSearch] = useState('')
-  const [filterMode, setFilterMode] = useState('all')
 
   const fetchInternships = async () => {
     try {
@@ -52,15 +51,12 @@ const StudentInternshipsPage = () => {
     return () => clearTimeout(timer)
   }, [search])
 
-  const filteredInternships = internships.filter(internship => {
-    if (filterMode === 'all') return true;
-    return internship.mode === filterMode;
-  });
+  const filteredInternships = internships;
 
   return (
     <div className="min-h-screen flex flex-col bg-gradient-to-br from-slate-50 via-blue-50 to-indigo-100 font-display">
       <Header />
-      
+
       <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 flex-grow">
         <motion.div
           initial={{ opacity: 0, y: 20 }}
@@ -71,7 +67,7 @@ const StudentInternshipsPage = () => {
           <h1 className="text-4xl md:text-5xl font-black text-slate-900 mb-4">
             Virtual Internships
           </h1>
-          <p className="text-xl text-slate-600 max-w-3xl mx-auto font-medium">
+          <p className="text-xl text-slate-600 max-w-3xl mx-auto font-medium mb-6">
             Discover virtual internships and showcase your capabilities. Gain real-world experience and accelerate your career.
           </p>
         </motion.div>
@@ -83,7 +79,7 @@ const StudentInternshipsPage = () => {
           transition={{ duration: 0.6, delay: 0.1 }}
           className="bg-white rounded-2xl shadow-sm border border-slate-200 p-6 mb-12"
         >
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+          <div className="max-w-2xl mx-auto">
             <div className="relative">
               <FiSearch className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400 w-5 h-5" />
               <input
@@ -94,21 +90,9 @@ const StudentInternshipsPage = () => {
                 className="w-full pl-12 pr-4 py-3 bg-slate-50 border border-slate-200 rounded-xl focus:ring-2 focus:ring-indigo-500 outline-none transition-all"
               />
             </div>
-            <div>
-              <select
-                value={filterMode}
-                onChange={(e) => setFilterMode(e.target.value)}
-                className="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl focus:ring-2 focus:ring-indigo-500 outline-none transition-all"
-              >
-                <option value="all">All Modes</option>
-                <option value="Online">Online</option>
-                <option value="Hybrid">Hybrid</option>
-                <option value="Offline">Offline</option>
-              </select>
-            </div>
           </div>
           <div className="mt-4 text-sm text-slate-500 font-bold uppercase tracking-wider">
-            Showing {filteredInternships.length} of {internships.length} opportunities
+            Showing {filteredInternships.length} of {internships.length} internships
           </div>
         </motion.div>
 
@@ -129,6 +113,7 @@ const StudentInternshipsPage = () => {
                 key={internship.id}
                 index={index}
                 internship={internship}
+                registration={myRegistrations.find(r => r.internship_id === internship.id)}
                 onClick={setSelectedInternship}
               />
             ))}

@@ -30,6 +30,16 @@ module.exports = (sequelize, DataTypes) => {
       allowNull: false,
       defaultValue: '4-12 Weeks'
     },
+    start_date: {
+      type: DataTypes.DATE,
+      allowNull: true,
+      comment: 'Internship start date'
+    },
+    end_date: {
+      type: DataTypes.DATE,
+      allowNull: true,
+      comment: 'Internship end date'
+    },
     // Mode: Online / Offline / Hybrid
     mode: {
       type: DataTypes.ENUM('Online', 'Offline', 'Hybrid'),

@@ -50,6 +50,7 @@ import ContactPage from './pages/ContactPage'
 import NotFoundPage from './pages/NotFoundPage'
 import InternshipsLandingPage from './pages/InternshipsLandingPage'
 import AdminInternshipsPage from './pages/AdminInternshipsPage'
+import MyInternshipSubmissionsPage from './pages/MyInternshipSubmissionsPage'
 
 // Components
 import ProtectedRoute from './components/auth/ProtectedRoute'
@@ -183,6 +184,16 @@ function App() {
                 element={
                   <ProtectedRoute>
                     <StudentInternshipsPage />
+                  </ProtectedRoute>
+                }
+              />
+
+              {/* My Internship Submissions Route */}
+              <Route
+                path="/student/internship-submissions"
+                element={
+                  <ProtectedRoute>
+                    <MyInternshipSubmissionsPage />
                   </ProtectedRoute>
                 }
               />

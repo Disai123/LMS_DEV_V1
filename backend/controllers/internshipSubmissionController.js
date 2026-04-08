@@ -33,7 +33,7 @@ exports.submitInternship = async (req, res) => {
         if (existing) {
             return res.status(400).json({
                 success: false,
-                message: 'You have already submitted tasks for this internship',
+                message: 'You have already submitted tasks for this internship. Use the edit option to update.',
                 data: existing
             });
         }
@@ -69,6 +69,89 @@ exports.submitInternship = async (req, res) => {
 };
 
 /**
+ * Get student's own submission for a specific internship
+ */
+exports.getMySubmissionForInternship = async (req, res) => {
+    try {
+        const studentId = req.user.id;
+        const { internship_id } = req.params;
+
+        const submission = await InternshipSubmission.findOne({
+            where: { student_id: studentId, internship_id }
+        });
+
+        res.json({
+            success: true,
+            data: submission || null
+        });
+    } catch (error) {
+        logger.error('Error fetching submission for internship:', error);
+        res.status(500).json({
+            success: false,
+            message: 'Failed to fetch submission'
+        });
+    }
+};
+
+/**
+ * Student: Update (re-submit) their own submission
+ * Resets status to 'pending' so admin re-evaluates
+ */
+exports.updateSubmission = async (req, res) => {
+    try {
+        const studentId = req.user.id;
+        const { id } = req.params;
+        const { github_url, drive_url, documentation_url, description } = req.body;
+
+        const submission = await InternshipSubmission.findOne({
+            where: { id, student_id: studentId }
+        });
+
+        if (!submission) {
+            return res.status(404).json({
+                success: false,
+                message: 'Submission not found or you do not have permission to edit it'
+            });
+        }
+
+        if (submission.status === 'approved') {
+            return res.status(400).json({
+                success: false,
+                message: 'Approved submissions cannot be edited'
+            });
+        }
+
+        await submission.update({
+            github_url,
+            drive_url,
+            documentation_url,
+            description,
+            status: 'pending',   // reset to pending so admin re-evaluates
+            submitted_at: new Date(),
+            reviewed_at: null,
+            admin_feedback: null
+        });
+
+        logger.info(`Internship submission ${id} updated by student ${studentId} — reset to pending`);
+
+        res.json({
+            success: true,
+            message: 'Submission updated. It will be re-evaluated by the admin.',
+            data: submission
+        });
+    } catch (error) {
+        logger.error('Error updating internship submission:', error);
+        res.status(500).json({
+            success: false,
+            message: 'Failed to update submission',
+            error: error.message
+        });
+    }
+};
+
+
+
+/**
  * Get student's own submissions
  */
 exports.getMySubmissions = async (req, res) => {
@@ -97,9 +180,10 @@ exports.getMySubmissions = async (req, res) => {
  */
 exports.getAllSubmissions = async (req, res) => {
     try {
-        const { status, page = 1, limit = 20 } = req.query;
+        const { status, internship_id, page = 1, limit = 20 } = req.query;
         const where = {};
         if (status) where.status = status;
+        if (internship_id) where.internship_id = internship_id;
 
         const offset = (page - 1) * limit;
 

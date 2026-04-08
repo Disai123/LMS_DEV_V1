@@ -1,224 +1,250 @@
-import { useState, useEffect } from 'react'
-import { motion } from 'framer-motion'
-import internshipService from '../services/internshipService'
-import CreateInternshipModal from '../components/admin/CreateInternshipModal'
-import InternshipRegistrationsList from '../components/admin/InternshipRegistrationsList'
+import React, { useState, useEffect } from 'react';
+import { motion } from 'framer-motion';
+import { FiPlus, FiEdit, FiFileText, FiTrash2, FiUsers, FiClock, FiSearch } from 'react-icons/fi';
+import internshipService from '../services/internshipService';
+import CreateInternshipModal from '../components/admin/CreateInternshipModal';
+import InternshipRegistrationsList from '../components/admin/InternshipRegistrationsList';
+import InternshipSubmissionsManagement from '../components/admin/InternshipSubmissionsManagement';
 
 const STATUS_COLORS = {
-  active: 'bg-green-100 text-green-700 border-green-200',
-  upcoming: 'bg-blue-100 text-blue-700 border-blue-200',
-  completed: 'bg-gray-100 text-gray-700 border-gray-200',
-  cancelled: 'bg-red-100 text-red-700 border-red-200'
-}
+  active: 'bg-green-100 text-green-800',
+  upcoming: 'bg-blue-100 text-blue-800',
+  completed: 'bg-gray-100 text-gray-800',
+  cancelled: 'bg-red-100 text-red-800'
+};
 
 const AdminInternshipsPage = () => {
-  const [internships, setInternships] = useState([])
-  const [loading, setLoading] = useState(true)
-  const [showCreateModal, setShowCreateModal] = useState(false)
-  const [editingInternship, setEditingInternship] = useState(null)
-  const [viewingRegistrations, setViewingRegistrations] = useState(null)
-  const [search, setSearch] = useState('')
+  const [internships, setInternships] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [showCreateModal, setShowCreateModal] = useState(false);
+  const [editingInternship, setEditingInternship] = useState(null);
+  const [viewingRegistrations, setViewingRegistrations] = useState(null);
+  
+  // NEW: specific state for submissions
+  const [showSubmissions, setShowSubmissions] = useState(false);
+  const [selectedInternshipForSubmissions, setSelectedInternshipForSubmissions] = useState(null);
+  
+  const [searchTerm, setSearchTerm] = useState('');
 
   const fetchInternships = async () => {
     try {
-      setLoading(true)
-      const res = await internshipService.getAll({ q: search })
-      setInternships(res.data.data.internships || [])
+      setLoading(true);
+      const res = await internshipService.getAll();
+      setInternships(res.data.data.internships || []);
     } catch (err) {
-      console.error('Error fetching internships:', err)
+      console.error('Error fetching internships:', err);
     } finally {
-      setLoading(false)
+      setLoading(false);
     }
-  }
+  };
 
   useEffect(() => {
-    fetchInternships()
-  }, [search])
+    fetchInternships();
+  }, []);
 
   const handleDelete = async (id) => {
-    if (!window.confirm('Are you sure you want to delete this internship?')) return
+    if (!window.confirm('Are you sure you want to delete this internship?')) return;
     try {
-      await internshipService.delete(id)
-      fetchInternships()
+      await internshipService.delete(id);
+      fetchInternships();
     } catch (err) {
-      alert('Failed to delete internship')
+      alert('Failed to delete internship');
     }
-  }
+  };
 
   const handleTogglePublish = async (id) => {
     try {
-      await internshipService.togglePublish(id)
-      fetchInternships()
+      await internshipService.togglePublish(id);
+      fetchInternships();
     } catch (err) {
-      alert('Failed to update status')
+      alert('Failed to update status');
     }
-  }
+  };
+
+  const handleEdit = (internship) => {
+    setEditingInternship(internship);
+    setShowCreateModal(true);
+  };
+  
+  const handleViewSubmissions = (internship) => {
+    setSelectedInternshipForSubmissions(internship);
+    setShowSubmissions(true);
+  };
+
+  const filteredInternships = internships.filter(i => 
+    i.title?.toLowerCase().includes(searchTerm.toLowerCase()) ||
+    i.description?.toLowerCase().includes(searchTerm.toLowerCase())
+  );
 
   return (
-    <div className="space-y-8 p-6">
-      {/* Page Header */}
-      <div className="flex items-center justify-between">
-        <div>
-          <h1 className="text-3xl font-bold text-gray-900 font-display">Manage Internships</h1>
-          <p className="text-gray-500 mt-1">Create and monitor internship programs for your students.</p>
+    <div className="min-h-screen bg-gray-50 pb-12">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-8">
+        {/* Header */}
+        <div className="flex justify-between items-center mb-8">
+          <div>
+            <h1 className="text-3xl font-bold text-gray-900">Internship Programs</h1>
+            <p className="text-gray-600 mt-2">Manage internship programs for your students.</p>
+          </div>
+          <button
+            onClick={() => { setEditingInternship(null); setShowCreateModal(true); }}
+            className="bg-indigo-600 text-white px-4 py-2 rounded-lg hover:bg-indigo-700 transition-colors duration-200 flex items-center space-x-2"
+          >
+            <FiPlus className="w-5 h-5" />
+            <span>Create Internship</span>
+          </button>
         </div>
-        <button
-          onClick={() => { setEditingInternship(null); setShowCreateModal(true) }}
-          className="btn-primary flex items-center gap-2 shadow-magic"
-        >
-          <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4" />
-          </svg>
-          Create Internship
-        </button>
-      </div>
 
-      {/* Stats Quick View */}
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-        <div className="stat-card group">
-          <div className="flex items-center justify-between">
+        {/* Stats Quick View */}
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+          <div className="bg-white p-6 rounded-lg shadow-sm border border-gray-100 flex items-center justify-between">
             <div>
               <p className="text-sm font-medium text-gray-500">Total Programs</p>
-              <p className="text-3xl font-bold text-primary">{internships.length}</p>
+              <p className="text-3xl font-bold text-indigo-600">{internships.length}</p>
             </div>
-            <div className="w-12 h-12 rounded-xl bg-primary/5 flex items-center justify-center text-primary group-hover:scale-110 transition-transform">
+            <div className="w-12 h-12 rounded-xl bg-indigo-50 flex items-center justify-center text-2xl">
               🚀
             </div>
           </div>
-        </div>
-        <div className="stat-card group">
-          <div className="flex items-center justify-between">
+          <div className="bg-white p-6 rounded-lg shadow-sm border border-gray-100 flex items-center justify-between">
             <div>
               <p className="text-sm font-medium text-gray-500">Published</p>
-              <p className="text-3xl font-bold text-success">{internships.filter(i => i.is_published).length}</p>
+              <p className="text-3xl font-bold text-green-600">{internships.filter(i => i.is_published).length}</p>
             </div>
-            <div className="w-12 h-12 rounded-xl bg-success/5 flex items-center justify-center text-success group-hover:scale-110 transition-transform">
+            <div className="w-12 h-12 rounded-xl bg-green-50 flex items-center justify-center text-2xl">
               📡
             </div>
           </div>
-        </div>
-        <div className="stat-card group">
-          <div className="flex items-center justify-between">
+          <div className="bg-white p-6 rounded-lg shadow-sm border border-gray-100 flex items-center justify-between">
             <div>
               <p className="text-sm font-medium text-gray-500">Total Applicants</p>
-              <p className="text-3xl font-bold text-secondary">
+              <p className="text-3xl font-bold text-blue-600">
                 {internships.reduce((acc, i) => acc + (i.current_registrations || 0), 0)}
               </p>
             </div>
-            <div className="w-12 h-12 rounded-xl bg-secondary/5 flex items-center justify-center text-secondary group-hover:scale-110 transition-transform">
+            <div className="w-12 h-12 rounded-xl bg-blue-50 flex items-center justify-center text-2xl">
               👥
             </div>
           </div>
         </div>
-      </div>
 
-      {/* Search and Filters */}
-      <div className="relative max-w-md">
-        <input
-          type="text"
-          placeholder="Filter programs..."
-          value={search}
-          onChange={(e) => setSearch(e.target.value)}
-          className="input pl-12"
-        />
-        <div className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400">
-          <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
-          </svg>
+        {/* Search */}
+        <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-6 mb-8">
+          <div className="relative max-w-md">
+            <FiSearch className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-5 h-5" />
+            <input
+              type="text"
+              placeholder="Search internships..."
+              value={searchTerm}
+              onChange={(e) => setSearchTerm(e.target.value)}
+              className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500"
+            />
+          </div>
         </div>
-      </div>
 
-      {/* Internships Table */}
-      <div className="bg-white rounded-[2rem] shadow-card overflow-hidden border border-white">
-        <div className="overflow-x-auto">
-          <table className="w-full border-collapse">
-            <thead>
-              <tr className="bg-slate-50/50 border-b border-gray-100">
-                <th className="px-6 py-4 text-left text-xs font-bold text-slate-500 uppercase tracking-widest">Program</th>
-                <th className="px-6 py-4 text-left text-xs font-bold text-slate-500 uppercase tracking-widest">Status</th>
-                <th className="px-6 py-4 text-left text-xs font-bold text-slate-500 uppercase tracking-widest">Registrations</th>
-                <th className="px-6 py-4 text-left text-xs font-bold text-slate-500 uppercase tracking-widest">Published</th>
-                <th className="px-6 py-4 text-right text-xs font-bold text-slate-500 uppercase tracking-widest">Actions</th>
-              </tr>
-            </thead>
-            <tbody className="divide-y divide-gray-50">
-              {loading ? (
-                <tr>
-                  <td colSpan="5" className="px-6 py-10 text-center text-gray-500">Loading programs...</td>
-                </tr>
-              ) : internships.length === 0 ? (
-                <tr>
-                  <td colSpan="5" className="px-6 py-10 text-center text-gray-500 font-medium">No internships found.</td>
-                </tr>
-              ) : (
-                internships.map((internship) => (
-                  <tr key={internship.id} className="hover:bg-slate-50/30 transition-colors group">
-                    <td className="px-6 py-4">
-                      <div className="flex items-center gap-4">
-                        <div className="w-12 h-12 rounded-xl bg-primary/5 flex items-center justify-center text-xl text-primary shadow-sm border border-primary/10">
-                          {internship.logo || '📖'}
-                        </div>
-                        <div>
-                          <p className="font-bold text-gray-900 line-clamp-1">{internship.title}</p>
-                          <p className="text-xs text-secondary font-semibold uppercase tracking-wider">{internship.duration}</p>
-                        </div>
+        {/* Internships Grid */}
+        {loading ? (
+          <div className="text-center py-12 text-gray-500">Loading programs...</div>
+        ) : filteredInternships.length === 0 ? (
+          <div className="text-center py-12">
+            <div className="text-gray-400 mb-4 text-6xl">📖</div>
+            <h3 className="text-lg font-medium text-gray-900 mb-2">No Internships Found</h3>
+            <p className="text-gray-600">Try adjusting your search or create a new program.</p>
+          </div>
+        ) : (
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            {filteredInternships.map((internship, index) => (
+              <motion.div
+                key={internship.id}
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.4, delay: 0.05 * index }}
+                className="bg-white rounded-lg shadow-md hover:shadow-lg transition-shadow duration-300 overflow-hidden flex flex-col"
+              >
+                {/* Header */}
+                <div className="h-28 bg-gradient-to-br from-blue-500 to-indigo-600 flex items-center justify-center p-4">
+                  {internship.logo ? (
+                    <img src={internship.logo} alt={internship.title} className="w-full h-full object-contain" />
+                  ) : (
+                    <div className="text-5xl">💻</div>
+                  )}
+                </div>
+
+                <div className="p-6 flex-1 flex flex-col">
+                  {/* Status Badges */}
+                  <div className="flex justify-between items-center mb-3">
+                    <span className={`px-2 py-1 rounded-full text-xs font-medium uppercase tracking-wider ${STATUS_COLORS[internship.status] || 'bg-gray-100 text-gray-800'}`}>
+                      {internship.status}
+                    </span>
+                    <span className={`px-2 py-1 rounded-full text-xs font-medium ${internship.is_published ? 'bg-green-100 text-green-800' : 'bg-gray-100 text-gray-800'}`}>
+                      {internship.is_published ? 'Published' : 'Draft'}
+                    </span>
+                  </div>
+
+                  <h3 className="text-lg font-bold text-gray-900 mb-2 line-clamp-1">{internship.title}</h3>
+                  <p className="text-gray-600 text-sm mb-4 line-clamp-2 flex-grow">{internship.description}</p>
+
+                  <div className="mb-4 space-y-2">
+                    <div className="flex items-center text-xs text-gray-600">
+                      <FiClock className="w-4 h-4 mr-2" />
+                      <span className="font-medium">{internship.duration}</span>
+                    </div>
+                    <div className="flex items-center justify-between text-xs text-gray-600">
+                      <div className="flex items-center">
+                        <FiUsers className="w-4 h-4 mr-2" />
+                        <span>{internship.current_registrations || 0} Registrations</span>
                       </div>
-                    </td>
-                    <td className="px-6 py-4">
-                      <span className={`px-3 py-1 rounded-full text-[10px] font-black uppercase tracking-wider border ${STATUS_COLORS[internship.status]}`}>
-                        {internship.status}
-                      </span>
-                    </td>
-                    <td className="px-6 py-4">
                       <button
                         onClick={() => setViewingRegistrations(internship)}
-                        className="text-sm font-bold text-primary hover:text-secondary transition-colors underline decoration-dotted underline-offset-4"
+                        className="text-indigo-600 hover:text-indigo-800 font-medium hover:underline"
                       >
-                        {internship.current_registrations || 0} Students
+                        View
                       </button>
-                    </td>
-                    <td className="px-6 py-4">
+                    </div>
+                  </div>
+
+                  {/* Actions */}
+                  <div className="space-y-2 mt-auto pt-4 border-t border-gray-100">
+                    <div className="flex space-x-2">
+                      <button
+                        onClick={() => handleEdit(internship)}
+                        className="flex-1 bg-gray-100 text-gray-700 py-2 px-3 rounded-lg hover:bg-gray-200 transition-colors duration-200 flex items-center justify-center space-x-1"
+                      >
+                        <FiEdit className="w-4 h-4" />
+                        <span className="text-xs font-medium">Edit</span>
+                      </button>
+                      <button
+                        onClick={() => handleViewSubmissions(internship)}
+                        className="flex-1 bg-blue-100 text-blue-700 py-2 px-3 rounded-lg hover:bg-blue-200 transition-colors duration-200 flex items-center justify-center space-x-1"
+                      >
+                        <FiFileText className="w-4 h-4" />
+                        <span className="text-xs font-medium">Submissions</span>
+                      </button>
+                    </div>
+                    <div className="flex space-x-2">
                       <button
                         onClick={() => handleTogglePublish(internship.id)}
-                        className={`relative inline-flex h-6 w-11 items-center rounded-full transition-colors focus:outline-none ${
-                          internship.is_published ? 'bg-success' : 'bg-gray-200'
+                        className={`flex-1 py-2 px-3 rounded-lg transition-colors duration-200 flex items-center justify-center space-x-1 text-xs font-medium ${
+                          internship.is_published
+                            ? 'bg-yellow-100 text-yellow-700 hover:bg-yellow-200'
+                            : 'bg-green-100 text-green-700 hover:bg-green-200'
                         }`}
                       >
-                        <span
-                          className={`inline-block h-4 w-4 transform rounded-full bg-white transition-transform ${
-                            internship.is_published ? 'translate-x-6' : 'translate-x-1'
-                          }`}
-                        />
+                        {internship.is_published ? 'Unpublish' : 'Publish'}
                       </button>
-                    </td>
-                    <td className="px-6 py-4 text-right">
-                      <div className="flex items-center justify-end gap-2">
-                        <button
-                          onClick={() => { setEditingInternship(internship); setShowCreateModal(true) }}
-                          className="p-2 text-primary hover:bg-primary/5 rounded-lg transition-colors"
-                          title="Edit"
-                        >
-                          <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
-                          </svg>
-                        </button>
-                        <button
-                          onClick={() => handleDelete(internship.id)}
-                          className="p-2 text-error hover:bg-error/5 rounded-lg transition-colors"
-                          title="Delete"
-                        >
-                          <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
-                          </svg>
-                        </button>
-                      </div>
-                    </td>
-                  </tr>
-                ))
-              )}
-            </tbody>
-          </table>
-        </div>
+                      <button
+                        onClick={() => handleDelete(internship.id)}
+                        className="flex-1 bg-red-100 text-red-700 py-2 px-3 rounded-lg hover:bg-red-200 transition-colors duration-200 flex items-center justify-center space-x-1"
+                      >
+                        <FiTrash2 className="w-4 h-4" />
+                        <span className="text-xs font-medium">Delete</span>
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              </motion.div>
+            ))}
+          </div>
+        )}
       </div>
 
       {/* Modals */}
@@ -226,7 +252,7 @@ const AdminInternshipsPage = () => {
         <CreateInternshipModal
           internship={editingInternship}
           onClose={() => setShowCreateModal(false)}
-          onSuccess={() => { setShowCreateModal(false); fetchInternships() }}
+          onSuccess={() => { setShowCreateModal(false); fetchInternships(); }}
         />
       )}
 
@@ -236,8 +262,42 @@ const AdminInternshipsPage = () => {
           onClose={() => setViewingRegistrations(null)}
         />
       )}
-    </div>
-  )
-}
 
-export default AdminInternshipsPage
+      {/* Submissions Management Modal */}
+      {showSubmissions && selectedInternshipForSubmissions && (
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50">
+          <div className="bg-white rounded-xl shadow-2xl max-w-6xl w-full max-h-[90vh] overflow-y-auto">
+            <div className="p-6 border-b border-gray-200">
+              <div className="flex items-center justify-between">
+                <div>
+                  <h2 className="text-2xl font-bold text-gray-900">
+                    Submissions - {selectedInternshipForSubmissions.title}
+                  </h2>
+                  <p className="text-gray-600 mt-1">
+                    Manage and review internship submissions
+                  </p>
+                </div>
+                <button
+                  onClick={() => {
+                    setShowSubmissions(false);
+                    setSelectedInternshipForSubmissions(null);
+                  }}
+                  className="text-gray-400 hover:text-gray-600 transition-colors"
+                >
+                  <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+                  </svg>
+                </button>
+              </div>
+            </div>
+            <div className="p-6">
+              <InternshipSubmissionsManagement internshipId={selectedInternshipForSubmissions.id} />
+            </div>
+          </div>
+        </div>
+      )}
+    </div>
+  );
+};
+
+export default AdminInternshipsPage;

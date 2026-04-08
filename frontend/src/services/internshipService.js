@@ -44,6 +44,28 @@ const internshipService = {
   // Student: my internships
   getMyInternships: () =>
     axios.get(`${BASE}/student/my`, { headers: getAuthHeader() }),
+
+  // Student: get my submission for one internship
+  getMySubmissionForInternship: (internshipId) =>
+    axios.get(`${BASE}/student/submissions/${internshipId}`, { headers: getAuthHeader() }),
+
+  // Student: update (re-submit) a submission
+  updateSubmission: (submissionId, data) =>
+    axios.put(`${BASE}/submissions/${submissionId}`, data, { headers: getAuthHeader() }),
+
+  // Student: all my submissions
+  getMySubmissions: () =>
+    axios.get(`${BASE}/student/submissions`, { headers: getAuthHeader() }),
+
+  // Admin: Submissions
+  getAllSubmissions: (params = {}) =>
+    axios.get(`${BASE}/admin/submissions/all`, { params, headers: getAuthHeader() }),
+
+  approveSubmission: (id, data) =>
+    axios.post(`${BASE}/admin/submissions/${id}/approve`, data, { headers: getAuthHeader() }),
+
+  rejectSubmission: (id, data) =>
+    axios.post(`${BASE}/admin/submissions/${id}/reject`, data, { headers: getAuthHeader() }),
 };
 
 export default internshipService;

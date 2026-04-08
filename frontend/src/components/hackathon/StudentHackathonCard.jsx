@@ -49,6 +49,18 @@ const StudentHackathonCard = ({ hackathon, index, onViewDetails }) => {
     });
   };
 
+  const getTimelineStatus = () => {
+    const now = new Date();
+    const start = new Date(hackathon.start_date);
+    const end = new Date(hackathon.end_date);
+
+    if (now < start) return 'upcoming';
+    if (now >= start && now <= end) return 'active';
+    return 'completed';
+  };
+
+  const currentStatus = getTimelineStatus();
+
   const getStatusColor = (status) => {
     switch (status) {
       case 'upcoming':
@@ -67,7 +79,7 @@ const StudentHackathonCard = ({ hackathon, index, onViewDetails }) => {
       case 'upcoming':
         return 'Upcoming';
       case 'active':
-        return 'Active';
+        return 'Ongoing';
       case 'completed':
         return 'Completed';
       default:
@@ -95,8 +107,8 @@ const StudentHackathonCard = ({ hackathon, index, onViewDetails }) => {
               {hackathon.description}
             </p>
           </div>
-          <span className={`px-3 py-1 rounded-full text-xs font-medium ${getStatusColor(hackathon.status)}`}>
-            {getStatusText(hackathon.status)}
+          <span className={`px-3 py-1 rounded-full text-xs font-medium ${getStatusColor(currentStatus)}`}>
+            {getStatusText(currentStatus)}
           </span>
         </div>
 
@@ -150,11 +162,6 @@ const StudentHackathonCard = ({ hackathon, index, onViewDetails }) => {
                   Submission: {submission.status.charAt(0).toUpperCase() + submission.status.slice(1)}
                 </span>
               </div>
-              {submission.is_winner && (
-                <span className="px-2 py-1 bg-yellow-100 text-yellow-800 text-xs font-medium rounded-full">
-                  Winner
-                </span>
-              )}
             </div>
           </div>
         )}

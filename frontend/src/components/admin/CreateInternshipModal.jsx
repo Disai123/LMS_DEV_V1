@@ -15,7 +15,9 @@ const CreateInternshipModal = ({ internship, onClose, onSuccess }) => {
     outcomes: [],
     highlights: [],
     status: 'active',
-    is_published: false
+    is_published: false,
+    start_date: '',
+    end_date: ''
   })
 
   const [domainInput, setDomainInput] = useState('')
@@ -31,7 +33,9 @@ const CreateInternshipModal = ({ internship, onClose, onSuccess }) => {
         domains_offered: internship.domains_offered || [],
         key_features: internship.key_features || [],
         outcomes: internship.outcomes || [],
-        highlights: internship.highlights || []
+        highlights: internship.highlights || [],
+        start_date: internship.start_date ? new Date(internship.start_date).toISOString().split('T')[0] : '',
+        end_date: internship.end_date ? new Date(internship.end_date).toISOString().split('T')[0] : ''
       })
     }
   }, [internship])
@@ -156,6 +160,26 @@ const CreateInternshipModal = ({ internship, onClose, onSuccess }) => {
                     <option value="completed">Completed</option>
                     <option value="cancelled">Cancelled</option>
                   </select>
+                </div>
+                <div className="grid grid-cols-2 gap-4">
+                  <div>
+                    <label className="block text-xs font-black text-slate-400 uppercase tracking-widest mb-2 px-1">Start Date</label>
+                    <input
+                      type="date"
+                      className="input"
+                      value={formData.start_date}
+                      onChange={e => setFormData({ ...formData, start_date: e.target.value })}
+                    />
+                  </div>
+                  <div>
+                    <label className="block text-xs font-black text-slate-400 uppercase tracking-widest mb-2 px-1">End Date</label>
+                    <input
+                      type="date"
+                      className="input"
+                      value={formData.end_date}
+                      onChange={e => setFormData({ ...formData, end_date: e.target.value })}
+                    />
+                  </div>
                 </div>
               </div>
               <div className="md:col-span-2">

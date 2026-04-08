@@ -153,12 +153,6 @@ const ProjectCard = ({ project, locked }) => {
         {/* Footer */}
         <div className="flex items-center justify-between pt-3 border-t border-gray-100">
           <div className="flex items-center gap-3">
-            {project.estimatedHours && (
-              <span className="flex items-center text-xs text-gray-500 bg-gray-100 px-2 py-1 rounded-full">
-                <FiClock className="w-3 h-3 mr-1" />
-                {project.estimatedHours}h
-              </span>
-            )}
           </div>
 
           <button className={`font-semibold text-sm flex items-center transition-colors ${locked ? 'text-amber-600 hover:text-amber-700' : 'text-indigo-600 hover:text-indigo-700'}`}>

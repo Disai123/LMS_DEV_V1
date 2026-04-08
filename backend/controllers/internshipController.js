@@ -110,7 +110,9 @@ const createInternship = async (req, res, next) => {
       outcomes,
       highlights,
       status,
-      max_registrations
+      max_registrations,
+      start_date,
+      end_date
     } = req.body;
 
     if (!title || !description) {
@@ -130,6 +132,8 @@ const createInternship = async (req, res, next) => {
       highlights: highlights || [],
       status: status || 'active',
       max_registrations: max_registrations || null,
+      start_date: start_date || null,
+      end_date: end_date || null,
       created_by: req.user.id,
       updated_by: req.user.id
     });

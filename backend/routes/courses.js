@@ -6,6 +6,7 @@ const courseController = require('../controllers/courseController');
 const chapterController = require('../controllers/chapterController');
 const { courseSchemas, commonSchemas } = require('../utils/validation');
 const { CourseChapter } = require('../models');
+const { checkPlanAccess } = require('../middleware/planAccessMiddleware');
 
 const router = express.Router();
 
@@ -140,6 +141,7 @@ router.delete('/:id/files/:fileId',
 // Student routes
 router.get('/:id/content', 
   authenticate,
+  checkPlanAccess('course'),
   requireEnrollment,
   validate(commonSchemas.id, 'params'),
   courseController.getCourseContent

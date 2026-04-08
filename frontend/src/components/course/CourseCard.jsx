@@ -1,7 +1,7 @@
 import { motion } from 'framer-motion'
-import { Link } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
 import useCourseLogo from '../../hooks/useCourseLogo'
-import { FiStar, FiUsers, FiClock, FiArrowRight } from 'react-icons/fi'
+import { FiStar, FiUsers, FiClock, FiArrowRight, FiLock } from 'react-icons/fi'
 
 const difficultyConfig = {
   beginner: { label: 'Beginner', class: 'bg-green-500/15 text-green-400 border-green-500/20' },
@@ -19,7 +19,8 @@ const ACCENT_BORDERS = [
   'border-l-cyan-500',
 ]
 
-const CourseCard = ({ course, index = 0, showInstructor = true, showRating = true }) => {
+const CourseCard = ({ course, index = 0, showInstructor = true, showRating = true, isLocked = false }) => {
+  const navigate = useNavigate()
   const { logoUrl } = useCourseLogo(course.id, !!course.logo)
 
   const difficulty = difficultyConfig[course.difficulty] || difficultyConfig['beginner']
@@ -31,13 +32,24 @@ const CourseCard = ({ course, index = 0, showInstructor = true, showRating = tru
     return r && typeof r === 'number' && !isNaN(r) ? r : 0
   })()
 
+  const handleClick = (e) => {
+    if (isLocked) {
+      e.preventDefault()
+      navigate('/pricing')
+    }
+  }
+
   return (
     <motion.div
       whileHover={{ y: -6, scale: 1.01 }}
       transition={{ duration: 0.22 }}
-      className={`bg-slate-900 border border-slate-800 border-l-4 ${accent} rounded-2xl overflow-hidden group hover:border-slate-700 hover:shadow-2xl hover:shadow-black/30 transition-all duration-300 flex flex-col w-full`}
+      className={`bg-slate-900 border border-l-4 ${accent} rounded-2xl overflow-hidden group transition-all duration-300 flex flex-col w-full ${
+        isLocked
+          ? 'border-slate-700 opacity-75 cursor-pointer'
+          : 'border-slate-800 hover:border-slate-700 hover:shadow-2xl hover:shadow-black/30'
+      }`}
     >
-      <Link to={`/courses/${course.id}`} className="flex flex-col flex-1">
+      <Link to={isLocked ? '/pricing' : `/courses/${course.id}`} onClick={handleClick} className="flex flex-col flex-1">
 
         {/* Thumbnail */}
         <div className="relative overflow-hidden h-44">
@@ -70,6 +82,22 @@ const CourseCard = ({ course, index = 0, showInstructor = true, showRating = tru
 
           {/* Overlay gradient */}
           <div className="absolute inset-0 bg-gradient-to-t from-slate-900/80 via-transparent to-transparent" />
+
+          {/* Lock overlay — shown when course is plan-gated */}
+          {isLocked && (
+            <div className="absolute inset-0 flex flex-col items-center justify-center gap-2"
+              style={{ background: 'rgba(15,23,42,0.72)', backdropFilter: 'blur(3px)' }}
+            >
+              <div className="w-10 h-10 rounded-full flex items-center justify-center"
+                style={{ background: 'rgba(251,191,36,0.12)', border: '1px solid rgba(251,191,36,0.3)' }}
+              >
+                <FiLock className="w-5 h-5 text-amber-400" />
+              </div>
+              <span className="text-[10px] font-black text-amber-400 tracking-widest uppercase">
+                {course.required_plan} plan
+              </span>
+            </div>
+          )}
 
           {/* Difficulty badge */}
           <div className="absolute top-3 left-3">

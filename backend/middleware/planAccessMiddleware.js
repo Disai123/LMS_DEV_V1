@@ -15,6 +15,23 @@ const { Op } = require('sequelize');
 const TIER_ORDER = { free: 0, basic: 1, pro: 2 };
 
 /**
+ * Derive tier order from plan name (ground truth).
+ * The plans.tier_order DB column defaults to 0 for all plans when not explicitly set,
+ * so we ALWAYS resolve from plan name to guarantee correctness.
+ */
+function resolveTierOrder(planName, dbTierOrder) {
+  const name = (planName || 'free').toLowerCase();
+  // Plan name is authoritative — fall back to DB value only for unknown names
+  if (TIER_ORDER[name] !== undefined) return TIER_ORDER[name];
+  // Handle variations like 'Pro Plan', 'Basic Plan'
+  if (name.includes('pro')) return 2;
+  if (name.includes('basic')) return 1;
+  if (name.includes('free')) return 0;
+  // Last resort: DB value (only reliable if explicitly set)
+  return (dbTierOrder != null && dbTierOrder > 0) ? dbTierOrder : 0;
+}
+
+/**
  * Get the student's current plan tier_order (0=free, 1=basic, 2=pro)
  * Returns 0 (free) if no active subscription found.
  */
@@ -38,8 +55,7 @@ async function getStudentTierOrder(userId) {
   });
 
   if (subscription && subscription.plan) {
-    const safePlanName = (subscription.plan.name || 'free').toLowerCase();
-    return subscription.plan.tier_order ?? TIER_ORDER[safePlanName] ?? 0;
+    return resolveTierOrder(subscription.plan.name, subscription.plan.tier_order);
   }
 
   // No subscription → treat as free
@@ -137,7 +153,7 @@ async function getStudentPlanInfo(userId) {
   if (subscription && subscription.plan) {
     return {
       planName: subscription.plan.name,
-      tierOrder: subscription.plan.tier_order ?? TIER_ORDER[(subscription.plan.name || 'free').toLowerCase()] ?? 0,
+      tierOrder: resolveTierOrder(subscription.plan.name, subscription.plan.tier_order),
       features: subscription.plan.features || {}
     };
   }
