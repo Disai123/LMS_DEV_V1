@@ -51,6 +51,7 @@ import NotFoundPage from './pages/NotFoundPage'
 import InternshipsLandingPage from './pages/InternshipsLandingPage'
 import AdminInternshipsPage from './pages/AdminInternshipsPage'
 import MyInternshipSubmissionsPage from './pages/MyInternshipSubmissionsPage'
+import NotificationsPage from './pages/NotificationsPage'
 
 // Components
 import ProtectedRoute from './components/auth/ProtectedRoute'
@@ -61,6 +62,7 @@ import ErrorBoundary from './components/common/ErrorBoundary'
 // Hooks
 import { useAuth } from './context/AuthContext'
 import { ProjectProgressProvider } from './context/ProjectProgressContext'
+import { NotificationProvider } from './context/NotificationContext'
 
 function App() {
   console.log('App component is rendering')
@@ -96,9 +98,10 @@ function App() {
 
           {/* <ChatNotification /> */}
 
-          <AnimatePresence mode="wait">
-            <Routes>
-              {/* Public Routes */}
+          <NotificationProvider>
+            <AnimatePresence mode="wait">
+              <Routes>
+                {/* Public Routes */}
               <Route path="/" element={<LandingPage />} />
               <Route path="/login" element={<LoginPage />} />
               <Route path="/register" element={<RegisterPage />} />
@@ -139,6 +142,7 @@ function App() {
               />
 
               {/* Course Routes */}
+              <Route path="/notifications" element={<ProtectedRoute><NotificationsPage /></ProtectedRoute>} />
               <Route path="/courses" element={<CourseListPage />} />
               <Route path="/realtime-projects" element={<RealtimeProjectsLandingPage />} />
               <Route path="/realtime-projects/diagnostics" element={<ProjectDiagnostics />} />
@@ -399,6 +403,7 @@ function App() {
               <Route path="*" element={<NotFoundPage />} />
             </Routes>
           </AnimatePresence>
+          </NotificationProvider>
         </ProjectProgressProvider>
       </ErrorBoundary>
     )

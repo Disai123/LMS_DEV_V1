@@ -22,6 +22,14 @@ module.exports = {
       defaultValue: 0.00,
       allowNull: false
     });
+
+    // Update the PostgreSQL ENUM for student achievements to include new project types
+    try {
+      await queryInterface.sequelize.query('ALTER TYPE "enum_student_achievements_achievement_type" ADD VALUE IF NOT EXISTS \'realtime_project_completion\';');
+      await queryInterface.sequelize.query('ALTER TYPE "enum_student_achievements_achievement_type" ADD VALUE IF NOT EXISTS \'internship_completion\';');
+    } catch (error) {
+      console.warn("Could not add missing enum values to achievements (might already exist)");
+    }
   },
 
   down: async (queryInterface, Sequelize) => {

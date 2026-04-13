@@ -224,22 +224,27 @@ class ScoringService {
   }
 
   /**
-   * Award points for internship completion
+   * Award points for internship completion.
+   * If an external `transaction` is provided (e.g. from approveSubmission),
+   * this function uses it directly and does NOT commit/rollback — the caller owns the transaction.
+   * When called without a transaction it manages its own.
    */
-  async awardInternshipPoints({ studentId, internshipId, internshipTitle, points = 100, approvedBy }) {
-    const transaction = await sequelize.transaction();
+  async awardInternshipPoints({ studentId, internshipId, internshipTitle, points = 100, approvedBy, transaction: externalTx = null }) {
+    const isExternalTx = !!externalTx;
+    const transaction = isExternalTx ? externalTx : await sequelize.transaction();
 
     try {
-      // Check if achievement already exists
+      // Check if achievement already exists (using the transaction so we see in-progress state)
       const existing = await StudentAchievement.checkExists(
         studentId,
         'internship_completion',
-        internshipId
+        internshipId,
+        transaction
       );
 
       if (existing) {
         logger.info(`Internship completion achievement already exists for student ${studentId}, internship ${internshipId}`);
-        await transaction.rollback();
+        if (!isExternalTx) await transaction.rollback();
         return existing;
       }
 
@@ -256,15 +261,15 @@ class ScoringService {
         }
       }, { transaction });
 
-      // Recalculate student scores
+      // Recalculate student scores within the same transaction
       await this.recalculateStudentScores(studentId, transaction);
 
-      await transaction.commit();
+      if (!isExternalTx) await transaction.commit();
       logger.info(`Awarded ${points} points for internship completion: student ${studentId}, internship ${internshipId}`);
 
       return achievement;
     } catch (error) {
-      await transaction.rollback();
+      if (!isExternalTx) await transaction.rollback();
       logger.error('Error awarding internship points:', error);
       throw error;
     }
@@ -411,17 +416,16 @@ class ScoringService {
         internships_count: 0
       });
 
-      // Get or create student score
-      const studentScore = await StudentScore.getOrCreate(studentId);
+      // Get or create student score (pass transaction for consistency)
+      const studentScore = await StudentScore.getOrCreate(studentId, transaction);
 
-      // Update student_scores
+      // Update student_scores — pq_score is computed by the beforeUpdate hook
       await studentScore.update({
         total_course_points: totals.course_points,
         total_project_points: totals.project_points,
         total_hackathon_points: totals.hackathon_points,
         total_internship_points: totals.internship_points,
         total_points: totals.course_points + totals.project_points + totals.hackathon_points + totals.internship_points,
-        pq_score: Math.min(( (totals.course_points + totals.project_points + totals.hackathon_points + totals.internship_points) / 60), 10),
         courses_completed_count: totals.courses_count,
         projects_approved_count: totals.projects_count,
         hackathons_approved_count: totals.hackathons_count,

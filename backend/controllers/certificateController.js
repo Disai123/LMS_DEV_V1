@@ -1,6 +1,7 @@
 const { Certificate, TestAttempt, CourseTest, Course, User, RealtimeProjectSubmission } = require('../models');
 const logger = require('../utils/logger');
 const { AppError } = require('../middleware/errorHandler');
+const notificationService = require('../services/notificationService');
 
 /**
  * Issue a certificate for an approved realtime project submission (called internally at approval)
@@ -46,6 +47,16 @@ const issueRealtimeProjectCertificate = async (submission, student) => {
     });
 
     logger.info(`Realtime project certificate ${certificateNumber} issued for student ${submission.student_id}, project ${submission.project_name}`);
+    
+    // Notification
+    await notificationService.create(
+      submission.student_id,
+      'certificate',
+      'Certificate Earned',
+      `You earned a certificate for the realtime project: "${submission.project_name}"!`,
+      '/certificates'
+    );
+
     return certificate;
   } catch (error) {
     logger.error('Error issuing realtime project certificate:', error);
@@ -149,6 +160,15 @@ const generateCertificate = async (req, res, next) => {
     });
 
     logger.info(`Certificate ${certificateNumber} successfully generated for student ${req.user.email}, course ${attempt.test.course.title} (ID: ${courseIdForCertificate})`);
+
+    // Notification
+    await notificationService.create(
+      studentId,
+      'certificate',
+      'Certificate Earned',
+      `You earned a certificate for the course: "${attempt.test.course.title}"!`,
+      '/certificates'
+    );
 
     res.status(201).json({
       success: true,

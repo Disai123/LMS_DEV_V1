@@ -1,5 +1,6 @@
 const { Enrollment, Course, User, CourseChapter, ChapterProgress, ActivityLog, Achievement, Subscription, Plan } = require('../models');
 const logger = require('../utils/logger');
+const notificationService = require('../services/notificationService');
 const { AppError } = require('../middleware/errorHandler');
 const { Op } = require('sequelize');
 
@@ -453,6 +454,15 @@ const completeCourse = async (req, res, next) => {
         }
       );
 
+      // Notification
+      await notificationService.create(
+        req.user.id,
+        'course_completed',
+        `Course Completed`,
+        `Congratulations! You have completed "${course.title}".`,
+        `/courses/${course.id}`
+      );
+
       // Note: Certificates are ONLY created when tests are passed (handled in testTakingController.js)
       // Do NOT create certificates here for course completion alone
     }
@@ -628,6 +638,15 @@ const completeChapter = async (req, res, next) => {
           pointsEarned: 5
         }
       );
+      
+      // Notification
+      await notificationService.create(
+        req.user.id,
+        'chapter_completed',
+        `Chapter Completed`,
+        `You completed "${chapters[currentChapterIndex].title}" in "${enrollment.course.title}".`
+      );
+
       console.log('=== CHAPTER ACTIVITY LOGGED ===');
       console.log('User ID:', req.user.id);
       console.log('Chapter:', chapters[currentChapterIndex].title);

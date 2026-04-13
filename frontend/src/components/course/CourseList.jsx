@@ -1,7 +1,6 @@
 import { motion } from 'framer-motion'
 import CourseCard from './CourseCard'
 import LoadingSpinner from '../common/LoadingSpinner'
-import LockedContentOverlay from '../LockedContentOverlay'
 import { FiAlertCircle, FiBookOpen } from 'react-icons/fi'
 import { useAuth } from '../../context/AuthContext'
 
@@ -71,15 +70,8 @@ const CourseList = ({ courses, isLoading, error, showInstructor = true, showRati
               index={index}
               showInstructor={showInstructor}
               showRating={showRating}
-              isLocked={isLocked}
+              isLocked={false}
             />
-            {isLocked && (
-              <LockedContentOverlay
-                requiredPlan={course.required_plan || 'basic'}
-                contentType="course"
-                compact={true}
-              />
-            )}
           </motion.div>
         )
       })}

@@ -3,6 +3,7 @@ const scoringService = require('../services/scoringService');
 const { issueRealtimeProjectCertificate } = require('./certificateController');
 const logger = require('../utils/logger');
 const { Op } = require('sequelize');
+const notificationService = require('../services/notificationService');
 
 /**
  * Submit a new realtime project
@@ -63,6 +64,15 @@ exports.submitProject = async (req, res) => {
         });
 
         logger.info(`Project submission created: ${submission.id} by student ${studentId}`);
+
+        // Notification
+        await notificationService.create(
+            studentId,
+            'project_submitted',
+            'Project Submitted',
+            `Your real-time project "${project_name}" has been submitted successfully!`,
+            `/projects`
+        );
 
         res.status(201).json({
             success: true,
@@ -367,6 +377,15 @@ exports.approveSubmission = async (req, res) => {
             logger.error('Certificate issuance failed (non-critical):', certError);
         }
 
+        // Notification
+        await notificationService.create(
+            submission.student_id,
+            'project_reviewed',
+            'Project Approved',
+            `Your project "${submission.project_name}" was APPROVED. You earned ${points} points!`,
+            `/projects`
+        );
+
         res.json({
             success: true,
             message: 'Submission approved successfully',
@@ -413,6 +432,15 @@ exports.rejectSubmission = async (req, res) => {
 
         logger.info(`Submission rejected: ${id} by admin ${reviewerId}`);
 
+        // Notification
+        await notificationService.create(
+            submission.student_id,
+            'project_reviewed',
+            'Project Rejected',
+            `Your project "${submission.project_name}" was REJECTED. Notes: ${feedback}`,
+            `/projects`
+        );
+
         res.json({
             success: true,
             message: 'Submission rejected',
@@ -456,6 +484,15 @@ exports.requestRevision = async (req, res) => {
         await submission.requestRevision(reviewerId, feedback);
 
         logger.info(`Revision requested for submission: ${id} by admin ${reviewerId}`);
+
+        // Notification
+        await notificationService.create(
+            submission.student_id,
+            'project_reviewed',
+            'Project Revision Requested',
+            `Revision requested for "${submission.project_name}". Notes: ${feedback}`,
+            `/projects`
+        );
 
         res.json({
             success: true,

@@ -1,5 +1,6 @@
 const { Plan, Subscription, PaymentRequest, User, sequelize } = require('../models');
 const { AppError } = require('../middleware/errorHandler');
+const notificationService = require('../services/notificationService');
 const { Op } = require('sequelize');
 
 /**
@@ -124,6 +125,18 @@ exports.submitPaymentRequest = async (req, res, next) => {
 
         await transaction.commit();
 
+        try {
+            await notificationService.create(
+                userId,
+                'plan_upgraded',
+                'Upgrade Request Submitted',
+                `Your payment request for the ${plan.name} plan has been submitted and is pending admin approval.`,
+                '/pricing'
+            );
+        } catch (error) {
+            console.error('Failed to notify payment request submission', error);
+        }
+
         res.status(201).json({
             success: true,
             message: 'Payment request submitted! Your account has been upgraded optimistically. Admin will verify the transaction.',
@@ -222,6 +235,15 @@ exports.approvePaymentRequest = async (req, res, next) => {
             approved_by: req.user.id
         });
 
+        // Notification
+        await notificationService.create(
+            paymentRequest.user_id,
+            'plan_upgraded',
+            'Plan Upgraded',
+            `Your payment was approved! You are now on the ${paymentRequest.plan.name} plan.`,
+            '/profile'
+        );
+
         res.json({
             success: true,
             message: `Payment approved. Transaction verified for ${paymentRequest.plan.name} plan.`
@@ -291,6 +313,18 @@ exports.rejectPaymentRequest = async (req, res, next) => {
         );
 
         await transaction.commit();
+
+        try {
+            await notificationService.create(
+                paymentRequest.user_id,
+                'plan_upgraded',
+                'Upgrade Request Rejected',
+                `Your payment request for the ${paymentRequest.plan.name} plan was rejected. Notes: ${admin_notes || 'None'}`,
+                '/pricing'
+            );
+        } catch (error) {
+            console.error('Failed to notify payment request rejection', error);
+        }
 
         res.json({
             success: true,
@@ -545,6 +579,15 @@ exports.manualUpgrade = async (req, res, next) => {
         await perm.update({ hackathons: hackathonsAccess, courses: true, realtime_projects: true }, { transaction });
 
         await transaction.commit();
+
+        // Notification
+        await notificationService.create(
+            student_id,
+            'plan_upgraded',
+            'Plan Upgraded',
+            `An admin has upgraded your account to the ${plan_name} plan.`,
+            '/profile'
+        );
 
         res.json({
             success: true,

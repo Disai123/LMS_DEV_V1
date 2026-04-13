@@ -1,6 +1,7 @@
 const { TestAttempt, TestAnswer, TestQuestion, TestQuestionOption, CourseTest, Course, Enrollment, ActivityLog, Achievement } = require('../models');
 const logger = require('../utils/logger');
 const { AppError } = require('../middleware/errorHandler');
+const notificationService = require('../services/notificationService');
 
 /**
  * Start a test attempt
@@ -402,6 +403,15 @@ const submitTest = async (req, res, next) => {
           courseDifficulty: course.difficulty || 'beginner'
         });
         logger.info(`Points awarded for course completion: student ${req.user.id}, course ${courseIdForCertificate}`);
+
+        // Notification
+        await notificationService.create(
+          req.user.id,
+          'test_passed',
+          'Test Passed',
+          `You passed the test "${test.title}" and earned a certificate!`,
+          `/certificates`
+        );
 
         // Create Achievement record so it shows up in achievements tab
         try {

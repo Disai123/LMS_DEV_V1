@@ -19,6 +19,16 @@ export const scoreService = {
     } catch (error) {
       throw new Error(error.response?.data?.message || 'Failed to get achievements')
     }
+  },
+
+  // Recalculate score — syncs any approved submissions that were missed
+  recalculateMyScore: async () => {
+    try {
+      const response = await api.post('/scores/me/recalculate')
+      return response.data
+    } catch (error) {
+      throw new Error(error.response?.data?.message || 'Failed to recalculate score')
+    }
   }
 }
 

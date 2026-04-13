@@ -41,7 +41,7 @@ async function cleanDatabaseSetup() {
       'hackathon_participants', 'hackathon_join_requests',
       'group_members', 'groups', 'chat_messages', 'chat_participants',
       'project_progress', 'project_phases', 'documents', 'videos', 'projects',
-      'course_tests', 'courses', 'users', 'student_permissions', 'SequelizeMeta'
+      'course_tests', 'courses', 'users', 'student_permissions', 'notifications', 'SequelizeMeta'
     ];
 
     // Drop all tables that exist
@@ -201,7 +201,7 @@ async function cleanDatabaseSetup() {
       'achievements', 'hackathons', 'hackathon_participants', 'hackathon_submissions',
       'hackathon_groups', 'hackathon_group_members', 'hackathon_join_requests',
       'groups', 'group_members', 'chat_messages', 'chat_participants',
-      'student_permissions'
+      'student_permissions', 'notifications'
     ];
 
     const createdTableNames = createdTables.map(t => t.table_name);

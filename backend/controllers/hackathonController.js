@@ -1,6 +1,7 @@
 const { Hackathon, HackathonParticipant, HackathonSubmission, HackathonGroup, HackathonGroupMember, HackathonJoinRequest, User, sequelize } = require('../models');
 const { AppError } = require('../middleware/errorHandler');
 const { Op } = require('sequelize');
+const notificationService = require('../services/notificationService');
 
 /**
  * Get all hackathons with filtering and pagination
@@ -1728,6 +1729,15 @@ const submitSubmission = async (req, res, next) => {
       await participant.save();
     }
 
+    // Notification
+    await notificationService.create(
+      req.user.id,
+      'hackathon_submitted',
+      'Hackathon Submitted',
+      `Your submission for "${hackathon.name}" has been received!`,
+      `/hackathons/${hackathon.id}`
+    );
+
     res.json({
       success: true,
       message: 'Submission submitted successfully',
@@ -1841,8 +1851,24 @@ const reviewSubmission = async (req, res, next) => {
         logger.error('Error awarding hackathon points:', scoringError);
         // Don't fail the approval if scoring fails
       }
+
+      // Notification
+      await notificationService.create(
+        submission.student_id,
+        'hackathon_reviewed',
+        'Hackathon Reviewed',
+        `Your submission for hackathon has been ACCEPTED. Score: ${score || 'N/A'}.`
+      );
     } else {
       await submission.reject(req.user.id, review_notes);
+
+      // Notification
+      await notificationService.create(
+        submission.student_id,
+        'hackathon_reviewed',
+        'Hackathon Reviewed',
+        `Your submission for hackathon has been REJECTED. Notes: ${review_notes || 'None'}.`
+      );
     }
 
     res.json({
@@ -2044,6 +2070,15 @@ const approveJoinRequest = async (req, res, next) => {
 
     // Approve the request
     await joinRequest.approve(req.user.id, reviewNotes);
+
+    // Notification
+    await notificationService.create(
+      joinRequest.student_id,
+      'hackathon_registered',
+      'Hackathon Request Approved',
+      `Your request to join hackathon "${hackathon.name}" has been APPROVED.`,
+      `/hackathons/${hackathon.id}`
+    );
 
     res.json({
       success: true,

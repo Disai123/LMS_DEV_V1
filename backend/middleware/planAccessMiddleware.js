@@ -9,7 +9,7 @@
  *   router.get('/projects/:id',         authenticate, checkPlanAccess('project'), controller);
  */
 
-const { Subscription, Plan, Course, Project } = require('../models');
+const { Subscription, Plan, Course, Project, User } = require('../models');
 const { Op } = require('sequelize');
 
 const TIER_ORDER = { free: 0, basic: 1, pro: 2 };
@@ -56,6 +56,12 @@ async function getStudentTierOrder(userId) {
 
   if (subscription && subscription.plan) {
     return resolveTierOrder(subscription.plan.name, subscription.plan.tier_order);
+  }
+
+  // Fallback to User model's plan_type if there's no Subscription record
+  const user = await User.findByPk(userId, { attributes: ['plan_type'] });
+  if (user && user.plan_type === 'premium') {
+    return 2; // 'premium' correlates to Pro access
   }
 
   // No subscription → treat as free
@@ -156,6 +162,12 @@ async function getStudentPlanInfo(userId) {
       tierOrder: resolveTierOrder(subscription.plan.name, subscription.plan.tier_order),
       features: subscription.plan.features || {}
     };
+  }
+
+  // Fallback to User model's plan_type if there's no Subscription record
+  const user = await User.findByPk(userId, { attributes: ['plan_type'] });
+  if (user && user.plan_type === 'premium') {
+    return { planName: 'pro', tierOrder: 2, features: {} };
   }
 
   return { planName: 'free', tierOrder: 0, features: {} };

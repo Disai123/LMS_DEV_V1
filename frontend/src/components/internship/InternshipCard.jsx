@@ -5,9 +5,9 @@ import internshipService from '../../services/internshipService'
 import InternshipSubmissionModal from './InternshipSubmissionModal'
 
 const STATUS_BADGE = {
-  pending:            { bg: 'bg-amber-100',  text: 'text-amber-700',  label: 'Under Review' },
-  approved:           { bg: 'bg-emerald-100', text: 'text-emerald-700', label: 'Approved ✓' },
-  rejected:           { bg: 'bg-red-100',    text: 'text-red-700',    label: 'Revision Needed' },
+  pending: { bg: 'bg-amber-100', text: 'text-amber-700', label: 'Under Review' },
+  approved: { bg: 'bg-emerald-100', text: 'text-emerald-700', label: 'Approved ✓' },
+  rejected: { bg: 'bg-red-100', text: 'text-red-700', label: 'Revision Needed' },
   revision_requested: { bg: 'bg-orange-100', text: 'text-orange-700', label: 'Revision Requested' },
 }
 
@@ -18,7 +18,7 @@ const InternshipCard = ({ internship, index, onClick, registration }) => {
 
   const getTimelineStatus = () => {
     if (!internship.start_date || !internship.end_date) return internship.status || 'active';
-    
+
     const now = new Date();
     const start = new Date(internship.start_date);
     const end = new Date(internship.end_date);
@@ -32,19 +32,19 @@ const InternshipCard = ({ internship, index, onClick, registration }) => {
 
   const getStatusColor = (status) => {
     switch (status) {
-      case 'active':    return 'bg-green-100 text-green-800 border-green-200';
-      case 'upcoming':  return 'bg-blue-100 text-blue-800 border-blue-200';
+      case 'active': return 'bg-green-100 text-green-800 border-green-200';
+      case 'upcoming': return 'bg-blue-100 text-blue-800 border-blue-200';
       case 'completed': return 'bg-gray-100 text-gray-800 border-gray-200';
-      default:          return 'bg-gray-100 text-gray-800 border-gray-200';
+      default: return 'bg-gray-100 text-gray-800 border-gray-200';
     }
   };
 
   const getStatusText = (status) => {
     switch (status) {
-      case 'active':    return 'Ongoing';
-      case 'upcoming':  return 'Upcoming';
+      case 'active': return 'Ongoing';
+      case 'upcoming': return 'Upcoming';
       case 'completed': return 'Completed';
-      default:          return status;
+      default: return status;
     }
   };
 
@@ -185,7 +185,7 @@ const InternshipCard = ({ internship, index, onClick, registration }) => {
             // Re-fetch submission to update badge
             internshipService.getMySubmissionForInternship(internship.id)
               .then(res => setSubmission(res.data?.data || null))
-              .catch(() => {})
+              .catch(() => { })
           }}
         />
       )}

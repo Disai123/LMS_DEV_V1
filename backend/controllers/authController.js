@@ -2,6 +2,7 @@ const { User, StudentPermission, Plan, Subscription } = require('../models');
 const { generateTokenPair, verifyToken } = require('../utils/jwt');
 const logger = require('../utils/logger');
 const { AppError } = require('../middleware/errorHandler');
+const notificationService = require('../services/notificationService');
 
 /**
  * Student registration
@@ -68,6 +69,19 @@ const register = async (req, res, next) => {
     } catch (permError) {
       logger.error('Error creating permissions/subscription for new student:', permError);
       // Don't fail registration if permission creation fails
+    }
+
+    // Welcome Notification
+    try {
+      await notificationService.create(
+        user.id,
+        'welcome',
+        'Welcome to GNANAM AI!',
+        'We are thrilled to have you here. Start exploring courses, realtime projects, internships, and hackathons!',
+        '/student'
+      );
+    } catch (notifError) {
+      logger.error('Error sending welcome notification:', notifError);
     }
 
     // Generate tokens for immediate login
@@ -287,6 +301,19 @@ const verifyGoogleCredential = async (req, res, next) => {
         } catch (subError) {
           logger.error('Error assigning free plan to new Google user:', subError);
         }
+        
+        // Welcome Notification
+        try {
+          await notificationService.create(
+            user.id,
+            'welcome',
+            'Welcome to GNANAM AI!',
+            'We are thrilled to have you here. Start exploring courses, realtime projects, internships, and hackathons!',
+            '/student'
+          );
+        } catch (notifError) {
+          logger.error('Error sending welcome notification:', notifError);
+        }
       }
     }
 
@@ -332,6 +359,21 @@ const googleCallback = async (req, res, next) => {
     });
 
     logger.info(`User ${user.email} ${isNewUser ? 'registered' : 'logged in'} via Google OAuth`);
+    
+    // Welcome Notification for new Google users
+    if (isNewUser) {
+      try {
+        await notificationService.create(
+          user.id,
+          'welcome',
+          'Welcome to GNANAM AI!',
+          'We are thrilled to have you here. Start exploring courses, realtime projects, internships, and hackathons!',
+          '/student'
+        );
+      } catch (notifError) {
+        logger.error('Error sending welcome notification via Google callback:', notifError);
+      }
+    }
 
     // Redirect to frontend with tokens
     const redirectUrl = `${process.env.FRONTEND_URL}/auth/callback?token=${tokens.accessToken}&refresh=${tokens.refreshToken}&isNew=${isNewUser}`;

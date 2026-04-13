@@ -2,6 +2,7 @@ const { Course, User, Enrollment, CourseChapter, CourseTest, ChapterProgress, Ac
 const logger = require('../utils/logger');
 const { AppError } = require('../middleware/errorHandler');
 const { Op } = require('sequelize');
+const notificationService = require('../services/notificationService');
 
 /**
  * Get all courses with filtering and pagination
@@ -1205,6 +1206,18 @@ const enrollInCourse = async (req, res, next) => {
         console.error('Failed to log re-enrollment activity:', activityError);
       }
 
+      try {
+        await notificationService.create(
+          req.user.id,
+          'enrollment',
+          `Re-enrolled in ${course.title}`,
+          `You have successfully re-enrolled in ${course.title}. Welcome back!`,
+          `/student/courses/${course.id}` // Wait, it should go to course content if possible, or /courses/id
+        );
+      } catch (notifError) {
+        console.error('Failed to send re-enrollment notification:', notifError);
+      }
+
       logger.info(`User ${req.user.email} re-enrolled in course "${course.title}"`);
 
       return res.status(200).json({
@@ -1255,6 +1268,18 @@ const enrollInCourse = async (req, res, next) => {
     } catch (activityError) {
       console.error('Failed to log enrollment activity:', activityError);
       // Don't fail the enrollment if activity logging fails
+    }
+
+    try {
+      await notificationService.create(
+        req.user.id,
+        'enrollment',
+        `Enrolled in ${course.title}`,
+        `You have successfully enrolled in ${course.title}. Happy learning!`,
+        `/courses/${course.id}` // or `/student/courses/${course.id}` - let's use standard course url
+      );
+    } catch (notifError) {
+      console.error('Failed to send enrollment notification:', notifError);
     }
 
     logger.info(`User ${req.user.email} enrolled in course "${course.title}"`);

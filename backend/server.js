@@ -41,6 +41,7 @@ const scoreRoutes = require('./routes/scores');
 const passwordResetRoutes = require('./routes/passwordReset');
 const paymentRoutes = require('./routes/payment');
 const contactRoutes = require('./routes/contact');
+const notificationRoutes = require('./routes/notifications');
 const { errorHandler } = require('./middleware/errorHandler');
 const logger = require('./utils/logger');
 const SocketServer = require('./socket/socketServer');
@@ -293,6 +294,7 @@ app.use('/api/scores', scoreRoutes);
 app.use('/api/password-reset', passwordResetRoutes);
 app.use('/api/payment', paymentRoutes);
 app.use('/api/contact', contactRoutes);
+app.use('/api/notifications', notificationRoutes);
 app.use('/api', progressRoutes);
 
 // Debug: Log all registered routes
@@ -343,6 +345,7 @@ const startServer = async () => {
 
     // Initialize Socket.io
     const socketServer = new SocketServer(server);
+    global.socketServer = socketServer;
     logger.info('Socket.io server initialized');
   } catch (error) {
     logger.error('Unable to start server:', error);

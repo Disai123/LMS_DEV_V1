@@ -2,6 +2,7 @@ import { useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 import { motion, AnimatePresence } from 'framer-motion'
 import { useAuth } from '../../context/AuthContext'
+import NotificationBell from './NotificationBell'
 
 const Header = () => {
   const { user, logout, isAuthenticated } = useAuth()
@@ -105,6 +106,9 @@ const Header = () => {
                 >
                   Dashboard
                 </Link>
+
+                {/* Notifications */}
+                <NotificationBell />
 
                 {/* Profile Dropdown */}
                 <div className="relative">
@@ -240,11 +244,18 @@ const Header = () => {
                 {user ? (
                   <>
                     <Link
-                      to={user.role === 'admin' ? '/admin' : '/student'}
+                      to="/student"
                       className="block px-4 py-4 text-gray-700 hover:bg-white/20 rounded-lg transition-colors duration-200 min-h-[44px] flex items-center"
                       onClick={() => setIsMenuOpen(false)}
                     >
                       Dashboard
+                    </Link>
+                    <Link
+                      to="/notifications"
+                      className="block px-4 py-4 text-gray-700 hover:bg-white/20 rounded-lg transition-colors duration-200 min-h-[44px] flex items-center"
+                      onClick={() => setIsMenuOpen(false)}
+                    >
+                      Notifications
                     </Link>
                     <Link
                       to="/profile"

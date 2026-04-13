@@ -142,12 +142,12 @@ module.exports = (sequelize, DataTypes) => {
     });
   };
 
-  StudentScore.getOrCreate = async function(studentId) {
-    let score = await this.findOne({
-      where: { student_id: studentId }
-    });
+  StudentScore.getOrCreate = async function(studentId, transaction = null) {
+    const opts = transaction ? { where: { student_id: studentId }, transaction } : { where: { student_id: studentId } };
+    let score = await this.findOne(opts);
 
     if (!score) {
+      const createOpts = transaction ? { transaction } : {};
       score = await this.create({
         student_id: studentId,
         total_course_points: 0,
@@ -160,7 +160,7 @@ module.exports = (sequelize, DataTypes) => {
         projects_approved_count: 0,
         hackathons_approved_count: 0,
         internships_completed_count: 0
-      });
+      }, createOpts);
     }
 
     return score;

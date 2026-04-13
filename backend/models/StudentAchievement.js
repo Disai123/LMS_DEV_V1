@@ -118,15 +118,17 @@ module.exports = (sequelize, DataTypes) => {
     });
   };
 
-  StudentAchievement.checkExists = function (studentId, achievementType, sourceId) {
-    return this.findOne({
+  StudentAchievement.checkExists = function (studentId, achievementType, sourceId, transaction = null) {
+    const opts = {
       where: {
         student_id: studentId,
         achievement_type: achievementType,
         source_id: String(sourceId), // Convert to string to match VARCHAR column
         is_active: true
       }
-    });
+    };
+    if (transaction) opts.transaction = transaction;
+    return this.findOne(opts);
   };
 
   return StudentAchievement;

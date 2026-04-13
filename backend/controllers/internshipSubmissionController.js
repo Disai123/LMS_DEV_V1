@@ -2,6 +2,7 @@ const { InternshipSubmission, User, Internship, sequelize } = require('../models
 const scoringService = require('../services/scoringService');
 const logger = require('../utils/logger');
 const { Op } = require('sequelize');
+const notificationService = require('../services/notificationService');
 
 /**
  * Submit internship completion tasks
@@ -52,6 +53,15 @@ exports.submitInternship = async (req, res) => {
         });
 
         logger.info(`Internship submission created: ${submission.id} by student ${studentId}`);
+
+        // Notification
+        await notificationService.create(
+            studentId,
+            'internship_submitted',
+            'Internship tasks Submitted',
+            `Your task submission for "${internship_title}" has been received!`,
+            `/student/internships`
+        );
 
         res.status(201).json({
             success: true,
@@ -265,16 +275,19 @@ exports.getSubmissionStats = async (req, res) => {
 
 /**
  * Admin: Approve submission
+ * Uses a single shared transaction for both approval and scoring to ensure atomicity.
  */
 exports.approveSubmission = async (req, res) => {
+    const transaction = await sequelize.transaction();
     try {
         const { id } = req.params;
         const { feedback, points = 100 } = req.body;
         const reviewerId = req.user.id;
 
-        const submission = await InternshipSubmission.findByPk(id);
+        const submission = await InternshipSubmission.findByPk(id, { transaction });
 
         if (!submission) {
+            await transaction.rollback();
             return res.status(404).json({
                 success: false,
                 message: 'Submission not found'
@@ -282,25 +295,44 @@ exports.approveSubmission = async (req, res) => {
         }
 
         if (submission.status === 'approved') {
+            await transaction.rollback();
             return res.status(400).json({
                 success: false,
                 message: 'Submission already approved'
             });
         }
 
-        // Update submission status
-        await submission.approve(reviewerId, feedback, points);
+        // 1. Update submission status within the shared transaction
+        submission.status = 'approved';
+        submission.reviewed_at = new Date();
+        submission.reviewed_by = reviewerId;
+        submission.admin_feedback = feedback || null;
+        submission.points_awarded = points;
+        await submission.save({ transaction });
 
-        // Award points via scoring service
+        // 2. Award points and recalculate scores — also within the same transaction
         await scoringService.awardInternshipPoints({
             studentId: submission.student_id,
             internshipId: submission.internship_id,
             internshipTitle: submission.internship_title,
             points,
-            approvedBy: reviewerId
+            approvedBy: reviewerId,
+            transaction  // pass shared transaction into the scoring service
         });
 
-        logger.info(`Internship submission ${id} approved by admin ${reviewerId}`);
+        // 3. Commit everything atomically
+        await transaction.commit();
+
+        logger.info(`Internship submission ${id} approved by admin ${reviewerId} — ${points} pts awarded`);
+
+        // Notification
+        await notificationService.create(
+            submission.student_id,
+            'internship_feedback',
+            'Internship Submission Approved',
+            `Your submission for "${submission.internship_title}" was APPROVED. Points: ${points}.`,
+            `/student/internships`
+        );
 
         res.json({
             success: true,
@@ -308,6 +340,7 @@ exports.approveSubmission = async (req, res) => {
             data: submission
         });
     } catch (error) {
+        await transaction.rollback();
         logger.error('Error approving internship submission:', error);
         res.status(500).json({
             success: false,
@@ -345,6 +378,15 @@ exports.rejectSubmission = async (req, res) => {
         await submission.reject(reviewerId, feedback);
 
         logger.info(`Internship submission ${id} rejected by admin ${reviewerId}`);
+
+        // Notification
+        await notificationService.create(
+            submission.student_id,
+            'internship_feedback',
+            'Internship Submission Rejected',
+            `Your submission for "${submission.internship_title}" was REJECTED. Notes: ${feedback}`,
+            `/student/internships`
+        );
 
         res.json({
             success: true,

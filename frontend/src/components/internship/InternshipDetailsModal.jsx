@@ -7,13 +7,13 @@ import {
 } from 'react-icons/fi'
 import { useAuth } from '../../context/AuthContext'
 import internshipService from '../../services/internshipService'
-import InternshipSubmissionModal from './InternshipSubmissionModal'
+
 
 const InternshipDetailsModal = ({ internship, registration, onClose, onRegistered }) => {
   const { user } = useAuth()
   const [registering, setRegistering] = useState(false)
   const [localRegistered, setLocalRegistered] = useState(false)
-  const [showSubmitModal, setShowSubmitModal] = useState(false)
+
   const [error, setError] = useState('')
 
   const isAlreadyRegistered = !!registration || localRegistered
@@ -69,12 +69,7 @@ const InternshipDetailsModal = ({ internship, registration, onClose, onRegistere
           <div className="bg-green-50 border border-green-200 text-green-800 font-semibold text-center py-2.5 rounded-xl text-sm flex items-center justify-center gap-2">
             <FiCheck className="w-4 h-4" /> You have applied for this internship
           </div>
-          <button
-            onClick={() => setShowSubmitModal(true)}
-            className="w-full py-3.5 bg-gradient-to-r from-emerald-500 to-emerald-600 text-white font-bold rounded-xl hover:from-emerald-600 hover:to-emerald-700 transition-all shadow-lg text-sm uppercase tracking-wide flex items-center justify-center gap-2"
-          >
-            📝 View / Submit Work
-          </button>
+
         </>
       )
     }
@@ -270,18 +265,7 @@ const InternshipDetailsModal = ({ internship, registration, onClose, onRegistere
         </motion.div>
       </div>
 
-      {/* Submission Modal — rendered outside details modal so it sits on top (z-[80]) */}
-      {showSubmitModal && (
-        <InternshipSubmissionModal
-          isOpen={showSubmitModal}
-          onClose={() => setShowSubmitModal(false)}
-          internship={internship}
-          onSuccess={() => {
-            setShowSubmitModal(false)
-            onRegistered && onRegistered()
-          }}
-        />
-      )}
+
     </>
   )
 }

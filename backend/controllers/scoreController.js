@@ -1,5 +1,5 @@
 const scoringService = require('../services/scoringService');
-const { StudentAchievement, Course, Project, Hackathon } = require('../models');
+const { StudentAchievement, StudentScore, Course, Project, Hackathon, InternshipSubmission } = require('../models');
 const logger = require('../utils/logger');
 const { Op } = require('sequelize');
 
@@ -167,8 +167,81 @@ const getMyAchievements = async (req, res, next) => {
   }
 };
 
-module.exports = {
-  getMyScore,
-  getMyAchievements
+/**
+ * Recalculate score for current student.
+ * Also syncs any approved internship submissions that are missing achievement records.
+ */
+const recalculateMyScore = async (req, res, next) => {
+  try {
+    const studentId = req.user.id;
+    await syncInternshipAchievements(studentId);
+    const score = await scoringService.getStudentScores(studentId);
+    const maxPoints = await calculateMaxPossiblePoints();
+    res.json({
+      success: true,
+      message: 'Score recalculated successfully',
+      data: { ...score, ...maxPoints }
+    });
+  } catch (error) {
+    logger.error('Error recalculating student score:', error);
+    next(error);
+  }
 };
 
+/**
+ * Admin: Recalculate score for a specific student.
+ */
+const recalculateStudentScore = async (req, res, next) => {
+  try {
+    const { studentId } = req.params;
+    await syncInternshipAchievements(parseInt(studentId));
+    const score = await scoringService.getStudentScores(parseInt(studentId));
+    res.json({
+      success: true,
+      message: `Score recalculated for student ${studentId}`,
+      data: score
+    });
+  } catch (error) {
+    logger.error('Error recalculating student score (admin):', error);
+    next(error);
+  }
+};
+
+/**
+ * Helper: ensure all approved internship submissions have a matching StudentAchievement.
+ * This fixes orphaned approvals where scoring failed after the submission was saved.
+ */
+const syncInternshipAchievements = async (studentId) => {
+  const approvedSubs = await InternshipSubmission.findAll({
+    where: { student_id: studentId, status: 'approved' }
+  });
+
+  for (const sub of approvedSubs) {
+    const exists = await StudentAchievement.checkExists(
+      studentId,
+      'internship_completion',
+      sub.internship_id
+    );
+    if (!exists && sub.points_awarded > 0) {
+      // Award missing points — this also recalculates the score
+      await scoringService.awardInternshipPoints({
+        studentId,
+        internshipId: sub.internship_id,
+        internshipTitle: sub.internship_title,
+        points: sub.points_awarded,
+        approvedBy: sub.reviewed_by
+      });
+      logger.info(`Synced missing internship achievement for student ${studentId}, internship ${sub.internship_id}`);
+    }
+  }
+
+  // After syncing achievements, always recalculate scores
+  await scoringService.recalculateStudentScores(studentId);
+};
+
+module.exports = {
+  getMyScore,
+  getMyAchievements,
+  recalculateMyScore,
+  recalculateStudentScore
+};

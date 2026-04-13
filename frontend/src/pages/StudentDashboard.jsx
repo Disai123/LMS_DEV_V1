@@ -1,5 +1,5 @@
 import { motion } from 'framer-motion'
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { useQuery, useMutation, useQueryClient } from 'react-query'
 import { useNavigate } from 'react-router-dom'
 import { useAuth } from '../context/AuthContext'
@@ -114,6 +114,15 @@ const StudentDashboard = () => {
       staleTime: 5 * 60 * 1000
     }
   )
+
+  // On mount: sync any approved internship submissions that were scored before the fix.
+  // This is a one-time heal — after the first visit, scores will always be correct.
+  useEffect(() => {
+    if (!user || user.role === 'admin') return
+    scoreService.recalculateMyScore()
+      .then(() => queryClient.invalidateQueries('student-score'))
+      .catch(() => { /* silent — score display still works from cached value */ })
+  }, [user]) // eslint-disable-line react-hooks/exhaustive-deps
 
   // const { data: chatRoomsData, isLoading: chatRoomsLoading, error: chatRoomsError } = useQuery(
   //   'student-chat-rooms',

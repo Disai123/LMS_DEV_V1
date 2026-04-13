@@ -16,7 +16,6 @@ const InternshipsLandingPage = () => {
   const [loading, setLoading] = useState(true)
   const [selectedInternship, setSelectedInternship] = useState(null)
   const [search, setSearch] = useState('')
-  const [filterMode, setFilterMode] = useState('all')
 
   const fetchInternships = async () => {
     try {
@@ -43,10 +42,7 @@ const InternshipsLandingPage = () => {
     return () => clearTimeout(timer)
   }, [search])
 
-  const filteredInternships = internships.filter(internship => {
-    if (filterMode === 'all') return true;
-    return internship.mode === filterMode;
-  });
+  const filteredInternships = internships;
 
   return (
     <div className="min-h-screen flex flex-col font-display bg-[#fdfdfd]">
@@ -189,7 +185,7 @@ const InternshipsLandingPage = () => {
                    <span className="text-[10px] font-black uppercase tracking-[0.2em]">Open Enrollment</span>
                 </div>
                 <h2 className="text-4xl md:text-5xl font-black text-slate-950 tracking-tight">Active Opportunities</h2>
-                <p className="text-slate-500 mt-6 text-lg font-medium leading-relaxed">Filter by tech or mode and find a track that transforms your portfolio into a pro-grade showcase.</p>
+                <p className="text-slate-500 mt-6 text-lg font-medium leading-relaxed">Explore our curated tracks and find the perfect match for your career goals.</p>
              </div>
 
              <div className="flex flex-wrap gap-4">
@@ -203,16 +199,6 @@ const InternshipsLandingPage = () => {
                      className="pl-12 pr-6 py-4 bg-white border border-slate-200 rounded-2xl focus:ring-4 focus:ring-indigo-500/10 focus:border-indigo-500 outline-none w-full sm:w-64 transition-all shadow-sm font-medium"
                    />
                 </div>
-                <select
-                  value={filterMode}
-                  onChange={(e) => setFilterMode(e.target.value)}
-                  className="px-6 py-4 bg-white border border-slate-200 rounded-2xl focus:ring-4 focus:ring-indigo-500/10 outline-none font-bold text-slate-700 cursor-pointer shadow-sm min-w-[160px] hover:border-indigo-200 transition-colors"
-                >
-                   <option value="all">Any Mode</option>
-                   <option value="Online">Online</option>
-                   <option value="Hybrid">Hybrid</option>
-                   <option value="Offline">Offline</option>
-                </select>
              </div>
           </div>
 

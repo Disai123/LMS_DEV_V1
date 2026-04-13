@@ -70,6 +70,7 @@ const ContactMessage = require('./ContactMessage')(sequelize, Sequelize.DataType
 const Internship = require('./Internship')(sequelize, Sequelize.DataTypes);
 const InternshipRegistration = require('./InternshipRegistration')(sequelize, Sequelize.DataTypes);
 const InternshipSubmission = require('./InternshipSubmission')(sequelize, Sequelize.DataTypes);
+const Notification = require('./Notification')(sequelize, Sequelize.DataTypes);
 
 // Define associations
 const defineAssociations = () => {
@@ -405,6 +406,18 @@ const defineAssociations = () => {
   ActivityLog.belongsTo(CourseTest, {
     foreignKey: 'test_id',
     as: 'test'
+  });
+
+  // Notification associations
+  User.hasMany(Notification, {
+    foreignKey: 'user_id',
+    as: 'notifications',
+    onDelete: 'CASCADE'
+  });
+
+  Notification.belongsTo(User, {
+    foreignKey: 'user_id',
+    as: 'user'
   });
 
   // Achievement associations
@@ -927,5 +940,6 @@ module.exports = {
   ContactMessage,
   Internship,
   InternshipRegistration,
-  InternshipSubmission
+  InternshipSubmission,
+  Notification
 };

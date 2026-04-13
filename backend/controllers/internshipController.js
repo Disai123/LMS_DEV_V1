@@ -1,6 +1,7 @@
 const { Internship, InternshipRegistration, User, sequelize } = require('../models');
 const { AppError } = require('../middleware/errorHandler');
 const { Op } = require('sequelize');
+const notificationService = require('../services/notificationService');
 
 /**
  * GET /api/internships
@@ -256,6 +257,15 @@ const registerForInternship = async (req, res, next) => {
 
     // Increment count
     await internship.increment('current_registrations');
+
+    // Notification
+    await notificationService.create(
+      studentId,
+      'internship_registered',
+      'Internship Registered',
+      `You successfully registered for the internship: "${internship.title}".`,
+      `/internships/${internship.id}`
+    );
 
     res.status(201).json({
       success: true,

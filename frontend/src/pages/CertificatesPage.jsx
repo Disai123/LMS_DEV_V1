@@ -79,244 +79,279 @@ const CertificatesPage = () => {
       downloadContainer.style.opacity = '0'
       downloadContainer.style.zIndex = '-1'
       
-      const themeColor = isProject ? '#1e3a8a' : '#0f172a' // Professional Deep Blue/Slate
-      const accentColor = '#6366f1' // Modern Indigo
+      const themeColor = '#29384d' // Navy Blue
+      const goldColor = '#c5a059' // Gold
 
-      downloadContainer.innerHTML = `
+      const certHtmlContent = `
         <style>
           @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Playfair+Display:wght@700&family=Alex+Brush&display=swap');
           
-          .certificate-container {
+          .certificate-container { /* keep class name for html2canvas query */
             width: 1200px;
             height: 850px;
             background: #fff;
-            padding: 0;
+            padding: 40px;
             box-sizing: border-box;
-            position: relative;
             font-family: 'Inter', sans-serif;
-            color: #1e293b;
-            box-shadow: 0 0 50px rgba(0,0,0,0.1);
-            border: 20px solid #f8fafc;
+            margin: 0;
             overflow: hidden;
           }
-
-          .accent-strip {
-             position: absolute;
-             top: 0;
-             left: 0;
-             width: 12px;
-             height: 100%;
-             background: linear-gradient(to bottom, ${themeColor}, ${accentColor});
+          
+          .navy-border {
+            border: 20px solid ${themeColor};
+            height: 100%;
+            padding: 8px;
+            box-sizing: border-box;
+            position: relative;
           }
 
-          .inner-content {
-            padding: 80px 100px;
+          .gold-border {
+            border: 2px solid ${goldColor};
             height: 100%;
-            width: 100%;
             box-sizing: border-box;
+            position: relative;
             display: flex;
             flex-direction: column;
             align-items: center;
+            padding: 40px 60px 30px 60px;
           }
 
-          .header-row {
+          .corner-ornament {
+            position: absolute;
+            width: 40px;
+            height: 40px;
+            fill: ${goldColor};
+          }
+          .tl { top: -20px; left: -20px; }
+          .tr { top: -20px; right: -20px; transform: rotate(90deg); }
+          .bl { bottom: -20px; left: -20px; transform: rotate(-90deg); }
+          .br { bottom: -20px; right: -20px; transform: rotate(180deg); }
+
+          .logos-area {
             width: 100%;
             display: flex;
-            justify-content: space-between;
-            align-items: flex-start;
-            margin-bottom: 60px;
+            justify-content: center;
+            margin-bottom: 20px;
           }
-
-          .logo-box { text-align: left; }
-          .logo { height: 50px; }
           
-          .cert-status {
-            text-align: right;
-            font-size: 10px;
-            letter-spacing: 3px;
-            text-transform: uppercase;
-            font-weight: 800;
-            color: #94a3b8;
+          .logo { height: 45px; }
+
+          .stars {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 12px;
+            margin-bottom: 20px;
           }
+          
+          .star { fill: ${goldColor}; }
+          .star.small { width: 20px; height: 20px; }
+          .star.med { width: 28px; height: 28px; margin-top: -10px; }
+          .star.large { width: 38px; height: 38px; margin-top: -20px; }
 
           .main-title {
-            font-size: 58px;
+            font-size: 46px;
             font-weight: 900;
             color: ${themeColor};
-            letter-spacing: -1.5px;
-            margin-bottom: 10px;
-            text-transform: uppercase;
-            line-height: 1;
             text-align: center;
+            line-height: 1.2;
+            margin: 0 0 15px 0;
+            letter-spacing: 1px;
+            text-transform: uppercase;
           }
 
-          .sub-title {
-            font-size: 18px;
-            letter-spacing: 8px;
-            color: ${accentColor};
-            font-weight: 600;
-            margin-bottom: 50px;
+          .certify-label {
+            font-size: 16px;
+            font-weight: 700;
+            color: ${goldColor};
+            letter-spacing: 4px;
+            margin: 0 0 15px 0;
             text-transform: uppercase;
-            text-align: center;
           }
 
-          .recipient-section { margin: 20px 0 40px; text-align: center; }
-          .certify-text { font-size: 16px; color: #64748b; margin-bottom: 15px; font-weight: 500; }
           .student-name {
             font-family: 'Playfair Display', serif;
-            font-size: 68px;
+            font-size: 56px;
             font-weight: 700;
-            color: #0f172a;
-            margin: 0;
-            line-height: 1.2;
-          }
-          
-          .divider {
-            width: 120px;
-            height: 4px;
-            background: ${accentColor};
-            margin: 25px auto;
-            border-radius: 2px;
+            color: ${themeColor};
+            margin: 0 0 15px 0;
           }
 
-          .attainment-description {
+          .gold-divider {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 100%;
+            margin-bottom: 25px;
+          }
+          .gold-line {
+            height: 2px;
+            background: ${goldColor};
+            width: 300px;
+            margin: 0 15px;
+          }
+          .gold-diamond {
+            width: 8px;
+            height: 8px;
+            background: #fff;
+            border: 2px solid ${goldColor};
+            transform: rotate(45deg);
+          }
+
+          .description {
             font-size: 18px;
             color: #475569;
+            text-align: center;
             line-height: 1.6;
-            max-width: 750px;
-            margin: 0 auto 30px;
-            text-align: center;
-            font-weight: 400;
+            margin-bottom: 20px;
+            max-width: 800px;
           }
 
-          .course-title {
-            font-size: 32px;
-            font-weight: 800;
-            color: #1e293b;
-            margin-bottom: 40px;
-            text-align: center;
+          .cert-id {
+            font-size: 18px;
+            font-weight: 700;
+            color: ${goldColor};
+            margin-bottom: auto;
+          }
+          .cert-id span {
+            color: ${themeColor};
           }
 
-          .stats-grid {
-            display: flex;
-            justify-content: center;
-            gap: 60px;
-            margin-bottom: 60px;
-            background: #f8fafc;
-            padding: 20px 40px;
-            border-radius: 12px;
-          }
-
-          .stat-box { display: flex; flex-direction: column; align-items: center; }
-          .stat-label { font-size: 10px; text-transform: uppercase; letter-spacing: 2px; color: #64748b; margin-bottom: 4px; font-weight: 700; }
-          .stat-val { font-size: 18px; font-weight: 800; color: #0f172a; }
-
-          .footer-section {
-            margin-top: auto;
+          .footer {
             width: 100%;
             display: flex;
             justify-content: space-between;
             align-items: flex-end;
+            margin-top: 20px;
+            padding: 0 20px;
           }
 
-          .signature-area { display: flex; gap: 80px; }
-          .signature-box { display: flex; flex-direction: column; align-items: center; min-width: 180px; }
-          .sign-img { font-family: 'Alex Brush', cursive; font-size: 36px; margin-bottom: 0px; color: #0f172a; }
-          .sign-line { width: 100%; height: 1.5px; background: #e2e8f0; margin-bottom: 8px; }
-          .sign-role { font-size: 11px; font-weight: 700; color: #94a3b8; text-transform: uppercase; letter-spacing: 1px; }
-
-          .verified-badge {
-            display: flex;
-            align-items: center;
-            gap: 12px;
-            padding: 12px 20px;
-            background: #fff;
-            border: 1px solid #e2e8f0;
-            border-radius: 12px;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.03);
+          .footer-box {
+            text-align: center;
+            width: 220px;
           }
 
-          .badge-icon {
-            width: 36px;
-            height: 36px;
-            background: ${themeColor};
-            border-radius: 50%;
+          .date-val {
+            font-size: 20px;
+            font-weight: 700;
+            color: ${themeColor};
+            margin-bottom: 5px;
+            height: 38px;
             display: flex;
-            align-items: center;
+            align-items: flex-end;
             justify-content: center;
-            color: #fff;
-            font-size: 18px;
+          }
+          
+          .sign-val {
+            font-family: 'Alex Brush', cursive;
+            font-size: 38px;
+            font-weight: 400;
+            color: ${themeColor};
+            margin-bottom: 0px;
+            line-height: 1;
+            height: 38px;
+            display: flex;
+            align-items: flex-end;
+            justify-content: center;
           }
 
-          .badge-text { text-align: left; }
-          .badge-status { font-size: 10px; font-weight: 800; color: #10b981; margin-bottom: 1px; }
-          .badge-number { font-size: 9px; font-weight: 600; color: #94a3b8; font-family: monospace; }
+          .footer-line {
+            width: 100%;
+            height: 2px;
+            background: ${goldColor};
+            margin-bottom: 8px;
+          }
+
+          .footer-label {
+            font-size: 14px;
+            font-weight: 700;
+            color: ${themeColor};
+            line-height: 1.4;
+          }
+
+          .footer-label span.gold {
+            color: ${goldColor};
+          }
+          
+          .seal {
+            width: 110px;
+            height: 110px;
+            margin: 0 20px;
+          }
 
         </style>
         <div class="certificate-container">
-          <div class="accent-strip"></div>
-          <div class="inner-content">
-            <div class="header-row">
-              <div class="logo-box">
+          <div class="navy-border">
+            <svg class="corner-ornament tl" viewBox="0 0 100 100"><path d="M0,0 L100,0 C100,55 55,100 0,100 Z" /></svg>
+            <svg class="corner-ornament tr" viewBox="0 0 100 100"><path d="M0,0 L100,0 C100,55 55,100 0,100 Z" /></svg>
+            <svg class="corner-ornament bl" viewBox="0 0 100 100"><path d="M0,0 L100,0 C100,55 55,100 0,100 Z" /></svg>
+            <svg class="corner-ornament br" viewBox="0 0 100 100"><path d="M0,0 L100,0 C100,55 55,100 0,100 Z" /></svg>
+            
+            <div class="gold-border">
+              <div class="logos-area">
                 <img src="${logoUrl}" class="logo" />
               </div>
-              <div class="cert-status">
-                OFFICIAL VERIFIED CERTIFICATION<br/>
-                ISSUED BY GNANAM AI ACADEMY
+              
+              <div class="stars">
+                <svg class="star small" viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+                <svg class="star med" viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+                <svg class="star large" viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+                <svg class="star med" viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+                <svg class="star small" viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
               </div>
-            </div>
 
-            <h1 class="main-title">${certTitle.split(' ').slice(0, 2).join(' ')}</h1>
-            <h2 class="sub-title">${certTitle.split(' ').slice(2).join(' ')}</h2>
-
-            <div class="recipient-section">
-              <p class="certify-text">This certificate confirms that</p>
+              <h1 class="main-title">${isProject ? 'Project Completion Certificate' : 'Course Completion Certificate'}</h1>
+              <h2 class="certify-label">THIS IS TO CERTIFY THAT</h2>
               <h3 class="student-name">${studentName}</h3>
-              <div class="divider"></div>
-            </div>
-
-            <p class="attainment-description">${certSubText}</p>
-            <h4 class="course-title">${mainName}</h4>
-
-            <div class="stats-grid">
-              ${difficulty ? `
-                <div class="stat-box">
-                  <span class="stat-label">Project Difficulty</span>
-                  <span class="stat-val">${difficulty}</span>
-                </div>
-              ` : ''}
-              ${score ? `
-                <div class="stat-box">
-                  <span class="stat-label">Performance Score</span>
-                  <span class="stat-val">${Math.round(score)}%</span>
-                </div>
-              ` : ''}
-              <div class="stat-box">
-                  <span class="stat-label">Completion Date</span>
-                  <span class="stat-val">${issuedDate}</span>
-              </div>
-            </div>
-
-            <div class="footer-section">
-              <div class="verified-badge">
-                <div class="badge-icon">✓</div>
-                <div class="badge-text">
-                  <div class="badge-status">VALIDATED CERTIFICATE</div>
-                  <div class="badge-number">ID: ${certificateNumber}</div>
-                </div>
+              
+              <div class="gold-divider">
+                <div class="gold-diamond"></div>
+                <div class="gold-line"></div>
+                <div class="gold-diamond"></div>
               </div>
 
-              <div class="signature-area">
-                <div class="signature-box">
-                  <span class="sign-img">Vijay Gunti</span>
-                  <div class="sign-line"></div>
-                  <span class="sign-role">Education Director</span>
+              <p class="description">
+                has completed the ${isProject ? 'Realtime Project' : 'Course'} 
+                <strong>${mainName}</strong>. 
+                <br/>
+                ${score ? `Completed with a performance score of <strong>${Math.round(score)}%</strong>.` : ''}
+                ${difficulty ? `Project Difficulty Level: <strong>${difficulty}</strong>.` : ''}
+                <br/>
+                Throughout this program, the learner has successfully learned the concepts and demonstrated a high level of efficiency in applying them practically.
+              </p>
+
+              <div class="cert-id">Certificate ID: <span>${certificateNumber}</span></div>
+
+              <div class="footer">
+                <div class="footer-box">
+                  <div class="date-val">${issuedDate}</div>
+                  <div class="footer-line"></div>
+                  <div class="footer-label">Date of Issue</div>
+                </div>
+
+                <svg class="seal" viewBox="0 0 100 100">
+                  <path fill="${goldColor}" d="M50 0 L55 10 L66 6 L68 17 L79 17 L78 28 L88 32 L84 42 L94 50 L84 58 L88 68 L78 72 L79 83 L68 83 L66 94 L55 90 L50 100 L45 90 L34 94 L32 83 L21 83 L22 72 L12 68 L16 58 L6 50 L16 42 L12 32 L22 28 L21 17 L32 17 L34 6 L45 10 Z" />
+                  <circle cx="50" cy="50" r="38" fill="#fff" stroke="${themeColor}" stroke-width="2"/>
+                  <circle cx="50" cy="50" r="34" fill="none" stroke="${goldColor}" stroke-width="1" stroke-dasharray="2,2"/>
+                  <path fill="${goldColor}" d="M50 25 L56 38 L70 40 L60 50 L63 65 L50 58 L37 65 L40 50 L30 40 L44 38 Z" />
+                  <text x="50" y="24" font-size="6" font-family="Arial" fill="${themeColor}" font-weight="bold" text-anchor="middle" letter-spacing="1">GNANAM AI</text>
+                  <text x="50" y="80" font-size="6" font-family="Arial" fill="${themeColor}" font-weight="bold" text-anchor="middle" letter-spacing="1">CERTIFIED</text>
+                </svg>
+                
+                <div class="footer-box">
+                  <div class="sign-val">Vijay Gunti</div>
+                  <div class="footer-line"></div>
+                  <div class="footer-label">Vijay Gunti<br/><span class="gold">Founder & CEO<br/>Gnanamai</span></div>
                 </div>
               </div>
+
             </div>
           </div>
         </div>
       `
+
+      downloadContainer.innerHTML = certHtmlContent
+
 
       document.body.appendChild(downloadContainer)
 
@@ -619,93 +654,124 @@ const CertificatesPage = () => {
               </button>
             </div>
 
-            <div className="relative bg-white shadow-2xl overflow-hidden text-center" style={{ minHeight: '750px', padding: '0' }}>
-              <div className="absolute top-0 left-0 w-3 h-full" style={{ background: `linear-gradient(to bottom, ${(selectedCertificate.certificate_type || selectedCertificate.certificateType) === 'realtime_project' ? '#1e3a8a' : '#0f172a'}, #6366f1)` }}></div>
-              
-              <div className="inner-content p-16 h-full w-full flex flex-col items-center">
-                {/* Header Row */}
-                <div className="w-full flex justify-between items-start mb-12">
-                  <div className="text-left">
-                    <img src="/lms_logo.svg" alt="GNANAM AI" className="h-10 w-auto" />
-                  </div>
-                  <div className="text-right text-[8px] tracking-[2px] font-extrabold text-slate-400 uppercase leading-relaxed">
-                    OFFICIAL VERIFIED CERTIFICATION<br/>
-                    ISSUED BY GNANAM AI ACADEMY
-                  </div>
-                </div>
+            {/* Automatically scales the 1200x850 rigid HTML safely into the modal */}
+            <div className="w-full flex justify-center bg-gray-100 p-2 md:p-6 rounded-xl overflow-x-auto">
+              <div style={{ width: '780px', height: '552px', position: 'relative', flexShrink: 0 }}>
+                <div
+                  style={{
+                    width: '1200px',
+                    height: '850px',
+                    transform: 'scale(0.65)',
+                    transformOrigin: 'top left',
+                    position: 'absolute',
+                    top: 0,
+                    left: 0,
+                    boxShadow: '0 10px 40px rgba(0,0,0,0.1)',
+                    backgroundColor: '#fff'
+                  }}
+                  dangerouslySetInnerHTML={{
+                  __html: `
+                    <style>
+                      .cert-preview-window .certificate-container { margin: 0; box-shadow: none; border: none; }
+                    </style>
+                    <div class="cert-preview-window">
+                    ${(() => {
+                        const isProject = (selectedCertificate.certificate_type || selectedCertificate.certificateType) === 'realtime_project'
+                        const studentName = selectedCertificate.metadata?.studentName || selectedCertificate.studentName || 'Learner Name'
+                        const certTitle = isProject ? 'Project Completion Certificate' : 'Course Completion Certificate'
+                        const mainName = isProject
+                          ? (selectedCertificate.metadata?.projectName || selectedCertificate.realtimeProjectSubmission?.project_name || 'Realtime Project')
+                          : (() => {
+                            const cn = selectedCertificate.metadata?.courseName || selectedCertificate.course?.title || 'Course'
+                            const dur = selectedCertificate.metadata?.courseDuration || selectedCertificate.course?.estimated_duration || null
+                            return dur ? `${cn} (${dur} Hrs)` : cn
+                          })()
+                        const score = !isProject ? selectedCertificate.metadata?.score : null
+                        const difficulty = isProject ? selectedCertificate.metadata?.difficulty : null
+                        const certificateNumber = selectedCertificate.certificate_number
+                        const issuedDate = formatDate(selectedCertificate.issued_date)
+                        const themeColor = '#29384d' // Navy Blue
+                        const goldColor = '#c5a059' // Gold
+                        const logoUrl = '/lms_logo.svg'
 
-                {/* Title */}
-                <div className="mb-10">
-                  <h1 className="text-5xl font-black tracking-tighter uppercase mb-1" style={{ fontFamily: "'Inter', sans-serif", color: (selectedCertificate.certificate_type || selectedCertificate.certificateType) === 'realtime_project' ? '#1e3a8a' : '#0f172a' }}>
-                    {(selectedCertificate.certificate_type || selectedCertificate.certificateType) === 'realtime_project' ? 'CERTIFICATE OF' : 'CERTIFICATE OF'}
-                  </h1>
-                  <h2 className="text-lg font-bold tracking-[6px] uppercase text-indigo-500">
-                    {(selectedCertificate.certificate_type || selectedCertificate.certificateType) === 'realtime_project' ? 'ACHIEVEMENT' : 'COMPLETION'}
-                  </h2>
-                </div>
-
-                <p className="text-sm font-semibold text-slate-400 uppercase tracking-widest mb-4">This certificate confirms that</p>
-                
-                <h3 className="text-6xl font-bold text-slate-900 mb-2" style={{ fontFamily: "'Playfair Display', serif" }}>
-                  {selectedCertificate.metadata?.studentName || selectedCertificate.studentName || 'Learner Name'}
-                </h3>
-                
-                <div className="w-24 h-1 bg-indigo-500 mx-auto mb-8 rounded-full"></div>
-
-                <p className="text-lg text-slate-600 mb-2 max-w-2xl">
-                  {(selectedCertificate.certificate_type || selectedCertificate.certificateType) === 'realtime_project'
-                    ? 'has successfully built and delivered the high-impact realtime project'
-                    : 'has successfully completed the comprehensive training course'
-                  }
-                </p>
-
-                <h4 className="text-3xl font-extrabold text-slate-800 mb-10">
-                  {(selectedCertificate.certificate_type || selectedCertificate.certificateType) === 'realtime_project'
-                    ? (selectedCertificate.metadata?.projectName || selectedCertificate.realtimeProjectSubmission?.project_name || 'Realtime Project')
-                    : (() => {
-                        const courseName = selectedCertificate.metadata?.courseName || 'Course'
-                        const courseDuration = selectedCertificate.metadata?.courseDuration || selectedCertificate.course?.estimated_duration
-                        return courseDuration ? `${courseName} (${courseDuration} Hrs)` : courseName
-                      })()
-                  }
-                </h4>
-
-                <div className="flex gap-12 mb-12 bg-slate-50 px-8 py-4 rounded-xl border border-slate-100">
-                  {(selectedCertificate.certificate_type || selectedCertificate.certificateType) === 'realtime_project' && selectedCertificate.metadata?.difficulty && (
-                    <div className="flex flex-col items-center">
-                      <span className="text-[9px] uppercase tracking-widest text-slate-400 font-bold mb-1">Project Level</span>
-                      <span className="text-base font-black text-slate-700 uppercase">{selectedCertificate.metadata.difficulty}</span>
+                        return `
+                          <style>
+                            @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Playfair+Display:wght@700&family=Alex+Brush&display=swap');
+                            .cert-inner { width: 1200px; height: 850px; background: #fff; padding: 40px; box-sizing: border-box; font-family: 'Inter', sans-serif; }
+                            .cert-inner .navy-border { border: 20px solid ${themeColor}; height: 100%; padding: 8px; box-sizing: border-box; position: relative; }
+                            .cert-inner .gold-border { border: 2px solid ${goldColor}; height: 100%; box-sizing: border-box; position: relative; display: flex; flex-direction: column; align-items: center; padding: 40px 60px 30px 60px; }
+                            .cert-inner .corner-ornament { position: absolute; width: 40px; height: 40px; fill: ${goldColor}; }
+                            .cert-inner .tl { top: -20px; left: -20px; } .cert-inner .tr { top: -20px; right: -20px; transform: rotate(90deg); } .cert-inner .bl { bottom: -20px; left: -20px; transform: rotate(-90deg); } .cert-inner .br { bottom: -20px; right: -20px; transform: rotate(180deg); }
+                            .cert-inner .logos-area { width: 100%; display: flex; justify-content: center; margin-bottom: 20px; }
+                            .cert-inner .logo { height: 45px; }
+                            .cert-inner .stars { display: flex; align-items: center; justify-content: center; gap: 12px; margin-bottom: 20px; }
+                            .cert-inner .star { fill: ${goldColor}; } .cert-inner .star.small { width: 20px; height: 20px; } .cert-inner .star.med { width: 28px; height: 28px; margin-top: -10px; } .cert-inner .star.large { width: 38px; height: 38px; margin-top: -20px; }
+                            .cert-inner .main-title { font-size: 46px; font-weight: 900; color: ${themeColor}; text-align: center; line-height: 1.2; margin: 0 0 15px 0; letter-spacing: 1px; text-transform: uppercase; }
+                            .cert-inner .certify-label { font-size: 16px; font-weight: 700; color: ${goldColor}; letter-spacing: 4px; margin: 0 0 15px 0; text-transform: uppercase; }
+                            .cert-inner .student-name { font-family: 'Playfair Display', serif; font-size: 56px; font-weight: 700; color: ${themeColor}; margin: 0 0 15px 0; }
+                            .cert-inner .gold-divider { display: flex; align-items: center; justify-content: center; width: 100%; margin-bottom: 25px; }
+                            .cert-inner .gold-line { height: 2px; background: ${goldColor}; width: 300px; margin: 0 15px; }
+                            .cert-inner .gold-diamond { width: 8px; height: 8px; background: #fff; border: 2px solid ${goldColor}; transform: rotate(45deg); }
+                            .cert-inner .description { font-size: 18px; color: #475569; text-align: center; line-height: 1.6; margin-bottom: 20px; max-width: 800px; }
+                            .cert-inner .cert-id { font-size: 18px; font-weight: 700; color: ${goldColor}; margin-bottom: auto; }
+                            .cert-inner .cert-id span { color: ${themeColor}; }
+                            .cert-inner .footer { width: 100%; display: flex; justify-content: space-between; align-items: flex-end; margin-top: 20px; padding: 0 20px; }
+                            .cert-inner .footer-box { text-align: center; width: 220px; }
+                            .cert-inner .date-val { font-size: 20px; font-weight: 700; color: ${themeColor}; margin-bottom: 5px; height: 38px; display: flex; align-items: flex-end; justify-content: center; }
+                            .cert-inner .sign-val { font-family: 'Alex Brush', cursive; font-size: 38px; font-weight: 400; color: ${themeColor}; margin-bottom: 0px; line-height: 1; height: 38px; display: flex; align-items: flex-end; justify-content: center; }
+                            .cert-inner .footer-line { width: 100%; height: 2px; background: ${goldColor}; margin-bottom: 8px; }
+                            .cert-inner .footer-label { font-size: 14px; font-weight: 700; color: ${themeColor}; line-height: 1.4; }
+                            .cert-inner .footer-label span.gold { color: ${goldColor}; }
+                            .cert-inner .seal { width: 110px; height: 110px; margin: 0 20px; }
+                          </style>
+                          <div class="cert-inner">
+                            <div class="navy-border">
+                              <svg class="corner-ornament tl" viewBox="0 0 100 100"><path d="M0,0 L100,0 C100,55 55,100 0,100 Z" /></svg>
+                              <svg class="corner-ornament tr" viewBox="0 0 100 100"><path d="M0,0 L100,0 C100,55 55,100 0,100 Z" /></svg>
+                              <svg class="corner-ornament bl" viewBox="0 0 100 100"><path d="M0,0 L100,0 C100,55 55,100 0,100 Z" /></svg>
+                              <svg class="corner-ornament br" viewBox="0 0 100 100"><path d="M0,0 L100,0 C100,55 55,100 0,100 Z" /></svg>
+                              
+                              <div class="gold-border">
+                                <div class="logos-area"><img src="${logoUrl}" class="logo" /></div>
+                                <div class="stars">
+                                  <svg class="star small" viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+                                  <svg class="star med" viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+                                  <svg class="star large" viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+                                  <svg class="star med" viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+                                  <svg class="star small" viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+                                </div>
+                                <h1 class="main-title">${certTitle}</h1>
+                                <h2 class="certify-label">THIS IS TO CERTIFY THAT</h2>
+                                <h3 class="student-name">${studentName}</h3>
+                                <div class="gold-divider"><div class="gold-diamond"></div><div class="gold-line"></div><div class="gold-diamond"></div></div>
+                                <p class="description">
+                                  has completed the ${isProject ? 'Realtime Project' : 'Course'} <strong>${mainName}</strong>. <br/>
+                                  ${score ? `Completed with a performance score of <strong>${Math.round(score)}%</strong>.` : ''}
+                                  ${difficulty ? `Project Difficulty Level: <strong>${difficulty}</strong>.` : ''}
+                                  <br/>Throughout this program, the learner has successfully learned the concepts and demonstrated a high level of efficiency in applying them practically.
+                                </p>
+                                <div class="cert-id">Certificate ID: <span>${certificateNumber}</span></div>
+                                <div class="footer">
+                                  <div class="footer-box"><div class="date-val">${issuedDate}</div><div class="footer-line"></div><div class="footer-label">Date of Issue</div></div>
+                                  <svg class="seal" viewBox="0 0 100 100">
+                                    <path fill="${goldColor}" d="M50 0 L55 10 L66 6 L68 17 L79 17 L78 28 L88 32 L84 42 L94 50 L84 58 L88 68 L78 72 L79 83 L68 83 L66 94 L55 90 L50 100 L45 90 L34 94 L32 83 L21 83 L22 72 L12 68 L16 58 L6 50 L16 42 L12 32 L22 28 L21 17 L32 17 L34 6 L45 10 Z" />
+                                    <circle cx="50" cy="50" r="38" fill="#fff" stroke="${themeColor}" stroke-width="2"/>
+                                    <circle cx="50" cy="50" r="34" fill="none" stroke="${goldColor}" stroke-width="1" stroke-dasharray="2,2"/>
+                                    <path fill="${goldColor}" d="M50 25 L56 38 L70 40 L60 50 L63 65 L50 58 L37 65 L40 50 L30 40 L44 38 Z" />
+                                    <text x="50" y="24" font-size="6" font-family="Arial" fill="${themeColor}" font-weight="bold" text-anchor="middle" letter-spacing="1">GNANAM AI</text>
+                                    <text x="50" y="80" font-size="6" font-family="Arial" fill="${themeColor}" font-weight="bold" text-anchor="middle" letter-spacing="1">CERTIFIED</text>
+                                  </svg>
+                                  <div class="footer-box"><div class="sign-val">Vijay Gunti</div><div class="footer-line"></div><div class="footer-label">Vijay Gunti<br/><span class="gold">Founder & CEO<br/>Gnanamai</span></div></div>
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                        `
+                    })()}
                     </div>
-                  )}
-                  {(selectedCertificate.certificate_type || selectedCertificate.certificateType) !== 'realtime_project' && selectedCertificate.metadata?.score && (
-                    <div className="flex flex-col items-center">
-                      <span className="text-[9px] uppercase tracking-widest text-slate-400 font-bold mb-1">Performance Score</span>
-                      <span className="text-base font-black text-slate-700">{Math.round(selectedCertificate.metadata.score)}%</span>
-                    </div>
-                  )}
-                  <div className="flex flex-col items-center">
-                    <span className="text-[9px] uppercase tracking-widest text-slate-400 font-bold mb-1">Completion Date</span>
-                    <span className="text-base font-black text-slate-700">{formatDate(selectedCertificate.issued_date)}</span>
-                  </div>
-                </div>
-
-                <div className="w-full flex justify-between items-end mt-4">
-                  <div className="flex items-center gap-4 p-4 bg-white border border-slate-100 rounded-xl shadow-sm">
-                    <div className="w-10 h-10 bg-slate-900 rounded-full flex items-center justify-center text-white text-xl">✓</div>
-                    <div className="text-left">
-                      <div className="text-[9px] font-black text-emerald-500 uppercase leading-none mb-1">VALIDATED CERTIFICATE</div>
-                      <div className="text-[8px] font-bold text-slate-400 font-mono">ID: {selectedCertificate.certificate_number}</div>
-                    </div>
-                  </div>
-
-                  <div className="flex gap-8">
-                    <div className="flex flex-col items-center min-w-[200px]">
-                      <span className="text-3xl mb-0 text-slate-900" style={{ fontFamily: "'Alex Brush', cursive" }}>Vijay Gunti</span>
-                      <div className="w-full h-[1px] bg-slate-200 mb-2"></div>
-                      <span className="text-[10px] font-black text-slate-400 uppercase tracking-tighter">Education Director</span>
-                    </div>
-                  </div>
-                </div>
+                  `
+                }}
+              ></div>
               </div>
             </div>
 
