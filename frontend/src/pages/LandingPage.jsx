@@ -528,8 +528,8 @@ const LandingPage = () => {
                 <p className="text-white/50 text-sm mb-6">For motivated learners</p>
                 <div className="flex items-baseline gap-2 flex-wrap">
                   <span className="text-2xl font-bold text-white/60">₹</span>
-                  <span className="text-5xl font-black text-white">299</span>
-                  <span className="text-lg text-white/40 line-through">₹999</span>
+                  <span className="text-5xl font-black text-white">2999</span>
+                  <span className="text-lg text-white/40 line-through">₹9999</span>
                   <span className="text-xs font-bold bg-amber-400 text-slate-900 px-2 py-0.5 rounded-full">Save 70%</span>
                 </div>
                 <p className="text-white/50 text-xs mt-2 font-medium">One-time · No hidden charges</p>
@@ -603,9 +603,9 @@ const LandingPage = () => {
                 <p className="text-gray-500 text-sm mb-6">For professionals & teams</p>
                 <div className="flex items-baseline gap-2 flex-wrap">
                   <span className="text-2xl font-bold text-gray-500">₹</span>
-                  <span className="text-5xl font-black text-white">799</span>
-                  <span className="text-lg text-gray-600 line-through">₹1999</span>
-                  <span className="text-xs font-bold bg-yellow-400/20 text-yellow-400 border border-yellow-400/30 px-2 py-0.5 rounded-full">Save 60%</span>
+                  <span className="text-5xl font-black text-white">4999</span>
+                  <span className="text-lg text-gray-600 line-through">₹14999</span>
+                  <span className="text-xs font-bold bg-yellow-400/20 text-yellow-400 border border-yellow-400/30 px-2 py-0.5 rounded-full">Save 66%</span>
                 </div>
                 <p className="text-gray-500 text-xs mt-2 font-medium">One-time · No hidden charges</p>
               </div>

@@ -1,119 +1,70 @@
 <div class="content-body">
   <div class="content-section">
     <h3 class="content-heading">AI Integration Development</h3>
-    <div style="max-width: none;">
-      <p style="color: #4b5563; line-height: 1.75; margin-bottom: 1.5rem;">
-        The AI integration code connects the API route with OpenAI's GPT models, handles function calling, 
-        and manages conversation context. This is the core intelligence layer of the agent.
+    <p style="color: #4b5563; line-height: 1.75; margin-bottom: 2rem;">
+      The AI integration layer connects the API route to <strong>OpenAI GPT-4o-mini</strong> using
+      the function calling feature. It manages the tool execution loop — calling OpenAI, detecting
+      tool requests, running tools, and feeding results back for the final response.
+    </p>
+
+    <!-- Tool Execution Loop Card -->
+    <div
+      style="background: white; border: 1px solid #e5e7eb; border-radius: 12px; padding: 1.5rem; margin-bottom: 2rem; box-shadow: 0 1px 3px rgba(0,0,0,0.1);">
+      <h4 style="font-size: 1.125rem; font-weight: 600; color: #1e293b; margin-bottom: 1rem;">Function Calling Loop</h4>
+      <p style="font-size: 0.9rem; color: #475569; line-height: 1.6; margin-bottom: 1.5rem;">
+        The agent uses <code>tool_choice: 'auto'</code> — the model decides when to call a tool.
+        When it does, we execute the tool and call OpenAI again with the result to get the final
+        natural language response.
       </p>
-      
-      <div style="display: flex; flex-direction: column; gap: 2rem;">
-        <div class="card">
-          <h4 style="font-size: 1.25rem; font-weight: 600; color: #1f2937; margin-bottom: 1.5rem; display: flex; align-items: center; gap: 0.5rem;">
-            <span style="font-size: 1.5rem;">🤖</span>
-            OpenAI Client Setup
-          </h4>
-          
-          <div style="background: #f9fafb; border-radius: 0.5rem; padding: 1.5rem; overflow-x: auto;">
-            <pre style="font-family: 'Courier New', monospace; font-size: 0.875rem; color: #1f2937; line-height: 1.6; margin: 0;"><code>// Initialize OpenAI client
-import OpenAI from 'openai'
 
-const openai = new OpenAI({
-  apiKey: process.env.OPENAI_API_KEY
-})
-
-// Model configuration
-const model = process.env.OPENAI_MODEL || 'gpt-4o-mini'</code></pre>
-          </div>
+      <div style="background: #f8fafc; border: 1px solid #cbd5e1; border-radius: 8px; padding: 1rem;">
+        <div
+          style="font-weight: 600; font-size: 0.85rem; color: #334155; margin-bottom: 0.5rem; display: flex; align-items: center; gap: 8px;">
+          <span style="background: #10b981; width: 6px; height: 6px; border-radius: 50%;"></span>
+          Tool Dispatch
         </div>
-
-        <div class="card">
-          <h4 style="font-size: 1.25rem; font-weight: 600; color: #1f2937; margin-bottom: 1.5rem; display: flex; align-items: center; gap: 0.5rem;">
-            <span style="font-size: 1.5rem;">💬</span>
-            Chat Completion Call
-          </h4>
-          
-          <div style="background: #f9fafb; border-radius: 0.5rem; padding: 1.5rem; overflow-x: auto;">
-            <pre style="font-family: 'Courier New', monospace; font-size: 0.875rem; color: #1f2937; line-height: 1.6; margin: 0;"><code>const completion = await openai.chat.completions.create({
-  model: 'gpt-4o-mini',
-  messages: [
-    { role: 'system', content: SYSTEM_PROMPT },
-    ...conversationHistory,
-    { role: 'user', content: userMessage }
-  ],
-  tools: tools, // Array of tool definitions
-  tool_choice: 'auto', // Let AI decide when to use tools
-  temperature: 0.7,
-  max_tokens: 1000
-})</code></pre>
-          </div>
-        </div>
-
-        <div class="card">
-          <h4 style="font-size: 1.25rem; font-weight: 600; color: #1f2937; margin-bottom: 1.5rem; display: flex; align-items: center; gap: 0.5rem;">
-            <span style="font-size: 1.5rem;">🔧</span>
-            Tool Execution Flow
-          </h4>
-          
-          <div style="background: #f9fafb; border-radius: 0.5rem; padding: 1.5rem;">
-            <div style="display: flex; flex-direction: column; gap: 1rem;">
-              <div style="border-left: 4px solid #3b82f6; padding-left: 1rem;">
-                <h5 style="font-weight: 600; color: #1f2937; margin-bottom: 0.5rem;">1. AI Requests Tool</h5>
-                <p style="font-size: 0.875rem; color: #6b7280;">
-                  OpenAI response includes tool_calls array with function name and parameters.
-                </p>
-              </div>
-
-              <div style="border-left: 4px solid #10b981; padding-left: 1rem;">
-                <h5 style="font-weight: 600; color: #1f2937; margin-bottom: 0.5rem;">2. Execute Tool</h5>
-                <div style="background: #1f2937; color: #10b981; padding: 1rem; border-radius: 0.5rem; font-family: monospace; font-size: 0.75rem; overflow-x: auto;">
-                  <pre>// Map tool name to function
-const toolMap = {
-  'searchProducts': catalogTools.searchProducts,
-  'addToCart': cartTools.addToCart,
-  // ... other tools
+        <pre style="font-size: 0.8rem; color: #475569; margin: 0; font-family: 'Courier New', Courier, monospace;">if (toolCall.name === 'searchProducts') {
+    result = await catalogTools.searchProducts(params);
 }
+// Feed result back to OpenAI for final response</pre>
+      </div>
+    </div>
 
-const toolFunction = toolMap[toolCall.name]
-const result = await toolFunction(params)</pre>
-                </div>
-              </div>
-
-              <div style="border-left: 4px solid #a855f7; padding-left: 1rem;">
-                <h5 style="font-weight: 600; color: #1f2937; margin-bottom: 0.5rem;">3. Return Result to AI</h5>
-                <p style="font-size: 0.875rem; color: #6b7280;">
-                  Tool result added to messages array, then call OpenAI again to generate final response.
-                </p>
-              </div>
-            </div>
-          </div>
+    <!-- Technical Stack -->
+    <h4 style="font-size: 1.125rem; font-weight: 600; color: #1e293b; margin-bottom: 1rem;">AI Integration Stack</h4>
+    <div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 1rem;">
+      <div
+        style="background: white; border: 1px solid #e2e8f0; border-radius: 10px; padding: 1rem; display: flex; align-items: center; gap: 12px;">
+        <div style="font-size: 1.5rem;">🤖</div>
+        <div>
+          <div style="font-weight: 600; font-size: 0.85rem;">GPT-4o-mini</div>
+          <div style="font-size: 0.75rem; color: #64748b;">Function Calling Model</div>
         </div>
-
-        <div class="card">
-          <h4 style="font-size: 1.25rem; font-weight: 600; color: #1f2937; margin-bottom: 1.5rem; display: flex; align-items: center; gap: 0.5rem;">
-            <span style="font-size: 1.5rem;">📝</span>
-            System Prompt
-          </h4>
-          
-          <div style="background: #f9fafb; border-radius: 0.5rem; padding: 1.5rem;">
-            <p style="font-size: 0.875rem; color: #6b7280; margin-bottom: 1rem;">
-              The system prompt defines the AI's personality and behavior:
-            </p>
-            <div style="background: #1f2937; color: #fbbf24; padding: 1rem; border-radius: 0.5rem; font-family: monospace; font-size: 0.75rem; overflow-x: auto; max-height: 300px; overflow-y: auto;">
-              <pre>"You are askunicart, the friendly shopping assistant for Unicart.
-You help customers browse products, check stock, recommend products, 
-and manage carts through natural language.
-
-Always:
-- Be friendly, helpful, and concise
-- Confirm understanding before acting on cart changes
-- Use tools to get accurate information
-- Provide concise, relevant responses"</pre>
-            </div>
-          </div>
+      </div>
+      <div
+        style="background: white; border: 1px solid #e2e8f0; border-radius: 10px; padding: 1rem; display: flex; align-items: center; gap: 12px;">
+        <div style="font-size: 1.5rem;">🔧</div>
+        <div>
+          <div style="font-weight: 600; font-size: 0.85rem;">Tool Registry</div>
+          <div style="font-size: 0.75rem; color: #64748b;">4 Registered Tool Functions</div>
+        </div>
+      </div>
+      <div
+        style="background: white; border: 1px solid #e2e8f0; border-radius: 10px; padding: 1rem; display: flex; align-items: center; gap: 12px;">
+        <div style="font-size: 1.5rem;">💬</div>
+        <div>
+          <div style="font-weight: 600; font-size: 0.85rem;">Context Window</div>
+          <div style="font-size: 0.75rem; color: #64748b;">Last 20 Messages as History</div>
+        </div>
+      </div>
+      <div
+        style="background: white; border: 1px solid #e2e8f0; border-radius: 10px; padding: 1rem; display: flex; align-items: center; gap: 12px;">
+        <div style="font-size: 1.5rem;">🌡️</div>
+        <div>
+          <div style="font-weight: 600; font-size: 0.85rem;">Temperature: 0.7</div>
+          <div style="font-size: 0.75rem; color: #64748b;">Balanced Creativity</div>
         </div>
       </div>
     </div>
   </div>
 </div>
-

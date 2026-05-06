@@ -43,26 +43,27 @@ const StudentRealtimeProjectsPage = () => {
 
   // Check if premium: Admin OR has active subscription OR has student permissions
   const planName = subscription?.plan?.name?.toLowerCase();
-  
+
   // Use permissions from AuthContext as the primary source of truth for optimistic activation
   const hasCoursesPerm = user?.permissions?.courses || false;
   const hasProjectsPerm = user?.permissions?.realtime_projects || false;
-  
+
   // isPaid true if any paid plan or admin or has explicit project permissions
-  const isPaid = user?.role === 'admin' || 
-                 ['basic', 'pro', 'monthly', 'yearly'].includes(planName) || 
-                 hasProjectsPerm;
+  const isPaid = user?.role === 'admin' ||
+    ['basic', 'pro', 'monthly', 'yearly'].includes(planName) ||
+    hasProjectsPerm;
 
   const isPremiumUser = isPaid; // Simplified: if you paid, you're premium
-  
+
   console.log('User Permissions:', user?.permissions);
   console.log('Is Paid (Access Granted):', isPaid);
 
   const badgeText = planName ? `${planName.charAt(0).toUpperCase() + planName.slice(1)} Plan` : (isPaid ? 'Premium Plan' : 'Free Plan');
 
   // Split projects into Free and Premium
-  const freeProjects = projects.filter(p => p.id?.toLowerCase()?.replace(/[-_]/g, '') === 'todoapp');
-  const premiumProjects = projects.filter(p => p.id?.toLowerCase()?.replace(/[-_]/g, '') !== 'todoapp');
+  const freeAllowedList = ['todoapp', 'prerequisites'];
+  const freeProjects = projects.filter(p => freeAllowedList.includes(p.id?.toLowerCase()?.replace(/[-_]/g, '')));
+  const premiumProjects = projects.filter(p => !freeAllowedList.includes(p.id?.toLowerCase()?.replace(/[-_]/g, '')));
 
   // Show access denied if no permission
   if (!hasAccess && !isLoading && !isPaid) {
@@ -102,7 +103,7 @@ const StudentRealtimeProjectsPage = () => {
               </div>
             </div>
             <p className="text-gray-600">
-              Build real-world projects and learn by doing. {total > 0 && `${total} project${total !== 1 ? 's' : ''} available`}
+              Build real-world projects and learn by doing.
             </p>
           </div>
         </motion.div>

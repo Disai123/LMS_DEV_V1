@@ -38,7 +38,7 @@ module.exports = {
                 name: 'basic',
                 display_name: 'Basic Plan',
                 description: 'For learners and early innovators who want training + mentorship.',
-                price: 299.00,
+                price: 2999.00,
                 currency: 'INR',
                 features: JSON.stringify([
                     'Includes Starter Plan',
@@ -54,7 +54,7 @@ module.exports = {
                 name: 'pro',
                 display_name: 'Pro Plan',
                 description: 'Built for students, professionals, startups, and industries.',
-                price: 799.00,
+                price: 4999.00,
                 currency: 'INR',
                 features: JSON.stringify([
                     'Includes Basic Plan & Starter Plan',

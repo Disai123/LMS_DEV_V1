@@ -10,7 +10,7 @@ class PhaseNavigation {
     this.currentTab = 'overview';
     this.subphases = [];
     this.contentCache = {};
-    
+
     // Initialize when DOM is ready
     if (document.readyState === 'loading') {
       document.addEventListener('DOMContentLoaded', () => this.init());
@@ -44,12 +44,12 @@ class PhaseNavigation {
           this.currentPhase = phaseMap[phaseName] || phaseName.toLowerCase();
         }
       }
-      
+
       // Normalize phase name
       if (this.currentPhase === 'code-development') {
         this.currentPhase = 'development';
       }
-      
+
       this.loadSubphases();
       this.setupEventListeners();
       this.updatePhaseNavigationBar();
@@ -122,13 +122,13 @@ class PhaseNavigation {
     if (!sidebarNav) return;
 
     sidebarNav.innerHTML = '';
-    
+
     this.subphases.forEach((subphase, index) => {
       const navItem = document.createElement('li');
       navItem.className = 'sidebar-nav-item';
-      
+
       const isActive = this.currentTab === subphase.id;
-      
+
       navItem.innerHTML = `
         <button 
           class="sidebar-nav-btn ${isActive ? 'active' : ''}"
@@ -141,10 +141,10 @@ class PhaseNavigation {
           </div>
         </button>
       `;
-      
+
       sidebarNav.appendChild(navItem);
     });
-    
+
     // Ensure all buttons are enabled and not disabled
     const allSidebarButtons = sidebarNav.querySelectorAll('.sidebar-nav-btn');
     allSidebarButtons.forEach(btn => {
@@ -224,7 +224,7 @@ class PhaseNavigation {
     this.renderSidebar();
     this.loadContent(tabId);
     this.updateProgress();
-    
+
     // Hide next button on conclusion/final-steps
     const nextBtn = document.getElementById('next-btn');
     if (nextBtn) {
@@ -244,7 +244,7 @@ class PhaseNavigation {
     if (currentIndex < this.subphases.length - 1) {
       const nextSubphase = this.subphases[currentIndex + 1];
       this.switchTab(nextSubphase.id);
-      
+
       // Scroll to top
       const contentArea = document.querySelector('.content-area');
       if (contentArea) {
@@ -284,10 +284,10 @@ class PhaseNavigation {
     try {
       const currentUrl = new URL(window.location.href);
       const currentPath = currentUrl.pathname;
-      
+
       let projectId = window.__LMS_PROJECT_ID;
       let apiBase = window.__LMS_API_BASE;
-      
+
       if (!apiBase) {
         let backendOrigin = null;
         if (currentPath.includes('/api/realtime-projects/')) {
@@ -302,7 +302,7 @@ class PhaseNavigation {
             backendOrigin = currentUrl.origin;
           }
         }
-        
+
         if (projectId && backendOrigin) {
           apiBase = backendOrigin + '/api/realtime-projects/' + projectId;
           window.__LMS_API_BASE = apiBase;
@@ -316,7 +316,7 @@ class PhaseNavigation {
               const normalizedExtracted = projectId.replace(/\s+/g, '_').toLowerCase();
               return normalizedPf === normalizedExtracted || projectId.includes('_phase') || projectId.includes('Phase');
             });
-            
+
             if (!isPhaseFolder && backendOrigin) {
               apiBase = backendOrigin + '/api/realtime-projects/' + projectId;
               window.__LMS_API_BASE = apiBase;
@@ -325,11 +325,9 @@ class PhaseNavigation {
           }
         }
       }
-      
-      if (!apiBase) {
-        throw new Error('Unable to determine API base URL for content loading');
-      }
-      
+
+      // Removed premature error throw to allow fallback to standalone mode
+
       if (apiBase) {
         const phaseFolders = {
           'brd': 'BRD_phase',
@@ -339,7 +337,7 @@ class PhaseNavigation {
           'testing': 'Testing_phase',
           'deployment': 'Deployment Phase'
         };
-        
+
         let phaseFolder = null;
         if (this.currentPhase && phaseFolders[this.currentPhase]) {
           phaseFolder = phaseFolders[this.currentPhase];
@@ -351,10 +349,10 @@ class PhaseNavigation {
             const foundPhase = Object.keys(phaseFolders).find(
               key => {
                 const pf = phaseFolders[key];
-                return pf === urlPhaseFolder || 
-                       pf.replace(/\s+/g, '_') === urlPhaseFolder ||
-                       pf.replace(/\s+/g, '') === urlPhaseFolder ||
-                       decodeURIComponent(urlPhaseFolder) === pf;
+                return pf === urlPhaseFolder ||
+                  pf.replace(/\s+/g, '_') === urlPhaseFolder ||
+                  pf.replace(/\s+/g, '') === urlPhaseFolder ||
+                  decodeURIComponent(urlPhaseFolder) === pf;
               }
             );
             if (foundPhase) {
@@ -362,7 +360,7 @@ class PhaseNavigation {
             }
           }
         }
-        
+
         let contentPath;
         if (phaseFolder) {
           const encodedFolder = encodeURIComponent(phaseFolder);
@@ -370,11 +368,11 @@ class PhaseNavigation {
         } else {
           contentPath = subphase.file;
         }
-        
+
         const cleanApiBase = apiBase.replace(/\/$/, '');
         const cleanContentPath = contentPath.replace(/^\//, '');
         contentUrl = cleanApiBase + '/' + cleanContentPath;
-        
+
         let token = window.__LMS_TOKEN;
         if (!token) {
           try {
@@ -393,22 +391,22 @@ class PhaseNavigation {
             console.warn('[Navigation] Could not read token from URL:', e);
           }
         }
-        
+
         if (token && !contentUrl.includes('token=')) {
           const separator = contentUrl.includes('?') ? '&' : '?';
           contentUrl = contentUrl + separator + 'token=' + encodeURIComponent(token);
         }
       } else {
-        const pathParts = currentPath.split('/').filter(p => p);
-        pathParts.pop();
-        const directoryPath = '/' + pathParts.join('/') + '/';
-        contentUrl = new URL(subphase.file, currentUrl.origin + directoryPath).href;
+        // Standalone mode: resolve relative to current page (works for file:// and http://)
+        const currentHref = window.location.href;
+        const currentDir = currentHref.substring(0, currentHref.lastIndexOf('/') + 1);
+        contentUrl = currentDir + subphase.file;
       }
-      
+
       if (!contentUrl || contentUrl === 'undefined' || contentUrl.includes('undefined')) {
         throw new Error('Invalid content URL constructed');
       }
-      
+
       const response = await fetch(contentUrl, {
         method: 'GET',
         headers: {
@@ -416,33 +414,33 @@ class PhaseNavigation {
         },
         credentials: 'include'
       });
-      
+
       if (!response.ok) {
         const errorText = await response.text().catch(() => '');
         throw new Error(`Failed to load content: ${response.status} ${response.statusText}. ${errorText.substring(0, 100)}`);
       }
-      
+
       const html = await response.text();
       const parser = new DOMParser();
       const doc = parser.parseFromString(html, 'text/html');
-      
+
       const parserError = doc.querySelector('parsererror');
       if (parserError) {
         console.warn('[Navigation] HTML parsing warning:', parserError.textContent);
       }
-      
+
       const content = doc.querySelector('.content-body') || doc.querySelector('body') || doc.body;
-      
+
       if (!content) {
         throw new Error('No content found in loaded HTML');
       }
 
       this.rewriteAssetUrls(content);
-      
+
       this.contentCache[tabId] = content.innerHTML;
       contentArea.innerHTML = this.contentCache[tabId];
       contentArea.classList.add('content-fade-in');
-      
+
     } catch (error) {
       console.error('Error loading content:', error);
       contentArea.innerHTML = `
@@ -502,7 +500,7 @@ class PhaseNavigation {
         if (token) {
           window.__LMS_TOKEN = token;
         }
-      } catch (e) {}
+      } catch (e) { }
       return token || '';
     };
 
@@ -528,8 +526,8 @@ class PhaseNavigation {
       if (!trimmed) return false;
       const lower = trimmed.toLowerCase();
       if (lower.startsWith('http://') || lower.startsWith('https://') ||
-          lower.startsWith('data:') || lower.startsWith('mailto:') ||
-          lower.startsWith('tel:') || lower.startsWith('#')) {
+        lower.startsWith('data:') || lower.startsWith('mailto:') ||
+        lower.startsWith('tel:') || lower.startsWith('#')) {
         return false;
       }
       return true;
@@ -586,7 +584,7 @@ class PhaseNavigation {
         if (token) {
           window.__LMS_TOKEN = token;
         }
-      } catch (e) {}
+      } catch (e) { }
       return token || '';
     };
 
@@ -612,8 +610,8 @@ class PhaseNavigation {
       if (!trimmed) return false;
       const lower = trimmed.toLowerCase();
       if (lower.startsWith('http://') || lower.startsWith('https://') ||
-          lower.startsWith('data:') || lower.startsWith('mailto:') ||
-          lower.startsWith('tel:') || lower.startsWith('#')) {
+        lower.startsWith('data:') || lower.startsWith('mailto:') ||
+        lower.startsWith('tel:') || lower.startsWith('#')) {
         return false;
       }
       return true;
@@ -623,7 +621,7 @@ class PhaseNavigation {
     footerLogos.forEach((img) => {
       const src = img.getAttribute('src');
       if (!shouldRewrite(src)) return;
-      
+
       let resolvedSrc = src;
       if (src.startsWith('../')) {
         const relativePath = src.replace('../', '');
@@ -633,7 +631,7 @@ class PhaseNavigation {
       } else {
         resolvedSrc = resolveUrl(src);
       }
-      
+
       const withToken = addToken(resolvedSrc);
       img.setAttribute('src', withToken);
     });
@@ -652,18 +650,18 @@ class PhaseNavigation {
     if (!progressList) return;
 
     progressList.innerHTML = '';
-    
+
     this.subphases.forEach((subphase) => {
       const progressItem = document.createElement('div');
       progressItem.className = 'progress-item';
-      
+
       const isActive = this.currentTab === subphase.id;
-      
+
       progressItem.innerHTML = `
         <div class="progress-dot ${isActive ? 'active' : ''}"></div>
         <span class="progress-label ${isActive ? 'active' : ''}">${subphase.label}</span>
       `;
-      
+
       progressList.appendChild(progressItem);
     });
   }
@@ -685,33 +683,45 @@ class PhaseNavigation {
       return;
     }
 
+    // SPECIAL HANDLING FOR LOCAL FILES (file:// protocol)
+    if (window.location.protocol === 'file:') {
+      const currentHref = window.location.href;
+      const pathParts = currentHref.split('/');
+      pathParts.pop(); // Remove current file (e.g., Overview.html)
+      pathParts.pop(); // Remove current phase folder (e.g., BRD_phase)
+      const projectRoot = pathParts.join('/') + '/';
+      const targetUrl = projectRoot + folder + '/Overview.html';
+      window.location.replace(targetUrl);
+      return;
+    }
+
     let targetUrl;
     const currentPath = window.location.pathname;
     const currentHref = window.location.href;
-    
+
     let projectId = window.__LMS_PROJECT_ID;
-    
+
     if (!projectId) {
       const pathParts = currentPath.split('/').filter(p => p);
       const projectIndex = pathParts.findIndex(p => p === 'realtime-projects');
-      
+
       if (projectIndex >= 0 && projectIndex + 1 < pathParts.length) {
         const extractedId = pathParts[projectIndex + 1];
         const phaseFolderNames = Object.values(phaseFolders);
         const isPhaseFolder = phaseFolderNames.some(pf => {
           const normalizedPf = pf.replace(/\s+/g, '_').toLowerCase();
           const normalizedExtracted = extractedId.replace(/\s+/g, '_').toLowerCase();
-          return normalizedPf === normalizedExtracted || 
-                 extractedId.includes('_phase') || 
-                 extractedId.includes('Phase');
+          return normalizedPf === normalizedExtracted ||
+            extractedId.includes('_phase') ||
+            extractedId.includes('Phase');
         });
-        
+
         if (!isPhaseFolder) {
           projectId = extractedId;
         }
       }
     }
-    
+
     if (!projectId && currentHref.includes('/api/realtime-projects/')) {
       const urlMatch = currentHref.match(/\/api\/realtime-projects\/([^\/\?]+)/);
       if (urlMatch && urlMatch[1]) {
@@ -720,25 +730,25 @@ class PhaseNavigation {
         const isPhaseFolder = phaseFolderNames.some(pf => {
           const normalizedPf = pf.replace(/\s+/g, '_').toLowerCase();
           const normalizedExtracted = extractedId.replace(/\s+/g, '_').toLowerCase();
-          return normalizedPf === normalizedExtracted || 
-                 extractedId.includes('_phase') || 
-                 extractedId.includes('Phase');
+          return normalizedPf === normalizedExtracted ||
+            extractedId.includes('_phase') ||
+            extractedId.includes('Phase');
         });
         if (!isPhaseFolder) {
           projectId = extractedId;
         }
       }
     }
-    
+
     if (!projectId) {
       console.error('[Navigation] ERROR: Could not determine project ID!');
       return;
     }
-    
+
     let backendOrigin = null;
     const currentUrl = new URL(window.location.href);
     const currentPathForNav = currentUrl.pathname;
-    
+
     if (currentPathForNav.includes('/api/realtime-projects/')) {
       backendOrigin = currentUrl.origin;
     } else {
@@ -751,20 +761,20 @@ class PhaseNavigation {
         backendOrigin = currentUrl.origin;
       }
     }
-    
+
     const apiBase = backendOrigin + '/api/realtime-projects/' + projectId;
     window.__LMS_API_BASE = apiBase;
     window.__LMS_PROJECT_ID = projectId;
-    
+
     const cleanApiBase = apiBase.replace(/\/$/, '');
     const cleanFolder = folder.replace(/^\//, '');
     targetUrl = cleanApiBase + '/' + encodeURIComponent(cleanFolder) + '/Overview.html';
-    
+
     if (!targetUrl.includes('/api/realtime-projects/' + projectId + '/')) {
       console.error('[Navigation] ERROR: Constructed URL does not contain project ID!');
       return;
     }
-    
+
     let token = window.__LMS_TOKEN;
     if (!token) {
       try {
@@ -783,18 +793,18 @@ class PhaseNavigation {
         console.warn('[Navigation] Could not read token from URL:', e);
       }
     }
-    
+
     if (token && !targetUrl.includes('token=')) {
       const separator = targetUrl.includes('?') ? '&' : '?';
       targetUrl = targetUrl + separator + 'token=' + encodeURIComponent(token);
     }
-    
+
     window.location.replace(targetUrl);
   }
 
   updatePhaseNavigationBar() {
     const phases = ['brd', 'uiux', 'architectural', 'code-development', 'testing', 'deployment'];
-    
+
     phases.forEach(phaseId => {
       const phaseBtn = document.querySelector(`[data-phase="${phaseId}"]`);
       if (phaseBtn) {
@@ -807,7 +817,7 @@ class PhaseNavigation {
         }
       }
     });
-    
+
     const allPhaseButtons = document.querySelectorAll('.phase-nav-btn');
     allPhaseButtons.forEach(btn => {
       btn.classList.remove('locked');
@@ -826,11 +836,11 @@ const phaseNav = new PhaseNavigation();
 window.phaseNav = phaseNav; // Expose globally for use in Conclusion.html buttons
 
 // Clean up any lock-related localStorage data
-(function() {
+(function () {
   if (localStorage.getItem('ecommerceProjectProgress')) {
     localStorage.removeItem('ecommerceProjectProgress');
   }
-  
+
   setTimeout(() => {
     const phaseButtons = document.querySelectorAll('.phase-nav-btn');
     phaseButtons.forEach(btn => {
@@ -841,12 +851,12 @@ window.phaseNav = phaseNav; // Expose globally for use in Conclusion.html button
         circle.style.opacity = '1';
       }
     });
-    
+
     const sidebarButtons = document.querySelectorAll('.sidebar-nav-btn');
     sidebarButtons.forEach(btn => {
       btn.classList.remove('disabled');
       btn.removeAttribute('disabled');
-      
+
       const icon = btn.querySelector('.sidebar-nav-icon');
       if (icon && icon.textContent.includes('🔒')) {
         const tabId = btn.dataset.tab;

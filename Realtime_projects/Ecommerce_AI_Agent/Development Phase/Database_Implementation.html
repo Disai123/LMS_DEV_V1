@@ -1,133 +1,57 @@
 <div class="content-body">
   <div class="content-section">
     <h3 class="content-heading">Database Implementation</h3>
-    <div style="max-width: none;">
-      <p style="color: #4b5563; line-height: 1.75; margin-bottom: 1.5rem;">
-        The database implementation uses Prisma ORM with PostgreSQL. We'll create the Conversation and Message 
-        models, set up migrations, and integrate with existing e-commerce tables.
-      </p>
-      
-      <div style="display: flex; flex-direction: column; gap: 2rem;">
-        <div class="card">
-          <h4 style="font-size: 1.25rem; font-weight: 600; color: #1f2937; margin-bottom: 1.5rem; display: flex; align-items: center; gap: 0.5rem;">
-            <span style="font-size: 1.5rem;">📋</span>
-            Prisma Schema
-          </h4>
-          
-          <div style="background: #f9fafb; border-radius: 0.5rem; padding: 1.5rem; overflow-x: auto;">
-            <pre style="font-family: 'Courier New', monospace; font-size: 0.875rem; color: #1f2937; line-height: 1.6; margin: 0;"><code>// prisma/schema.prisma
+    <p style="color: #4b5563; line-height: 1.75; margin-bottom: 2rem;">
+      The data layer uses <strong>PostgreSQL</strong> via <strong>Prisma ORM</strong>.
+      We implement Conversation and Message models that persist chat history,
+      and integrate with the existing e-commerce product and cart tables.
+    </p>
 
-model Conversation {
-  id        String   @id @default(cuid())
-  userId    String
-  user      User     @relation(fields: [userId], references: [id])
-  title     String?
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-  
-  messages  Message[]
-  
-  @@index([userId])
-  @@map("conversations")
-}
+    <!-- Code Snippet Card -->
+    <div
+      style="background: #1e293b; padding: 1.5rem; border-radius: 12px; color: #cbd5e1; font-family: 'Courier New', Courier, monospace; font-size: 0.85rem; margin-bottom: 2rem; border: 1px solid #334155; box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);">
+      <div style="color: #10b981; margin-bottom: 0.5rem;">// Prisma Schema — Conversation Model</div>
+      <div style="margin-bottom: 0.5rem;"><span style="color: #f472b6;">model</span> <span
+          style="color: #38bdf8;">Conversation</span> {</div>
+      <div style="padding-left: 1rem; margin-bottom: 0.5rem;">id <span style="color: #fbbf24;">String</span> @id
+        @default(cuid())</div>
+      <div style="padding-left: 1rem; margin-bottom: 0.5rem;">userId <span style="color: #fbbf24;">String</span> <span
+          style="color: #94a3b8;">// Bound to JWT user</span></div>
+      <div style="padding-left: 1rem; margin-bottom: 0.5rem;">messages <span style="color: #fbbf24;">Message[]</span>
+      </div>
+      <div style="padding-left: 1rem; margin-bottom: 0.5rem;">createdAt <span style="color: #fbbf24;">DateTime</span>
+        @default(now())</div>
+      <div>}</div>
+    </div>
 
-model Message {
-  id             String       @id @default(cuid())
-  conversationId String
-  conversation   Conversation @relation(fields: [conversationId], references: [id], onDelete: Cascade)
-  role           String       // "user" | "assistant"
-  content        String       @db.Text
-  toolCalls      Json?
-  createdAt      DateTime     @default(now())
-  
-  @@index([conversationId])
-  @@index([createdAt])
-  @@map("messages")
-}</code></pre>
-          </div>
+    <p style="color: #4b5563; line-height: 1.75; margin-bottom: 1.5rem;">
+      The implementation focuses on <strong>user-bound data isolation</strong> — every query is
+      scoped by <code>userId</code> extracted from the validated JWT token, ensuring no cross-user
+      data leakage.
+    </p>
+
+    <!-- Feature List -->
+    <div
+      style="background: white; border: 1px solid #e2e8f0; border-radius: 12px; padding: 1.5rem; box-shadow: 0 1px 3px rgba(0,0,0,0.1);">
+      <h4 style="font-size: 1rem; font-weight: 600; color: #1e293b; margin-bottom: 1rem;">Implementation Highlights</h4>
+      <div style="display: flex; flex-direction: column; gap: 0.75rem;">
+        <div style="display: flex; align-items: center; gap: 10px; font-size: 0.85rem; color: #475569;">
+          <div style="width: 8px; height: 8px; background: #10b981; border-radius: 50%;"></div>
+          <span>Prisma for type-safe, non-blocking database operations.</span>
         </div>
-
-        <div class="card">
-          <h4 style="font-size: 1.25rem; font-weight: 600; color: #1f2937; margin-bottom: 1.5rem; display: flex; align-items: center; gap: 0.5rem;">
-            <span style="font-size: 1.5rem;">🔄</span>
-            Migration Process
-          </h4>
-          
-          <div style="background: #f9fafb; border-radius: 0.5rem; padding: 1.5rem;">
-            <div style="display: flex; flex-direction: column; gap: 1rem;">
-              <div style="border-left: 4px solid #3b82f6; padding-left: 1rem;">
-                <h5 style="font-weight: 600; color: #1f2937; margin-bottom: 0.5rem;">Create Migration</h5>
-                <div style="background: #1f2937; color: #10b981; padding: 1rem; border-radius: 0.5rem; font-family: monospace; font-size: 0.75rem; overflow-x: auto;">
-                  <pre>npx prisma migrate dev --name add_ai_conversations</pre>
-                </div>
-              </div>
-
-              <div style="border-left: 4px solid #10b981; padding-left: 1rem;">
-                <h5 style="font-weight: 600; color: #1f2937; margin-bottom: 0.5rem;">Generate Prisma Client</h5>
-                <div style="background: #1f2937; color: #3b82f6; padding: 1rem; border-radius: 0.5rem; font-family: monospace; font-size: 0.75rem; overflow-x: auto;">
-                  <pre>npx prisma generate</pre>
-                </div>
-              </div>
-
-              <div style="border-left: 4px solid #a855f7; padding-left: 1rem;">
-                <h5 style="font-weight: 600; color: #1f2937; margin-bottom: 0.5rem;">Update User Model</h5>
-                <p style="font-size: 0.875rem; color: #6b7280;">
-                  Add conversations relation to existing User model in schema.
-                </p>
-              </div>
-            </div>
-          </div>
+        <div style="display: flex; align-items: center; gap: 10px; font-size: 0.85rem; color: #475569;">
+          <div style="width: 8px; height: 8px; background: #10b981; border-radius: 50%;"></div>
+          <span>Prisma Migrate for managed schema versioning and migrations.</span>
         </div>
-
-        <div class="card">
-          <h4 style="font-size: 1.25rem; font-weight: 600; color: #1f2937; margin-bottom: 1.5rem; display: flex; align-items: center; gap: 0.5rem;">
-            <span style="font-size: 1.5rem;">🔍</span>
-            Database Queries
-          </h4>
-          
-          <div style="background: #f9fafb; border-radius: 0.5rem; padding: 1.5rem;">
-            <div style="display: flex; flex-direction: column; gap: 1rem;">
-              <div style="border-left: 4px solid #3b82f6; padding-left: 1rem;">
-                <h5 style="font-weight: 600; color: #1f2937; margin-bottom: 0.5rem;">Create Conversation</h5>
-                <div style="background: #1f2937; color: #10b981; padding: 1rem; border-radius: 0.5rem; font-family: monospace; font-size: 0.75rem; overflow-x: auto;">
-                  <pre>await prisma.conversation.create({
-  data: {
-    userId: user.id,
-    title: firstMessage.substring(0, 50)
-  }
-})</pre>
-                </div>
-              </div>
-
-              <div style="border-left: 4px solid #10b981; padding-left: 1rem;">
-                <h5 style="font-weight: 600; color: #1f2937; margin-bottom: 0.5rem;">Load Messages</h5>
-                <div style="background: #1f2937; color: #3b82f6; padding: 1rem; border-radius: 0.5rem; font-family: monospace; font-size: 0.75rem; overflow-x: auto;">
-                  <pre>await prisma.message.findMany({
-  where: { conversationId },
-  orderBy: { createdAt: 'asc' },
-  take: 20
-})</pre>
-                </div>
-              </div>
-
-              <div style="border-left: 4px solid #a855f7; padding-left: 1rem;">
-                <h5 style="font-weight: 600; color: #1f2937; margin-bottom: 0.5rem;">Save Message</h5>
-                <div style="background: #1f2937; color: #a855f7; padding: 1rem; border-radius: 0.5rem; font-family: monospace; font-size: 0.75rem; overflow-x: auto;">
-                  <pre>await prisma.message.create({
-  data: {
-    conversationId,
-    role: 'user',
-    content: message,
-    toolCalls: null
-  }
-})</pre>
-                </div>
-              </div>
-            </div>
-          </div>
+        <div style="display: flex; align-items: center; gap: 10px; font-size: 0.85rem; color: #475569;">
+          <div style="width: 8px; height: 8px; background: #10b981; border-radius: 50%;"></div>
+          <span>Message history capped at 20 records to control token usage.</span>
+        </div>
+        <div style="display: flex; align-items: center; gap: 10px; font-size: 0.85rem; color: #475569;">
+          <div style="width: 8px; height: 8px; background: #10b981; border-radius: 50%;"></div>
+          <span>Cascade delete on Conversation ensures clean message cleanup.</span>
         </div>
       </div>
     </div>
   </div>
 </div>
-

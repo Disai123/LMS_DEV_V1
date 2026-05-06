@@ -24,20 +24,22 @@ const PLAN_META = {
     badgeBg: 'bg-indigo-500',
     cardBorder: 'border-2 border-indigo-500 shadow-xl shadow-indigo-100 scale-[1.02]',
     btnClass: 'bg-green-500 hover:bg-green-600 text-white font-bold',
-    courses: ['Everything in Starter plan', 'Deep Learning', 'NLP', 'GenAI'],
-    projects: ['Everything in Starter plan', 'Ecommerce Web-Full Stack'],
+    includes: 'Starter',
+    courses: ['Deep Learning', 'NLP', 'GenAI'],
+    projects: ['Ecommerce Web-Full Stack'],
     extras: ['Project Certificate', 'Priority Support'],
-    originalPrice: 999,
+    originalPrice: 9999,
   },
   pro: {
     badge: 'BEST VALUE',
     badgeBg: 'bg-green-500',
     cardBorder: 'border-2 border-indigo-200 shadow-lg',
     btnClass: 'bg-indigo-600 hover:bg-indigo-700 text-white font-bold',
-    courses: ['Everything in Basic plan', 'RAG', 'AI Agents', 'MCP'],
-    projects: ['Everything in Basic plan', 'Retail - Single Agent', 'Retail - Multi Agent', 'Travel - MCP'],
+    includes: 'Basic',
+    courses: ['RAG', 'AI Agents', 'MCP'],
+    projects: ['Retail - Single Agent', 'Retail - Multi Agent', 'Travel - MCP'],
     extras: ['Mentor Support'],
-    originalPrice: 1999,
+    originalPrice: 14999,
   }
 };
 
@@ -79,7 +81,9 @@ const PricingPage = () => {
         paymentService.getMySubscription().catch(() => ({ data: { data: null, pendingRequest: null } }))
       ]);
       const order = { starter: 0, basic: 1, pro: 2 };
-      const sorted = (plansRes.data.data || []).sort((a, b) => (order[a.name] ?? 9) - (order[b.name] ?? 9));
+      const sorted = (plansRes.data.data || [])
+        .filter(p => p.name !== 'free')
+        .sort((a, b) => (order[a.name] ?? 9) - (order[b.name] ?? 9));
       setPlans(sorted);
       setCurrentSubscription(subRes.data.data);
       setPendingRequest(subRes.data.pendingRequest);
@@ -97,13 +101,13 @@ const PricingPage = () => {
     try {
       await paymentService.submitTransaction(selectedPlan.id, transactionId.trim());
       toast.success('Your account has been upgraded successfully!');
-      setSelectedPlan(null); 
+      setSelectedPlan(null);
       setTransactionId('');
-      
+
       // Crucial: Invalidate all queries to force re-fetch everywhere
       queryClient.invalidateQueries('my-subscription');
       queryClient.invalidateQueries('realtime-projects');
-      
+
       fetchData();
       await refreshUser(); // Update global auth state
     } catch (err) {
@@ -167,7 +171,7 @@ const PricingPage = () => {
               )}
 
               {/* Current Plan Banner */}
-              {isCurrent && (
+              {isAuthenticated && isCurrent && (
                 <div className="bg-green-500 py-2.5 text-center text-white text-[13px] font-extrabold uppercase tracking-widest border-t border-green-400">
                   ✓ Current Plan
                 </div>
@@ -202,6 +206,18 @@ const PricingPage = () => {
 
                 <div className="w-full h-[1px] bg-slate-100 mb-2"></div>
 
+                {/* Parent Plan Inclusion Badge */}
+                {meta.includes && (
+                  <div className="bg-slate-50 border border-slate-100 rounded-lg px-3 py-2 mb-4 flex items-center gap-2">
+                    <div className="bg-green-500 rounded-full p-0.5">
+                      <Check size={12} className="text-white" strokeWidth={4} />
+                    </div>
+                    <span className="text-[12px] font-bold text-slate-600">
+                      Includes <span className="text-indigo-600">{meta.includes}</span> plan
+                    </span>
+                  </div>
+                )}
+
                 {/* Features List */}
                 <div className="flex-grow mb-4">
                   <SectionHeader text="Courses" />
@@ -221,13 +237,19 @@ const PricingPage = () => {
                 </div>
 
                 {/* CTA Button */}
-                {isCurrent ? (
+                {isAuthenticated && isCurrent ? (
                   <button disabled className="w-full py-2.5 rounded-full font-bold text-white bg-green-500 text-sm">
                     ✓ Active
                   </button>
                 ) : isFree ? (
-                  <button disabled className="w-full py-2.5 rounded-full font-bold text-slate-500 bg-slate-100 text-sm">
-                    Free (Default)
+                  <button
+                    onClick={() => !isAuthenticated && navigate('/login', { state: { from: location } })}
+                    className={`w-full py-2.5 rounded-full font-bold text-sm transition-all duration-200 ${isAuthenticated
+                      ? 'text-slate-500 bg-slate-100 cursor-default'
+                      : 'bg-green-500 hover:bg-green-600 text-white shadow-md'
+                      }`}
+                  >
+                    {isAuthenticated ? 'Free (Default)' : 'BUY'}
                   </button>
 
                 ) : (

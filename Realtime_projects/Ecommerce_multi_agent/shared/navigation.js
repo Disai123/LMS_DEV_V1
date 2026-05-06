@@ -9,7 +9,7 @@ class PhaseNavigation {
     this.currentTab = 'overview';
     this.subphases = [];
     this.contentCache = {};
-    
+
     // Initialize when DOM is ready
     if (document.readyState === 'loading') {
       document.addEventListener('DOMContentLoaded', () => this.init());
@@ -43,12 +43,12 @@ class PhaseNavigation {
           this.currentPhase = phaseMap[phaseName] || phaseName.toLowerCase();
         }
       }
-      
+
       // Normalize phase name
       if (this.currentPhase === 'code-development') {
         this.currentPhase = 'development';
       }
-      
+
       this.loadSubphases();
       this.setupEventListeners();
       this.updatePhaseNavigationBar();
@@ -116,13 +116,13 @@ class PhaseNavigation {
     if (!sidebarNav) return;
 
     sidebarNav.innerHTML = '';
-    
+
     this.subphases.forEach((subphase, index) => {
       const navItem = document.createElement('li');
       navItem.className = 'sidebar-nav-item';
-      
+
       const isActive = this.currentTab === subphase.id;
-      
+
       navItem.innerHTML = `
         <button 
           class="sidebar-nav-btn ${isActive ? 'active' : ''}"
@@ -135,10 +135,10 @@ class PhaseNavigation {
           </div>
         </button>
       `;
-      
+
       sidebarNav.appendChild(navItem);
     });
-    
+
     // Ensure all buttons are enabled and not disabled
     const allSidebarButtons = sidebarNav.querySelectorAll('.sidebar-nav-btn');
     allSidebarButtons.forEach(btn => {
@@ -213,7 +213,7 @@ class PhaseNavigation {
     this.renderSidebar();
     this.loadContent(tabId);
     this.updateProgress();
-    
+
     // Hide next button on conclusion/final-steps
     const nextBtn = document.getElementById('next-btn');
     if (nextBtn) {
@@ -233,7 +233,7 @@ class PhaseNavigation {
     if (currentIndex < this.subphases.length - 1) {
       const nextSubphase = this.subphases[currentIndex + 1];
       this.switchTab(nextSubphase.id);
-      
+
       // Scroll to top
       const contentArea = document.querySelector('.content-area');
       if (contentArea) {
@@ -275,16 +275,16 @@ class PhaseNavigation {
       // Get current page URL and construct the content file URL
       const currentUrl = new URL(window.location.href);
       const currentPath = currentUrl.pathname;
-      
+
       // CRITICAL: Use stored project ID and API base first (set by token interceptor)
       // This is the most reliable source since it's set by the backend
       let projectId = window.__LMS_PROJECT_ID;
       let apiBase = window.__LMS_API_BASE;
-      
+
       console.log('[Navigation] Initial state - projectId:', projectId, 'apiBase:', apiBase);
       console.log('[Navigation] Current URL:', currentUrl.href);
       console.log('[Navigation] Current path:', currentPath);
-      
+
       // If API base not set, construct it from project ID or extract from URL
       if (!apiBase) {
         // First, try to extract backend origin from current URL if it's already an API URL
@@ -298,9 +298,9 @@ class PhaseNavigation {
           // Check if we're on a frontend domain and need to use backend domain
           const currentHost = currentUrl.hostname;
           const currentPort = currentUrl.port;
-          
+
           console.log('[Navigation] Current host:', currentHost, 'port:', currentPort);
-          
+
           if (currentHost === 'gnanamai.com' || currentHost === 'www.gnanamai.com') {
             // Frontend domain - backend should be api.gnanamai.com
             backendOrigin = currentUrl.protocol + '//api.gnanamai.com';
@@ -316,7 +316,7 @@ class PhaseNavigation {
             console.warn('[Navigation] Using current origin as fallback (may be incorrect):', backendOrigin);
           }
         }
-        
+
         if (projectId && backendOrigin) {
           apiBase = backendOrigin + '/api/realtime-projects/' + projectId;
           window.__LMS_API_BASE = apiBase;
@@ -333,7 +333,7 @@ class PhaseNavigation {
               const normalizedExtracted = projectId.replace(/\s+/g, '_').toLowerCase();
               return normalizedPf === normalizedExtracted || projectId.includes('_phase') || projectId.includes('Phase');
             });
-            
+
             if (!isPhaseFolder && backendOrigin) {
               apiBase = backendOrigin + '/api/realtime-projects/' + projectId;
               window.__LMS_API_BASE = apiBase;
@@ -344,7 +344,7 @@ class PhaseNavigation {
             }
           }
         }
-        
+
         // Final fallback: if we still don't have apiBase but we're on an API URL, construct from current URL
         if (!apiBase && currentPath.includes('/api/realtime-projects/')) {
           const pathMatch = currentPath.match(/^\/api\/realtime-projects\/([^\/]+)/);
@@ -356,7 +356,7 @@ class PhaseNavigation {
               const normalizedExtracted = extractedId.replace(/\s+/g, '_').toLowerCase();
               return normalizedPf === normalizedExtracted || extractedId.includes('_phase') || extractedId.includes('Phase');
             });
-            
+
             if (!isPhaseFolder) {
               // Extract project ID by going up the path
               const pathParts = currentPath.split('/').filter(p => p);
@@ -372,23 +372,16 @@ class PhaseNavigation {
           }
         }
       }
-      
-      // Final validation
-      if (!apiBase) {
-        console.error('[Navigation] CRITICAL: Could not determine API base!');
-        console.error('[Navigation] Current URL:', currentUrl.href);
-        console.error('[Navigation] Current path:', currentPath);
-        console.error('[Navigation] Project ID:', projectId);
-        throw new Error('Unable to determine API base URL for content loading');
-      }
-      
+
+      // Removed premature error throw to allow fallback to standalone mode (local file system)
+
       console.log('[Navigation] Final API base:', apiBase);
-      
+
       if (apiBase) {
         // Use LMS API base to construct the URL
         // Format: /api/realtime-projects/{projectId}/{phase_folder}/{content_file}
         // Example: /api/realtime-projects/ecommerce/BRD_phase/Overview_Content.html
-        
+
         // Map phase ID to folder name
         const phaseFolders = {
           'brd': 'BRD_phase',
@@ -398,9 +391,9 @@ class PhaseNavigation {
           'testing': 'Testing_phase',
           'deployment': 'Deployment Phase'
         };
-        
+
         let phaseFolder = null;
-        
+
         // First, try to get phase folder from current phase
         if (this.currentPhase && phaseFolders[this.currentPhase]) {
           phaseFolder = phaseFolders[this.currentPhase];
@@ -410,7 +403,7 @@ class PhaseNavigation {
           const pathParts = currentPath.split('/').filter(p => p);
           // pathParts = ['api', 'realtime-projects', 'ecommerce', 'BRD_phase', 'Overview.html']
           const projectIndex = pathParts.findIndex(p => p === 'realtime-projects');
-          
+
           if (projectIndex >= 0 && projectIndex + 3 < pathParts.length) {
             // Get phase folder from URL (index 3 after 'api', 'realtime-projects', projectId)
             const urlPhaseFolder = pathParts[projectIndex + 3];
@@ -418,10 +411,10 @@ class PhaseNavigation {
             const foundPhase = Object.keys(phaseFolders).find(
               key => {
                 const pf = phaseFolders[key];
-                return pf === urlPhaseFolder || 
-                       pf.replace(/\s+/g, '_') === urlPhaseFolder ||
-                       pf.replace(/\s+/g, '') === urlPhaseFolder ||
-                       decodeURIComponent(urlPhaseFolder) === pf;
+                return pf === urlPhaseFolder ||
+                  pf.replace(/\s+/g, '_') === urlPhaseFolder ||
+                  pf.replace(/\s+/g, '') === urlPhaseFolder ||
+                  decodeURIComponent(urlPhaseFolder) === pf;
               }
             );
             if (foundPhase) {
@@ -430,7 +423,7 @@ class PhaseNavigation {
             }
           }
         }
-        
+
         // Construct the content path with phase folder
         let contentPath;
         if (phaseFolder) {
@@ -444,13 +437,13 @@ class PhaseNavigation {
           contentPath = subphase.file;
           console.warn('[Navigation] No phase folder found, using filename only:', contentPath);
         }
-        
+
         // Construct final URL
         const cleanApiBase = apiBase.replace(/\/$/, ''); // Remove trailing slash
         const cleanContentPath = contentPath.replace(/^\//, ''); // Remove leading slash
         contentUrl = cleanApiBase + '/' + cleanContentPath;
         console.log('[Navigation] Final content URL:', contentUrl);
-        
+
         // Get token - try window variable first, then URL
         let token = window.__LMS_TOKEN;
         if (!token) {
@@ -470,7 +463,7 @@ class PhaseNavigation {
             console.warn('[Navigation] Could not read token from URL:', e);
           }
         }
-        
+
         // Add token if available (CRITICAL for authentication)
         if (token && !contentUrl.includes('token=')) {
           const separator = contentUrl.includes('?') ? '&' : '?';
@@ -479,22 +472,21 @@ class PhaseNavigation {
           console.warn('[Navigation] No token available for content request!');
         }
       } else {
-        // Standalone mode: resolve relative to current page
-        const pathParts = currentPath.split('/').filter(p => p);
-        pathParts.pop(); // Remove filename
-        const directoryPath = '/' + pathParts.join('/') + '/';
-        contentUrl = new URL(subphase.file, currentUrl.origin + directoryPath).href;
+        // Standalone mode: resolve relative to current page (works for file:// and http://)
+        const currentHref = window.location.href;
+        const currentDir = currentHref.substring(0, currentHref.lastIndexOf('/') + 1);
+        contentUrl = currentDir + subphase.file;
       }
-      
+
       console.log('[Navigation] Loading content from:', contentUrl);
       console.log('[Navigation] Token available:', !!window.__LMS_TOKEN);
       console.log('[Navigation] API Base:', apiBase || 'Not set (standalone mode)');
-      
+
       // Validate URL before fetching
       if (!contentUrl || contentUrl === 'undefined' || contentUrl.includes('undefined')) {
         throw new Error('Invalid content URL constructed');
       }
-      
+
       const response = await fetch(contentUrl, {
         method: 'GET',
         headers: {
@@ -502,38 +494,38 @@ class PhaseNavigation {
         },
         credentials: 'include' // Include cookies if any
       });
-      
+
       if (!response.ok) {
         const errorText = await response.text().catch(() => '');
         throw new Error(`Failed to load content: ${response.status} ${response.statusText}. ${errorText.substring(0, 100)}`);
       }
-      
+
       const html = await response.text();
-      
+
       // Extract content from the HTML (assumes content is in a specific container)
       const parser = new DOMParser();
       const doc = parser.parseFromString(html, 'text/html');
-      
+
       // Check for parsing errors
       const parserError = doc.querySelector('parsererror');
       if (parserError) {
         console.warn('[Navigation] HTML parsing warning:', parserError.textContent);
       }
-      
+
       const content = doc.querySelector('.content-body') || doc.querySelector('body') || doc.body;
-      
+
       if (!content) {
         throw new Error('No content found in loaded HTML');
       }
 
       // Rewrite asset URLs to include project base and token
       this.rewriteAssetUrls(content);
-      
+
       // Cache and display
       this.contentCache[tabId] = content.innerHTML;
       contentArea.innerHTML = this.contentCache[tabId];
       contentArea.classList.add('content-fade-in');
-      
+
     } catch (error) {
       console.error('Error loading content:', error);
       console.error('Content URL attempted:', contentUrl);
@@ -574,7 +566,7 @@ class PhaseNavigation {
           // Get current phase folder from API base or current path
           const currentPath = window.location.pathname;
           let phaseFolder = '';
-          
+
           // Extract phase folder from current path if available
           const pathMatch = currentPath.match(/\/api\/realtime-projects\/[^\/]+\/([^\/]+)\//);
           if (pathMatch && pathMatch[1]) {
@@ -588,7 +580,7 @@ class PhaseNavigation {
           // Relative path without ./ or ../ - assume it's relative to project root
           return apiBase + url;
         }
-        
+
         // Absolute path or full URL
         return new URL(url, apiBase).href;
       } catch (e) {
@@ -640,8 +632,8 @@ class PhaseNavigation {
       if (!trimmed) return false;
       const lower = trimmed.toLowerCase();
       if (lower.startsWith('http://') || lower.startsWith('https://') ||
-          lower.startsWith('data:') || lower.startsWith('mailto:') ||
-          lower.startsWith('tel:') || lower.startsWith('#')) {
+        lower.startsWith('data:') || lower.startsWith('mailto:') ||
+        lower.startsWith('tel:') || lower.startsWith('#')) {
         return false;
       }
       return true;
@@ -672,11 +664,11 @@ class PhaseNavigation {
     // Rewrite footer logo and other assets when served through LMS API
     const apiBaseRaw = window.__LMS_API_BASE || '';
     if (!apiBaseRaw) return;
-    
+
     const apiBase = apiBaseRaw.replace(/\/$/, '') + '/';
     const footer = document.querySelector('footer');
     if (!footer) return;
-    
+
     // Resolve URL relative to API base
     const resolveUrl = (url) => {
       try {
@@ -685,7 +677,7 @@ class PhaseNavigation {
         return url;
       }
     };
-    
+
     const getToken = () => {
       let token = window.__LMS_TOKEN;
       if (token) return token;
@@ -706,7 +698,7 @@ class PhaseNavigation {
       }
       return token || '';
     };
-    
+
     const addToken = (url) => {
       const token = getToken();
       if (!token) return url;
@@ -722,26 +714,26 @@ class PhaseNavigation {
         return url + separator + 'token=' + encodeURIComponent(token);
       }
     };
-    
+
     const shouldRewrite = (value) => {
       if (!value) return false;
       const trimmed = value.trim();
       if (!trimmed) return false;
       const lower = trimmed.toLowerCase();
       if (lower.startsWith('http://') || lower.startsWith('https://') ||
-          lower.startsWith('data:') || lower.startsWith('mailto:') ||
-          lower.startsWith('tel:') || lower.startsWith('#')) {
+        lower.startsWith('data:') || lower.startsWith('mailto:') ||
+        lower.startsWith('tel:') || lower.startsWith('#')) {
         return false;
       }
       return true;
     };
-    
+
     // Rewrite footer logo images
     const footerLogos = footer.querySelectorAll('img[src*="lms_logo"]');
     footerLogos.forEach((img) => {
       const src = img.getAttribute('src');
       if (!shouldRewrite(src)) return;
-      
+
       // Handle relative paths - convert ../lms_logo.svg to proper API path
       let resolvedSrc = src;
       if (src.startsWith('../')) {
@@ -754,7 +746,7 @@ class PhaseNavigation {
       } else {
         resolvedSrc = resolveUrl(src);
       }
-      
+
       const withToken = addToken(resolvedSrc);
       img.setAttribute('src', withToken);
     });
@@ -776,18 +768,18 @@ class PhaseNavigation {
     if (!progressList) return;
 
     progressList.innerHTML = '';
-    
+
     this.subphases.forEach((subphase) => {
       const progressItem = document.createElement('div');
       progressItem.className = 'progress-item';
-      
+
       const isActive = this.currentTab === subphase.id;
-      
+
       progressItem.innerHTML = `
         <div class="progress-dot ${isActive ? 'active' : ''}"></div>
         <span class="progress-label ${isActive ? 'active' : ''}">${subphase.label}</span>
       `;
-      
+
       progressList.appendChild(progressItem);
     });
   }
@@ -810,41 +802,53 @@ class PhaseNavigation {
       return;
     }
 
+    // SPECIAL HANDLING FOR LOCAL FILES (file:// protocol)
+    if (window.location.protocol === 'file:') {
+      const currentHref = window.location.href;
+      const pathParts = currentHref.split('/');
+      pathParts.pop(); // Remove current file
+      pathParts.pop(); // Remove current phase folder
+      const projectRoot = pathParts.join('/') + '/';
+      const targetUrl = projectRoot + folder + '/Overview.html';
+      window.location.replace(targetUrl);
+      return;
+    }
+
     let targetUrl;
     const currentPath = window.location.pathname;
     const currentHref = window.location.href;
-    
+
     // CRITICAL: Always use stored project ID first (set by token interceptor)
     // This is the most reliable source since it's set by the backend
     let projectId = window.__LMS_PROJECT_ID;
-    
+
     // If not available, extract from current path
     // Path format: /api/realtime-projects/{projectId}/{phase_folder}/{file.html}
     if (!projectId) {
       const pathParts = currentPath.split('/').filter(p => p);
       const projectIndex = pathParts.findIndex(p => p === 'realtime-projects');
-      
+
       if (projectIndex >= 0 && projectIndex + 1 < pathParts.length) {
         const extractedId = pathParts[projectIndex + 1];
-        
+
         // Check if it's actually a project ID (not a phase folder)
         const phaseFolderNames = Object.values(phaseFolders);
         const isPhaseFolder = phaseFolderNames.some(pf => {
           // Handle spaces in folder names (e.g., "Development Phase")
           const normalizedPf = pf.replace(/\s+/g, '_').toLowerCase();
           const normalizedExtracted = extractedId.replace(/\s+/g, '_').toLowerCase();
-          return normalizedPf === normalizedExtracted || 
-                 extractedId.includes('_phase') || 
-                 extractedId.includes('Phase');
+          return normalizedPf === normalizedExtracted ||
+            extractedId.includes('_phase') ||
+            extractedId.includes('Phase');
         });
-        
+
         if (!isPhaseFolder) {
           projectId = extractedId;
           console.log('[Navigation] Extracted project ID from path:', projectId);
         }
       }
     }
-    
+
     // If still no project ID, try to extract from href
     if (!projectId && currentHref.includes('/api/realtime-projects/')) {
       const urlMatch = currentHref.match(/\/api\/realtime-projects\/([^\/\?]+)/);
@@ -854,9 +858,9 @@ class PhaseNavigation {
         const isPhaseFolder = phaseFolderNames.some(pf => {
           const normalizedPf = pf.replace(/\s+/g, '_').toLowerCase();
           const normalizedExtracted = extractedId.replace(/\s+/g, '_').toLowerCase();
-          return normalizedPf === normalizedExtracted || 
-                 extractedId.includes('_phase') || 
-                 extractedId.includes('Phase');
+          return normalizedPf === normalizedExtracted ||
+            extractedId.includes('_phase') ||
+            extractedId.includes('Phase');
         });
         if (!isPhaseFolder) {
           projectId = extractedId;
@@ -864,7 +868,7 @@ class PhaseNavigation {
         }
       }
     }
-    
+
     // If still no project ID, we can't proceed
     if (!projectId) {
       console.error('[Navigation] ERROR: Could not determine project ID!');
@@ -873,20 +877,20 @@ class PhaseNavigation {
       console.error('[Navigation] Stored project ID:', window.__LMS_PROJECT_ID);
       return;
     }
-    
+
     // Construct API base with the project ID
     // Use stored API base if available, otherwise determine backend origin
     let backendOrigin = null;
     const currentUrl = new URL(window.location.href);
     const currentPathForNav = currentUrl.pathname; // Use different variable name to avoid conflict
-    
+
     if (currentPathForNav.includes('/api/realtime-projects/')) {
       // Current URL is already pointing to backend API - use current origin
       backendOrigin = currentUrl.origin;
     } else {
       // Not an API URL - try to determine backend URL
       const currentHost = currentUrl.hostname;
-      
+
       if (currentHost === 'gnanamai.com' || currentHost === 'www.gnanamai.com') {
         // Frontend domain - backend should be api.gnanamai.com
         backendOrigin = currentUrl.protocol + '//api.gnanamai.com';
@@ -901,20 +905,20 @@ class PhaseNavigation {
         console.warn('[Navigation] Using current origin as fallback (may be incorrect):', backendOrigin);
       }
     }
-    
+
     const apiBase = backendOrigin + '/api/realtime-projects/' + projectId;
     window.__LMS_API_BASE = apiBase; // Cache it
     window.__LMS_PROJECT_ID = projectId; // Cache project ID
     console.log('[Navigation] Using project ID:', projectId);
     console.log('[Navigation] Backend origin:', backendOrigin);
     console.log('[Navigation] API base:', apiBase);
-    
+
     // Construct target URL: /api/realtime-projects/{projectId}/{phase_folder}/Overview.html
     const cleanApiBase = apiBase.replace(/\/$/, ''); // Remove trailing slash
     // Handle folder names with spaces (e.g., "Development Phase")
     const cleanFolder = folder.replace(/^\//, ''); // Remove leading slash
     targetUrl = cleanApiBase + '/' + encodeURIComponent(cleanFolder) + '/Overview.html';
-    
+
     // Final validation: ensure URL contains project ID
     if (!targetUrl.includes('/api/realtime-projects/' + projectId + '/')) {
       console.error('[Navigation] ERROR: Constructed URL does not contain project ID!');
@@ -922,11 +926,11 @@ class PhaseNavigation {
       console.error('[Navigation] Project ID:', projectId);
       return;
     }
-    
+
     console.log('[Navigation] API Base:', cleanApiBase);
     console.log('[Navigation] Phase Folder:', cleanFolder);
     console.log('[Navigation] Constructed phase URL:', targetUrl);
-    
+
     // Get token - try window variable first, then URL
     let token = window.__LMS_TOKEN;
     if (!token) {
@@ -946,15 +950,15 @@ class PhaseNavigation {
         console.warn('[Navigation] Could not read token from URL:', e);
       }
     }
-    
+
     // Add token if available
     if (token && !targetUrl.includes('token=')) {
       const separator = targetUrl.includes('?') ? '&' : '?';
       targetUrl = targetUrl + separator + 'token=' + encodeURIComponent(token);
     }
-    
+
     console.log('[Navigation] Navigating to phase:', phaseId, 'Folder:', folder, 'Final URL:', targetUrl);
-    
+
     // Navigate to the target URL - use replace to avoid adding to history
     window.location.replace(targetUrl);
   }
@@ -962,7 +966,7 @@ class PhaseNavigation {
   updatePhaseNavigationBar() {
     // Remove any locked states from phase navigation buttons
     const phases = ['brd', 'uiux', 'architectural', 'code-development', 'testing', 'deployment'];
-    
+
     phases.forEach(phaseId => {
       const phaseBtn = document.querySelector(`[data-phase="${phaseId}"]`);
       if (phaseBtn) {
@@ -976,7 +980,7 @@ class PhaseNavigation {
         }
       }
     });
-    
+
     // Also remove any lock classes from all phase buttons (in case some were missed)
     const allPhaseButtons = document.querySelectorAll('.phase-nav-btn');
     allPhaseButtons.forEach(btn => {
@@ -995,12 +999,12 @@ class PhaseNavigation {
 const phaseNav = new PhaseNavigation();
 
 // Clean up any lock-related localStorage data and remove lock classes on page load
-(function() {
+(function () {
   // Clear old progress data that might have lock information
   if (localStorage.getItem('ecommerceProjectProgress')) {
     localStorage.removeItem('ecommerceProjectProgress');
   }
-  
+
   // Remove any lock classes from phase navigation buttons
   setTimeout(() => {
     const phaseButtons = document.querySelectorAll('.phase-nav-btn');
@@ -1012,13 +1016,13 @@ const phaseNav = new PhaseNavigation();
         circle.style.opacity = '1';
       }
     });
-    
+
     // Remove any disabled classes from sidebar buttons
     const sidebarButtons = document.querySelectorAll('.sidebar-nav-btn');
     sidebarButtons.forEach(btn => {
       btn.classList.remove('disabled');
       btn.removeAttribute('disabled');
-      
+
       // Remove lock icons if present
       const icon = btn.querySelector('.sidebar-nav-icon');
       if (icon && icon.textContent.includes('🔒')) {

@@ -3,7 +3,7 @@
     "name": "Ecommerce Multi-Agent Assistant",
     "description": "An advanced project implementing a multi-agent system using LangGraph and FastAPI for a delegated shopping experience.",
     "category": "Multi-Agent AI System",
-    "level": "Advanced",
+    "difficulty": "advanced",
     "duration": "4 Weeks",
     "stack": [
         "LangGraph",

@@ -33,16 +33,17 @@ const checkProjectAccess = async (userId, userRole, projectId = null) => {
       return true;
     }
 
-    // Basic Plan (499): Access to Todo App and Ecommerce Web
+    // Basic Plan (499): Access to Prerequisites, Todo App and Ecommerce Web
     if (planName.includes('basic')) {
       if (!projectId) return true; // Allow access to list
-      const basicAllowed = ['todoapp', 'ecommerceweb'];
+      const basicAllowed = ['prerequisites', 'todoapp', 'ecommerceweb'];
       return basicAllowed.includes(normalizedPid);
     }
 
-    // Starter/Free Plan: Access to Todo App only
+    // Starter/Free Plan: Access to Prerequisites and Todo App
     if (!projectId) return true; // Allow access to list
-    return normalizedPid === 'todoapp';
+    const freeAllowed = ['prerequisites', 'todoapp'];
+    return freeAllowed.includes(normalizedPid);
 
   } catch (error) {
     console.error('Error checking project access:', error);
@@ -88,28 +89,29 @@ const getProjectsList = async (req, res, next) => {
       if (userRole === 'admin' || (planName && planName.includes('pro'))) {
         isLocked = false;
       }
-      // Basic Plan (499): Unlock Todo and Ecommerce
+      // Basic Plan (499): Unlock Prerequisites, Todo and Ecommerce
       else if (planName && planName.includes('basic')) {
-        const basicAllowed = ['todoapp', 'ecommerceweb'];
+        const basicAllowed = ['prerequisites', 'todoapp', 'ecommerceweb'];
         if (basicAllowed.includes(pIdNormalized)) {
           isLocked = false;
         }
       }
-      // Free Plan: Unlock only Todo App
+      // Free Plan: Unlock Prerequisites and Todo App
       else {
-        if (pIdNormalized === 'todoapp') {
+        const freeAllowed = ['prerequisites', 'todoapp'];
+        if (freeAllowed.includes(pIdNormalized)) {
           isLocked = false;
         }
       }
 
       p.isLocked = isLocked;
-      
+
       // Debug logging for the user
       if (index === 0) {
         console.log(`[REALTIME-ACCESS] Processing for User: ${userId}, Role: ${userRole}, Plan: ${planName}`);
       }
       console.log(`[REALTIME-ACCESS] Project [${index}] ${p.id}: isLocked = ${isLocked}`);
-      
+
       return p;
     });
 
@@ -224,7 +226,7 @@ const serveProjectMainPage = async (req, res, next) => {
     const { projectId } = req.params;
     // Get any sub-path (for SPA routing like /ecommerce/home, /ecommerce/products, etc.)
     const subPath = req.params[0] || ''; // This will be undefined if no sub-path
-    
+
     // Redirect to trailing slash if it's a project root and missing the slash
     // This is critical for relative path resolution (e.g., BRD_phase/Overview.html)
     if (!subPath && !req.path.endsWith('/')) {
@@ -1563,7 +1565,7 @@ const serveProjectMainPage = async (req, res, next) => {
     res.setHeader('Cache-Control', 'no-cache, no-store, must-revalidate');
     res.setHeader('X-Content-Type-Options', 'nosniff');
     console.log(`[serveProjectMainPage] Sending HTML response, length: ${html.length}, backendUrl: ${backendUrl}`);
-    
+
     // Store in cache for future requests
     if (htmlCache.size >= CACHE_MAX_SIZE) {
       const firstKey = htmlCache.keys().next().value;

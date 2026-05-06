@@ -1,71 +1,75 @@
 <div class="content-body">
   <div class="content-section">
     <h3 class="content-heading">Development Overview</h3>
-    
+
     <!-- Video Section -->
     <div style="margin-bottom: 2rem;">
       <h4 style="font-size: 1.25rem; font-weight: 600; color: #1f2937; margin-bottom: 1rem;">Project Video</h4>
-      <div style="background: #ffffff; border: 1px solid #e5e7eb; border-radius: 0.75rem; padding: 1.5rem; box-shadow: 0 1px 3px rgba(0,0,0,0.1);">
-        <div style="position: relative; padding-bottom: 56.25%; height: 0; overflow: hidden; border-radius: 0.5rem; background: #000;">
-          <iframe 
-            src="https://drive.google.com/file/d/1K3lDGsPomZFCrdLn4_O_2hr5PRSD3qPA/preview" 
+      <div
+        style="background: #ffffff; border: 1px solid #e5e7eb; border-radius: 0.75rem; padding: 1.5rem; box-shadow: 0 1px 3px rgba(0,0,0,0.1);">
+        <div
+          style="position: relative; padding-bottom: 56.25%; height: 0; overflow: hidden; border-radius: 0.5rem; background: #000;">
+          <iframe src="https://drive.google.com/file/d/1K3lDGsPomZFCrdLn4_O_2hr5PRSD3qPA/preview"
             style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; border: none;"
-            allow="autoplay; encrypted-media"
-            allowfullscreen>
+            allow="autoplay; encrypted-media" allowfullscreen>
           </iframe>
         </div>
       </div>
     </div>
 
-    <div>
-      <p style="color: #4b5563; line-height: 1.75; margin-bottom: 1.5rem;">
-        This phase covers the implementation of all components for the <strong>askunicart AI agent</strong>. 
-        We'll build the backend API routes, tool modules, frontend chat component, database schema, and 
-        AI integration code.
-      </p>
-      
-      <div style="background: #f0fdf4; border-radius: 0.5rem; padding: 1.5rem; margin-bottom: 1.5rem;">
-        <h4 style="font-size: 1.125rem; font-weight: 600; color: #1f2937; margin-bottom: 0.75rem;">Development Components</h4>
-        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1rem; margin-top: 1rem;">
-          <div style="background: white; padding: 1rem; border-radius: 0.5rem; border: 1px solid #e5e7eb;">
-            <div style="font-size: 1.5rem; margin-bottom: 0.5rem;">⚙️</div>
-            <div style="font-weight: 600; color: #1f2937; margin-bottom: 0.25rem;">Backend API</div>
-            <div style="font-size: 0.875rem; color: #6b7280;">Next.js API routes</div>
+    <p style="color: #4b5563; line-height: 1.75; margin-bottom: 2rem;">
+      Development in this project focuses on building a <strong>Single AI Agent</strong> powered by
+      OpenAI function calling. We build deterministic tool modules first, then wire the backend API
+      route that orchestrates the agent's reasoning loop and tool execution.
+    </p>
+
+    <!-- Development Timeline -->
+    <div
+      style="background: white; border: 1px solid #e5e7eb; border-radius: 12px; padding: 1.5rem; margin-bottom: 2rem; box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);">
+      <h4 style="font-size: 1.125rem; font-weight: 600; color: #1f2937; margin-bottom: 1.5rem;">Development Steps</h4>
+      <div style="display: flex; flex-direction: column; gap: 1.25rem;">
+        <div style="display: flex; gap: 12px;">
+          <div
+            style="width: 24px; height: 24px; background: #10b981; color: #fff; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 0.75rem; flex-shrink: 0;">
+            1</div>
+          <div>
+            <div style="font-weight: 600; font-size: 0.9rem;">Tool Module Development</div>
+            <div style="font-size: 0.8rem; color: #6b7280;">Implementing Catalog Scout, Inventory Sentinel,
+              Recommendation Engine, and Cart Manager.</div>
           </div>
-          <div style="background: white; padding: 1rem; border-radius: 0.5rem; border: 1px solid #e5e7eb;">
-            <div style="font-size: 1.5rem; margin-bottom: 0.5rem;">🔧</div>
-            <div style="font-weight: 600; color: #1f2937; margin-bottom: 0.25rem;">Tool Modules</div>
-            <div style="font-size: 0.875rem; color: #6b7280;">4 specialized tools</div>
+        </div>
+        <div style="display: flex; gap: 12px;">
+          <div
+            style="width: 24px; height: 24px; background: #3b82f6; color: #fff; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 0.75rem; flex-shrink: 0;">
+            2</div>
+          <div>
+            <div style="font-weight: 600; font-size: 0.9rem;">Backend API Route</div>
+            <div style="font-size: 0.8rem; color: #6b7280;">Next.js API route with JWT auth, conversation history, and
+              OpenAI function calling loop.</div>
           </div>
-          <div style="background: white; padding: 1rem; border-radius: 0.5rem; border: 1px solid #e5e7eb;">
-            <div style="font-size: 1.5rem; margin-bottom: 0.5rem;">💻</div>
-            <div style="font-weight: 600; color: #1f2937; margin-bottom: 0.25rem;">Frontend</div>
-            <div style="font-size: 0.875rem; color: #6b7280;">React chat component</div>
-          </div>
-          <div style="background: white; padding: 1rem; border-radius: 0.5rem; border: 1px solid #e5e7eb;">
-            <div style="font-size: 1.5rem; margin-bottom: 0.5rem;">🗄️</div>
-            <div style="font-weight: 600; color: #1f2937; margin-bottom: 0.25rem;">Database</div>
-            <div style="font-size: 0.875rem; color: #6b7280;">Prisma schema & migrations</div>
-          </div>
-          <div style="background: white; padding: 1rem; border-radius: 0.5rem; border: 1px solid #e5e7eb;">
-            <div style="font-size: 1.5rem; margin-bottom: 0.5rem;">🤖</div>
-            <div style="font-weight: 600; color: #1f2937; margin-bottom: 0.25rem;">AI Integration</div>
-            <div style="font-size: 0.875rem; color: #6b7280;">OpenAI SDK setup</div>
+        </div>
+        <div style="display: flex; gap: 12px;">
+          <div
+            style="width: 24px; height: 24px; background: #a855f7; color: #fff; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 0.75rem; flex-shrink: 0;">
+            3</div>
+          <div>
+            <div style="font-weight: 600; font-size: 0.9rem;">Reactive UI Widget</div>
+            <div style="font-size: 0.8rem; color: #6b7280;">React chat component with Zustand state management for
+              floating chat interface.</div>
           </div>
         </div>
       </div>
+    </div>
 
-      <div style="background: #eff6ff; border-radius: 0.5rem; padding: 1.5rem;">
-        <h4 style="font-size: 1.125rem; font-weight: 600; color: #1f2937; margin-bottom: 0.75rem;">Technology Stack</h4>
-        <ul style="list-style: disc; list-style-position: inside; display: flex; flex-direction: column; gap: 0.5rem; color: #4b5563;">
-          <li><strong>Frontend:</strong> React 18, Next.js 14, TypeScript, Tailwind CSS, Zustand</li>
-          <li><strong>Backend:</strong> Next.js API Routes, Node.js</li>
-          <li><strong>Database:</strong> PostgreSQL, Prisma ORM</li>
-          <li><strong>AI:</strong> OpenAI SDK, GPT-4o-mini</li>
-          <li><strong>Authentication:</strong> JWT tokens</li>
-        </ul>
-      </div>
+    <div style="background: #f0fdf4; border-radius: 12px; padding: 1.5rem; border: 1px solid #bbf7d0;">
+      <h4 style="font-size: 1rem; font-weight: 600; color: #166534; margin-bottom: 0.75rem;">Quality Standards</h4>
+      <ul
+        style="list-style: none; display: flex; flex-direction: column; gap: 0.75rem; font-size: 0.9rem; color: #15803d;">
+        <li>✅ JWT-validated authentication on every request</li>
+        <li>✅ Tool execution sandboxed per user_id</li>
+        <li>✅ Response time target &lt; 2 seconds end-to-end</li>
+        <li>✅ Full TypeScript type safety throughout</li>
+      </ul>
     </div>
   </div>
 </div>
-
