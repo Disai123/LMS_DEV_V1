@@ -1,15 +1,24 @@
 require('dotenv').config();
+const path = require('path');
 
-// Helper function to determine if database is remote (requires SSL)
+function trimEnv(value) {
+  if (value === undefined || value === null) return value;
+  return String(value).trim().replace(/^["']|["']$/g, '');
+}
+
+function getSqliteStorage() {
+  const storage = trimEnv(process.env.DB_STORAGE) || './database.sqlite';
+  return path.isAbsolute(storage) ? storage : path.resolve(process.cwd(), storage);
+}
+
 function isRemoteDatabase(host) {
-  return host && 
-         host !== 'localhost' && 
-         host !== '127.0.0.1' && 
+  return host &&
+         host !== 'localhost' &&
+         host !== '127.0.0.1' &&
          !host.startsWith('192.168.') &&
          !host.startsWith('10.');
 }
 
-// Get SSL configuration based on host
 function getSSLConfig(host) {
   if (isRemoteDatabase(host)) {
     return {
@@ -20,62 +29,71 @@ function getSSLConfig(host) {
   return false;
 }
 
-module.exports = {
-  development: {
-    username: process.env.DB_USER || 'postgres',
-    password: process.env.DB_PASSWORD || 'password',
-    database: process.env.DB_DATABASE || process.env.DB_NAME || 'lms_db',
-    host: process.env.DB_HOST || 'localhost',
-    port: process.env.DB_PORT || 5432,
+function isSqliteDialect() {
+  return trimEnv(process.env.DB_DIALECT) === 'sqlite';
+}
+
+function buildPostgresConfig(env, overrides = {}) {
+  const host = trimEnv(process.env.DB_HOST) || 'localhost';
+  return {
+    username: trimEnv(process.env.DB_USER) || 'postgres',
+    password: trimEnv(process.env.DB_PASSWORD) || 'password',
+    database: trimEnv(process.env.DB_DATABASE || process.env.DB_NAME) || 'lms_db',
+    host,
+    port: trimEnv(process.env.DB_PORT) || 5432,
     dialect: 'postgres',
-    logging: console.log,
+    logging: env === 'development' ? console.log : false,
+    pool: {
+      max: env === 'production' ? 20 : 5,
+      min: env === 'production' ? 5 : 0,
+      acquire: 30000,
+      idle: 10000
+    },
+    dialectOptions: {
+      ssl: env === 'production'
+        ? { require: true, rejectUnauthorized: false }
+        : getSSLConfig(host)
+    },
+    ...overrides
+  };
+}
+
+function buildSqliteConfig(env) {
+  return {
+    dialect: 'sqlite',
+    storage: getSqliteStorage(),
+    logging: env === 'development' ? console.log : false,
     pool: {
       max: 5,
       min: 0,
       acquire: 30000,
       idle: 10000
     },
-    dialectOptions: {
-      ssl: getSSLConfig(process.env.DB_HOST || 'localhost')
-    }
-  },
-  test: {
-    username: process.env.DB_USER,
-    password: process.env.DB_PASSWORD,
-    database: (process.env.DB_DATABASE || process.env.DB_NAME) + '_test',
-    host: process.env.DB_HOST,
-    port: process.env.DB_PORT,
-    dialect: 'postgres',
-    logging: false,
-    pool: {
-      max: 5,
-      min: 0,
-      acquire: 30000,
-      idle: 10000
-    },
-    dialectOptions: {
-      ssl: getSSLConfig(process.env.DB_HOST)
-    }
-  },
-  production: {
-    username: process.env.DB_USER,
-    password: process.env.DB_PASSWORD,
-    database: process.env.DB_DATABASE || process.env.DB_NAME,
-    host: process.env.DB_HOST,
-    port: process.env.DB_PORT,
-    dialect: 'postgres',
-    logging: false,
-    pool: {
-      max: 20,
-      min: 5,
-      acquire: 30000,
-      idle: 10000
-    },
-    dialectOptions: {
-      ssl: {
-        require: true,
-        rejectUnauthorized: false
-      }
-    }
+    dialectOptions: {}
+  };
+}
+
+function buildConfig(env) {
+  if (isSqliteDialect()) {
+    return buildSqliteConfig(env);
   }
+  if (env === 'test') {
+    const base = buildPostgresConfig(env);
+    return {
+      ...base,
+      database: `${base.database}_test`,
+      logging: false
+    };
+  }
+  return buildPostgresConfig(env);
+}
+
+module.exports = {
+  development: buildConfig('development'),
+  test: buildConfig('test'),
+  production: buildConfig('production'),
+  isSqliteDialect,
+  getSqliteStorage,
+  getSSLConfig,
+  trimEnv
 };

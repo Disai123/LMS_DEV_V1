@@ -7,10 +7,13 @@ const rateLimit = require('express-rate-limit');
 const passport = require('passport');
 require('dotenv').config();
 
-// Force development mode to disable SSL for local database
+// Force development mode to disable SSL for local PostgreSQL only
 // This must be set BEFORE requiring models to ensure correct database config
-if (!process.env.DB_HOST || process.env.DB_HOST === 'localhost' || process.env.DB_HOST.includes('localhost')) {
-  process.env.NODE_ENV = 'development';
+const { isSqliteDialect, getSqliteStorage } = require('./config/database');
+if (!isSqliteDialect()) {
+  if (!process.env.DB_HOST || process.env.DB_HOST === 'localhost' || process.env.DB_HOST.includes('localhost')) {
+    process.env.NODE_ENV = 'development';
+  }
 }
 
 const { sequelize } = require('./models');
@@ -332,9 +335,11 @@ const startServer = async () => {
     await sequelize.authenticate();
     logger.info('Database connection established successfully.');
 
-    // Database is already set up with clean-database-setup.js
-    // No need to sync or run migrations
-    logger.info('Database connection verified. Using pre-configured schema.');
+    if (isSqliteDialect()) {
+      logger.info(`Using SQLite database at ${getSqliteStorage()}`);
+    } else {
+      logger.info('Database connection verified. Using pre-configured schema.');
+    }
 
     // Start server
     const server = app.listen(PORT, () => {

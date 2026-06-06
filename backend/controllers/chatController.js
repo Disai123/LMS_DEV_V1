@@ -1,6 +1,7 @@
-const { ChatMessage, ChatParticipant, User, Hackathon, HackathonGroup } = require('../models');
+const { ChatMessage, ChatParticipant, User, Hackathon, HackathonGroup, sequelize } = require('../models');
 const { Op } = require('sequelize');
 const { AppError } = require('../middleware/errorHandler');
+const { caseInsensitiveMatch } = require('../utils/dbHelpers');
 
 /**
  * Get chat messages for a specific hackathon group
@@ -174,8 +175,8 @@ const getAllChatRooms = async (req, res, next) => {
 
     if (search) {
       whereClause[Op.or] = [
-        { '$hackathon.title$': { [Op.iLike]: `%${search}%` } },
-        { '$group.group_name$': { [Op.iLike]: `%${search}%` } }
+        caseInsensitiveMatch(sequelize, 'hackathon.title', search),
+        caseInsensitiveMatch(sequelize, 'group.group_name', search)
       ];
     }
 

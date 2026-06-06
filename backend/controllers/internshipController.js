@@ -2,6 +2,7 @@ const { Internship, InternshipRegistration, User, sequelize } = require('../mode
 const { AppError } = require('../middleware/errorHandler');
 const { Op } = require('sequelize');
 const notificationService = require('../services/notificationService');
+const { buildTextSearchOr } = require('../utils/dbHelpers');
 
 /**
  * GET /api/internships
@@ -31,12 +32,7 @@ const getAllInternships = async (req, res, next) => {
     }
     if (status) conditions.push({ status });
     if (q) {
-      conditions.push({
-        [Op.or]: [
-          { title: { [Op.iLike]: `%${q}%` } },
-          { description: { [Op.iLike]: `%${q}%` } }
-        ]
-      });
+      conditions.push(buildTextSearchOr(sequelize, ['title', 'description'], q));
     }
 
     const where = conditions.length > 0 ? { [Op.and]: conditions } : {};

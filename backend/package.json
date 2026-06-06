@@ -19,6 +19,7 @@
     "db:create-admin": "node create-admin-user.js",
     "db:seed": "node seed-data.js",
     "db:migrate:prod-to-dev": "node migrate-prod-to-dev.js",
+    "db:migrate:rds-to-sqlite": "node migrate-rds-to-sqlite.js",
     "backfill:scores": "node backfill-student-scores.js",
     "legacy:create-tables": "node create-all-tables.js",
     "legacy:delete-tables": "node delete-all-tables.js"
@@ -58,6 +59,7 @@
     "sequelize": "^6.35.0",
     "sharp": "^0.32.6",
     "socket.io": "^4.8.1",
+    "sqlite3": "^5.1.7",
     "uuid": "^9.0.1",
     "winston": "^3.11.0"
   },

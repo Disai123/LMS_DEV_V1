@@ -1,7 +1,8 @@
-const { User, Course, Enrollment } = require('../models');
+const { User, Course, Enrollment, sequelize } = require('../models');
 const logger = require('../utils/logger');
 const { AppError } = require('../middleware/errorHandler');
 const { Op } = require('sequelize');
+const { buildTextSearchOr } = require('../utils/dbHelpers');
 
 /**
  * Get all users with pagination
@@ -94,12 +95,7 @@ const searchUsers = async (req, res, next) => {
     }
 
     const offset = (page - 1) * limit;
-    const whereClause = {
-      [Op.or]: [
-        { name: { [Op.iLike]: `%${q}%` } },
-        { email: { [Op.iLike]: `%${q}%` } }
-      ]
-    };
+    const whereClause = buildTextSearchOr(sequelize, ['name', 'email'], q);
 
     const { count, rows: users } = await User.findAndCountAll({
       where: whereClause,

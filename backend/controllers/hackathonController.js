@@ -2,6 +2,7 @@ const { Hackathon, HackathonParticipant, HackathonSubmission, HackathonGroup, Ha
 const { AppError } = require('../middleware/errorHandler');
 const { Op } = require('sequelize');
 const notificationService = require('../services/notificationService');
+const { buildTextSearchOr } = require('../utils/dbHelpers');
 
 /**
  * Get all hackathons with filtering and pagination
@@ -63,13 +64,7 @@ const getAllHackathons = async (req, res, next) => {
 
     // Add search condition
     if (q) {
-      conditions.push({
-        [Op.or]: [
-          { name: { [Op.iLike]: `%${q}%` } },
-          { description: { [Op.iLike]: `%${q}%` } },
-          { technology: { [Op.iLike]: `%${q}%` } }
-        ]
-      });
+      conditions.push(buildTextSearchOr(sequelize, ['name', 'description', 'technology'], q));
     }
 
     // Build final where clause

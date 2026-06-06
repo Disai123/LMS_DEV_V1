@@ -1,4 +1,5 @@
 const { DataTypes } = require('sequelize');
+const { arrayType } = require('../utils/sequelizeTypes');
 
 module.exports = (sequelize, DataTypes) => {
     const RealtimeProjectSubmission = sequelize.define('RealtimeProjectSubmission', {
@@ -47,7 +48,7 @@ module.exports = (sequelize, DataTypes) => {
             allowNull: true
         },
         technologies_used: {
-            type: DataTypes.ARRAY(DataTypes.STRING),
+            type: arrayType(sequelize, DataTypes, DataTypes.STRING),
             defaultValue: [],
             allowNull: true
         },
@@ -62,7 +63,7 @@ module.exports = (sequelize, DataTypes) => {
 
         // Attachments (URL-based)
         screenshots_urls: {
-            type: DataTypes.ARRAY(DataTypes.STRING),
+            type: arrayType(sequelize, DataTypes, DataTypes.STRING),
             defaultValue: [],
             allowNull: true,
             comment: 'Array of screenshot URLs (Google Drive, Imgur, etc.)'

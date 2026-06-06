@@ -4,28 +4,38 @@ const config = require('../config/database');
 const env = process.env.NODE_ENV || 'development';
 const dbConfig = config[env];
 
-// Create Sequelize instance
-const sequelize = new Sequelize(
-  dbConfig.database,
-  dbConfig.username,
-  dbConfig.password,
-  {
-    host: dbConfig.host,
-    port: dbConfig.port,
-    dialect: dbConfig.dialect,
-    logging: dbConfig.logging,
-    pool: dbConfig.pool,
-    dialectOptions: dbConfig.dialectOptions || {},
-    define: {
-      timestamps: true,
-      underscored: true,
-      createdAt: 'created_at',
-      updatedAt: 'updated_at',
-      freezeTableName: true
-    },
-    quoteIdentifiers: false
-  }
-);
+const defineOptions = {
+  timestamps: true,
+  underscored: true,
+  createdAt: 'created_at',
+  updatedAt: 'updated_at',
+  freezeTableName: true
+};
+
+const sequelizeOptions = {
+  dialect: dbConfig.dialect,
+  logging: dbConfig.logging,
+  pool: dbConfig.pool,
+  dialectOptions: dbConfig.dialectOptions || {},
+  define: defineOptions,
+  quoteIdentifiers: false
+};
+
+const sequelize = dbConfig.dialect === 'sqlite'
+  ? new Sequelize({
+      ...sequelizeOptions,
+      storage: dbConfig.storage
+    })
+  : new Sequelize(
+      dbConfig.database,
+      dbConfig.username,
+      dbConfig.password,
+      {
+        ...sequelizeOptions,
+        host: dbConfig.host,
+        port: dbConfig.port
+      }
+    );
 
 // Import models
 const User = require('./User')(sequelize, Sequelize.DataTypes);

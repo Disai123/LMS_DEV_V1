@@ -1,4 +1,5 @@
 const { DataTypes } = require('sequelize');
+const { arrayType } = require('../utils/sequelizeTypes');
 
 module.exports = (sequelize, DataTypes) => {
   const Course = sequelize.define('Course', {
@@ -96,11 +97,11 @@ module.exports = (sequelize, DataTypes) => {
       }
     },
     tags: {
-      type: DataTypes.ARRAY(DataTypes.STRING),
+      type: arrayType(sequelize, DataTypes, DataTypes.STRING),
       defaultValue: []
     },
     learning_objectives: {
-      type: DataTypes.ARRAY(DataTypes.TEXT),
+      type: arrayType(sequelize, DataTypes, DataTypes.TEXT),
       defaultValue: []
     },
     is_free: {
@@ -230,17 +231,14 @@ module.exports = (sequelize, DataTypes) => {
   };
 
   Course.search = function (searchTerm) {
+    const { tagsSearchCondition, caseInsensitiveMatch } = require('../utils/dbHelpers');
     return this.findAll({
       where: {
         is_published: true,
         [sequelize.Sequelize.Op.or]: [
-          { title: { [sequelize.Sequelize.Op.iLike]: `%${searchTerm}%` } },
-          { description: { [sequelize.Sequelize.Op.iLike]: `%${searchTerm}%` } },
-          // Use raw SQL for tags search to avoid type issues
-          sequelize.literal(`EXISTS (
-            SELECT 1 FROM unnest(tags) AS tag 
-            WHERE tag ILIKE '%${searchTerm.replace(/'/g, "''")}%'
-          )`)
+          caseInsensitiveMatch(sequelize, 'title', searchTerm),
+          caseInsensitiveMatch(sequelize, 'description', searchTerm),
+          tagsSearchCondition(sequelize, searchTerm)
         ]
       },
       order: [['created_at', 'DESC']]

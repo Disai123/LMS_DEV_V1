@@ -3,6 +3,7 @@ const logger = require('../utils/logger');
 const { AppError } = require('../middleware/errorHandler');
 const { Op } = require('sequelize');
 const notificationService = require('../services/notificationService');
+const { caseInsensitiveMatch, tagsSearchCondition } = require('../utils/dbHelpers');
 
 /**
  * Get all courses with filtering and pagination
@@ -56,13 +57,9 @@ const getCourses = async (req, res, next) => {
     if (q) {
       conditions.push({
         [Op.or]: [
-          { title: { [Op.iLike]: `%${q}%` } },
-          { description: { [Op.iLike]: `%${q}%` } },
-          // Use raw SQL for tags search to avoid type issues
-          sequelize.literal(`EXISTS (
-            SELECT 1 FROM unnest(tags) AS tag 
-            WHERE tag ILIKE '%${q.replace(/'/g, "''")}%'
-          )`)
+          caseInsensitiveMatch(sequelize, 'title', q),
+          caseInsensitiveMatch(sequelize, 'description', q),
+          tagsSearchCondition(sequelize, q)
         ]
       });
     }
@@ -127,13 +124,9 @@ const searchCourses = async (req, res, next) => {
     const whereClause = {
       is_published: true,
       [Op.or]: [
-        { title: { [Op.iLike]: `%${q}%` } },
-        { description: { [Op.iLike]: `%${q}%` } },
-        // Use raw SQL for tags search to avoid type issues
-        sequelize.literal(`EXISTS (
-          SELECT 1 FROM unnest(tags) AS tag 
-          WHERE tag ILIKE '%${q.replace(/'/g, "''")}%'
-        )`)
+        caseInsensitiveMatch(sequelize, 'title', q),
+        caseInsensitiveMatch(sequelize, 'description', q),
+        tagsSearchCondition(sequelize, q)
       ]
     };
 
