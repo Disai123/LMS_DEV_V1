@@ -1,0 +1,16 @@
+<svg width="200" height="60" viewBox="0 0 200 60" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <!-- Icon: target / resolve mark -->
+  <g transform="translate(10, 10)">
+    <circle cx="17" cy="20" r="16" stroke="#1e3a8a" stroke-width="2.5" fill="none"/>
+    <circle cx="17" cy="20" r="10" stroke="#0d9488" stroke-width="2.5" fill="none"/>
+    <circle cx="17" cy="20" r="4" fill="#f97316"/>
+    <path d="M17 4 L19 8 L17 7 L15 8 Z" fill="#1e3a8a"/>
+    <rect x="15" y="2" width="4" height="2" fill="#1e3a8a" rx="0.5"/>
+    <path d="M28 20 L32 18 L30 20 L32 22 Z" fill="#0d9488"/>
+  </g>
+  <!-- Text -->
+  <g transform="translate(50, 20)">
+    <text x="0" y="20" font-family="Arial, sans-serif" font-size="18" font-weight="bold" fill="#1e3a8a">SANKALP</text>
+    <text x="92" y="20" font-family="Arial, sans-serif" font-size="18" font-weight="bold" fill="#f97316">LMS</text>
+  </g>
+</svg>

@@ -1,0 +1,309 @@
+const { DataTypes } = require('sequelize');
+const bcrypt = require('bcryptjs');
+
+module.exports = (sequelize, DataTypes) => {
+  const User = sequelize.define('User', {
+    id: {
+      type: DataTypes.INTEGER,
+      primaryKey: true,
+      autoIncrement: true
+    },
+    google_id: {
+      type: DataTypes.STRING(255),
+      unique: true,
+      allowNull: true
+    },
+    name: {
+      type: DataTypes.STRING(255),
+      allowNull: false,
+      validate: {
+        notEmpty: true,
+        len: [2, 255]
+      }
+    },
+    email: {
+      type: DataTypes.STRING(255),
+      allowNull: false,
+      unique: true,
+      validate: {
+        isEmail: true,
+        notEmpty: true
+      }
+    },
+    avatar: {
+      type: DataTypes.TEXT,
+      allowNull: true,
+      validate: {
+        isUrl: true
+      }
+    },
+    password: {
+      type: DataTypes.STRING(255),
+      allowNull: true,
+      validate: {
+        len: [6, 255]
+      }
+    },
+    role: {
+      type: DataTypes.ENUM('admin', 'student'),
+      defaultValue: 'student',
+      allowNull: false
+    },
+    is_active: {
+      type: DataTypes.BOOLEAN,
+      defaultValue: true
+    },
+    last_login: {
+      type: DataTypes.DATE,
+      defaultValue: DataTypes.NOW
+    },
+    reset_password_token: {
+      type: DataTypes.STRING(255),
+      allowNull: true
+    },
+    reset_password_expires: {
+      type: DataTypes.DATE,
+      allowNull: true
+    },
+    plan_type: {
+      type: DataTypes.ENUM('free', 'premium'),
+      defaultValue: 'free',
+      allowNull: false
+    },
+    bio: {
+      type: DataTypes.TEXT,
+      allowNull: true
+    },
+    phone: {
+      type: DataTypes.STRING(20),
+      allowNull: true
+    },
+    location: {
+      type: DataTypes.STRING(255),
+      allowNull: true
+    },
+    student_id: {
+      type: DataTypes.STRING(50),
+      allowNull: true,
+      unique: true
+    },
+    date_of_birth: {
+      type: DataTypes.DATEONLY,
+      allowNull: true
+    },
+    gender: {
+      type: DataTypes.ENUM('male', 'female', 'other', 'prefer_not_to_say'),
+      allowNull: true
+    },
+    education_level: {
+      type: DataTypes.STRING(100),
+      allowNull: true
+    },
+    college_name: {
+      type: DataTypes.STRING(255),
+      allowNull: true
+    },
+    graduation_year: {
+      type: DataTypes.INTEGER,
+      allowNull: true
+    },
+    specialization: {
+      type: DataTypes.STRING(255),
+      allowNull: true
+    },
+    joined_at: {
+      type: DataTypes.DATEONLY,
+      allowNull: true
+    },
+    emergency_contact_name: {
+      type: DataTypes.STRING(255),
+      allowNull: true
+    },
+    emergency_contact_phone: {
+      type: DataTypes.STRING(20),
+      allowNull: true
+    },
+    notification_preferences: {
+      type: DataTypes.JSON,
+      allowNull: true,
+      defaultValue: {
+        email_course_updates: true,
+        email_certificates: true,
+        email_marketing: false
+      }
+    },
+  }, {
+    tableName: 'users',
+    indexes: [
+      {
+        fields: ['email']
+      },
+      {
+        fields: ['google_id']
+      },
+      {
+        fields: ['role']
+      },
+      {
+        fields: ['is_active']
+      }
+    ],
+    hooks: {
+      beforeCreate: async (user) => {
+        if (user.last_login) {
+          user.last_login = new Date();
+        }
+        // Hash password if provided
+        if (user.password) {
+          const bcrypt = require('bcryptjs');
+          user.password = await bcrypt.hash(user.password, 12);
+        }
+      },
+      beforeUpdate: async (user) => {
+        if (user.changed('last_login')) {
+          user.last_login = new Date();
+        }
+        // Hash password if it's being updated
+        if (user.changed('password') && user.password) {
+          const bcrypt = require('bcryptjs');
+          user.password = await bcrypt.hash(user.password, 12);
+        }
+      },
+      afterCreate: async () => {}
+    }
+  });
+
+  // Instance methods
+  User.prototype.toJSON = function () {
+    const values = Object.assign({}, this.get());
+    delete values.google_id;
+    delete values.password;
+    return values;
+  };
+
+  User.prototype.getPublicProfile = function () {
+    return {
+      id: this.id,
+      name: this.name,
+      email: this.email,
+      avatar: this.avatar,
+      role: this.role,
+      plan_type: this.plan_type,
+      is_active: this.is_active,
+      last_login: this.last_login,
+      bio: this.bio,
+      phone: this.phone,
+      location: this.location,
+      student_id: this.student_id,
+      date_of_birth: this.date_of_birth,
+      gender: this.gender,
+      education_level: this.education_level,
+      college_name: this.college_name,
+      graduation_year: this.graduation_year,
+      specialization: this.specialization,
+      joined_at: this.joined_at,
+      emergency_contact_name: this.emergency_contact_name,
+      emergency_contact_phone: this.emergency_contact_phone,
+      notification_preferences: this.notification_preferences || {
+        email_course_updates: true,
+        email_certificates: true,
+        email_marketing: false
+      },
+      created_at: this.created_at,
+      updated_at: this.updated_at,
+      permissions: this.permissions || null
+    };
+  };
+
+  User.prototype.isAdmin = function () {
+    return this.role === 'admin';
+  };
+
+  User.prototype.isStudent = function () {
+    return this.role === 'student';
+  };
+
+  User.prototype.comparePassword = async function (candidatePassword) {
+    if (!this.password) {
+      return false;
+    }
+    const bcrypt = require('bcryptjs');
+    return await bcrypt.compare(candidatePassword, this.password);
+  };
+
+  User.prototype.generatePasswordResetToken = async function () {
+    const crypto = require('crypto');
+    const bcrypt = require('bcryptjs');
+
+    // Generate a random token
+    const resetToken = crypto.randomBytes(32).toString('hex');
+
+    // Hash the token before storing
+    const hashedToken = await bcrypt.hash(resetToken, 10);
+
+    // Set token and expiration (1 hour from now)
+    this.reset_password_token = hashedToken;
+    this.reset_password_expires = new Date(Date.now() + 3600000); // 1 hour
+
+    await this.save();
+
+    // Return the unhashed token to send via email
+    return resetToken;
+  };
+
+  User.prototype.isResetTokenValid = function () {
+    if (!this.reset_password_token || !this.reset_password_expires) {
+      return false;
+    }
+    return new Date() < new Date(this.reset_password_expires);
+  };
+
+  User.prototype.clearResetToken = async function () {
+    this.reset_password_token = null;
+    this.reset_password_expires = null;
+    await this.save();
+  };
+
+
+  // Class methods
+  User.findByEmail = function (email) {
+    return this.findOne({ where: { email } });
+  };
+
+  User.findByGoogleId = function (googleId) {
+    return this.findOne({ where: { google_id: googleId } });
+  };
+
+  User.findActiveUsers = function () {
+    return this.findAll({ where: { is_active: true } });
+  };
+
+  User.findByRole = function (role) {
+    return this.findAll({ where: { role, is_active: true } });
+  };
+
+  User.findByResetToken = async function (token) {
+    const bcrypt = require('bcryptjs');
+    const { Op } = require('sequelize');
+
+    // Find all users with non-null reset tokens that haven't expired
+    const users = await this.findAll({
+      where: {
+        reset_password_token: { [Op.ne]: null },
+        reset_password_expires: { [Op.gt]: new Date() }
+      }
+    });
+
+    // Check each user's hashed token against the provided token
+    for (const user of users) {
+      const isMatch = await bcrypt.compare(token, user.reset_password_token);
+      if (isMatch) {
+        return user;
+      }
+    }
+
+    return null;
+  };
+
+  return User;
+};

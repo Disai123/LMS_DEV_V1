@@ -1,0 +1,415 @@
+@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,600;0,700;0,800;0,900;1,700&family=Inter:wght@300;400;500;600;700;800&display=swap');
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  * {
+    @apply border-gray-200;
+  }
+
+  body {
+    @apply bg-gradient-to-br from-slate-50 via-amber-50/30 to-stone-100 text-gray-800 font-sans antialiased;
+    background-attachment: fixed;
+    font-feature-settings: "rlig" 1, "calt" 1;
+  }
+
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6 {
+    @apply font-display;
+  }
+
+  html {
+    scroll-behavior: smooth;
+  }
+
+  /* Custom scrollbar */
+  ::-webkit-scrollbar {
+    @apply w-3 h-3;
+  }
+
+  ::-webkit-scrollbar-track {
+    @apply bg-gray-100 rounded-full;
+  }
+
+  ::-webkit-scrollbar-thumb {
+    @apply bg-gradient-to-b from-primary to-secondary rounded-full;
+  }
+
+  ::-webkit-scrollbar-thumb:hover {
+    @apply from-primary-hover to-secondary-hover;
+  }
+
+  /* Selection */
+  ::selection {
+    @apply bg-secondary/20 text-secondary;
+  }
+
+  /* Focus styles */
+  *:focus {
+    @apply outline-none;
+  }
+
+  *:focus-visible {
+    @apply ring-2 ring-secondary ring-offset-2;
+  }
+}
+
+@layer components {
+
+  /* Disney-themed Buttons */
+  .btn-primary {
+    @apply bg-gradient-to-r from-primary to-primary-hover text-white px-6 py-3 rounded-2xl font-semibold hover:shadow-magic hover:scale-105 transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:scale-100 relative overflow-hidden shadow-lg;
+  }
+
+  .btn-primary::before {
+    content: '';
+    @apply absolute inset-0 bg-gradient-to-r from-white/0 via-white/30 to-white/0;
+    transform: translateX(-100%);
+    transition: transform 0.6s;
+  }
+
+  .btn-primary:hover::before {
+    transform: translateX(100%);
+  }
+
+  .btn-secondary {
+    @apply bg-white border-2 border-primary/30 text-primary px-6 py-3 rounded-2xl font-semibold hover:bg-primary/5 hover:border-primary hover:shadow-lg transition-all duration-300 hover:scale-105;
+  }
+
+  .btn-accent {
+    @apply bg-gradient-to-r from-accent to-accent-hover text-gray-900 px-6 py-3 rounded-2xl font-bold hover:shadow-glow hover:scale-105 transition-all duration-300 relative overflow-hidden;
+  }
+
+  .btn-ghost {
+    @apply bg-transparent text-primary px-4 py-2 rounded-xl font-medium hover:bg-primary/10 transition-all duration-300;
+  }
+
+  /* Disney-themed Cards */
+  .card {
+    @apply bg-white/90 backdrop-blur-md rounded-3xl shadow-card border border-white/50 p-6 hover:shadow-card-hover transition-all duration-300 relative overflow-hidden;
+  }
+
+  .card::before {
+    content: '';
+    @apply absolute top-0 left-0 w-full h-1 bg-gradient-disney;
+  }
+
+  .card-hover {
+    @apply card hover:transform hover:scale-105 hover:shadow-magic-lg;
+  }
+
+  .card-magic {
+    @apply bg-gradient-to-br from-white via-amber-50/30 to-slate-50/30 backdrop-blur-md rounded-3xl shadow-magic border-2 border-amber-200/50 p-6 hover:shadow-magic-lg hover:scale-[1.02] transition-all duration-300;
+  }
+
+  /* Disney-themed Input Fields */
+  .input {
+    @apply w-full px-5 py-3 border-2 border-gray-200 rounded-2xl focus:outline-none focus:ring-4 focus:ring-primary/20 focus:border-primary transition-all duration-300 bg-white/80 backdrop-blur-sm;
+  }
+
+  /* Compatibility alias */
+  .input-field {
+    @apply input;
+  }
+
+  .input:focus {
+    @apply shadow-magic;
+  }
+
+  .input-floating {
+    @apply relative;
+  }
+
+  .input-floating input {
+    @apply input pt-6 pb-2;
+  }
+
+  .input-floating label {
+    @apply absolute left-4 top-3 text-gray-500 transition-all duration-200 pointer-events-none;
+  }
+
+  .input-floating input:focus+label,
+  .input-floating input:not(:placeholder-shown)+label {
+    @apply -top-2 left-3 text-xs text-primary bg-white px-2 rounded-full;
+  }
+
+  /* Glass morphism effect */
+  .glass {
+    @apply bg-white/25 backdrop-blur-xl border border-white/20;
+  }
+
+  .glass-dark {
+    @apply bg-black/25 backdrop-blur-xl border border-white/10;
+  }
+
+  /* Gradient backgrounds */
+  .gradient-primary {
+    @apply bg-gradient-to-r from-primary via-secondary to-secondary;
+  }
+
+  .gradient-secondary {
+    @apply bg-gradient-to-r from-secondary to-primary;
+  }
+
+  /* Professional Gradient Text */
+  .text-gradient {
+    @apply bg-gradient-to-r from-primary via-secondary to-secondary bg-clip-text text-transparent font-bold;
+  }
+
+  .text-gold {
+    @apply bg-gradient-to-r from-accent to-accent-hover bg-clip-text text-transparent font-bold;
+  }
+
+  /* Disney-themed Badges */
+  .badge {
+    @apply inline-flex items-center px-3 py-1 rounded-full text-xs font-semibold shadow-sm;
+  }
+
+  .badge-success {
+    @apply bg-gradient-to-r from-success to-success-hover text-white;
+  }
+
+  .badge-warning {
+    @apply bg-gradient-to-r from-warning to-warning-hover text-white;
+  }
+
+  .badge-error {
+    @apply bg-gradient-to-r from-error to-error-hover text-white;
+  }
+
+  .badge-info {
+    @apply bg-gradient-to-r from-primary to-secondary text-white;
+  }
+
+  .badge-magic {
+    @apply bg-gradient-to-r from-magic-blue via-magic-purple to-magic-pink text-white animate-shimmer;
+  }
+
+  /* Loading spinner */
+  .spinner {
+    @apply animate-spin rounded-full border-4 border-gray-200 border-t-primary;
+  }
+
+  /* Skeleton loading */
+  .skeleton {
+    @apply animate-pulse bg-gray-200 rounded;
+  }
+
+  /* Progress bar */
+  .progress-bar {
+    @apply w-full bg-gray-200 rounded-full h-2 overflow-hidden;
+  }
+
+  .progress-fill {
+    @apply h-full bg-gradient-to-r from-primary to-secondary rounded-full transition-all duration-500 ease-out;
+  }
+
+  /* Course card (Preserved from original but updated styles) */
+  .course-card {
+    @apply card-hover p-0 group cursor-pointer border-none overflow-hidden;
+  }
+
+  .course-card:hover .course-image {
+    @apply transform scale-105;
+  }
+
+  .course-image {
+    @apply w-full h-48 object-cover transition-transform duration-300;
+  }
+
+  /* Dashboard stats */
+  .stat-card {
+    @apply card p-6 text-center;
+  }
+
+  .stat-number {
+    @apply text-3xl font-bold text-primary mb-2;
+  }
+
+  .stat-label {
+    @apply text-gray-600 font-medium;
+  }
+
+  /* Navigation */
+  .nav-link {
+    @apply flex items-center px-4 py-3 text-gray-700 rounded-xl hover:bg-white/20 transition-all duration-200;
+  }
+
+  .nav-link.active {
+    @apply bg-gradient-to-r from-primary to-secondary text-white shadow-lg;
+  }
+
+  /* Disney Sidebar Items */
+  .sidebar-item {
+    @apply flex items-center gap-3 px-6 py-3.5 rounded-2xl font-medium transition-all duration-300 cursor-pointer hover:bg-gradient-to-r hover:from-primary/10 hover:to-secondary/10 hover:scale-105 hover:shadow-md;
+  }
+
+  .sidebar-item.active {
+    @apply bg-gradient-to-r from-primary to-secondary text-white shadow-magic;
+  }
+
+  /* Modal */
+  .modal-overlay {
+    @apply fixed inset-0 bg-black/50 backdrop-blur-sm z-50 flex items-center justify-center p-4;
+  }
+
+  .modal-content {
+    @apply bg-white rounded-3xl shadow-strong max-w-md w-full max-h-[90vh] overflow-y-auto border border-white/50 relative;
+  }
+
+  /* Toast notifications */
+  .toast {
+    @apply glass rounded-xl shadow-lg;
+  }
+
+  /* File upload zone */
+  .upload-zone {
+    @apply border-2 border-dashed border-primary/30 rounded-2xl p-8 text-center hover:border-primary transition-colors duration-200 bg-white/50;
+  }
+
+  .upload-zone.dragover {
+    @apply border-primary bg-primary/5;
+  }
+
+  /* Video player */
+  .video-player {
+    @apply relative w-full bg-black rounded-2xl overflow-hidden shadow-2xl;
+  }
+
+  .video-controls {
+    @apply absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/80 to-transparent p-4 transform translate-y-full transition-transform duration-300;
+  }
+
+  .video-player:hover .video-controls {
+    @apply translate-y-0;
+  }
+
+  /* Progress ring */
+  .progress-ring {
+    @apply w-24 h-24 transform -rotate-90;
+  }
+
+  .progress-ring-circle {
+    @apply stroke-gray-200 stroke-2 fill-transparent;
+    stroke-dasharray: 251.2;
+    stroke-dashoffset: 251.2;
+    transition: stroke-dashoffset 0.5s ease-in-out;
+  }
+
+  .progress-ring-circle.progress {
+    @apply stroke-primary;
+  }
+
+  /* Magical Effects */
+  .sparkle {
+    @apply animate-sparkle;
+  }
+
+  .float {
+    @apply animate-float;
+  }
+
+  .shimmer {
+    @apply relative overflow-hidden;
+  }
+
+  .shimmer::after {
+    content: '';
+    @apply absolute inset-0 bg-shimmer;
+    animation: shimmer 2s infinite;
+  }
+}
+
+@layer utilities {
+
+  /* Text gradients */
+  .text-gradient {
+    @apply bg-gradient-to-r from-primary to-secondary bg-clip-text text-transparent;
+  }
+
+  .text-glass {
+    @apply text-white/90 backdrop-blur-sm;
+  }
+
+  /* Hide scrollbar */
+  .hide-scrollbar {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+  }
+
+  .hide-scrollbar::-webkit-scrollbar {
+    display: none;
+  }
+
+  /* Touch-friendly interactions */
+  .touch-target {
+    min-height: 44px;
+    min-width: 44px;
+  }
+
+  /* Aspect ratios */
+  .aspect-video {
+    aspect-ratio: 16 / 9;
+  }
+
+  .aspect-square {
+    aspect-ratio: 1 / 1;
+  }
+}
+
+/* Custom Animations */
+@keyframes shimmer {
+  0% {
+    background-position: -1000px 0;
+  }
+
+  100% {
+    background-position: 1000px 0;
+  }
+}
+
+@keyframes scroll-horizontal {
+  0% {
+    transform: translateX(0);
+  }
+
+  100% {
+    transform: translateX(-50%);
+  }
+}
+
+.animate-scroll-horizontal {
+  animation: scroll-horizontal 40s linear infinite;
+}
+
+/* Magical Particle Effect */
+.magic-particles {
+  position: relative;
+}
+
+.magic-particles::before,
+.magic-particles::after {
+  content: '✨';
+  position: absolute;
+  font-size: 1.5rem;
+  animation: float 3s ease-in-out infinite;
+  opacity: 0.6;
+}
+
+.magic-particles::before {
+  top: -10px;
+  left: -10px;
+  animation-delay: 0s;
+}
+
+.magic-particles::after {
+  bottom: -10px;
+  right: -10px;
+  animation-delay: 1.5s;
+}

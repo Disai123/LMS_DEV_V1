@@ -1,0 +1,54 @@
+# Frontend Dependencies for LMS Project
+# Node.js version requirement
+node>=16.0.0
+
+# Production Dependencies
+react==18.2.0
+react-dom==18.2.0
+react-router-dom==6.8.1
+react-query==3.39.3
+axios==1.6.2
+react-hook-form==7.48.2
+framer-motion==10.16.16
+react-hot-toast==2.4.1
+react-icons==4.12.0
+react-helmet-async==1.3.0
+react-dropzone==14.2.3
+react-player==2.13.0
+react-pdf==7.1.2
+react-markdown==9.0.1
+date-fns==2.30.0
+clsx==2.0.0
+tailwind-merge==2.2.0
+
+# Build Dependencies
+@vitejs/plugin-react==4.2.1
+vite==5.0.8
+tailwindcss==3.4.0
+autoprefixer==10.4.16
+postcss==8.4.32
+@tailwindcss/forms==0.5.7
+@tailwindcss/typography==0.5.10
+
+# Development Dependencies (optional for production)
+# @types/react==18.2.45
+# @types/react-dom==18.2.18
+# eslint==8.56.0
+# eslint-plugin-react==7.33.2
+# eslint-plugin-react-hooks==4.6.0
+# eslint-plugin-react-refresh==0.4.5
+
+# Build Commands:
+# npm run build
+# npm run preview
+
+# Environment Variables Required:
+# VITE_API_URL=https://your-backend-api-url
+# VITE_APP_NAME=LMS
+# VITE_GOOGLE_CLIENT_ID=your-google-client-id
+
+# Build Output Directory:
+# dist/
+
+# Static File Serving:
+# Serve the dist/ directory as static files

@@ -1,0 +1,567 @@
+const { User } = require('../models');
+const { generateTokenPair, verifyToken } = require('../utils/jwt');
+const logger = require('../utils/logger');
+const { AppError } = require('../middleware/errorHandler');
+const notificationService = require('../services/notificationService');
+
+/**
+ * Student registration
+ */
+const register = async (req, res, next) => {
+  try {
+    const { name, email, password } = req.body;
+
+    if (!name || !email || !password) {
+      throw new AppError('Name, email, and password are required', 400);
+    }
+
+    // Validate email format
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!emailRegex.test(email)) {
+      throw new AppError('Please provide a valid email address', 400);
+    }
+
+    // Validate password strength
+    if (password.length < 6) {
+      throw new AppError('Password must be at least 6 characters long', 400);
+    }
+
+    // Check if user already exists
+    const existingUser = await User.findByEmail(email);
+    if (existingUser) {
+      throw new AppError('User with this email already exists', 400);
+    }
+
+    // Create new student user
+    const user = await User.create({
+      name: name.trim(),
+      email: email.toLowerCase().trim(),
+      password,
+      role: 'student',
+      is_active: true
+    });
+
+    logger.info(`New student registered: ${email}`);
+
+    // Welcome Notification
+    try {
+      await notificationService.create(
+        user.id,
+        'welcome',
+        'Welcome to SANKALP!',
+        'We are thrilled to have you here. Start exploring courses and earn your certificates!',
+        '/student'
+      );
+    } catch (notifError) {
+      logger.error('Error sending welcome notification:', notifError);
+    }
+
+    // Generate tokens for immediate login
+    const tokens = generateTokenPair(user);
+
+    res.status(201).json({
+      success: true,
+      message: 'Registration successful! Welcome to our platform.',
+      data: {
+        user: user.getPublicProfile(),
+        tokens
+      }
+    });
+  } catch (error) {
+    logger.error('Registration error:', error);
+    next(error);
+  }
+};
+
+/**
+ * Traditional username/password login
+ */
+const login = async (req, res, next) => {
+  try {
+    const { username, password } = req.body;
+
+    if (!username || !password) {
+      throw new AppError('Username and password are required', 400);
+    }
+
+    // Check for hardcoded admin credentials
+    if (username === 'admin' && password === 'admin123') {
+      // Create or find admin user
+      let user = await User.findOne({ where: { email: 'admin@aishani.com' } });
+
+      if (!user) {
+        user = await User.create({
+          name: 'Admin User',
+          email: 'admin@aishani.com',
+          role: 'admin',
+          password: 'admin123', // Will be hashed by the model hook
+          is_active: true,
+          last_login: new Date()
+        });
+        logger.info('Admin user created');
+      } else {
+        // Ensure admin user is always active when logging in
+        await user.update({
+          is_active: true,
+          last_login: new Date()
+        });
+        logger.info('Admin user status updated to active');
+      }
+
+      // Generate tokens
+      const tokens = generateTokenPair(user);
+
+      logger.info(`Admin user ${user.email} logged in via traditional auth`);
+
+      res.json({
+        success: true,
+        message: 'Login successful',
+        data: {
+          user: user.getPublicProfile(),
+          tokens
+        }
+      });
+    } else {
+      // Check for student login with email/password
+      const user = await User.findOne({ where: { email: username } });
+
+      if (!user) {
+        throw new AppError('Invalid username or password', 401);
+      }
+
+      // Check if user has a password set
+      if (!user.password) {
+        throw new AppError('Password not set for this account. Please use Google login or contact admin.', 401);
+      }
+
+      // Verify password
+      const isPasswordValid = await user.comparePassword(password);
+      if (!isPasswordValid) {
+        throw new AppError('Invalid username or password', 401);
+      }
+
+      // Check if user is active
+      if (!user.is_active) {
+        throw new AppError('Account is deactivated', 401);
+      }
+
+      // Update last login
+      await user.update({ last_login: new Date() });
+
+      // Generate tokens
+      const tokens = generateTokenPair(user);
+
+      logger.info(`User ${user.email} logged in via traditional auth`);
+
+      res.json({
+        success: true,
+        message: 'Login successful',
+        data: {
+          user: user.getPublicProfile(),
+          tokens
+        }
+      });
+    }
+  } catch (error) {
+    logger.error('Login error:', error);
+    next(error);
+  }
+};
+
+/**
+ * Verify Google credential and authenticate user
+ */
+const verifyGoogleCredential = async (req, res, next) => {
+  try {
+    if (!process.env.GOOGLE_CLIENT_ID) {
+      throw new AppError('Google sign-in is not configured on this server. Use email and password instead.', 503);
+    }
+
+    const { credential } = req.body;
+
+    if (!credential) {
+      throw new AppError('Google credential is required', 400);
+    }
+
+    // Verify the Google credential using Google's API
+    const { OAuth2Client } = require('google-auth-library');
+    const client = new OAuth2Client();
+
+    const ticket = await client.verifyIdToken({
+      idToken: credential,
+      // Don't specify audience to allow any valid Google token
+      // This fixes the "Wrong recipient, payload audience != requiredAudience" error
+    });
+
+    const payload = ticket.getPayload();
+    const { sub: googleId, name: displayName, email, picture: avatar } = payload;
+
+    // Check if user already exists
+    let user = await User.findByGoogleId(googleId);
+    let isNewUser = false;
+
+    if (user) {
+      // Check if user account is active
+      if (!user.is_active) {
+        throw new AppError('Account is deactivated. Please contact an administrator.', 403);
+      }
+
+      // Update existing user's information (do NOT update is_active)
+      await user.update({
+        name: displayName,
+        email: email,
+        avatar: avatar,
+        last_login: new Date()
+      });
+    } else {
+      // Check if user exists with same email
+      user = await User.findByEmail(email);
+
+      if (user) {
+        // Check if user account is active
+        if (!user.is_active) {
+          throw new AppError('Account is deactivated. Please contact an administrator.', 403);
+        }
+
+        // Link Google account to existing user (do NOT update is_active)
+        await user.update({
+          google_id: googleId,
+          avatar: avatar,
+          last_login: new Date()
+        });
+      } else {
+        // Create new user
+        user = await User.create({
+          google_id: googleId,
+          name: displayName,
+          email: email,
+          avatar: avatar,
+          role: 'student', // Default role
+          is_active: true,
+          last_login: new Date()
+        });
+        isNewUser = true;
+
+        // Welcome Notification
+        try {
+          await notificationService.create(
+            user.id,
+            'welcome',
+            'Welcome to SANKALP!',
+            'We are thrilled to have you here. Start exploring courses and earn your certificates!',
+            '/student'
+          );
+        } catch (notifError) {
+          logger.error('Error sending welcome notification:', notifError);
+        }
+      }
+    }
+
+    // Generate tokens
+    const tokens = generateTokenPair(user);
+
+    logger.info(`User ${user.email} ${isNewUser ? 'registered' : 'logged in'} via Google credential verification`);
+
+    res.json({
+      success: true,
+      message: isNewUser ? 'Account created successfully' : 'Login successful',
+      data: {
+        user: user.getPublicProfile(),
+        tokens,
+        isNewUser
+      }
+    });
+  } catch (error) {
+    logger.error('Google credential verification error:', error);
+    next(error);
+  }
+};
+
+/**
+ * Google OAuth callback handler
+ */
+const googleCallback = async (req, res, next) => {
+  try {
+    const { user, isNewUser } = req.user;
+
+    // Check if user account is active (user should already be checked in passport strategy, but double-check here)
+    if (!user.is_active) {
+      logger.warn(`Inactive user ${user.email} attempted Google OAuth login via callback`);
+      return res.redirect(`${process.env.FRONTEND_URL}/login?error=account_deactivated`);
+    }
+
+    // Generate tokens
+    const tokens = generateTokenPair(user);
+
+    // Update last login (do NOT update is_active - preserve admin's deactivation)
+    await user.update({
+      last_login: new Date()
+    });
+
+    logger.info(`User ${user.email} ${isNewUser ? 'registered' : 'logged in'} via Google OAuth`);
+    
+    // Welcome Notification for new Google users
+    if (isNewUser) {
+      try {
+        await notificationService.create(
+          user.id,
+          'welcome',
+          'Welcome to SANKALP!',
+          'We are thrilled to have you here. Start exploring courses and earn your certificates!',
+          '/student'
+        );
+      } catch (notifError) {
+        logger.error('Error sending welcome notification via Google callback:', notifError);
+      }
+    }
+
+    // Redirect to frontend with tokens
+    const redirectUrl = `${process.env.FRONTEND_URL}/auth/callback?token=${tokens.accessToken}&refresh=${tokens.refreshToken}&isNew=${isNewUser}`;
+
+    res.redirect(redirectUrl);
+  } catch (error) {
+    logger.error('Google OAuth callback error:', error);
+    next(error);
+  }
+};
+
+/**
+ * Refresh access token
+ */
+const refreshToken = async (req, res, next) => {
+  try {
+    const { refreshToken } = req.body;
+
+    if (!refreshToken) {
+      throw new AppError('Refresh token required', 400);
+    }
+
+    // Verify refresh token
+    const decoded = verifyToken(refreshToken);
+    const user = await User.findByPk(decoded.id);
+
+    if (!user || !user.is_active) {
+      throw new AppError('Invalid refresh token', 401);
+    }
+
+    // Generate new tokens
+    const tokens = generateTokenPair(user);
+
+    res.json({
+      success: true,
+      message: 'Token refreshed successfully',
+      data: tokens
+    });
+  } catch (error) {
+    logger.error('Token refresh error:', error);
+    next(error);
+  }
+};
+
+/**
+ * Logout user
+ */
+const logout = async (req, res, next) => {
+  try {
+    // In a more sophisticated implementation, you might:
+    // 1. Add the token to a blacklist
+    // 2. Store the blacklist in Redis
+    // 3. Check blacklist on each request
+
+    logger.info(`User ${req.user.email} logged out`);
+
+    res.json({
+      success: true,
+      message: 'Logged out successfully'
+    });
+  } catch (error) {
+    logger.error('Logout error:', error);
+    next(error);
+  }
+};
+
+/**
+ * Get current user profile
+ */
+const getCurrentUser = async (req, res, next) => {
+  try {
+    const user = await User.findByPk(req.user.id, {
+      attributes: { exclude: ['google_id', 'password'] }
+    });
+
+    if (!user) {
+      throw new AppError('User not found', 404);
+    }
+
+    res.json({
+      success: true,
+      message: 'User profile retrieved successfully',
+      data: {
+        user: user.getPublicProfile()
+      }
+    });
+  } catch (error) {
+    logger.error('Get current user error:', error);
+    next(error);
+  }
+};
+
+/**
+ * Update user profile
+ */
+const updateProfile = async (req, res, next) => {
+  try {
+    const userId = req.user.id;
+    const allowedFields = [
+      'name', 'email', 'avatar', 'bio', 'phone', 'location', 'date_of_birth',
+      'gender', 'education_level', 'college_name', 'graduation_year', 'specialization',
+      'emergency_contact_name', 'emergency_contact_phone', 'notification_preferences'
+    ];
+
+    const user = await User.findByPk(userId);
+    if (!user) {
+      throw new AppError('User not found', 404);
+    }
+
+    if (req.body.email && req.body.email !== user.email) {
+      const existingUser = await User.findByEmail(req.body.email);
+      if (existingUser && existingUser.id !== userId) {
+        throw new AppError('Email already in use', 400);
+      }
+    }
+
+    const updates = {};
+    allowedFields.forEach((field) => {
+      if (req.body[field] !== undefined) {
+        updates[field] = req.body[field];
+      }
+    });
+
+    await user.update(updates);
+    await user.reload();
+
+    logger.info(`User ${user.email} updated profile`);
+
+    res.json({
+      success: true,
+      message: 'Profile updated successfully',
+      data: {
+        user: user.getPublicProfile()
+      }
+    });
+  } catch (error) {
+    logger.error('Update profile error:', error);
+    next(error);
+  }
+};
+
+/**
+ * Get authentication status
+ */
+const getAuthStatus = async (req, res, next) => {
+  try {
+    if (!req.user) {
+      return res.json({
+        success: true,
+        data: {
+          isAuthenticated: false,
+          user: null
+        }
+      });
+    }
+
+    res.json({
+      success: true,
+      data: {
+        isAuthenticated: true,
+        user: req.user.getPublicProfile()
+      }
+    });
+  } catch (error) {
+    logger.error('Get auth status error:', error);
+    next(error);
+  }
+};
+
+/**
+ * Change user password
+ */
+const changePassword = async (req, res, next) => {
+  try {
+    const { currentPassword, newPassword } = req.body;
+
+    if (!currentPassword || !newPassword) {
+      throw new AppError('Current password and new password are required', 400);
+    }
+
+    // Validate new password strength
+    if (newPassword.length < 6) {
+      throw new AppError('New password must be at least 6 characters long', 400);
+    }
+
+    // Check if new password is same as current password
+    if (currentPassword === newPassword) {
+      throw new AppError('New password must be different from current password', 400);
+    }
+
+    // Get user with password
+    const user = await User.findByPk(req.user.id);
+
+    if (!user) {
+      throw new AppError('User not found', 404);
+    }
+
+    // Check if user has a password set (not Google-only account)
+    if (!user.password) {
+      throw new AppError('Password not set for this account. Please use Google login or contact admin.', 400);
+    }
+
+    // Verify current password
+    const isPasswordValid = await user.comparePassword(currentPassword);
+    if (!isPasswordValid) {
+      throw new AppError('Current password is incorrect', 401);
+    }
+
+    // Update password (will be hashed by the model hook)
+    await user.update({ password: newPassword });
+
+    logger.info(`User ${user.email} changed password`);
+
+    res.json({
+      success: true,
+      message: 'Password changed successfully'
+    });
+  } catch (error) {
+    logger.error('Change password error:', error);
+    next(error);
+  }
+};
+
+const getMyStudentProfile = async (req, res, next) => {
+  try {
+    const { buildStudentProfileData } = require('./userController');
+    const data = await buildStudentProfileData(req.user.id);
+    res.json({
+      success: true,
+      message: 'Student profile retrieved successfully',
+      data
+    });
+  } catch (error) {
+    logger.error('Get my student profile error:', error);
+    next(error);
+  }
+};
+
+module.exports = {
+  register,
+  login,
+  verifyGoogleCredential,
+  googleCallback,
+  refreshToken,
+  logout,
+  getCurrentUser,
+  updateProfile,
+  getMyStudentProfile,
+  getAuthStatus,
+  changePassword
+};
