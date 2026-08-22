@@ -80,10 +80,6 @@ jspm_packages/
 ehthumbs.db
 Thumbs.db
 
-# Database files
-*.db
-*.sqlite
-*.sqlite3
 
 # Uploads directory (if storing files locally)
 
