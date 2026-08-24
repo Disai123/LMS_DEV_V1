@@ -50,10 +50,8 @@ const Header = () => {
     >
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex justify-between items-center h-16 sm:h-20 py-2 gap-2 sm:gap-4">
-          {/* GNANAM AI — far left */}
-          <BrandLogos brand="gnanam" />
+          <BrandLogos />
 
-          {/* Desktop Navigation + SANKALP — far right */}
           <div className="hidden md:flex items-center gap-6 lg:gap-8 flex-1 justify-end min-w-0">
             <nav className="flex items-center space-x-6 lg:space-x-8">
             <Link
@@ -146,13 +144,9 @@ const Header = () => {
               </div>
             )}
             </nav>
-
-            <BrandLogos brand="sankalp" logoClassName="h-10 sm:h-12 w-auto object-contain" />
           </div>
 
-          {/* Mobile — SANKALP right + menu */}
           <div className="md:hidden flex items-center gap-2 shrink-0">
-            <BrandLogos brand="sankalp" logoClassName="h-8 w-auto object-contain max-w-[7.5rem]" />
             <button
               onClick={toggleMenu}
               className="p-3 rounded-lg hover:bg-white/20 transition-colors duration-200 min-h-[44px] min-w-[44px] flex items-center justify-center"

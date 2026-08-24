@@ -1,4 +1,4 @@
-const { Enrollment, Course, User, CourseChapter, ChapterProgress, ActivityLog, Achievement } = require('../models');
+const { Enrollment, Course, User, CourseChapter, ChapterProgress, ActivityLog, Achievement, Certificate } = require('../models');
 const logger = require('../utils/logger');
 const notificationService = require('../services/notificationService');
 const { AppError } = require('../middleware/errorHandler');
@@ -1022,6 +1022,20 @@ const getAdminStats = async (req, res, next) => {
       where: { is_published: true }
     });
 
+    const certifiedEnrollments = await Enrollment.count({
+      where: { status: 'certified' }
+    });
+
+    const totalCertificates = await Certificate.count({
+      where: { is_valid: true }
+    });
+
+    const avgProgressRow = await Enrollment.findOne({
+      attributes: [[Enrollment.sequelize.fn('AVG', Enrollment.sequelize.col('progress')), 'avgProgress']],
+      raw: true
+    });
+    const averageProgress = Math.round(parseFloat(avgProgressRow?.avgProgress || 0) * 100) / 100;
+
     res.json({
       success: true,
       message: 'Admin statistics retrieved successfully',
@@ -1033,7 +1047,10 @@ const getAdminStats = async (req, res, next) => {
           completionRate: Math.round(completionRate * 100) / 100,
           totalStudents,
           totalCourses,
-          publishedCourses
+          publishedCourses,
+          certifiedEnrollments,
+          totalCertificates,
+          averageProgress
         }
       }
     });

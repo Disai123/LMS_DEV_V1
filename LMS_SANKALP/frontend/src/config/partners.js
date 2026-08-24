@@ -7,7 +7,7 @@ export const PARTNERS = {
     logo: '/partners/rishi-engineering-college-logo.png',
     alt: 'Rishi Engineering College logo',
     description:
-      'Where students enroll and begin their learning journey with GNANAM AI.',
+      'Where students enroll and begin their learning journey with SANKALP LMS.',
   },
   institution: {
     key: 'institution',

@@ -10,8 +10,7 @@ import Pagination from '../components/common/Pagination'
 import ErrorBoundary from '../components/common/ErrorBoundary'
 import { useAuth } from '../context/AuthContext'
 import {
-  FiSearch, FiX, FiArrowRight, FiSliders,
-  FiBookOpen, FiAward, FiZap, FiUsers
+  FiSearch, FiX, FiArrowRight, FiSliders
 } from 'react-icons/fi'
 
 const DIFFICULTIES = [
@@ -96,169 +95,49 @@ const CourseListPage = () => {
 
   return (
     <ErrorBoundary>
-      <div className="min-h-screen" style={{ background: '#0F172A' }}>
+      <div className="min-h-screen flex flex-col bg-slate-50">
         <Header />
 
-        {/* ══════════════════════════════════════════════════════════════════
-            HERO — dark slate with amber radial glow spotlight
-        ══════════════════════════════════════════════════════════════════ */}
-        <section className="relative overflow-hidden" style={{ background: '#0F172A' }}>
+        {/* Hero — light theme matching home page */}
+        <section className="relative overflow-hidden">
+          <div className="absolute inset-0 bg-gradient-to-br from-indigo-50 via-white to-amber-50/80" />
+          <div className="absolute -top-24 -right-24 w-80 h-80 rounded-full bg-violet-300/20 blur-3xl" />
+          <div className="absolute bottom-0 left-0 w-72 h-72 rounded-full bg-amber-300/15 blur-3xl" />
 
-          {/* Amber spotlight glow — the hero's unique signature */}
-          <div className="absolute inset-0 pointer-events-none">
-            <div style={{
-              position: 'absolute',
-              top: '-10%',
-              left: '-5%',
-              width: '70%',
-              height: '120%',
-              background: 'radial-gradient(ellipse at 30% 50%, rgba(251,191,36,0.18) 0%, rgba(251,191,36,0.06) 40%, transparent 70%)',
-            }} />
-          </div>
-
-          {/* Subtle dot grid */}
-          <div className="absolute inset-0 opacity-[0.04]" style={{
-            backgroundImage: 'radial-gradient(circle, #fbbf24 1px, transparent 1px)',
-            backgroundSize: '32px 32px'
-          }} />
-
-          {/* Faint horizontal rule lines — editorial feel */}
-          <div className="absolute inset-0" style={{
-            backgroundImage: 'linear-gradient(transparent calc(100% - 1px), rgba(255,255,255,0.03) 100%)',
-            backgroundSize: '100% 80px'
-          }} />
-
-          <div className="relative max-w-7xl mx-auto px-6 lg:px-12 pt-12 pb-14">
-
-            {/* Overline */}
+          <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-14 sm:py-16">
             <motion.div
-              initial={{ opacity: 0, x: -20 }}
-              animate={{ opacity: 1, x: 0 }}
-              transition={{ duration: 0.5 }}
-              className="flex items-center gap-3 mb-10"
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              className="max-w-3xl"
             >
-              <div className="h-px w-12 bg-amber-400" />
-              <span className="font-mono text-amber-400 text-xs tracking-[0.28em] uppercase">
-                GNANAM AI · Course Catalog
+              <span className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full text-xs font-bold uppercase tracking-wider bg-gradient-to-r from-indigo-600 to-violet-600 text-white shadow-md mb-5">
+                SANKALP LMS · Courses
               </span>
-            </motion.div>
-
-            <div className="grid grid-cols-1 lg:grid-cols-[1fr_380px] gap-16 items-start">
-
-              {/* ── Left: editorial headline ─────────────────────────────── */}
-              <div>
-                <motion.h1
-                  initial={{ opacity: 0, y: 40 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ duration: 0.8, delay: 0.1 }}
-                  className="font-black leading-[1.15] tracking-tight mb-8"
-                  style={{ fontSize: 'clamp(2.7rem, 5.5vw, 6.2rem)' }}
-                >
-                  <span className="text-white block">MASTER</span>
-                  <span className="text-amber-400 block">ANY SKILL.</span>
-                  <span className="block" style={{
-                    color: 'transparent',
-                    WebkitTextStroke: '2px rgba(255,255,255,0.15)'
-                  }}>LAND ANY JOB.</span>
-                </motion.h1>
-
-                <motion.p
-                  initial={{ opacity: 0, y: 16 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ duration: 0.6, delay: 0.35 }}
-                  className="text-slate-400 text-lg leading-relaxed max-w-lg mb-10 font-light"
-                >
-                  AI-powered learning that adapts to <em className="text-white not-italic font-semibold">you</em> — every course, every project, every certificate is built for real-world impact.
-                </motion.p>
-
-                <motion.div
-                  initial={{ opacity: 0, y: 16 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ duration: 0.5, delay: 0.5 }}
-                  className="flex flex-wrap gap-4"
-                >
-                  <button
-                    onClick={() => document.getElementById('courses-section')?.scrollIntoView({ behavior: 'smooth' })}
-                    className="group inline-flex items-center gap-3 bg-amber-400 text-slate-900 font-black px-8 py-4 rounded-xl hover:bg-amber-300 transition-all duration-300 text-sm shadow-lg shadow-amber-400/25"
-                  >
-                    Browse Courses
-                    <FiArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
-                  </button>
-                  {!user && (
-                    <button
-                      onClick={() => navigate('/login')}
-                      className="inline-flex items-center gap-3 border border-slate-700 text-slate-300 font-bold px-8 py-4 rounded-xl hover:border-amber-400/50 hover:text-white transition-all duration-300 text-sm"
-                    >
-                      Sign In
-                    </button>
-                  )}
-                </motion.div>
-
-              </div>
-
-              {/* ── Right: stacked feature cards ─────────────────────────── */}
-              <motion.div
-                initial={{ opacity: 0, x: 30 }}
-                animate={{ opacity: 1, x: 0 }}
-                transition={{ duration: 0.8, delay: 0.3 }}
-                className="space-y-3 pt-4"
+              <h1 className="text-4xl sm:text-5xl font-bold text-slate-900 leading-tight mb-4">
+                Explore our{' '}
+                <span className="bg-gradient-to-r from-indigo-600 via-violet-600 to-amber-500 bg-clip-text text-transparent">
+                  course catalog
+                </span>
+              </h1>
+              <p className="text-lg text-slate-600 mb-8 max-w-2xl">
+                Browse courses, enroll, complete chapters and assessments, and earn your certificate.
+              </p>
+              <button
+                onClick={() => document.getElementById('courses-section')?.scrollIntoView({ behavior: 'smooth' })}
+                className="inline-flex items-center gap-2 px-8 py-3.5 rounded-xl bg-gradient-to-r from-indigo-600 to-violet-600 text-white font-semibold hover:from-indigo-700 hover:to-violet-700 shadow-lg shadow-indigo-300/30"
               >
-                {[
-                  {
-                    icon: <FiZap className="w-5 h-5" />,
-                    title: 'AI-Adaptive Curriculum',
-                    body: 'Lessons that adjust to your pace and learning style in real time.',
-                    accent: 'border-l-amber-400'
-                  },
-                  {
-                    icon: <FiBookOpen className="w-5 h-5" />,
-                    title: 'Live Project Integration',
-                    body: 'Every course links to a deployable, portfolio-ready real project.',
-                    accent: 'border-l-blue-400'
-                  },
-                  {
-                    icon: <FiAward className="w-5 h-5" />,
-                    title: 'Industry Certificates',
-                    body: 'Verifiable certificates built around skills companies hire for.',
-                    accent: 'border-l-emerald-400'
-                  },
-                  {
-                    icon: <FiUsers className="w-5 h-5" />,
-                    title: 'Community & Mentorship',
-                    body: 'Learn alongside peers and get guidance from industry mentors.',
-                    accent: 'border-l-violet-400'
-                  },
-                ].map((card, i) => (
-                  <motion.div
-                    key={i}
-                    initial={{ opacity: 0, x: 20 }}
-                    animate={{ opacity: 1, x: 0 }}
-                    transition={{ delay: 0.4 + i * 0.1 }}
-                    className={`bg-white/[0.04] border border-white/[0.07] border-l-2 ${card.accent} rounded-xl p-4 hover:bg-white/[0.07] transition-colors duration-200`}
-                  >
-                    <div className="flex items-start gap-3">
-                      <div className="text-amber-400/70 mt-0.5 flex-shrink-0">{card.icon}</div>
-                      <div>
-                        <div className="text-white font-bold text-sm mb-0.5">{card.title}</div>
-                        <div className="text-slate-400 text-xs leading-relaxed">{card.body}</div>
-                      </div>
-                    </div>
-                  </motion.div>
-                ))}
-              </motion.div>
-            </div>
+                View All Courses
+                <FiArrowRight className="w-4 h-4" />
+              </button>
+            </motion.div>
           </div>
         </section>
 
-        {/* ══════════════════════════════════════════════════════════════════
-            CATALOG SECTION — warm light background (catalog feel)
-        ══════════════════════════════════════════════════════════════════ */}
-        <div style={{ background: '#F5F4F0' }}>
+        <div className="bg-white border-t border-indigo-100/50">
 
           {/* ── STICKY FILTER BAR ────────────────────────────────────────── */}
           <div
-            className="sticky top-0 z-30 border-b border-gray-200 shadow-sm"
-            style={{ background: '#F5F4F0' }}
+            className="sticky top-0 z-30 border-b border-gray-200 shadow-sm bg-white"
             id="courses-section"
           >
             <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -415,6 +294,7 @@ const CourseListPage = () => {
               error={error}
               showInstructor={true}
               showRating={true}
+              variant="light"
             />
 
             {!isLoading && !error && courses.length > 0 && (
@@ -429,36 +309,6 @@ const CourseListPage = () => {
             )}
           </main>
         </div>
-
-        {/* ══════════════════════════════════════════════════════════════════
-            BOTTOM CTA — back to dark for bookend symmetry
-        ══════════════════════════════════════════════════════════════════ */}
-        <section className="py-20" style={{ background: '#0F172A', borderTop: '1px solid rgba(255,255,255,0.06)' }}>
-          <div className="max-w-7xl mx-auto px-6 lg:px-12">
-            <div className="flex flex-col md:flex-row items-center justify-between gap-8">
-              <div>
-                <div className="flex items-center gap-3 mb-5">
-                  <div className="h-px w-8 bg-amber-400" />
-                  <span className="font-mono text-amber-400 text-xs tracking-widest uppercase">Ready to grow?</span>
-                </div>
-                <h2 className="text-4xl font-black text-white">
-                  Your next skill is<br />
-                  <span className="text-amber-400">one course away.</span>
-                </h2>
-                <p className="text-slate-500 mt-3 text-sm">
-                  Start learning · Industry certificates · Hands-on chapters
-                </p>
-              </div>
-              <button
-                onClick={() => navigate(user ? '/student' : '/login')}
-                className="group inline-flex items-center gap-3 bg-amber-400 text-slate-900 font-black px-8 py-5 rounded-2xl hover:bg-amber-300 transition-all duration-300 text-base flex-shrink-0 shadow-xl shadow-amber-400/20"
-              >
-                {user ? 'Go to Dashboard' : 'Get Started'}
-                <FiArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
-              </button>
-            </div>
-          </div>
-        </section>
 
         <Footer />
       </div>

@@ -39,8 +39,8 @@ function App() {
   return (
     <ErrorBoundary>
       <Helmet>
-        <title>SANKALP - Learning Platform</title>
-        <meta name="description" content="SANKALP - Course learning, assessments, and certificates" />
+        <title>SANKALP LMS — Learning Management System</title>
+        <meta name="description" content="SANKALP LMS — online courses, progress tracking, assessments, and certificates for students and institutions." />
       </Helmet>
 
       <NotificationProvider>

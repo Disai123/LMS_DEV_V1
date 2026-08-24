@@ -735,8 +735,8 @@ const EditCourse = () => {
       </motion.div>
 
       {/* Test Management Section */}
-      <div className="card p-6">
-        <TestManagement 
+      <div id="tests" className="card p-6 scroll-mt-24">
+        <TestManagement
           courseId={id} 
           courseTitle={courseData?.data?.course?.title || 'Course'} 
         />

@@ -303,10 +303,10 @@ const ProfilePage = () => {
             <button class="print-button no-print" onclick="window.print()">Download as PDF</button>
             <div class="certificate">
               <div class="watermark">
-                <img src="/lms_logo.svg" alt="GNANAM AI" onerror="this.style.display='none'">
+                <img src="/lms_logo.svg" alt="SANKALP LMS" onerror="this.style.display='none'">
               </div>
               <div class="logo-container">
-                <img src="/lms_logo.svg" alt="GNANAM AI" onerror="this.style.display='none'">
+                <img src="/lms_logo.svg" alt="SANKALP LMS" onerror="this.style.display='none'">
               </div>
               <div class="header">
                 <h1>CERTIFICATE OF COMPLETION</h1>
@@ -1008,7 +1008,7 @@ const ProfilePage = () => {
                           </div>
                         </div>
                         <button 
-                          onClick={() => window.open('mailto:support@gnanamai.com?subject=Support Request', '_blank')}
+                          onClick={() => window.open('mailto:support@sankalplms.com?subject=Support Request', '_blank')}
                           className="px-4 py-2 bg-gray-600 text-white rounded-lg hover:bg-gray-700 transition-colors"
                         >
                           Contact

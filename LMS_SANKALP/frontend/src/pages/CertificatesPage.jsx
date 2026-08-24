@@ -12,7 +12,6 @@ import toast from 'react-hot-toast'
 const CertificatesPage = () => {
   const [selectedCertificate, setSelectedCertificate] = useState(null)
   const [showCertificateModal, setShowCertificateModal] = useState(false)
-  const [activeTab, setActiveTab] = useState('course') // 'course' or 'realtime_project'
 
   // Fetch student's certificates
   const { data: certificatesData, isLoading, error } = useQuery(
@@ -336,14 +335,14 @@ const CertificatesPage = () => {
                   <circle cx="50" cy="50" r="38" fill="#fff" stroke="${themeColor}" stroke-width="2"/>
                   <circle cx="50" cy="50" r="34" fill="none" stroke="${goldColor}" stroke-width="1" stroke-dasharray="2,2"/>
                   <path fill="${goldColor}" d="M50 25 L56 38 L70 40 L60 50 L63 65 L50 58 L37 65 L40 50 L30 40 L44 38 Z" />
-                  <text x="50" y="24" font-size="6" font-family="Arial" fill="${themeColor}" font-weight="bold" text-anchor="middle" letter-spacing="1">GNANAM AI</text>
+                  <text x="50" y="24" font-size="6" font-family="Arial" fill="${themeColor}" font-weight="bold" text-anchor="middle" letter-spacing="1">SANKALP LMS</text>
                   <text x="50" y="80" font-size="6" font-family="Arial" fill="${themeColor}" font-weight="bold" text-anchor="middle" letter-spacing="1">CERTIFIED</text>
                 </svg>
                 
                 <div class="footer-box">
-                  <div class="sign-val">Vijay Gunti</div>
+                  <div class="sign-val">SANKALP LMS</div>
                   <div class="footer-line"></div>
-                  <div class="footer-label">Vijay Gunti<br/><span class="gold">Founder & CEO<br/>Gnanamai</span></div>
+                  <div class="footer-label">SANKALP LMS<br/><span class="gold">Learning Management System</span></div>
                 </div>
               </div>
 
@@ -453,42 +452,16 @@ const CertificatesPage = () => {
           transition={{ duration: 0.6 }}
           className="mb-8"
         >
-          <div className="flex flex-col md:flex-row md:items-end justify-between gap-6">
-            <div>
-              <h1 className="text-4xl font-bold text-gray-900 mb-2">My Certificates</h1>
-              <p className="text-lg text-gray-600">
-                Manage and view your earned certifications
-              </p>
-            </div>
-
-            {/* Tab Navigation */}
-            <div className="flex p-1 bg-white/50 backdrop-blur-sm rounded-xl border border-white shadow-sm self-start">
-              <button
-                onClick={() => setActiveTab('course')}
-                className={`px-6 py-2.5 rounded-lg text-sm font-semibold transition-all duration-300 ${activeTab === 'course'
-                    ? 'bg-indigo-600 text-white shadow-md'
-                    : 'text-gray-600 hover:text-indigo-600'
-                  }`}
-              >
-                Course Certs
-              </button>
-              <button
-                onClick={() => setActiveTab('realtime_project')}
-                className={`px-6 py-2.5 rounded-lg text-sm font-semibold transition-all duration-300 ${activeTab === 'realtime_project'
-                    ? 'bg-purple-600 text-white shadow-md'
-                    : 'text-gray-600 hover:text-purple-600'
-                  }`}
-              >
-                Project Certs
-              </button>
-            </div>
+          <div>
+            <h1 className="text-4xl font-bold text-gray-900 mb-2">My Certificates</h1>
+            <p className="text-lg text-gray-600">
+              Manage and view your earned course certificates
+            </p>
           </div>
         </motion.div>
 
         {(() => {
-          const filteredCerts = certificates.filter(c => (c.certificate_type || c.certificateType) === activeTab)
-
-          if (filteredCerts.length === 0) {
+          if (certificates.length === 0) {
             return (
               <motion.div
                 initial={{ opacity: 0, scale: 0.9 }}
@@ -496,30 +469,20 @@ const CertificatesPage = () => {
                 transition={{ duration: 0.5 }}
                 className="text-center py-20 bg-white/20 backdrop-blur-sm rounded-3xl border border-white/50"
               >
-                <div className={`w-24 h-24 rounded-full flex items-center justify-center mx-auto mb-6 ${activeTab === 'course' ? 'bg-indigo-50 text-indigo-400' : 'bg-purple-50 text-purple-400'}`}>
-                  {activeTab === 'course' ? (
-                    <svg className="w-12 h-12" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253" />
-                    </svg>
-                  ) : (
-                    <svg className="w-12 h-12" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 20l4-16m4 4l4 4-4 4M6 16l-4-4 4-4" />
-                    </svg>
-                  )}
+                <div className="w-24 h-24 rounded-full flex items-center justify-center mx-auto mb-6 bg-indigo-50 text-indigo-400">
+                  <svg className="w-12 h-12" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253" />
+                  </svg>
                 </div>
-                <h3 className="text-2xl font-bold text-gray-900 mb-4">No {activeTab === 'course' ? 'Course' : 'Project'} Certificates</h3>
+                <h3 className="text-2xl font-bold text-gray-900 mb-4">No Certificates Yet</h3>
                 <p className="text-gray-600 mb-8 max-w-md mx-auto">
-                  {activeTab === 'course'
-                    ? "Complete courses and pass tests to earn certificates. Each certificate is unique and verifiable."
-                    : "Deliver high-quality projects and get them approved to earn project certificates."
-                  }
+                  Complete courses and pass tests to earn certificates. Each certificate is unique and verifiable.
                 </p>
                 <button
-                  onClick={() => window.location.href = activeTab === 'course' ? '/student' : '/realtime-projects'}
-                  className={`px-8 py-3 text-white font-semibold rounded-lg transition-all duration-200 shadow-lg hover:shadow-xl transform hover:-translate-y-1 ${activeTab === 'course' ? 'bg-indigo-600 hover:bg-indigo-700' : 'bg-purple-600 hover:bg-purple-700'
-                    }`}
+                  onClick={() => window.location.href = '/courses'}
+                  className="px-8 py-3 text-white font-semibold rounded-lg transition-all duration-200 shadow-lg hover:shadow-xl transform hover:-translate-y-1 bg-indigo-600 hover:bg-indigo-700"
                 >
-                  {activeTab === 'course' ? 'Browse Courses' : 'Browse Projects'}
+                  Browse Courses
                 </button>
               </motion.div>
             )
@@ -527,7 +490,7 @@ const CertificatesPage = () => {
 
           return (
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-              {filteredCerts.map((certificate, index) => {
+              {certificates.map((certificate, index) => {
                 const isProject = (certificate.certificate_type || certificate.certificateType) === 'realtime_project'
                 const title = isProject
                   ? (certificate.metadata?.projectName || certificate.realtimeProjectSubmission?.project_name || 'Project Certificate')
@@ -760,10 +723,10 @@ const CertificatesPage = () => {
                                     <circle cx="50" cy="50" r="38" fill="#fff" stroke="${themeColor}" stroke-width="2"/>
                                     <circle cx="50" cy="50" r="34" fill="none" stroke="${goldColor}" stroke-width="1" stroke-dasharray="2,2"/>
                                     <path fill="${goldColor}" d="M50 25 L56 38 L70 40 L60 50 L63 65 L50 58 L37 65 L40 50 L30 40 L44 38 Z" />
-                                    <text x="50" y="24" font-size="6" font-family="Arial" fill="${themeColor}" font-weight="bold" text-anchor="middle" letter-spacing="1">GNANAM AI</text>
+                                    <text x="50" y="24" font-size="6" font-family="Arial" fill="${themeColor}" font-weight="bold" text-anchor="middle" letter-spacing="1">SANKALP LMS</text>
                                     <text x="50" y="80" font-size="6" font-family="Arial" fill="${themeColor}" font-weight="bold" text-anchor="middle" letter-spacing="1">CERTIFIED</text>
                                   </svg>
-                                  <div class="footer-box"><div class="sign-val">Vijay Gunti</div><div class="footer-line"></div><div class="footer-label">Vijay Gunti<br/><span class="gold">Founder & CEO<br/>Gnanamai</span></div></div>
+                                  <div class="footer-box"><div class="sign-val">SANKALP LMS</div><div class="footer-line"></div><div class="footer-label">SANKALP LMS<br/><span class="gold">Learning Management System</span></div></div>
                                 </div>
                               </div>
                             </div>

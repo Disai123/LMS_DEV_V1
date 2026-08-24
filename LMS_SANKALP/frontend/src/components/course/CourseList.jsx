@@ -3,7 +3,7 @@ import CourseCard from './CourseCard'
 import LoadingSpinner from '../common/LoadingSpinner'
 import { FiAlertCircle, FiBookOpen } from 'react-icons/fi'
 
-const CourseList = ({ courses, isLoading, error, showInstructor = true, showRating = true }) => {
+const CourseList = ({ courses, isLoading, error, showInstructor = true, showRating = true, variant = 'dark' }) => {
   if (isLoading) {
     return (
       <div className="flex justify-center py-16">
@@ -61,6 +61,7 @@ const CourseList = ({ courses, isLoading, error, showInstructor = true, showRati
             index={index}
             showInstructor={showInstructor}
             showRating={showRating}
+            variant={variant}
           />
         </motion.div>
       ))}
