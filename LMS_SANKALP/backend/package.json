@@ -8,7 +8,8 @@
     "dev": "nodemon server.js",
     "db:init": "node scripts/init-sqlite-schema.js",
     "db:pull": "node scripts/pull-from-gnanamai.js",
-    "db:create-admin": "node create-admin-user.js"
+    "db:create-admin": "node create-admin-user.js",
+    "db:reset-demo": "node scripts/reset-python-demo.js"
   },
   "license": "MIT",
   "dependencies": {

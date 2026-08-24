@@ -1,7 +1,7 @@
 import { motion } from 'framer-motion'
 import { Link, useNavigate } from 'react-router-dom'
 import useCourseLogo from '../../hooks/useCourseLogo'
-import { FiStar, FiUsers, FiClock, FiArrowRight, FiLock } from 'react-icons/fi'
+import { FiStar, FiUsers, FiClock, FiArrowRight } from 'react-icons/fi'
 
 const difficultyConfig = {
   beginner: { label: 'Beginner', class: 'bg-green-500/15 text-green-400 border-green-500/20' },
@@ -19,7 +19,7 @@ const ACCENT_BORDERS = [
   'border-l-cyan-500',
 ]
 
-const CourseCard = ({ course, index = 0, showInstructor = true, showRating = true, isLocked = false }) => {
+const CourseCard = ({ course, index = 0, showInstructor = true, showRating = true }) => {
   const navigate = useNavigate()
   const { logoUrl } = useCourseLogo(course.id, !!course.logo)
 
@@ -32,23 +32,13 @@ const CourseCard = ({ course, index = 0, showInstructor = true, showRating = tru
     return r && typeof r === 'number' && !isNaN(r) ? r : 0
   })()
 
-  const handleClick = (e) => {
-    if (isLocked) {
-      e.preventDefault()
-    }
-  }
-
   return (
     <motion.div
       whileHover={{ y: -6, scale: 1.01 }}
       transition={{ duration: 0.22 }}
-      className={`bg-slate-900 border border-l-4 ${accent} rounded-2xl overflow-hidden group transition-all duration-300 flex flex-col w-full ${
-        isLocked
-          ? 'border-slate-700 opacity-75 cursor-pointer'
-          : 'border-slate-800 hover:border-slate-700 hover:shadow-2xl hover:shadow-black/30'
-      }`}
+      className={`bg-slate-900 border border-l-4 ${accent} rounded-2xl overflow-hidden group transition-all duration-300 flex flex-col w-full border-slate-800 hover:border-slate-700 hover:shadow-2xl hover:shadow-black/30`}
     >
-      <Link to={`/courses/${course.id}`} onClick={handleClick} className="flex flex-col flex-1">
+      <Link to={`/courses/${course.id}`} className="flex flex-col flex-1">
 
         {/* Thumbnail */}
         <div className="relative overflow-hidden h-44">
@@ -82,22 +72,6 @@ const CourseCard = ({ course, index = 0, showInstructor = true, showRating = tru
           {/* Overlay gradient */}
           <div className="absolute inset-0 bg-gradient-to-t from-slate-900/80 via-transparent to-transparent" />
 
-          {/* Lock overlay — shown when course is plan-gated */}
-          {isLocked && (
-            <div className="absolute inset-0 flex flex-col items-center justify-center gap-2"
-              style={{ background: 'rgba(15,23,42,0.72)', backdropFilter: 'blur(3px)' }}
-            >
-              <div className="w-10 h-10 rounded-full flex items-center justify-center"
-                style={{ background: 'rgba(251,191,36,0.12)', border: '1px solid rgba(251,191,36,0.3)' }}
-              >
-                <FiLock className="w-5 h-5 text-amber-400" />
-              </div>
-              <span className="text-[10px] font-black text-amber-400 tracking-widest uppercase">
-                {course.required_plan} plan
-              </span>
-            </div>
-          )}
-
           {/* Difficulty badge */}
           <div className="absolute top-3 left-3">
             <span className={`px-2 py-1 text-[10px] font-bold rounded-lg border backdrop-blur-sm ${difficulty.class}`}>
@@ -105,19 +79,8 @@ const CourseCard = ({ course, index = 0, showInstructor = true, showRating = tru
             </span>
           </div>
 
-          {/* Free/Premium badge */}
-          <div className="absolute top-3 right-3 flex flex-col gap-2 items-end">
-            <motion.span
-              animate={{ opacity: [1, 0.4, 1] }}
-              transition={{ repeat: Infinity, duration: 2, ease: "easeInOut" }}
-              className={`px-2 py-1 text-[10px] font-bold rounded-lg border backdrop-blur-sm ${course.is_free
-                ? 'bg-emerald-500/20 text-emerald-400 border-emerald-500/30'
-                : 'bg-violet-500/20 text-violet-400 border-violet-500/30'
-              }`}>
-              {course.is_free ? 'Free' : 'Premium'}
-            </motion.span>
-
-            {/* Live/Draft badge (only for admins or when needed) */}
+          {/* Live/Draft badge */}
+          <div className="absolute top-3 right-3">
             <span className={`px-2 py-1 text-[10px] font-bold rounded-lg backdrop-blur-sm ${course.is_published
               ? 'bg-green-500/20 text-green-400 border border-green-500/30'
               : 'bg-slate-700 text-slate-400 border border-slate-600'

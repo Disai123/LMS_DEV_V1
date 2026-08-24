@@ -8,7 +8,6 @@ import Footer from '../components/common/Footer'
 import CourseList from '../components/course/CourseList'
 import Pagination from '../components/common/Pagination'
 import ErrorBoundary from '../components/common/ErrorBoundary'
-import usePlanAccess from '../hooks/usePlanAccess'
 import { useAuth } from '../context/AuthContext'
 import {
   FiSearch, FiX, FiArrowRight, FiSliders,
@@ -22,34 +21,25 @@ const DIFFICULTIES = [
   { key: 'advanced', label: 'Advanced' },
 ]
 
-const PLANS = [
-  { key: '', label: 'All Plans' },
-  { key: 'true', label: 'Free' },
-  { key: 'false', label: 'Premium' },
-]
-
 import { getCourseMetadata } from '../utils/courseManifest'
 
 const CourseListPage = () => {
   const navigate = useNavigate()
   const { user } = useAuth()
-  const { tierOrder: planTierOrder } = usePlanAccess(user)
   const [search, setSearch] = useState('')
   const [activeCategory, setActiveCategory] = useState('')
   const [activeDifficulty, setActiveDifficulty] = useState('')
-  const [activePlan, setActivePlan] = useState('')
   const [currentPage, setCurrentPage] = useState(1)
   const [showFilters, setShowFilters] = useState(false)
-  const COURSES_PER_PAGE = 12 // Increased to show more courses
+  const COURSES_PER_PAGE = 12
 
   const { data: coursesData, isLoading, error } = useQuery(
-    ['courses', search, activeCategory, activeDifficulty, activePlan, currentPage],
+    ['courses', search, activeCategory, activeDifficulty, currentPage],
     () => {
       const params = { page: currentPage, limit: COURSES_PER_PAGE }
       if (search.trim()) params.q = search
       if (activeCategory) params.category = activeCategory
       if (activeDifficulty) params.difficulty = activeDifficulty
-      if (activePlan !== '') params.is_free = activePlan
       return courseService.getCourses(params)
     },
     { refetchOnWindowFocus: false, staleTime: 5 * 60 * 1000 }
@@ -69,12 +59,10 @@ const CourseListPage = () => {
     if (meta) {
       return {
         ...course,
-        required_plan: meta.plan,
-        is_free: meta.plan === 'free',
         sequence: meta.sequence
       };
     }
-    return { ...course, sequence: 999 }; // Unknown courses go to end
+    return { ...course, sequence: 999 };
   });
 
   const sortedCourses = [...processedCourses].sort((a, b) => a.sequence - b.sequence);
@@ -101,11 +89,10 @@ const CourseListPage = () => {
     setSearch('')
     setActiveCategory('')
     setActiveDifficulty('')
-    setActivePlan('')
     setCurrentPage(1)
   }
 
-  const hasFilters = search || activeCategory || activeDifficulty || activePlan
+  const hasFilters = search || activeCategory || activeDifficulty
 
   return (
     <ErrorBoundary>
@@ -197,12 +184,14 @@ const CourseListPage = () => {
                     Browse Courses
                     <FiArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
                   </button>
-                  <button
-                    onClick={() => navigate('/pricing')}
-                    className="inline-flex items-center gap-3 border border-slate-700 text-slate-300 font-bold px-8 py-4 rounded-xl hover:border-amber-400/50 hover:text-white transition-all duration-300 text-sm"
-                  >
-                    View Pricing
-                  </button>
+                  {!user && (
+                    <button
+                      onClick={() => navigate('/login')}
+                      className="inline-flex items-center gap-3 border border-slate-700 text-slate-300 font-bold px-8 py-4 rounded-xl hover:border-amber-400/50 hover:text-white transition-all duration-300 text-sm"
+                    >
+                      Sign In
+                    </button>
+                  )}
                 </motion.div>
 
               </div>
@@ -294,17 +283,16 @@ const CourseListPage = () => {
 
                 <button
                   onClick={() => setShowFilters(f => !f)}
-                  className={`flex items-center gap-2 px-4 py-2.5 rounded-xl text-xs font-bold transition-all border shadow-sm ${showFilters || activeDifficulty || activePlan
+                  className={`flex items-center gap-2 px-4 py-2.5 rounded-xl text-xs font-bold transition-all border shadow-sm ${showFilters || activeDifficulty
                     ? 'bg-slate-900 text-amber-400 border-slate-900'
                     : 'bg-white text-gray-600 border-gray-200 hover:border-gray-300'
                     }`}
                 >
                   <FiSliders className="w-3.5 h-3.5" />
                   Filters
-                  {(activeDifficulty || activePlan) && (
+                  {activeDifficulty && (
                     <span className="text-[10px] font-black text-amber-400">
-                      · {activePlan === 'true' ? 'Free' : activePlan === 'false' ? 'Premium' : ''}
-                      {activeDifficulty && `${activePlan ? ', ' : ''}${activeDifficulty}`}
+                      · {activeDifficulty}
                     </span>
                   )}
                 </button>
@@ -363,26 +351,6 @@ const CourseListPage = () => {
                     className="overflow-hidden"
                   >
                     <div className="flex flex-col py-4 border-t border-gray-100 gap-4">
-                      {/* Plan Filter */}
-                      <div className="flex items-center gap-2">
-                        <span className="text-[10px] font-bold text-gray-400 uppercase tracking-widest w-16">Plan:</span>
-                        <div className="flex flex-wrap gap-2">
-                          {PLANS.map(p => (
-                            <button
-                              key={p.key}
-                              onClick={() => { setActivePlan(p.key); setCurrentPage(1) }}
-                              className={`px-3 py-1.5 rounded-lg text-xs font-bold transition-all border ${activePlan === p.key
-                                ? 'bg-amber-400 text-slate-900 border-amber-400 shadow-sm'
-                                : 'bg-white text-gray-500 border-gray-200 hover:border-gray-300'
-                                }`}
-                            >
-                              {p.label}
-                            </button>
-                          ))}
-                        </div>
-                      </div>
-
-                      {/* Difficulty filter */}
                       <div className="flex items-center gap-2">
                         <span className="text-[10px] font-bold text-gray-400 uppercase tracking-widest w-16">Level:</span>
                         <div className="flex flex-wrap gap-2">
@@ -447,7 +415,6 @@ const CourseListPage = () => {
               error={error}
               showInstructor={true}
               showRating={true}
-              planTierOrder={planTierOrder}
             />
 
             {!isLoading && !error && courses.length > 0 && (
@@ -479,14 +446,14 @@ const CourseListPage = () => {
                   <span className="text-amber-400">one course away.</span>
                 </h2>
                 <p className="text-slate-500 mt-3 text-sm">
-                  Free to start · AI-adaptive · Industry certificates
+                  Start learning · Industry certificates · Hands-on chapters
                 </p>
               </div>
               <button
-                onClick={() => navigate('/pricing')}
+                onClick={() => navigate(user ? '/student' : '/login')}
                 className="group inline-flex items-center gap-3 bg-amber-400 text-slate-900 font-black px-8 py-5 rounded-2xl hover:bg-amber-300 transition-all duration-300 text-base flex-shrink-0 shadow-xl shadow-amber-400/20"
               >
-                Get Full Access
+                {user ? 'Go to Dashboard' : 'Get Started'}
                 <FiArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
               </button>
             </div>

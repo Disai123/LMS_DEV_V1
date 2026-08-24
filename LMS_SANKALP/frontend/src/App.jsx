@@ -12,10 +12,6 @@ import AdminDashboard from './pages/AdminDashboard'
 import StudentDashboard from './pages/StudentDashboard'
 import CourseListPage from './pages/CourseListPage'
 import CourseDetailPage from './pages/CourseDetailPage'
-import CreateCoursePage from './pages/CreateCoursePage'
-import UserManagementPage from './pages/UserManagementPage'
-import StudentListPage from './pages/StudentListPage'
-import AdminStudentProfilePage from './pages/AdminStudentProfilePage'
 import ProfilePage from './pages/ProfilePage'
 import CertificatesPage from './pages/CertificatesPage'
 import NotificationsPage from './pages/NotificationsPage'
@@ -89,42 +85,6 @@ function App() {
             <Route path="/notifications" element={<ProtectedRoute><NotificationsPage /></ProtectedRoute>} />
             <Route path="/courses" element={<CourseListPage />} />
             <Route path="/courses/:id" element={<CourseDetailPage />} />
-
-            <Route
-              path="/admin/courses/create"
-              element={
-                <ProtectedRoute requiredRole="admin">
-                  <CreateCoursePage />
-                </ProtectedRoute>
-              }
-            />
-
-            <Route
-              path="/admin/users"
-              element={
-                <ProtectedRoute requiredRole="admin">
-                  <UserManagementPage />
-                </ProtectedRoute>
-              }
-            />
-
-            <Route
-              path="/admin/students"
-              element={
-                <ProtectedRoute requiredRole="admin">
-                  <StudentListPage />
-                </ProtectedRoute>
-              }
-            />
-
-            <Route
-              path="/admin/students/:id"
-              element={
-                <ProtectedRoute requiredRole="admin">
-                  <AdminStudentProfilePage />
-                </ProtectedRoute>
-              }
-            />
 
             <Route path="/profile" element={<ProtectedRoute><ProfilePage /></ProtectedRoute>} />
             <Route path="/certificates" element={<ProtectedRoute><CertificatesPage /></ProtectedRoute>} />

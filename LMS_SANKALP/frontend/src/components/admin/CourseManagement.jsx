@@ -52,20 +52,6 @@ const CourseManagement = ({ courses }) => {
     }
   )
 
-  // Toggle Free/Premium mutation
-  const toggleFreeMutation = useMutation(
-    ({ id, is_free }) => courseService.updateCourse(id, { is_free }),
-    {
-      onSuccess: () => {
-        queryClient.invalidateQueries('admin-courses')
-        toast.success('Course type updated successfully')
-      },
-      onError: (error) => {
-        toast.error(error.message)
-      }
-    }
-  )
-
   const handleDelete = (courseId, courseTitle) => {
     if (window.confirm(`Are you sure you want to delete "${courseTitle}"? This action cannot be undone.`)) {
       deleteCourseMutation.mutate(courseId)
@@ -80,19 +66,13 @@ const CourseManagement = ({ courses }) => {
     unpublishCourseMutation.mutate(courseId)
   }
 
-  const handleToggleFree = (id, currentStatus) => {
-    toggleFreeMutation.mutate({ id, is_free: !currentStatus })
-  }
-
   // Filter courses
   const filteredCourses = courses.filter(course => {
     const matchesSearch = course.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
       course.description?.toLowerCase().includes(searchTerm.toLowerCase())
     const matchesStatus = filterStatus === 'all' ||
       (filterStatus === 'published' && course.is_published) ||
-      (filterStatus === 'draft' && !course.is_published) ||
-      (filterStatus === 'free' && course.is_free) ||
-      (filterStatus === 'premium' && !course.is_free)
+      (filterStatus === 'draft' && !course.is_published)
     return matchesSearch && matchesStatus
   })
 
@@ -133,8 +113,6 @@ const CourseManagement = ({ courses }) => {
               <option value="all">All Status</option>
               <option value="published">Published</option>
               <option value="draft">Draft</option>
-              <option value="free">Free</option>
-              <option value="premium">Premium</option>
             </select>
           </div>
         </div>
@@ -166,12 +144,6 @@ const CourseManagement = ({ courses }) => {
                     : 'bg-yellow-500/10 text-yellow-700 border-yellow-500/20'
                   }`}>
                   {course.is_published ? 'Live' : 'Draft'}
-                </span>
-                <span className={`px-2 py-1 text-[10px] font-bold rounded-lg border ${course.is_free
-                    ? 'bg-emerald-500/10 text-emerald-700 border-emerald-500/20'
-                    : 'bg-violet-500/10 text-violet-700 border-violet-500/20'
-                  }`}>
-                  {course.is_free ? 'Free' : 'Premium'}
                 </span>
               </div>
             </div>
@@ -240,16 +212,6 @@ const CourseManagement = ({ courses }) => {
                     Publish
                   </button>
                 )}
-                <button
-                  onClick={() => handleToggleFree(course.id, course.is_free)}
-                  disabled={toggleFreeMutation.isLoading}
-                  className={`px-3 py-1 text-xs rounded-lg transition-colors duration-200 disabled:opacity-50 ${course.is_free
-                      ? 'bg-violet-100 text-violet-800 hover:bg-violet-200'
-                      : 'bg-emerald-100 text-emerald-800 hover:bg-emerald-200'
-                    }`}
-                >
-                  Make {course.is_free ? 'Premium' : 'Free'}
-                </button>
                 <button
                   onClick={() => handleDelete(course.id, course.title)}
                   disabled={deleteCourseMutation.isLoading}

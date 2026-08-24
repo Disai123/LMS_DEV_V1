@@ -105,6 +105,28 @@ This recreates the SQLite file and re-imports filtered course-flow data.
 
 ---
 
+## Python demo reset
+
+Trim the SQLite database to a single Python course with only the admin and sample student:
+
+```powershell
+cd d:\lms_copy\LMS_SANKALP\backend
+npm run db:reset-demo
+```
+
+This keeps **course id 3** (Python), **admin@aishani.com**, and **sandhya@gmail.com**. All other courses and users are removed.
+
+**Demo credentials:**
+
+| Role | Email | Password |
+|------|-------|----------|
+| Admin | admin@aishani.com | admin123 |
+| Student | sandhya@gmail.com | *(existing password from source DB)* |
+
+Optional env overrides in `.env`: `DEMO_PYTHON_COURSE_ID`, `DEMO_ADMIN_EMAIL`, `DEMO_STUDENT_EMAIL`.
+
+---
+
 ## Branding
 
 UI matches GNANAM AI design. Text branding is **SANKALP**. Replace `frontend/public/lms_logo.svg` with your client logo when ready.

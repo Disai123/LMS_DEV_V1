@@ -80,12 +80,6 @@ const StudentCourseCard = ({ course, index, isEnrolled, enrollingCourseId, onEnr
             </div>
 
             <div className="flex items-center space-x-2">
-              <span className={`px-2 py-1 rounded-full text-[10px] font-bold border ${course.is_free
-                  ? 'bg-emerald-500/10 text-emerald-600 border-emerald-500/20'
-                  : 'bg-violet-500/10 text-violet-600 border-violet-500/20'
-                }`}>
-                {course.is_free ? 'Free' : 'Premium'}
-              </span>
               <span className="px-2 py-1 bg-gray-200 rounded-full text-xs font-medium text-gray-700">
                 {course.difficulty}
               </span>
