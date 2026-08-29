@@ -5,6 +5,14 @@ import { chapterService } from '../../services/chapterService'
 import toast from 'react-hot-toast'
 import LoadingSpinner from '../common/LoadingSpinner'
 
+const getChapterContentType = (chapter) => {
+  if (chapter?.video_url && chapter?.pdf_url) return 'both'
+  if (chapter?.video_url) return 'video'
+  if (chapter?.pdf_url) return 'pdf'
+  if (chapter?.external_url) return 'url'
+  return 'content'
+}
+
 const ChapterManagement = ({ courseId, courseTitle }) => {
   const queryClient = useQueryClient()
   const [showCreateForm, setShowCreateForm] = useState(false)
@@ -195,13 +203,13 @@ const ChapterManagement = ({ courseId, courseTitle }) => {
                         {chapter.title}
                       </h4>
                       <span className={`inline-flex items-center px-2 py-1 rounded-full text-xs font-medium ${
-                        chapter.content_type === 'video' 
+                        getChapterContentType(chapter) === 'video' 
                           ? 'bg-red-100 text-red-800'
-                          : chapter.content_type === 'pdf'
+                          : getChapterContentType(chapter) === 'pdf'
                           ? 'bg-blue-100 text-blue-800'
                           : 'bg-green-100 text-green-800'
                       }`}>
-                        {chapter.content_type.toUpperCase()}
+                        {getChapterContentType(chapter).toUpperCase()}
                       </span>
                       {!chapter.is_published && (
                         <span className="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-yellow-100 text-yellow-800">
@@ -307,22 +315,14 @@ const ChapterManagement = ({ courseId, courseTitle }) => {
 
 // Chapter Form Component
 const ChapterForm = ({ courseId, chapter, onClose, onSubmit, isSubmitting }) => {
-  // Determine content type based on existing URLs
-  const getContentType = (chapter) => {
-    if (chapter?.video_url && chapter?.pdf_url) return 'both'
-    if (chapter?.video_url) return 'video'
-    if (chapter?.pdf_url) return 'pdf'
-    return 'video' // default
-  }
-
   const [formData, setFormData] = useState({
     title: chapter?.title || '',
     description: chapter?.description || '',
-    content_type: getContentType(chapter),
+    content_type: chapter ? getChapterContentType(chapter) : 'video',
     video_url: chapter?.video_url || '',
     pdf_url: chapter?.pdf_url || '',
     external_url: chapter?.external_url || '',
-    duration_minutes: chapter?.duration_minutes || '',
+    duration_minutes: chapter?.duration_minutes || '5',
     is_published: chapter?.is_published ?? true
   })
 
@@ -344,6 +344,11 @@ const ChapterForm = ({ courseId, chapter, onClose, onSubmit, isSubmitting }) => 
     }
     if (formData.content_type === 'both' && !formData.video_url && !formData.pdf_url) {
       toast.error('At least one URL (video or PDF) is required')
+      return
+    }
+
+    if (!formData.duration_minutes || parseInt(formData.duration_minutes, 10) < 1) {
+      toast.error('Duration is required (minimum 1 minute)')
       return
     }
 
@@ -511,16 +516,20 @@ const ChapterForm = ({ courseId, chapter, onClose, onSubmit, isSubmitting }) => 
 
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-2">
-                Duration (minutes)
+                Duration (minutes) *
               </label>
               <input
                 type="number"
                 value={formData.duration_minutes}
                 onChange={(e) => setFormData(prev => ({ ...prev, duration_minutes: e.target.value }))}
                 className="input w-full"
-                placeholder="0"
-                min="0"
+                placeholder="5"
+                min="1"
+                required
               />
+              <p className="text-xs text-gray-500 mt-1">
+                Students must spend at least 90% of this time (or finish the video) to unlock Next.
+              </p>
             </div>
 
             <div className="flex items-center">

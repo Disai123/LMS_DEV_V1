@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react'
 import { motion } from 'framer-motion'
-import { analyzeUrl, getUrlTypeDisplayName, supportsEmbedding } from '../../utils/urlAnalyzer'
+import { analyzeUrl, getUrlTypeDisplayName, supportsEmbedding, URL_TYPES } from '../../utils/urlAnalyzer'
 import { api } from '../../services/api'
 import { FiPlay, FiExternalLink, FiAlertCircle } from 'react-icons/fi'
 
@@ -11,7 +11,8 @@ const VideoPlayer = ({
   className = '',
   enrollmentId,
   chapterId,
-  autoplay = false 
+  autoplay = false,
+  onVideoWatched
 }) => {
   const [urlAnalysis, setUrlAnalysis] = useState(null)
   const [isLoading, setIsLoading] = useState(true)
@@ -27,9 +28,12 @@ const VideoPlayer = ({
     }
 
     const analysis = analyzeUrl(playbackUrl)
-    if (embedUrl && !url) {
+    if (embedUrl) {
       analysis.isValid = true
       analysis.embedUrl = embedUrl
+      if (!supportsEmbedding(analysis.type) && analysis.type === URL_TYPES.UNKNOWN) {
+        analysis.type = URL_TYPES.YOUTUBE
+      }
     }
     if (analysis.type === 'youtube' && analysis.embedUrl) {
       analysis.embedUrl = analysis.embedUrl.replace('www.youtube.com', 'www.youtube-nocookie.com')
@@ -48,12 +52,13 @@ const VideoPlayer = ({
       if (!enrollmentId || !chapterId || !urlAnalysis?.isValid) return
       try {
         await api.post(`/progress/enrollment/${enrollmentId}/chapter/${chapterId}/video-watched`)
+        onVideoWatched?.()
       } catch (err) {
         console.warn('Failed to mark video watched', err)
       }
     }
     markWatched()
-  }, [enrollmentId, chapterId, urlAnalysis?.isValid])
+  }, [enrollmentId, chapterId, urlAnalysis?.isValid, onVideoWatched])
 
   if (isLoading) {
     return (
@@ -83,7 +88,9 @@ const VideoPlayer = ({
   }
 
   const renderVideoContent = () => {
-    if (supportsEmbedding(urlAnalysis.type)) {
+    const canEmbed = supportsEmbedding(urlAnalysis.type) || Boolean(embedUrl && urlAnalysis.embedUrl)
+
+    if (canEmbed) {
       return (
         <div
           className="relative w-full bg-black rounded-lg overflow-hidden select-none"

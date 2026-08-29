@@ -121,6 +121,15 @@ export const enrollmentService = {
     }
   },
 
+  getEnrollmentGrades: async (enrollmentId) => {
+    try {
+      const response = await api.get(`/enrollments/${enrollmentId}/grades`)
+      return response.data
+    } catch (error) {
+      throw new Error(error.response?.data?.message || 'Failed to get grades')
+    }
+  },
+
   // Enroll in a course
   enrollInCourse: async (courseId) => {
     try {

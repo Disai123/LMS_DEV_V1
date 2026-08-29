@@ -5,6 +5,7 @@ const { Op } = require('sequelize');
 const notificationService = require('../services/notificationService');
 const { analyzeUrl } = require('../utils/urlAnalyzer');
 const { ilikeOp, tagsSearchLiteral } = require('../utils/dialect');
+const studentPerformanceService = require('../services/studentPerformanceService');
 
 /**
  * Get all courses with filtering and pagination
@@ -282,9 +283,17 @@ const getCourseById = async (req, res, next) => {
         {
           model: CourseChapter,
           as: 'chapters',
-          attributes: ['id', 'title', 'description', 'video_url', 'pdf_url', 'chapter_order', 'duration_minutes', 'is_published'],
+          attributes: ['id', 'title', 'description', 'video_url', 'pdf_url', 'chapter_order', 'duration_minutes', 'is_published', 'test_id'],
           where: { is_published: true },
-          required: false
+          required: false,
+          include: [
+            {
+              model: CourseTest,
+              as: 'test',
+              attributes: ['id', 'title', 'description', 'passing_score', 'is_active', 'instructions', 'time_limit_minutes', 'max_attempts', 'test_type'],
+              required: false
+            }
+          ]
         },
         {
           model: CourseTest,
@@ -372,11 +381,14 @@ const getCourseById = async (req, res, next) => {
             type: 'chapter'
           });
         } else {
-          // Full access - include all data including URLs
-          allContent.push({
+          const chapterPayload = {
             ...chapterInfo,
             type: 'chapter'
-          });
+          };
+          if (chapter.test) {
+            chapterPayload.test = chapter.test.getPublicInfo();
+          }
+          allContent.push(chapterPayload);
         }
       });
     }
@@ -1009,7 +1021,7 @@ const getCourseContent = async (req, res, next) => {
             {
               model: CourseTest,
               as: 'test',
-              attributes: ['id', 'title', 'description', 'passing_score', 'is_active', 'instructions'],
+              attributes: ['id', 'title', 'description', 'passing_score', 'is_active', 'instructions', 'time_limit_minutes', 'max_attempts', 'test_type'],
               required: false
             }
           ]
@@ -1054,6 +1066,9 @@ const getCourseContent = async (req, res, next) => {
       const isStudent = req.user.role === 'student';
       course.chapters.forEach(chapter => {
         const chapterInfo = chapter.getPublicInfo();
+        if (chapter.test) {
+          chapterInfo.test = chapter.test.getPublicInfo();
+        }
         if (isStudent && chapter.video_url) {
           const analysis = chapter.url_analysis || analyzeUrl(chapter.video_url);
           chapterInfo.has_video = true;
@@ -1520,6 +1535,27 @@ const getCourseCertificates = async (req, res, next) => {
   }
 };
 
+/**
+ * Get course performance roster (admin only)
+ */
+const getCoursePerformance = async (req, res, next) => {
+  try {
+    const { id } = req.params;
+    const data = await studentPerformanceService.getCoursePerformance(id);
+
+    logger.info(`Admin ${req.user.email} viewed performance for course "${data.course.title}"`);
+
+    res.json({
+      success: true,
+      message: 'Course performance retrieved successfully',
+      data
+    });
+  } catch (error) {
+    logger.error('Get course performance error:', error);
+    next(error);
+  }
+};
+
 module.exports = {
   getCourses,
   searchCourses,
@@ -1542,5 +1578,6 @@ module.exports = {
   updateProgress,
   rateCourse,
   getCourseEnrollments,
-  getCourseCertificates
+  getCourseCertificates,
+  getCoursePerformance
 };

@@ -3,6 +3,7 @@ const logger = require('../utils/logger');
 const { AppError } = require('../middleware/errorHandler');
 const { Op } = require('sequelize');
 const { ilikeOp } = require('../utils/dialect');
+const studentPerformanceService = require('../services/studentPerformanceService');
 
 /**
  * Get all users with pagination
@@ -504,20 +505,28 @@ const buildStudentProfileData = async (userId) => {
       course: e.course ? e.course.getPublicInfo?.() || e.course : null
     })),
     certificates,
-    testAttempts: testAttempts.map((a) => ({
-      id: a.id,
-      score: a.score,
-      status: a.status,
-      completed_at: a.completed_at,
-      test: a.test,
-      isPassed: a.isPassed?.() ?? (a.score >= (a.test?.passing_score || 70))
-    })),
+    testAttempts: testAttempts.map((a) => {
+      const passingScore = a.test?.passing_score ?? 70;
+      const score = parseFloat(a.score);
+      return {
+        id: a.id,
+        score: a.score,
+        status: a.status,
+        completed_at: a.completed_at,
+        test: a.test,
+        isPassed: !Number.isNaN(score) && score >= passingScore
+      };
+    }),
     summary: {
       totalEnrolled: enrollments.length,
       contentCompleted: enrollments.filter((e) => ['content_completed', 'completed', 'certified'].includes(e.status)).length,
       certified: enrollments.filter((e) => e.status === 'certified').length,
       certificatesEarned: certificates.length,
-      testsPassed: testAttempts.filter((a) => (a.isPassed?.() ?? a.score >= (a.test?.passing_score || 70))).length
+      testsPassed: testAttempts.filter((a) => {
+        const passingScore = a.test?.passing_score ?? 70;
+        const score = parseFloat(a.score);
+        return !Number.isNaN(score) && score >= passingScore;
+      }).length
     }
   };
 };
@@ -633,6 +642,25 @@ const updateUserPlan = async (req, res, next) => {
   }
 };
 
+/**
+ * Get student performance (admin only)
+ */
+const getStudentPerformance = async (req, res, next) => {
+  try {
+    const { id } = req.params;
+    const data = await studentPerformanceService.getStudentPerformance(id);
+
+    res.json({
+      success: true,
+      message: 'Student performance retrieved successfully',
+      data
+    });
+  } catch (error) {
+    logger.error('Get student performance error:', error);
+    next(error);
+  }
+};
+
 module.exports = {
   getUsers,
   getStudents,
@@ -648,6 +676,7 @@ module.exports = {
   getStudentProfile,
   updateStudentProfile,
   buildStudentProfileData,
-  updateUserPlan
+  updateUserPlan,
+  getStudentPerformance
 };
 

@@ -1,5 +1,6 @@
 import { motion } from 'framer-motion'
 import { useState } from 'react'
+import { Link } from 'react-router-dom'
 import { useQuery } from 'react-query'
 import { userService } from '../../services/userService'
 import { courseService } from '../../services/courseService'
@@ -33,6 +34,16 @@ const UserAnalytics = () => {
   const { data: enrollmentsData, isLoading: enrollmentsLoading } = useQuery(
     ['course-enrollments', selectedCourseId],
     () => courseService.getCourseEnrollments(selectedCourseId),
+    {
+      refetchOnWindowFocus: false,
+      staleTime: 30 * 1000,
+      enabled: isAuthenticated && user?.role === 'admin' && selectedCourseId !== null
+    }
+  )
+
+  const { data: performanceData, isLoading: performanceLoading } = useQuery(
+    ['course-performance', selectedCourseId],
+    () => courseService.getCoursePerformance(selectedCourseId),
     {
       refetchOnWindowFocus: false,
       staleTime: 30 * 1000,
@@ -520,17 +531,22 @@ const UserAnalytics = () => {
 
         {selectedCourseId && (
           <div className="mt-6">
-            {(enrollmentsLoading || certificatesLoading) ? (
+            {(enrollmentsLoading || performanceLoading || certificatesLoading) ? (
               <div className="text-center py-8">
                 <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-indigo-600 mx-auto"></div>
-                <p className="mt-2 text-sm text-gray-500">Loading enrollment and certificate data...</p>
+                <p className="mt-2 text-sm text-gray-500">Loading enrollment and performance data...</p>
               </div>
-            ) : enrollmentsData?.data?.enrollments && enrollmentsData.data.enrollments.length > 0 ? (
+            ) : (performanceData?.data?.enrollments?.length > 0 || enrollmentsData?.data?.enrollments?.length > 0) ? (
               <div>
                 <div className="mb-4 flex items-center justify-between flex-wrap gap-2">
                   <p className="text-sm text-gray-600">
-                    <span className="font-semibold">{enrollmentsData.data.totalEnrollments}</span> users enrolled in{' '}
-                    <span className="font-semibold text-indigo-600">{enrollmentsData.data.course.title}</span>
+                    <span className="font-semibold">
+                      {performanceData?.data?.enrollments?.length || enrollmentsData?.data?.totalEnrollments}
+                    </span>{' '}
+                    users enrolled in{' '}
+                    <span className="font-semibold text-indigo-600">
+                      {performanceData?.data?.course?.title || enrollmentsData?.data?.course?.title}
+                    </span>
                     {certificatesData?.data?.certificates && certificatesData.data.certificates.length > 0 && (
                       <span className="ml-2">
                         • <span className="font-semibold text-green-600">{certificatesData.data.totalCertificates}</span> certificate{certificatesData.data.totalCertificates !== 1 ? 's' : ''} issued
@@ -555,6 +571,18 @@ const UserAnalytics = () => {
                           Progress
                         </th>
                         <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                          Quiz Avg
+                        </th>
+                        <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                          Final Exam
+                        </th>
+                        <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                          Total Marks
+                        </th>
+                        <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                          Time Spent
+                        </th>
+                        <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                           Enrolled Date
                         </th>
                         <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
@@ -572,12 +600,14 @@ const UserAnalytics = () => {
                       </tr>
                     </thead>
                     <tbody className="bg-white divide-y divide-gray-200">
-                      {enrollmentsData.data.enrollments.map((enrollment) => {
-                        // Find matching certificate for this enrollment
+                      {(performanceData?.data?.enrollments || enrollmentsData?.data?.enrollments || []).map((enrollment) => {
                         const certificate = certificatesData?.data?.certificates?.find(
                           cert => cert.student?.id === enrollment.student?.id || cert.student?.email === enrollment.student?.email
                         )
-                        
+                        const formatScore = (value) => (value === null || value === undefined ? '—' : `${value}%`)
+                        const timeSpent = enrollment.timeSpent ?? enrollment.time_spent ?? 0
+                        const studentId = enrollment.student?.id
+
                         return (
                           <tr key={enrollment.enrollmentId} className="hover:bg-gray-50">
                             <td className="px-4 py-4">
@@ -588,11 +618,20 @@ const UserAnalytics = () => {
                                   className="w-10 h-10 rounded-full mr-3 flex-shrink-0"
                                 />
                                 <div className="min-w-0 flex-1">
-                                  <div className="text-sm font-medium text-gray-900 truncate">
-                                    {enrollment.student?.name || 'Unknown'}
-                                  </div>
+                                  {studentId ? (
+                                    <Link
+                                      to={`/admin/students/${studentId}?tab=performance`}
+                                      className="text-sm font-medium text-indigo-600 hover:text-indigo-800 truncate block"
+                                    >
+                                      {enrollment.student?.name || 'Unknown'}
+                                    </Link>
+                                  ) : (
+                                    <div className="text-sm font-medium text-gray-900 truncate">
+                                      {enrollment.student?.name || 'Unknown'}
+                                    </div>
+                                  )}
                                   <div className="text-xs text-gray-500">
-                                    {enrollment.student?.isActive ? (
+                                    {enrollment.student?.isActive !== false ? (
                                       <span className="text-green-600">Active</span>
                                     ) : (
                                       <span className="text-gray-400">Inactive</span>
@@ -606,8 +645,10 @@ const UserAnalytics = () => {
                             </td>
                             <td className="px-4 py-4">
                               <span className={`px-2 inline-flex text-xs leading-5 font-semibold rounded-full ${
-                                enrollment.status === 'completed' 
+                                enrollment.status === 'certified' || enrollment.status === 'completed'
                                   ? 'bg-green-100 text-green-800'
+                                  : enrollment.status === 'content_completed'
+                                  ? 'bg-emerald-100 text-emerald-800'
                                   : enrollment.status === 'in-progress'
                                   ? 'bg-yellow-100 text-yellow-800'
                                   : 'bg-blue-100 text-blue-800'
@@ -627,6 +668,20 @@ const UserAnalytics = () => {
                                 </div>
                                 <span className="text-sm text-gray-900 whitespace-nowrap">{enrollment.progress || 0}%</span>
                               </div>
+                            </td>
+                            <td className="px-4 py-4 text-sm text-gray-900 whitespace-nowrap">
+                              {formatScore(enrollment.quizAvg)}
+                            </td>
+                            <td className="px-4 py-4 whitespace-nowrap">
+                              <span className={`text-sm font-medium ${enrollment.finalExamPassed ? 'text-green-700' : 'text-gray-900'}`}>
+                                {formatScore(enrollment.finalExamScore)}
+                              </span>
+                            </td>
+                            <td className="px-4 py-4 text-sm font-semibold text-indigo-700 whitespace-nowrap">
+                              {formatScore(enrollment.totalMarks)}
+                            </td>
+                            <td className="px-4 py-4 text-sm text-gray-500 whitespace-nowrap">
+                              {timeSpent < 60 ? `${timeSpent} min` : `${Math.floor(timeSpent / 60)}h ${timeSpent % 60}m`}
                             </td>
                             <td className="px-4 py-4 text-sm text-gray-500 whitespace-nowrap">
                               {enrollment.enrolledAt 

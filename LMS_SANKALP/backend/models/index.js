@@ -141,6 +141,11 @@ const defineAssociations = () => {
     as: 'creator'
   });
 
+  CourseTest.belongsTo(CourseChapter, {
+    foreignKey: 'chapter_id',
+    as: 'linkedChapter'
+  });
+
   CourseTest.hasMany(TestQuestion, {
     foreignKey: 'test_id',
     as: 'questions',

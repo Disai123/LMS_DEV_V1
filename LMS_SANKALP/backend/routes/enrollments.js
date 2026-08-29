@@ -70,7 +70,14 @@ router.get('/:enrollmentId/progression',
   enrollmentController.getChapterProgression
 );
 
-router.post('/:enrollmentId/feedback', 
+router.get('/:enrollmentId/grades',
+  authenticate,
+  requireStudent,
+  validate(commonSchemas.enrollmentId, 'params'),
+  enrollmentController.getEnrollmentGrades
+);
+
+router.post('/:enrollmentId/feedback',
   authenticate,
   requireStudent,
   validate(commonSchemas.enrollmentId, 'params'),

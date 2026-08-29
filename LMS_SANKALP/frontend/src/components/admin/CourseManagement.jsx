@@ -84,27 +84,26 @@ const CourseManagement = ({ courses }) => {
         </div>
       </div>
 
-      {/* Course list */}
+      {/* Course cards */}
       {filteredCourses.length > 0 ? (
-        <div className="bg-white rounded-2xl border border-slate-200 shadow-sm overflow-hidden">
+        <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-5">
           {filteredCourses.map((course, index) => (
             <motion.div
               key={course.id}
               initial={{ opacity: 0, y: 8 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: index * 0.04 }}
-              className="p-5 sm:p-6 border-b border-slate-100 last:border-b-0 hover:bg-slate-50/80 transition-colors"
+              className="bg-white rounded-2xl border border-slate-200 shadow-sm hover:shadow-md hover:border-indigo-200 transition-all flex flex-col"
             >
-              <div className="flex flex-col xl:flex-row xl:items-center gap-5">
-                {/* Course info */}
-                <div className="flex items-start gap-4 flex-1 min-w-0">
-                  <div className="w-14 h-14 rounded-xl bg-gradient-to-br from-indigo-500 to-violet-600 flex items-center justify-center text-white text-xl font-bold shrink-0">
+              <div className="p-5 flex-1">
+                <div className="flex items-start gap-3 mb-4">
+                  <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-indigo-500 to-violet-600 flex items-center justify-center text-white text-lg font-bold shrink-0">
                     {course.title?.charAt(0) || 'C'}
                   </div>
                   <div className="min-w-0 flex-1">
                     <div className="flex flex-wrap items-center gap-2 mb-1">
-                      <h3 className="text-lg font-semibold text-slate-900">{course.title}</h3>
-                      <span className={`px-2.5 py-0.5 text-xs font-semibold rounded-full ${
+                      <h3 className="text-base font-semibold text-slate-900 line-clamp-1">{course.title}</h3>
+                      <span className={`px-2 py-0.5 text-xs font-semibold rounded-full ${
                         course.is_published
                           ? 'bg-emerald-100 text-emerald-700'
                           : 'bg-amber-100 text-amber-700'
@@ -112,50 +111,46 @@ const CourseManagement = ({ courses }) => {
                         {course.is_published ? 'Live' : 'Draft'}
                       </span>
                     </div>
-                    <p className="text-sm text-slate-600 line-clamp-2 mb-2">
+                    <p className="text-sm text-slate-600 line-clamp-2">
                       {course.description || 'No description'}
                     </p>
-                    <div className="flex flex-wrap gap-3 text-xs text-slate-500">
-                      <span className="capitalize">{course.category}</span>
-                      <span>·</span>
-                      <span className="capitalize">{course.difficulty}</span>
-                      <span>·</span>
-                      <span>{course.enrollment_count || 0} enrolled</span>
-                      <span>·</span>
-                      <span>Rating {course.average_rating || 0}</span>
-                    </div>
                   </div>
                 </div>
 
-                {/* Stats pills - visible on wide screens */}
-                <div className="hidden lg:flex items-center gap-6 px-4">
-                  <div className="text-center">
-                    <p className="text-xl font-bold text-indigo-600">{course.enrollment_count || 0}</p>
+                <div className="flex flex-wrap gap-2 text-xs text-slate-500 mb-4">
+                  <span className="capitalize px-2 py-1 bg-slate-100 rounded-md">{course.category}</span>
+                  <span className="capitalize px-2 py-1 bg-slate-100 rounded-md">{course.difficulty}</span>
+                </div>
+
+                <div className="grid grid-cols-2 gap-3">
+                  <div className="rounded-lg bg-indigo-50 px-3 py-2 text-center">
+                    <p className="text-lg font-bold text-indigo-600">{course.enrollment_count || 0}</p>
                     <p className="text-xs text-slate-500">Enrolled</p>
                   </div>
-                  <div className="text-center">
-                    <p className="text-xl font-bold text-violet-600">{course.average_rating || 0}</p>
+                  <div className="rounded-lg bg-violet-50 px-3 py-2 text-center">
+                    <p className="text-lg font-bold text-violet-600">{course.average_rating || 0}</p>
                     <p className="text-xs text-slate-500">Rating</p>
                   </div>
                 </div>
+              </div>
 
-                {/* Actions */}
-                <div className="flex flex-wrap gap-2 xl:shrink-0">
+              <div className="px-5 pb-5 pt-0 border-t border-slate-100">
+                <div className="flex flex-wrap gap-2 pt-4">
                   <Link
                     to={`/courses/${course.id}`}
-                    className="px-4 py-2 text-sm font-medium rounded-lg border border-slate-200 text-slate-700 hover:bg-slate-50 transition-colors"
+                    className="flex-1 min-w-[70px] text-center px-3 py-2 text-xs font-medium rounded-lg border border-slate-200 text-slate-700 hover:bg-slate-50 transition-colors"
                   >
                     View
                   </Link>
                   <Link
                     to={`/admin/courses/${course.id}/edit`}
-                    className="px-4 py-2 text-sm font-medium rounded-lg bg-indigo-600 text-white hover:bg-indigo-700 transition-colors"
+                    className="flex-1 min-w-[70px] text-center px-3 py-2 text-xs font-medium rounded-lg bg-indigo-600 text-white hover:bg-indigo-700 transition-colors"
                   >
                     Edit
                   </Link>
                   <Link
                     to={`/admin/courses/${course.id}/edit#tests`}
-                    className="px-4 py-2 text-sm font-medium rounded-lg border border-indigo-200 text-indigo-700 hover:bg-indigo-50 transition-colors"
+                    className="flex-1 min-w-[70px] text-center px-3 py-2 text-xs font-medium rounded-lg border border-indigo-200 text-indigo-700 hover:bg-indigo-50 transition-colors"
                   >
                     Tests
                   </Link>
@@ -163,7 +158,7 @@ const CourseManagement = ({ courses }) => {
                     <button
                       onClick={() => unpublishCourseMutation.mutate(course.id)}
                       disabled={unpublishCourseMutation.isLoading}
-                      className="px-4 py-2 text-sm font-medium rounded-lg border border-amber-200 text-amber-700 hover:bg-amber-50 transition-colors disabled:opacity-50"
+                      className="flex-1 min-w-[70px] px-3 py-2 text-xs font-medium rounded-lg border border-amber-200 text-amber-700 hover:bg-amber-50 transition-colors disabled:opacity-50"
                     >
                       Unpublish
                     </button>
@@ -171,7 +166,7 @@ const CourseManagement = ({ courses }) => {
                     <button
                       onClick={() => publishCourseMutation.mutate(course.id)}
                       disabled={publishCourseMutation.isLoading}
-                      className="px-4 py-2 text-sm font-medium rounded-lg border border-emerald-200 text-emerald-700 hover:bg-emerald-50 transition-colors disabled:opacity-50"
+                      className="flex-1 min-w-[70px] px-3 py-2 text-xs font-medium rounded-lg border border-emerald-200 text-emerald-700 hover:bg-emerald-50 transition-colors disabled:opacity-50"
                     >
                       Publish
                     </button>
@@ -179,7 +174,7 @@ const CourseManagement = ({ courses }) => {
                   <button
                     onClick={() => handleDelete(course.id, course.title)}
                     disabled={deleteCourseMutation.isLoading}
-                    className="px-4 py-2 text-sm font-medium rounded-lg border border-red-200 text-red-600 hover:bg-red-50 transition-colors disabled:opacity-50"
+                    className="flex-1 min-w-[70px] px-3 py-2 text-xs font-medium rounded-lg border border-red-200 text-red-600 hover:bg-red-50 transition-colors disabled:opacity-50"
                   >
                     Delete
                   </button>

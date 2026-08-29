@@ -33,7 +33,7 @@ export const analyzeUrl = (url) => {
     const pathname = urlObj.pathname
 
     // YouTube detection
-    if (hostname.includes('youtube.com') || hostname.includes('youtu.be')) {
+    if (hostname.includes('youtube.com') || hostname.includes('youtu.be') || hostname.includes('youtube-nocookie.com')) {
       return analyzeYouTubeUrl(url, urlObj)
     }
 
@@ -92,9 +92,15 @@ const analyzeYouTubeUrl = (url, urlObj) => {
   if (urlObj.hostname.includes('youtu.be')) {
     // Short YouTube URL format: https://youtu.be/VIDEO_ID
     videoId = urlObj.pathname.substring(1)
-  } else if (urlObj.hostname.includes('youtube.com')) {
-    // Long YouTube URL format: https://www.youtube.com/watch?v=VIDEO_ID
+  } else if (urlObj.hostname.includes('youtube.com') || urlObj.hostname.includes('youtube-nocookie.com')) {
+    // watch?v=, /embed/, /shorts/, /live/
     videoId = urlObj.searchParams.get('v')
+    if (!videoId) {
+      const pathMatch = urlObj.pathname.match(/^\/(?:embed|shorts|live)\/([^/?]+)/)
+      if (pathMatch) {
+        videoId = pathMatch[1]
+      }
+    }
   }
 
   if (videoId) {

@@ -2,9 +2,10 @@ import { useState } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import { useQuery, useMutation, useQueryClient } from 'react-query'
 import { testService } from '../../services/testService'
+import { DEFAULT_QUIZ_MAX_ATTEMPTS } from '../../utils/chapterConstants'
 import toast from 'react-hot-toast'
 
-const TestManagement = ({ courseId, courseTitle }) => {
+const TestManagement = ({ courseId, courseTitle, chapters = [] }) => {
   const queryClient = useQueryClient()
   const [showTestForm, setShowTestForm] = useState(false)
   const [editingTest, setEditingTest] = useState(null)
@@ -17,12 +18,16 @@ const TestManagement = ({ courseId, courseTitle }) => {
     passing_score: 70,
     time_limit_minutes: null,
     max_attempts: null,
-    instructions: ''
+    instructions: '',
+    test_type: 'final_exam',
+    chapter_id: null
   })
   const [questionFormData, setQuestionFormData] = useState({
     question_text: '',
     question_type: 'multiple_choice',
     points: 1,
+    accepted_answers: '',
+    correct_true_false: 'true',
     options: [
       { option_text: '', is_correct: false },
       { option_text: '', is_correct: false },
@@ -170,7 +175,9 @@ const TestManagement = ({ courseId, courseTitle }) => {
       passing_score: 70,
       time_limit_minutes: null,
       max_attempts: null,
-      instructions: ''
+      instructions: '',
+      test_type: 'final_exam',
+      chapter_id: null
     })
   }
 
@@ -179,6 +186,8 @@ const TestManagement = ({ courseId, courseTitle }) => {
       question_text: '',
       question_type: 'multiple_choice',
       points: 1,
+      accepted_answers: '',
+      correct_true_false: 'true',
       options: [
         { option_text: '', is_correct: false },
         { option_text: '', is_correct: false },
@@ -196,7 +205,9 @@ const TestManagement = ({ courseId, courseTitle }) => {
       passing_score: test.passing_score,
       time_limit_minutes: test.time_limit_minutes,
       max_attempts: test.max_attempts,
-      instructions: test.instructions || ''
+      instructions: test.instructions || '',
+      test_type: test.test_type || 'final_exam',
+      chapter_id: test.chapter_id || null
     })
     setShowTestForm(true)
   }
@@ -209,10 +220,19 @@ const TestManagement = ({ courseId, courseTitle }) => {
 
   const handleSubmitTest = (e) => {
     e.preventDefault()
+    if (testFormData.test_type === 'chapter_quiz' && !testFormData.chapter_id) {
+      toast.error('Select a chapter for this quiz')
+      return
+    }
+
+    const payload = { ...testFormData }
+    if (payload.test_type === 'chapter_quiz' && (payload.max_attempts == null || payload.max_attempts === '')) {
+      payload.max_attempts = DEFAULT_QUIZ_MAX_ATTEMPTS
+    }
     if (editingTest) {
-      updateTestMutation.mutate({ testId: editingTest.id, testData: testFormData })
+      updateTestMutation.mutate({ testId: editingTest.id, testData: payload })
     } else {
-      createTestMutation.mutate(testFormData)
+      createTestMutation.mutate(payload)
     }
   }
 
@@ -226,12 +246,17 @@ const TestManagement = ({ courseId, courseTitle }) => {
   const handleEditQuestion = (question) => {
     setEditingQuestion(question)
     setSelectedTest(question.test_id)
+    const falseOption = question.options?.find((opt) => opt.option_text === 'False' && opt.is_correct)
     setQuestionFormData({
       question_text: question.question_text,
       question_type: question.question_type,
       points: question.points,
+      accepted_answers: question.question_type === 'short_answer'
+        ? (question.options || []).filter((opt) => opt.is_correct).map((opt) => opt.option_text).join(', ')
+        : '',
+      correct_true_false: falseOption ? 'false' : 'true',
       options: question.options ? question.options.map(opt => ({
-        id: opt.id, // Include the option ID for tracking existing options
+        id: opt.id,
         option_text: opt.option_text,
         is_correct: opt.is_correct
       })) : [
@@ -252,46 +277,53 @@ const TestManagement = ({ courseId, courseTitle }) => {
 
   const handleSubmitQuestion = (e) => {
     e.preventDefault()
-    
-    // Filter out empty options
-    const validOptions = questionFormData.options.filter(opt => opt.option_text && opt.option_text.trim() !== '')
-    
-    console.log('Original options:', questionFormData.options);
-    console.log('Valid options after filtering:', validOptions);
-    
-    // Validate at least one correct answer
-    const hasCorrectAnswer = validOptions.some(opt => opt.is_correct)
-    if (!hasCorrectAnswer) {
-      toast.error('Please mark at least one option as correct')
-      return
-    }
 
-    // Validate at least 2 options
-    if (validOptions.length < 2) {
-      toast.error('Please provide at least 2 options')
-      return
-    }
-    
-    // Validate that all options have unique text
-    const optionTexts = validOptions.map(opt => opt.option_text.trim().toLowerCase())
-    const uniqueTexts = [...new Set(optionTexts)]
-    if (optionTexts.length !== uniqueTexts.length) {
-      toast.error('All options must have different text')
-      return
-    }
-
+    const { question_type, accepted_answers, correct_true_false } = questionFormData
+    let validOptions = []
     const dataToSend = {
       test_id: selectedTest,
-      ...questionFormData,
-      options: validOptions
+      question_text: questionFormData.question_text,
+      question_type,
+      points: questionFormData.points
     }
 
-    console.log('=== FRONTEND SUBMIT QUESTION ===');
-    console.log('Question form data:', questionFormData);
-    console.log('Valid options:', validOptions);
-    console.log('Selected test ID:', selectedTest);
-    console.log('Data to send:', dataToSend);
-    console.log('===============================');
+    if (question_type === 'multiple_choice') {
+      validOptions = questionFormData.options.filter(opt => opt.option_text && opt.option_text.trim() !== '')
+
+      const hasCorrectAnswer = validOptions.some(opt => opt.is_correct)
+      if (!hasCorrectAnswer) {
+        toast.error('Please mark at least one option as correct')
+        return
+      }
+
+      if (validOptions.length < 2) {
+        toast.error('Please provide at least 2 options')
+        return
+      }
+
+      const optionTexts = validOptions.map(opt => opt.option_text.trim().toLowerCase())
+      const uniqueTexts = [...new Set(optionTexts)]
+      if (optionTexts.length !== uniqueTexts.length) {
+        toast.error('All options must have different text')
+        return
+      }
+
+      dataToSend.options = validOptions
+    } else if (question_type === 'short_answer') {
+      const answers = accepted_answers.split(',').map((a) => a.trim()).filter(Boolean)
+      if (answers.length === 0) {
+        toast.error('Please provide at least one accepted answer')
+        return
+      }
+      dataToSend.accepted_answers = answers
+      dataToSend.options = answers.map((text) => ({ option_text: text, is_correct: true }))
+    } else if (question_type === 'true_false') {
+      dataToSend.correct_true_false = correct_true_false
+      dataToSend.options = [
+        { option_text: 'True', is_correct: correct_true_false === 'true' },
+        { option_text: 'False', is_correct: correct_true_false === 'false' }
+      ]
+    }
 
     if (editingQuestion) {
       updateQuestionMutation.mutate({
@@ -396,6 +428,13 @@ const TestManagement = ({ courseId, courseTitle }) => {
                           </span>
                         )}
                         <span className={`px-3 py-1 rounded-full text-xs font-medium ${
+                          (test.test_type || 'final_exam') === 'chapter_quiz'
+                            ? 'bg-purple-100 text-purple-800'
+                            : 'bg-blue-100 text-blue-800'
+                        }`}>
+                          {(test.test_type || 'final_exam') === 'chapter_quiz' ? 'Chapter Quiz' : 'Final Exam'}
+                        </span>
+                        <span className={`px-3 py-1 rounded-full text-xs font-medium ${
                           test.is_active 
                             ? 'bg-green-100 text-green-800' 
                             : 'bg-gray-100 text-gray-600'
@@ -469,6 +508,54 @@ const TestManagement = ({ courseId, courseTitle }) => {
                 />
               </div>
 
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-2">
+                  Test Type *
+                </label>
+                <select
+                  value={testFormData.test_type}
+                  onChange={(e) => {
+                    const test_type = e.target.value
+                    setTestFormData({
+                      ...testFormData,
+                      test_type,
+                      chapter_id: null,
+                      max_attempts: test_type === 'chapter_quiz'
+                        ? (testFormData.max_attempts ?? DEFAULT_QUIZ_MAX_ATTEMPTS)
+                        : testFormData.max_attempts
+                    })
+                  }}
+                  className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500"
+                >
+                  <option value="final_exam">Final Exam</option>
+                  <option value="chapter_quiz">Chapter Quiz</option>
+                </select>
+              </div>
+
+              {testFormData.test_type === 'chapter_quiz' && (
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-2">
+                    Link to Chapter *
+                  </label>
+                  <select
+                    value={testFormData.chapter_id || ''}
+                    onChange={(e) => setTestFormData({
+                      ...testFormData,
+                      chapter_id: e.target.value ? parseInt(e.target.value, 10) : null
+                    })}
+                    className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500"
+                    required
+                  >
+                    <option value="">Select a chapter</option>
+                    {chapters.map((chapter) => (
+                      <option key={chapter.id} value={chapter.id}>
+                        {chapter.chapter_order}. {chapter.title}
+                      </option>
+                    ))}
+                  </select>
+                </div>
+              )}
+
               <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
                 <div>
                   <label className="block text-sm font-medium text-gray-700 mb-2">
@@ -501,16 +588,24 @@ const TestManagement = ({ courseId, courseTitle }) => {
 
                 <div>
                   <label className="block text-sm font-medium text-gray-700 mb-2">
-                    Max Attempts
+                    Max Attempts{testFormData.test_type === 'chapter_quiz' ? ' *' : ''}
                   </label>
                   <input
                     type="number"
-                    value={testFormData.max_attempts || ''}
-                    onChange={(e) => setTestFormData({ ...testFormData, max_attempts: e.target.value ? parseInt(e.target.value) : null })}
+                    value={testFormData.max_attempts ?? (testFormData.test_type === 'chapter_quiz' ? DEFAULT_QUIZ_MAX_ATTEMPTS : '')}
+                    onChange={(e) => setTestFormData({
+                      ...testFormData,
+                      max_attempts: e.target.value ? parseInt(e.target.value, 10) : null
+                    })}
                     min="1"
-                    placeholder="Unlimited"
+                    placeholder={testFormData.test_type === 'chapter_quiz' ? String(DEFAULT_QUIZ_MAX_ATTEMPTS) : 'Unlimited'}
                     className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500"
                   />
+                  {testFormData.test_type === 'chapter_quiz' && (
+                    <p className="text-xs text-gray-500 mt-1">
+                      Defaults to {DEFAULT_QUIZ_MAX_ATTEMPTS}. After all attempts, the average score is recorded.
+                    </p>
+                  )}
                 </div>
               </div>
 
@@ -608,7 +703,12 @@ const TestManagement = ({ courseId, courseTitle }) => {
                   </label>
                   <select
                     value={questionFormData.question_type}
-                    onChange={(e) => setQuestionFormData({ ...questionFormData, question_type: e.target.value })}
+                    onChange={(e) => setQuestionFormData({
+                      ...questionFormData,
+                      question_type: e.target.value,
+                      accepted_answers: '',
+                      correct_true_false: 'true'
+                    })}
                     className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-green-500"
                   >
                     <option value="multiple_choice">Multiple Choice</option>
@@ -631,6 +731,57 @@ const TestManagement = ({ courseId, courseTitle }) => {
                   />
                 </div>
               </div>
+
+              {questionFormData.question_type === 'short_answer' && (
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-2">
+                    Accepted Answer(s) *
+                  </label>
+                  <input
+                    type="text"
+                    value={questionFormData.accepted_answers}
+                    onChange={(e) => setQuestionFormData({ ...questionFormData, accepted_answers: e.target.value })}
+                    placeholder="e.g. EC2, Elastic Compute Cloud"
+                    className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-green-500"
+                    required
+                  />
+                  <p className="mt-1 text-xs text-gray-500">
+                    Separate multiple accepted answers with commas. Matching is case-insensitive.
+                  </p>
+                </div>
+              )}
+
+              {questionFormData.question_type === 'true_false' && (
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-2">
+                    Correct Answer *
+                  </label>
+                  <div className="flex gap-4">
+                    <label className="flex items-center gap-2 cursor-pointer">
+                      <input
+                        type="radio"
+                        name="correct_true_false"
+                        value="true"
+                        checked={questionFormData.correct_true_false === 'true'}
+                        onChange={(e) => setQuestionFormData({ ...questionFormData, correct_true_false: e.target.value })}
+                        className="text-green-600 focus:ring-green-500"
+                      />
+                      <span className="text-sm text-gray-700">True</span>
+                    </label>
+                    <label className="flex items-center gap-2 cursor-pointer">
+                      <input
+                        type="radio"
+                        name="correct_true_false"
+                        value="false"
+                        checked={questionFormData.correct_true_false === 'false'}
+                        onChange={(e) => setQuestionFormData({ ...questionFormData, correct_true_false: e.target.value })}
+                        className="text-green-600 focus:ring-green-500"
+                      />
+                      <span className="text-sm text-gray-700">False</span>
+                    </label>
+                  </div>
+                </div>
+              )}
 
               {questionFormData.question_type === 'multiple_choice' && (
                 <div>
@@ -736,7 +887,12 @@ const TestManagement = ({ courseId, courseTitle }) => {
                           </div>
                         </div>
                         <p className="text-sm text-gray-800 font-medium mb-2">{question.question_text}</p>
-                        {question.options && question.options.length > 0 && (
+                        {question.question_type === 'short_answer' && question.options?.length > 0 && (
+                          <p className="ml-4 text-sm text-green-700">
+                            Accepted: {question.options.filter((opt) => opt.is_correct).map((opt) => opt.option_text).join(', ')}
+                          </p>
+                        )}
+                        {question.question_type !== 'short_answer' && question.options && question.options.length > 0 && (
                           <div className="ml-4 space-y-1">
                             {question.options.map((opt) => (
                               <div key={opt.id} className="text-sm flex items-center space-x-2">

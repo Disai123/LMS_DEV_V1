@@ -1,108 +1,33 @@
-import { useState } from 'react'
+import { useState, useMemo } from 'react'
 import { motion } from 'framer-motion'
+import { FiPlay, FiFileText, FiClipboard } from 'react-icons/fi'
+import { buildCourseSteps, getStepStatus } from '../../utils/courseSteps'
 
-const ChapterSidebar = ({ chapters = [], selectedChapterId, onChapterSelect, courseTitle, progressionData = null }) => {
+const ChapterSidebar = ({
+  chapters = [],
+  selectedStepKey = null,
+  onStepSelect,
+  courseTitle,
+  progressionData = null,
+  resumeChapterId = null,
+  hasAdminAccess = false
+}) => {
   const [isCollapsed, setIsCollapsed] = useState(false)
 
-  // Filter out test chapters to ensure they don't appear in the chapter list
-  const regularChapters = chapters.filter(chapter => 
-    !chapter.test_id && 
-    !chapter.test && 
-    chapter.type !== 'test'
-  )
+  const courseSteps = useMemo(() => buildCourseSteps(chapters), [chapters])
 
-  const getChapterContentType = (chapter) => {
-    // Students may only receive video_embed_url / has_video (raw video_url stripped)
-    const hasVideo = chapter.video_url || chapter.video_embed_url || chapter.has_video
-    const hasPDF = chapter.pdf_url || chapter.has_pdf
-    const hasTest = chapter.test_id || chapter.test || chapter.has_test
-    
-    if (hasTest) return 'test'
-    if (hasVideo && hasPDF) return 'both'
-    if (hasVideo) return 'video'
-    if (hasPDF) return 'pdf'
-    return 'none'
-  }
-
-  const getContentTypeIcon = (chapter) => {
-    const contentType = getChapterContentType(chapter)
-    switch (contentType) {
-      case 'test':
-        return (
-          <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
-          </svg>
-        )
-      case 'video':
-        return (
-          <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M14.828 14.828a4 4 0 01-5.656 0M9 10h1m4 0h1m-6 4h1m4 0h1m-6-8h8a2 2 0 012 2v8a2 2 0 01-2 2H8a2 2 0 01-2-2V6a2 2 0 012-2z" />
-          </svg>
-        )
-      case 'pdf':
-        return (
-          <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
-          </svg>
-        )
-      case 'both':
-        return (
-          <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2V6zM14 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2V6zM4 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2v-2zM14 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2v-2z" />
-          </svg>
-        )
-      default:
-        return (
-          <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
-          </svg>
-        )
-    }
-  }
-
-  const getContentTypeColor = (chapter) => {
-    const contentType = getChapterContentType(chapter)
-    switch (contentType) {
-      case 'test':
-        return 'text-purple-600'
-      case 'video':
-        return 'text-red-600'
-      case 'pdf':
-        return 'text-blue-600'
-      case 'both':
-        return 'text-purple-600'
-      default:
-        return 'text-gray-600'
-    }
-  }
-
-  const getChapterStatus = (chapter) => {
-    if (!progressionData?.chapters) {
-      return { isAccessible: true, isCompleted: false }
-    }
-    
-    const chapterProgress = progressionData.chapters.find(ch => ch.id === chapter.id)
-    return {
-      isAccessible: chapterProgress?.is_accessible || false,
-      isCompleted: chapterProgress?.is_completed || false
-    }
-  }
-
-  const formatDuration = (minutes) => {
-    if (!minutes) return null
-    const hours = Math.floor(minutes / 60)
-    const mins = minutes % 60
-    if (hours > 0) {
-      return `${hours}h ${mins}m`
-    }
-    return `${mins}m`
-  }
+  const resumeStepKey = useMemo(() => {
+    if (!resumeChapterId) return null
+    const chapterStep = courseSteps.find(
+      (step) => step.type === 'chapter' && step.chapterId === resumeChapterId
+    )
+    return chapterStep?.key || null
+  }, [courseSteps, resumeChapterId])
 
   return (
     <div className={`bg-white border-r border-gray-200 transition-all duration-300 ${
       isCollapsed ? 'w-12' : 'w-64'
     }`}>
-      {/* Compact Header */}
       <div className="p-3 border-b border-gray-200">
         <div className="flex items-center justify-between">
           {!isCollapsed && (
@@ -112,14 +37,15 @@ const ChapterSidebar = ({ chapters = [], selectedChapterId, onChapterSelect, cou
             </div>
           )}
           <button
+            type="button"
             onClick={() => setIsCollapsed(!isCollapsed)}
             className="p-1.5 text-gray-400 hover:text-gray-600 rounded-md hover:bg-gray-100"
             title={isCollapsed ? 'Expand sidebar' : 'Collapse sidebar'}
           >
-            <svg 
-              className={`w-4 h-4 transition-transform ${isCollapsed ? 'rotate-180' : ''}`} 
-              fill="none" 
-              stroke="currentColor" 
+            <svg
+              className={`w-4 h-4 transition-transform ${isCollapsed ? 'rotate-180' : ''}`}
+              fill="none"
+              stroke="currentColor"
               viewBox="0 0 24 24"
             >
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
@@ -128,128 +54,112 @@ const ChapterSidebar = ({ chapters = [], selectedChapterId, onChapterSelect, cou
         </div>
       </div>
 
-      {/* Chapters List */}
       <div className="flex-1 overflow-y-auto">
-        {regularChapters.length === 0 ? (
+        {courseSteps.length === 0 ? (
           <div className="p-4 text-center text-gray-500">
-            <svg className="w-8 h-8 mx-auto mb-2 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
-            </svg>
             <p className="text-sm">No chapters available</p>
           </div>
         ) : (
           <div className="p-1">
-            {regularChapters.map((chapter, index) => {
-              const { isAccessible, isCompleted } = getChapterStatus(chapter)
-              
+            {courseSteps.map((step, index) => {
+              const { isAccessible, isCompleted, quizBestScore } = getStepStatus(
+                step,
+                progressionData,
+                hasAdminAccess
+              )
+              const isSelected = selectedStepKey === step.key
+              const isResumeTarget = resumeStepKey === step.key && !isCompleted
+              const isQuiz = step.type === 'quiz'
+
               return (
                 <motion.div
-                  key={chapter.id}
+                  key={step.key}
                   initial={{ opacity: 0, x: -20 }}
                   animate={{ opacity: 1, x: 0 }}
-                  transition={{ delay: index * 0.1 }}
-                  className={`mb-1 rounded-md transition-all duration-200 ${
-                    selectedChapterId === chapter.id
+                  transition={{ delay: index * 0.05 }}
+                  className={`mb-1 rounded-md border transition-all duration-200 ${
+                    isSelected
                       ? 'bg-indigo-50 border-indigo-200'
                       : isAccessible
                         ? 'hover:bg-gray-50 border-transparent'
-                        : 'opacity-50 cursor-not-allowed'
-                  } border`}
+                        : 'opacity-50 border-transparent'
+                  }`}
                 >
                   <button
-                    onClick={() => isAccessible && onChapterSelect(chapter)}
+                    type="button"
+                    onClick={() => isAccessible && onStepSelect?.(step)}
                     disabled={!isAccessible}
                     className={`w-full p-2 text-left rounded-md transition-colors ${
-                      selectedChapterId === chapter.id
+                      isSelected
                         ? 'text-indigo-900'
                         : isAccessible
                           ? 'text-gray-700 hover:text-gray-900'
                           : 'text-gray-400 cursor-not-allowed'
                     }`}
                   >
-                  <div className="flex items-start space-x-2">
-                    {/* Chapter Number */}
-                    <div className={`flex-shrink-0 w-6 h-6 rounded-full flex items-center justify-center text-xs font-medium ${
-                      selectedChapterId === chapter.id
-                        ? 'bg-indigo-600 text-white'
-                        : isCompleted
-                          ? 'bg-green-500 text-white'
-                          : isAccessible
-                            ? 'bg-gray-200 text-gray-600'
-                            : 'bg-gray-100 text-gray-400'
-                    }`}>
-                      {isCompleted ? '✓' : chapter.chapter_order}
-                    </div>
-
-                    {!isCollapsed && (
-                      <div className="flex-1 min-w-0">
-                        <div className="flex items-center space-x-1 mb-0.5">
-                          <h4 className="text-xs font-medium truncate">{chapter.title}</h4>
-                          <span className={`${getContentTypeColor(chapter)}`}>
-                            {getContentTypeIcon(chapter)}
-                          </span>
-                        </div>
-                        
-                        <div className="flex items-center justify-between text-xs text-gray-400">
-                          <span className="flex items-center space-x-1">
-                            {chapter.test_id || chapter.test ? (
-                              <span className="flex items-center space-x-0.5 text-purple-500">
-                                <svg className="w-2.5 h-2.5" fill="currentColor" viewBox="0 0 24 24">
-                                  <path d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
-                                </svg>
-                                <span>Test</span>
-                              </span>
-                            ) : (chapter.video_url || chapter.video_embed_url || chapter.has_video) && (chapter.pdf_url || chapter.has_pdf) ? (
-                              <>
-                                <span className="flex items-center space-x-0.5">
-                                  <svg className="w-2.5 h-2.5 text-red-500" fill="currentColor" viewBox="0 0 24 24">
-                                    <path d="M8 5v14l11-7z"/>
-                                  </svg>
-                                  <span>1 video</span>
-                                </span>
-                                <span>,</span>
-                                <span className="flex items-center space-x-0.5">
-                                  <svg className="w-2.5 h-2.5 text-blue-500" fill="currentColor" viewBox="0 0 24 24">
-                                    <path d="M14,2H6A2,2 0 0,0 4,4V20A2,2 0 0,0 6,22H18A2,2 0 0,0 20,20V8L14,2M18,20H6V4H13V9H18V20Z" />
-                                  </svg>
-                                  <span>1 PDF</span>
-                                </span>
-                              </>
-                            ) : (chapter.video_url || chapter.video_embed_url || chapter.has_video) ? (
-                              <span className="flex items-center space-x-0.5">
-                                <svg className="w-2.5 h-2.5 text-red-500" fill="currentColor" viewBox="0 0 24 24">
-                                  <path d="M8 5v14l11-7z"/>
-                                </svg>
-                                <span>1 video</span>
-                              </span>
-                            ) : (chapter.pdf_url || chapter.has_pdf) ? (
-                              <span className="flex items-center space-x-0.5">
-                                <svg className="w-2.5 h-2.5 text-blue-500" fill="currentColor" viewBox="0 0 24 24">
-                                  <path d="M14,2H6A2,2 0 0,0 4,4V20A2,2 0 0,0 6,22H18A2,2 0 0,0 20,20V8L14,2M18,20H6V4H13V9H18V20Z" />
-                                </svg>
-                                <span>1 PDF</span>
-                              </span>
-                            ) : (
-                              <span>No content</span>
-                            )}
-                          </span>
-                        </div>
+                    <div className="flex items-start gap-2">
+                      <div className={`flex-shrink-0 w-6 h-6 rounded-full flex items-center justify-center text-xs font-medium ${
+                        isSelected
+                          ? 'bg-indigo-600 text-white'
+                          : isCompleted
+                            ? 'bg-green-500 text-white'
+                            : isAccessible
+                              ? isQuiz ? 'bg-purple-100 text-purple-700' : 'bg-gray-200 text-gray-600'
+                              : 'bg-gray-100 text-gray-400'
+                      }`}>
+                        {isCompleted ? '✓' : step.stepNumber}
                       </div>
-                    )}
-                  </div>
-                </button>
-              </motion.div>
+
+                      {!isCollapsed && (
+                        <div className="flex-1 min-w-0">
+                          <div className="flex items-center gap-1 mb-0.5">
+                            <h4 className="text-xs font-medium truncate">{step.title}</h4>
+                            {isResumeTarget && (
+                              <span className="text-[10px] px-1.5 py-0.5 rounded bg-amber-100 text-amber-700 font-semibold shrink-0">
+                                Continue
+                              </span>
+                            )}
+                          </div>
+                          <div className="flex items-center justify-between text-[11px] text-gray-400">
+                            <span className="flex items-center gap-1">
+                              {isQuiz ? (
+                                <>
+                                  <FiClipboard className="w-3 h-3 text-purple-500" />
+                                  <span className="text-purple-600">Quiz</span>
+                                </>
+                              ) : step.subtitle === 'Video' ? (
+                                <>
+                                  <FiPlay className="w-3 h-3 text-red-500" />
+                                  <span>Video lesson</span>
+                                </>
+                              ) : step.subtitle === 'PDF' ? (
+                                <>
+                                  <FiFileText className="w-3 h-3 text-blue-500" />
+                                  <span>PDF lesson</span>
+                                </>
+                              ) : (
+                                <span>{step.subtitle}</span>
+                              )}
+                            </span>
+                            {isQuiz && isCompleted && quizBestScore != null && (
+                              <span className="text-green-600 font-medium">{Math.round(quizBestScore)}%</span>
+                            )}
+                          </div>
+                        </div>
+                      )}
+                    </div>
+                  </button>
+                </motion.div>
               )
             })}
           </div>
         )}
       </div>
 
-      {/* Compact Footer */}
       {!isCollapsed && (
         <div className="p-2 border-t border-gray-200 bg-gray-50">
           <div className="text-xs text-gray-500 text-center">
-            {regularChapters.length} chapter{regularChapters.length !== 1 ? 's' : ''} available
+            {courseSteps.length} step{courseSteps.length !== 1 ? 's' : ''} in course
           </div>
         </div>
       )}

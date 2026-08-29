@@ -1,6 +1,7 @@
 const { CourseChapter, Course } = require('../models');
 const { AppError } = require('../middleware/errorHandler');
 const logger = require('../utils/logger');
+const { DEFAULT_CHAPTER_MINUTES } = require('../utils/chapterConstants');
 const { analyzeUrl } = require('../utils/urlAnalyzer');
 
 /**
@@ -24,6 +25,13 @@ const createChapter = async (req, res, next) => {
     // Get next chapter order
     const nextOrder = await CourseChapter.getNextOrder(courseId);
     chapterData.chapter_order = nextOrder;
+
+    const duration = parseInt(chapterData.duration_minutes, 10);
+    if (!duration || duration < 1) {
+      chapterData.duration_minutes = DEFAULT_CHAPTER_MINUTES;
+    } else {
+      chapterData.duration_minutes = duration;
+    }
 
     // Validate that at least one URL is provided
     if (!chapterData.video_url && !chapterData.pdf_url) {
@@ -158,8 +166,8 @@ const updateChapter = async (req, res, next) => {
       throw new AppError('Access denied. You can only edit chapters in your own courses.', 403);
     }
 
-    // Validate that at least one URL is provided
-    if (!updateData.video_url && !updateData.pdf_url) {
+    // Validate that at least one URL is provided (unless linking a quiz-only update with test_id)
+    if (!updateData.video_url && !updateData.pdf_url && !updateData.test_id && !chapter.test_id) {
       throw new AppError('At least one URL (video or PDF) is required', 400);
     }
 

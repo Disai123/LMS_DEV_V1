@@ -24,6 +24,9 @@ const CourseDetailPage = () => {
   const { tierOrder: userTierOrder } = usePlanAccess(user)
   const queryClient = useQueryClient()
   const [selectedChapter, setSelectedChapter] = useState(null)
+  const [selectedStepKey, setSelectedStepKey] = useState(null)
+  const [chapterViewMode, setChapterViewMode] = useState('video')
+  const [resumeApplied, setResumeApplied] = useState(false)
   const [showLoginModal, setShowLoginModal] = useState(false)
   const [chapterProgression, setChapterProgression] = useState(null)
   const [showTestSection, setShowTestSection] = useState(false)
@@ -147,24 +150,46 @@ const CourseDetailPage = () => {
   const { logoUrl, loading: logoLoading, error: logoError } = useCourseLogo(course?.id, !!course?.logo)
 
 
-  // Set first accessible chapter as selected when chapters are loaded
+  // Reset chapter selection when course or enrollment changes
   useEffect(() => {
-    if (chapters.length > 0 && !selectedChapter) {
-      if (progressionData?.data?.chapters) {
-        // Use progression data to find first accessible chapter
-        const firstAccessibleChapter = progressionData.data.chapters.find(ch => ch.is_accessible)
-        if (firstAccessibleChapter) {
-          const fullChapter = chapters.find(ch => ch.id === firstAccessibleChapter.id)
-          if (fullChapter) {
-            setSelectedChapter(fullChapter)
-            return
-          }
-        }
+    setSelectedChapter(null)
+    setSelectedStepKey(null)
+    setChapterViewMode('video')
+    setResumeApplied(false)
+  }, [id, enrollment?.id])
+
+  // Resume at first incomplete chapter for enrolled students
+  useEffect(() => {
+    if (!chapters.length) return
+
+    const isStudentEnrolled = isEnrolled && user?.role === 'student' && enrollment?.id
+
+    if (isStudentEnrolled) {
+      if (!progressionData?.data || resumeApplied) return
+
+      const resumeId = progressionData.data.resumeChapterId
+      const targetChapter = resumeId
+        ? chapters.find((ch) => ch.id === resumeId)
+        : chapters.find((ch) => {
+            const prog = progressionData.data.chapters?.find((p) => p.id === ch.id)
+            return prog?.is_accessible && !prog?.is_completed
+          }) || chapters[0]
+
+      if (targetChapter) {
+        setSelectedChapter(targetChapter)
+        setSelectedStepKey(`chapter-${targetChapter.id}`)
+        setChapterViewMode('video')
+        setResumeApplied(true)
       }
-      // Fallback to first chapter
-      setSelectedChapter(chapters[0])
+      return
     }
-  }, [chapters, progressionData, selectedChapter])
+
+    if (!selectedChapter && chapters[0]) {
+      setSelectedChapter(chapters[0])
+      setSelectedStepKey(`chapter-${chapters[0].id}`)
+      setChapterViewMode('video')
+    }
+  }, [chapters, progressionData, isEnrolled, user?.role, enrollment?.id, resumeApplied, selectedChapter])
 
   // Listen for test section display event
   useEffect(() => {
@@ -189,16 +214,25 @@ const CourseDetailPage = () => {
   }, [progressionData])
 
   // Handle chapter change
+  const handleStepSelect = (step) => {
+    if (!step?.chapter) return
+    setSelectedChapter(step.chapter)
+    setSelectedStepKey(step.key)
+    setChapterViewMode(step.type === 'quiz' ? 'test' : 'video')
+  }
+
   const handleChapterChange = (chapterOrId) => {
     if (chapterOrId) {
-      // If it's a chapter object, use it directly
       if (typeof chapterOrId === 'object') {
         setSelectedChapter(chapterOrId)
+        setSelectedStepKey(`chapter-${chapterOrId.id}`)
+        setChapterViewMode('video')
       } else {
-        // If it's a chapter ID, find the chapter in the chapters array
         const chapter = chapters.find(ch => ch.id === chapterOrId)
         if (chapter) {
           setSelectedChapter(chapter)
+          setSelectedStepKey(`chapter-${chapter.id}`)
+          setChapterViewMode('video')
         }
       }
     }
@@ -569,10 +603,12 @@ const CourseDetailPage = () => {
                   <div className="w-64 bg-white/80 backdrop-blur-sm border-r border-gray-200 overflow-y-auto">
                     <ChapterSidebar
                       chapters={chapters}
-                      selectedChapterId={selectedChapter?.id}
-                      onChapterSelect={setSelectedChapter}
+                      selectedStepKey={selectedStepKey || (selectedChapter ? `chapter-${selectedChapter.id}` : null)}
+                      onStepSelect={handleStepSelect}
                       courseTitle={course.title}
                       progressionData={chapterProgression}
+                      resumeChapterId={progressionData?.data?.resumeChapterId}
+                      hasAdminAccess={isAdmin}
                     />
                   </div>
 
@@ -648,6 +684,10 @@ const CourseDetailPage = () => {
                           isAuthenticatedNotEnrolled={isAuthenticatedNotEnrolled}
                           courseId={id}
                           hasAdminAccess={isAdmin}
+                          progressionData={progressionData?.data || chapterProgression}
+                          preferredViewMode={chapterViewMode}
+                          onViewModeChange={setChapterViewMode}
+                          onStepSelect={handleStepSelect}
                         />
                       )}
                     </div>

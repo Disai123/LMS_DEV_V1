@@ -252,5 +252,15 @@ export const courseService = {
     } catch (error) {
       throw new Error(error.response?.data?.message || 'Failed to get course certificates')
     }
+  },
+
+  // Get course performance roster (admin only)
+  getCoursePerformance: async (courseId) => {
+    try {
+      const response = await api.get(`/courses/${courseId}/performance`)
+      return response.data
+    } catch (error) {
+      throw new Error(error.response?.data?.message || 'Failed to get course performance')
+    }
   }
 }

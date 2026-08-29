@@ -1,8 +1,12 @@
-const { TestAttempt, TestAnswer, TestQuestion, TestQuestionOption, CourseTest, Course, Enrollment, ActivityLog, Achievement } = require('../models');
+const { TestAttempt, TestAnswer, TestQuestion, TestQuestionOption, CourseTest, Course, Enrollment, ActivityLog, Achievement, CourseChapter, ChapterProgress } = require('../models');
 const logger = require('../utils/logger');
 const { AppError } = require('../middleware/errorHandler');
 const notificationService = require('../services/notificationService');
 const emailService = require('../services/emailService');
+const chapterProgressionService = require('../services/chapterProgressionService');
+const { gradeShortAnswer } = require('../utils/answerGrading');
+const { isAssignmentChapter, getEffectiveMaxAttempts } = require('../utils/chapterConstants');
+const { Op } = require('sequelize');
 
 /**
  * Start a test attempt
@@ -35,39 +39,84 @@ const startTest = async (req, res, next) => {
       throw new AppError('You are not enrolled in this course', 403);
     }
 
-    // Unlock when content is done: 100% progress, completed status, or all regular chapters finished
+    const testType = test.test_type || 'final_exam';
     const contentStatuses = ['content_completed', 'completed', 'certified'];
     let contentReady = isAdmin;
 
     if (enrollment && !contentReady) {
-      contentReady = enrollment.progress >= 100 || contentStatuses.includes(enrollment.status);
-    }
+      if (testType === 'chapter_quiz') {
+        const linkedChapter = await CourseChapter.findOne({
+          where: { test_id: testId, course_id: test.course_id },
+          attributes: ['id', 'title', 'chapter_order', 'test_id', 'duration_minutes']
+        });
 
-    if (!contentReady && enrollment) {
-      const { CourseChapter, ChapterProgress } = require('../models');
-      const { Op } = require('sequelize');
-      const chapters = await CourseChapter.findAll({
-        where: { course_id: test.course_id, is_published: true },
-        attributes: ['id', 'title']
-      });
-      const regularChapters = chapters.filter((chapter) => {
-        const title = (chapter.title || '').toLowerCase();
-        return !title.includes('assignment') && !title.includes('test') &&
-          !title.includes('exam') && !title.includes('final');
-      });
-      const regularIds = regularChapters.map((c) => c.id);
-      const completedCount = regularIds.length === 0 ? 0 : await ChapterProgress.count({
-        where: {
-          enrollment_id: enrollment.id,
-          is_completed: true,
-          chapter_id: { [Op.in]: regularIds }
+        if (!linkedChapter) {
+          throw new AppError('This chapter quiz is not linked to a chapter', 400);
         }
-      });
-      contentReady = regularIds.length > 0 && completedCount >= regularIds.length;
+
+        const allChapters = await CourseChapter.findAll({
+          where: { course_id: test.course_id, is_published: true },
+          attributes: ['id', 'title', 'chapter_order', 'test_id', 'duration_minutes'],
+          order: [['chapter_order', 'ASC']]
+        });
+        const regularChapters = allChapters.filter((ch) => !isAssignmentChapter(ch.title));
+        const chapterIndex = regularChapters.findIndex((ch) => ch.id === linkedChapter.id);
+
+        for (let i = 0; i < chapterIndex; i++) {
+          const prevChapter = regularChapters[i];
+          const prevProgress = await ChapterProgress.findOne({
+            where: { enrollment_id: enrollment.id, chapter_id: prevChapter.id }
+          });
+          if (!chapterProgressionService.isChapterFullyComplete(prevProgress, !!prevChapter.test_id)) {
+            throw new AppError(`Complete "${prevChapter.title}" before taking this quiz`, 400);
+          }
+        }
+
+        const chapterProgress = await ChapterProgress.findOne({
+          where: { enrollment_id: enrollment.id, chapter_id: linkedChapter.id }
+        });
+
+        contentReady = chapterProgress?.content_completed || chapterProgress?.is_completed;
+        if (!contentReady) {
+          throw new AppError('Complete the chapter content before taking this quiz', 400);
+        }
+      } else {
+        contentReady = enrollment.progress >= 100 || contentStatuses.includes(enrollment.status);
+
+        if (!contentReady) {
+          const chapters = await CourseChapter.findAll({
+            where: { course_id: test.course_id, is_published: true },
+            attributes: ['id', 'title', 'test_id']
+          });
+          const regularChapters = chapters.filter((chapter) => !isAssignmentChapter(chapter.title));
+          const regularIds = regularChapters.map((c) => c.id);
+          const completedCount = regularIds.length === 0 ? 0 : await ChapterProgress.count({
+            where: {
+              enrollment_id: enrollment.id,
+              is_completed: true,
+              chapter_id: { [Op.in]: regularIds }
+            }
+          });
+          contentReady = regularIds.length > 0 && completedCount >= regularIds.length;
+        }
+
+        if (contentReady) {
+          const quizzesPassed = await chapterProgressionService.allChapterQuizzesPassed(
+            enrollment.id,
+            test.course_id
+          );
+          contentReady = quizzesPassed;
+        }
+      }
     }
 
     if (!contentReady) {
-      throw new AppError('You must complete all course chapters before taking the test', 400);
+      throw new AppError(
+        testType === 'chapter_quiz'
+          ? 'Complete the chapter content before taking this quiz'
+          : 'You must complete all course chapters and quizzes before taking the final exam',
+        400
+      );
     }
 
     // Keep progress in sync if status already marks content done
@@ -89,25 +138,29 @@ const startTest = async (req, res, next) => {
     );
 
     if (hasPassed) {
-      throw new AppError('You have already passed this test and received a certificate. No retakes allowed.', 400);
+      const message = testType === 'chapter_quiz'
+        ? 'You have already passed this chapter quiz'
+        : 'You have already passed this test and received a certificate. No retakes allowed.';
+      throw new AppError(message, 400);
     }
 
-    // Check if user has a certificate for this course (additional check)
-    const { Certificate } = require('../models');
-    const existingCertificate = await Certificate.findOne({
-      where: {
-        student_id: req.user.id,
-        course_id: test.course_id
+    if (testType === 'final_exam') {
+      const { Certificate } = require('../models');
+      const existingCertificate = await Certificate.findOne({
+        where: {
+          student_id: req.user.id,
+          course_id: test.course_id
+        }
+      });
+
+      if (existingCertificate) {
+        throw new AppError('You have already received a certificate for this course. No retakes allowed.', 400);
       }
-    });
-
-    if (existingCertificate) {
-      throw new AppError('You have already received a certificate for this course. No retakes allowed.', 400);
     }
 
-    // Enforce max attempts if configured
-    if (test.max_attempts && existingAttempts.length >= test.max_attempts) {
-      throw new AppError(`Maximum attempts (${test.max_attempts}) reached for this test`, 400);
+    const effectiveMaxAttempts = getEffectiveMaxAttempts(test);
+    if (effectiveMaxAttempts && existingAttempts.length >= effectiveMaxAttempts) {
+      throw new AppError(`Maximum attempts (${effectiveMaxAttempts}) reached for this test`, 400);
     }
 
     // Check if there's an active attempt
@@ -296,29 +349,44 @@ const submitTest = async (req, res, next) => {
     for (const question of questions) {
       totalPoints += question.points;
 
-      const selectedOptionId = submittedAnswers[question.id];
+      const response = submittedAnswers?.[question.id]
+        ?? submittedAnswers?.[String(question.id)];
       let isCorrect = false;
       let pointsEarned = 0;
-
+      let answerText = '';
       let selectedOption = null;
-      if (selectedOptionId) {
-        // Find the selected option
-        selectedOption = question.options.find(opt => opt.id == selectedOptionId);
 
-        if (selectedOption) {
-          isCorrect = selectedOption.is_correct;
-          if (isCorrect) {
-            pointsEarned = question.points;
-            earnedPoints += pointsEarned;
-            correctAnswers++;
+      if (question.question_type === 'short_answer') {
+        answerText = typeof response === 'string' ? response : (response?.text || '');
+        isCorrect = gradeShortAnswer(answerText, question.options);
+        if (isCorrect) {
+          pointsEarned = question.points;
+          earnedPoints += pointsEarned;
+          correctAnswers++;
+        } else {
+          incorrectAnswers++;
+        }
+      } else {
+        const selectedOptionId = response;
+        if (selectedOptionId) {
+          selectedOption = question.options.find(opt => opt.id == selectedOptionId);
+
+          if (selectedOption) {
+            isCorrect = selectedOption.is_correct;
+            answerText = selectedOption.option_text;
+            if (isCorrect) {
+              pointsEarned = question.points;
+              earnedPoints += pointsEarned;
+              correctAnswers++;
+            } else {
+              incorrectAnswers++;
+            }
           } else {
             incorrectAnswers++;
           }
         } else {
           incorrectAnswers++;
         }
-      } else {
-        incorrectAnswers++;
       }
 
       // Create or update the answer record
@@ -331,7 +399,7 @@ const submitTest = async (req, res, next) => {
 
       if (answer) {
         await answer.update({
-          answer_text: selectedOption ? selectedOption.option_text : '',
+          answer_text: answerText,
           is_correct: isCorrect,
           points_earned: pointsEarned
         });
@@ -339,7 +407,7 @@ const submitTest = async (req, res, next) => {
         await TestAnswer.create({
           attempt_id: attemptId,
           question_id: question.id,
-          answer_text: selectedOption ? selectedOption.option_text : '',
+          answer_text: answerText,
           is_correct: isCorrect,
           points_earned: pointsEarned
         });
@@ -363,8 +431,10 @@ const submitTest = async (req, res, next) => {
       completed_at: new Date()
     });
 
-    // Update enrollment and create certificate if test is passed
-    if (isPassed) {
+    const testType = test.test_type || 'final_exam';
+
+    let quizAttemptMeta = null;
+    if (testType === 'chapter_quiz') {
       const enrollment = await Enrollment.findOne({
         where: {
           student_id: req.user.id,
@@ -373,10 +443,30 @@ const submitTest = async (req, res, next) => {
       });
 
       if (enrollment) {
-        await enrollment.certify();
+        quizAttemptMeta = await chapterProgressionService.updateChapterQuizAfterAttempt({
+          studentId: req.user.id,
+          enrollment,
+          test,
+          score
+        });
       }
+    }
 
-      // Auto-generate certificate for passing the test ONLY for the completed course
+    // Update enrollment and create certificate if final exam is passed
+    if (isPassed) {
+      const enrollment = await Enrollment.findOne({
+        where: {
+          student_id: req.user.id,
+          course_id: test.course_id
+        }
+      });
+
+      if (testType === 'chapter_quiz') {
+        // Chapter quiz progress handled above
+      } else if (enrollment) {
+        await enrollment.certify();
+
+      // Auto-generate certificate for passing the final exam ONLY for the completed course
       const { Certificate } = require('../models');
 
       // CRITICAL: Verify we have the correct course_id before generating certificate
@@ -503,6 +593,7 @@ const submitTest = async (req, res, next) => {
           logger.error('Failed to create achievement for certificate:', achievementError);
         }
       }
+      }
     }
 
     const course = await Course.findByPk(test.course_id, {
@@ -565,7 +656,8 @@ const submitTest = async (req, res, next) => {
         correct_answers: correctAnswers,
         incorrect_answers: incorrectAnswers,
         is_passed: isPassed,
-        time_taken_minutes: timeTaken
+        time_taken_minutes: timeTaken,
+        ...(quizAttemptMeta ? { attempt_meta: quizAttemptMeta } : {})
       }
     });
   } catch (error) {
@@ -719,14 +811,17 @@ const getTestQuestions = async (req, res, next) => {
           order: [['id', 'ASC']]
         });
 
-        return {
-          ...question.getPublicInfo(),
-          options: options.map(option => ({
+        const publicOptions = question.question_type === 'short_answer'
+          ? []
+          : options.map(option => ({
             id: option.id,
             option_text: option.option_text,
             order: option.order
-            // Note: is_correct is excluded for students
-          }))
+          }));
+
+        return {
+          ...question.getPublicInfo(),
+          options: publicOptions
         };
       })
     );

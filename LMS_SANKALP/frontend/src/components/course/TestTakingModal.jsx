@@ -1,15 +1,17 @@
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useRef, useCallback } from 'react'
 import { createPortal } from 'react-dom'
 import { motion, AnimatePresence } from 'framer-motion'
 import { useMutation, useQuery, useQueryClient } from 'react-query'
 import { testService } from '../../services/testService'
+import { DEFAULT_QUIZ_MAX_ATTEMPTS } from '../../utils/chapterConstants'
 import toast from 'react-hot-toast'
 
 const TestTakingModal = ({
   isOpen,
   onClose,
   test,
-  enrollmentId
+  enrollmentId,
+  onQuizComplete
 }) => {
   const queryClient = useQueryClient()
   const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0)
@@ -18,7 +20,24 @@ const TestTakingModal = ({
   const [testStarted, setTestStarted] = useState(false)
   const [testCompleted, setTestCompleted] = useState(false)
   const [testResults, setTestResults] = useState(null)
+  const [attemptMeta, setAttemptMeta] = useState(null)
   const [testAttemptId, setTestAttemptId] = useState(null)
+  const testAttemptIdRef = useRef(null)
+
+  // Reset state when modal opens/closes
+  useEffect(() => {
+    if (!isOpen) {
+      setCurrentQuestionIndex(0)
+      setAnswers({})
+      setTimeLeft(null)
+      setTestStarted(false)
+      setTestCompleted(false)
+      setTestResults(null)
+      setAttemptMeta(null)
+      setTestAttemptId(null)
+      testAttemptIdRef.current = null
+    }
+  }, [isOpen])
 
   // Debug: Log when modal opens and test data
   useEffect(() => {
@@ -81,10 +100,14 @@ const TestTakingModal = ({
     (testId) => testService.startTest(testId),
     {
       onSuccess: (data) => {
-        setTestAttemptId(data.data.attempt.id)
+        const attemptId = data?.data?.attempt?.id
+        if (attemptId) {
+          testAttemptIdRef.current = attemptId
+          setTestAttemptId(attemptId)
+        }
         setTestStarted(true)
         if (testData?.time_limit_minutes) {
-          setTimeLeft(testData.time_limit_minutes * 60) // Convert to seconds
+          setTimeLeft(testData.time_limit_minutes * 60)
         }
         toast.success('Test started! Good luck!')
       },
@@ -99,54 +122,64 @@ const TestTakingModal = ({
     }
   )
 
-  // Submit test mutation
   const submitTestMutation = useMutation(
     (attemptData) => testService.submitTest(attemptData.attemptId, attemptData.answers),
     {
       onSuccess: async (data) => {
+        const resultData = data?.data
+        if (!resultData) {
+          toast.error('Unexpected response from server')
+          return
+        }
+
+        const passingScore = testData?.passing_score ?? test?.passing_score ?? 0
+        const passed = resultData.score >= passingScore
+        const chapterQuiz = (testData?.test_type || test?.test_type) === 'chapter_quiz'
+
+        setAttemptMeta(resultData.attempt_meta || null)
         setTestCompleted(true)
-        setTestResults(data.data)
+        setTestResults(resultData)
         toast.success('Test submitted successfully!')
 
-        // Refresh all relevant data including test progress
-        queryClient.invalidateQueries('student-enrollments')
-        queryClient.invalidateQueries('student-activities')
-        queryClient.invalidateQueries('user-achievements')
-        queryClient.invalidateQueries('student-score') // CRITICAL: Invalidate score cache for points update
-        // Invalidate course data to get updated enrollment progress
-        queryClient.invalidateQueries(['course'])
-        // Invalidate chapter progression to update test accessibility
-        queryClient.invalidateQueries(['chapterProgression'])
-        // Invalidate test-related queries
-        queryClient.invalidateQueries(['course-tests'])
-        queryClient.invalidateQueries(['test-attempts'])
-        // Force refetch to immediately update UI including achievements
-        await Promise.all([
-          queryClient.refetchQueries('student-enrollments'),
-          queryClient.refetchQueries(['course']),
-          queryClient.refetchQueries(['chapterProgression']),
-          queryClient.refetchQueries('user-achievements'), // Refetch achievements immediately
-          queryClient.refetchQueries('student-score') // Refetch score immediately for dashboard
-        ])
+        if (chapterQuiz && passed && onQuizComplete) {
+          try {
+            queryClient.invalidateQueries(['chapterProgression', enrollmentId])
+            await queryClient.refetchQueries(['chapterProgression', enrollmentId])
+          } catch (refetchError) {
+            console.warn('Progression refetch after quiz submit failed:', refetchError)
+          }
+          toast.success('Quiz passed! Moving to the next chapter...')
+          onQuizComplete()
+          return
+        }
+
+        try {
+          queryClient.invalidateQueries('student-enrollments')
+          queryClient.invalidateQueries('student-activities')
+          queryClient.invalidateQueries('user-achievements')
+          queryClient.invalidateQueries('student-score')
+          queryClient.invalidateQueries(['course'])
+          queryClient.invalidateQueries(['chapterProgression'])
+          queryClient.invalidateQueries(['course-tests'])
+          queryClient.invalidateQueries(['test-attempts'])
+          await Promise.all([
+            queryClient.refetchQueries('student-enrollments'),
+            queryClient.refetchQueries(['course']),
+            queryClient.refetchQueries('user-achievements'),
+            queryClient.refetchQueries('student-score'),
+            enrollmentId
+              ? queryClient.refetchQueries(['chapterProgression', enrollmentId])
+              : Promise.resolve()
+          ])
+        } catch (refetchError) {
+          console.warn('Refetch after test submit failed:', refetchError)
+        }
       },
       onError: (error) => {
         toast.error(error.message || 'Failed to submit test')
       }
     }
   )
-
-  // Timer effect
-  useEffect(() => {
-    if (timeLeft > 0 && testStarted && !testCompleted) {
-      const timer = setTimeout(() => {
-        setTimeLeft(timeLeft - 1)
-      }, 1000)
-      return () => clearTimeout(timer)
-    } else if (timeLeft === 0 && testStarted && !testCompleted && !submitTestMutation.isLoading) {
-      // Auto-submit when time runs out
-      handleSubmitTest()
-    }
-  }, [timeLeft, testStarted, testCompleted])
 
   const handleStartTest = () => {
     if (!test?.id) {
@@ -163,6 +196,23 @@ const TestTakingModal = ({
     }))
   }
 
+  const handleTextAnswerChange = (questionId, text) => {
+    setAnswers(prev => ({
+      ...prev,
+      [questionId]: text
+    }))
+  }
+
+  const isQuestionAnswered = (question) => {
+    const answer = answers[question.id] ?? answers[String(question.id)]
+    if (question.question_type === 'short_answer') {
+      return typeof answer === 'string' && answer.trim().length > 0
+    }
+    return answer !== undefined && answer !== null && answer !== ''
+  }
+
+  const allQuestionsAnswered = questions.length > 0 && questions.every(isQuestionAnswered)
+
   const handleNextQuestion = () => {
     if (currentQuestionIndex < questions.length - 1) {
       setCurrentQuestionIndex(currentQuestionIndex + 1)
@@ -175,18 +225,75 @@ const TestTakingModal = ({
     }
   }
 
-  const handleSubmitTest = () => {
-    if (!testAttemptId) {
+  const buildSubmitAnswers = useCallback(() => {
+    const payload = {}
+    questions.forEach((question) => {
+      const answer = answers[question.id] ?? answers[String(question.id)]
+      if (answer !== undefined && answer !== null && answer !== '') {
+        payload[question.id] = answer
+      }
+    })
+    return payload
+  }, [answers, questions])
+
+  const handleSubmitTest = useCallback((options = {}) => {
+    const { skipAnswerCheck = false } = options
+    const activeAttemptId = testAttemptIdRef.current || testAttemptId
+
+    if (!activeAttemptId) {
       toast.error('Please click "Start Test" before submitting.')
       return
     }
     if (testCompleted || submitTestMutation.isLoading) {
       return
     }
+    if (!skipAnswerCheck && !allQuestionsAnswered) {
+      toast.error('Please answer all questions before submitting')
+      return
+    }
+
     submitTestMutation.mutate({
-      attemptId: testAttemptId,
-      answers: answers
+      attemptId: activeAttemptId,
+      answers: buildSubmitAnswers()
     })
+  }, [
+    allQuestionsAnswered,
+    buildSubmitAnswers,
+    submitTestMutation,
+    testAttemptId,
+    testCompleted
+  ])
+
+  // Timer effect
+  useEffect(() => {
+    if (timeLeft > 0 && testStarted && !testCompleted) {
+      const timer = setTimeout(() => {
+        setTimeLeft(timeLeft - 1)
+      }, 1000)
+      return () => clearTimeout(timer)
+    } else if (timeLeft === 0 && testStarted && !testCompleted && !submitTestMutation.isLoading) {
+      handleSubmitTest({ skipAnswerCheck: true })
+    }
+  }, [timeLeft, testStarted, testCompleted, submitTestMutation.isLoading, handleSubmitTest])
+
+  const handleRetry = () => {
+    setTestCompleted(false)
+    setTestResults(null)
+    setAttemptMeta(null)
+    setCurrentQuestionIndex(0)
+    setAnswers({})
+    setTestAttemptId(null)
+    testAttemptIdRef.current = null
+    setTimeLeft(null)
+    setTestStarted(false)
+  }
+
+  const handleContinueAfterQuiz = () => {
+    if (onQuizComplete) {
+      onQuizComplete()
+    } else {
+      onClose()
+    }
   }
 
   const formatTime = (seconds) => {
@@ -199,7 +306,19 @@ const TestTakingModal = ({
     return ((currentQuestionIndex + 1) / questions.length) * 100
   }
 
-  const isPassing = testResults?.score >= testData?.passing_score
+  const effectiveMaxAttempts = testData?.test_type === 'chapter_quiz' || test?.test_type === 'chapter_quiz'
+    ? (testData?.max_attempts ?? test?.max_attempts ?? DEFAULT_QUIZ_MAX_ATTEMPTS)
+    : (testData?.max_attempts ?? test?.max_attempts ?? null)
+  const isPassing = testResults?.score >= (testData?.passing_score ?? test?.passing_score ?? 0)
+  const isChapterQuiz = (testData?.test_type || test?.test_type) === 'chapter_quiz'
+  const canRetry = attemptMeta?.can_retry
+  const attemptsExhausted = attemptMeta?.attempts_exhausted
+  const displayScore = attemptsExhausted && attemptMeta?.final_average_score != null
+    ? attemptMeta.final_average_score
+    : testResults?.score
+  const showPassingResult = attemptsExhausted
+    ? (attemptMeta?.quiz_passed || displayScore >= (testData?.passing_score ?? test?.passing_score ?? 0))
+    : isPassing
 
   // Prevent body scroll when modal is open
   useEffect(() => {
@@ -306,7 +425,7 @@ const TestTakingModal = ({
                     <div className="text-sm text-gray-600">Time Limit (min)</div>
                   </div>
                   <div className="text-center p-4 bg-gray-50 rounded-lg">
-                    <div className="text-2xl font-bold text-purple-600">{testData?.max_attempts != null ? testData.max_attempts : '∞'}</div>
+                    <div className="text-2xl font-bold text-purple-600">{effectiveMaxAttempts ?? '∞'}</div>
                     <div className="text-sm text-gray-600">Max Attempts</div>
                   </div>
                 </div>
@@ -321,25 +440,37 @@ const TestTakingModal = ({
             ) : testCompleted ? (
               // Test Results Screen
               <div className="text-center py-12">
-                <div className={`w-24 h-24 rounded-full flex items-center justify-center mx-auto mb-6 ${isPassing ? 'bg-gradient-to-br from-green-500 to-emerald-600' : 'bg-gradient-to-br from-red-500 to-pink-600'
+                <div className={`w-24 h-24 rounded-full flex items-center justify-center mx-auto mb-6 ${showPassingResult ? 'bg-gradient-to-br from-green-500 to-emerald-600' : 'bg-gradient-to-br from-red-500 to-pink-600'
                   }`}>
                   <svg className="w-12 h-12 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    {isPassing ? (
+                    {showPassingResult ? (
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
                     ) : (
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
                     )}
                   </svg>
                 </div>
-                <h3 className={`text-3xl font-bold mb-4 ${isPassing ? 'text-green-600' : 'text-red-600'}`}>
-                  {isPassing ? 'Congratulations!' : 'Keep Trying!'}
+                <h3 className={`text-3xl font-bold mb-4 ${showPassingResult ? 'text-green-600' : attemptsExhausted ? 'text-amber-600' : 'text-red-600'}`}>
+                  {showPassingResult
+                    ? 'Congratulations!'
+                    : attemptsExhausted
+                      ? 'Attempts Complete'
+                      : 'Keep Trying!'}
                 </h3>
                 <div className="text-6xl font-bold text-gray-900 mb-2">
-                  {testResults?.score}%
+                  {displayScore}%
                 </div>
-                <p className="text-gray-600 mb-6">
-                  You scored {testResults?.earned_points} out of {testResults?.total_points} points
-                </p>
+                {attemptsExhausted && attemptMeta?.final_average_score != null && (
+                  <p className="text-sm text-gray-600 mb-2">
+                    Final quiz score (average of {attemptMeta.attempts_used} attempt{attemptMeta.attempts_used !== 1 ? 's' : ''})
+                  </p>
+                )}
+                {!attemptsExhausted && (
+                  <p className="text-gray-600 mb-6">
+                    You scored {testResults?.earned_points} out of {testResults?.total_points} points
+                  </p>
+                )}
+                {!attemptsExhausted && (
                 <div className="bg-gray-50 rounded-lg p-6 mb-8 max-w-md mx-auto">
                   <div className="grid grid-cols-2 gap-4 text-center">
                     <div>
@@ -352,15 +483,52 @@ const TestTakingModal = ({
                     </div>
                   </div>
                 </div>
-                {isPassing ? (
+                )}
+                {attemptMeta && (
+                  <p className="text-sm text-gray-500 mb-4">
+                    Attempt {attemptMeta.attempts_used}
+                    {attemptMeta.max_attempts != null ? ` of ${attemptMeta.max_attempts}` : ''}
+                    {attemptMeta.attempts_remaining != null && attemptMeta.attempts_remaining > 0
+                      ? ` · ${attemptMeta.attempts_remaining} remaining`
+                      : ''}
+                  </p>
+                )}
+                {showPassingResult ? (
                   <div className="space-y-4">
-                    <p className="text-green-600 font-semibold">🎉 You passed! You've earned a certificate!</p>
-                    <p className="text-gray-600 text-sm">Check your profile achievements section to view and download your certificate.</p>
+                    {isChapterQuiz ? (
+                      <>
+                        <p className="text-green-600 font-semibold">Chapter quiz passed! The next chapter is now unlocked.</p>
+                        <button
+                          onClick={handleContinueAfterQuiz}
+                          className="bg-gradient-to-r from-green-500 to-emerald-600 text-white font-semibold py-3 px-6 rounded-lg hover:from-green-600 hover:to-emerald-700 transition-all duration-300 shadow-lg hover:shadow-xl transform hover:-translate-y-1"
+                        >
+                          Continue Learning
+                        </button>
+                      </>
+                    ) : (
+                      <>
+                        <p className="text-green-600 font-semibold">You passed! You&apos;ve earned a certificate!</p>
+                        <p className="text-gray-600 text-sm">Check your profile achievements section to view and download your certificate.</p>
+                        <button
+                          onClick={onClose}
+                          className="bg-gradient-to-r from-green-500 to-emerald-600 text-white font-semibold py-3 px-6 rounded-lg hover:from-green-600 hover:to-emerald-700 transition-all duration-300 shadow-lg hover:shadow-xl transform hover:-translate-y-1"
+                        >
+                          View Achievements
+                        </button>
+                      </>
+                    )}
+                  </div>
+                ) : attemptsExhausted && isChapterQuiz ? (
+                  <div className="space-y-4">
+                    <p className="text-amber-700 font-medium max-w-md mx-auto">
+                      You used all attempts. Your final quiz score is the average of your attempts ({displayScore}%).
+                      You can continue to the next chapter.
+                    </p>
                     <button
-                      onClick={onClose}
-                      className="bg-gradient-to-r from-green-500 to-emerald-600 text-white font-semibold py-3 px-6 rounded-lg hover:from-green-600 hover:to-emerald-700 transition-all duration-300 shadow-lg hover:shadow-xl transform hover:-translate-y-1"
+                      onClick={handleContinueAfterQuiz}
+                      className="bg-gradient-to-r from-indigo-600 to-purple-600 text-white font-semibold py-3 px-6 rounded-lg hover:from-indigo-700 hover:to-purple-700 transition-all duration-300"
                     >
-                      View Achievements
+                      Continue to Next Chapter
                     </button>
                   </div>
                 ) : (
@@ -368,12 +536,21 @@ const TestTakingModal = ({
                     <p className="text-red-600 font-semibold">
                       You need {testData?.passing_score || test?.passing_score}% to pass.
                     </p>
-                    <button
-                      onClick={onClose}
-                      className="bg-gradient-to-r from-gray-500 to-gray-600 text-white font-semibold py-3 px-6 rounded-lg hover:from-gray-600 hover:to-gray-700 transition-all duration-300"
-                    >
-                      Close
-                    </button>
+                    {canRetry ? (
+                      <button
+                        onClick={handleRetry}
+                        className="bg-gradient-to-r from-indigo-600 to-purple-600 text-white font-semibold py-3 px-6 rounded-lg hover:from-indigo-700 hover:to-purple-700 transition-all duration-300"
+                      >
+                        Retry Quiz
+                      </button>
+                    ) : (
+                      <button
+                        onClick={onClose}
+                        className="bg-gradient-to-r from-gray-500 to-gray-600 text-white font-semibold py-3 px-6 rounded-lg hover:from-gray-600 hover:to-gray-700 transition-all duration-300"
+                      >
+                        Close
+                      </button>
+                    )}
                   </div>
                 )}
               </div>
@@ -401,6 +578,20 @@ const TestTakingModal = ({
                   <h3 className="text-xl font-semibold text-gray-900 mb-4">
                     {questions[currentQuestionIndex]?.question_text}
                   </h3>
+                  {questions[currentQuestionIndex]?.question_type === 'short_answer' ? (
+                    <div>
+                      <label className="block text-sm font-medium text-gray-700 mb-2">
+                        Your answer
+                      </label>
+                      <textarea
+                        value={answers[questions[currentQuestionIndex].id] || ''}
+                        onChange={(e) => handleTextAnswerChange(questions[currentQuestionIndex].id, e.target.value)}
+                        placeholder="Type your answer here..."
+                        rows={4}
+                        className="w-full px-4 py-3 border-2 border-gray-200 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 resize-none"
+                      />
+                    </div>
+                  ) : (
                   <div className="space-y-3">
                     {questions[currentQuestionIndex]?.options?.map((option) => (
                       <label
@@ -430,6 +621,7 @@ const TestTakingModal = ({
                       </label>
                     ))}
                   </div>
+                  )}
                 </div>
 
                 {/* Navigation */}
@@ -449,7 +641,7 @@ const TestTakingModal = ({
                         onClick={() => setCurrentQuestionIndex(index)}
                         className={`w-8 h-8 rounded-full text-sm font-medium ${index === currentQuestionIndex
                             ? 'bg-indigo-600 text-white'
-                            : answers[questions[index].id]
+                            : isQuestionAnswered(questions[index])
                               ? 'bg-indigo-100 text-indigo-700'
                               : 'bg-gray-100 text-gray-600'
                           }`}
@@ -460,17 +652,25 @@ const TestTakingModal = ({
                   </div>
 
                   {currentQuestionIndex === questions.length - 1 ? (
-                    <button
-                      onClick={handleSubmitTest}
-                      disabled={submitTestMutation.isLoading || testCompleted}
-                      className="px-6 py-2 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 disabled:opacity-50"
-                    >
-                      {submitTestMutation.isLoading ? 'Submitting...' : testCompleted ? 'Test Completed' : 'Submit Test'}
-                    </button>
+                    allQuestionsAnswered ? (
+                      <button
+                        type="button"
+                        onClick={() => handleSubmitTest()}
+                        disabled={submitTestMutation.isLoading || testCompleted}
+                        className="px-6 py-2 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 disabled:opacity-50"
+                      >
+                        {submitTestMutation.isLoading ? 'Submitting...' : 'Submit Test'}
+                      </button>
+                    ) : (
+                      <span className="text-sm text-gray-500 px-2">
+                        Answer all questions to submit
+                      </span>
+                    )
                   ) : (
                     <button
                       onClick={handleNextQuestion}
-                      className="px-4 py-2 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700"
+                      disabled={!isQuestionAnswered(questions[currentQuestionIndex])}
+                      className="px-4 py-2 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 disabled:opacity-50 disabled:cursor-not-allowed"
                     >
                       Next
                     </button>

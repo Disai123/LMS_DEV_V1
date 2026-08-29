@@ -41,6 +41,26 @@ module.exports = (sequelize, DataTypes) => {
     completed_at: {
       type: DataTypes.DATE,
       allowNull: true
+    },
+    content_completed: {
+      type: DataTypes.BOOLEAN,
+      defaultValue: false
+    },
+    quiz_passed: {
+      type: DataTypes.BOOLEAN,
+      defaultValue: false
+    },
+    quiz_best_score: {
+      type: DataTypes.DECIMAL(5, 2),
+      allowNull: true
+    },
+    quiz_attempts: {
+      type: DataTypes.INTEGER,
+      defaultValue: 0
+    },
+    quiz_passed_at: {
+      type: DataTypes.DATE,
+      allowNull: true
     }
   }, {
     tableName: 'chapter_progress',

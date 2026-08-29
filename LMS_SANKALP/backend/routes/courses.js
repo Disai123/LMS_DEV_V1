@@ -67,6 +67,14 @@ router.get('/:id/certificates',
   courseController.getCourseCertificates
 );
 
+// Get course performance roster (admin only)
+router.get('/:id/performance',
+  authenticate,
+  requireAdmin,
+  validate(commonSchemas.id, 'params'),
+  courseController.getCoursePerformance
+);
+
 router.get('/:id', 
   optionalAuth,
   validate(commonSchemas.id, 'params'),

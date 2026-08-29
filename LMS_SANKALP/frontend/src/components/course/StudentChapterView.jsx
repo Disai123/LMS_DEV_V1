@@ -7,6 +7,8 @@ import SmartPDFViewer from './SmartPDFViewer'
 import ChapterNavigation from './ChapterNavigation'
 import TestTakingModal from './TestTakingModal'
 import { enrollmentService } from '../../services/enrollmentService'
+import useChapterTimeTracker from '../../hooks/useChapterTimeTracker'
+import { buildCourseSteps } from '../../utils/courseSteps'
 import { FiFile, FiPlay, FiEye, FiClipboard } from 'react-icons/fi'
 import toast from 'react-hot-toast'
 
@@ -19,13 +21,54 @@ const StudentChapterView = ({
   isPreviewMode = false,
   isAuthenticatedNotEnrolled = false,
   courseId = null,
-  hasAdminAccess = false
+  hasAdminAccess = false,
+  progressionData = null,
+  preferredViewMode = 'video',
+  onViewModeChange,
+  onStepSelect
 }) => {
-  const [viewMode, setViewMode] = useState('video') // 'video', 'pdf', or 'test'
+  const [viewMode, setViewMode] = useState(preferredViewMode || 'video')
   const [showFeedback, setShowFeedback] = useState(false)
   const [feedback, setFeedback] = useState({ rating: 0, review: '' })
   const [isTestModalOpen, setIsTestModalOpen] = useState(false)
   const queryClient = useQueryClient()
+  
+  const chapterProgress = progressionData?.chapters?.find((ch) => ch.id === chapter?.id)
+  const isChapterCompleted = chapterProgress?.is_completed || false
+  const quizRequired = chapterProgress?.quiz_required || !!(chapter?.test_id || chapter?.test)
+  const quizPassed = chapterProgress?.quiz_passed || false
+  const contentCompleted = chapterProgress?.content_completed || isChapterCompleted
+  const quizUnlocked = chapterProgress?.quiz_unlocked || contentCompleted || hasAdminAccess
+
+  const {
+    canProceed
+  } = useChapterTimeTracker({
+    enrollmentId,
+    chapterId: chapter?.id,
+    durationMinutes: chapter?.duration_minutes || chapterProgress?.duration_minutes,
+    initialTimeSpent: chapterProgress?.time_spent || 0,
+    isCompleted: isChapterCompleted,
+    enabled: !!enrollmentId && !isPreviewMode
+  })
+
+  const courseSteps = buildCourseSteps(chapters)
+  const currentStepKey = viewMode === 'test' && quizRequired
+    ? `quiz-${chapter?.id}`
+    : `chapter-${chapter?.id}`
+  const currentStepIndex = courseSteps.findIndex((step) => step.key === currentStepKey)
+
+  const contentEngagementMet = !!(chapterProgress?.video_watched || chapterProgress?.pdf_viewed)
+  const progressionCanProceed = chapterProgress?.can_proceed || false
+
+  const requiresTimeGate = Boolean(enrollmentId && !isPreviewMode)
+  const canGoNextOnChapter = isChapterCompleted
+    || contentCompleted
+    || contentEngagementMet
+    || progressionCanProceed
+    || (requiresTimeGate ? canProceed : true)
+  const canGoNextOnQuiz = false
+  const canGoNext = viewMode === 'test' ? canGoNextOnQuiz : canGoNextOnChapter
+  const showQuizPrompt = quizRequired && contentCompleted && !quizPassed && quizUnlocked && !hasAdminAccess
   
   // Check if user has full access
   const hasFullAccess = hasAdminAccess || (!isPreviewMode && !isAuthenticatedNotEnrolled && !!enrollmentId)
@@ -115,6 +158,19 @@ const StudentChapterView = ({
     },
     {
       onSuccess: async (data) => {
+        if (data?.data?.requiresQuiz) {
+          toast.success('Chapter content completed! Pass the quiz to continue.')
+          setViewMode('test')
+          onViewModeChange?.('test')
+          onStepSelect?.({
+            key: `quiz-${chapter.id}`,
+            type: 'quiz',
+            chapterId: chapter.id,
+            chapter
+          })
+          await queryClient.refetchQueries(['chapterProgression', enrollmentId])
+          return
+        }
         toast.success('Chapter completed!')
         // Invalidate all relevant queries to ensure UI updates
         queryClient.invalidateQueries(['course', chapter.course_id])
@@ -143,26 +199,39 @@ const StudentChapterView = ({
     }
   )
 
-  // Auto-set view mode based on available content
+  const goToStep = (step) => {
+    if (!step) return
+    onStepSelect?.(step)
+    const stepChapter = step.chapter || chapter
+    const mode = step.type === 'quiz'
+      ? 'test'
+      : (stepChapter?.video_url || stepChapter?.video_embed_url || stepChapter?.has_video ? 'video' : 'pdf')
+    setViewMode(mode)
+    onViewModeChange?.(mode)
+  }
+
+  const goToNextStep = () => {
+    const nextStep = courseSteps[currentStepIndex + 1]
+    if (nextStep) goToStep(nextStep)
+  }
+
+  const goToPreviousStep = () => {
+    const prevStep = courseSteps[currentStepIndex - 1]
+    if (prevStep) goToStep(prevStep)
+  }
+
+  // Sync view mode from sidebar selection
   useEffect(() => {
-    if (chapter) {
-      // Students get video_embed_url (raw video_url is stripped for download protection)
+    if (!chapter) return
+    if (preferredViewMode) {
+      setViewMode(preferredViewMode)
+    } else {
       const hasVideo = !!(chapter.video_url || chapter.video_embed_url || chapter.has_video)
       const hasPDF = !!(chapter.pdf_url || chapter.has_pdf)
-      const hasTest = !!chapter.test_id || !!chapter.test || !!chapter.has_test
-      
-      if (hasTest) {
-        setViewMode('test')
-      } else if (hasVideo && hasPDF) {
-        // If both are available, keep current selection or default to video
-        setViewMode(prev => prev === 'video' || prev === 'pdf' ? prev : 'video')
-      } else if (hasVideo) {
-        setViewMode('video')
-      } else if (hasPDF) {
-        setViewMode('pdf')
-      }
+      if (hasVideo) setViewMode('video')
+      else if (hasPDF) setViewMode('pdf')
     }
-  }, [chapter, isPreviewMode])
+  }, [chapter?.id, preferredViewMode])
 
   if (!chapter) {
     return (
@@ -180,10 +249,15 @@ const StudentChapterView = ({
   const hasVideo = !!(chapter.video_url || chapter.video_embed_url || chapter.has_video)
   const hasPDF = !!(chapter.pdf_url || chapter.has_pdf)
   const hasTest = !!chapter.test_id || !!chapter.test || !!chapter.has_test
+  const chapterTest = chapter.test || (chapter.test_id ? { id: chapter.test_id } : null)
 
   const handleTakeTest = () => {
     if (!enrollmentId && !hasAdminAccess) {
       toast.error('You must be enrolled to take this test')
+      return
+    }
+    if (!quizUnlocked && !hasAdminAccess) {
+      toast.error('Complete the chapter content before taking the quiz')
       return
     }
     setIsTestModalOpen(true)
@@ -191,17 +265,21 @@ const StudentChapterView = ({
 
   const handleCloseTestModal = () => {
     setIsTestModalOpen(false)
-    // Refresh the chapter data and enrollment after test completion
     queryClient.invalidateQueries(['course', chapter.course_id])
     queryClient.invalidateQueries(['chapterProgression', enrollmentId])
     queryClient.invalidateQueries('student-enrollments')
     queryClient.invalidateQueries(['course-tests'])
-    // Force refetch to update test progress immediately
     Promise.all([
       queryClient.refetchQueries(['course', chapter.course_id]),
       queryClient.refetchQueries(['chapterProgression', enrollmentId]),
       queryClient.refetchQueries('student-enrollments')
     ])
+  }
+
+  const handleQuizComplete = async () => {
+    setIsTestModalOpen(false)
+    await queryClient.refetchQueries(['chapterProgression', enrollmentId])
+    goToNextStep()
   }
 
   return (
@@ -212,41 +290,27 @@ const StudentChapterView = ({
         <div className="relative flex items-center justify-between">
           {/* Left side - Previous button */}
           <div className="flex items-center space-x-3">
-            {chapters.length > 0 && (() => {
-              // Filter out test chapters to get only regular content chapters
-              const regularChapters = chapters.filter(ch => 
-                !ch.test_id && 
-                !ch.test && 
-                ch.type !== 'test'
-              )
-              
-              const currentIndex = regularChapters.findIndex(ch => ch.id === chapter.id)
-              
-              return (
-                <button
-                  onClick={() => {
-                    if (currentIndex > 0) {
-                      onChapterChange(regularChapters[currentIndex - 1].id)
-                    }
-                  }}
-                  disabled={currentIndex === 0}
-                  className={`flex items-center space-x-1 px-3 py-1.5 rounded-lg text-xs font-medium transition-all ${
-                    currentIndex > 0
-                      ? 'bg-gray-100 hover:bg-gray-200 text-gray-700'
-                      : 'bg-gray-50 text-gray-400 cursor-not-allowed'
-                  }`}
-                >
-                  <svg className="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
-                  </svg>
-                  <span>Previous</span>
-                </button>
-              )
-            })()}
+            {courseSteps.length > 0 && (
+              <button
+                type="button"
+                onClick={goToPreviousStep}
+                disabled={currentStepIndex <= 0}
+                className={`flex items-center space-x-1 px-3 py-1.5 rounded-lg text-xs font-medium transition-all ${
+                  currentStepIndex > 0
+                    ? 'bg-gray-100 hover:bg-gray-200 text-gray-700'
+                    : 'bg-gray-50 text-gray-400 cursor-not-allowed'
+                }`}
+              >
+                <svg className="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
+                </svg>
+                <span>Previous</span>
+              </button>
+            )}
           </div>
           
           {/* Compact View Mode Toggle */}
-          {(hasVideo || hasPDF || hasTest) && (
+          {(hasVideo || hasPDF) && viewMode !== 'test' && (
             <motion.div
               initial={{ opacity: 0, x: 20 }}
               animate={{ opacity: 1, x: 0 }}
@@ -256,7 +320,17 @@ const StudentChapterView = ({
               <div className="flex bg-gradient-to-r from-gray-100 to-gray-200 rounded-lg p-1 shadow-sm">
                 {hasVideo && (
                   <button
-                    onClick={() => setViewMode('video')}
+                    type="button"
+                    onClick={() => {
+                      setViewMode('video')
+                      onViewModeChange?.('video')
+                      onStepSelect?.({
+                        key: `chapter-${chapter.id}`,
+                        type: 'chapter',
+                        chapterId: chapter.id,
+                        chapter
+                      })
+                    }}
                     className={`flex items-center space-x-1 px-3 py-1.5 rounded-md text-xs font-medium transition-all duration-200 ${
                       viewMode === 'video'
                         ? 'bg-white text-indigo-600 shadow-sm'
@@ -269,7 +343,17 @@ const StudentChapterView = ({
                 )}
                 {hasPDF && (
                   <button
-                    onClick={() => setViewMode('pdf')}
+                    type="button"
+                    onClick={() => {
+                      setViewMode('pdf')
+                      onViewModeChange?.('pdf')
+                      onStepSelect?.({
+                        key: `chapter-${chapter.id}`,
+                        type: 'chapter',
+                        chapterId: chapter.id,
+                        chapter
+                      })
+                    }}
                     className={`flex items-center space-x-1 px-3 py-1.5 rounded-md text-xs font-medium transition-all duration-200 ${
                       viewMode === 'pdf'
                         ? 'bg-white text-indigo-600 shadow-sm'
@@ -280,85 +364,20 @@ const StudentChapterView = ({
                     <span>PDF</span>
                   </button>
                 )}
-                {hasTest && (
-                  <button
-                    onClick={() => setViewMode('test')}
-                    className={`flex items-center space-x-1 px-3 py-1.5 rounded-md text-xs font-medium transition-all duration-200 ${
-                      viewMode === 'test'
-                        ? 'bg-white text-indigo-600 shadow-sm'
-                        : 'text-gray-600 hover:text-gray-900 hover:bg-white/50'
-                    }`}
-                  >
-                    <FiClipboard className="w-3 h-3" />
-                    <span>Test</span>
-                  </button>
-                )}
-              </div>
-              
-              {/* Compact Content Status Indicator */}
-              <div className="flex items-center space-x-2">
-                {hasTest ? (
-                  <div className="flex items-center space-x-1 px-2 py-1 bg-gradient-to-r from-purple-50 to-purple-100 rounded-lg border border-purple-200">
-                    <FiClipboard className="w-3 h-3 text-purple-500" />
-                    <span className="text-xs font-medium text-purple-700">Test</span>
-                  </div>
-                ) : hasVideo && hasPDF ? (
-                  <div className="flex items-center space-x-1 px-2 py-1 bg-gradient-to-r from-red-50 to-blue-50 rounded-lg border border-red-200">
-                    <div className="flex items-center space-x-1">
-                      <svg className="w-3 h-3 text-red-500" fill="currentColor" viewBox="0 0 24 24">
-                        <path d="M8 5v14l11-7z"/>
-                      </svg>
-                      <span className="text-xs font-medium text-red-700">1 video</span>
-                    </div>
-                    <div className="w-0.5 h-0.5 bg-gray-400 rounded-full"></div>
-                    <div className="flex items-center space-x-1">
-                      <svg className="w-3 h-3 text-blue-500" fill="currentColor" viewBox="0 0 24 24">
-                        <path d="M14,2H6A2,2 0 0,0 4,4V20A2,2 0 0,0 6,22H18A2,2 0 0,0 20,20V8L14,2M18,20H6V4H13V9H18V20Z" />
-                      </svg>
-                      <span className="text-xs font-medium text-blue-700">1 PDF</span>
-                    </div>
-                  </div>
-                ) : hasVideo ? (
-                  <div className="flex items-center space-x-1 px-2 py-1 bg-gradient-to-r from-red-50 to-red-100 rounded-lg border border-red-200">
-                    <svg className="w-3 h-3 text-red-500" fill="currentColor" viewBox="0 0 24 24">
-                      <path d="M8 5v14l11-7z"/>
-                    </svg>
-                    <span className="text-xs font-medium text-red-700">1 video</span>
-                  </div>
-                ) : hasPDF ? (
-                  <div className="flex items-center space-x-1 px-2 py-1 bg-gradient-to-r from-blue-50 to-blue-100 rounded-lg border border-blue-200">
-                    <svg className="w-3 h-3 text-blue-500" fill="currentColor" viewBox="0 0 24 24">
-                      <path d="M14,2H6A2,2 0 0,0 4,4V20A2,2 0 0,0 6,22H18A2,2 0 0,0 20,20V8L14,2M18,20H6V4H13V9H18V20Z" />
-                    </svg>
-                    <span className="text-xs font-medium text-blue-700">1 PDF</span>
-                  </div>
-                ) : null}
               </div>
             </motion.div>
           )}
 
-          {/* Right side - Next/Complete button */}
+          {/* Right side - Next/Complete (hidden on quiz steps; use Take Test + Submit there) */}
           <div className="flex items-center space-x-3">
-            {chapters.length > 0 && (
+            {viewMode !== 'test' && courseSteps.length > 0 && (
               <>
-                {(() => {
-                  // Filter out test chapters to get only regular content chapters
-                  const regularChapters = chapters.filter(ch => 
-                    !ch.test_id && 
-                    !ch.test && 
-                    ch.type !== 'test'
-                  )
-                  
-                  // Check if current chapter is the last regular chapter
-                  const isLastRegularChapter = regularChapters.findIndex(ch => ch.id === chapter.id) === regularChapters.length - 1
-                  
-                  return isLastRegularChapter
-                })() ? (
-                  // Last chapter - Show Complete Course button only if enrolled
+                {currentStepIndex === courseSteps.length - 1 ? (
                   enrollmentId ? (
                     <button
+                      type="button"
                       onClick={() => completeCourseMutation.mutate()}
-                      disabled={completeCourseMutation.isLoading}
+                      disabled={completeCourseMutation.isLoading || !canGoNext}
                       className="flex items-center space-x-1 px-4 py-2 rounded-lg text-sm font-semibold transition-all bg-gradient-to-r from-green-500 to-green-600 hover:from-green-600 hover:to-green-700 text-white shadow-md hover:shadow-lg disabled:opacity-50"
                     >
                       {completeCourseMutation.isLoading ? (
@@ -375,34 +394,32 @@ const StudentChapterView = ({
                       <span>Course Preview</span>
                     </div>
                   )
-                ) : (
-                  // Not last chapter - Show Next button
+                ) : viewMode !== 'test' && showQuizPrompt ? (
                   <button
+                    type="button"
+                    onClick={() => goToStep(courseSteps.find((s) => s.key === `quiz-${chapter.id}`))}
+                    className="flex items-center space-x-1 px-3 py-1.5 rounded-lg text-xs font-medium transition-all bg-purple-100 hover:bg-purple-200 text-purple-700"
+                  >
+                    <FiClipboard className="w-3 h-3" />
+                    <span>Go to Quiz</span>
+                  </button>
+                ) : (
+                  <button
+                    type="button"
                     onClick={() => {
-                      // Filter out test chapters to get only regular content chapters
-                      const regularChapters = chapters.filter(ch => 
-                        !ch.test_id && 
-                        !ch.test && 
-                        ch.type !== 'test'
-                      )
-                      
-                      const currentIndex = regularChapters.findIndex(ch => ch.id === chapter.id)
-                      if (currentIndex < regularChapters.length - 1) {
-                        if (enrollmentId) {
-                          // Complete current chapter first, then navigate
-                          completeChapterMutation.mutate(undefined, {
-                            onSuccess: () => {
-                              onChapterChange(regularChapters[currentIndex + 1].id)
-                            }
-                          })
-                        } else {
-                          // Just navigate without completion tracking
-                          onChapterChange(regularChapters[currentIndex + 1].id)
-                        }
+                      if (enrollmentId) {
+                        completeChapterMutation.mutate(undefined, {
+                          onSuccess: (data) => {
+                            if (data?.data?.requiresQuiz) return
+                            goToNextStep()
+                          }
+                        })
+                      } else {
+                        goToNextStep()
                       }
                     }}
-                    disabled={completeChapterMutation.isLoading}
-                    className="flex items-center space-x-1 px-3 py-1.5 rounded-lg text-xs font-medium transition-all bg-indigo-100 hover:bg-indigo-200 text-indigo-700 disabled:opacity-50"
+                    disabled={completeChapterMutation.isLoading || !canGoNext}
+                    className="flex items-center space-x-1 px-3 py-1.5 rounded-lg text-xs font-medium transition-all bg-indigo-100 hover:bg-indigo-200 text-indigo-700 disabled:opacity-50 disabled:cursor-not-allowed"
                   >
                     <span>{completeChapterMutation.isLoading ? 'Completing...' : 'Next'}</span>
                     <svg className="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -430,27 +447,27 @@ const StudentChapterView = ({
                 <FiClipboard className="w-16 h-16 text-white" />
               </div>
               <h3 className="text-3xl font-bold text-gray-900 mb-4">
-                {chapter.test?.title || 'Chapter Test'}
+                {chapterTest?.title || 'Chapter Test'}
               </h3>
               <p className="text-lg text-gray-600 mb-6">
-                {chapter.test?.description || 'Complete this test to demonstrate your understanding of the chapter material.'}
+                {chapterTest?.description || 'Complete this test to demonstrate your understanding of the chapter material.'}
               </p>
               
-              {chapter.test && (
+              {chapterTest && (
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-8">
                   <div className="bg-white rounded-lg p-4 shadow-md">
-                    <div className="text-2xl font-bold text-purple-600">{chapter.test.passing_score}%</div>
+                    <div className="text-2xl font-bold text-purple-600">{chapterTest.passing_score ?? '—'}%</div>
                     <div className="text-sm text-gray-600">Passing Score</div>
                   </div>
                   <div className="bg-white rounded-lg p-4 shadow-md">
                     <div className="text-2xl font-bold text-indigo-600">
-                      {chapter.test.time_limit_minutes || '∞'}
+                      {chapterTest.time_limit_minutes ?? '∞'}
                     </div>
                     <div className="text-sm text-gray-600">Time Limit (min)</div>
                   </div>
                   <div className="bg-white rounded-lg p-4 shadow-md">
                     <div className="text-2xl font-bold text-blue-600">
-                      {chapter.test.max_attempts || '∞'}
+                      {chapterTest.max_attempts ?? '∞'}
                     </div>
                     <div className="text-sm text-gray-600">Max Attempts</div>
                   </div>
@@ -498,10 +515,10 @@ const StudentChapterView = ({
                 </div>
               )}
 
-              {chapter.test?.instructions && (
+              {chapterTest?.instructions && (
                 <div className="mt-8 bg-blue-50 border border-blue-200 rounded-lg p-4 text-left">
                   <h4 className="font-semibold text-blue-900 mb-2">Instructions:</h4>
-                  <p className="text-sm text-blue-800">{chapter.test.instructions}</p>
+                  <p className="text-sm text-blue-800">{chapterTest.instructions}</p>
                 </div>
               )}
             </motion.div>
@@ -515,6 +532,10 @@ const StudentChapterView = ({
               className="h-full w-full"
               enrollmentId={enrollmentId}
               chapterId={chapter.id}
+              onVideoWatched={() => {
+                queryClient.invalidateQueries(['chapterProgression', enrollmentId])
+                queryClient.refetchQueries(['chapterProgression', enrollmentId])
+              }}
             />
           ) : (
             // Preview mode - show locked video player
@@ -566,6 +587,8 @@ const StudentChapterView = ({
                pdfUrl={chapter.pdf_url}
                title={chapter.title}
                className="h-full"
+               enrollmentId={enrollmentId}
+               chapterId={chapter.id}
              />
            ) : (
              // Preview mode - show locked PDF viewer
@@ -757,12 +780,13 @@ const StudentChapterView = ({
       )}
 
       {/* Test Taking Modal */}
-      {hasTest && chapter.test && (
+      {hasTest && chapterTest && (
         <TestTakingModal
           isOpen={isTestModalOpen}
           onClose={handleCloseTestModal}
-          test={chapter.test}
+          test={chapterTest}
           enrollmentId={enrollmentId}
+          onQuizComplete={handleQuizComplete}
         />
       )}
 

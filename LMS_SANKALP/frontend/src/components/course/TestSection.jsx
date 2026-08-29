@@ -20,9 +20,9 @@ const TestSection = ({ courseId, enrollment, progress, progressionData, hasAdmin
     }
   )
 
-  const tests = testsData?.data?.tests || []
+  const tests = (testsData?.data?.tests || []).filter((test) => (test.test_type || 'final_exam') === 'final_exam')
   
-  // Check if student has completed all chapters / content (admins can always take tests)
+  // Check if student has completed all chapters / content and chapter quizzes
   const contentStatuses = ['content_completed', 'completed', 'certified']
   let hasCompletedAllChapters = hasAdminAccess || contentStatuses.includes(enrollment?.status)
   if (!hasCompletedAllChapters && progressionData?.chapters && progressionData?.stats) {
@@ -33,9 +33,17 @@ const TestSection = ({ courseId, enrollment, progress, progressionData, hasAdmin
     hasCompletedAllChapters = progress >= 100
   }
 
+  const allQuizzesPassed = hasAdminAccess || !progressionData?.chapters
+    ? true
+    : progressionData.chapters
+        .filter((ch) => ch.quiz_required)
+        .every((ch) => ch.is_completed)
+
+  const canTakeFinalExam = hasCompletedAllChapters && allQuizzesPassed
+
   const handleTakeTest = (test) => {
-    if (!hasCompletedAllChapters) {
-      toast.error('You must complete all course chapters before taking the test')
+    if (!canTakeFinalExam) {
+      toast.error('Complete all chapters and chapter quizzes before taking the final exam')
       return
     }
     if (!test || !test.id) {
@@ -88,12 +96,12 @@ const TestSection = ({ courseId, enrollment, progress, progressionData, hasAdmin
               Course Tests
             </h3>
             <p className="text-sm text-gray-600 mt-1">
-              {hasCompletedAllChapters 
-                ? 'Complete the test to earn your certificate'
-                : 'Complete all chapters to unlock the course test'}
+              {canTakeFinalExam 
+                ? 'Complete the final exam to earn your certificate'
+                : 'Complete all chapters and chapter quizzes to unlock the final exam'}
             </p>
           </div>
-          {!hasCompletedAllChapters && (
+          {!canTakeFinalExam && (
             <div className="px-4 py-2 bg-yellow-100 text-yellow-800 rounded-lg text-sm font-medium">
               🔒 Locked
             </div>
@@ -104,13 +112,13 @@ const TestSection = ({ courseId, enrollment, progress, progressionData, hasAdmin
           {tests.map((test) => (
             <motion.div
               key={test.id}
-              whileHover={{ scale: hasCompletedAllChapters ? 1.02 : 1 }}
+              whileHover={{ scale: canTakeFinalExam ? 1.02 : 1 }}
               className={`p-5 border-2 rounded-xl transition-all duration-300 ${
-                hasCompletedAllChapters
+                canTakeFinalExam
                   ? 'border-indigo-200 bg-gradient-to-r from-indigo-50 to-purple-50 hover:border-indigo-300 hover:shadow-lg cursor-pointer'
                   : 'border-gray-200 bg-gray-50 opacity-60 cursor-not-allowed'
               }`}
-              onClick={() => hasCompletedAllChapters && handleTakeTest(test)}
+              onClick={() => canTakeFinalExam && handleTakeTest(test)}
             >
               <div className="flex items-start justify-between">
                 <div className="flex-1">
@@ -151,7 +159,7 @@ const TestSection = ({ courseId, enrollment, progress, progressionData, hasAdmin
                   </div>
                 </div>
                 
-                {hasCompletedAllChapters && (
+                {canTakeFinalExam && (
                   <button
                     className="ml-4 px-6 py-3 bg-gradient-to-r from-indigo-600 to-purple-600 text-white font-semibold rounded-lg hover:from-indigo-700 hover:to-purple-700 transition-all duration-300 shadow-lg hover:shadow-xl transform hover:-translate-y-1"
                     onClick={(e) => {
@@ -170,7 +178,7 @@ const TestSection = ({ courseId, enrollment, progress, progressionData, hasAdmin
           ))}
         </div>
 
-        {!hasCompletedAllChapters && (
+        {!canTakeFinalExam && (
           <div className="mt-4 p-4 bg-yellow-50 border border-yellow-200 rounded-lg">
             <div className="flex items-start">
               <svg className="w-5 h-5 text-yellow-600 mr-2 mt-0.5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">

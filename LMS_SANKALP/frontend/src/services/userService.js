@@ -130,6 +130,15 @@ export const userService = {
     }
   },
 
+  getStudentPerformance: async (id) => {
+    try {
+      const response = await api.get(`/users/${id}/performance`)
+      return response.data
+    } catch (error) {
+      throw new Error(error.response?.data?.message || 'Failed to get student performance')
+    }
+  },
+
   updateStudentProfile: async (id, data) => {
     try {
       const response = await api.put(`/users/${id}/student-profile`, data)

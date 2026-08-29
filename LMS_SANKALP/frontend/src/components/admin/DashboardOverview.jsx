@@ -132,10 +132,10 @@ const DashboardOverview = ({ courses, stats }) => {
           <h3 className="text-lg font-semibold text-slate-900 mb-5">Platform Overview</h3>
           <div className="space-y-4">
             {[
-              { label: 'Completion Rate', value: `${Math.round(stats?.completionRate || 0)}%`, color: 'text-emerald-600' },
-              { label: 'Enrollments', value: stats?.totalEnrolled || 0, color: 'text-blue-600' },
+              { label: 'Total Students', value: stats?.totalStudents || 0, color: 'text-slate-700' },
+              { label: 'Active Enrollments', value: stats?.totalActive || stats?.totalEnrolled || 0, color: 'text-blue-600' },
               { label: 'Avg Progress', value: `${Math.round(stats?.averageProgress || 0)}%`, color: 'text-violet-600' },
-              { label: 'Certificates', value: stats?.totalCertificates || 0, color: 'text-amber-600' },
+              { label: 'Certificates Issued', value: stats?.totalCertificates || 0, color: 'text-amber-600' },
             ].map((item) => (
               <div key={item.label} className="flex items-center justify-between py-2 border-b border-slate-100 last:border-0">
                 <span className="text-sm text-slate-600">{item.label}</span>

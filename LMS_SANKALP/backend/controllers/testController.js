@@ -1,4 +1,5 @@
 const { CourseTest, TestQuestion, TestQuestionOption, TestAnswer, TestAttempt, Certificate, ActivityLog, Course, User } = require('../models');
+const { buildShortAnswerOptions, buildTrueFalseOptions } = require('../utils/answerGrading');
 const logger = require('../utils/logger');
 const { AppError } = require('../middleware/errorHandler');
 
@@ -74,7 +75,11 @@ const createTest = async (req, res, next) => {
       title, 
       description, 
       passing_score, 
-      instructions
+      instructions,
+      test_type,
+      chapter_id,
+      time_limit_minutes,
+      max_attempts
     } = req.body;
 
     // Verify course exists
@@ -83,15 +88,28 @@ const createTest = async (req, res, next) => {
       throw new AppError('Course not found', 404);
     }
 
+    const resolvedTestType = test_type || 'final_exam';
+
     const test = await CourseTest.create({
       course_id,
       title,
       description,
       passing_score: passing_score || 70,
       instructions,
+      test_type: resolvedTestType,
+      chapter_id: chapter_id || null,
+      time_limit_minutes: time_limit_minutes || null,
+      max_attempts: max_attempts ?? (resolvedTestType === 'chapter_quiz' ? 3 : null),
       created_by: req.user.id,
       is_active: true
     });
+
+    if (resolvedTestType === 'chapter_quiz' && chapter_id) {
+      await require('../models').CourseChapter.update(
+        { test_id: test.id },
+        { where: { id: chapter_id, course_id } }
+      );
+    }
 
     logger.info(`Test "${title}" created for course ${course_id} by ${req.user.email}`);
 
@@ -304,27 +322,42 @@ const createQuestion = async (req, res, next) => {
       throw new AppError('Test not found', 404);
     }
 
-    // Validate options for multiple choice questions
-    if (question_type === 'multiple_choice') {
+    const questionType = question_type || 'multiple_choice';
+    let optionsToCreate = options || [];
+
+    if (questionType === 'multiple_choice') {
       if (!options || options.length === 0) {
         throw new AppError('Multiple choice questions must have at least 2 options', 400);
       }
-      
+
       const validOptions = options.filter(opt => opt.option_text && opt.option_text.trim() !== '');
       if (validOptions.length < 2) {
         throw new AppError('Multiple choice questions must have at least 2 valid options', 400);
       }
-      
+
       const hasCorrectAnswer = validOptions.some(opt => opt.is_correct);
       if (!hasCorrectAnswer) {
         throw new AppError('At least one option must be marked as correct', 400);
       }
+      optionsToCreate = validOptions;
+    } else if (questionType === 'short_answer') {
+      const accepted = req.body.accepted_answers ?? options;
+      optionsToCreate = buildShortAnswerOptions(accepted);
+      if (optionsToCreate.length === 0) {
+        throw new AppError('Short answer questions must have at least one accepted answer', 400);
+      }
+    } else if (questionType === 'true_false') {
+      const correctValue = req.body.correct_true_false;
+      if (correctValue === undefined || correctValue === null || correctValue === '') {
+        throw new AppError('Please select the correct True/False answer', 400);
+      }
+      optionsToCreate = buildTrueFalseOptions(correctValue);
     }
 
     const question = await TestQuestion.create({
       test_id,
       question_text,
-      question_type: question_type || 'multiple_choice',
+      question_type: questionType,
       points: points || 1,
       explanation,
       is_active: true
@@ -332,38 +365,19 @@ const createQuestion = async (req, res, next) => {
 
     console.log('Question created with ID:', question.id);
 
-    // Create options for multiple choice questions
-    if (question_type === 'multiple_choice' && options && options.length > 0) {
+    if (optionsToCreate.length > 0) {
       console.log('Creating options for question:', question.id);
-      console.log('Options to create:', options);
-      
-      // Filter out empty options
-      const validOptions = options.filter(opt => opt.option_text && opt.option_text.trim() !== '');
-      console.log('Valid options after filtering:', validOptions);
-      
-      const optionPromises = validOptions.map((option, index) => {
-        console.log(`Creating option ${index + 1}:`, option);
-        console.log(`  - option_text: "${option.option_text}"`);
-        console.log(`  - is_correct: ${option.is_correct}`);
-        console.log(`  - trimmed: "${option.option_text.trim()}"`);
-        
-        return TestQuestionOption.create({
+      const optionPromises = optionsToCreate.map((option) =>
+        TestQuestionOption.create({
           question_id: question.id,
           option_text: option.option_text.trim(),
           is_correct: option.is_correct || false,
-        });
-      });
-      
-      const createdOptions = await Promise.all(optionPromises);
-      console.log('Created options:', createdOptions.length);
-      console.log('Created options details:', createdOptions.map(opt => ({ 
-        id: opt.id, 
-        text: opt.option_text, 
-        correct: opt.is_correct,
-        raw: opt.toJSON()
-      })));
+        })
+      );
+
+      await Promise.all(optionPromises);
     } else {
-      console.log('No options to create. Question type:', question_type, 'Options length:', options ? options.length : 'undefined');
+      console.log('No options to create. Question type:', questionType);
     }
 
     // Fetch the question with options for response
@@ -417,65 +431,95 @@ const updateQuestion = async (req, res, next) => {
       throw new AppError('Question not found', 404);
     }
 
+    const questionType = questionUpdateData.question_type || question.question_type;
+    let optionsToSave = options;
+
+    if (options !== undefined) {
+      if (questionType === 'multiple_choice') {
+        const validOptions = options.filter(opt => opt.option_text && opt.option_text.trim() !== '');
+        if (validOptions.length < 2) {
+          throw new AppError('Question must have at least 2 valid options', 400);
+        }
+        const hasCorrectAnswer = validOptions.some(opt => opt.is_correct);
+        if (!hasCorrectAnswer) {
+          throw new AppError('At least one option must be marked as correct', 400);
+        }
+        optionsToSave = validOptions;
+      } else if (questionType === 'short_answer') {
+        const accepted = req.body.accepted_answers ?? options;
+        optionsToSave = buildShortAnswerOptions(accepted);
+        if (optionsToSave.length === 0) {
+          throw new AppError('Short answer questions must have at least one accepted answer', 400);
+        }
+      } else if (questionType === 'true_false') {
+        const correctValue = req.body.correct_true_false;
+        if (correctValue === undefined || correctValue === null || correctValue === '') {
+          throw new AppError('Please select the correct True/False answer', 400);
+        }
+        optionsToSave = buildTrueFalseOptions(correctValue);
+      }
+    }
+
     // Update question fields
     await question.update(questionUpdateData);
 
     // Handle options if provided
-    if (options && Array.isArray(options)) {
-      // Filter out empty options
-      const validOptions = options.filter(opt => opt.option_text && opt.option_text.trim() !== '');
-      
-      // Validate that we have at least 2 valid options
-      if (validOptions.length < 2) {
-        throw new AppError('Question must have at least 2 valid options', 400);
-      }
-
-      // Check if at least one option is marked as correct
-      const hasCorrectAnswer = validOptions.some(opt => opt.is_correct);
-      if (!hasCorrectAnswer) {
-        throw new AppError('At least one option must be marked as correct', 400);
-      }
+    if (optionsToSave && Array.isArray(optionsToSave)) {
+      const validOptions = optionsToSave.filter(opt => opt.option_text && opt.option_text.trim() !== '');
 
       // Get existing options
       const existingOptions = await TestQuestionOption.findAll({
         where: { question_id: questionId }
       });
 
-      console.log(`Existing options count: ${existingOptions.length}`);
-      console.log(`Valid new options count: ${validOptions.length}`);
-
-      // Track which existing options are being updated
-      const updatedOptionIds = validOptions
-        .filter(opt => opt.id)
-        .map(opt => opt.id);
-
-      // Delete options that are not in the new options list
-      const optionsToDelete = existingOptions.filter(opt => !updatedOptionIds.includes(opt.id));
-      for (const optToDelete of optionsToDelete) {
-        console.log(`Deleting option ${optToDelete.id}: "${optToDelete.option_text}"`);
-        await optToDelete.destroy();
-      }
-
-      // Update or create options
-      for (const newOption of validOptions) {
-        if (newOption.id) {
-          // Update existing option
-          const existingOption = existingOptions.find(opt => opt.id === newOption.id);
-          if (existingOption) {
-            console.log(`Updating option ${existingOption.id}: "${existingOption.option_text}" -> "${newOption.option_text}"`);
-            await existingOption.update({
-              option_text: newOption.option_text.trim(),
-              is_correct: newOption.is_correct || false
-            });
-          }
-        } else {
-          // Create new option
-          console.log(`Creating new option: "${newOption.option_text}"`);
+      // For short_answer / true_false, replace all options
+      if (questionType === 'short_answer' || questionType === 'true_false') {
+        for (const opt of existingOptions) {
+          await opt.destroy();
+        }
+        for (const newOption of validOptions) {
           await TestQuestionOption.create({
             question_id: questionId,
             option_text: newOption.option_text.trim(),
             is_correct: newOption.is_correct || false
           });
+        }
+      } else {
+        // Multiple choice: update/create/delete as before
+        if (validOptions.length < 2) {
+          throw new AppError('Question must have at least 2 valid options', 400);
+        }
+
+        const hasCorrectAnswer = validOptions.some(opt => opt.is_correct);
+        if (!hasCorrectAnswer) {
+          throw new AppError('At least one option must be marked as correct', 400);
+        }
+
+        const updatedOptionIds = validOptions
+          .filter(opt => opt.id)
+          .map(opt => opt.id);
+
+        const optionsToDelete = existingOptions.filter(opt => !updatedOptionIds.includes(opt.id));
+        for (const optToDelete of optionsToDelete) {
+          await optToDelete.destroy();
+        }
+
+        for (const newOption of validOptions) {
+          if (newOption.id) {
+            const existingOption = existingOptions.find(opt => opt.id === newOption.id);
+            if (existingOption) {
+              await existingOption.update({
+                option_text: newOption.option_text.trim(),
+                is_correct: newOption.is_correct || false
+              });
+            }
+          } else {
+            await TestQuestionOption.create({
+              question_id: questionId,
+              option_text: newOption.option_text.trim(),
+              is_correct: newOption.is_correct || false
+            });
+          }
         }
       }
     }

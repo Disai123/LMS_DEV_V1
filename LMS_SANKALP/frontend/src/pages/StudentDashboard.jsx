@@ -17,24 +17,49 @@ import toast from 'react-hot-toast'
 const StudentDashboard = () => {
   const queryClient = useQueryClient()
   const navigate = useNavigate()
-  const { user } = useAuth()
+  const { user, isAuthenticated } = useAuth()
 
-  const { data: coursesData, isLoading: coursesLoading, error: coursesError } = useQuery(
+  const {
+    data: coursesData,
+    isLoading: coursesLoading,
+    error: coursesError,
+    refetch: refetchCourses
+  } = useQuery(
     'student-courses',
     () => courseService.getCourses({ limit: 6 }),
-    { refetchOnWindowFocus: false, staleTime: 5 * 60 * 1000, retry: 1 }
+    {
+      enabled: isAuthenticated,
+      refetchOnWindowFocus: false,
+      staleTime: 5 * 60 * 1000,
+      retry: 2
+    }
   )
 
-  const { data: enrollmentsData, isLoading: enrollmentsLoading, error: enrollmentsError } = useQuery(
+  const {
+    data: enrollmentsData,
+    isLoading: enrollmentsLoading,
+    error: enrollmentsError,
+    refetch: refetchEnrollments
+  } = useQuery(
     'student-enrollments',
     () => enrollmentService.getMyEnrollments(),
-    { refetchOnWindowFocus: false, staleTime: 5 * 60 * 1000, retry: 1 }
+    {
+      enabled: isAuthenticated,
+      refetchOnWindowFocus: false,
+      staleTime: 5 * 60 * 1000,
+      retry: 2
+    }
   )
 
   const { data: activitiesData, isLoading: activitiesLoading } = useQuery(
     'student-activities',
     () => activityService.getMyActivities(5),
-    { refetchOnWindowFocus: false, staleTime: 2 * 60 * 1000, retry: 1 }
+    {
+      enabled: isAuthenticated,
+      refetchOnWindowFocus: false,
+      staleTime: 2 * 60 * 1000,
+      retry: 1
+    }
   )
 
   const enrollMutation = useMutation(
@@ -82,20 +107,47 @@ const StudentDashboard = () => {
     )
   }
 
-  if (coursesError || enrollmentsError) {
+  const hasCourseData = Boolean(coursesData?.data?.courses)
+  const hasEnrollmentData = Boolean(enrollmentsData?.data?.enrollments)
+  const dashboardLoadFailed = (coursesError && !hasCourseData) || (enrollmentsError && !hasEnrollmentData)
+
+  const handleRetryDashboard = async () => {
+    await Promise.all([
+      refetchCourses(),
+      refetchEnrollments()
+    ])
+  }
+
+  if (dashboardLoadFailed) {
+    const errorMessage = [
+      coursesError && !hasCourseData ? `Courses: ${coursesError.message}` : null,
+      enrollmentsError && !hasEnrollmentData ? `Enrollments: ${enrollmentsError.message}` : null
+    ].filter(Boolean).join(' · ')
+
     return (
       <div className="min-h-screen bg-gradient-to-br from-slate-50 via-amber-50/30 to-stone-100">
         <Header />
         <div className="flex items-center justify-center py-20 text-center px-4">
           <div>
             <h1 className="text-2xl font-bold text-gray-900 mb-4">Unable to Load Dashboard</h1>
-            <p className="text-gray-600 mb-6">Please refresh and try again.</p>
-            <button
-              onClick={() => window.location.reload()}
-              className="px-6 py-3 bg-amber-600 text-white font-semibold rounded-xl hover:bg-amber-700"
-            >
-              Refresh Page
-            </button>
+            <p className="text-gray-600 mb-2">We could not load your dashboard data.</p>
+            {errorMessage && (
+              <p className="text-sm text-red-600 mb-6 max-w-md mx-auto">{errorMessage}</p>
+            )}
+            <div className="flex flex-col sm:flex-row gap-3 justify-center">
+              <button
+                onClick={handleRetryDashboard}
+                className="px-6 py-3 bg-amber-600 text-white font-semibold rounded-xl hover:bg-amber-700"
+              >
+                Try Again
+              </button>
+              <button
+                onClick={() => window.location.reload()}
+                className="px-6 py-3 bg-white text-gray-700 font-semibold rounded-xl border border-gray-300 hover:bg-gray-50"
+              >
+                Refresh Page
+              </button>
+            </div>
           </div>
         </div>
       </div>

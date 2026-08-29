@@ -15,6 +15,7 @@ const CreateCourse = () => {
   const queryClient = useQueryClient()
   const [isSubmitting, setIsSubmitting] = useState(false)
   const [createdCourseId, setCreatedCourseId] = useState(null)
+  const [createdCourseTitle, setCreatedCourseTitle] = useState('')
   const [introContentType, setIntroContentType] = useState('video')
   const [introFile, setIntroFile] = useState(null)
   const [urlAnalysis, setUrlAnalysis] = useState(null)
@@ -119,11 +120,6 @@ const CreateCourse = () => {
   const createCourseMutation = useMutation(
     (courseData) => courseService.createCourse(courseData),
     {
-      onSuccess: (response) => {
-        queryClient.invalidateQueries('admin-courses')
-        toast.success('Course created successfully!')
-        setCreatedCourseId(response.data.course.id)
-      },
       onError: (error) => {
         toast.error(error.message)
       }
@@ -163,34 +159,34 @@ const CreateCourse = () => {
         }
       }
 
-      // Handle file uploads if needed
+      let courseId = null
+      let courseTitle = filteredData.title || 'Course'
+
       if (introContentType === 'pdf' && introFile) {
+        const courseResponse = await createCourseMutation.mutateAsync(filteredData)
+        courseId = courseResponse.data.course.id
+        courseTitle = courseResponse.data.course.title || courseTitle
+
         try {
           const formData = new FormData()
           formData.append('files', introFile)
-          
-          // First create the course without the file
-          const courseResponse = await createCourseMutation.mutateAsync(filteredData)
-          const courseId = courseResponse.data.course.id
-          
-          // Then upload the file and update the course
+
           const fileResponse = await api.post(`/courses/${courseId}/files`, formData, {
             headers: {
               'Content-Type': 'multipart/form-data'
             }
           })
-          
+
           if (fileResponse.data) {
             const fileData = fileResponse.data
-            // Update course with file ID
             const updateResponse = await api.put(`/courses/${courseId}`, {
               intro_file_id: fileData.data.files[0].id
             })
-            
+
             if (!updateResponse.data) {
               throw new Error('Failed to update course with file reference')
             }
-            
+
             toast.success('Course and file uploaded successfully!')
           } else {
             throw new Error('File upload failed')
@@ -200,32 +196,30 @@ const CreateCourse = () => {
           toast.error('Course created but file upload failed')
         }
       } else if (logoFile) {
+        const courseResponse = await createCourseMutation.mutateAsync(filteredData)
+        courseId = courseResponse.data.course.id
+        courseTitle = courseResponse.data.course.title || courseTitle
+
         try {
           const formData = new FormData()
           formData.append('logo', logoFile)
-          
-          // First create the course without the logo
-          const courseResponse = await createCourseMutation.mutateAsync(filteredData)
-          const courseId = courseResponse.data.course.id
-          
-          // Then upload the logo and update the course
+
           const logoResponse = await api.post(`/courses/${courseId}/logo`, formData, {
             headers: {
               'Content-Type': 'multipart/form-data'
             }
           })
-          
+
           if (logoResponse.data) {
             const logoData = logoResponse.data
-            // Update course with logo URL
             const updateResponse = await api.put(`/courses/${courseId}`, {
               logo: logoData.data.logoUrl
             })
-            
+
             if (!updateResponse.data) {
               throw new Error('Failed to update course with logo')
             }
-            
+
             toast.success('Course and logo uploaded successfully!')
           } else {
             throw new Error('Logo upload failed')
@@ -235,9 +229,18 @@ const CreateCourse = () => {
           toast.error('Course created but logo upload failed')
         }
       } else {
-        // For video URL and external URL, just create the course
-        await createCourseMutation.mutateAsync(filteredData)
+        const courseResponse = await createCourseMutation.mutateAsync(filteredData)
+        courseId = courseResponse.data.course.id
+        courseTitle = courseResponse.data.course.title || courseTitle
+        toast.success('Course created successfully!')
       }
+
+      queryClient.invalidateQueries('admin-courses')
+      setCreatedCourseId(courseId)
+      setCreatedCourseTitle(courseTitle)
+      window.scrollTo({ top: 0, behavior: 'smooth' })
+    } catch (error) {
+      // Mutation onError already toasts create failures
     } finally {
       setIsSubmitting(false)
     }
@@ -266,13 +269,46 @@ const CreateCourse = () => {
       >
         {/* Header */}
         <div>
-          <h2 className="text-3xl font-bold text-gray-900">Create New Course</h2>
+          <h2 className="text-3xl font-bold text-gray-900">
+            {createdCourseId ? 'Add Chapters' : 'Create New Course'}
+          </h2>
           <p className="text-gray-600 mt-2">
-            Build an engaging course with multimedia content and clear learning objectives.
+            {createdCourseId
+              ? `Course "${createdCourseTitle}" is ready. Add chapters now, or finish and edit them later.`
+              : 'Build an engaging course with multimedia content and clear learning objectives.'}
           </p>
         </div>
 
-        {/* Form */}
+        {createdCourseId ? (
+          <div className="space-y-6">
+            <div className="rounded-xl border border-green-200 bg-green-50 px-4 py-3 text-sm text-green-800">
+              Course created successfully. Add your chapters below, then click Finish when you are done.
+            </div>
+
+            <ChapterManagement
+              courseId={createdCourseId}
+              courseTitle={createdCourseTitle}
+            />
+
+            <div className="flex flex-col sm:flex-row gap-3 justify-end">
+              <button
+                type="button"
+                onClick={() => navigate(`/admin/courses/${createdCourseId}/edit`)}
+                className="btn-secondary"
+              >
+                Open Full Edit
+              </button>
+              <button
+                type="button"
+                onClick={() => navigate('/admin/courses')}
+                className="btn-primary"
+              >
+                Finish & Go to Courses
+              </button>
+            </div>
+          </div>
+        ) : (
+        /* Form */
         <form onSubmit={handleSubmit(onSubmit)} className="space-y-8">
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
             {/* Main Content */}
@@ -677,41 +713,6 @@ const CreateCourse = () => {
           </div>
 
         </form>
-
-        {/* Chapter Management - Show after course creation */}
-        {createdCourseId && (
-          <div className="mt-8">
-            <div className="card p-6">
-              <div className="flex items-center justify-between mb-4">
-                <div>
-                  <h3 className="text-lg font-semibold text-gray-900">Course Chapters</h3>
-                  <p className="text-sm text-gray-600">
-                    Manage the content structure of "{watch('title') || 'Course'}"
-                  </p>
-                </div>
-                <button
-                  type="button"
-                  onClick={() => navigate(`/admin/courses/${createdCourseId}/edit`)}
-                  className="btn-primary"
-                >
-                  Manage Chapters
-                </button>
-              </div>
-              
-              <div className="text-center py-8 text-gray-500">
-                <p>Course created successfully! Click "Manage Chapters" to add content.</p>
-              </div>
-            </div>
-            
-            <div className="mt-6 flex justify-end">
-              <button
-                onClick={() => navigate('/admin/courses')}
-                className="btn-primary"
-              >
-                Finish & Go to Courses
-              </button>
-            </div>
-          </div>
         )}
       </motion.div>
     </div>

@@ -65,6 +65,22 @@ module.exports = (sequelize, DataTypes) => {
       type: DataTypes.INTEGER,
       allowNull: true,
       validate: { min: 1 }
+    },
+    test_type: {
+      type: DataTypes.STRING(20),
+      allowNull: false,
+      defaultValue: 'final_exam',
+      validate: {
+        isIn: [['chapter_quiz', 'final_exam']]
+      }
+    },
+    chapter_id: {
+      type: DataTypes.INTEGER,
+      allowNull: true,
+      references: {
+        model: 'course_chapters',
+        key: 'id'
+      }
     }
   }, {
     tableName: 'course_tests',
@@ -99,6 +115,8 @@ module.exports = (sequelize, DataTypes) => {
       order: this.order,
       time_limit_minutes: this.time_limit_minutes,
       max_attempts: this.max_attempts,
+      test_type: this.test_type || 'final_exam',
+      chapter_id: this.chapter_id,
       created_at: this.created_at,
       updated_at: this.updated_at
     };

@@ -63,7 +63,7 @@ const Header = () => {
             <Link to="/courses" className="text-gray-700 hover:text-amber-600 font-medium transition-colors duration-200">
               Courses
             </Link>
-            {isAuthenticated && (
+            {isAuthenticated && user?.role === 'student' && (
               <Link to="/certificates" className="text-gray-700 hover:text-amber-600 font-medium transition-colors duration-200">
                 Certificates
               </Link>
@@ -183,7 +183,7 @@ const Header = () => {
                 >
                   Courses
                 </Link>
-                {isAuthenticated && (
+                {isAuthenticated && user?.role === 'student' && (
                   <Link
                     to="/certificates"
                     onClick={() => setIsMenuOpen(false)}

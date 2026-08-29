@@ -738,7 +738,8 @@ const EditCourse = () => {
       <div id="tests" className="card p-6 scroll-mt-24">
         <TestManagement
           courseId={id} 
-          courseTitle={courseData?.data?.course?.title || 'Course'} 
+          courseTitle={courseData?.data?.course?.title || 'Course'}
+          chapters={courseData?.data?.course?.chapters || []}
         />
       </div>
     </div>

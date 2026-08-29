@@ -97,6 +97,13 @@ class ProgressService {
 
       await chapterProgress.save();
 
+      if (time_spent !== undefined && time_spent > 0) {
+        const enrollment = await Enrollment.findByPk(enrollmentId);
+        if (enrollment) {
+          await enrollment.addTimeSpent(time_spent);
+        }
+      }
+
       let enrollment = await Enrollment.findByPk(enrollmentId);
       const previousProgress = enrollment ? enrollment.progress : 0;
 

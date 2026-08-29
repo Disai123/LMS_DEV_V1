@@ -110,8 +110,13 @@ module.exports = (sequelize, DataTypes) => {
     };
   };
 
-  TestAttempt.prototype.isPassed = function(passingScore) {
-    return this.score >= passingScore;
+  TestAttempt.prototype.isPassed = function(passingScore = 70) {
+    const score = parseFloat(this.score);
+    const threshold = parseFloat(passingScore);
+    if (Number.isNaN(score) || Number.isNaN(threshold)) {
+      return false;
+    }
+    return score >= threshold;
   };
 
   TestAttempt.prototype.complete = function() {

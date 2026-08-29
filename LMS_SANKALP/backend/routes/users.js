@@ -92,6 +92,13 @@ router.get('/:id/student-profile',
   userController.getStudentProfile
 );
 
+router.get('/:id/performance',
+  authenticate,
+  requireAdmin,
+  validate(commonSchemas.id, 'params'),
+  userController.getStudentPerformance
+);
+
 router.put('/:id/student-profile',
   authenticate,
   requireAdmin,
