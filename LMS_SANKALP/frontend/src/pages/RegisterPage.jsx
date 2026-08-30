@@ -4,6 +4,7 @@ import { motion } from 'framer-motion'
 import { useAuth } from '../context/AuthContext'
 import { authService } from '../services/authService'
 import BrandLogos from '../components/common/BrandLogos'
+import GoogleAuth from '../components/auth/GoogleAuth'
 import toast from 'react-hot-toast'
 
 const RegisterPage = () => {
@@ -117,15 +118,6 @@ const RegisterPage = () => {
     }
   }
 
-  const handleGoogleSuccess = (user) => {
-    toast.success(`Welcome ${user.name}! Your account has been created.`)
-    navigate(from, { replace: true })
-  }
-
-  const handleGoogleError = (error) => {
-    toast.error(`Registration failed: ${error}`)
-  }
-
   if (loading) {
     return (
       <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-slate-50 via-blue-50 to-indigo-100">
@@ -196,10 +188,7 @@ const RegisterPage = () => {
               transition={{ duration: 0.3 }}
               className="space-y-6"
             >
-              <GoogleAuth
-                onSuccess={handleGoogleSuccess}
-                onError={handleGoogleError}
-              />
+              <GoogleAuth redirectPath={from} buttonText="Register with Google" />
 
               <div className="relative">
                 <div className="absolute inset-0 flex items-center">

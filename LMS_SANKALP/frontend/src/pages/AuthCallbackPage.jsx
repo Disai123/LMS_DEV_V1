@@ -45,8 +45,10 @@ const AuthCallbackPage = () => {
             toast.success('Welcome back!')
           }
           
-          // Redirect to dashboard or intended page
-          const from = localStorage.getItem('intendedPath') || '/'
+          const storedPath = localStorage.getItem('redirectAfterLogin')
+          const defaultPath = result.user?.role === 'admin' ? '/admin' : '/student'
+          const from = storedPath || defaultPath
+          localStorage.removeItem('redirectAfterLogin')
           localStorage.removeItem('intendedPath')
           navigate(from, { replace: true })
         } else {

@@ -1,5 +1,18 @@
 import { api } from './api'
 
+const RATE_LIMIT_MESSAGE = 'Too many attempts. Please wait 15 minutes or contact support.'
+
+const getAuthErrorMessage = (error, fallback) => {
+  if (error.response?.status === 429) {
+    return RATE_LIMIT_MESSAGE
+  }
+  const data = error.response?.data
+  if (typeof data === 'string' && data.trim()) {
+    return data
+  }
+  return data?.message || fallback
+}
+
 export const authService = {
   // Student registration
   register: async (userData) => {
@@ -7,7 +20,7 @@ export const authService = {
       const response = await api.post('/auth/register', userData)
       return response.data
     } catch (error) {
-      throw new Error(error.response?.data?.message || 'Registration failed')
+      throw new Error(getAuthErrorMessage(error, 'Registration failed'))
     }
   },
 
@@ -17,7 +30,7 @@ export const authService = {
       const response = await api.post('/auth/login', { username, password })
       return response.data
     } catch (error) {
-      throw new Error(error.response?.data?.message || 'Login failed')
+      throw new Error(getAuthErrorMessage(error, 'Login failed'))
     }
   },
 

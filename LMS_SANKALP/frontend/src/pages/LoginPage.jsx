@@ -3,6 +3,7 @@ import { Link, useNavigate, useLocation } from 'react-router-dom'
 import { motion } from 'framer-motion'
 import { useAuth } from '../context/AuthContext'
 import BrandLogos from '../components/common/BrandLogos'
+import GoogleAuth from '../components/auth/GoogleAuth'
 import { authService } from '../services/authService'
 import toast from 'react-hot-toast'
 
@@ -78,17 +79,6 @@ const LoginPage = () => {
     }
   }
 
-  const handleGoogleSuccess = (user) => {
-    toast.success(`Welcome ${user.name}!`)
-    const redirectPath = getRedirectPath()
-    localStorage.removeItem('redirectAfterLogin')
-    navigate(redirectPath, { replace: true })
-  }
-
-  const handleGoogleError = (error) => {
-    toast.error(`Login failed: ${error}`)
-  }
-
   const handleInputChange = (e) => {
     const { name, value } = e.target
     setFormData(prev => ({
@@ -126,7 +116,8 @@ const LoginPage = () => {
       }
     } catch (error) {
       console.error('Login error:', error)
-      toast.error(error.message || 'Login failed. Please try again.')
+      const message = error.message || 'Login failed. Please try again.'
+      toast.error(message, { duration: message.includes('15 minutes') ? 6000 : 4000 })
     } finally {
       setLoading(false)
     }
@@ -315,10 +306,7 @@ const LoginPage = () => {
               transition={{ duration: 0.3 }}
               className="space-y-6"
             >
-              <GoogleAuth
-                onSuccess={handleGoogleSuccess}
-                onError={handleGoogleError}
-              />
+              <GoogleAuth redirectPath={getRedirectPath()} />
 
               <div className="relative">
                 <div className="absolute inset-0 flex items-center">

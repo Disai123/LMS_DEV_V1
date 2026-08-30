@@ -10,6 +10,15 @@ const getBaseUrl = () => {
 
 const API_URL = getBaseUrl();
 
+/** Start Google OAuth via backend Passport redirect (not GIS button). */
+export const getGoogleOAuthStartUrl = () => {
+  if (import.meta.env.PROD) {
+    return '/api/auth/google';
+  }
+  const apiRoot = (import.meta.env.VITE_API_URL || 'http://localhost:5001').replace(/\/$/, '');
+  return `${apiRoot}/api/auth/google`;
+};
+
 export const api = axios.create({
   baseURL: API_URL,
   headers: {
