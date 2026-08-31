@@ -7,7 +7,6 @@ import {
   getOpenInNewTabUrl,
   getProxyUrl
 } from '../../utils/pdfUrlUtils'
-import { progressService } from '../../services/progressService'
 
 const METHOD_METADATA = {
   iframe: { id: 'iframe', name: 'Direct Embed', description: 'Try to embed the PDF directly in the browser' },
@@ -23,9 +22,7 @@ const SmartPDFViewer = ({
   pdfUrl,
   title = 'PDF Document',
   className = '',
-  showControls = true,
-  enrollmentId = null,
-  chapterId = null
+  showControls = true
 }) => {
   const [normalizedSource, setNormalizedSource] = useState(null)
   const [methodSequence, setMethodSequence] = useState([])
@@ -33,7 +30,6 @@ const SmartPDFViewer = ({
   const [isLoading, setIsLoading] = useState(true)
   const [error, setError] = useState(null)
   const [success, setSuccess] = useState(false)
-  const pdfMarkedRef = useRef(false)
   const retryTimerRef = useRef(null)
 
   const clearScheduledTimeout = () => {
@@ -58,18 +54,6 @@ const SmartPDFViewer = ({
       clearScheduledTimeout()
     }
   }, [])
-
-  useEffect(() => {
-    pdfMarkedRef.current = false
-  }, [pdfUrl, chapterId])
-
-  useEffect(() => {
-    if (!success || !enrollmentId || !chapterId || pdfMarkedRef.current) return
-    pdfMarkedRef.current = true
-    progressService.markPdfViewed(enrollmentId, chapterId).catch((err) => {
-      console.warn('Failed to mark PDF viewed', err)
-    })
-  }, [success, enrollmentId, chapterId])
 
   useEffect(() => {
     clearScheduledTimeout()

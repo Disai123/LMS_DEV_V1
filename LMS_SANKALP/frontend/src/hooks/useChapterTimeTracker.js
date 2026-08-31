@@ -39,6 +39,15 @@ export const useChapterTimeTracker = ({
     }
   }
 
+  const flushPendingTime = async () => {
+    const totalLocal = Math.floor(elapsedSecondsRef.current / 60)
+    const pending = totalLocal - syncedMinutesRef.current
+    if (pending >= 1) {
+      syncedMinutesRef.current += pending
+      await syncMinutes(pending)
+    }
+  }
+
   useEffect(() => {
     setElapsedSeconds(0)
     syncedMinutesRef.current = 0
@@ -84,6 +93,7 @@ export const useChapterTimeTracker = ({
     requiredMinutes,
     completionPercent,
     canProceed,
+    flushPendingTime,
     isTracking: enabled && !isCompleted
   }
 }

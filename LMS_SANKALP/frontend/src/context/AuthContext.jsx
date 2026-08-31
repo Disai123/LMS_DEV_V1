@@ -108,7 +108,8 @@ export function AuthProvider({ children }) {
     }
   }
 
-  const login = async (token, refreshToken, isNewUser = false, loginMethod = 'traditional') => {
+  const login = async (token, refreshToken, isNewUser = false, loginMethod = 'traditional', options = {}) => {
+    const { silent = false } = options
     try {
       dispatch({ type: 'AUTH_START' })
       
@@ -149,9 +150,9 @@ export function AuthProvider({ children }) {
         }
         
         if (isNewUser) {
-          toast.success('Welcome to LMS Platform!')
+          if (!silent) toast.success('Welcome to LMS Platform!')
         } else {
-          toast.success('Welcome back!')
+          if (!silent) toast.success('Welcome back!')
         }
         
         return { success: true, user: response.data.user }
@@ -164,7 +165,9 @@ export function AuthProvider({ children }) {
         type: 'AUTH_FAILURE', 
         payload: { error: error.message } 
       })
-      toast.error('Login failed. Please try again.')
+      if (!silent) {
+        toast.error('Login failed. Please try again.')
+      }
       return { success: false, error: error.message }
     }
   }

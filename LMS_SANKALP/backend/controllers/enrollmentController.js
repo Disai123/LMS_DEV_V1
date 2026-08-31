@@ -591,8 +591,6 @@ const completeChapter = async (req, res, next) => {
     if (
       !alreadyFullyComplete
       && !isTimeRequirementMet(chapterProgress.time_spent, currentChapter.duration_minutes)
-      && !chapterProgress.video_watched
-      && !chapterProgress.pdf_viewed
     ) {
       throw new AppError('Complete at least 90% of this chapter before proceeding', 400);
     }
@@ -601,6 +599,12 @@ const completeChapter = async (req, res, next) => {
 
     if (quizRequired && !chapterProgress.quiz_passed) {
       await chapterProgress.save();
+
+      const progression = await chapterProgressionService.buildChapterProgression(
+        enrollment,
+        chapters
+      );
+      await enrollment.updateProgress(progression.stats.progressPercentage);
       await enrollment.update({ last_accessed_at: new Date() });
 
       return res.json({
@@ -632,17 +636,14 @@ const completeChapter = async (req, res, next) => {
       await chapterProgress.save();
     }
 
-    // Calculate new progress based on completed chapters
-    const completedChapters = await ChapterProgress.count({
-      where: {
-        enrollment_id: enrollmentId,
-        is_completed: true
-      }
-    });
-
-    const totalChapters = chapters.length;
+    const progression = await chapterProgressionService.buildChapterProgression(
+      enrollment,
+      chapters
+    );
     const previousProgress = enrollment.progress;
-    const newProgress = Math.round((completedChapters / totalChapters) * 100);
+    const newProgress = progression.stats.progressPercentage;
+    const completedChapters = progression.stats.completedChapters;
+    const totalChapters = progression.stats.totalChapters;
 
     // Update enrollment progress
     await enrollment.updateProgress(newProgress);
@@ -777,6 +778,14 @@ const getChapterProgression = async (req, res, next) => {
       isContentDone(enrollment.status)
     );
 
+    // Keep enrollment.progress aligned with step-based progression (heals older 0% rows)
+    if (
+      typeof progression.stats.progressPercentage === 'number'
+      && enrollment.progress !== progression.stats.progressPercentage
+    ) {
+      await enrollment.updateProgress(progression.stats.progressPercentage);
+    }
+
     res.json({
       success: true,
       message: 'Chapter progression retrieved successfully',
@@ -788,7 +797,9 @@ const getChapterProgression = async (req, res, next) => {
         },
         chapters: progression.chapters,
         stats: progression.stats,
-        resumeChapterId: progression.resumeChapterId
+        resumeChapterId: progression.resumeChapterId,
+        resumeStepKey: progression.resumeStepKey,
+        resumeViewMode: progression.resumeViewMode
       }
     });
   } catch (error) {

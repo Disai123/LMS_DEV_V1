@@ -158,7 +158,7 @@ const CourseDetailPage = () => {
     setResumeApplied(false)
   }, [id, enrollment?.id])
 
-  // Resume at first incomplete chapter for enrolled students
+  // Resume at first incomplete chapter/quiz step for enrolled students
   useEffect(() => {
     if (!chapters.length) return
 
@@ -176,9 +176,11 @@ const CourseDetailPage = () => {
           }) || chapters[0]
 
       if (targetChapter) {
+        const resumeStepKey = progressionData.data.resumeStepKey || `chapter-${targetChapter.id}`
+        const resumeViewMode = progressionData.data.resumeViewMode === 'test' ? 'test' : 'video'
         setSelectedChapter(targetChapter)
-        setSelectedStepKey(`chapter-${targetChapter.id}`)
-        setChapterViewMode('video')
+        setSelectedStepKey(resumeStepKey)
+        setChapterViewMode(resumeViewMode)
         setResumeApplied(true)
       }
       return
@@ -439,12 +441,12 @@ const CourseDetailPage = () => {
                           </div>
                           <div className="text-right">
                             <div className="text-xl font-bold text-green-800 mb-1">
-                              {enrollment.progress || 0}%
+                              {progressionData?.data?.stats?.progressPercentage ?? enrollment.progress ?? 0}%
                             </div>
                             <div className="w-20 bg-green-200 rounded-full h-1.5 overflow-hidden">
                               <div
                                 className="h-full bg-gradient-to-r from-green-500 to-emerald-500 rounded-full transition-all duration-1000"
-                                style={{ width: `${enrollment.progress || 0}%` }}
+                                style={{ width: `${progressionData?.data?.stats?.progressPercentage ?? enrollment.progress ?? 0}%` }}
                               />
                             </div>
                             <div className="text-xs text-green-600 mt-0.5">Progress</div>
@@ -608,6 +610,7 @@ const CourseDetailPage = () => {
                       courseTitle={course.title}
                       progressionData={chapterProgression}
                       resumeChapterId={progressionData?.data?.resumeChapterId}
+                      resumeStepKey={progressionData?.data?.resumeStepKey}
                       hasAdminAccess={isAdmin}
                     />
                   </div>

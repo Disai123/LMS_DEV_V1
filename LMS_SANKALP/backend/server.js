@@ -34,6 +34,9 @@ const SocketServer = require('./socket/socketServer');
 const app = express();
 const PORT = process.env.PORT || 5001;
 
+// Required behind nginx/reverse proxy so rate limits key by real client IP
+app.set('trust proxy', 1);
+
 if (!process.env.JWT_SECRET) {
   process.env.JWT_SECRET = 'sankalp-jwt-secret-change-in-production';
 }
@@ -88,10 +91,14 @@ app.disable('etag');
 
 const limiter = rateLimit({
   windowMs: 15 * 60 * 1000,
-  max: 1000,
-  message: 'Too many requests from this IP, please try again later.',
+  max: 5000,
   standardHeaders: true,
-  legacyHeaders: false
+  legacyHeaders: false,
+  skip: (req) => req.path === '/health',
+  message: {
+    success: false,
+    message: 'Too many requests from this IP, please try again later.'
+  }
 });
 app.use(limiter);
 

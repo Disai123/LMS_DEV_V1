@@ -1,4 +1,4 @@
-import { Routes, Route, Navigate } from 'react-router-dom'
+import { Routes, Route, Navigate, useLocation } from 'react-router-dom'
 import { Helmet } from 'react-helmet-async'
 import { AnimatePresence } from 'framer-motion'
 
@@ -24,8 +24,10 @@ import { NotificationProvider } from './context/NotificationContext'
 
 function App() {
   const { user, loading } = useAuth()
+  const location = useLocation()
+  const isAuthCallback = location.pathname === '/auth/callback'
 
-  if (loading) {
+  if (loading && !isAuthCallback) {
     return (
       <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-slate-50 via-blue-50 to-indigo-100">
         <div className="text-center">

@@ -1,18 +1,13 @@
 import { useState, useEffect } from 'react'
-import { motion } from 'framer-motion'
 import { analyzeUrl, getUrlTypeDisplayName, supportsEmbedding, URL_TYPES } from '../../utils/urlAnalyzer'
-import { api } from '../../services/api'
-import { FiPlay, FiExternalLink, FiAlertCircle } from 'react-icons/fi'
+import { FiPlay, FiAlertCircle } from 'react-icons/fi'
 
 const VideoPlayer = ({ 
   url,
   embedUrl,
   title = 'Video Content', 
   className = '',
-  enrollmentId,
-  chapterId,
-  autoplay = false,
-  onVideoWatched
+  autoplay = false
 }) => {
   const [urlAnalysis, setUrlAnalysis] = useState(null)
   const [isLoading, setIsLoading] = useState(true)
@@ -46,19 +41,6 @@ const VideoPlayer = ({
       setError(analysis.error || 'Invalid URL')
     }
   }, [playbackUrl, embedUrl, url])
-
-  useEffect(() => {
-    const markWatched = async () => {
-      if (!enrollmentId || !chapterId || !urlAnalysis?.isValid) return
-      try {
-        await api.post(`/progress/enrollment/${enrollmentId}/chapter/${chapterId}/video-watched`)
-        onVideoWatched?.()
-      } catch (err) {
-        console.warn('Failed to mark video watched', err)
-      }
-    }
-    markWatched()
-  }, [enrollmentId, chapterId, urlAnalysis?.isValid, onVideoWatched])
 
   if (isLoading) {
     return (

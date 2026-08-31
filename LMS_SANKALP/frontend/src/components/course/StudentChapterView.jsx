@@ -41,7 +41,8 @@ const StudentChapterView = ({
   const quizUnlocked = chapterProgress?.quiz_unlocked || contentCompleted || hasAdminAccess
 
   const {
-    canProceed
+    canProceed,
+    flushPendingTime
   } = useChapterTimeTracker({
     enrollmentId,
     chapterId: chapter?.id,
@@ -57,13 +58,13 @@ const StudentChapterView = ({
     : `chapter-${chapter?.id}`
   const currentStepIndex = courseSteps.findIndex((step) => step.key === currentStepKey)
 
-  const contentEngagementMet = !!(chapterProgress?.video_watched || chapterProgress?.pdf_viewed)
   const progressionCanProceed = chapterProgress?.can_proceed || false
 
   const requiresTimeGate = Boolean(enrollmentId && !isPreviewMode)
+  // Enrolled students unlock Next only via 90% time (local tracker or backend can_proceed)
+  // or after the chapter content is already completed — not via open-on-load engagement flags.
   const canGoNextOnChapter = isChapterCompleted
     || contentCompleted
-    || contentEngagementMet
     || progressionCanProceed
     || (requiresTimeGate ? canProceed : true)
   const canGoNextOnQuiz = false
@@ -376,7 +377,10 @@ const StudentChapterView = ({
                   enrollmentId ? (
                     <button
                       type="button"
-                      onClick={() => completeCourseMutation.mutate()}
+                      onClick={async () => {
+                        await flushPendingTime()
+                        completeCourseMutation.mutate()
+                      }}
                       disabled={completeCourseMutation.isLoading || !canGoNext}
                       className="flex items-center space-x-1 px-4 py-2 rounded-lg text-sm font-semibold transition-all bg-gradient-to-r from-green-500 to-green-600 hover:from-green-600 hover:to-green-700 text-white shadow-md hover:shadow-lg disabled:opacity-50"
                     >
@@ -406,8 +410,9 @@ const StudentChapterView = ({
                 ) : (
                   <button
                     type="button"
-                    onClick={() => {
+                    onClick={async () => {
                       if (enrollmentId) {
+                        await flushPendingTime()
                         completeChapterMutation.mutate(undefined, {
                           onSuccess: (data) => {
                             if (data?.data?.requiresQuiz) return
@@ -530,12 +535,6 @@ const StudentChapterView = ({
               embedUrl={chapter.video_embed_url}
               title={chapter.title}
               className="h-full w-full"
-              enrollmentId={enrollmentId}
-              chapterId={chapter.id}
-              onVideoWatched={() => {
-                queryClient.invalidateQueries(['chapterProgression', enrollmentId])
-                queryClient.refetchQueries(['chapterProgression', enrollmentId])
-              }}
             />
           ) : (
             // Preview mode - show locked video player
@@ -587,8 +586,6 @@ const StudentChapterView = ({
                pdfUrl={chapter.pdf_url}
                title={chapter.title}
                className="h-full"
-               enrollmentId={enrollmentId}
-               chapterId={chapter.id}
              />
            ) : (
              // Preview mode - show locked PDF viewer

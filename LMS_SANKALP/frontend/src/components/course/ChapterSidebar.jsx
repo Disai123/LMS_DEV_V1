@@ -10,6 +10,7 @@ const ChapterSidebar = ({
   courseTitle,
   progressionData = null,
   resumeChapterId = null,
+  resumeStepKey: resumeStepKeyProp = null,
   hasAdminAccess = false
 }) => {
   const [isCollapsed, setIsCollapsed] = useState(false)
@@ -17,12 +18,13 @@ const ChapterSidebar = ({
   const courseSteps = useMemo(() => buildCourseSteps(chapters), [chapters])
 
   const resumeStepKey = useMemo(() => {
+    if (resumeStepKeyProp) return resumeStepKeyProp
     if (!resumeChapterId) return null
     const chapterStep = courseSteps.find(
       (step) => step.type === 'chapter' && step.chapterId === resumeChapterId
     )
     return chapterStep?.key || null
-  }, [courseSteps, resumeChapterId])
+  }, [courseSteps, resumeChapterId, resumeStepKeyProp])
 
   return (
     <div className={`bg-white border-r border-gray-200 transition-all duration-300 ${

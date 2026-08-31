@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react'
+import { useEffect, useState, useRef } from 'react'
 import { useNavigate, useLocation } from 'react-router-dom'
 import { useAuth } from '../context/AuthContext'
 import { motion } from 'framer-motion'
@@ -10,8 +10,12 @@ const AuthCallbackPage = () => {
   const location = useLocation()
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState(null)
+  const handledRef = useRef(false)
 
   useEffect(() => {
+    if (handledRef.current) return
+    handledRef.current = true
+
     const handleCallback = async () => {
       try {
         const urlParams = new URLSearchParams(location.search)
@@ -36,7 +40,7 @@ const AuthCallbackPage = () => {
           return
         }
 
-        const result = await login(token, refreshToken, isNew)
+        const result = await login(token, refreshToken, isNew, 'google', { silent: true })
         
         if (result.success) {
           if (isNew) {

@@ -28,8 +28,6 @@ const ChapterContentViewer = ({ chapter }) => {
           url={chapter.video_url}
           embedUrl={chapter.video_embed_url}
           title={chapter.title}
-          enrollmentId={chapter.enrollmentId}
-          chapterId={chapter.id}
         />
       )
     }

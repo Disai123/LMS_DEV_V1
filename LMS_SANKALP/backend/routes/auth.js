@@ -1,4 +1,5 @@
 const express = require('express');
+const rateLimit = require('express-rate-limit');
 const passport = require('../config/passport');
 const { googleOAuthEnabled } = require('../config/passport');
 const { authenticate, optionalAuth } = require('../middleware/auth');
@@ -8,11 +9,22 @@ const { userSchemas } = require('../utils/validation');
 
 const router = express.Router();
 
+const authLoginLimiter = rateLimit({
+  windowMs: 15 * 60 * 1000,
+  max: 30,
+  standardHeaders: true,
+  legacyHeaders: false,
+  message: {
+    success: false,
+    message: 'Too many login attempts. Please wait 15 minutes and try again.'
+  }
+});
+
 // Student registration
-router.post('/register', authController.register);
+router.post('/register', authLoginLimiter, authController.register);
 
 // Traditional login
-router.post('/login', authController.login);
+router.post('/login', authLoginLimiter, authController.login);
 
 // Google OAuth routes (only when credentials are configured)
 const googleNotConfigured = (req, res) => {

@@ -95,16 +95,12 @@ const updateChapterQuizAfterAttempt = async ({ studentId, enrollment, test, scor
   await chapterProgress.save();
 
   if (chapterProgress.is_completed) {
-    const totalChapters = await CourseChapter.count({
-      where: { course_id: test.course_id, is_published: true }
+    const courseChapters = await CourseChapter.findAll({
+      where: { course_id: test.course_id, is_published: true },
+      order: [['chapter_order', 'ASC']]
     });
-    const completedChapters = await ChapterProgress.count({
-      where: { enrollment_id: enrollment.id, is_completed: true }
-    });
-    const newProgress = totalChapters > 0
-      ? Math.round((completedChapters / totalChapters) * 100)
-      : enrollment.progress;
-    await enrollment.updateProgress(newProgress);
+    const progression = await buildChapterProgression(enrollment, courseChapters);
+    await enrollment.updateProgress(progression.stats.progressPercentage);
   }
 
   return {
@@ -143,8 +139,6 @@ const buildChapterProgression = async (enrollment, courseChapters, isCourseCompl
     const contentCompleted = progress?.content_completed || progress?.is_completed || isCourseCompleted;
     const quizPassed = progress?.quiz_passed || isCourseCompleted;
     const timeMet = isTimeRequirementMet(timeSpent, chapter.duration_minutes)
-      || progress?.video_watched
-      || progress?.pdf_viewed
       || contentCompleted
       || isCourseCompleted;
     const quizUnlocked = contentCompleted && timeMet;
@@ -224,19 +218,57 @@ const buildChapterProgression = async (enrollment, courseChapters, isCourseCompl
     resumeChapterId = chaptersWithProgress[chaptersWithProgress.length - 1].id;
   }
 
+  const resumeChapter = chaptersWithProgress.find((ch) => ch.id === resumeChapterId)
+    || chaptersWithProgress[0]
+    || null;
+
+  let resumeStepKey = resumeChapter ? `chapter-${resumeChapter.id}` : null;
+  let resumeViewMode = 'video';
+  if (
+    resumeChapter
+    && resumeChapter.content_completed
+    && resumeChapter.quiz_required
+    && !resumeChapter.quiz_passed
+  ) {
+    resumeStepKey = `quiz-${resumeChapter.id}`;
+    resumeViewMode = 'test';
+  }
+
+  let totalSteps = 0;
+  let completedSteps = 0;
+  chaptersWithProgress.forEach((ch) => {
+    totalSteps += 1;
+    if (ch.content_completed || ch.is_completed) {
+      completedSteps += 1;
+    }
+    if (ch.quiz_required) {
+      totalSteps += 1;
+      if (ch.quiz_passed || ch.is_completed) {
+        completedSteps += 1;
+      }
+    }
+  });
+
   const completedChapters = chaptersWithProgress.filter((ch) => ch.is_completed).length;
   const totalChapters = chaptersWithProgress.length;
+  const progressPercentage = totalSteps > 0
+    ? Math.round((completedSteps / totalSteps) * 100)
+    : 0;
 
   return {
     chapters: chaptersWithProgress,
     stats: {
       completedChapters,
       totalChapters,
+      completedSteps,
+      totalSteps,
       isCourseCompleted: isCourseCompleted || (completedChapters === totalChapters && totalChapters > 0),
-      progressPercentage: totalChapters > 0 ? Math.round((completedChapters / totalChapters) * 100) : 0,
+      progressPercentage,
       allRegularChaptersComplete: allRegularComplete
     },
-    resumeChapterId
+    resumeChapterId,
+    resumeStepKey,
+    resumeViewMode
   };
 };
 

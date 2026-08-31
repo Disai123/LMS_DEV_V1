@@ -528,7 +528,7 @@ const ChapterForm = ({ courseId, chapter, onClose, onSubmit, isSubmitting }) => 
                 required
               />
               <p className="text-xs text-gray-500 mt-1">
-                Students must spend at least 90% of this time (or finish the video) to unlock Next.
+                Students must spend at least 90% of this time on the chapter to unlock Next.
               </p>
             </div>
 

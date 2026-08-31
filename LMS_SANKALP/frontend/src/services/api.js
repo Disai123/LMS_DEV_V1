@@ -1,22 +1,28 @@
 import axios from 'axios';
 
 const getBaseUrl = () => {
+  const configured = import.meta.env.VITE_API_URL?.replace(/\/$/, '');
+  if (configured) {
+    return `${configured}/api`;
+  }
   if (import.meta.env.PROD) {
     return '/api';
   }
-  const apiRoot = (import.meta.env.VITE_API_URL || 'http://localhost:5001').replace(/\/$/, '');
-  return `${apiRoot}/api`;
+  return 'http://localhost:5001/api';
 };
 
 const API_URL = getBaseUrl();
 
 /** Start Google OAuth via backend Passport redirect (not GIS button). */
 export const getGoogleOAuthStartUrl = () => {
+  const configured = import.meta.env.VITE_API_URL?.replace(/\/$/, '');
+  if (configured) {
+    return `${configured}/api/auth/google`;
+  }
   if (import.meta.env.PROD) {
     return '/api/auth/google';
   }
-  const apiRoot = (import.meta.env.VITE_API_URL || 'http://localhost:5001').replace(/\/$/, '');
-  return `${apiRoot}/api/auth/google`;
+  return 'http://localhost:5001/api/auth/google';
 };
 
 export const api = axios.create({
