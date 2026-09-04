@@ -4,6 +4,9 @@ const notificationService = require('../services/notificationService');
 const { AppError } = require('../middleware/errorHandler');
 const { Op } = require('sequelize');
 
+const isContentDone = (status) => ['content_completed', 'completed', 'certified'].includes(status);
+const isCertified = (status) => status === 'certified';
+
 /**
  * Get my enrollments
  */
@@ -72,7 +75,8 @@ const getMyProgress = async (req, res, next) => {
 
     const stats = {
       totalEnrolled: enrollments.length,
-      completed: enrollments.filter(e => e.status === 'completed').length,
+      completed: enrollments.filter(e => isCertified(e.status)).length,
+      contentCompleted: enrollments.filter(e => isContentDone(e.status)).length,
       inProgress: enrollments.filter(e => e.status === 'in-progress').length,
       enrolled: enrollments.filter(e => e.status === 'enrolled').length,
       averageProgress: enrollments.length > 0
@@ -92,7 +96,7 @@ const getMyProgress = async (req, res, next) => {
         };
       }
       categoryStats[category].total++;
-      if (enrollment.status === 'completed') {
+      if (isContentDone(enrollment.status)) {
         categoryStats[category].completed++;
       }
     });
@@ -140,7 +144,7 @@ const getMyCompletedCourses = async (req, res, next) => {
     const { count, rows: enrollments } = await Enrollment.findAndCountAll({
       where: {
         student_id: req.user.id,
-        status: 'completed'
+        status: ['content_completed', 'completed', 'certified']
       },
       include: [
         {
@@ -262,7 +266,7 @@ const getMyStats = async (req, res, next) => {
       let enrollmentTime = enrollment.time_spent || 0;
 
       // If completed course has no time_spent, estimate based on progress and chapters
-      if (enrollment.status === 'completed' && enrollmentTime === 0) {
+      if (isContentDone(enrollment.status) && enrollmentTime === 0) {
         const totalChapters = enrollment.course?.chapters?.length || 0;
         if (totalChapters > 0) {
           // Estimate 12 minutes per chapter for completed courses
@@ -283,7 +287,7 @@ const getMyStats = async (req, res, next) => {
 
     const stats = {
       totalCourses: enrollments.length,
-      completedCourses: enrollments.filter(e => e.status === 'completed').length,
+      completedCourses: enrollments.filter(e => isCertified(e.status)).length,
       // In progress = enrolled courses with progress > 0 but not completed
       inProgressCourses: enrollments.filter(e => e.status === 'enrolled' && e.progress > 0 && e.progress < 100).length,
       enrolledCourses: enrollments.filter(e => e.status === 'enrolled' && e.progress === 0).length,
@@ -292,7 +296,7 @@ const getMyStats = async (req, res, next) => {
         ? Math.round(enrollments.reduce((sum, e) => sum + (e.progress || 0), 0) / enrollments.length)
         : 0,
       completionRate: enrollments.length > 0
-        ? Math.round((enrollments.filter(e => e.status === 'completed').length / enrollments.length) * 100)
+        ? Math.round((enrollments.filter(e => isCertified(e.status)).length / enrollments.length) * 100)
         : 0
     };
 
@@ -309,7 +313,7 @@ const getMyStats = async (req, res, next) => {
         };
       }
       categoryBreakdown[category].total++;
-      if (enrollment.status === 'completed') {
+      if (isContentDone(enrollment.status)) {
         categoryBreakdown[category].completed++;
       } else if (enrollment.status === 'enrolled' && enrollment.progress > 0 && enrollment.progress < 100) {
         categoryBreakdown[category].inProgress++;
@@ -336,7 +340,7 @@ const getMyStats = async (req, res, next) => {
         };
       }
       difficultyBreakdown[difficulty].total++;
-      if (enrollment.status === 'completed') {
+      if (isContentDone(enrollment.status)) {
         difficultyBreakdown[difficulty].completed++;
       }
     });
@@ -376,15 +380,42 @@ const updateMyProgress = async (req, res, next) => {
       where: {
         id: id,
         student_id: req.user.id
-      }
+      },
+      include: [
+        {
+          model: Course,
+          as: 'course',
+          attributes: ['id', 'title']
+        }
+      ]
     });
 
     if (!enrollment) {
       throw new AppError('Enrollment not found', 404);
     }
 
+    const previousProgress = enrollment.progress;
+
     if (progress !== undefined) {
       await enrollment.updateProgress(progress);
+      await enrollment.reload();
+
+      if (enrollment.course) {
+        try {
+          await notificationService.notifyProgressMilestones(
+            req.user.id,
+            enrollment,
+            enrollment.course,
+            previousProgress,
+            enrollment.progress
+          );
+          if (previousProgress < 100 && enrollment.progress >= 100) {
+            await notificationService.notifyCourseContentCompleted(req.user.id, enrollment.course, enrollment);
+          }
+        } catch (notifError) {
+          console.error('Failed to send progress notifications:', notifError);
+        }
+      }
     }
 
     if (time_spent !== undefined) {
@@ -455,13 +486,7 @@ const completeCourse = async (req, res, next) => {
       );
 
       // Notification
-      await notificationService.create(
-        req.user.id,
-        'course_completed',
-        `Course Completed`,
-        `Congratulations! You have completed "${course.title}".`,
-        `/courses/${course.id}`
-      );
+      await notificationService.notifyCourseContentCompleted(req.user.id, course, enrollment);
 
       // Note: Certificates are ONLY created when tests are passed (handled in testTakingController.js)
       // Do NOT create certificates here for course completion alone
@@ -607,6 +632,7 @@ const completeChapter = async (req, res, next) => {
     });
 
     const totalChapters = chapters.length;
+    const previousProgress = enrollment.progress;
     const newProgress = Math.round((completedChapters / totalChapters) * 100);
 
     // Update enrollment progress
@@ -639,14 +665,6 @@ const completeChapter = async (req, res, next) => {
         }
       );
       
-      // Notification
-      await notificationService.create(
-        req.user.id,
-        'chapter_completed',
-        `Chapter Completed`,
-        `You completed "${chapters[currentChapterIndex].title}" in "${enrollment.course.title}".`
-      );
-
       console.log('=== CHAPTER ACTIVITY LOGGED ===');
       console.log('User ID:', req.user.id);
       console.log('Chapter:', chapters[currentChapterIndex].title);
@@ -655,11 +673,26 @@ const completeChapter = async (req, res, next) => {
       console.log('===============================');
     } catch (activityError) {
       console.error('Failed to log chapter completion activity:', activityError);
-      // Don't fail the chapter completion if activity logging fails
     }
 
-    // Check if course is completed
+    // Notifications (independent of activity logging)
     const isCourseCompleted = completedChapters === totalChapters;
+    try {
+      await notificationService.handleProgressChange(
+        req.user.id,
+        enrollment,
+        enrollment.course,
+        previousProgress,
+        newProgress,
+        {
+          chapter: chapters[currentChapterIndex],
+          isCourseCompleted
+        }
+      );
+    } catch (notifError) {
+      console.error('Failed to send chapter completion notifications:', notifError);
+    }
+
     let nextChapter = null;
 
     if (!isCourseCompleted && currentChapterIndex < chapters.length - 1) {
@@ -763,7 +796,7 @@ const getChapterProgression = async (req, res, next) => {
 
     // Check if all regular chapters are completed OR if course itself is completed
     // If course is completed, all chapters/tests should be accessible regardless of individual chapter progress
-    const isCourseCompleted = enrollment.status === 'completed';
+    const isCourseCompleted = isContentDone(enrollment.status);
 
     const allRegularChaptersCompleted = isCourseCompleted || regularChapters.every(chapter => {
       const progress = progressMap[chapter.id];
@@ -881,8 +914,13 @@ const submitCourseFeedback = async (req, res, next) => {
       throw new AppError('Enrollment not found', 404);
     }
 
-    if (enrollment.status !== 'completed') {
+    if (!isContentDone(enrollment.status)) {
       throw new AppError('Course must be completed before submitting feedback', 400);
+    }
+
+    // Keep progress in sync so Take Test unlocks immediately on the client
+    if (enrollment.progress < 100) {
+      enrollment.progress = 100;
     }
 
     // Update enrollment with rating and review

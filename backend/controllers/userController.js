@@ -1,4 +1,4 @@
-const { User, Course, Enrollment } = require('../models');
+const { User, Course, Enrollment, Certificate, TestAttempt, StudentScore, StudentPermission, CourseTest } = require('../models');
 const logger = require('../utils/logger');
 const { AppError } = require('../middleware/errorHandler');
 const { Op } = require('sequelize');
@@ -462,6 +462,141 @@ const getUserEnrollments = async (req, res, next) => {
   }
 };
 /**
+ * Build aggregated student profile payload
+ */
+const buildStudentProfileData = async (userId) => {
+  const user = await User.findByPk(userId, {
+    attributes: { exclude: ['google_id', 'password', 'reset_password_token', 'reset_password_expires'] },
+    include: [{ model: StudentPermission, as: 'permissions', required: false }]
+  });
+
+  if (!user) {
+    throw new AppError('User not found', 404);
+  }
+
+  const [enrollments, certificates, testAttempts, studentScore] = await Promise.all([
+    Enrollment.findAll({
+      where: { student_id: userId },
+      include: [{ model: Course, as: 'course', attributes: ['id', 'title', 'thumbnail', 'category', 'difficulty'] }],
+      order: [['enrolled_at', 'DESC']]
+    }),
+    Certificate.findAll({
+      where: { student_id: userId },
+      order: [['issued_date', 'DESC']]
+    }),
+    TestAttempt.findAll({
+      where: { student_id: userId, status: 'completed' },
+      include: [{ model: CourseTest, as: 'test', attributes: ['id', 'title', 'course_id', 'passing_score'] }],
+      order: [['completed_at', 'DESC']]
+    }),
+    StudentScore.findOne({ where: { student_id: userId } })
+  ]);
+
+  return {
+    profile: user.getPublicProfile(),
+    enrollments: enrollments.map((e) => ({
+      id: e.id,
+      status: e.status,
+      progress: e.progress,
+      test_passed: e.test_passed,
+      enrolled_at: e.enrolled_at,
+      completed_at: e.completed_at,
+      time_spent: e.time_spent,
+      course: e.course ? e.course.getPublicInfo?.() || e.course : null
+    })),
+    certificates,
+    testAttempts: testAttempts.map((a) => ({
+      id: a.id,
+      score: a.score,
+      status: a.status,
+      completed_at: a.completed_at,
+      test: a.test,
+      isPassed: a.isPassed?.() ?? (a.score >= (a.test?.passing_score || 70))
+    })),
+    studentScore: studentScore || null,
+    summary: {
+      totalEnrolled: enrollments.length,
+      contentCompleted: enrollments.filter((e) => ['content_completed', 'completed', 'certified'].includes(e.status)).length,
+      certified: enrollments.filter((e) => e.status === 'certified').length,
+      certificatesEarned: certificates.length,
+      testsPassed: testAttempts.filter((a) => (a.isPassed?.() ?? a.score >= (a.test?.passing_score || 70))).length
+    }
+  };
+};
+
+/**
+ * Get aggregated student profile (admin)
+ */
+const getStudentProfile = async (req, res, next) => {
+  try {
+    const { id } = req.params;
+    const data = await buildStudentProfileData(id);
+    res.json({
+      success: true,
+      message: 'Student profile retrieved successfully',
+      data
+    });
+  } catch (error) {
+    logger.error('Get student profile error:', error);
+    next(error);
+  }
+};
+
+/**
+ * Update student profile (admin)
+ */
+const updateStudentProfile = async (req, res, next) => {
+  try {
+    const { id } = req.params;
+    const user = await User.findByPk(id);
+
+    if (!user) {
+      throw new AppError('User not found', 404);
+    }
+
+    if (req.body.email && req.body.email !== user.email) {
+      const existingUser = await User.findByEmail(req.body.email);
+      if (existingUser && existingUser.id !== parseInt(id)) {
+        throw new AppError('Email already in use', 400);
+      }
+    }
+
+    if (req.body.student_id && req.body.student_id !== user.student_id) {
+      const existingStudentId = await User.findOne({ where: { student_id: req.body.student_id } });
+      if (existingStudentId && existingStudentId.id !== parseInt(id)) {
+        throw new AppError('Student ID already in use', 400);
+      }
+    }
+
+    const allowedFields = [
+      'name', 'email', 'bio', 'phone', 'location', 'student_id', 'date_of_birth',
+      'gender', 'education_level', 'college_name', 'graduation_year', 'specialization',
+      'joined_at', 'emergency_contact_name', 'emergency_contact_phone', 'is_active',
+      'notification_preferences'
+    ];
+
+    const updates = {};
+    allowedFields.forEach((field) => {
+      if (req.body[field] !== undefined) {
+        updates[field] = req.body[field];
+      }
+    });
+
+    await user.update(updates);
+    const data = await buildStudentProfileData(id);
+
+    res.json({
+      success: true,
+      message: 'Student profile updated successfully',
+      data
+    });
+  } catch (error) {
+    logger.error('Update student profile error:', error);
+    next(error);
+  }
+};
+
+/**
  * Update user plan type (Admin only)
  */
 const updateUserPlan = async (req, res, next) => {
@@ -512,6 +647,9 @@ module.exports = {
   deactivateUser,
   getUserCourses,
   getUserEnrollments,
+  getStudentProfile,
+  updateStudentProfile,
+  buildStudentProfileData,
   updateUserPlan
 };
 

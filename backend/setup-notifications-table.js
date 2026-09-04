@@ -1,5 +1,5 @@
 /**
- * Run this script ONCE to create the notifications table.
+ * Run this script ONCE to create or upgrade the notifications table.
  * Usage: cd backend && node setup-notifications-table.js
  */
 require('dotenv').config();
@@ -13,11 +13,10 @@ const { sequelize } = require('./models');
 const createTables = async () => {
   try {
     await sequelize.authenticate();
-    console.log('✅ Database connected');
+    console.log('Database connected');
 
-    console.log('🔄 Setting up notifications table...');
+    console.log('Setting up notifications table...');
 
-    // Create notifications table with correct schema
     await sequelize.query(`
       CREATE TABLE IF NOT EXISTS notifications (
         id SERIAL PRIMARY KEY,
@@ -32,19 +31,53 @@ const createTables = async () => {
         updated_at TIMESTAMP WITH TIME ZONE NOT NULL DEFAULT NOW()
       );
     `);
-    console.log('✅ notifications table created with correct schema');
+
+    // Upgrade legacy schema (link column, missing metadata/updated_at)
+    await sequelize.query(`
+      DO $$
+      BEGIN
+        IF EXISTS (
+          SELECT 1 FROM information_schema.columns
+          WHERE table_name = 'notifications' AND column_name = 'link'
+        ) AND NOT EXISTS (
+          SELECT 1 FROM information_schema.columns
+          WHERE table_name = 'notifications' AND column_name = 'action_url'
+        ) THEN
+          ALTER TABLE notifications RENAME COLUMN link TO action_url;
+        END IF;
+
+        IF NOT EXISTS (
+          SELECT 1 FROM information_schema.columns
+          WHERE table_name = 'notifications' AND column_name = 'action_url'
+        ) THEN
+          ALTER TABLE notifications ADD COLUMN action_url VARCHAR(255);
+        END IF;
+
+        IF NOT EXISTS (
+          SELECT 1 FROM information_schema.columns
+          WHERE table_name = 'notifications' AND column_name = 'metadata'
+        ) THEN
+          ALTER TABLE notifications ADD COLUMN metadata JSONB DEFAULT '{}'::jsonb;
+        END IF;
+
+        IF NOT EXISTS (
+          SELECT 1 FROM information_schema.columns
+          WHERE table_name = 'notifications' AND column_name = 'updated_at'
+        ) THEN
+          ALTER TABLE notifications ADD COLUMN updated_at TIMESTAMP WITH TIME ZONE NOT NULL DEFAULT NOW();
+        END IF;
+      END $$;
+    `);
 
     await sequelize.query(`
       CREATE INDEX IF NOT EXISTS idx_notifications_user_id ON notifications(user_id);
       CREATE INDEX IF NOT EXISTS idx_notifications_is_read ON notifications(is_read);
     `);
-    console.log('✅ notifications indexes created');
 
-    console.log('');
-    console.log('🎉 Notification tables ready!');
+    console.log('notifications table ready');
     process.exit(0);
   } catch (error) {
-    console.error('❌ Error setting up notification tables:', error.message);
+    console.error('Error setting up notification tables:', error.message);
     process.exit(1);
   }
 };

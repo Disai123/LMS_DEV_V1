@@ -34,7 +34,9 @@ const NotificationBell = () => {
     switch (type) {
       case 'enrollment': case 'plan_upgraded': return 'bg-blue-100 text-blue-600 dark:bg-blue-900 dark:text-blue-200';
       case 'course_completed': case 'certificate': return 'bg-yellow-100 text-yellow-600 dark:bg-yellow-900 dark:text-yellow-200';
+      case 'chapter_completed': case 'progress_milestone': return 'bg-indigo-100 text-indigo-600 dark:bg-indigo-900 dark:text-indigo-200';
       case 'test_passed': return 'bg-green-100 text-green-600 dark:bg-green-900 dark:text-green-200';
+      case 'test_failed': return 'bg-red-100 text-red-600 dark:bg-red-900 dark:text-red-200';
       case 'project_reviewed': case 'hackathon_reviewed': case 'internship_feedback': return 'bg-purple-100 text-purple-600 dark:bg-purple-900 dark:text-purple-200';
       case 'welcome': return 'bg-pink-100 text-pink-600 dark:bg-pink-900 dark:text-pink-200';
       default: return 'bg-gray-100 text-gray-600 dark:bg-gray-800 dark:text-gray-200';
@@ -81,7 +83,7 @@ const NotificationBell = () => {
               </div>
             ) : (
               <div className="divide-y dark:divide-gray-700">
-                {notifications.slice(0, 1).map((notification) => (
+                {notifications.slice(0, 5).map((notification) => (
                   <div
                     key={notification.id}
                     className={`flex items-start p-4 transition-colors ${
@@ -113,9 +115,9 @@ const NotificationBell = () => {
                     </button>
                     </div>
                 ))}
-                {notifications.length > 1 && (
+                {notifications.length > 5 && (
                   <div className="px-4 py-2 bg-gray-50 dark:bg-gray-800/50 text-xs text-center text-gray-500 border-t dark:border-gray-700">
-                    You have {notifications.length - 1} more notifications
+                    You have {notifications.length - 5} more notifications
                   </div>
                 )}
               </div>

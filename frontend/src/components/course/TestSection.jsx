@@ -22,16 +22,14 @@ const TestSection = ({ courseId, enrollment, progress, progressionData }) => {
 
   const tests = testsData?.data?.tests || []
   
-  // Check if student has completed all chapters
-  // Use progression data if available (more reliable), otherwise fall back to progress percentage
-  let hasCompletedAllChapters = false
-  if (progressionData?.chapters && progressionData?.stats) {
-    // Check if all regular chapters (non-assignment) are completed
+  // Check if student has completed all chapters / content
+  const contentStatuses = ['content_completed', 'completed', 'certified']
+  let hasCompletedAllChapters = contentStatuses.includes(enrollment?.status)
+  if (!hasCompletedAllChapters && progressionData?.chapters && progressionData?.stats) {
     const regularChapters = progressionData.chapters.filter(ch => !ch.is_assignment)
     const completedRegularChapters = regularChapters.filter(ch => ch.is_completed)
     hasCompletedAllChapters = regularChapters.length > 0 && completedRegularChapters.length === regularChapters.length
-  } else {
-    // Fallback to progress percentage
+  } else if (!hasCompletedAllChapters) {
     hasCompletedAllChapters = progress >= 100
   }
 

@@ -17,13 +17,14 @@ import CourseDetailPage from './pages/CourseDetailPage'
 import CreateCoursePage from './pages/CreateCoursePage'
 import UserManagementPage from './pages/UserManagementPage'
 import StudentListPage from './pages/StudentListPage'
+import AdminStudentProfilePage from './pages/AdminStudentProfilePage'
 import ProfilePage from './pages/ProfilePage'
 import CertificatesPage from './pages/CertificatesPage'
 // Student Realtime Projects pages
 import StudentRealtimeProjectsPage from './pages/StudentRealtimeProjectsPage'
 import ProjectViewer from './components/projects/ProjectViewer'
 import ProjectDiagnostics from './pages/ProjectDiagnostics'
-import HackathonPage from './pages/HackathonPage'
+// import HackathonPage from './pages/HackathonPage' // HIDDEN: Hackathons/Internships temporarily hidden
 // Phase pages - COMMENTED OUT (Student access removed, but kept for future use)
 // import BRDPhasePage from './pages/BRDPhasePage'
 // import UIUXPhasePage from './pages/UIUXPhasePage'
@@ -35,22 +36,22 @@ import MyProjectSubmissionsPage from './pages/MyProjectSubmissionsPage';
 // import DeploymentPhasePage from './pages/DeploymentPhasePage'
 // Admin Projects pages - COMMENTED OUT (Admin side removed, but kept for students)
 // import AdminProjectsPage from './pages/AdminProjectsPage'
-import StudentInternshipsPage from './pages/StudentInternshipsPage'
+// import StudentInternshipsPage from './pages/StudentInternshipsPage' // HIDDEN
 import AdminProjectManagementPage from './pages/AdminProjectManagementPage'
 import ProjectManagementDetailPage from './pages/ProjectManagementDetailPage'
-import AdminHackathonsPage from './pages/AdminHackathonsPage';
+// import AdminHackathonsPage from './pages/AdminHackathonsPage'; // HIDDEN
 import AdminProjectSubmissionsPage from './pages/AdminProjectSubmissionsPage';
-import CreateHackathonPage from './pages/CreateHackathonPage'
-import CreateGroupPage from './pages/CreateGroupPage'
+// import CreateHackathonPage from './pages/CreateHackathonPage' // HIDDEN
+// import CreateGroupPage from './pages/CreateGroupPage' // HIDDEN
 // import AdminChatPage from './pages/AdminChatPage'
 import RealtimeProjectsLandingPage from './pages/RealtimeProjectsLandingPage'
-import HackathonLandingPage from './pages/HackathonLandingPage'
+// import HackathonLandingPage from './pages/HackathonLandingPage' // HIDDEN
 import PricingPage from './pages/PricingPage'
 import ContactPage from './pages/ContactPage'
 import NotFoundPage from './pages/NotFoundPage'
-import InternshipsLandingPage from './pages/InternshipsLandingPage'
-import AdminInternshipsPage from './pages/AdminInternshipsPage'
-import MyInternshipSubmissionsPage from './pages/MyInternshipSubmissionsPage'
+// import InternshipsLandingPage from './pages/InternshipsLandingPage' // HIDDEN
+// import AdminInternshipsPage from './pages/AdminInternshipsPage' // HIDDEN
+// import MyInternshipSubmissionsPage from './pages/MyInternshipSubmissionsPage' // HIDDEN
 import NotificationsPage from './pages/NotificationsPage'
 
 // Components
@@ -146,11 +147,12 @@ function App() {
               <Route path="/courses" element={<CourseListPage />} />
               <Route path="/realtime-projects" element={<RealtimeProjectsLandingPage />} />
               <Route path="/realtime-projects/diagnostics" element={<ProjectDiagnostics />} />
-              <Route path="/hackathons" element={<HackathonLandingPage />} />
-              <Route path="/internships" element={<InternshipsLandingPage />} />
-              <Route path="/admin/hackathons" element={<AdminHackathonsPage />} />
+              {/* HIDDEN: Hackathons & Internships routes temporarily hidden */}
+              {/* <Route path="/hackathons" element={<HackathonLandingPage />} /> */}
+              {/* <Route path="/internships" element={<InternshipsLandingPage />} /> */}
+              {/* <Route path="/admin/hackathons" element={<AdminHackathonsPage />} /> */}
               <Route path="/admin/project-submissions" element={<AdminProjectSubmissionsPage />} />
-              <Route path="/admin/hackathons/create" element={<CreateHackathonPage />} />
+              {/* <Route path="/admin/hackathons/create" element={<CreateHackathonPage />} /> */}
               <Route path="/courses/:id" element={<CourseDetailPage />} />
 
               {/* Realtime Projects Routes - Student access */}
@@ -172,35 +174,10 @@ function App() {
                 }
               />
 
-              {/* Student Hackathons Route */}
-              <Route
-                path="/student/hackathons"
-                element={
-                  <ProtectedRoute>
-                    <HackathonPage />
-                  </ProtectedRoute>
-                }
-              />
-
-              {/* Student Internships Route */}
-              <Route
-                path="/student/internships"
-                element={
-                  <ProtectedRoute>
-                    <StudentInternshipsPage />
-                  </ProtectedRoute>
-                }
-              />
-
-              {/* My Internship Submissions Route */}
-              <Route
-                path="/student/internship-submissions"
-                element={
-                  <ProtectedRoute>
-                    <MyInternshipSubmissionsPage />
-                  </ProtectedRoute>
-                }
-              />
+              {/* HIDDEN: Student Hackathons & Internships Routes temporarily hidden */}
+              {/* <Route path="/student/hackathons" element={<ProtectedRoute><HackathonPage /></ProtectedRoute>} /> */}
+              {/* <Route path="/student/internships" element={<ProtectedRoute><StudentInternshipsPage /></ProtectedRoute>} /> */}
+              {/* <Route path="/student/internship-submissions" element={<ProtectedRoute><MyInternshipSubmissionsPage /></ProtectedRoute>} /> */}
 
               {/* Realtime Projects Phase Routes - COMMENTED OUT (Student access removed, but pages kept for future use) */}
               {/* <Route
@@ -294,6 +271,15 @@ function App() {
                 }
               />
 
+              <Route
+                path="/admin/students/:id"
+                element={
+                  <ProtectedRoute requiredRole="admin">
+                    <AdminStudentProfilePage />
+                  </ProtectedRoute>
+                }
+              />
+
               {/* Admin Projects Routes - COMMENTED OUT (Admin side removed, but kept for students) */}
               {/* <Route
               path="/admin/projects"
@@ -322,43 +308,11 @@ function App() {
               }
             /> */}
 
-              {/* Admin Internships Route */}
-              <Route
-                path="/admin/internships"
-                element={
-                  <ProtectedRoute requiredRole="admin">
-                    <AdminInternshipsPage />
-                  </ProtectedRoute>
-                }
-              />
-
-              {/* Hackathon Admin Routes */}
-              <Route
-                path="/admin/hackathons"
-                element={
-                  <ProtectedRoute requiredRole="admin">
-                    <AdminHackathonsPage />
-                  </ProtectedRoute>
-                }
-              />
-
-              <Route
-                path="/admin/hackathons/create"
-                element={
-                  <ProtectedRoute requiredRole="admin">
-                    <CreateHackathonPage />
-                  </ProtectedRoute>
-                }
-              />
-
-              <Route
-                path="/admin/hackathons/create-group"
-                element={
-                  <ProtectedRoute requiredRole="admin">
-                    <CreateGroupPage />
-                  </ProtectedRoute>
-                }
-              />
+              {/* HIDDEN: Admin Internships & Hackathon Routes temporarily hidden */}
+              {/* <Route path="/admin/internships" element={<ProtectedRoute requiredRole="admin"><AdminInternshipsPage /></ProtectedRoute>} /> */}
+              {/* <Route path="/admin/hackathons" element={<ProtectedRoute requiredRole="admin"><AdminHackathonsPage /></ProtectedRoute>} /> */}
+              {/* <Route path="/admin/hackathons/create" element={<ProtectedRoute requiredRole="admin"><CreateHackathonPage /></ProtectedRoute>} /> */}
+              {/* <Route path="/admin/hackathons/create-group" element={<ProtectedRoute requiredRole="admin"><CreateGroupPage /></ProtectedRoute>} /> */}
 
               {/* Chat Management Route - COMMENTED OUT */}
               {/* <Route

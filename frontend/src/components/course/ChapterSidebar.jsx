@@ -12,8 +12,8 @@ const ChapterSidebar = ({ chapters = [], selectedChapterId, onChapterSelect, cou
   )
 
   const getChapterContentType = (chapter) => {
-    // Check for preview mode flags or actual URLs
-    const hasVideo = chapter.video_url || chapter.has_video
+    // Students may only receive video_embed_url / has_video (raw video_url stripped)
+    const hasVideo = chapter.video_url || chapter.video_embed_url || chapter.has_video
     const hasPDF = chapter.pdf_url || chapter.has_pdf
     const hasTest = chapter.test_id || chapter.test || chapter.has_test
     
@@ -199,7 +199,7 @@ const ChapterSidebar = ({ chapters = [], selectedChapterId, onChapterSelect, cou
                                 </svg>
                                 <span>Test</span>
                               </span>
-                            ) : chapter.video_url && chapter.pdf_url ? (
+                            ) : (chapter.video_url || chapter.video_embed_url || chapter.has_video) && (chapter.pdf_url || chapter.has_pdf) ? (
                               <>
                                 <span className="flex items-center space-x-0.5">
                                   <svg className="w-2.5 h-2.5 text-red-500" fill="currentColor" viewBox="0 0 24 24">
@@ -215,14 +215,14 @@ const ChapterSidebar = ({ chapters = [], selectedChapterId, onChapterSelect, cou
                                   <span>1 PDF</span>
                                 </span>
                               </>
-                            ) : chapter.video_url ? (
+                            ) : (chapter.video_url || chapter.video_embed_url || chapter.has_video) ? (
                               <span className="flex items-center space-x-0.5">
                                 <svg className="w-2.5 h-2.5 text-red-500" fill="currentColor" viewBox="0 0 24 24">
                                   <path d="M8 5v14l11-7z"/>
                                 </svg>
                                 <span>1 video</span>
                               </span>
-                            ) : chapter.pdf_url ? (
+                            ) : (chapter.pdf_url || chapter.has_pdf) ? (
                               <span className="flex items-center space-x-0.5">
                                 <svg className="w-2.5 h-2.5 text-blue-500" fill="currentColor" viewBox="0 0 24 24">
                                   <path d="M14,2H6A2,2 0 0,0 4,4V20A2,2 0 0,0 6,22H18A2,2 0 0,0 20,20V8L14,2M18,20H6V4H13V9H18V20Z" />

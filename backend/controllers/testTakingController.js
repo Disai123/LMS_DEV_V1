@@ -2,6 +2,7 @@ const { TestAttempt, TestAnswer, TestQuestion, TestQuestionOption, CourseTest, C
 const logger = require('../utils/logger');
 const { AppError } = require('../middleware/errorHandler');
 const notificationService = require('../services/notificationService');
+const emailService = require('../services/emailService');
 
 /**
  * Start a test attempt
@@ -32,9 +33,40 @@ const startTest = async (req, res, next) => {
       throw new AppError('You are not enrolled in this course', 403);
     }
 
-    // Check if student has completed all chapters (basic check)
-    if (enrollment.progress < 100) {
+    // Unlock when content is done: 100% progress, completed status, or all regular chapters finished
+    const contentStatuses = ['content_completed', 'completed', 'certified'];
+    let contentReady = enrollment.progress >= 100 || contentStatuses.includes(enrollment.status);
+
+    if (!contentReady) {
+      const { CourseChapter, ChapterProgress } = require('../models');
+      const { Op } = require('sequelize');
+      const chapters = await CourseChapter.findAll({
+        where: { course_id: test.course_id, is_published: true },
+        attributes: ['id', 'title']
+      });
+      const regularChapters = chapters.filter((chapter) => {
+        const title = (chapter.title || '').toLowerCase();
+        return !title.includes('assignment') && !title.includes('test') &&
+          !title.includes('exam') && !title.includes('final');
+      });
+      const regularIds = regularChapters.map((c) => c.id);
+      const completedCount = regularIds.length === 0 ? 0 : await ChapterProgress.count({
+        where: {
+          enrollment_id: enrollment.id,
+          is_completed: true,
+          chapter_id: { [Op.in]: regularIds }
+        }
+      });
+      contentReady = regularIds.length > 0 && completedCount >= regularIds.length;
+    }
+
+    if (!contentReady) {
       throw new AppError('You must complete all course chapters before taking the test', 400);
+    }
+
+    // Keep progress in sync if status already marks content done
+    if (contentStatuses.includes(enrollment.status) && enrollment.progress < 100) {
+      await enrollment.update({ progress: 100 });
     }
 
     // Check attempt limits
@@ -67,7 +99,10 @@ const startTest = async (req, res, next) => {
       throw new AppError('You have already received a certificate for this course. No retakes allowed.', 400);
     }
 
-    // Note: max_attempts column was removed, so no attempt limit checking
+    // Enforce max attempts if configured
+    if (test.max_attempts && existingAttempts.length >= test.max_attempts) {
+      throw new AppError(`Maximum attempts (${test.max_attempts}) reached for this test`, 400);
+    }
 
     // Check if there's an active attempt
     const activeAttempt = existingAttempts.find(attempt => attempt.status === 'in_progress');
@@ -332,10 +367,7 @@ const submitTest = async (req, res, next) => {
       });
 
       if (enrollment) {
-        await enrollment.update({
-          test_passed: true,
-          status: 'completed'
-        });
+        await enrollment.certify();
       }
 
       // Auto-generate certificate for passing the test ONLY for the completed course
@@ -404,14 +436,13 @@ const submitTest = async (req, res, next) => {
         });
         logger.info(`Points awarded for course completion: student ${req.user.id}, course ${courseIdForCertificate}`);
 
-        // Notification
-        await notificationService.create(
-          req.user.id,
-          'test_passed',
-          'Test Passed',
-          `You passed the test "${test.title}" and earned a certificate!`,
-          `/certificates`
-        );
+        await notificationService.notifyCertificate(req.user.id, course, certificateNumber);
+
+        await emailService.sendEventEmail('certificate_issued', req.user, {
+          courseTitle: course.title,
+          certificateNumber,
+          verificationCode
+        });
 
         // Create Achievement record so it shows up in achievements tab
         try {
@@ -468,6 +499,21 @@ const submitTest = async (req, res, next) => {
           // Log error but don't fail certificate creation if achievement creation fails
           logger.error('Failed to create achievement for certificate:', achievementError);
         }
+      }
+    }
+
+    const course = await Course.findByPk(test.course_id, {
+      attributes: ['id', 'title']
+    });
+
+    if (course) {
+      try {
+        await notificationService.notifyTestResult(req.user.id, test, course, {
+          passed: isPassed,
+          score: Math.round(score)
+        });
+      } catch (notifError) {
+        logger.error('Failed to send test result notification:', notifError);
       }
     }
 

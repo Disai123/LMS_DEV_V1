@@ -10,7 +10,7 @@ const StudentListPage = () => {
   
   const { data: studentsData, isLoading } = useQuery(
     'students',
-    () => userService.getUsers({ role: 'student', limit: 100 }),
+    () => userService.getStudents({ limit: 100 }),
     {
       enabled: isAuthenticated && user?.role === 'admin',
       refetchOnWindowFocus: false,
@@ -26,7 +26,7 @@ const StudentListPage = () => {
     )
   }
 
-  const students = studentsData?.data?.users || []
+  const students = studentsData?.data?.students || []
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-50 via-blue-50 to-indigo-100">
@@ -162,29 +162,27 @@ const StudentListPage = () => {
                     </div>
                   </div>
                   
-                  <div className="mt-4 pt-4 border-t border-gray-200">
-                    <div className="flex justify-between text-sm text-gray-500">
-                      <span>Courses Enrolled</span>
-                      <span className="font-medium">12</span>
-                    </div>
-                    <div className="flex justify-between text-sm text-gray-500 mt-1">
-                      <span>Completion Rate</span>
-                      <span className="font-medium">85%</span>
-                    </div>
-                    <div className="flex justify-between text-sm text-gray-500 mt-1">
-                      <span>Last Active</span>
-                      <span className="font-medium">2 days ago</span>
-                    </div>
+                  <div className="mt-4 pt-4 border-t border-gray-200 space-y-2">
+                    {student.student_id && (
+                      <div className="flex justify-between text-sm text-gray-500">
+                        <span>Student ID</span>
+                        <span className="font-medium">{student.student_id}</span>
+                      </div>
+                    )}
+                    {student.phone && (
+                      <div className="flex justify-between text-sm text-gray-500">
+                        <span>Phone</span>
+                        <span className="font-medium">{student.phone}</span>
+                      </div>
+                    )}
+                    <Link
+                      to={`/admin/students/${student.id}`}
+                      className="block w-full text-center mt-3 px-4 py-2 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 transition-colors text-sm font-medium"
+                    >
+                      View Full Profile
+                    </Link>
                   </div>
 
-                  <div className="mt-4 flex space-x-2">
-                    <button className="flex-1 btn-secondary text-sm">
-                      View Profile
-                    </button>
-                    <button className="flex-1 btn-primary text-sm">
-                      Message
-                    </button>
-                  </div>
                 </motion.div>
               ))}
             </div>

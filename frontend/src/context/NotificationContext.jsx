@@ -1,8 +1,8 @@
 import React, { createContext, useContext, useState, useEffect, useCallback } from 'react';
-import axios from 'axios';
 import { useAuth } from './AuthContext';
 import { io } from 'socket.io-client';
 import toast from 'react-hot-toast';
+import notificationApi from '../services/notificationService';
 
 const NotificationContext = createContext();
 
@@ -15,31 +15,22 @@ export const NotificationProvider = ({ children }) => {
   const [unreadCount, setUnreadCount] = useState(0);
   const [socket, setSocket] = useState(null);
 
-  // Fetch initial notifications
   const fetchNotifications = useCallback(async () => {
     if (!token) return;
     try {
-      const response = await axios.get('http://localhost:5000/api/notifications', {
-        headers: { Authorization: `Bearer ${token}` }
-      });
+      const response = await notificationApi.getNotifications(token);
       if (response.data.success) {
         setNotifications(response.data.data.notifications);
       }
     } catch (error) {
       console.error('[NotificationContext] Error fetching notifications:', error.message);
-      if (error.response) {
-        console.error('[NotificationContext] Server response error:', error.response.status, error.response.data);
-      }
     }
   }, [token]);
 
-  // Fetch unread count
   const fetchUnreadCount = useCallback(async () => {
     if (!token) return;
     try {
-      const response = await axios.get('http://localhost:5000/api/notifications/unread-count', {
-        headers: { Authorization: `Bearer ${token}` }
-      });
+      const response = await notificationApi.getUnreadCount(token);
       if (response.data.success) {
         setUnreadCount(response.data.data.count);
       }
@@ -48,65 +39,53 @@ export const NotificationProvider = ({ children }) => {
     }
   }, [token]);
 
-  // Initialize strictly when user is logged in
+  const refreshNotifications = useCallback(async () => {
+    await Promise.all([fetchNotifications(), fetchUnreadCount()]);
+  }, [fetchNotifications, fetchUnreadCount]);
+
   useEffect(() => {
-    if (user && token) {
-      fetchNotifications();
-      fetchUnreadCount();
-
-      // Initialize Socket
-      const newSocket = io('http://localhost:5000', {
-        auth: { token }
-      });
-
-      newSocket.on('connect', () => {
-        console.log('[NotificationSocket] Connected successfully to http://localhost:5000');
-      });
-
-      newSocket.on('connect_error', (error) => {
-        console.error('[NotificationSocket] Connection error:', error.message);
-        console.error('[NotificationSocket] Target URL: http://localhost:5000');
-      });
-
-      newSocket.on('disconnect', (reason) => {
-        console.log('[NotificationSocket] Disconnected:', reason);
-      });
-
-      newSocket.on('notification', (notification) => {
-        // Play sound or show toast based on preferences
-        toast.success(`New Notification: ${notification.title}`, {
-          icon: '🔔',
-          duration: 4000
-        });
-
-        setNotifications((prev) => [notification, ...prev]);
-        setUnreadCount((prev) => prev + 1);
-      });
-
-      setSocket(newSocket);
-
-      return () => {
-        newSocket.disconnect();
-      };
-    } else {
-      if (socket) {
-        socket.disconnect();
-        setSocket(null);
-      }
+    if (!user || !token) {
       setNotifications([]);
       setUnreadCount(0);
+      return;
     }
-  }, [user, token, fetchNotifications, fetchUnreadCount]);
 
-  // Mark one as read
+    refreshNotifications();
+
+    const socketUrl = notificationApi.getSocketUrl();
+    const newSocket = io(socketUrl, { auth: { token } });
+
+    newSocket.on('connect', () => {
+      console.log('[NotificationSocket] Connected to', socketUrl);
+    });
+
+    newSocket.on('connect_error', (error) => {
+      console.error('[NotificationSocket] Connection error:', error.message);
+    });
+
+    newSocket.on('notification', (notification) => {
+      toast.success(`New Notification: ${notification.title}`, {
+        icon: '🔔',
+        duration: 4000
+      });
+
+      setNotifications((prev) => [notification, ...prev]);
+      setUnreadCount((prev) => prev + 1);
+    });
+
+    setSocket(newSocket);
+
+    return () => {
+      newSocket.disconnect();
+    };
+  }, [user, token, refreshNotifications]);
+
   const markAsRead = async (id) => {
     try {
-      const response = await axios.patch(`http://localhost:5000/api/notifications/${id}/read`, {}, {
-        headers: { Authorization: `Bearer ${token}` }
-      });
-      
+      const response = await notificationApi.markAsRead(token, id);
+
       if (response.data.success) {
-        setNotifications(prev => 
+        setNotifications(prev =>
           prev.map(notif => notif.id === id ? { ...notif, is_read: true } : notif)
         );
         setUnreadCount(prev => Math.max(0, prev - 1));
@@ -116,13 +95,10 @@ export const NotificationProvider = ({ children }) => {
     }
   };
 
-  // Mark all as read
   const markAllAsRead = async () => {
     try {
-      const response = await axios.patch('http://localhost:5000/api/notifications/read-all', {}, {
-        headers: { Authorization: `Bearer ${token}` }
-      });
-      
+      const response = await notificationApi.markAllAsRead(token);
+
       if (response.data.success) {
         setNotifications(prev => prev.map(notif => ({ ...notif, is_read: true })));
         setUnreadCount(0);
@@ -132,13 +108,10 @@ export const NotificationProvider = ({ children }) => {
     }
   };
 
-  // Delete notification
   const deleteNotification = async (id) => {
     try {
-      const response = await axios.delete(`http://localhost:5000/api/notifications/${id}`, {
-        headers: { Authorization: `Bearer ${token}` }
-      });
-      
+      const response = await notificationApi.deleteNotification(token, id);
+
       if (response.data.success) {
         setNotifications(prev => {
           const removed = prev.find(n => n.id === id);
@@ -157,6 +130,9 @@ export const NotificationProvider = ({ children }) => {
     <NotificationContext.Provider value={{
       notifications,
       unreadCount,
+      fetchNotifications,
+      fetchUnreadCount,
+      refreshNotifications,
       markAsRead,
       markAllAsRead,
       deleteNotification

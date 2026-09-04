@@ -9,9 +9,12 @@ const { Op } = require('sequelize');
 exports.getPlans = async (req, res, next) => {
     try {
         const plans = await Plan.findAll({
-            where: { is_active: true },
-            attributes: ['id', 'name', 'description', 'price', 'currency', 'features'],
-            order: [['price', 'ASC']]
+            where: {
+                is_active: true,
+                name: { [Op.in]: ['free', 'basic', 'pro'] }
+            },
+            attributes: ['id', 'name', 'description', 'price', 'currency', 'features', 'tier_order'],
+            order: [['tier_order', 'ASC']]
         });
 
         res.json({
@@ -43,9 +46,15 @@ exports.submitPaymentRequest = async (req, res, next) => {
         }
 
         // Check plan exists
-        const plan = await Plan.findOne({ where: { id: plan_id, is_active: true } });
+        const plan = await Plan.findOne({
+            where: {
+                id: plan_id,
+                is_active: true,
+                name: { [Op.in]: ['basic', 'pro'] }
+            }
+        });
         if (!plan) {
-            throw new AppError('Invalid plan selected', 400);
+            throw new AppError('Invalid plan selected. Only Basic and Pro plans can be purchased.', 400);
         }
 
         // Check if this transaction ID was already submitted

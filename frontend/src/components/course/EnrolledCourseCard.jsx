@@ -79,11 +79,17 @@ const EnrolledCourseCard = ({ enrollment, index, onContinue }) => {
             </div>
             <div className="flex items-center justify-between text-xs text-gray-500">
               <span className={`px-2 py-1 rounded-full text-xs font-medium ${
-                enrollment.status === 'completed' 
-                  ? 'bg-green-100 text-green-800' 
+                enrollment.status === 'certified'
+                  ? 'bg-green-100 text-green-800'
+                  : ['content_completed', 'completed'].includes(enrollment.status)
+                  ? 'bg-amber-100 text-amber-800'
                   : 'bg-blue-100 text-blue-800'
               }`}>
-                {enrollment.status === 'completed' ? 'Completed' : 'In Progress'}
+                {enrollment.status === 'certified'
+                  ? 'Certified'
+                  : ['content_completed', 'completed'].includes(enrollment.status)
+                  ? 'Assessment Pending'
+                  : 'In Progress'}
               </span>
               <span>{enrollment.course?.estimated_duration || 0}h</span>
             </div>

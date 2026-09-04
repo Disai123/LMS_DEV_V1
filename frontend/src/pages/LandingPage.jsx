@@ -9,7 +9,7 @@ import { FiBookOpen, FiCode, FiUsers, FiAward, FiTrendingUp, FiZap, FiTarget, Fi
 // ─── Marquee Strip ──────────────────────────────────────────────────────────
 const marqueeItems = [
   'AI-Enabled Learning', 'Realtime Projects', 'Industry Certifications',
-  'Expert Mentors', 'Hackathons', 'Career Boost', 'Live Feedback',
+  'Expert Mentors', 'Career Boost', 'Live Feedback',
   'Goal Tracking', 'Global Community', 'Premium Support'
 ]
 
@@ -91,15 +91,7 @@ const HeroMockup = () => (
       </div>
     </motion.div>
 
-    {/* Hackathon badge */}
-    <motion.div
-      animate={{ y: [-8, 8, -8] }}
-      transition={{ duration: 4, repeat: Infinity, ease: 'easeInOut' }}
-      className="absolute bottom-0 left-12 bg-amber-400 rounded-2xl shadow-xl px-4 py-2.5 flex items-center gap-2"
-    >
-      <FiUsers className="w-4 h-4 text-white" />
-      <span className="text-xs font-bold text-white">Live Hackathon →</span>
-    </motion.div>
+    {/* HIDDEN: Hackathon badge temporarily hidden */}
   </div>
 )
 
@@ -115,7 +107,7 @@ const LandingPage = () => {
   const handleLoginClick = () => navigate('/login')
   const handleExploreCourses = () => navigate('/courses')
   const handleExploreProjects = () => navigate(isAuthenticated ? '/student/realtime-projects' : '/realtime-projects')
-  const handleExploreHackathons = () => navigate(isAuthenticated ? '/student/hackathons' : '/hackathons')
+  // const handleExploreHackathons = () => navigate(isAuthenticated ? '/student/hackathons' : '/hackathons') // HIDDEN
 
   return (
     <div className="min-h-screen bg-stone-50 overflow-x-hidden">
@@ -196,7 +188,7 @@ const LandingPage = () => {
                   transition={{ duration: 0.7, delay: 0.5 }}
                   className="text-gray-400 text-lg max-w-md leading-relaxed mb-10 font-light"
                 >
-                  AI-powered personalized learning, real-world projects, live hackathons,
+                  AI-powered personalized learning, real-world projects,
                   and industry-recognized certifications — all in one platform.
                 </motion.p>
 
@@ -305,7 +297,7 @@ const LandingPage = () => {
                 <span className="text-amber-500">to grow.</span>
               </h2>
               <p className="text-gray-500 text-lg leading-relaxed mb-8 max-w-lg">
-                From AI-personalised coursework to hands-on projects and live hackathons —
+                From AI-personalised coursework to hands-on projects —
                 GNANAM AI is built to accelerate real career outcomes.
               </p>
               <button
@@ -321,7 +313,7 @@ const LandingPage = () => {
               {[
                 { icon: <FiBookOpen className="w-6 h-6" />, title: 'AI Courses', desc: 'Adaptive learning paths', color: 'bg-blue-50 text-blue-600', border: 'border-blue-100' },
                 { icon: <FiCode className="w-6 h-6" />, title: 'Live Projects', desc: 'Build real applications', color: 'bg-amber-50 text-amber-600', border: 'border-amber-100' },
-                { icon: <FiUsers className="w-6 h-6" />, title: 'Hackathons', desc: 'Compete & collaborate', color: 'bg-green-50 text-green-600', border: 'border-green-100' },
+                { icon: <FiUsers className="w-6 h-6" />, title: 'Community', desc: 'Learn & collaborate', color: 'bg-green-50 text-green-600', border: 'border-green-100' },
                 { icon: <FiAward className="w-6 h-6" />, title: 'Certificates', desc: 'Industry-recognised', color: 'bg-purple-50 text-purple-600', border: 'border-purple-100' },
               ].map((f, i) => (
                 <motion.div
@@ -407,9 +399,7 @@ const LandingPage = () => {
             <button onClick={handleExploreProjects} className="bg-white text-slate-900 font-bold px-6 py-3 rounded-lg hover:bg-stone-100 transition-colors text-sm">
               See Projects
             </button>
-            <button onClick={handleExploreHackathons} className="border-2 border-slate-900 text-slate-900 font-bold px-6 py-3 rounded-lg hover:bg-slate-900 hover:text-white transition-all text-sm">
-              Hackathons
-            </button>
+            {/* HIDDEN: Hackathons button temporarily hidden */}
           </div>
         </div>
       </section>
@@ -489,7 +479,7 @@ const LandingPage = () => {
                 <div>
                   <p className="text-[10px] font-black text-slate-400 uppercase tracking-widest mb-1.5">Extras</p>
                   <div className="space-y-1">
-                    {['Community Forum Access', 'Course Certificates', 'Hackathon Access'].map((f, i) => (
+                    {['Community Forum Access', 'Course Certificates'].map((f, i) => (
                       <div key={i} className="flex items-center gap-3">
                         <FiCheck className="w-4 h-4 text-slate-400" />
                         <span className="text-gray-600 text-sm">{f}</span>
@@ -528,8 +518,8 @@ const LandingPage = () => {
                 <p className="text-white/50 text-sm mb-6">For motivated learners</p>
                 <div className="flex items-baseline gap-2 flex-wrap">
                   <span className="text-2xl font-bold text-white/60">₹</span>
-                  <span className="text-5xl font-black text-white">2999</span>
-                  <span className="text-lg text-white/40 line-through">₹9999</span>
+                  <span className="text-5xl font-black text-white">299</span>
+                  <span className="text-lg text-white/40 line-through">₹999</span>
                   <span className="text-xs font-bold bg-amber-400 text-slate-900 px-2 py-0.5 rounded-full">Save 70%</span>
                 </div>
                 <p className="text-white/50 text-xs mt-2 font-medium">One-time · No hidden charges</p>
@@ -603,8 +593,8 @@ const LandingPage = () => {
                 <p className="text-gray-500 text-sm mb-6">For professionals & teams</p>
                 <div className="flex items-baseline gap-2 flex-wrap">
                   <span className="text-2xl font-bold text-gray-500">₹</span>
-                  <span className="text-5xl font-black text-white">4999</span>
-                  <span className="text-lg text-gray-600 line-through">₹14999</span>
+                  <span className="text-5xl font-black text-white">799</span>
+                  <span className="text-lg text-gray-600 line-through">₹4999</span>
                   <span className="text-xs font-bold bg-yellow-400/20 text-yellow-400 border border-yellow-400/30 px-2 py-0.5 rounded-full">Save 66%</span>
                 </div>
                 <p className="text-gray-500 text-xs mt-2 font-medium">One-time · No hidden charges</p>

@@ -40,8 +40,13 @@ module.exports = (sequelize, DataTypes) => {
       allowNull: true
     },
     status: {
-      type: DataTypes.ENUM('enrolled', 'completed', 'dropped'),
+      type: DataTypes.ENUM('enrolled', 'content_completed', 'completed', 'certified', 'dropped'),
       defaultValue: 'enrolled'
+    },
+    test_passed: {
+      type: DataTypes.BOOLEAN,
+      defaultValue: false,
+      allowNull: false
     },
     rating: {
       type: DataTypes.INTEGER,
@@ -93,12 +98,17 @@ module.exports = (sequelize, DataTypes) => {
           enrollment.last_accessed_at = new Date();
         }
 
-        // Set completed_at when status changes to completed
-        if (enrollment.changed('status') && enrollment.status === 'completed' && !enrollment.completed_at) {
+        // Set completed_at when content is fully done or certified
+        if (enrollment.changed('status') &&
+          ['content_completed', 'completed', 'certified'].includes(enrollment.status) &&
+          !enrollment.completed_at) {
           enrollment.completed_at = new Date();
-          enrollment.progress = 100;
         }
 
+        if (enrollment.changed('status') && enrollment.status === 'certified') {
+          enrollment.test_passed = true;
+          enrollment.progress = 100;
+        }
       }
     }
   });
@@ -112,11 +122,10 @@ module.exports = (sequelize, DataTypes) => {
   Enrollment.prototype.updateProgress = function(progress) {
     this.progress = Math.min(Math.max(progress, 0), 100);
     
-    if (this.progress >= 100) {
-      this.status = 'completed';
+    if (this.progress >= 100 && !['certified', 'content_completed'].includes(this.status)) {
+      this.status = 'content_completed';
       this.completed_at = new Date();
-    } else if (this.progress > 0) {
-      // Use 'enrolled' instead of 'in-progress' if the enum doesn't support it
+    } else if (this.progress > 0 && this.status === 'dropped') {
       this.status = 'enrolled';
     }
     
@@ -129,9 +138,17 @@ module.exports = (sequelize, DataTypes) => {
   };
 
   Enrollment.prototype.complete = function() {
-    this.status = 'completed';
+    this.status = 'content_completed';
     this.progress = 100;
     this.completed_at = new Date();
+    return this.save();
+  };
+
+  Enrollment.prototype.certify = function() {
+    this.status = 'certified';
+    this.test_passed = true;
+    this.progress = 100;
+    this.completed_at = this.completed_at || new Date();
     return this.save();
   };
 
@@ -175,7 +192,17 @@ module.exports = (sequelize, DataTypes) => {
     return this.findAll({
       where: { 
         student_id: studentId,
-        status: 'completed'
+        status: ['content_completed', 'completed', 'certified']
+      },
+      order: [['completed_at', 'DESC']]
+    });
+  };
+
+  Enrollment.findCertified = function(studentId) {
+    return this.findAll({
+      where: {
+        student_id: studentId,
+        status: 'certified'
       },
       order: [['completed_at', 'DESC']]
     });

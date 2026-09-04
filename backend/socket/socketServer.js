@@ -334,10 +334,7 @@ class SocketServer {
 
   // Method to send notification to specific user
   sendNotificationToUser(userId, notification) {
-    const socketId = this.connectedUsers.get(userId);
-    if (socketId) {
-      this.io.to(socketId).emit('notification', notification);
-    }
+    this.io.to(`user_${userId}`).emit('notification', notification);
   }
 
   // Method to broadcast to all admins

@@ -85,6 +85,21 @@ router.get('/:id/enrollments',
   userController.getUserEnrollments
 );
 
+router.get('/:id/student-profile',
+  authenticate,
+  requireAdmin,
+  validate(commonSchemas.id, 'params'),
+  userController.getStudentProfile
+);
+
+router.put('/:id/student-profile',
+  authenticate,
+  requireAdmin,
+  validate(commonSchemas.id, 'params'),
+  validate(userSchemas.adminProfileUpdate, 'body'),
+  userController.updateStudentProfile
+);
+
 router.put('/:id/plan-type',
   authenticate,
   requireAdmin,

@@ -1,5 +1,6 @@
-const { ChapterProgress, Enrollment, CourseChapter } = require('../models');
+const { ChapterProgress, Enrollment, CourseChapter, Course } = require('../models');
 const logger = require('../utils/logger');
+const notificationService = require('./notificationService');
 
 class ProgressService {
   /**
@@ -10,9 +11,16 @@ class ProgressService {
       const enrollment = await Enrollment.findByPk(enrollmentId, {
         include: [
           {
-            model: CourseChapter,
-            as: 'course.chapters',
-            attributes: ['id']
+            model: Course,
+            as: 'course',
+            attributes: ['id'],
+            include: [
+              {
+                model: CourseChapter,
+                as: 'chapters',
+                attributes: ['id']
+              }
+            ]
           }
         ]
       });
@@ -89,12 +97,55 @@ class ProgressService {
 
       await chapterProgress.save();
 
+      let enrollment = await Enrollment.findByPk(enrollmentId);
+      const previousProgress = enrollment ? enrollment.progress : 0;
+
       // Recalculate overall course progress
       const overallProgress = await this.calculateCourseProgress(enrollmentId);
       
       // Update enrollment progress
-      const enrollment = await Enrollment.findByPk(enrollmentId);
+      enrollment = await Enrollment.findByPk(enrollmentId, {
+        include: [
+          {
+            model: Course,
+            as: 'course',
+            attributes: ['id', 'title'],
+            include: [
+              {
+                model: CourseChapter,
+                as: 'chapters',
+                attributes: ['id', 'title', 'chapter_order']
+              }
+            ]
+          }
+        ]
+      });
       await enrollment.updateProgress(overallProgress);
+      await enrollment.reload();
+
+      if (is_completed && enrollment.course) {
+        const chapter = await CourseChapter.findByPk(chapterId, {
+          attributes: ['id', 'title', 'chapter_order']
+        });
+        const totalChapters = enrollment.course?.chapters?.length || 0;
+        const completedCount = await ChapterProgress.count({
+          where: { enrollment_id: enrollmentId, is_completed: true }
+        });
+        const isCourseCompleted = totalChapters > 0 && completedCount >= totalChapters;
+
+        try {
+          await notificationService.handleProgressChange(
+            enrollment.student_id,
+            enrollment,
+            enrollment.course,
+            previousProgress,
+            overallProgress,
+            { chapter, isCourseCompleted }
+          );
+        } catch (notifError) {
+          logger.error('Failed to send progress notifications from ProgressService:', notifError);
+        }
+      }
 
       return {
         chapterProgress,

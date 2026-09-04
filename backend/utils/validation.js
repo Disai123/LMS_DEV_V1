@@ -17,10 +17,70 @@ const userSchemas = {
     role: Joi.string().valid('admin', 'student').optional(),
     is_active: Joi.boolean().optional(),
     password: Joi.string().min(6).optional(),
-    preferences: Joi.object().optional(),
     bio: Joi.string().max(1000).optional().allow(''),
     phone: Joi.string().max(20).optional().allow(''),
-    location: Joi.string().max(255).optional().allow('')
+    location: Joi.string().max(255).optional().allow(''),
+    student_id: Joi.string().max(50).optional().allow('', null),
+    date_of_birth: Joi.date().iso().optional().allow(null),
+    gender: Joi.string().valid('male', 'female', 'other', 'prefer_not_to_say').optional().allow(null),
+    education_level: Joi.string().max(100).optional().allow(''),
+    college_name: Joi.string().max(255).optional().allow(''),
+    graduation_year: Joi.number().integer().min(1950).max(2100).optional().allow(null),
+    specialization: Joi.string().max(255).optional().allow(''),
+    joined_at: Joi.date().iso().optional().allow(null),
+    emergency_contact_name: Joi.string().max(255).optional().allow(''),
+    emergency_contact_phone: Joi.string().max(20).optional().allow(''),
+    notification_preferences: Joi.object({
+      email_course_updates: Joi.boolean().optional(),
+      email_certificates: Joi.boolean().optional(),
+      email_marketing: Joi.boolean().optional()
+    }).optional()
+  }),
+
+  profileUpdate: Joi.object({
+    name: Joi.string().min(2).max(255).optional(),
+    email: Joi.string().email().optional(),
+    avatar: Joi.string().uri().optional(),
+    bio: Joi.string().max(1000).optional().allow(''),
+    phone: Joi.string().max(20).optional().allow(''),
+    location: Joi.string().max(255).optional().allow(''),
+    date_of_birth: Joi.date().iso().optional().allow(null),
+    gender: Joi.string().valid('male', 'female', 'other', 'prefer_not_to_say').optional().allow(null),
+    education_level: Joi.string().max(100).optional().allow(''),
+    college_name: Joi.string().max(255).optional().allow(''),
+    graduation_year: Joi.number().integer().min(1950).max(2100).optional().allow(null),
+    specialization: Joi.string().max(255).optional().allow(''),
+    emergency_contact_name: Joi.string().max(255).optional().allow(''),
+    emergency_contact_phone: Joi.string().max(20).optional().allow(''),
+    notification_preferences: Joi.object({
+      email_course_updates: Joi.boolean().optional(),
+      email_certificates: Joi.boolean().optional(),
+      email_marketing: Joi.boolean().optional()
+    }).optional()
+  }),
+
+  adminProfileUpdate: Joi.object({
+    name: Joi.string().min(2).max(255).optional(),
+    email: Joi.string().email().optional(),
+    bio: Joi.string().max(1000).optional().allow(''),
+    phone: Joi.string().max(20).optional().allow(''),
+    location: Joi.string().max(255).optional().allow(''),
+    student_id: Joi.string().max(50).optional().allow('', null),
+    date_of_birth: Joi.date().iso().optional().allow(null),
+    gender: Joi.string().valid('male', 'female', 'other', 'prefer_not_to_say').optional().allow(null),
+    education_level: Joi.string().max(100).optional().allow(''),
+    college_name: Joi.string().max(255).optional().allow(''),
+    graduation_year: Joi.number().integer().min(1950).max(2100).optional().allow(null),
+    specialization: Joi.string().max(255).optional().allow(''),
+    joined_at: Joi.date().iso().optional().allow(null),
+    emergency_contact_name: Joi.string().max(255).optional().allow(''),
+    emergency_contact_phone: Joi.string().max(20).optional().allow(''),
+    is_active: Joi.boolean().optional(),
+    notification_preferences: Joi.object({
+      email_course_updates: Joi.boolean().optional(),
+      email_certificates: Joi.boolean().optional(),
+      email_marketing: Joi.boolean().optional()
+    }).optional()
   }),
 
   login: Joi.object({

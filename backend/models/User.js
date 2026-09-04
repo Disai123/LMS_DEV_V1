@@ -70,6 +70,68 @@ module.exports = (sequelize, DataTypes) => {
       defaultValue: 'free',
       allowNull: false
     },
+    bio: {
+      type: DataTypes.TEXT,
+      allowNull: true
+    },
+    phone: {
+      type: DataTypes.STRING(20),
+      allowNull: true
+    },
+    location: {
+      type: DataTypes.STRING(255),
+      allowNull: true
+    },
+    student_id: {
+      type: DataTypes.STRING(50),
+      allowNull: true,
+      unique: true
+    },
+    date_of_birth: {
+      type: DataTypes.DATEONLY,
+      allowNull: true
+    },
+    gender: {
+      type: DataTypes.ENUM('male', 'female', 'other', 'prefer_not_to_say'),
+      allowNull: true
+    },
+    education_level: {
+      type: DataTypes.STRING(100),
+      allowNull: true
+    },
+    college_name: {
+      type: DataTypes.STRING(255),
+      allowNull: true
+    },
+    graduation_year: {
+      type: DataTypes.INTEGER,
+      allowNull: true
+    },
+    specialization: {
+      type: DataTypes.STRING(255),
+      allowNull: true
+    },
+    joined_at: {
+      type: DataTypes.DATEONLY,
+      allowNull: true
+    },
+    emergency_contact_name: {
+      type: DataTypes.STRING(255),
+      allowNull: true
+    },
+    emergency_contact_phone: {
+      type: DataTypes.STRING(20),
+      allowNull: true
+    },
+    notification_preferences: {
+      type: DataTypes.JSONB,
+      allowNull: true,
+      defaultValue: {
+        email_course_updates: true,
+        email_certificates: true,
+        email_marketing: false
+      }
+    },
   }, {
     tableName: 'users',
     indexes: [
@@ -141,6 +203,24 @@ module.exports = (sequelize, DataTypes) => {
       plan_type: this.plan_type,
       is_active: this.is_active,
       last_login: this.last_login,
+      bio: this.bio,
+      phone: this.phone,
+      location: this.location,
+      student_id: this.student_id,
+      date_of_birth: this.date_of_birth,
+      gender: this.gender,
+      education_level: this.education_level,
+      college_name: this.college_name,
+      graduation_year: this.graduation_year,
+      specialization: this.specialization,
+      joined_at: this.joined_at,
+      emergency_contact_name: this.emergency_contact_name,
+      emergency_contact_phone: this.emergency_contact_phone,
+      notification_preferences: this.notification_preferences || {
+        email_course_updates: true,
+        email_certificates: true,
+        email_marketing: false
+      },
       created_at: this.created_at,
       updated_at: this.updated_at,
       permissions: this.permissions || null

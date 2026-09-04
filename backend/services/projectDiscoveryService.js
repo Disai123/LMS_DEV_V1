@@ -1,20 +1,22 @@
-const s3Service = require('./s3Service');
+const fs = require('fs');
+const path = require('path');
 
 /**
  * Project Discovery Service
- * Scans S3 bucket and discovers all HTML projects
+ * Scans local projects folder and discovers all HTML projects
  */
 
 class ProjectDiscoveryService {
   constructor() {
-    console.log('ProjectDiscoveryService initialized using S3');
+    this.projectsPath = process.env.REALTIME_PROJECTS_PATH || path.join(__dirname, '../../Realtime_projects');
+    console.log(`ProjectDiscoveryService initialized using local path: ${this.projectsPath}`);
     this.cachedProjects = null;
     this.lastCacheTime = 0;
     this.CACHE_TTL = 5 * 60 * 1000; // 5 minutes cache
   }
 
   /**
-   * Discover all projects in the S3 bucket
+   * Discover all projects in the local projects directory
    */
   async discoverProjects(forceRefresh = false) {
     try {
@@ -23,9 +25,9 @@ class ProjectDiscoveryService {
         return this.cachedProjects;
       }
 
-      console.log('Fetching projects from S3 (Cache miss or expired)...');
+      console.log('Fetching projects from local directory (Cache miss or expired)...');
       const projects = [];
-      const folders = await s3Service.listProjectFolders();
+      const folders = this.listProjectFolders();
 
       for (const folderName of folders) {
         const projectInfo = await this.getProjectInfo(folderName);
@@ -51,10 +53,10 @@ class ProjectDiscoveryService {
 
       return projects;
     } catch (error) {
-      console.error('Error discovering projects from S3:', error);
-      // Fallback to cache if S3 fails and we have a cache, even if expired
+      console.error('Error discovering projects from local folder:', error);
+      // Fallback to cache if local scan fails and we have a cache, even if expired
       if (this.cachedProjects) {
-          console.log('Returning stale cache due to S3 error');
+          console.log('Returning stale cache due to local scan error');
           return this.cachedProjects;
       }
       return [];
@@ -66,29 +68,30 @@ class ProjectDiscoveryService {
    */
   async getProjectInfo(folderName) {
     try {
-      const indexPath = `${folderName}/index.html`;
+      const projectPath = path.join(this.projectsPath, folderName);
+      const indexPath = path.join(projectPath, 'index.html');
       
       // Project must have index.html
-      const hasIndex = await s3Service.fileExists(indexPath);
+      const hasIndex = fs.existsSync(indexPath) && fs.statSync(indexPath).isFile();
       if (!hasIndex) {
         return null;
       }
 
       // Try to read project.json
-      const configPath = `${folderName}/project.json`;
+      const configPath = path.join(projectPath, 'project.json');
       let config = {};
       
-      const configContent = await s3Service.getFileString(configPath);
-      if (configContent) {
+      if (fs.existsSync(configPath)) {
         try {
+          const configContent = fs.readFileSync(configPath, 'utf-8');
           config = JSON.parse(configContent);
         } catch (error) {
           console.log(`Error reading project.json for ${folderName}:`, error.message);
         }
       }
 
-      // Get metadata for folder creation/modification (we'll just use index.html's metadata as a proxy)
-      const indexObjMeta = await s3Service.getObjectMetadata(indexPath) || {};
+      // Use file stats from index.html as date proxy
+      const indexStats = fs.statSync(indexPath);
 
       // Generate project info from folder name and config
       const projectId = config.id || folderName.toLowerCase().replace(/\s+/g, '-');
@@ -106,11 +109,11 @@ class ProjectDiscoveryService {
         estimatedHours: config.estimatedHours || 40,
         order: config.order !== undefined ? config.order : 999,
         version: config.version || '1.0.0',
-        createdAt: config.createdAt || (indexObjMeta.lastModified ? indexObjMeta.lastModified.toISOString().split('T')[0] : new Date().toISOString().split('T')[0]),
-        updatedAt: config.updatedAt || (indexObjMeta.lastModified ? indexObjMeta.lastModified.toISOString().split('T')[0] : new Date().toISOString().split('T')[0]),
+        createdAt: config.createdAt || (indexStats.birthtime ? indexStats.birthtime.toISOString().split('T')[0] : new Date().toISOString().split('T')[0]),
+        updatedAt: config.updatedAt || (indexStats.mtime ? indexStats.mtime.toISOString().split('T')[0] : new Date().toISOString().split('T')[0]),
         hideFooter: config.hideFooter === true, // Default to false (show footer unless explicitly hidden)
         hideHeader: config.hideHeader === true,
-        path: folderName // In S3 we use prefix (folder name) as path
+        path: projectPath
       };
     } catch (error) {
       console.error(`Error getting project info for ${folderName}:`, error);
@@ -179,7 +182,7 @@ class ProjectDiscoveryService {
   }
 
   /**
-   * Find thumbnail image in project folder in S3
+   * Find thumbnail image in project folder
    */
   async findThumbnail(folderName) {
     const possiblePaths = [
@@ -192,14 +195,26 @@ class ProjectDiscoveryService {
     ];
 
     for (const thumbPath of possiblePaths) {
-      const fullPath = `${folderName}/${thumbPath}`;
-      const exists = await s3Service.fileExists(fullPath);
+      const fullPath = path.join(this.projectsPath, folderName, thumbPath);
+      const exists = fs.existsSync(fullPath) && fs.statSync(fullPath).isFile();
       if (exists) {
         return thumbPath; // Just return the relative path from project root
       }
     }
 
     return null;
+  }
+
+  /**
+   * List folders inside projectsPath
+   */
+  listProjectFolders() {
+    if (!fs.existsSync(this.projectsPath)) {
+      return [];
+    }
+    return fs.readdirSync(this.projectsPath, { withFileTypes: true })
+      .filter(item => item.isDirectory())
+      .map(item => item.name);
   }
 }
 

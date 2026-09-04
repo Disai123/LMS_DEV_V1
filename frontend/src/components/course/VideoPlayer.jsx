@@ -1,34 +1,59 @@
 import { useState, useEffect } from 'react'
 import { motion } from 'framer-motion'
 import { analyzeUrl, getUrlTypeDisplayName, supportsEmbedding } from '../../utils/urlAnalyzer'
-import { FiPlay, FiExternalLink, FiDownload, FiAlertCircle } from 'react-icons/fi'
+import { api } from '../../services/api'
+import { FiPlay, FiExternalLink, FiAlertCircle } from 'react-icons/fi'
 
 const VideoPlayer = ({ 
-  url, 
+  url,
+  embedUrl,
   title = 'Video Content', 
   className = '',
-  showControls = true,
+  enrollmentId,
+  chapterId,
   autoplay = false 
 }) => {
   const [urlAnalysis, setUrlAnalysis] = useState(null)
   const [isLoading, setIsLoading] = useState(true)
   const [error, setError] = useState(null)
 
+  const playbackUrl = url || embedUrl
+
   useEffect(() => {
-    if (!url) {
+    if (!playbackUrl) {
       setError('No URL provided')
       setIsLoading(false)
       return
     }
 
-    const analysis = analyzeUrl(url)
+    const analysis = analyzeUrl(playbackUrl)
+    if (embedUrl && !url) {
+      analysis.isValid = true
+      analysis.embedUrl = embedUrl
+    }
+    if (analysis.type === 'youtube' && analysis.embedUrl) {
+      analysis.embedUrl = analysis.embedUrl.replace('www.youtube.com', 'www.youtube-nocookie.com')
+      analysis.embedUrl += analysis.embedUrl.includes('?') ? '&rel=0&modestbranding=1' : '?rel=0&modestbranding=1'
+    }
     setUrlAnalysis(analysis)
     setIsLoading(false)
 
     if (!analysis.isValid) {
       setError(analysis.error || 'Invalid URL')
     }
-  }, [url])
+  }, [playbackUrl, embedUrl, url])
+
+  useEffect(() => {
+    const markWatched = async () => {
+      if (!enrollmentId || !chapterId || !urlAnalysis?.isValid) return
+      try {
+        await api.post(`/progress/enrollment/${enrollmentId}/chapter/${chapterId}/video-watched`)
+      } catch (err) {
+        console.warn('Failed to mark video watched', err)
+      }
+    }
+    markWatched()
+  }, [enrollmentId, chapterId, urlAnalysis?.isValid])
 
   if (isLoading) {
     return (
@@ -60,36 +85,24 @@ const VideoPlayer = ({
   const renderVideoContent = () => {
     if (supportsEmbedding(urlAnalysis.type)) {
       return (
-        <div className="relative w-full bg-black rounded-lg overflow-hidden">
+        <div
+          className="relative w-full bg-black rounded-lg overflow-hidden select-none"
+          onContextMenu={(e) => e.preventDefault()}
+        >
           <div className="aspect-video w-full">
-            {urlAnalysis.type === 'google_colab' ? (
-              // Special handling for Google Colab notebooks
-              <iframe
-                src={urlAnalysis.embedUrl}
-                title={title}
-                className="w-full h-full"
-                frameBorder="0"
-                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-                allowFullScreen
-                sandbox="allow-same-origin allow-scripts allow-forms allow-popups allow-popups-to-escape-sandbox"
-              />
-            ) : (
-              // Standard iframe for other embeddable content
-              <iframe
-                src={urlAnalysis.embedUrl}
-                title={title}
-                className="w-full h-full"
-                frameBorder="0"
-                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                allowFullScreen
-              />
-            )}
+            <iframe
+              src={urlAnalysis.embedUrl}
+              title={title}
+              className="w-full h-full"
+              frameBorder="0"
+              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+              allowFullScreen
+            />
           </div>
         </div>
       )
     }
 
-    // For non-embeddable content, show a preview card
     return (
       <div className="bg-white border border-gray-200 rounded-lg p-4 sm:p-6 text-center">
         <div className="mb-4">
@@ -98,31 +111,10 @@ const VideoPlayer = ({
           </div>
           <h3 className="text-base sm:text-lg font-medium text-gray-900 mb-2">{title}</h3>
           <p className="text-sm text-gray-600 mb-4">
-            {getUrlTypeDisplayName(urlAnalysis.type)} content
+            {getUrlTypeDisplayName(urlAnalysis.type)} content — view in platform only
           </p>
         </div>
-        
-        <div className="flex flex-col sm:flex-row gap-2 sm:gap-3 justify-center">
-          <a
-            href={urlAnalysis.originalUrl}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="inline-flex items-center justify-center px-4 py-3 bg-indigo-600 text-white text-sm font-medium rounded-lg hover:bg-indigo-700 transition-colors duration-200 min-h-[44px]"
-          >
-            <FiExternalLink className="w-4 h-4 mr-2" />
-            Open in New Tab
-          </a>
-          
-          {urlAnalysis.type === 'dropbox' && (
-            <button
-              onClick={() => window.open(urlAnalysis.originalUrl, '_blank')}
-              className="inline-flex items-center justify-center px-4 py-3 bg-gray-100 text-gray-700 text-sm font-medium rounded-lg hover:bg-gray-200 transition-colors duration-200 min-h-[44px]"
-            >
-              <FiDownload className="w-4 h-4 mr-2" />
-              Download
-            </button>
-          )}
-        </div>
+        <p className="text-sm text-gray-500">This video type cannot be embedded. Contact your instructor.</p>
       </div>
     )
   }

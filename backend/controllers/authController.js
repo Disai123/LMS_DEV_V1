@@ -472,34 +472,42 @@ const getCurrentUser = async (req, res, next) => {
  */
 const updateProfile = async (req, res, next) => {
   try {
-    const { name, email, avatar, preferences, bio } = req.body;
     const userId = req.user.id;
+    const allowedFields = [
+      'name', 'email', 'avatar', 'bio', 'phone', 'location', 'date_of_birth',
+      'gender', 'education_level', 'college_name', 'graduation_year', 'specialization',
+      'emergency_contact_name', 'emergency_contact_phone', 'notification_preferences'
+    ];
 
-    // Check if email is being changed and if it's already taken
-    if (email && email !== req.user.email) {
-      const existingUser = await User.findByEmail(email);
+    const user = await User.findByPk(userId);
+    if (!user) {
+      throw new AppError('User not found', 404);
+    }
+
+    if (req.body.email && req.body.email !== user.email) {
+      const existingUser = await User.findByEmail(req.body.email);
       if (existingUser && existingUser.id !== userId) {
         throw new AppError('Email already in use', 400);
       }
     }
 
-    // Update user
-    const updatedUser = await User.findByPk(userId);
-    await updatedUser.update({
-      name: name || updatedUser.name,
-      email: email || updatedUser.email,
-      avatar: avatar || updatedUser.avatar,
-      preferences: preferences || updatedUser.preferences,
-      bio: bio !== undefined ? bio : updatedUser.bio,
+    const updates = {};
+    allowedFields.forEach((field) => {
+      if (req.body[field] !== undefined) {
+        updates[field] = req.body[field];
+      }
     });
 
-    logger.info(`User ${updatedUser.email} updated profile`);
+    await user.update(updates);
+    await user.reload();
+
+    logger.info(`User ${user.email} updated profile`);
 
     res.json({
       success: true,
       message: 'Profile updated successfully',
       data: {
-        user: updatedUser.getPublicProfile()
+        user: user.getPublicProfile()
       }
     });
   } catch (error) {
@@ -590,6 +598,21 @@ const changePassword = async (req, res, next) => {
   }
 };
 
+const getMyStudentProfile = async (req, res, next) => {
+  try {
+    const { buildStudentProfileData } = require('./userController');
+    const data = await buildStudentProfileData(req.user.id);
+    res.json({
+      success: true,
+      message: 'Student profile retrieved successfully',
+      data
+    });
+  } catch (error) {
+    logger.error('Get my student profile error:', error);
+    next(error);
+  }
+};
+
 module.exports = {
   register,
   login,
@@ -599,6 +622,7 @@ module.exports = {
   logout,
   getCurrentUser,
   updateProfile,
+  getMyStudentProfile,
   getAuthStatus,
   changePassword
 };

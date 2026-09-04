@@ -3,6 +3,7 @@ const logger = require('../utils/logger');
 const { AppError } = require('../middleware/errorHandler');
 const { Op } = require('sequelize');
 const notificationService = require('../services/notificationService');
+const { analyzeUrl } = require('../utils/urlAnalyzer');
 
 /**
  * Get all courses with filtering and pagination
@@ -520,6 +521,23 @@ const updateCourse = async (req, res, next) => {
     const updateData = { ...req.body };
     if (updateData.learning_objectives) {
       updateData.learning_objectives = updateData.learning_objectives.filter(obj => obj && obj.trim() !== '');
+    }
+
+    if (updateData.is_published === true) {
+      const activeTests = await CourseTest.findAll({
+        where: { course_id: id, is_active: true }
+      });
+      let hasValidTest = false;
+      for (const test of activeTests) {
+        const questionCount = await TestQuestion.count({ where: { test_id: test.id } });
+        if (questionCount > 0) {
+          hasValidTest = true;
+          break;
+        }
+      }
+      if (!hasValidTest) {
+        throw new AppError('Course must have at least one active assessment with questions before publishing', 400);
+      }
     }
 
     await course.update(updateData);
@@ -1075,9 +1093,18 @@ const getCourseContent = async (req, res, next) => {
 
     // Add all published chapters
     if (course.chapters) {
+      const isStudent = req.user.role === 'student';
       course.chapters.forEach(chapter => {
+        const chapterInfo = chapter.getPublicInfo();
+        if (isStudent && chapter.video_url) {
+          const analysis = chapter.url_analysis || analyzeUrl(chapter.video_url);
+          chapterInfo.has_video = true;
+          chapterInfo.video_embed_url = analysis.embedUrl;
+          chapterInfo.video_source_type = analysis.type;
+          delete chapterInfo.video_url;
+        }
         allContent.push({
-          ...chapter.getPublicInfo(),
+          ...chapterInfo,
           type: 'chapter'
         });
       });
@@ -1276,7 +1303,8 @@ const enrollInCourse = async (req, res, next) => {
         'enrollment',
         `Enrolled in ${course.title}`,
         `You have successfully enrolled in ${course.title}. Happy learning!`,
-        `/courses/${course.id}` // or `/student/courses/${course.id}` - let's use standard course url
+        `/courses/${course.id}`,
+        { courseTitle: course.title, courseId: course.id }
       );
     } catch (notifError) {
       console.error('Failed to send enrollment notification:', notifError);

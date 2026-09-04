@@ -28,6 +28,8 @@ module.exports = (sequelize, DataTypes) => {
           'project_reviewed', 
           'plan_upgraded', 
           'test_passed',
+          'test_failed',
+          'progress_milestone',
           'welcome'
         ]]
       }

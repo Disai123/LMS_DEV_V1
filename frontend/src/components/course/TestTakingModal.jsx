@@ -149,6 +149,10 @@ const TestTakingModal = ({
   }, [timeLeft, testStarted, testCompleted])
 
   const handleStartTest = () => {
+    if (!test?.id) {
+      toast.error('Test data is invalid. Please refresh and try again.')
+      return
+    }
     startTestMutation.mutate(test.id)
   }
 

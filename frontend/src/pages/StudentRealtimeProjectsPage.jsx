@@ -50,7 +50,7 @@ const StudentRealtimeProjectsPage = () => {
 
   // isPaid true if any paid plan or admin or has explicit project permissions
   const isPaid = user?.role === 'admin' ||
-    ['basic', 'pro', 'monthly', 'yearly'].includes(planName) ||
+    ['basic', 'pro'].includes(planName) ||
     hasProjectsPerm;
 
   const isPremiumUser = isPaid; // Simplified: if you paid, you're premium

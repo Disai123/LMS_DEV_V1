@@ -34,11 +34,13 @@ const createChapter = async (req, res, next) => {
     // Validate video URL if provided
     if (chapterData.video_url) {
       try {
-        const analysis = await analyzeUrl(chapterData.video_url);
+        const analysis = analyzeUrl(chapterData.video_url);
         if (!analysis.isValid) {
           throw new AppError('Invalid video URL format', 400);
         }
+        chapterData.url_analysis = { ...analysis, video_source_type: analysis.type };
       } catch (analysisError) {
+        if (analysisError instanceof AppError) throw analysisError;
         logger.warn('Video URL analysis failed:', analysisError);
         throw new AppError('Invalid video URL format', 400);
       }
@@ -48,22 +50,16 @@ const createChapter = async (req, res, next) => {
     if (chapterData.pdf_url) {
       try {
         logger.info('Validating PDF URL:', chapterData.pdf_url);
-        
-        // Basic URL validation for PDF URLs
         const urlObj = new URL(chapterData.pdf_url);
         if (!urlObj.protocol.startsWith('http')) {
           throw new AppError('Invalid PDF URL format', 400);
         }
-        
-        // Try to analyze the URL, but don't fail if analysis fails
-        const analysis = await analyzeUrl(chapterData.pdf_url);
-        logger.info('PDF URL analysis result:', analysis);
-        
+        const analysis = analyzeUrl(chapterData.pdf_url);
         if (!analysis.isValid) {
-          // For PDF URLs, we'll accept any valid HTTP URL even if analysis fails
           logger.info('PDF URL analysis failed, but accepting as valid URL:', chapterData.pdf_url);
         }
       } catch (urlError) {
+        if (urlError instanceof AppError) throw urlError;
         logger.warn('PDF URL validation failed:', urlError);
         throw new AppError('Invalid PDF URL format', 400);
       }
@@ -170,10 +166,11 @@ const updateChapter = async (req, res, next) => {
 
     // Validate video URL if provided
     if (updateData.video_url) {
-      const analysis = await analyzeUrl(updateData.video_url);
+      const analysis = analyzeUrl(updateData.video_url);
       if (!analysis.isValid) {
         throw new AppError('Invalid video URL format', 400);
       }
+      updateData.url_analysis = { ...analysis, video_source_type: analysis.type };
     }
 
     // Validate PDF URL if provided

@@ -22,13 +22,14 @@ const ChapterContentViewer = ({ chapter }) => {
 
   const renderContent = () => {
     // Check if chapter has video URL
-    if (chapter.video_url) {
+    if (chapter.video_url || chapter.video_embed_url || chapter.has_video) {
       return (
         <VideoPlayer
-          videoUrl={chapter.video_url}
+          url={chapter.video_url}
+          embedUrl={chapter.video_embed_url}
           title={chapter.title}
-          onLoadStart={() => setIsLoading(true)}
-          onLoadEnd={() => setIsLoading(false)}
+          enrollmentId={chapter.enrollmentId}
+          chapterId={chapter.id}
         />
       )
     }
@@ -83,13 +84,13 @@ const ChapterContentViewer = ({ chapter }) => {
               
               <div className="flex items-center">
                 <span className={`inline-flex items-center px-2 py-1 rounded-full text-xs font-medium ${
-                  chapter.video_url 
+                  (chapter.video_url || chapter.video_embed_url || chapter.has_video)
                     ? 'bg-red-100 text-red-800'
                     : chapter.pdf_url
                     ? 'bg-blue-100 text-blue-800'
                     : 'bg-gray-100 text-gray-800'
                 }`}>
-                  {chapter.video_url ? 'VIDEO' : 
+                  {(chapter.video_url || chapter.video_embed_url || chapter.has_video) ? 'VIDEO' : 
                    chapter.pdf_url ? 'PDF' : 'NONE'}
                 </span>
               </div>

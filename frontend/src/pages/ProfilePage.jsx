@@ -27,6 +27,21 @@ const ProfilePage = () => {
     name: user?.name || '',
     email: user?.email || '',
     bio: user?.bio || '',
+    phone: user?.phone || '',
+    location: user?.location || '',
+    date_of_birth: user?.date_of_birth || '',
+    gender: user?.gender || '',
+    education_level: user?.education_level || '',
+    college_name: user?.college_name || '',
+    graduation_year: user?.graduation_year || '',
+    specialization: user?.specialization || '',
+    emergency_contact_name: user?.emergency_contact_name || '',
+    emergency_contact_phone: user?.emergency_contact_phone || '',
+  })
+  const [emailPrefs, setEmailPrefs] = useState({
+    email_course_updates: true,
+    email_certificates: true,
+    email_marketing: false,
   })
 
   // Update form data when user data changes
@@ -35,6 +50,21 @@ const ProfilePage = () => {
       name: user?.name || '',
       email: user?.email || '',
       bio: user?.bio || '',
+      phone: user?.phone || '',
+      location: user?.location || '',
+      date_of_birth: user?.date_of_birth || '',
+      gender: user?.gender || '',
+      education_level: user?.education_level || '',
+      college_name: user?.college_name || '',
+      graduation_year: user?.graduation_year || '',
+      specialization: user?.specialization || '',
+      emergency_contact_name: user?.emergency_contact_name || '',
+      emergency_contact_phone: user?.emergency_contact_phone || '',
+    })
+    setEmailPrefs(user?.notification_preferences || {
+      email_course_updates: true,
+      email_certificates: true,
+      email_marketing: false,
     })
   }, [user])
 
@@ -92,7 +122,7 @@ const ProfilePage = () => {
   const apiStats = statsData?.data?.stats || {}
   const stats = {
     totalEnrolled: apiStats.totalCourses || enrollments.length,
-    completedCourses: apiStats.completedCourses || enrollments.filter(e => e.status === 'completed').length,
+    completedCourses: apiStats.completedCourses || enrollments.filter(e => e.status === 'certified' || e.status === 'completed').length,
     // In progress = enrolled with progress > 0 but not completed
     inProgressCourses: apiStats.inProgressCourses !== undefined 
       ? apiStats.inProgressCourses 
@@ -119,7 +149,10 @@ const ProfilePage = () => {
     
     try {
       // Use the AuthContext's updateProfile function which handles API call and state update
-      const result = await updateProfile(formData)
+      const result = await updateProfile({
+        ...formData,
+        notification_preferences: emailPrefs,
+      })
       
       if (result.success) {
         setIsEditing(false)
@@ -559,6 +592,39 @@ const ProfilePage = () => {
                       />
                     </div>
 
+                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
+                      {[
+                        ['phone', 'Phone'],
+                        ['location', 'Location'],
+                        ['date_of_birth', 'Date of Birth'],
+                        ['gender', 'Gender'],
+                        ['education_level', 'Education Level'],
+                        ['college_name', 'College / University'],
+                        ['graduation_year', 'Graduation Year'],
+                        ['specialization', 'Specialization'],
+                        ['emergency_contact_name', 'Emergency Contact Name'],
+                        ['emergency_contact_phone', 'Emergency Contact Phone'],
+                      ].map(([name, label]) => (
+                        <div key={name}>
+                          <label className="block text-sm font-medium text-gray-700 mb-2">{label}</label>
+                          <input
+                            type={name.includes('year') ? 'number' : name.includes('date') ? 'date' : 'text'}
+                            name={name}
+                            value={formData[name] || ''}
+                            onChange={handleInputChange}
+                            disabled={!isEditing}
+                            className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 disabled:bg-gray-50 disabled:text-gray-500 transition-colors"
+                          />
+                        </div>
+                      ))}
+                      {user?.student_id && (
+                        <div>
+                          <label className="block text-sm font-medium text-gray-700 mb-2">Student ID</label>
+                          <input type="text" value={user.student_id} disabled className="w-full px-4 py-3 border border-gray-300 rounded-lg bg-gray-50 text-gray-500" />
+                        </div>
+                      )}
+                    </div>
+
 
                     {isEditing && (
                       <div className="flex justify-end space-x-3 pt-6 border-t border-gray-200">
@@ -859,7 +925,7 @@ const ProfilePage = () => {
                       </div>
 
                       {/* Email Notifications */}
-                      <div className="flex items-center justify-between py-4">
+                      <div className="flex items-center justify-between py-4 border-b border-gray-100">
                         <div className="flex items-center">
                           <div className="p-2 bg-indigo-100 rounded-lg mr-4">
                             <svg className="w-5 h-5 text-indigo-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -867,16 +933,59 @@ const ProfilePage = () => {
                             </svg>
                           </div>
                           <div>
-                            <h4 className="text-sm font-medium text-gray-900">Email Notifications</h4>
-                            <p className="text-sm text-gray-500">Receive updates about courses and activities</p>
+                            <h4 className="text-sm font-medium text-gray-900">Course Update Emails</h4>
+                            <p className="text-sm text-gray-500">Enrollment, completion, and assessment updates</p>
                           </div>
                         </div>
+                        <label className="relative inline-flex items-center cursor-pointer">
+                          <input
+                            type="checkbox"
+                            checked={emailPrefs.email_course_updates}
+                            onChange={(e) => setEmailPrefs(p => ({ ...p, email_course_updates: e.target.checked }))}
+                            className="sr-only peer"
+                          />
+                          <div className="w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-blue-300 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-blue-600"></div>
+                        </label>
+                      </div>
+
+                      <div className="flex items-center justify-between py-4">
                         <div className="flex items-center">
-                          <label className="relative inline-flex items-center cursor-pointer">
-                            <input type="checkbox" defaultChecked className="sr-only peer" />
-                            <div className="w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-blue-300 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-blue-600"></div>
-                          </label>
+                          <div className="p-2 bg-green-100 rounded-lg mr-4">
+                            <svg className="w-5 h-5 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4M7.835 4.697a3.42 3.42 0 001.946-.806 3.42 3.42 0 014.438 0 3.42 3.42 0 001.946.806 3.42 3.42 0 013.138 3.138 3.42 3.42 0 00.806 1.946 3.42 3.42 0 010 4.438 3.42 3.42 0 00-.806 1.946 3.42 3.42 0 01-3.138 3.138 3.42 3.42 0 00-1.946.806 3.42 3.42 0 01-4.438 0 3.42 3.42 0 00-1.946-.806 3.42 3.42 0 01-3.138-3.138 3.42 3.42 0 00-.806-1.946 3.42 3.42 0 010-4.438 3.42 3.42 0 00.806-1.946 3.42 3.42 0 013.138-3.138z" />
+                            </svg>
+                          </div>
+                          <div>
+                            <h4 className="text-sm font-medium text-gray-900">Certificate Emails</h4>
+                            <p className="text-sm text-gray-500">Receive emails when you earn certificates</p>
+                          </div>
                         </div>
+                        <label className="relative inline-flex items-center cursor-pointer">
+                          <input
+                            type="checkbox"
+                            checked={emailPrefs.email_certificates}
+                            onChange={(e) => setEmailPrefs(p => ({ ...p, email_certificates: e.target.checked }))}
+                            className="sr-only peer"
+                          />
+                          <div className="w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-blue-300 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-blue-600"></div>
+                        </label>
+                      </div>
+
+                      <div className="pt-4">
+                        <button
+                          type="button"
+                          onClick={async () => {
+                            try {
+                              await updateProfile({ notification_preferences: emailPrefs })
+                              toast.success('Notification preferences saved')
+                            } catch (err) {
+                              toast.error('Failed to save preferences')
+                            }
+                          }}
+                          className="px-4 py-2 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700"
+                        >
+                          Save Notification Preferences
+                        </button>
                       </div>
                     </div>
                   </div>

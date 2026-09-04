@@ -55,6 +55,16 @@ module.exports = (sequelize, DataTypes) => {
     order: {
       type: DataTypes.INTEGER,
       defaultValue: 0
+    },
+    time_limit_minutes: {
+      type: DataTypes.INTEGER,
+      allowNull: true,
+      validate: { min: 1 }
+    },
+    max_attempts: {
+      type: DataTypes.INTEGER,
+      allowNull: true,
+      validate: { min: 1 }
     }
   }, {
     tableName: 'course_tests',

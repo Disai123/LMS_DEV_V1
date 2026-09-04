@@ -390,13 +390,15 @@ const CourseDetailPage = () => {
                             </div>
                             <div>
                               <h3 className="text-sm font-bold text-green-800">
-                                {enrollment.status === 'completed'
-                                  ? 'Course Completed! 🎉'
+                                {enrollment.status === 'certified'
+                                  ? 'Certified! 🎓'
+                                  : ['content_completed', 'completed'].includes(enrollment.status)
+                                  ? 'Chapters Complete — Take Assessment! 📝'
                                   : 'You\'re enrolled in this course!'}
                               </h3>
                               <p className="text-xs text-green-600">
-                                {enrollment.status === 'completed' && enrollment.completed_at
-                                  ? `Completed on ${new Date(enrollment.completed_at).toLocaleDateString()}`
+                                {['content_completed', 'completed', 'certified'].includes(enrollment.status) && enrollment.completed_at
+                                  ? `Updated on ${new Date(enrollment.completed_at).toLocaleDateString()}`
                                   : `Enrolled on ${new Date(enrollment.enrolled_at).toLocaleDateString()}`}
                               </p>
                             </div>

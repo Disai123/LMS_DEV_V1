@@ -10,7 +10,17 @@ module.exports = {
     `);
 
     if (tableExists.length > 0) {
-      console.log('Course_tests table already exists, skipping creation');
+      console.log('Course_tests table already exists, ensuring test columns');
+      const addColumnSafe = async (column, definition) => {
+        try {
+          await queryInterface.addColumn('course_tests', column, definition);
+          console.log(`✅ Added ${column} to course_tests`);
+        } catch (error) {
+          console.log(`ℹ️ ${column} on course_tests skipped:`, error.message);
+        }
+      };
+      await addColumnSafe('time_limit_minutes', { type: Sequelize.INTEGER, allowNull: true });
+      await addColumnSafe('max_attempts', { type: Sequelize.INTEGER, allowNull: true, defaultValue: null });
       return;
     }
 
@@ -64,6 +74,15 @@ module.exports = {
       order: {
         type: Sequelize.INTEGER,
         defaultValue: 0
+      },
+      time_limit_minutes: {
+        type: Sequelize.INTEGER,
+        allowNull: true
+      },
+      max_attempts: {
+        type: Sequelize.INTEGER,
+        allowNull: true,
+        defaultValue: null
       },
       created_at: {
         type: Sequelize.DATE,

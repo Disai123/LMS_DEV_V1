@@ -44,8 +44,13 @@ router.get('/me', authenticate, authController.getCurrentUser);
 // Update profile
 router.put('/profile', 
   authenticate, 
-  validate(userSchemas.update, 'body'),
+  validate(userSchemas.profileUpdate, 'body'),
   authController.updateProfile
+);
+
+router.get('/my-student-profile',
+  authenticate,
+  authController.getMyStudentProfile
 );
 
 // Change password

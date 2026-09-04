@@ -1,14 +1,39 @@
 const fs = require('fs');
 const path = require('path');
 const projectDiscoveryService = require('../services/projectDiscoveryService');
+const { getStudentTierOrder } = require('../middleware/planAccessMiddleware');
 const { StudentPermission, Plan, Subscription } = require('../models');
 const { AppError } = require('../middleware/errorHandler');
 
-// Cache for processed HTML files to reduce S3 latency
-// key: s3Key, value: { html, timestamp, contentType }
+// Cache for processed HTML files
+// key: local file path, value: { html, timestamp, contentType }
 const htmlCache = new Map();
 const CACHE_TTL = 30000; // 30 seconds TTL for "realtime" updates
 const CACHE_MAX_SIZE = 100; // Prevent memory leak
+
+const resolveProjectFilePath = (projectRoot, rawPath) => {
+  const safeRelativePath = path.posix.normalize((rawPath || '').replace(/\\/g, '/')).replace(/^(\.\.(\/|$))+/, '');
+  const resolvedPath = path.resolve(projectRoot, safeRelativePath);
+  const resolvedRoot = path.resolve(projectRoot);
+  if (!resolvedPath.startsWith(resolvedRoot + path.sep) && resolvedPath !== resolvedRoot) {
+    return null;
+  }
+  return resolvedPath;
+};
+
+const FREE_PROJECTS = ['prerequisites', 'todoapp'];
+const BASIC_PROJECTS = [...FREE_PROJECTS, 'ecommerceweb'];
+
+const normalizeProjectId = (projectId) =>
+  projectId ? projectId.toLowerCase().replace(/[-_]/g, '') : null;
+
+const isProjectUnlockedForTier = (projectId, tierOrder) => {
+  const normalizedPid = normalizeProjectId(projectId);
+  if (!normalizedPid) return true;
+  if (tierOrder >= 2) return true;
+  if (tierOrder >= 1) return BASIC_PROJECTS.includes(normalizedPid);
+  return FREE_PROJECTS.includes(normalizedPid);
+};
 
 /**
  * Check if student has access to realtime projects
@@ -19,32 +44,8 @@ const checkProjectAccess = async (userId, userRole, projectId = null) => {
   }
 
   try {
-    // 1. Check active subscription
-    const subscription = await Subscription.findOne({
-      where: { user_id: userId, status: 'active' },
-      include: [{ model: Plan, as: 'plan' }]
-    });
-
-    const planName = subscription?.plan?.name?.toLowerCase() || 'free';
-    const normalizedPid = projectId ? projectId.toLowerCase().replace(/[-_]/g, '') : null;
-
-    // Pro Plan: Access to everything
-    if (planName.includes('pro')) {
-      return true;
-    }
-
-    // Basic Plan (499): Access to Prerequisites, Todo App and Ecommerce Web
-    if (planName.includes('basic')) {
-      if (!projectId) return true; // Allow access to list
-      const basicAllowed = ['prerequisites', 'todoapp', 'ecommerceweb'];
-      return basicAllowed.includes(normalizedPid);
-    }
-
-    // Starter/Free Plan: Access to Prerequisites and Todo App
-    if (!projectId) return true; // Allow access to list
-    const freeAllowed = ['prerequisites', 'todoapp'];
-    return freeAllowed.includes(normalizedPid);
-
+    const tierOrder = await getStudentTierOrder(userId);
+    return isProjectUnlockedForTier(projectId, tierOrder);
   } catch (error) {
     console.error('Error checking project access:', error);
     return false;
@@ -72,45 +73,18 @@ const getProjectsList = async (req, res, next) => {
     // Discover all projects
     const projects = await projectDiscoveryService.discoverProjects();
 
-    // Determine user plan
-    const subscription = await Subscription.findOne({
-      where: { user_id: userId, status: 'active' },
-      include: [{ model: Plan, as: 'plan' }]
-    });
-    const planName = subscription?.plan?.name?.toLowerCase() || 'free';
+    const tierOrder = userRole === 'admin' ? 2 : await getStudentTierOrder(userId);
 
     // Attach isLocked status based on fresh objects to avoid cache contamination
     const processedProjects = projects.map((project, index) => {
       const p = { ...project }; // Fresh copy
-      const pIdNormalized = p.id.toLowerCase().replace(/[-_]/g, '');
-      let isLocked = true;
-
-      // Admin or Pro can see everything
-      if (userRole === 'admin' || (planName && planName.includes('pro'))) {
-        isLocked = false;
-      }
-      // Basic Plan (499): Unlock Prerequisites, Todo and Ecommerce
-      else if (planName && planName.includes('basic')) {
-        const basicAllowed = ['prerequisites', 'todoapp', 'ecommerceweb'];
-        if (basicAllowed.includes(pIdNormalized)) {
-          isLocked = false;
-        }
-      }
-      // Free Plan: Unlock Prerequisites and Todo App
-      else {
-        const freeAllowed = ['prerequisites', 'todoapp'];
-        if (freeAllowed.includes(pIdNormalized)) {
-          isLocked = false;
-        }
-      }
-
-      p.isLocked = isLocked;
+      p.isLocked = !isProjectUnlockedForTier(p.id || p.folderName, tierOrder);
 
       // Debug logging for the user
       if (index === 0) {
-        console.log(`[REALTIME-ACCESS] Processing for User: ${userId}, Role: ${userRole}, Plan: ${planName}`);
+        console.log(`[REALTIME-ACCESS] Processing for User: ${userId}, Role: ${userRole}, Tier: ${tierOrder}`);
       }
-      console.log(`[REALTIME-ACCESS] Project [${index}] ${p.id}: isLocked = ${isLocked}`);
+      console.log(`[REALTIME-ACCESS] Project [${index}] ${p.id}: isLocked = ${p.isLocked}`);
 
       return p;
     });
@@ -312,35 +286,33 @@ const serveProjectMainPage = async (req, res, next) => {
       `);
     }
 
-    // Determine the S3 key to serve based on sub-path
-    let s3Key;
+    // Determine the local path to serve based on sub-path
+    let filePath;
     const cleanSubPath = (subPath || '').replace(/^\/+/, '').replace(/\\/g, '/');
 
     if (!cleanSubPath) {
       // No sub-path - serve index.html
-      s3Key = `${project.path}/index.html`;
+      filePath = path.join(project.path, 'index.html');
       console.log(`[serveProjectMainPage] No sub-path, serving index.html`);
     } else {
-      // Prevent directory traversal
-      const safePath = path.posix.normalize(cleanSubPath).replace(/^(\.\.(\/|$))+/, '');
-      s3Key = `${project.path}/${safePath}`;
+      filePath = resolveProjectFilePath(project.path, cleanSubPath);
+      if (!filePath) {
+        return res.status(403).send('Access denied');
+      }
     }
 
-    console.log(`[serveProjectMainPage] Final S3 key: ${s3Key}`);
+    console.log(`[serveProjectMainPage] Final local file path: ${filePath}`);
 
     // Determine if it's an HTML file or static asset
-    const extRaw = path.extname(s3Key).toLowerCase();
+    const extRaw = path.extname(filePath).toLowerCase();
     const isHtmlFileRaw = extRaw === '.html' || extRaw === '.htm';
 
     // 1. Serve static assets directly
     if (!isHtmlFileRaw) {
-      // (Assets are streamed, caching them in memory might be too much memory, 
-      // so we rely on S3 directly + browser cache headers)
-      console.log(`[serveProjectMainPage] Serving static asset: ${s3Key}`);
-      const fileData = await require('../services/s3Service').getFileStream(s3Key);
-
-      if (!fileData) {
-        console.error(`[serveProjectMainPage] Asset not found in S3 or error: ${s3Key}`);
+      // Stream local assets directly and rely on browser cache headers
+      console.log(`[serveProjectMainPage] Serving static asset: ${filePath}`);
+      if (!fs.existsSync(filePath) || !fs.statSync(filePath).isFile()) {
+        console.error(`[serveProjectMainPage] Asset not found locally: ${filePath}`);
         return res.status(404).send('Asset not found');
       }
 
@@ -360,51 +332,56 @@ const serveProjectMainPage = async (req, res, next) => {
         '.eot': 'application/vnd.ms-fontobject'
       };
 
-      const contentType = contentTypes[extRaw] || fileData.contentType || 'application/octet-stream';
+      const fileStats = fs.statSync(filePath);
+      const contentType = contentTypes[extRaw] || 'application/octet-stream';
       res.setHeader('Content-Type', contentType);
       res.setHeader('Cache-Control', 'public, max-age=3600');
-      if (fileData.contentLength) {
-        res.setHeader('Content-Length', fileData.contentLength);
-      }
-
-      fileData.stream.pipe(res);
+      res.setHeader('Content-Length', fileStats.size);
+      fs.createReadStream(filePath).pipe(res);
       return;
     }
 
     // 2. It's an HTML file - Check Cache first
     const now = Date.now();
-    const cachedItem = htmlCache.get(s3Key);
+    const cachedItem = htmlCache.get(filePath);
     if (cachedItem && (now - cachedItem.timestamp < CACHE_TTL)) {
-      console.log(`[serveProjectMainPage] Serving from cache: ${s3Key} (Cache age: ${Math.round((now - cachedItem.timestamp) / 1000)}s)`);
+      console.log(`[serveProjectMainPage] Serving from cache: ${filePath} (Cache age: ${Math.round((now - cachedItem.timestamp) / 1000)}s)`);
       res.setHeader('Content-Type', 'text/html');
       res.setHeader('Cache-Control', 'public, max-age=30'); // Short browser cache for dynamic content
       return res.send(cachedItem.html);
     }
 
     // 3. Cache miss - Fetch and handle fallbacks
-    console.log(`[serveProjectMainPage] Reading HTML file from S3: ${s3Key}...`);
-    let html = await require('../services/s3Service').getFileString(s3Key);
+    console.log(`[serveProjectMainPage] Reading HTML file from local folder: ${filePath}...`);
+    let html = null;
+    if (filePath && fs.existsSync(filePath) && fs.statSync(filePath).isFile()) {
+      html = fs.readFileSync(filePath, 'utf-8');
+    }
 
     if (!html) {
-      console.log(`[serveProjectMainPage] Exact file not found: ${s3Key}. Trying fallbacks.`);
+      console.log(`[serveProjectMainPage] Exact file not found: ${filePath}. Trying fallbacks.`);
       let foundFallback = false;
 
       // Fallback logic for SPAs and phases
       // 1. Try Overview.html in the directory
-      let overviewKey = s3Key.endsWith('/') ? `${s3Key}Overview.html` : `${s3Key}/Overview.html`;
-      html = await require('../services/s3Service').getFileString(overviewKey);
+      let overviewKey = filePath.endsWith(path.sep) ? `${filePath}Overview.html` : path.join(filePath, 'Overview.html');
+      if (fs.existsSync(overviewKey) && fs.statSync(overviewKey).isFile()) {
+        html = fs.readFileSync(overviewKey, 'utf-8');
+      }
       if (html) {
-        s3Key = overviewKey;
+        filePath = overviewKey;
         foundFallback = true;
         console.log(`[serveProjectMainPage] Fallback success: Served Overview.html`);
       }
 
       // 2. Try index.html in the directory
       if (!foundFallback) {
-        let indexKey = s3Key.endsWith('/') ? `${s3Key}index.html` : `${s3Key}/index.html`;
-        html = await require('../services/s3Service').getFileString(indexKey);
+        let indexKey = filePath.endsWith(path.sep) ? `${filePath}index.html` : path.join(filePath, 'index.html');
+        if (fs.existsSync(indexKey) && fs.statSync(indexKey).isFile()) {
+          html = fs.readFileSync(indexKey, 'utf-8');
+        }
         if (html) {
-          s3Key = indexKey;
+          filePath = indexKey;
           foundFallback = true;
           console.log(`[serveProjectMainPage] Fallback success: Served index.html from dir`);
         }
@@ -415,10 +392,12 @@ const serveProjectMainPage = async (req, res, next) => {
         const pathParts = cleanSubPath.split('/');
         if (pathParts.length >= 2) {
           const parentDir = pathParts.slice(0, -1).join('/');
-          const parentOverviewKey = `${project.path}/${parentDir}/Overview.html`;
-          html = await require('../services/s3Service').getFileString(parentOverviewKey);
+          const parentOverviewKey = path.join(project.path, parentDir, 'Overview.html');
+          if (fs.existsSync(parentOverviewKey) && fs.statSync(parentOverviewKey).isFile()) {
+            html = fs.readFileSync(parentOverviewKey, 'utf-8');
+          }
           if (html) {
-            s3Key = parentOverviewKey;
+            filePath = parentOverviewKey;
             foundFallback = true;
             console.log(`[serveProjectMainPage] Fallback success: Served parent Overview.html`);
           }
@@ -427,17 +406,19 @@ const serveProjectMainPage = async (req, res, next) => {
 
       // 4. Ultimate SPA Fallback
       if (!foundFallback) {
-        const rootIndexKey = `${project.path}/index.html`;
-        html = await require('../services/s3Service').getFileString(rootIndexKey);
+        const rootIndexKey = path.join(project.path, 'index.html');
+        if (fs.existsSync(rootIndexKey) && fs.statSync(rootIndexKey).isFile()) {
+          html = fs.readFileSync(rootIndexKey, 'utf-8');
+        }
         if (html) {
-          s3Key = rootIndexKey;
+          filePath = rootIndexKey;
           foundFallback = true;
           console.log(`[serveProjectMainPage] Fallback success: Served SPA root index.html`);
         }
       }
 
       if (!foundFallback || !html) {
-        console.error(`[serveProjectMainPage] File completely not found in S3: ${s3Key}`);
+        console.error(`[serveProjectMainPage] File completely not found locally: ${filePath}`);
         return res.status(404).send('Project file not found');
       }
     }
@@ -1571,7 +1552,7 @@ const serveProjectMainPage = async (req, res, next) => {
       const firstKey = htmlCache.keys().next().value;
       htmlCache.delete(firstKey);
     }
-    htmlCache.set(s3Key, { html, timestamp: Date.now() });
+    htmlCache.set(filePath, { html, timestamp: Date.now() });
 
     res.send(html);
   } catch (error) {

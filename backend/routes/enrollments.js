@@ -66,7 +66,7 @@ router.post('/:enrollmentId/chapters/:chapterId/complete',
 router.get('/:enrollmentId/progression', 
   authenticate,
   requireStudent,
-  validate(commonSchemas.id, 'params'),
+  validate(commonSchemas.enrollmentId, 'params'),
   enrollmentController.getChapterProgression
 );
 

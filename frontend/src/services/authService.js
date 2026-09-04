@@ -65,6 +65,15 @@ export const authService = {
     }
   },
 
+  getMyStudentProfile: async () => {
+    try {
+      const response = await api.get('/auth/my-student-profile')
+      return response.data
+    } catch (error) {
+      throw new Error(error.response?.data?.message || 'Failed to get student profile')
+    }
+  },
+
   // Change password
   changePassword: async (currentPassword, newPassword) => {
     try {

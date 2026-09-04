@@ -52,6 +52,68 @@ module.exports = {
         allowNull: false,
         comment: 'Student subscription plan type'
       },
+      bio: {
+        type: Sequelize.TEXT,
+        allowNull: true
+      },
+      phone: {
+        type: Sequelize.STRING(20),
+        allowNull: true
+      },
+      location: {
+        type: Sequelize.STRING(255),
+        allowNull: true
+      },
+      student_id: {
+        type: Sequelize.STRING(50),
+        allowNull: true,
+        unique: true
+      },
+      date_of_birth: {
+        type: Sequelize.DATEONLY,
+        allowNull: true
+      },
+      gender: {
+        type: Sequelize.ENUM('male', 'female', 'other', 'prefer_not_to_say'),
+        allowNull: true
+      },
+      education_level: {
+        type: Sequelize.STRING(100),
+        allowNull: true
+      },
+      college_name: {
+        type: Sequelize.STRING(255),
+        allowNull: true
+      },
+      graduation_year: {
+        type: Sequelize.INTEGER,
+        allowNull: true
+      },
+      specialization: {
+        type: Sequelize.STRING(255),
+        allowNull: true
+      },
+      joined_at: {
+        type: Sequelize.DATEONLY,
+        allowNull: true
+      },
+      emergency_contact_name: {
+        type: Sequelize.STRING(255),
+        allowNull: true
+      },
+      emergency_contact_phone: {
+        type: Sequelize.STRING(20),
+        allowNull: true
+      },
+      notification_preferences: {
+        type: Sequelize.JSONB,
+        allowNull: true,
+        defaultValue: {
+          email_course_updates: true,
+          email_certificates: true,
+          email_marketing: false
+        }
+      },
       created_at: {
         type: Sequelize.DATE,
         allowNull: false,

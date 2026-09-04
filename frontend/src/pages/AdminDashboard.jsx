@@ -21,8 +21,8 @@ import UserAnalytics from '../components/admin/UserAnalytics'
 import CreateCourse from '../components/admin/CreateCourse'
 import EditCourse from '../components/admin/EditCourse'
 import AdminProjectsPage from './AdminProjectsPage'
-import AdminHackathonsPage from './AdminHackathonsPage'
-import AdminInternshipsPage from './AdminInternshipsPage'
+// import AdminHackathonsPage from './AdminHackathonsPage' // HIDDEN
+// import AdminInternshipsPage from './AdminInternshipsPage' // HIDDEN
 import RBACManagementPage from './RBACManagementPage'
 import SubscriptionManagement from '../components/admin/SubscriptionManagement'
 import ContactMessages from '../components/admin/ContactMessages'
@@ -92,8 +92,9 @@ const AdminDashboard = () => {
     { name: 'Create Course', href: '/admin/courses/create', icon: 'add', current: location.pathname === '/admin/courses/create' },
     { name: 'Package Management', href: '/admin/packages', icon: 'packages', current: location.pathname.startsWith('/admin/packages') },
     { name: 'Subscriptions', href: '/admin/subscriptions', icon: 'subscriptions', current: location.pathname.startsWith('/admin/subscriptions') },
-    { name: 'Hackathons', href: '/admin/hackathons', icon: 'hackathons', current: location.pathname.startsWith('/admin/hackathons') },
-    { name: 'Internships', href: '/admin/internships', icon: 'internships', current: location.pathname.startsWith('/admin/internships') },
+    // HIDDEN: Hackathons & Internships temporarily hidden
+    // { name: 'Hackathons', href: '/admin/hackathons', icon: 'hackathons', current: location.pathname.startsWith('/admin/hackathons') },
+    // { name: 'Internships', href: '/admin/internships', icon: 'internships', current: location.pathname.startsWith('/admin/internships') },
     { name: 'Project Submissions', href: '/admin/project-submissions', icon: 'submissions', current: location.pathname.startsWith('/admin/project-submissions') },
     { name: 'RBAC Management', href: '/admin/rbac', icon: 'rbac', current: location.pathname.startsWith('/admin/rbac') },
     { name: 'Users', href: '/admin/users', icon: 'users', current: location.pathname.startsWith('/admin/users') },
@@ -272,14 +273,9 @@ const AdminDashboard = () => {
                   path="/projects"
                   element={<AdminProjectsPage />}
                 />
-                <Route
-                  path="/hackathons"
-                  element={<AdminHackathonsPage />}
-                />
-                <Route
-                  path="/internships"
-                  element={<AdminInternshipsPage />}
-                />
+                {/* HIDDEN: Hackathons & Internships routes temporarily hidden */}
+                {/* <Route path="/hackathons" element={<AdminHackathonsPage />} /> */}
+                {/* <Route path="/internships" element={<AdminInternshipsPage />} /> */}
                 <Route
                   path="/rbac"
                   element={<RBACManagementPage />}

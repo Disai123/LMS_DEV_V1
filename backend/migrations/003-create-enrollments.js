@@ -45,8 +45,13 @@ module.exports = {
         defaultValue: Sequelize.NOW
       },
       status: {
-        type: Sequelize.ENUM('enrolled', 'completed', 'dropped'),
+        type: Sequelize.ENUM('enrolled', 'content_completed', 'completed', 'certified', 'dropped'),
         defaultValue: 'enrolled'
+      },
+      test_passed: {
+        type: Sequelize.BOOLEAN,
+        defaultValue: false,
+        allowNull: false
       },
       rating: {
         type: Sequelize.INTEGER,

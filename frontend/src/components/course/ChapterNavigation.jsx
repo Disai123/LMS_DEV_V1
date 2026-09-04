@@ -57,14 +57,23 @@ const ChapterNavigation = ({
   const submitFeedbackMutation = useMutation(
     (feedbackData) => enrollmentService.submitCourseFeedback(enrollmentId, feedbackData),
     {
-      onSuccess: () => {
+      onSuccess: async () => {
         toast.success('Thank you for your feedback!')
         setShowFeedback(false)
-        // Invalidate all course-related queries to update ratings everywhere
         queryClient.invalidateQueries(['course', currentChapter.course_id])
         queryClient.invalidateQueries(['courses'])
         queryClient.invalidateQueries(['student-enrollments'])
         queryClient.invalidateQueries(['my-completed-courses'])
+        queryClient.invalidateQueries(['chapterProgression', enrollmentId])
+        queryClient.invalidateQueries(['chapterProgression'])
+        queryClient.invalidateQueries(['course-tests'])
+        await Promise.all([
+          queryClient.refetchQueries(['chapterProgression', enrollmentId]),
+          queryClient.refetchQueries(['course', currentChapter.course_id]),
+          queryClient.refetchQueries(['student-enrollments']),
+          queryClient.refetchQueries(['course-tests', currentChapter.course_id])
+        ])
+        window.dispatchEvent(new CustomEvent('showTestSection'))
       },
       onError: (error) => {
         toast.error(error.message)

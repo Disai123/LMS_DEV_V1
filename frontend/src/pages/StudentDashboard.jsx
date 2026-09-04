@@ -6,11 +6,11 @@ import { useAuth } from '../context/AuthContext'
 import { courseService } from '../services/courseService'
 import { enrollmentService } from '../services/enrollmentService'
 import { activityService } from '../services/activityService'
-import { hackathonService } from '../services/hackathonService'
+// import { hackathonService } from '../services/hackathonService' // HIDDEN
 import { scoreService } from '../services/scoreService'
 import { usePermissions } from '../hooks/usePermissions'
 import { useRealtimeProjects } from '../hooks/useRealtimeProjects'
-import internshipService from '../services/internshipService'
+// import internshipService from '../services/internshipService' // HIDDEN
 import { paymentService } from '../services/api'
 import ProjectCard from '../components/projects/ProjectCard'
 // import { chatService } from '../services/chatService'
@@ -20,8 +20,8 @@ import AllCoursesModal from '../components/course/AllCoursesModal'
 import EnrolledCoursesModal from '../components/course/EnrolledCoursesModal'
 import StudentCourseCard from '../components/course/StudentCourseCard'
 import EnrolledCourseCard from '../components/course/EnrolledCourseCard'
-import InternshipSubmissionModal from '../components/internship/InternshipSubmissionModal'
-import { Send } from 'lucide-react'
+// import InternshipSubmissionModal from '../components/internship/InternshipSubmissionModal' // HIDDEN
+// import { Send } from 'lucide-react' // HIDDEN: used by internship submission modal
 import toast from 'react-hot-toast'
 
 const StudentDashboard = () => {
@@ -79,18 +79,19 @@ const StudentDashboard = () => {
     }
   )
 
-  const { data: hackathonsData, isLoading: hackathonsLoading, error: hackathonsError } = useQuery(
-    'student-hackathons',
-    () => hackathonService.getMyHackathons(),
-    {
-      refetchOnWindowFocus: false,
-      staleTime: 5 * 60 * 1000,
-      retry: 1,
-      onError: (error) => {
-        console.error('Hackathons API error:', error)
-      }
-    }
-  )
+  // HIDDEN: Hackathons query temporarily disabled
+  // const { data: hackathonsData, isLoading: hackathonsLoading, error: hackathonsError } = useQuery(
+  //   'student-hackathons',
+  //   () => hackathonService.getMyHackathons(),
+  //   {
+  //     refetchOnWindowFocus: false,
+  //     staleTime: 5 * 60 * 1000,
+  //     retry: 1,
+  //     onError: (error) => {
+  //       console.error('Hackathons API error:', error)
+  //     }
+  //   }
+  // )
 
   const { data: scoreData, isLoading: scoreLoading, error: scoreError } = useQuery(
     'student-score',
@@ -106,14 +107,15 @@ const StudentDashboard = () => {
     }
   )
 
-  const { data: myInternshipsData, isLoading: internshipsLoading } = useQuery(
-    'my-internships',
-    () => internshipService.getMyInternships(),
-    {
-      enabled: !!user,
-      staleTime: 5 * 60 * 1000
-    }
-  )
+  // HIDDEN: Internships query temporarily disabled
+  // const { data: myInternshipsData, isLoading: internshipsLoading } = useQuery(
+  //   'my-internships',
+  //   () => internshipService.getMyInternships(),
+  //   {
+  //     enabled: !!user,
+  //     staleTime: 5 * 60 * 1000
+  //   }
+  // )
 
   // On mount: sync any approved internship submissions that were scored before the fix.
   // This is a one-time heal — after the first visit, scores will always be correct.
@@ -169,18 +171,19 @@ const StudentDashboard = () => {
   // Modal state
   const [isAllCoursesModalOpen, setIsAllCoursesModalOpen] = useState(false)
   const [isEnrolledCoursesModalOpen, setIsEnrolledCoursesModalOpen] = useState(false)
-  const [selectedInternship, setSelectedInternship] = useState(null)
-  const [isSubmissionModalOpen, setIsSubmissionModalOpen] = useState(false)
+  // HIDDEN: Internship modal state temporarily disabled
+  // const [selectedInternship, setSelectedInternship] = useState(null)
+  // const [isSubmissionModalOpen, setIsSubmissionModalOpen] = useState(false)
 
   const { hasAccess } = usePermissions()
   const { projects: realtimeProjects = [], hasAccess: hasProjectsAccess = false } = useRealtimeProjects({ category: 'all', difficulty: 'all', sort: 'name' })
 
-  const isLoading = coursesLoading || enrollmentsLoading || activitiesLoading || hackathonsLoading || scoreLoading || internshipsLoading
+  const isLoading = coursesLoading || enrollmentsLoading || activitiesLoading || scoreLoading
   const courses = coursesData?.data?.courses || []
   const enrollments = enrollmentsData?.data?.enrollments || []
   const activities = activitiesData?.data?.activities || []
   // const chatRooms = chatRoomsData?.data?.chatRooms || []
-  const hackathons = hackathonsData?.data?.hackathons || []
+  // const hackathons = hackathonsData?.data?.hackathons || [] // HIDDEN
 
   // Helper function to get activity styling
   const getActivityStyle = (activityType) => {
@@ -369,7 +372,7 @@ const StudentDashboard = () => {
     )
   }
 
-  const completedCourses = (enrollments || []).filter(e => e.status === 'completed').length
+  const completedCourses = (enrollments || []).filter(e => e.status === 'certified' || e.status === 'completed').length
   const inProgressCourses = (enrollments || []).filter(e => e.status === 'enrolled' && e.progress > 0 && e.progress < 100).length
   const totalProgress = (enrollments || []).reduce((sum, e) => sum + (e.progress || 0), 0) / Math.max((enrollments || []).length, 1)
 
@@ -488,8 +491,9 @@ const StudentDashboard = () => {
                             {[
                               { label: 'Courses', value: scoreData?.data?.total_course_points || 0, color: 'border-blue-500/30' },
                               { label: 'Projects', value: scoreData?.data?.total_project_points || 0, color: 'border-emerald-500/30' },
-                              { label: 'Hackathons', value: scoreData?.data?.total_hackathon_points || 0, color: 'border-indigo-500/30' },
-                              { label: 'Internships', value: scoreData?.data?.total_internship_points || 0, color: 'border-purple-500/30' },
+                              // HIDDEN: Hackathons & Internships score cards temporarily hidden
+                              // { label: 'Hackathons', value: scoreData?.data?.total_hackathon_points || 0, color: 'border-indigo-500/30' },
+                              // { label: 'Internships', value: scoreData?.data?.total_internship_points || 0, color: 'border-purple-500/30' },
                             ].map((stat, i) => (
                               <div key={i} className={`bg-white/5 backdrop-blur-sm rounded-lg p-2.5 text-center border ${stat.color} hover:bg-white/10 transition-colors`}>
                                 <p className="text-white/40 text-[9px] font-bold uppercase tracking-tighter mb-1">{stat.label}</p>
@@ -821,75 +825,7 @@ const StudentDashboard = () => {
               </motion.div>
             </div>
 
-            {/* My Internships Section */}
-            {myInternshipsData?.data?.data?.registrations?.length > 0 && (
-              <motion.div
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: 0.75 }}
-                className="group relative overflow-hidden bg-white rounded-xl shadow-md hover:shadow-lg transition-all duration-300"
-              >
-                <div className="absolute top-0 right-0 w-16 h-16 bg-gradient-to-br from-primary to-secondary rounded-full -translate-y-8 translate-x-8 opacity-10"></div>
-                <div className="relative p-6">
-                  <div className="flex items-center justify-between mb-6">
-                    <div>
-                      <h3 className="text-lg font-bold text-gray-900 mb-1">My Internships</h3>
-                      <p className="text-sm text-gray-600">Track your professional journey</p>
-                    </div>
-                    <button
-                      onClick={() => navigate('/internships')}
-                      className="inline-flex items-center px-3 py-1.5 bg-primary/10 text-primary rounded-lg hover:bg-primary/20 transition-colors duration-200 font-medium text-sm"
-                    >
-                      Browse More
-                    </button>
-                  </div>
-
-                  <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-                    {myInternshipsData.data.data.registrations.map((reg, index) => (
-                      <motion.div
-                        key={reg.id}
-                        initial={{ opacity: 0, scale: 0.95 }}
-                        animate={{ opacity: 1, scale: 1 }}
-                        transition={{ delay: 0.8 + index * 0.1 }}
-                        className="bg-gray-50 rounded-xl p-4 border border-gray-100 hover:border-primary/30 transition-all cursor-pointer group/card"
-                        onClick={() => navigate('/internships')}
-                      >
-                        <div className="flex items-center gap-3 mb-3">
-                          <div className="w-10 h-10 rounded-lg bg-primary flex items-center justify-center text-lg text-white">
-                            {reg.internship?.logo || '📖'}
-                          </div>
-                          <div>
-                            <h4 className="font-bold text-gray-900 text-sm line-clamp-1">{reg.internship?.title}</h4>
-                            <span className={`text-[10px] uppercase font-bold tracking-wider ${reg.status === 'completed' ? 'text-green-600' : 'text-primary'
-                              }`}>
-                              {reg.status?.replace('_', ' ')}
-                            </span>
-                          </div>
-                        </div>
-                        <div className="flex flex-col gap-2 mt-4">
-                          <div className="flex items-center justify-between">
-                            <span className="text-xs text-gray-400">Duration: {reg.internship?.duration}</span>
-                            <span className="text-primary text-xs font-bold group-hover/card:underline">View Syllabus →</span>
-                          </div>
-
-                          <button
-                            onClick={(e) => {
-                              e.stopPropagation();
-                              setSelectedInternship(reg.internship);
-                              setIsSubmissionModalOpen(true);
-                            }}
-                            className="w-full py-2 bg-primary/10 hover:bg-primary/20 text-primary text-xs font-bold rounded-lg transition-colors flex items-center justify-center gap-1.5 border border-primary/20"
-                          >
-                            <Send size={12} />
-                            Submit Completion Task
-                          </button>
-                        </div>
-                      </motion.div>
-                    ))}
-                  </div>
-                </div>
-              </motion.div>
-            )}
+            {/* HIDDEN: My Internships Section temporarily hidden */}
           </motion.div>
 
           {/* Group Chats Section - COMMENTED OUT */}
@@ -931,15 +867,7 @@ const StudentDashboard = () => {
         onClose={() => setIsEnrolledCoursesModalOpen(false)}
       />
 
-      <InternshipSubmissionModal
-        isOpen={isSubmissionModalOpen}
-        onClose={() => setIsSubmissionModalOpen(false)}
-        internship={selectedInternship}
-        onSuccess={() => {
-          queryClient.invalidateQueries(['student-score']);
-          queryClient.invalidateQueries(['my-internships']);
-        }}
-      />
+      {/* HIDDEN: InternshipSubmissionModal temporarily hidden */}
 
 
       {/* Chat Room Modal - COMMENTED OUT */}

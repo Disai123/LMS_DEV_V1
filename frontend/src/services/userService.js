@@ -119,6 +119,24 @@ export const userService = {
     } catch (error) {
       throw new Error(error.response?.data?.message || 'Failed to update user plan')
     }
+  },
+
+  getStudentProfile: async (id) => {
+    try {
+      const response = await api.get(`/users/${id}/student-profile`)
+      return response.data
+    } catch (error) {
+      throw new Error(error.response?.data?.message || 'Failed to get student profile')
+    }
+  },
+
+  updateStudentProfile: async (id, data) => {
+    try {
+      const response = await api.put(`/users/${id}/student-profile`, data)
+      return response.data
+    } catch (error) {
+      throw new Error(error.response?.data?.message || 'Failed to update student profile')
+    }
   }
 }
 

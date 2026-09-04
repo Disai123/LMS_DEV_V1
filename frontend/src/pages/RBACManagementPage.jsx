@@ -287,7 +287,7 @@ const RBACManagementPage = () => {
       <div className="flex items-center justify-between">
         <div>
           <h1 className="text-2xl font-bold text-gray-900">RBAC Management</h1>
-          <p className="text-gray-600 mt-1">Control student access to courses, hackathons, and realtime projects</p>
+          <p className="text-gray-600 mt-1">Control student access to courses and realtime projects</p>
         </div>
         <div className="flex items-center space-x-3">
           <button
@@ -314,7 +314,7 @@ const RBACManagementPage = () => {
       </div>
 
       {/* Statistics Cards */}
-      <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
         <div className="bg-white rounded-lg border border-gray-200 p-6">
           <div className="flex items-center">
             <div className="flex-shrink-0">
@@ -339,17 +339,7 @@ const RBACManagementPage = () => {
           </div>
         </div>
 
-        <div className="bg-white rounded-lg border border-gray-200 p-6">
-          <div className="flex items-center">
-            <div className="flex-shrink-0">
-              <FiAward className="h-8 w-8 text-purple-600" />
-            </div>
-            <div className="ml-4">
-              <p className="text-sm font-medium text-gray-500">Hackathons Access</p>
-              <p className="text-2xl font-semibold text-gray-900">{stats.hackathonsEnabled}</p>
-            </div>
-          </div>
-        </div>
+        {/* HIDDEN: Hackathons Access stat card temporarily hidden */}
 
         <div className="bg-white rounded-lg border border-gray-200 p-6">
           <div className="flex items-center">
@@ -395,15 +385,7 @@ const RBACManagementPage = () => {
                   />
                   <span className="text-sm text-gray-700">Courses</span>
                 </label>
-                <label className="flex items-center space-x-2">
-                  <input
-                    type="checkbox"
-                    checked={bulkPermissions.hackathons}
-                    onChange={(e) => handleBulkPermissionChange('hackathons', e.target.checked)}
-                    className="w-4 h-4 text-indigo-600 border-gray-300 rounded focus:ring-indigo-500"
-                  />
-                  <span className="text-sm text-gray-700">Hackathons</span>
-                </label>
+                {/* HIDDEN: Hackathons bulk toggle temporarily hidden */}
                 <label className="flex items-center space-x-2">
                   <input
                     type="checkbox"
@@ -485,9 +467,7 @@ const RBACManagementPage = () => {
                   <th className="px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider">
                     Courses
                   </th>
-                  <th className="px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider">
-                    Hackathons
-                  </th>
+                  {/* HIDDEN: Hackathons column temporarily hidden */}
                   <th className="px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider">
                     Projects
                   </th>
@@ -531,18 +511,7 @@ const RBACManagementPage = () => {
                       </button>
                     </td>
 
-                    <td className="px-6 py-4 whitespace-nowrap text-center">
-                      <button
-                        onClick={() => togglePermission(student.id, 'hackathons')}
-                        className={`w-12 h-6 rounded-full transition-colors duration-200 ${permissions[student.id]?.hackathons
-                            ? 'bg-purple-500'
-                            : 'bg-gray-300'
-                          }`}
-                      >
-                        <div className={`w-5 h-5 bg-white rounded-full shadow transform transition-transform duration-200 ${permissions[student.id]?.hackathons ? 'translate-x-6' : 'translate-x-0.5'
-                          }`} />
-                      </button>
-                    </td>
+                    {/* HIDDEN: Hackathons toggle column temporarily hidden */}
 
                     <td className="px-6 py-4 whitespace-nowrap text-center">
                       <button

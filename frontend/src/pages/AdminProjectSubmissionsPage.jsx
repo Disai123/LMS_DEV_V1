@@ -219,7 +219,8 @@ const AdminProjectSubmissionsPage = () => {
                         >
                             Realtime Projects
                         </button>
-                        <button
+                        {/* HIDDEN: Internships tab temporarily hidden */}
+                        {/* <button
                             onClick={() => { setActiveTab('internships'); setCurrentPage(1); setStatusFilter('all'); }}
                             className={`flex-1 py-4 rounded-xl font-bold text-lg shadow-lg transition-all ${activeTab === 'internships'
                                 ? 'bg-indigo-600 text-white transform scale-105'
@@ -227,7 +228,7 @@ const AdminProjectSubmissionsPage = () => {
                                 }`}
                         >
                             Internships
-                        </button>
+                        </button> */}
                     </div>
 
                     {/* Statistics Cards */}

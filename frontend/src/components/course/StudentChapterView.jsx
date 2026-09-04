@@ -79,14 +79,24 @@ const StudentChapterView = ({
       return enrollmentService.submitCourseFeedback(enrollmentId, feedbackData)
     },
     {
-      onSuccess: () => {
+      onSuccess: async () => {
         toast.success('Thank you for your feedback!')
         setShowFeedback(false)
-        // Invalidate all course-related queries to update ratings everywhere
+        // Refresh enrollment/progression so Take Test unlocks without full page reload
         queryClient.invalidateQueries(['course', chapter.course_id])
         queryClient.invalidateQueries(['courses'])
         queryClient.invalidateQueries(['student-enrollments'])
         queryClient.invalidateQueries(['my-completed-courses'])
+        queryClient.invalidateQueries(['chapterProgression', enrollmentId])
+        queryClient.invalidateQueries(['chapterProgression'])
+        queryClient.invalidateQueries(['course-tests'])
+        await Promise.all([
+          queryClient.refetchQueries(['chapterProgression', enrollmentId]),
+          queryClient.refetchQueries(['course', chapter.course_id]),
+          queryClient.refetchQueries(['student-enrollments']),
+          queryClient.refetchQueries(['course-tests', chapter.course_id])
+        ])
+        window.dispatchEvent(new CustomEvent('showTestSection'))
       },
       onError: (error) => {
         console.error('Submit feedback error:', error)
@@ -136,9 +146,9 @@ const StudentChapterView = ({
   // Auto-set view mode based on available content
   useEffect(() => {
     if (chapter) {
-      // In preview mode, use has_video/has_pdf flags; otherwise use actual URLs
-      const hasVideo = isPreviewMode ? !!chapter.has_video : !!chapter.video_url
-      const hasPDF = isPreviewMode ? !!chapter.has_pdf : !!chapter.pdf_url
+      // Students get video_embed_url (raw video_url is stripped for download protection)
+      const hasVideo = !!(chapter.video_url || chapter.video_embed_url || chapter.has_video)
+      const hasPDF = !!(chapter.pdf_url || chapter.has_pdf)
       const hasTest = !!chapter.test_id || !!chapter.test || !!chapter.has_test
       
       if (hasTest) {
@@ -166,9 +176,9 @@ const StudentChapterView = ({
     )
   }
 
-  // In preview mode, check flags instead of URLs
-  const hasVideo = isPreviewMode ? !!chapter.has_video : !!chapter.video_url
-  const hasPDF = isPreviewMode ? !!chapter.has_pdf : !!chapter.pdf_url
+  // Students get video_embed_url (raw video_url is stripped for download protection)
+  const hasVideo = !!(chapter.video_url || chapter.video_embed_url || chapter.has_video)
+  const hasPDF = !!(chapter.pdf_url || chapter.has_pdf)
   const hasTest = !!chapter.test_id || !!chapter.test || !!chapter.has_test
 
   const handleTakeTest = () => {
@@ -501,13 +511,14 @@ const StudentChapterView = ({
             </motion.div>
           </div>
         ) : viewMode === 'video' && hasVideo ? (
-          hasFullAccess && chapter.video_url ? (
+          hasFullAccess && (chapter.video_url || chapter.video_embed_url || chapter.has_video) ? (
             <VideoPlayer
               url={chapter.video_url}
+              embedUrl={chapter.video_embed_url}
               title={chapter.title}
               className="h-full w-full"
-              showControls={true}
-              autoplay={false}
+              enrollmentId={enrollmentId}
+              chapterId={chapter.id}
             />
           ) : (
             // Preview mode - show locked video player
@@ -710,21 +721,24 @@ const StudentChapterView = ({
             </div>
 
             <div className="flex justify-between items-center mt-6">
-              <button
-                onClick={() => {
-                  // Skip only the review, but still require test taking
-                  setShowFeedback(false)
-                  // Automatically trigger test taking after skipping review
-                  if (window.dispatchEvent) {
-                    window.dispatchEvent(new CustomEvent('showTestSection', { 
-                      detail: { courseId: chapter.course_id } 
-                    }))
-                  }
-                }}
-                className="px-4 py-2 text-gray-700 bg-gray-100 hover:bg-gray-200 rounded-lg transition-colors"
-              >
-                Skip Review
-              </button>
+                <button
+                  onClick={() => {
+                    // Skip review but still unlock / show the course test section
+                    setShowFeedback(false)
+                    Promise.all([
+                      queryClient.refetchQueries(['chapterProgression', enrollmentId]),
+                      queryClient.refetchQueries(['course', chapter.course_id]),
+                      queryClient.refetchQueries(['student-enrollments'])
+                    ]).finally(() => {
+                      window.dispatchEvent(new CustomEvent('showTestSection', {
+                        detail: { courseId: chapter.course_id }
+                      }))
+                    })
+                  }}
+                  className="px-4 py-2 text-gray-700 bg-gray-100 hover:bg-gray-200 rounded-lg transition-colors"
+                >
+                  Skip Review
+                </button>
               
               <div className="flex space-x-3">
                 <button
@@ -733,17 +747,7 @@ const StudentChapterView = ({
                       toast.error('Please select a rating')
                       return
                     }
-                    submitFeedbackMutation.mutate(feedback, {
-                      onSuccess: () => {
-                        // After submitting review, automatically trigger test taking
-                        setShowFeedback(false)
-                        if (window.dispatchEvent) {
-                          window.dispatchEvent(new CustomEvent('showTestSection', { 
-                            detail: { courseId: chapter.course_id } 
-                          }))
-                        }
-                      }
-                    })
+                    submitFeedbackMutation.mutate(feedback)
                   }}
                   disabled={submitFeedbackMutation.isLoading}
                   className="px-4 py-2 bg-indigo-600 hover:bg-indigo-700 text-white rounded-lg transition-colors disabled:opacity-50"

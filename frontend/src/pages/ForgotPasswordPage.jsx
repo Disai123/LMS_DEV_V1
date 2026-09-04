@@ -3,6 +3,7 @@ import { Link, useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import toast from 'react-hot-toast';
 import { authService } from '../services/authService';
+import AuthBrandHeader from '../components/common/AuthBrandHeader';
 
 const ForgotPasswordPage = () => {
     const navigate = useNavigate();
@@ -134,13 +135,7 @@ const ForgotPasswordPage = () => {
                 <div className="p-8 rounded-2xl shadow-xl bg-white">
                     {/* Header */}
                     <div className="text-center mb-8">
-                        <Link to="/" className="flex items-center justify-center space-x-2 mb-6">
-                            <img
-                                src="/lms_logo.svg"
-                                alt="GNANAM AI"
-                                className="h-12 w-auto"
-                            />
-                        </Link>
+                        <AuthBrandHeader />
 
                         <h2 className="text-3xl font-bold text-gray-900 mb-2">
                             Forgot Password?

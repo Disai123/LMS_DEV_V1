@@ -9,14 +9,14 @@ const UPI_ID = 'test@upi';
 const UPI_NAME = 'GNANAM AI';
 
 const PLAN_META = {
-  starter: {
+  free: {
     badge: 'START HERE',
     badgeBg: 'bg-slate-500',
     cardBorder: 'border-2 border-slate-300 shadow-lg',
     btnClass: 'bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold',
     courses: ['Python for Beginners', 'Machine Learning'],
-    projects: ['Todo Application'],
-    extras: ['Community Forum Access', 'Course Certificates', 'Hackathon Access'],
+    projects: ['Todo Application', 'Prerequisites'],
+    extras: ['Community Forum Access', 'Course Certificates'],
     originalPrice: null,
   },
   basic: {
@@ -24,11 +24,11 @@ const PLAN_META = {
     badgeBg: 'bg-indigo-500',
     cardBorder: 'border-2 border-indigo-500 shadow-xl shadow-indigo-100 scale-[1.02]',
     btnClass: 'bg-green-500 hover:bg-green-600 text-white font-bold',
-    includes: 'Starter',
+    includes: 'Free',
     courses: ['Deep Learning', 'NLP', 'GenAI'],
     projects: ['Ecommerce Web-Full Stack'],
     extras: ['Project Certificate', 'Priority Support'],
-    originalPrice: 9999,
+    originalPrice: 999,
   },
   pro: {
     badge: 'BEST VALUE',
@@ -39,8 +39,19 @@ const PLAN_META = {
     courses: ['RAG', 'AI Agents', 'MCP'],
     projects: ['Retail - Single Agent', 'Retail - Multi Agent', 'Travel - MCP'],
     extras: ['Mentor Support'],
-    originalPrice: 14999,
+    originalPrice: 4999,
   }
+};
+
+const getPlanMeta = (plan) => {
+  const meta = PLAN_META[plan.name] || PLAN_META.free;
+  const features = plan.features || {};
+  return {
+    ...meta,
+    courses: Array.isArray(features.courses) ? features.courses : meta.courses,
+    projects: Array.isArray(features.projects) ? features.projects : meta.projects,
+    extras: Array.isArray(features.highlights) ? features.highlights : meta.extras
+  };
 };
 
 const CheckItem = ({ text }) => (
@@ -80,9 +91,8 @@ const PricingPage = () => {
         paymentService.getPlans(),
         paymentService.getMySubscription().catch(() => ({ data: { data: null, pendingRequest: null } }))
       ]);
-      const order = { starter: 0, basic: 1, pro: 2 };
+      const order = { free: 0, basic: 1, pro: 2 };
       const sorted = (plansRes.data.data || [])
-        .filter(p => p.name !== 'free')
         .sort((a, b) => (order[a.name] ?? 9) - (order[b.name] ?? 9));
       setPlans(sorted);
       setCurrentSubscription(subRes.data.data);
@@ -126,8 +136,7 @@ const PricingPage = () => {
     );
   }
 
-  // Fallback to 'starter' if user has no explicit subscription yet
-  const currentPlanName = currentSubscription?.plan?.name?.toLowerCase() || 'starter';
+  const currentPlanName = currentSubscription?.plan?.name?.toLowerCase() || 'free';
 
   return (
     <div className="min-h-screen bg-slate-50/50 font-sans pb-20">
@@ -148,9 +157,9 @@ const PricingPage = () => {
       {/* Plan Cards Container */}
       <div className="max-w-6xl mx-auto px-4 grid md:grid-cols-3 gap-6 lg:gap-8 items-stretch">
         {plans.map((plan) => {
-          const meta = PLAN_META[plan.name] || PLAN_META.starter;
+          const meta = getPlanMeta(plan);
           const isCurrent = currentPlanName === plan.name;
-          const isFree = plan.name === 'starter';
+          const isFree = plan.name === 'free';
           const discount = meta.originalPrice
             ? Math.round(((meta.originalPrice - plan.price) / meta.originalPrice) * 100)
             : null;
@@ -188,7 +197,7 @@ const PricingPage = () => {
                 ) : (
                   <div className="flex items-baseline gap-1 mb-1">
                     <span className="text-[48px] leading-none font-black text-slate-900">₹{Math.floor(plan.price)}</span>
-                    <span className="text-slate-500 font-semibold text-sm">/ One Year</span>
+                    <span className="text-slate-500 font-semibold text-sm">/ lifetime</span>
                   </div>
                 )}
 

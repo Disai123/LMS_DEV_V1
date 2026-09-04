@@ -22,7 +22,7 @@ const PLANS = [
   {
     name: 'basic',
     description: 'Access to 5 courses including Deep Learning, NLP, GenAI + 3 projects',
-    price: 2999.00,
+    price: 299.00,
     currency: 'INR',
     tier_order: 1,
     is_active: true,
@@ -35,7 +35,7 @@ const PLANS = [
   {
     name: 'pro',
     description: 'Full access to all courses and realtime projects',
-    price: 4999.00,
+    price: 799.00,
     currency: 'INR',
     tier_order: 2,
     is_active: true,

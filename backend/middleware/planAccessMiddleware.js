@@ -21,13 +21,10 @@ const TIER_ORDER = { free: 0, basic: 1, pro: 2 };
  */
 function resolveTierOrder(planName, dbTierOrder) {
   const name = (planName || 'free').toLowerCase();
-  // Plan name is authoritative — fall back to DB value only for unknown names
   if (TIER_ORDER[name] !== undefined) return TIER_ORDER[name];
-  // Handle variations like 'Pro Plan', 'Basic Plan'
   if (name.includes('pro')) return 2;
   if (name.includes('basic')) return 1;
   if (name.includes('free')) return 0;
-  // Last resort: DB value (only reliable if explicitly set)
   return (dbTierOrder != null && dbTierOrder > 0) ? dbTierOrder : 0;
 }
 
