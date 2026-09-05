@@ -2,6 +2,7 @@ import { motion } from 'framer-motion'
 import { Link, useNavigate } from 'react-router-dom'
 import useCourseLogo from '../../hooks/useCourseLogo'
 import { FiStar, FiUsers, FiClock, FiArrowRight, FiLock } from 'react-icons/fi'
+import { PRICING_HIDDEN } from '../../config/features'
 
 const difficultyConfig = {
   beginner: { label: 'Beginner', class: 'bg-green-500/15 text-green-400 border-green-500/20' },
@@ -22,6 +23,7 @@ const ACCENT_BORDERS = [
 const CourseCard = ({ course, index = 0, showInstructor = true, showRating = true, isLocked = false }) => {
   const navigate = useNavigate()
   const { logoUrl } = useCourseLogo(course.id, !!course.logo)
+  const effectiveLocked = PRICING_HIDDEN ? false : isLocked
 
   const difficulty = difficultyConfig[course.difficulty] || difficultyConfig['beginner']
   const thumbnail = (course.logo && logoUrl) ? logoUrl : course.thumbnail || null
@@ -33,7 +35,7 @@ const CourseCard = ({ course, index = 0, showInstructor = true, showRating = tru
   })()
 
   const handleClick = (e) => {
-    if (isLocked) {
+    if (effectiveLocked) {
       e.preventDefault()
       navigate('/pricing')
     }
@@ -44,12 +46,12 @@ const CourseCard = ({ course, index = 0, showInstructor = true, showRating = tru
       whileHover={{ y: -6, scale: 1.01 }}
       transition={{ duration: 0.22 }}
       className={`bg-slate-900 border border-l-4 ${accent} rounded-2xl overflow-hidden group transition-all duration-300 flex flex-col w-full ${
-        isLocked
+        effectiveLocked
           ? 'border-slate-700 opacity-75 cursor-pointer'
           : 'border-slate-800 hover:border-slate-700 hover:shadow-2xl hover:shadow-black/30'
       }`}
     >
-      <Link to={isLocked ? '/pricing' : `/courses/${course.id}`} onClick={handleClick} className="flex flex-col flex-1">
+      <Link to={effectiveLocked ? '/pricing' : `/courses/${course.id}`} onClick={handleClick} className="flex flex-col flex-1">
 
         {/* Thumbnail */}
         <div className="relative overflow-hidden h-44">
@@ -84,7 +86,7 @@ const CourseCard = ({ course, index = 0, showInstructor = true, showRating = tru
           <div className="absolute inset-0 bg-gradient-to-t from-slate-900/80 via-transparent to-transparent" />
 
           {/* Lock overlay — shown when course is plan-gated */}
-          {isLocked && (
+          {effectiveLocked && (
             <div className="absolute inset-0 flex flex-col items-center justify-center gap-2"
               style={{ background: 'rgba(15,23,42,0.72)', backdropFilter: 'blur(3px)' }}
             >

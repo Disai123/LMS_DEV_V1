@@ -8,6 +8,7 @@ import { enrollmentService } from '../../services/enrollmentService'
 import useCourseLogo from '../../hooks/useCourseLogo'
 import { paymentService } from '../../services/api'
 import LoadingSpinner from '../common/LoadingSpinner'
+import { PRICING_HIDDEN } from '../../config/features'
 import toast from 'react-hot-toast'
 
 // Component for course image with logo support
@@ -55,7 +56,7 @@ const AllCoursesModal = ({ isOpen, onClose }) => {
   );
   const subscription = subscriptionResponse?.data?.data;
   const planName = subscription?.plan?.name?.toLowerCase();
-  const isPremiumUser = user?.role === 'admin' || user?.plan_type === 'premium' || (subscription && subscription.status === 'active' && planName && !planName.includes('free'));
+  const isPremiumUser = PRICING_HIDDEN || user?.role === 'admin' || user?.plan_type === 'premium' || (subscription && subscription.status === 'active' && planName && !planName.includes('free'));
 
   // Fetch all courses
   const { data: coursesData, isLoading: coursesLoading } = useQuery(

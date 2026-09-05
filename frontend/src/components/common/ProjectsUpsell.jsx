@@ -2,9 +2,13 @@ import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { FiLock, FiStar, FiCode, FiCpu } from 'react-icons/fi';
+import { PRICING_HIDDEN } from '../../config/features';
 
 const ProjectsUpsell = () => {
     const navigate = useNavigate();
+
+    // HIDDEN: Pricing — upsell panel temporarily hidden
+    if (PRICING_HIDDEN) return null;
 
     return (
         <div className="flex flex-col items-center justify-center py-16 px-4 text-center">

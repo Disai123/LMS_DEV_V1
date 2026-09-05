@@ -20,6 +20,17 @@ function getSSLConfig(host) {
   return false;
 }
 
+// Get dialect options including optional search_path for prod schema routing
+function getDialectOptions(host) {
+  const options = {
+    ssl: getSSLConfig(host)
+  };
+  if (process.env.DB_SEARCH_PATH) {
+    options.options = `-c search_path=${process.env.DB_SEARCH_PATH}`;
+  }
+  return options;
+}
+
 module.exports = {
   development: {
     username: process.env.DB_USER || 'postgres',
@@ -35,9 +46,7 @@ module.exports = {
       acquire: 30000,
       idle: 10000
     },
-    dialectOptions: {
-      ssl: getSSLConfig(process.env.DB_HOST || 'localhost')
-    }
+    dialectOptions: getDialectOptions(process.env.DB_HOST || 'localhost')
   },
   test: {
     username: process.env.DB_USER,
@@ -53,9 +62,7 @@ module.exports = {
       acquire: 30000,
       idle: 10000
     },
-    dialectOptions: {
-      ssl: getSSLConfig(process.env.DB_HOST)
-    }
+    dialectOptions: getDialectOptions(process.env.DB_HOST)
   },
   production: {
     username: process.env.DB_USER,
@@ -75,7 +82,10 @@ module.exports = {
       ssl: {
         require: true,
         rejectUnauthorized: false
-      }
+      },
+      ...(process.env.DB_SEARCH_PATH && {
+        options: `-c search_path=${process.env.DB_SEARCH_PATH}`
+      })
     }
   }
 };

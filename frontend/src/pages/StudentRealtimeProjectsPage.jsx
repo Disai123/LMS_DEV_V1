@@ -10,6 +10,7 @@ import { useNavigate } from 'react-router-dom';
 import { useRealtimeProjects } from '../hooks/useRealtimeProjects';
 import { useAuth } from '../context/AuthContext';
 import { paymentService } from '../services/api';
+import { PRICING_HIDDEN } from '../config/features';
 
 const StudentRealtimeProjectsPage = () => {
   const navigate = useNavigate();
@@ -49,7 +50,7 @@ const StudentRealtimeProjectsPage = () => {
   const hasProjectsPerm = user?.permissions?.realtime_projects || false;
 
   // isPaid true if any paid plan or admin or has explicit project permissions
-  const isPaid = user?.role === 'admin' ||
+  const isPaid = PRICING_HIDDEN || user?.role === 'admin' ||
     ['basic', 'pro'].includes(planName) ||
     hasProjectsPerm;
 
@@ -66,7 +67,7 @@ const StudentRealtimeProjectsPage = () => {
   const premiumProjects = projects.filter(p => !freeAllowedList.includes(p.id?.toLowerCase()?.replace(/[-_]/g, '')));
 
   // Show access denied if no permission
-  if (!hasAccess && !isLoading && !isPaid) {
+  if (!PRICING_HIDDEN && !hasAccess && !isLoading && !isPaid) {
     return (
       <>
         <Header />
@@ -94,13 +95,15 @@ const StudentRealtimeProjectsPage = () => {
               <h1 className="text-3xl font-bold text-gray-900">
                 Realtime Projects
               </h1>
-              {/* Plan Badge */}
+              {/* Plan Badge — hidden while pricing is hidden */}
+              {!PRICING_HIDDEN && (
               <div className={`px-3 py-1 rounded-full text-xs font-bold uppercase tracking-wider ${isPaid
                 ? 'bg-gradient-to-r from-indigo-500 to-purple-500 text-white shadow-sm'
                 : 'bg-gray-200 text-gray-600'
                 }`}>
                 {badgeText}
               </div>
+              )}
             </div>
             <p className="text-gray-600">
               Build real-world projects and learn by doing.
@@ -143,7 +146,7 @@ const StudentRealtimeProjectsPage = () => {
                 <div className="flex items-center gap-2">
                   <div className="h-8 w-1 bg-purple-500 rounded-full"></div>
                   <h2 className="text-xl font-bold text-gray-800">Premium Realtime Experience</h2>
-                  {!isPaid && user?.role !== 'admin' && (
+                  {!PRICING_HIDDEN && !isPaid && user?.role !== 'admin' && (
                     <span className="text-xs font-medium bg-amber-100 text-amber-700 px-2 py-0.5 rounded-full flex items-center gap-1">
                       <svg className="w-3 h-3" fill="currentColor" viewBox="0 0 20 20"><path d="M5 9V7a5 5 0 0110 0v2a2 2 0 012 2v5a2 2 0 01-2 2H5a2 2 0 01-2-2v-5a2 2 0 012-2zm8-2v2H7V7a3 3 0 016 0z" /></svg>
                       Premium Only
@@ -151,7 +154,8 @@ const StudentRealtimeProjectsPage = () => {
                   )}
                 </div>
 
-                {!isPaid && user?.role !== 'admin' && (
+                {/* HIDDEN: Pricing — unlock button temporarily hidden */}
+                {!PRICING_HIDDEN && !isPaid && user?.role !== 'admin' && (
                   <button
                     onClick={() => navigate('/pricing')}
                     className="text-sm font-bold text-indigo-600 hover:text-indigo-700 flex items-center gap-1 group"
@@ -166,7 +170,8 @@ const StudentRealtimeProjectsPage = () => {
                   <ProjectGrid projects={premiumProjects} isLoading={isLoading} />
 
                   {/* Upsell Banner Overlay for Free Users */}
-                  {!isPaid && user?.role !== 'admin' && !isLoading && (
+                  {/* HIDDEN: Pricing — upsell banner temporarily hidden */}
+                  {!PRICING_HIDDEN && !isPaid && user?.role !== 'admin' && !isLoading && (
                     <div className="mt-8 p-6 rounded-2xl bg-gradient-to-r from-indigo-600 to-purple-700 text-white shadow-xl flex flex-col md:flex-row items-center justify-between gap-6 overflow-hidden relative">
                       <div className="absolute top-0 right-0 -mt-8 -mr-8 w-32 h-32 bg-white/10 rounded-full blur-2xl"></div>
                       <div className="absolute bottom-0 left-0 -mb-8 -ml-8 w-32 h-32 bg-white/10 rounded-full blur-2xl"></div>

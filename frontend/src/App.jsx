@@ -46,7 +46,7 @@ import AdminProjectSubmissionsPage from './pages/AdminProjectSubmissionsPage';
 // import AdminChatPage from './pages/AdminChatPage'
 import RealtimeProjectsLandingPage from './pages/RealtimeProjectsLandingPage'
 // import HackathonLandingPage from './pages/HackathonLandingPage' // HIDDEN
-import PricingPage from './pages/PricingPage'
+// import PricingPage from './pages/PricingPage' // HIDDEN: Pricing temporarily hidden
 import ContactPage from './pages/ContactPage'
 import NotFoundPage from './pages/NotFoundPage'
 // import InternshipsLandingPage from './pages/InternshipsLandingPage' // HIDDEN
@@ -109,7 +109,8 @@ function App() {
               <Route path="/forgot-password" element={<ForgotPasswordPage />} />
               <Route path="/reset-password/:token" element={<ResetPasswordPage />} />
               <Route path="/auth/callback" element={<AuthCallbackPage />} />
-              <Route path="/pricing" element={<PricingPage />} />
+              {/* HIDDEN: Pricing route temporarily hidden */}
+              {/* <Route path="/pricing" element={<PricingPage />} /> */}
               <Route path="/contact" element={<ContactPage />} />
 
               {/* Protected Routes */}

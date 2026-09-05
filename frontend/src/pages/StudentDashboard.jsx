@@ -12,6 +12,7 @@ import { usePermissions } from '../hooks/usePermissions'
 import { useRealtimeProjects } from '../hooks/useRealtimeProjects'
 // import internshipService from '../services/internshipService' // HIDDEN
 import { paymentService } from '../services/api'
+import { PRICING_HIDDEN } from '../config/features'
 import ProjectCard from '../components/projects/ProjectCard'
 // import { chatService } from '../services/chatService'
 import Header from '../components/common/Header'
@@ -37,7 +38,7 @@ const StudentDashboard = () => {
   );
   const subscription = subscriptionResponse?.data?.data;
   const planName = subscription?.plan?.name?.toLowerCase();
-  const isPremiumUser = user?.role === 'admin' || user?.plan_type === 'premium' || (subscription && subscription.status === 'active' && planName && !planName.includes('free'));
+  const isPremiumUser = PRICING_HIDDEN || user?.role === 'admin' || user?.plan_type === 'premium' || (subscription && subscription.status === 'active' && planName && !planName.includes('free'));
   const displayPlanName = user?.role === 'admin' ? 'Admin' : (subscription?.plan?.name || (isPremiumUser ? 'Premium Plan' : 'Free Plan'));
 
   const { data: coursesData, isLoading: coursesLoading, error: coursesError } = useQuery(
@@ -415,7 +416,8 @@ const StudentDashboard = () => {
                         </div>
                       )}
 
-                      {/* Plan Badge */}
+                      {/* HIDDEN: Pricing — plan badge temporarily hidden */}
+                      {!PRICING_HIDDEN && (
                       <div className={`flex items-center gap-1.5 px-2.5 py-1 rounded-full border ${isPremiumUser
                         ? 'bg-amber-500/30 border-amber-300/50 text-amber-100'
                         : 'bg-white/20 border-white/30 text-white'
@@ -424,12 +426,14 @@ const StudentDashboard = () => {
                           {displayPlanName}
                         </span>
                       </div>
+                      )}
                     </div>
                     <p className="text-sm text-amber-100 mb-3">
                       Continue your learning journey and explore new courses.
                     </p>
                     <div className="flex flex-wrap gap-2">
-                      {!isPremiumUser && (
+                      {/* HIDDEN: Pricing — Upgrade Now button temporarily hidden */}
+                      {!PRICING_HIDDEN && !isPremiumUser && (
                         <button
                           onClick={() => navigate('/pricing')}
                           className="inline-flex items-center justify-center px-3 py-1.5 bg-gradient-to-r from-amber-400 to-amber-500 text-white text-sm font-bold rounded-lg hover:from-amber-500 hover:to-amber-600 transition-all duration-200 shadow-lg hover:shadow-xl animate-pulse"

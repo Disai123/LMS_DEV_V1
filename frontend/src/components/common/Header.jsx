@@ -92,12 +92,10 @@ const Header = () => {
             >
               Internships
             </Link> */}
-            <Link
-              to="/pricing"
-              className="text-gray-700 hover:text-amber-600 font-medium transition-colors duration-200"
-            >
+            {/* HIDDEN: Pricing nav link temporarily hidden */}
+            {/* <Link to="/pricing" className="text-gray-700 hover:text-amber-600 font-medium transition-colors duration-200">
               Pricing
-            </Link>
+            </Link> */}
 
             {user ? (
               <div className="flex items-center space-x-4">
@@ -235,13 +233,10 @@ const Header = () => {
                 >
                   Internships
                 </Link> */}
-                <Link
-                  to="/pricing"
-                  onClick={() => setIsMenuOpen(false)}
-                  className="block px-4 py-4 text-gray-700 hover:bg-white/20 rounded-lg transition-colors duration-200 min-h-[44px] flex items-center"
-                >
+                {/* HIDDEN: Pricing mobile nav link temporarily hidden */}
+                {/* <Link to="/pricing" onClick={() => setIsMenuOpen(false)} className="block px-4 py-4 text-gray-700 hover:bg-white/20 rounded-lg transition-colors duration-200 min-h-[44px] flex items-center">
                   Pricing
-                </Link>
+                </Link> */}
 
                 {user ? (
                   <>

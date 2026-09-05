@@ -1,7 +1,16 @@
 import { useState, useEffect, useCallback } from 'react';
 import { rbacService } from '../services/api';
+import { PRICING_HIDDEN } from '../config/features';
 
 const TIER_ORDER = { free: 0, basic: 1, pro: 2 };
+
+const FULL_ACCESS = {
+  planName: 'pro',
+  tierOrder: 2,
+  loading: false,
+  hasAccess: () => true,
+  refresh: () => {},
+};
 
 /**
  * Hook to get the current user's plan access info.
@@ -11,11 +20,13 @@ function usePlanAccess(user) {
   const userRole = user?.role;
   const userPlanType = user?.plan_type;
   const userId = user?.id;
-  const [planName, setPlanName] = useState('free');
-  const [tierOrder, setTierOrder] = useState(0);
-  const [loading, setLoading] = useState(true);
+  const [planName, setPlanName] = useState(PRICING_HIDDEN ? 'pro' : 'free');
+  const [tierOrder, setTierOrder] = useState(PRICING_HIDDEN ? 2 : 0);
+  const [loading, setLoading] = useState(!PRICING_HIDDEN);
 
   const fetch = useCallback(async () => {
+    if (PRICING_HIDDEN) return;
+
     if (userRole === 'admin') {
       setPlanName('pro');
       setTierOrder(2);
@@ -43,18 +54,20 @@ function usePlanAccess(user) {
     }
   }, [userRole, userId, userPlanType]);
 
-  useEffect(() => { fetch(); }, [fetch]);
+  useEffect(() => {
+    if (PRICING_HIDDEN) return;
+    fetch();
+  }, [fetch]);
 
-  /**
-   * Check if the student has access to a resource with requiredPlan
-   * @param {string} requiredPlan - 'free' | 'basic' | 'pro'
-   * @returns {boolean}
-   */
   const hasAccess = useCallback((requiredPlan) => {
-    if (userRole === 'admin') return true;
+    if (PRICING_HIDDEN || userRole === 'admin') return true;
     const required = TIER_ORDER[requiredPlan] ?? 0;
     return tierOrder >= required;
   }, [tierOrder, userRole]);
+
+  if (PRICING_HIDDEN) {
+    return FULL_ACCESS;
+  }
 
   return { planName, tierOrder, loading, hasAccess, refresh: fetch };
 }

@@ -23,7 +23,7 @@ const ProtectedRoute = ({ children, requiredRole = null }) => {
     const dashboardRoutes = {
       student: '/dashboard',
       hr: '/hr/dashboard',
-      admin: '/admin/dashboard'
+      admin: '/admin'
     }
     const redirectTo = dashboardRoutes[user.role] || '/'
     return <Navigate to={redirectTo} replace />

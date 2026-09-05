@@ -1,5 +1,6 @@
 import { useNavigate } from 'react-router-dom';
 import { Lock } from 'lucide-react';
+import { PRICING_HIDDEN } from '../../config/features';
 
 const PLAN_LABELS = {
   basic: 'Basic Plan',
@@ -24,6 +25,9 @@ const PLAN_COLORS = {
  * @param {boolean} compact     - smaller variant for cards
  */
 const LockedContentOverlay = ({ requiredPlan = 'basic', contentType = 'content', compact = false }) => {
+  // HIDDEN: Pricing — never show lock overlay while pricing is hidden
+  if (PRICING_HIDDEN) return null;
+
   const navigate = useNavigate();
   const colors = PLAN_COLORS[requiredPlan] || PLAN_COLORS.basic;
   const label = PLAN_LABELS[requiredPlan] || 'Basic Plan';

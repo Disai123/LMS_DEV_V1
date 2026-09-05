@@ -16,6 +16,7 @@ import ChapterNavigation from '../components/course/ChapterNavigation'
 import TestSection from '../components/course/TestSection'
 import usePlanAccess from '../hooks/usePlanAccess'
 import { getCourseMetadata, hasPlanAccess as manifestCheck } from '../utils/courseManifest'
+import { PRICING_HIDDEN } from '../config/features'
 import { FiAlertCircle } from 'react-icons/fi'
 
 const CourseDetailPage = () => {
@@ -58,6 +59,7 @@ const CourseDetailPage = () => {
 
   // isLocked = either backend says locked OR our frontend manifest override says locked
   const isLocked = isLockedByManifest || accessLevel === 'locked'
+  const effectiveIsLocked = PRICING_HIDDEN ? false : isLocked
 
   // isPreviewMode = user is NOT authenticated (show Login button)
   const isPreviewMode = !isAuthenticated && !isAdmin
@@ -65,7 +67,7 @@ const CourseDetailPage = () => {
   // Try to get full content if enrolled (this includes enrollment data and full chapter details)
   // Enable if user is authenticated AND (accessLevel is 'enrolled' OR we have enrollment data)
   // Always fetch if we have enrollment data, regardless of accessLevel
-  const shouldFetchFullContent = (isAuthenticated && (accessLevel === 'enrolled' || !!enrollmentFromCourseData) && !isLocked) || isAdmin
+  const shouldFetchFullContent = (isAuthenticated && (accessLevel === 'enrolled' || !!enrollmentFromCourseData) && !effectiveIsLocked) || isAdmin
 
 
   const { data: fullContentData } = useQuery(
@@ -475,7 +477,7 @@ const CourseDetailPage = () => {
                                 onClick={async () => {
                                   // Check if it's a premium course and user is not premium
                                   const isPremiumCourse = effectiveRequiredPlan !== 'free';
-                                  if (isPremiumCourse && isLocked) {
+                                  if (!PRICING_HIDDEN && isPremiumCourse && effectiveIsLocked) {
                                     alert('This is a premium course. Redirecting to pricing...');
                                     navigate('/pricing');
                                     return;
@@ -589,7 +591,7 @@ const CourseDetailPage = () => {
 
                     {/* Video/Content Area - Fixed height, no scrolling */}
                     <div className="flex-1 flex flex-col">
-                      {isLocked ? (
+                      {effectiveIsLocked ? (
                         /* Premium Lock Screen */
                         <div className="h-full flex flex-col items-center justify-center p-8 text-center bg-gray-900 text-white relative overflow-hidden">
                           <div className="absolute inset-0 opacity-20" style={{

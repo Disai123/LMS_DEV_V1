@@ -2,14 +2,16 @@ import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { FiCode, FiClock, FiTag } from 'react-icons/fi';
+import { PRICING_HIDDEN } from '../../config/features';
 
 const ProjectCard = ({ project, locked }) => {
   const navigate = useNavigate();
+  const effectiveLocked = PRICING_HIDDEN ? false : locked;
   const apiUrl = import.meta.env.VITE_API_URL || 'http://localhost:5000';
 
   const handleClick = (e) => {
     // Prevent event bubbling if needed, though mostly handled at container level
-    if (locked) {
+    if (effectiveLocked) {
       console.log('Project is locked, redirecting to pricing');
       navigate('/pricing');
       return;
@@ -76,7 +78,7 @@ const ProjectCard = ({ project, locked }) => {
       onClick={handleClick}
     >
       {/* Lock Overlay */}
-      {locked && (
+      {effectiveLocked && (
         <div className="absolute inset-0 bg-black/50 z-20 flex items-center justify-center backdrop-blur-[2px] transition-opacity duration-300">
           <div className="bg-white/90 p-4 rounded-full shadow-lg">
             <svg className="w-8 h-8 text-indigo-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -155,8 +157,8 @@ const ProjectCard = ({ project, locked }) => {
           <div className="flex items-center gap-3">
           </div>
 
-          <button className={`font-semibold text-sm flex items-center transition-colors ${locked ? 'text-amber-600 hover:text-amber-700' : 'text-indigo-600 hover:text-indigo-700'}`}>
-            {locked ? 'Get Access' : 'View Project'} <span className="ml-1 group-hover:translate-x-1 transition-transform">→</span>
+          <button className={`font-semibold text-sm flex items-center transition-colors ${effectiveLocked ? 'text-amber-600 hover:text-amber-700' : 'text-indigo-600 hover:text-indigo-700'}`}>
+            {effectiveLocked ? 'Get Access' : 'View Project'} <span className="ml-1 group-hover:translate-x-1 transition-transform">→</span>
           </button>
         </div>
       </div>

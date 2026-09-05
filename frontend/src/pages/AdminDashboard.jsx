@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react'
-import { Routes, Route, Link, useLocation } from 'react-router-dom'
+import { Routes, Route, Link, Navigate, useLocation } from 'react-router-dom'
 import { motion } from 'framer-motion'
 import { useQuery } from 'react-query'
 import { useAuth } from '../context/AuthContext'
@@ -24,9 +24,9 @@ import AdminProjectsPage from './AdminProjectsPage'
 // import AdminHackathonsPage from './AdminHackathonsPage' // HIDDEN
 // import AdminInternshipsPage from './AdminInternshipsPage' // HIDDEN
 import RBACManagementPage from './RBACManagementPage'
-import SubscriptionManagement from '../components/admin/SubscriptionManagement'
+// import SubscriptionManagement from '../components/admin/SubscriptionManagement' // HIDDEN: Pricing
+// import PackageManagementPage from '../components/admin/PackageManagementPage' // HIDDEN: Pricing
 import ContactMessages from '../components/admin/ContactMessages'
-import PackageManagementPage from '../components/admin/PackageManagementPage'
 
 const AdminDashboard = () => {
   const { user, isAuthenticated } = useAuth()
@@ -87,11 +87,12 @@ const AdminDashboard = () => {
   const isLoading = coursesLoading || usersLoading || statsLoading || messagesLoading
 
   const navigation = [
-    { name: 'Dashboard', href: '/admin', icon: 'dashboard', current: location.pathname === '/admin' },
+    { name: 'Dashboard', href: '/admin', icon: 'dashboard', current: location.pathname === '/admin' || location.pathname === '/admin/dashboard' },
     { name: 'Courses', href: '/admin/courses', icon: 'courses', current: location.pathname.startsWith('/admin/courses') },
     { name: 'Create Course', href: '/admin/courses/create', icon: 'add', current: location.pathname === '/admin/courses/create' },
-    { name: 'Package Management', href: '/admin/packages', icon: 'packages', current: location.pathname.startsWith('/admin/packages') },
-    { name: 'Subscriptions', href: '/admin/subscriptions', icon: 'subscriptions', current: location.pathname.startsWith('/admin/subscriptions') },
+    // HIDDEN: Pricing — Package Management & Subscriptions temporarily hidden
+    // { name: 'Package Management', href: '/admin/packages', icon: 'packages', current: location.pathname.startsWith('/admin/packages') },
+    // { name: 'Subscriptions', href: '/admin/subscriptions', icon: 'subscriptions', current: location.pathname.startsWith('/admin/subscriptions') },
     // HIDDEN: Hackathons & Internships temporarily hidden
     // { name: 'Hackathons', href: '/admin/hackathons', icon: 'hackathons', current: location.pathname.startsWith('/admin/hackathons') },
     // { name: 'Internships', href: '/admin/internships', icon: 'internships', current: location.pathname.startsWith('/admin/internships') },
@@ -241,6 +242,7 @@ const AdminDashboard = () => {
                     />
                   }
                 />
+                <Route path="/dashboard" element={<Navigate to="/admin" replace />} />
                 <Route
                   path="/courses"
                   element={
@@ -280,14 +282,9 @@ const AdminDashboard = () => {
                   path="/rbac"
                   element={<RBACManagementPage />}
                 />
-                <Route
-                  path="/subscriptions"
-                  element={<SubscriptionManagement />}
-                />
-                <Route
-                  path="/packages"
-                  element={<PackageManagementPage />}
-                />
+                {/* HIDDEN: Pricing — admin package/subscription routes temporarily hidden */}
+                {/* <Route path="/subscriptions" element={<SubscriptionManagement />} /> */}
+                {/* <Route path="/packages" element={<PackageManagementPage />} /> */}
                 <Route
                   path="/notifications"
                   element={<ContactMessages />}

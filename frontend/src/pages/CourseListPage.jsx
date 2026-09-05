@@ -9,6 +9,7 @@ import CourseList from '../components/course/CourseList'
 import Pagination from '../components/common/Pagination'
 import ErrorBoundary from '../components/common/ErrorBoundary'
 import usePlanAccess from '../hooks/usePlanAccess'
+import { PRICING_HIDDEN } from '../config/features'
 import { useAuth } from '../context/AuthContext'
 import {
   FiSearch, FiX, FiArrowRight, FiSliders,
@@ -197,12 +198,14 @@ const CourseListPage = () => {
                     Browse Courses
                     <FiArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
                   </button>
+                  {!PRICING_HIDDEN && (
                   <button
                     onClick={() => navigate('/pricing')}
                     className="inline-flex items-center gap-3 border border-slate-700 text-slate-300 font-bold px-8 py-4 rounded-xl hover:border-amber-400/50 hover:text-white transition-all duration-300 text-sm"
                   >
                     View Pricing
                   </button>
+                  )}
                 </motion.div>
 
               </div>
@@ -482,6 +485,7 @@ const CourseListPage = () => {
                   Free to start · AI-adaptive · Industry certificates
                 </p>
               </div>
+              {!PRICING_HIDDEN && (
               <button
                 onClick={() => navigate('/pricing')}
                 className="group inline-flex items-center gap-3 bg-amber-400 text-slate-900 font-black px-8 py-5 rounded-2xl hover:bg-amber-300 transition-all duration-300 text-base flex-shrink-0 shadow-xl shadow-amber-400/20"
@@ -489,6 +493,7 @@ const CourseListPage = () => {
                 Get Full Access
                 <FiArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
               </button>
+              )}
             </div>
           </div>
         </section>

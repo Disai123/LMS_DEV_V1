@@ -182,10 +182,10 @@ const ContactPage = () => {
                                     Thank you for reaching out. Our team has received your message and will get back to you shortly.
                                 </p>
                                 <button
-                                    onClick={() => navigate('/pricing')}
+                                    onClick={() => navigate('/')}
                                     className="inline-flex items-center gap-2 bg-slate-800 hover:bg-slate-700 text-white font-bold px-8 py-3 rounded-xl transition-all"
                                 >
-                                    Back to Pricing
+                                    Back to Home
                                 </button>
                             </div>
                         )}

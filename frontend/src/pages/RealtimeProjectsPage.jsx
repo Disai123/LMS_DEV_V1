@@ -5,6 +5,7 @@ import AccessDenied from '../components/common/AccessDenied';
 import { usePermissions } from '../hooks/usePermissions';
 import { projectService } from '../services/projectService';
 import toast from 'react-hot-toast';
+import { PRICING_HIDDEN } from '../config/features';
 
 const RealtimeProjectsPage = () => {
   const [projects, setProjects] = useState([]);
@@ -146,7 +147,7 @@ const RealtimeProjectsPage = () => {
                 className="relative bg-white/90 backdrop-blur-sm rounded-xl hover:bg-white transition-all duration-300 overflow-hidden group border border-gray-200 shadow-lg hover:shadow-indigo-500/20 w-full"
               >
                 {/* Lock Overlay */}
-                {project.isLocked && (
+                {!PRICING_HIDDEN && project.isLocked && (
                   <div className="absolute inset-0 bg-gray-900/70 backdrop-blur-[2px] z-50 flex flex-col items-center justify-center text-center p-6 transition-all duration-300">
                     <div className="w-14 h-14 bg-gray-800 rounded-full flex items-center justify-center mb-4 shadow-lg border border-gray-700">
                       <svg className="w-7 h-7 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" /></svg>

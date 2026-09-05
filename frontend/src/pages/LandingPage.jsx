@@ -404,7 +404,8 @@ const LandingPage = () => {
         </div>
       </section>
 
-      {/* ── PRICING ───────────────────────────────────────────────────────── */}
+      {/* HIDDEN: Pricing section temporarily hidden */}
+      {false && (
       <section className="py-28 bg-stone-50 relative overflow-hidden" id="pricing">
 
         {/* Editorial number */}
@@ -650,6 +651,7 @@ const LandingPage = () => {
           </div>
         </div>
       </section>
+      )}
 
       {/* ── FINAL CTA ─────────────────────────────────────────────────────── */}
       <section className="py-32 bg-primary relative overflow-hidden">

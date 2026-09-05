@@ -11,7 +11,7 @@ const calculateMaxPossiblePoints = async () => {
     // Fetch all data in parallel for better performance
     const [courses, projects, hackathons] = await Promise.all([
       Course.findAll({
-        where: { is_active: true },
+        where: { is_published: true },
         attributes: ['id', 'difficulty']
       }),
       Project.findAll({

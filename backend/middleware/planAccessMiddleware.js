@@ -12,6 +12,8 @@
 const { Subscription, Plan, Course, Project, User } = require('../models');
 const { Op } = require('sequelize');
 
+const PRICING_HIDDEN = process.env.PRICING_HIDDEN === 'true';
+
 const TIER_ORDER = { free: 0, basic: 1, pro: 2 };
 
 /**
@@ -33,6 +35,8 @@ function resolveTierOrder(planName, dbTierOrder) {
  * Returns 0 (free) if no active subscription found.
  */
 async function getStudentTierOrder(userId) {
+  if (PRICING_HIDDEN) return 2;
+
   // Admins always get full access
   const subscription = await Subscription.findOne({
     where: {
@@ -72,6 +76,11 @@ async function getStudentTierOrder(userId) {
 function checkPlanAccess(resourceType) {
   return async (req, res, next) => {
     try {
+      // HIDDEN: Pricing — bypass plan checks while pricing is hidden
+      if (PRICING_HIDDEN) {
+        return next();
+      }
+
       // Admins bypass all plan checks
       if (req.user && req.user.role === 'admin') {
         return next();

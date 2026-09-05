@@ -2,6 +2,7 @@ import { motion, AnimatePresence } from 'framer-motion'
 import { useNavigate } from 'react-router-dom'
 import { useEffect, useState } from 'react'
 import { useAuth } from '../context/AuthContext'
+import { PRICING_HIDDEN } from '../config/features'
 import Header from '../components/common/Header'
 import Footer from '../components/common/Footer'
 import api from '../services/api'
@@ -509,12 +510,14 @@ const RealtimeProjectsLandingPage = () => {
                   Start a Project
                   <FiArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
                 </button>
+                {!PRICING_HIDDEN && (
                 <button
                   onClick={() => navigate('/pricing')}
                   className="inline-flex items-center gap-3 border border-slate-700 text-slate-300 font-bold px-6 py-4 rounded-xl hover:border-amber-400/50 hover:text-white transition-all duration-300 text-sm"
                 >
                   <FiPackage className="w-4 h-4" /> View Plans
                 </button>
+                )}
               </div>
             </motion.div>
           </div>
@@ -588,12 +591,14 @@ const RealtimeProjectsLandingPage = () => {
                 <div className="text-slate-500 text-sm">Blockchain · Social Platform · IoT · SaaS Starter · Data Pipeline</div>
               </div>
             </div>
+            {!PRICING_HIDDEN && (
             <button
               onClick={() => navigate('/pricing')}
               className="inline-flex items-center gap-2 bg-amber-400 text-slate-900 font-black px-6 py-3 rounded-xl hover:bg-amber-300 transition-colors text-sm flex-shrink-0"
             >
               View All Plans <FiArrowRight className="w-4 h-4" />
             </button>
+            )}
           </motion.div>
         </div>
       </section>
