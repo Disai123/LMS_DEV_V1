@@ -1,0 +1,54 @@
+<div class="content-body">
+    <div class="content-section">
+        <h3 class="content-heading">Deployment Strategy & Cloud Planning</h3>
+        <p style="color: #4b5563; line-height: 1.75; margin-bottom: 2rem;">
+            Deploying a multi-service agentic platform requires a robust plan for containerization, secret
+            management, and auto-scaling to handle the unpredictable loads of LLM reasoning.
+        </p>
+
+        <div
+            style="background: #ffffff; border: 1px solid #e5e7eb; border-radius: 12px; padding: 2rem; margin-bottom: 2.5rem;">
+            <h4 style="font-weight: 700; color: #111827; margin-bottom: 1.5rem;">Target Infrastructure</h4>
+            <div style="display: flex; flex-direction: column; gap: 1.25rem;">
+                <div style="display: flex; align-items: start; gap: 1rem;">
+                    <div
+                        style="background: #eff6ff; color: #3b82f6; width: 2.5rem; height: 2.5rem; border-radius: 50%; display: flex; align-items: center; justify-content: center; flex-shrink: 0; font-weight: 700;">
+                        1</div>
+                    <div>
+                        <div style="font-weight: 600; color: #111827;">Containerization (Docker)</div>
+                        <p style="font-size: 0.875rem; color: #4b5563;">We bundle the FastAPI backend, LangGraph
+                            orchestrator, and individual MCP servers into light-weight Docker images.</p>
+                    </div>
+                </div>
+                <div style="display: flex; align-items: start; gap: 1rem;">
+                    <div
+                        style="background: #eff6ff; color: #3b82f6; width: 2.5rem; height: 2.5rem; border-radius: 50%; display: flex; align-items: center; justify-content: center; flex-shrink: 0; font-weight: 700;">
+                        2</div>
+                    <div>
+                        <div style="font-weight: 600; color: #111827;">Serverless Hosting (Cloud Run)</div>
+                        <p style="font-size: 0.875rem; color: #4b5563;">Deploying to platforms like Google Cloud Run
+                            ensures we only pay for the execution time of our agent's reasoning turns.</p>
+                    </div>
+                </div>
+                <div style="display: flex; align-items: start; gap: 1rem;">
+                    <div
+                        style="background: #eff6ff; color: #3b82f6; width: 2.5rem; height: 2.5rem; border-radius: 50%; display: flex; align-items: center; justify-content: center; flex-shrink: 0; font-weight: 700;">
+                        3</div>
+                    <div>
+                        <div style="font-weight: 600; color: #111827;">Static Delivery (CDN)</div>
+                        <p style="font-size: 0.875rem; color: #4b5563;">The React discovery dashboard is optimized and
+                            served via a global CDN for low-latency map tile loading.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div style="background: #fff7ed; padding: 1.5rem; border-radius: 12px; border: 1px solid #ffedd5;">
+            <h5 style="font-weight: 700; color: #9a3412; margin-bottom: 0.5rem;">Deployment Tip:</h5>
+            <p style="font-size: 0.875rem; color: #c2410c;">
+                Always use a reverse proxy (like Nginx or Cloud Identity-Aware Proxy) to handle SSL termination and
+                protect your MCP herramienta endpoints from unauthorized access.
+            </p>
+        </div>
+    </div>
+</div>

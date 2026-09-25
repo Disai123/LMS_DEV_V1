@@ -1,0 +1,71 @@
+<div class="content-body">
+    <div class="content-section">
+        <h3 class="content-heading">System Overview & Orchestration</h3>
+
+        <!-- Video Section -->
+        <div style="margin-bottom: 2rem;">
+            <h4 style="font-size: 1.25rem; font-weight: 600; color: #1f2937; margin-bottom: 1rem;">Architectural Deep
+                Dive</h4>
+            <div
+                style="background: #ffffff; border: 1px solid #e5e7eb; border-radius: 0.75rem; padding: 1.5rem; box-shadow: 0 1px 3px rgba(0,0,0,0.1);">
+                <div
+                    style="position: relative; padding-bottom: 56.25%; height: 0; overflow: hidden; border-radius: 0.5rem; background: #000;">
+                    <iframe src="https://drive.google.com/file/d/1SpsFfBExL3l2wO2Hq_H0tXp_6k-F6e4J/preview"
+                        style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; border: none;"
+                        allow="autoplay; encrypted-media" allowfullscreen>
+                    </iframe>
+                </div>
+            </div>
+        </div>
+
+        <div style="margin-bottom: 2rem;">
+            <p style="color: #4b5563; line-height: 1.75; margin-bottom: 1.5rem;">
+                The Smart MCP Trip Planner uses an <strong>Agentic Workflow</strong> powered by
+                <strong>LangGraph</strong>.
+                Instead of a rigid procedural script, the system uses an LLM (Gemini) as a "Reasoning Engine"
+                to decide which MCP tools to invoke based on user intent.
+            </p>
+
+            <div
+                style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 1.5rem; margin-bottom: 2rem;">
+                <div style="background: #f0fdf4; border: 1px solid #bcf0da; border-radius: 12px; padding: 1.5rem;">
+                    <h4 style="font-size: 1rem; font-weight: 700; color: #166534; margin-bottom: 0.5rem;">Orchestration
+                        Layer</h4>
+                    <p style="font-size: 0.9rem; color: #14532d;">LangGraph manages the conversation state and
+                        intelligently routes requests to the Planner, Tools, or Final Generator nodes.</p>
+                </div>
+                <div style="background: #f0fdf4; border: 1px solid #bcf0da; border-radius: 12px; padding: 1.5rem;">
+                    <h4 style="font-size: 1rem; font-weight: 700; color: #166534; margin-bottom: 0.5rem;">MCP
+                        Infrastructure</h4>
+                    <p style="font-size: 0.9rem; color: #14532d;">Decoupled servers for Maps (OSM), Weather (OpenMeteo),
+                        and Travel (SQLite) communicate via standardized MCP protocol.</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Tech Stack Component -->
+        <div
+            style="background: #ffffff; border: 1px solid #e5e7eb; border-radius: 12px; padding: 1.5rem; box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);">
+            <h4 style="font-size: 1.125rem; font-weight: 600; color: #1f2937; margin-bottom: 1.25rem;">Technology
+                Blueprint</h4>
+            <div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 1rem;">
+                <div style="padding: 10px; border-left: 3px solid #22c55e; background: #f8fafc;">
+                    <span style="font-weight: 700; font-size: 0.8rem; color: #64748b; display: block;">FRONTEND</span>
+                    <span style="font-size: 0.95rem; color: #1e293b;">React 18 + Leaflet</span>
+                </div>
+                <div style="padding: 10px; border-left: 3px solid #22c55e; background: #f8fafc;">
+                    <span style="font-weight: 700; font-size: 0.8rem; color: #64748b; display: block;">BACKEND</span>
+                    <span style="font-size: 0.95rem; color: #1e293b;">FastAPI + LangGraph</span>
+                </div>
+                <div style="padding: 10px; border-left: 3px solid #22c55e; background: #f8fafc;">
+                    <span style="font-weight: 700; font-size: 0.8rem; color: #64748b; display: block;">MODEL</span>
+                    <span style="font-size: 0.95rem; color: #1e293b;">Google Gemini Pro</span>
+                </div>
+                <div style="padding: 10px; border-left: 3px solid #22c55e; background: #f8fafc;">
+                    <span style="font-weight: 700; font-size: 0.8rem; color: #64748b; display: block;">STANDARDS</span>
+                    <span style="font-size: 0.95rem; color: #1e293b;">Model Context Protocol</span>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

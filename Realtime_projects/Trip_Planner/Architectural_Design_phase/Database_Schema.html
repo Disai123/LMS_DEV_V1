@@ -1,0 +1,59 @@
+<div class="content-body">
+    <div class="content-section">
+        <h3 class="content-heading">Database Schema & Persistence</h3>
+        <p style="color: #4b5563; line-height: 1.75; margin-bottom: 2rem;">
+            The Trip Planner utilizes a relational schema to manage user preferences, travel history, and
+            cached MCP tool data. This ensures high performance and offline-first capabilities for core discovery.
+        </p>
+
+        <div
+            style="background: #1e293b; border-radius: 12px; padding: 2rem; margin-bottom: 2.5rem; color: #e2e8f0; overflow-x: auto;">
+            <h4 style="font-weight: 700; color: #38bdf8; margin-bottom: 1.5rem;">Travel Management Schema</h4>
+            <pre style="font-family: 'Fira Code', monospace; font-size: 0.875rem; line-height: 1.5; margin: 0;">
+CREATE TABLE itineraries (
+    id UUID PRIMARY KEY,
+    user_id UUID,
+    title TEXT,
+    start_date DATE,
+    end_date DATE,
+    center_lat FLOAT,
+    center_lon FLOAT,
+    created_at TIMESTAMP
+);
+
+CREATE TABLE locations (
+    id UUID PRIMARY KEY,
+    itinerary_id UUID REFERENCES itineraries(id),
+    name TEXT,
+    osm_id BIGINT,
+    lat FLOAT,
+    lon FLOAT,
+    category TEXT, -- cafe, museum, hotel
+    visit_order INT
+);
+
+CREATE TABLE weather_cache (
+    id SERIAL PRIMARY KEY,
+    lat FLOAT,
+    lon FLOAT,
+    forecast_json JSONB,
+    updated_at TIMESTAMP
+);
+            </pre>
+        </div>
+
+        <div
+            style="grid: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 1.5rem; display: grid;">
+            <div style="background: #ffffff; border: 1px solid #e5e7eb; border-radius: 12px; padding: 1.5rem;">
+                <h5 style="font-weight: 700; color: #111827; margin-bottom: 0.75rem;">Relational Integrity</h5>
+                <p style="font-size: 0.875rem; color: #4b5563;">Cascading deletes ensure that if an itinerary is
+                    removed, all associated locations and route markers are cleaned up automatically.</p>
+            </div>
+            <div style="background: #ffffff; border: 1px solid #e5e7eb; border-radius: 12px; padding: 1.5rem;">
+                <h5 style="font-weight: 700; color: #111827; margin-bottom: 0.75rem;">Caching Strategy</h5>
+                <p style="font-size: 0.875rem; color: #4b5563;">The weather cache reduces API costs by storing forecasts
+                    for coordinates within a 5km radius for up to 6 hours.</p>
+            </div>
+        </div>
+    </div>
+</div>

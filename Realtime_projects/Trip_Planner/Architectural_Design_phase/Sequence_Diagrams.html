@@ -1,0 +1,57 @@
+<div class="content-body">
+    <div class="content-section">
+        <h3 class="content-heading">Interactive Sequence Flow</h3>
+        <p style="color: #4b5563; line-height: 1.75; margin-bottom: 1.5rem;">
+            Understanding the data flow is critical when building agentic systems. This sequence demonstrates how a
+            single user click triggers a multi-step background orchestration.
+        </p>
+
+        <!-- Sequence Diagram Mockup -->
+        <div
+            style="background: #111827; border-radius: 12px; padding: 2rem; color: #94a3b8; font-family: 'Courier New', Courier, monospace; font-size: 0.85rem; line-height: 1.4; overflow-x: auto; margin-bottom: 2rem;">
+            <div style="color: #60a5fa;"># User clicks "Taj Mahal" on Map</div>
+            <div style="margin-bottom: 15px;">
+                <span style="color: #fbbf24;">Frontend</span> -> <span style="color: #34d399;">FastAPI</span>: GET
+                /agent/details?place="Taj Mahal"
+            </div>
+
+            <div style="color: #60a5fa;"># LangGraph Starts Phase</div>
+            <div style="margin-left: 20px; border-left: 1px solid #334155; padding-left: 15px;">
+                <div><span style="color: #34d399;">PlannerNode</span>: Decides tools needed [Weather, Distance]</div>
+                <div style="margin-bottom: 10px;">
+                    <span style="color: #34d399;">ToolNode</span> -> <span style="color: #f472b6;">OSM_MCP</span>:
+                    get_weather("Taj Mahal")
+                    <br><span style="color: #f472b6;">OSM_MCP</span> --(22°C Cloud)--> <span
+                        style="color: #34d399;">ToolNode</span>
+                </div>
+                <div>
+                    <span style="color: #34d399;">ToolNode</span> -> <span style="color: #f472b6;">Travel_MCP</span>:
+                    search_transports("Agra")
+                    <br><span style="color: #f472b6;">Travel_MCP</span> --(Agra Cantt 5km)--> <span
+                        style="color: #34d399;">ToolNode</span>
+                </div>
+                <div style="margin-top: 10px;">
+                    <span style="color: #34d399;">SynthesisNode</span>: "It's 22°C. Nearest station is Agra Cantt..."
+                </div>
+            </div>
+
+            <div style="margin-top: 15px;">
+                <span style="color: #34d399;">FastAPI</span> -> <span style="color: #fbbf24;">Frontend</span>: {
+                "weather": "Cloudy", "insights": "..." }
+            </div>
+        </div>
+
+        <div style="background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 12px; padding: 1.5rem;">
+            <h4 style="font-size: 1rem; font-weight: 600; color: #1e293b; margin-bottom: 1rem;">Key Takeaways</h4>
+            <ul
+                style="list-style: disc; padding-left: 1.5rem; color: #4b5563; font-size: 0.95rem; display: flex; flex-direction: column; gap: 0.5rem;">
+                <li><strong>Async Handling:</strong> Each tool call is independent but orchestrated sequentially or in
+                    parallel by the graph.</li>
+                <li><strong>State Persistence:</strong> The "Source" location remains in the graph state, allowing the
+                    LLM to calculate "Travel: 5h 20m from [Source]" without re-querying.</li>
+                <li><strong>Decoupling:</strong> The UI only waits for the final JSON, while the agent handles complex
+                    API logic.</li>
+            </ul>
+        </div>
+    </div>
+</div>

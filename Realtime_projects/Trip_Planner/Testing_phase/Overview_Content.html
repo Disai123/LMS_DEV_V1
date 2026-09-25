@@ -1,0 +1,60 @@
+<div class="content-body">
+    <div class="content-section">
+        <h3 class="content-heading">Testing & Quality Assurance</h3>
+
+        <!-- Video Section -->
+        <div style="margin-bottom: 2rem;">
+            <h4 style="font-size: 1.25rem; font-weight: 600; color: #1f2937; margin-bottom: 1rem;">QA Strategy</h4>
+            <div
+                style="background: #ffffff; border: 1px solid #e5e7eb; border-radius: 0.75rem; padding: 1.5rem; box-shadow: 0 1px 3px rgba(0,0,0,0.1);">
+                <div
+                    style="position: relative; padding-bottom: 56.25%; height: 0; overflow: hidden; border-radius: 0.5rem; background: #000;">
+                    <iframe src="https://drive.google.com/file/d/1SpsFfBExL3l2wO2Hq_H0tXp_6k-F6e4J/preview"
+                        style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; border: none;"
+                        allow="autoplay; encrypted-media" allowfullscreen>
+                    </iframe>
+                </div>
+            </div>
+        </div>
+
+        <div style="margin-bottom: 2rem;">
+            <p style="color: #4b5563; line-height: 1.75; margin-bottom: 1.5rem;">
+                Testing an agentic system requires a multi-layered approach. We must verify not only the UI
+                components but also the reliability of the LangGraph state transitions and the accuracy
+                of MCP tool calls.
+            </p>
+
+            <div style="display: flex; flex-direction: column; gap: 1.5rem;">
+                <div
+                    style="background: white; border: 1px solid #e2e8f0; border-radius: 12px; padding: 1.5rem; box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);">
+                    <h4 style="font-size: 1.1rem; font-weight: 600; color: #1f2937; margin-bottom: 0.5rem;">Agentic
+                        Reasoning Tests</h4>
+                    <p style="font-size: 0.95rem; color: #414b5a; line-height: 1.6;">
+                        Verifying that the LLM correctly identifies which tools to call. For example, ensuring
+                        that "Check weather in Coorg" triggers only the Weather MCP tool and not the Flight tool.
+                    </p>
+                </div>
+
+                <div
+                    style="background: white; border: 1px solid #e2e8f0; border-radius: 12px; padding: 1.5rem; box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);">
+                    <h4 style="font-size: 1.1rem; font-weight: 600; color: #1f2937; margin-bottom: 0.5rem;">UI/UX
+                        Interaction Testing</h4>
+                    <p style="font-size: 0.95rem; color: #414b5a; line-height: 1.6;">
+                        Validating map markers, hover effects, and the smooth expansion of the glassmorphism
+                        sidebar using tools like Playwright or manual sanity checks.
+                    </p>
+                </div>
+
+                <div
+                    style="background: white; border: 1px solid #e2e8f0; border-radius: 12px; padding: 1.5rem; box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);">
+                    <h4 style="font-size: 1.1rem; font-weight: 600; color: #1f2937; margin-bottom: 0.5rem;">API & Tool
+                        Connection Testing</h4>
+                    <p style="font-size: 0.95rem; color: #414b5a; line-height: 1.6;">
+                        Writing integration tests to ensure the FastAPI proxy correctly handles large JSON payloads
+                        from Nominatim and OpenMeteo without timeouts.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

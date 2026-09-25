@@ -1,0 +1,69 @@
+<div class="content-body">
+    <div class="content-section">
+        <h3 class="content-heading">Frontend: Interactive React Map</h3>
+        <p style="color: #4b5563; line-height: 1.75; margin-bottom: 1.5rem;">
+            The frontend is a <strong>React</strong> application using <strong>Leaflet</strong> for mapping and
+            <strong>Framer Motion</strong> for the premium glassmorphism animations.
+        </p>
+
+        <!-- Code Block 2: React Map -->
+        <div style="margin-bottom: 2rem;">
+            <div
+                style="background: #1e293b; border-top-left-radius: 8px; border-top-right-radius: 8px; padding: 10px 15px; display: flex; justify-content: space-between; align-items: center;">
+                <span style="color: #94a3b8; font-size: 0.8rem; font-family: monospace;">App.jsx</span>
+                <span
+                    style="background: #334155; color: #94a3b8; font-size: 0.7rem; padding: 2px 8px; border-radius: 4px;">React</span>
+            </div>
+            <div
+                style="background: #0f172a; border-bottom-left-radius: 8px; border-bottom-right-radius: 8px; padding: 1.5rem; overflow-x: auto; font-family: 'Courier New', Courier, monospace; font-size: 0.85rem; line-height: 1.5; color: #e2e8f0; border: 1px solid #334155; border-top: none;">
+                <div><span style="color: #f472b6;">const</span> <span style="color: #38bdf8;">handleMarkerClick</span> =
+                    <span style="color: #f472b6;">async</span> (place) => {</div>
+                <div style="margin-left: 20px;">
+                    setSelectedPlace(place);
+                    <span style="color: #94a3b8;">// Invoke Agent with Context</span>
+                    <br><span style="color: #f472b6;">const</span> res = <span style="color: #f472b6;">await</span>
+                    agentApi.invoke(<span style="color: #34d399;">`Analyze ${place.name}`</span>, {
+                    <br>&nbsp;&nbsp;&nbsp;&nbsp;source: localStorage.getItem(<span
+                        style="color: #34d399;">"source"</span>),
+                    <br>&nbsp;&nbsp;&nbsp;&nbsp;destination: place.name,
+                    <br>&nbsp;&nbsp;&nbsp;&nbsp;place_context: place.name
+                    <br>});
+                    <br>setDetails(res.response);
+                </div>
+                <div>};</div>
+                <div style="margin-top: 15px; color: #94a3b8;">&lt;MapContainer ...&gt;</div>
+                <div style="margin-left: 20px;">
+                    &lt;TileLayer url="..." /&gt;
+                    <br>{places.map(p => (
+                    <br>&nbsp;&nbsp;&lt;Marker position={[p.lat, p.lon]} eventHandlers={{ <span
+                        style="color: #38bdf8;">click</span>: () => handleMarkerClick(p) }} /&gt;
+                    <br>))}
+                </div>
+                <div>&lt;/MapContainer&gt;</div>
+            </div>
+        </div>
+
+        <div style="background: #fdf2f8; border-radius: 12px; padding: 1.5rem; border-left: 4px solid #db2777;">
+            <h4 style="font-size: 1rem; font-weight: 600; color: #1e293b; margin-bottom: 0.75rem;">Frontend Innovations
+            </h4>
+            <ul
+                style="list-style: none; padding: 0; color: #4b5563; font-size: 0.95rem; display: flex; flex-direction: column; gap: 0.75rem;">
+                <li style="display: flex; gap: 10px;">
+                    <span style="color: #db2777;">📍</span>
+                    <span><strong>Event Handlers:</strong> Markers capture interactions to trigger backend agent calls
+                        with specific geographical context.</span>
+                </li>
+                <li style="display: flex; gap: 10px;">
+                    <span style="color: #db2777;">🎭</span>
+                    <span><strong>AnimatePresence:</strong> Used to create high-end sidebar transitions when a place
+                        detail is loading or selected.</span>
+                </li>
+                <li style="display: flex; gap: 10px;">
+                    <span style="color: #db2777;">🧊</span>
+                    <span><strong>Glass Container:</strong> Tailwind CSS utilities combined with custom glass-panel
+                        styles for consistent branding.</span>
+                </li>
+            </ul>
+        </div>
+    </div>
+</div>

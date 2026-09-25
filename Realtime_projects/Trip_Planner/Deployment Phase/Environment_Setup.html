@@ -1,0 +1,44 @@
+<div class="content-body">
+    <div class="content-section">
+        <h3 class="content-heading">Environment Setup & Secrets</h3>
+        <p style="color: #4b5563; line-height: 1.75; margin-bottom: 2rem;">
+            A secure environment configuration is critical for the Trip Planner, as it requires multiple API keys
+            (Gemini, OSM, Weather) that must never be exposed to the client-side code.
+        </p>
+
+        <div style="background: #1e293b; border-radius: 12px; padding: 2rem; margin-bottom: 2.5rem; color: #e2e8f0;">
+            <h4 style="font-weight: 700; color: #38bdf8; margin-bottom: 1.5rem;">Production .env Template</h4>
+            <pre style="font-family: 'Fira Code', monospace; font-size: 0.8125rem; line-height: 1.6; margin: 0;">
+# Core AI Configuration
+GOOGLE_API_KEY=your_gemini_key_here
+LANGCHAIN_TRACING_V2=true
+LANGCHAIN_PROJECT="Trip-Planner-Prod"
+
+# MCP Tool Servers
+WEATHER_SERVICE_URL=http://weather-mcp:5000
+OSM_API_KEY=your_osm_key_here
+
+# Backend Security
+SECRET_KEY=highly_secure_long_random_string
+ALLOWED_ORIGINS=https://your-trip-planner.com
+
+# Database
+DATABASE_URL=postgresql://user:pass@host:5432/travel_db
+            </pre>
+        </div>
+
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem;">
+            <div style="background: #ffffff; border: 1px solid #e5e7eb; border-radius: 12px; padding: 1.5rem;">
+                <h5 style="font-weight: 700; color: #111827; margin-bottom: 0.75rem;">Secret Management</h5>
+                <p style="font-size: 0.875rem; color: #4b5563;">In production, use tools like AWS Secrets Manager or
+                    Google Secret Manager to inject these variables at runtime, rather than bundling them in Docker
+                    images.</p>
+            </div>
+            <div style="background: #ffffff; border: 1px solid #e5e7eb; border-radius: 12px; padding: 1.5rem;">
+                <h5 style="font-weight: 700; color: #111827; margin-bottom: 0.75rem;">Backend Proxying</h5>
+                <p style="font-size: 0.875rem; color: #4b5563;">Our FastAPI backend acts as a proxy—the Frontend never
+                    talks to the AI or tool APIs directly, preventing key leakage and CORS issues.</p>
+            </div>
+        </div>
+    </div>
+</div>
