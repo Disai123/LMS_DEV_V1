@@ -1,0 +1,56 @@
+<div class="content-body">
+    <div class="content-section">
+        <h3 class="content-heading">Integration Testing</h3>
+        <p style="color: #4b5563; line-height: 1.75; margin-bottom: 2rem;">
+            Integration tests verify the complex interactions between the <strong>Supervisor</strong>,
+            <strong>Workers</strong>, and the <strong>Database</strong>. We must ensure the graph state
+            remains consistent during multi-turn reasoning across these layers.
+        </p>
+
+        <!-- Integration Scenario 1 -->
+        <div
+            style="background: #ffffff; border: 1px solid #e5e7eb; border-radius: 12px; padding: 1.5rem; margin-bottom: 1.5rem; border-left: 4px solid #6366f1;">
+            <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 0.5rem;">
+                <span style="font-weight: 700; color: #1e293b;">Scenario:</span>
+                <span style="font-size: 0.9rem; color: #6366f1; font-weight: 600;">Search-to-Cart Pipeline</span>
+            </div>
+            <div style="background: #f8fafc; padding: 1rem; border-radius: 8px; margin-top: 1rem;">
+                <ol
+                    style="font-size: 0.85rem; color: #475569; padding-left: 1.25rem; display: flex; flex-direction: column; gap: 8px;">
+                    <li>User asks for "Black Sneakers".</li>
+                    <li>Supervisor invokes <code>search_worker</code>.</li>
+                    <li><code>search_worker</code> calls <code>get_products</code> and returns 2 items.</li>
+                    <li>User asks "Add the first one to my cart".</li>
+                    <li>Supervisor invokes <code>cart_worker</code>.</li>
+                    <li><code>cart_worker</code> calls <code>add_to_cart</code> with the correct product ID.</li>
+                    <li>Verify DB state contains the item for the user.</li>
+                </ol>
+            </div>
+        </div>
+
+        <!-- Tools Used -->
+        <div style="background: #f0fdf4; border: 1px solid #bbf7d0; border-radius: 12px; padding: 1.5rem;">
+            <h4 style="font-size: 1rem; font-weight: 600; color: #166534; margin-bottom: 0.75rem;">Integration QA Stack
+            </h4>
+            <div style="display: flex; gap: 1rem;">
+                <div style="flex: 1; text-align: center;">
+                    <div style="font-size: 0.75rem; font-weight: 600; color: #15803d; margin-bottom: 4px;">State
+                        Persistence</div>
+                    <div style="font-size: 0.85rem; color: #3f6212;">SQLAlchemy Checkpoints</div>
+                </div>
+                <div style="width: 1px; background: #bbf7d0;"></div>
+                <div style="flex: 1; text-align: center;">
+                    <div style="font-size: 0.75rem; font-weight: 600; color: #15803d; margin-bottom: 4px;">API
+                        Integration</div>
+                    <div style="font-size: 0.85rem; color: #3f6212;">FastAPI TestClient</div>
+                </div>
+                <div style="width: 1px; background: #bbf7d0;"></div>
+                <div style="flex: 1; text-align: center;">
+                    <div style="font-size: 0.75rem; font-weight: 600; color: #15803d; margin-bottom: 4px;">LLM Mocking
+                    </div>
+                    <div style="font-size: 0.85rem; color: #3f6212;">LangChain FakeLLM</div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

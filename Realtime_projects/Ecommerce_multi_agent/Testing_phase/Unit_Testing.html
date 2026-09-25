@@ -1,0 +1,55 @@
+<div class="content-body">
+    <div class="content-section">
+        <h3 class="content-heading">Unit Testing</h3>
+        <p style="color: #4b5563; line-height: 1.75; margin-bottom: 2rem;">
+            Unit tests form the foundation of our testing strategy. We verify individual tools,
+            utility functions, and agent nodes in isolation using <strong>Pytest</strong> and <strong>Vitest</strong>.
+        </p>
+
+        <!-- Unit Test Card 1: Tools -->
+        <div
+            style="background: white; border: 1px solid #e2e8f0; border-radius: 12px; padding: 1.5rem; margin-bottom: 2rem; box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem;">
+                <h4 style="font-size: 1.1rem; font-weight: 700; color: #1e293b;">Agent Tool Testing</h4>
+                <span
+                    style="background: #dcfce7; color: #166534; padding: 2px 10px; border-radius: 12px; font-size: 0.75rem; font-weight: 600;">PASSING</span>
+            </div>
+            <p style="font-size: 0.85rem; color: #64748b; line-height: 1.6; margin-bottom: 1.25rem;">
+                We verify that each tool (Search, Cart, Support) correctly handles various inputs and
+                returns the expected schema format.
+            </p>
+            <div
+                style="background: #1e293b; padding: 1rem; border-radius: 8px; font-family: monospace; font-size: 0.8rem; color: #cbd5e1;">
+                <div style="color: #94a3b8;"># test_tools.py</div>
+                <div><span style="color: #f472b6;">def</span> <span
+                        style="color: #38bdf8;">test_search_tool_valid</span>():</div>
+                <div style="padding-left: 1rem;">result = search_tool.invoke({"query": "sneakers"})</div>
+                <div style="padding-left: 1rem;"><span style="color: #f472b6;">assert</span> result["status"] == <span
+                        style="color: #10b981;">"success"</span></div>
+                <div style="padding-left: 1rem;"><span style="color: #f472b6;">assert</span> <span
+                        style="color: #fbbf24;">len</span>(result["items"]) > <span style="color: #fbbf24;">0</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Unit Test Card 2: UI -->
+        <div
+            style="background: white; border: 1px solid #e2e8f0; border-radius: 12px; padding: 1.5rem; box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem;">
+                <h4 style="font-size: 1.1rem; font-weight: 700; color: #1e293b;">Component Verification</h4>
+                <span
+                    style="background: #dcfce7; color: #166534; padding: 2px 10px; border-radius: 12px; font-size: 0.75rem; font-weight: 600;">PASSING</span>
+            </div>
+            <p style="font-size: 0.85rem; color: #64748b; line-height: 1.6; margin-bottom: 1.25rem;">
+                Ensures the Chat Widget and Cart components render correctly given a specific agent state.
+            </p>
+            <div style="display: flex; gap: 8px;">
+                <span
+                    style="background: #f1f5f9; padding: 4px 12px; border-radius: 6px; font-size: 0.75rem; font-weight: 600; color: #475569;">Vitest</span>
+                <span
+                    style="background: #f1f5f9; padding: 4px 12px; border-radius: 6px; font-size: 0.75rem; font-weight: 600; color: #475569;">React
+                    Testing Library</span>
+            </div>
+        </div>
+    </div>
+</div>

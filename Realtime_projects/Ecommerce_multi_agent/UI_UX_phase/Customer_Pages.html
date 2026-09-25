@@ -1,0 +1,67 @@
+<div class="content-body">
+    <div class="content-section">
+        <h3 class="content-heading">Customer Screens</h3>
+        <p style="color: #4b5563; line-height: 1.75; margin-bottom: 2rem;">
+            The customer experience is centered around a reactive chat widget that integrates seamlessly into the
+            storefront. These screens highlight the conversational search and cart management features.
+        </p>
+
+        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 2rem;">
+            <!-- Chat Widget Screen -->
+            <div
+                style="background: #ffffff; border: 1px solid #e5e7eb; border-radius: 12px; padding: 1.5rem; box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);">
+                <h4 style="font-size: 1rem; font-weight: 600; color: #1f2937; margin-bottom: 1rem;">Conversational
+                    Widget</h4>
+                <div
+                    style="background: #0f172a; border-radius: 8px; padding: 1rem; height: 240px; display: flex; flex-direction: column; gap: 12px; overflow: hidden;">
+                    <div
+                        style="align-self: flex-start; background: #1e293b; color: #cbd5e1; padding: 8px 12px; border-radius: 12px 12px 12px 2px; font-size: 0.8rem; max-width: 80%;">
+                        Hi! I'm your AI shopping assistant. How can I help you today?
+                    </div>
+                    <div
+                        style="align-self: flex-end; background: #6366f1; color: white; padding: 8px 12px; border-radius: 12px 12px 2px 12px; font-size: 0.8rem; max-width: 80%;">
+                        Show me some running shoes.
+                    </div>
+                    <div style="align-self: flex-start; color: #94a3b8; font-size: 0.75rem; font-style: italic;">
+                        Assistant is searching...
+                    </div>
+                    <div
+                        style="align-self: flex-start; background: #1e293b; color: #cbd5e1; padding: 8px 12px; border-radius: 12px 12px 12px 2px; font-size: 0.8rem; max-width: 80%;">
+                        I've found 3 pairs of running shoes. Would you like to see them?
+                    </div>
+                </div>
+                <p style="margin-top: 1rem; font-size: 0.85rem; color: #6b7280;">High-fidelity chat interface with
+                    worker state tracking and token streaming.</p>
+            </div>
+
+            <!-- Reactive Cart Screen -->
+            <div
+                style="background: #ffffff; border: 1px solid #e5e7eb; border-radius: 12px; padding: 1.5rem; box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);">
+                <h4 style="font-size: 1rem; font-weight: 600; color: #1f2937; margin-bottom: 1rem;">Reactive Shopping
+                    Cart</h4>
+                <div style="background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 8px; padding: 1.25rem;">
+                    <div
+                        style="display: flex; justify-content: space-between; border-bottom: 1px solid #e2e8f0; padding-bottom: 0.75rem; margin-bottom: 0.75rem;">
+                        <span style="font-weight: 700; font-size: 0.9rem;">My Cart</span>
+                        <span
+                            style="background: #10b981; color: white; padding: 2px 8px; border-radius: 10px; font-size: 0.7rem;">2
+                            Items</span>
+                    </div>
+                    <div style="display: flex; gap: 12px; margin-bottom: 1rem;">
+                        <div style="width: 40px; height: 40px; background: #e2e8f0; border-radius: 4px;"></div>
+                        <div style="flex: 1;">
+                            <div style="font-size: 0.85rem; font-weight: 600;">Pro Runner X</div>
+                            <div style="font-size: 0.75rem; color: #64748b;">$89.99</div>
+                        </div>
+                    </div>
+                    <div
+                        style="border-top: 1px dashed #cbd5e1; padding-top: 0.75rem; text-align: center; color: #10b981; font-size: 0.75rem; font-weight: 600;">
+                        ✨ Updated by Assistant
+                    </div>
+                </div>
+                <p style="margin-top: 1rem; font-size: 0.85rem; color: #6b7280;">Live cart state synchronization across
+                    components when agent executes a tool.</p>
+            </div>
+        </div>
+    </div>
+</div>

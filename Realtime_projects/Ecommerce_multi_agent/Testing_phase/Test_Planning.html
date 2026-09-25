@@ -1,0 +1,60 @@
+<div class="content-body">
+    <div class="content-section">
+        <h3 class="content-heading">Test Planning</h3>
+        <p style="color: #4b5563; line-height: 1.75; margin-bottom: 2rem;">
+            The test plan for the Multi-Agent Assistant focuses on <strong>Deterministic Verification</strong> and
+            <strong>Probabilistic Validation</strong>. We must ensure that while the AI is creative,
+            the commerce actions (Search/Cart) remain 100% reliable.
+        </p>
+
+        <div style="display: flex; flex-direction: column; gap: 1.5rem; margin-bottom: 2.5rem;">
+            <div style="background: white; border-radius: 12px; border: 1px solid #e5e7eb; overflow: hidden;">
+                <div
+                    style="background: #f8fafc; padding: 1rem; border-bottom: 1px solid #e5e7eb; font-weight: 700; color: #1e293b;">
+                    1. Test Environment Setup
+                </div>
+                <div style="padding: 1.25rem; color: #4b5563; font-size: 0.9rem; line-height: 1.6;">
+                    We establish a dedicated `test` database and provide the orchestrator with mocked LLM providers
+                    to ensure repeatable test results without incurring token costs.
+                </div>
+            </div>
+
+            <div style="background: white; border-radius: 12px; border: 1px solid #e5e7eb; overflow: hidden;">
+                <div
+                    style="background: #f8fafc; padding: 1rem; border-bottom: 1px solid #e5e7eb; font-weight: 700; color: #1e293b;">
+                    2. Core Testing Scenarios
+                </div>
+                <div style="padding: 1.25rem;">
+                    <ul
+                        style="list-style: none; display: flex; flex-direction: column; gap: 0.75rem; color: #4b5563; font-size: 0.9rem;">
+                        <li>• <strong>Intent Routing:</strong> Does Supervisor transition correctly for "Add to cart"?
+                        </li>
+                        <li>• <strong>Multi-Turn Memory:</strong> Does the agent remember the user's color preference
+                            across messages?</li>
+                        <li>• <strong>Tool Guardrails:</strong> Does the worker handle "Product Not Found" errors
+                            gracefully?</li>
+                        <li>• <strong>Concurrency:</strong> Can the backend handle separate threads for different user
+                            sessions?</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div style="background: white; border-radius: 12px; border: 1px solid #e5e7eb; overflow: hidden;">
+                <div
+                    style="background: #f8fafc; padding: 1rem; border-bottom: 1px solid #e5e7eb; font-weight: 700; color: #1e293b;">
+                    3. Tools & Infrastructure
+                </div>
+                <div style="padding: 1.25rem; display: flex; flex-wrap: wrap; gap: 10px;">
+                    <span
+                        style="background: #f1f5f9; padding: 6px 12px; border-radius: 6px; font-weight: 600; font-size: 0.8rem; color: #475569; border: 1px solid #e2e8f0;">Pytest</span>
+                    <span
+                        style="background: #f1f5f9; padding: 6px 12px; border-radius: 6px; font-weight: 600; font-size: 0.80rem; color: #475569; border: 1px solid #e2e8f0;">LangSmith</span>
+                    <span
+                        style="background: #f1f5f9; padding: 6px 12px; border-radius: 6px; font-weight: 600; font-size: 0.80rem; color: #475569; border: 1px solid #e2e8f0;">Playwright</span>
+                    <span
+                        style="background: #f1f5f9; padding: 6px 12px; border-radius: 6px; font-weight: 600; font-size: 0.80rem; color: #475569; border: 1px solid #e2e8f0;">Vitest</span>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
