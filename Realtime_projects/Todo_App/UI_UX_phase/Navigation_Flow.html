@@ -1,0 +1,55 @@
+<div class="content-body">
+    <div class="content-section">
+        <h3 class="content-heading">Navigation Flow</h3>
+        <p style="color: #4b5563; line-height: 1.75; margin-bottom: 2rem;">
+            The flow is designed to be as shallow as possible. Most operations are performed directly on the main
+            dashboard without context switching.
+        </p>
+
+        <div style="background: #fafafa; border: 1px solid #e5e7eb; border-radius: 12px; padding: 2rem;">
+            <div
+                style="position: relative; height: 300px; display: flex; align-items: center; justify-content: space-between;">
+                <!-- Root node -->
+                <div
+                    style="z-index: 2; width: 140px; height: 80px; background: #6366f1; border-radius: 8px; color: #fff; display: flex; align-items: center; justify-content: center; text-align: center; font-weight: 600; font-size: 0.9rem; box-shadow: 0 4px 10px rgba(99, 102, 241, 0.4);">
+                    Application Startup</div>
+
+                <!-- Arrow -->
+                <div
+                    style="position: absolute; left: 140px; width: 80px; height: 2px; background: #d1d5db; z-index: 1;">
+                </div>
+
+                <!-- Main node -->
+                <div
+                    style="z-index: 2; width: 140px; height: 120px; background: #1e293b; border-radius: 8px; color: #fff; display: flex; align-items: center; justify-content: center; text-align: center; font-weight: 600; font-size: 0.9rem; border: 2px solid #6366f1; box-shadow: 0 10px 20px rgba(0,0,0,0.2);">
+                    Dashboard (CRUD View)</div>
+
+                <!-- Forking Arrows -->
+                <div
+                    style="position: absolute; left: 360px; top: 151px; border-top: 2px solid #d1d5db; border-right: 2px solid #d1d5db; width: 40px; height: 60px; z-index: 1;">
+                </div>
+                <div
+                    style="position: absolute; left: 360px; top: 91px; border-bottom: 2px solid #d1d5db; border-right: 2px solid #d1d5db; width: 40px; height: 60px; z-index: 1;">
+                </div>
+
+                <!-- Ends -->
+                <div style="display: flex; flex-direction: column; gap: 40px;">
+                    <div
+                        style="z-index: 2; width: 120px; height: 60px; background: #fafafa; border: 2px solid #e5e7eb; border-radius: 8px; color: #4b5563; display: flex; align-items: center; justify-content: center; text-align: center; font-size: 0.85rem;">
+                        Local Storage Sync</div>
+                    <div
+                        style="z-index: 2; width: 120px; height: 60px; background: #fafafa; border: 2px solid #e5e7eb; border-radius: 8px; color: #4b5563; display: flex; align-items: center; justify-content: center; text-align: center; font-size: 0.85rem;">
+                        Backend API Persist</div>
+                </div>
+            </div>
+        </div>
+
+        <div style="margin-top: 2rem;">
+            <h4 style="font-weight: 600; margin-bottom: 1rem;">Interaction Principles</h4>
+            <div style="background: #eff6ff; padding: 1rem; border-radius: 8px; color: #1e40af; font-size: 0.95rem;">
+                <strong>Instant Feedback:</strong> Clicking a checkbox immediately triggers the strike-through and
+                re-ordering animation. There is no "Save" button for individual tasks.
+            </div>
+        </div>
+    </div>
+</div>

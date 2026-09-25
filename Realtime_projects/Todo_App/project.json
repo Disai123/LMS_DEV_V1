@@ -1,0 +1,10 @@
+{
+  "name": "Todo App",
+  "description": "Build a full-stack minimalist To-Do application from scratch using React.js and FastAPI. Learn CRUD operations, REST APIs, and modern UI design with glassmorphism.",
+  "category": "Web Development",
+  "difficulty": "beginner",
+  "estimatedHours": 15,
+  "order": 2,
+  "tags": ["React", "FastAPI", "Python", "SQLite", "Vite"],
+  "version": "1.0.0"
+}
