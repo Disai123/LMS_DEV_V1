@@ -1,0 +1,879 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Prerequisites - Antigravity LMS</title>
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Poppins:wght@300;400;500;600;700;800;900&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="shared/styles.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', 'SF Pro Display', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+            background: linear-gradient(to bottom right, #f8fafc 0%, #e0e7ff 50%, #e0e7ff 100%);
+            min-height: 100vh;
+            color: #1f2937;
+            line-height: 1.6;
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+            overflow-x: hidden;
+            position: relative;
+            font-feature-settings: "rlig" 1, "calt" 1;
+        }
+
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background:
+                radial-gradient(circle at 20% 30%, rgba(99, 102, 241, 0.08) 0%, transparent 50%),
+                radial-gradient(circle at 80% 70%, rgba(147, 51, 234, 0.08) 0%, transparent 50%),
+                radial-gradient(circle at 50% 50%, rgba(59, 130, 246, 0.05) 0%, transparent 50%);
+            background-size: 200% 200%;
+            animation: gradientShift 20s ease infinite;
+            z-index: 0;
+            pointer-events: none;
+        }
+
+        @keyframes gradientShift {
+
+            0%,
+            100% {
+                background-position: 0% 50%;
+            }
+
+            50% {
+                background-position: 100% 50%;
+            }
+        }
+
+        .particles {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+            z-index: 1;
+            pointer-events: none;
+        }
+
+        .particle {
+            position: absolute;
+            width: 3px;
+            height: 3px;
+            background: rgba(99, 102, 241, 0.3);
+            border-radius: 50%;
+            animation: float 25s infinite linear;
+        }
+
+        @keyframes float {
+            0% {
+                transform: translateY(100vh) translateX(0) rotate(0deg);
+                opacity: 0;
+            }
+
+            10% {
+                opacity: 0.5;
+            }
+
+            90% {
+                opacity: 0.5;
+            }
+
+            100% {
+                transform: translateY(-100px) translateX(100px) rotate(360deg);
+                opacity: 0;
+            }
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 40px 30px;
+            position: relative;
+            z-index: 2;
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 50px;
+            animation: fadeInDown 1s ease-out;
+            position: relative;
+        }
+
+        .header::after {
+            content: '';
+            position: absolute;
+            bottom: -30px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 100px;
+            height: 4px;
+            background: linear-gradient(90deg, transparent, #6366f1, #9333ea, transparent);
+            border-radius: 2px;
+        }
+
+        .header h1 {
+            font-size: 3rem;
+            font-weight: 900;
+            background: linear-gradient(135deg, #1e3a5f 0%, #c9a227 50%, #1e3a5f 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 15px;
+            letter-spacing: -0.02em;
+            animation: shimmer 4s ease-in-out infinite;
+        }
+
+        @keyframes shimmer {
+
+            0%,
+            100% {
+                filter: brightness(1);
+            }
+
+            50% {
+                filter: brightness(1.15);
+            }
+        }
+
+        .header .subtitle {
+            font-size: 1.4rem;
+            color: #4b5563;
+            font-weight: 600;
+            margin-bottom: 15px;
+        }
+
+        .header .description {
+            font-size: 1rem;
+            color: #6b7280;
+            max-width: 700px;
+            margin: 0 auto;
+            line-height: 1.7;
+            font-weight: 400;
+        }
+
+        .overview-section {
+            background: rgba(255, 255, 255, 0.9);
+            backdrop-filter: blur(20px);
+            border-radius: 16px;
+            padding: 32px;
+            border: 1px solid rgba(229, 231, 235, 0.8);
+            margin-bottom: 32px;
+            animation: fadeInUp 1s ease-out 0.2s both;
+            box-shadow:
+                0 10px 40px rgba(0, 0, 0, 0.08),
+                0 4px 12px rgba(99, 102, 241, 0.1),
+                inset 0 1px 0 rgba(255, 255, 255, 0.9);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .overview-section:hover {
+            transform: translateY(-5px);
+            box-shadow:
+                0 20px 60px rgba(99, 102, 241, 0.15),
+                0 8px 24px rgba(147, 51, 234, 0.15),
+                inset 0 1px 0 rgba(255, 255, 255, 1);
+        }
+
+        .section-title {
+            font-size: 1.75rem;
+            font-weight: 700;
+            color: #1f2937;
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            position: relative;
+        }
+
+        .section-title::before {
+            content: '';
+            width: 4px;
+            height: 28px;
+            background: linear-gradient(180deg, #6366f1 0%, #9333ea 100%);
+            border-radius: 2px;
+            box-shadow: 0 0 8px rgba(99, 102, 241, 0.4);
+        }
+
+        .project-description {
+            font-size: 0.95rem;
+            color: #4b5563;
+            line-height: 1.75;
+            margin-bottom: 24px;
+            font-weight: 400;
+        }
+
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+            gap: 18px;
+            margin-bottom: 0;
+        }
+
+        .feature-card {
+            background: rgba(255, 255, 255, 0.7);
+            backdrop-filter: blur(10px);
+            border-radius: 16px;
+            padding: 22px 18px;
+            border: 1px solid rgba(229, 231, 235, 0.6);
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            position: relative;
+            overflow: hidden;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+        }
+
+        .feature-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(99, 102, 241, 0.1), transparent);
+            transition: left 0.5s ease;
+        }
+
+        .feature-card:hover::before {
+            left: 100%;
+        }
+
+        .feature-card:hover {
+            transform: translateY(-6px) scale(1.02);
+            box-shadow:
+                0 12px 32px rgba(99, 102, 241, 0.2),
+                0 4px 12px rgba(147, 51, 234, 0.15),
+                0 0 0 1px rgba(99, 102, 241, 0.2);
+            border-color: rgba(99, 102, 241, 0.4);
+            background: rgba(255, 255, 255, 0.95);
+        }
+
+        .feature-icon {
+            font-size: 2rem;
+            margin-bottom: 10px;
+            display: inline-block;
+            transition: transform 0.3s ease;
+            filter: drop-shadow(0 2px 4px rgba(99, 102, 241, 0.2));
+        }
+
+        .feature-card:hover .feature-icon {
+            transform: scale(1.15) rotate(5deg);
+        }
+
+        .feature-title {
+            font-size: 1rem;
+            font-weight: 700;
+            color: #1f2937;
+            margin-bottom: 6px;
+        }
+
+        .feature-description {
+            font-size: 0.8rem;
+            color: #6b7280;
+            line-height: 1.5;
+            font-weight: 400;
+        }
+
+        /* Prerequisites Cards Section */
+        .prereq-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+            gap: 24px;
+            margin-top: 32px;
+            margin-bottom: 32px;
+            animation: fadeInUp 1s ease-out 0.4s both;
+        }
+
+        .prereq-card {
+            background: rgba(255, 255, 255, 0.9);
+            backdrop-filter: blur(20px);
+            border-radius: 20px;
+            padding: 28px 24px;
+            border: 1px solid rgba(229, 231, 235, 0.8);
+            box-shadow:
+                0 10px 40px rgba(0, 0, 0, 0.08),
+                0 4px 12px rgba(99, 102, 241, 0.1),
+                inset 0 1px 0 rgba(255, 255, 255, 0.9);
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            cursor: pointer;
+            text-decoration: none;
+            color: inherit;
+            display: block;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .prereq-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: var(--card-gradient, linear-gradient(90deg, #6366f1, #9333ea));
+            border-radius: 20px 20px 0 0;
+        }
+
+        .prereq-card:hover {
+            transform: translateY(-8px) scale(1.02);
+            box-shadow:
+                0 24px 60px rgba(99, 102, 241, 0.2),
+                0 10px 30px rgba(147, 51, 234, 0.15),
+                inset 0 1px 0 rgba(255, 255, 255, 1);
+            border-color: rgba(99, 102, 241, 0.4);
+        }
+
+        .prereq-card-icon {
+            font-size: 2.8rem;
+            margin-bottom: 14px;
+            display: block;
+            filter: drop-shadow(0 4px 8px rgba(99, 102, 241, 0.25));
+            transition: transform 0.3s ease;
+        }
+
+        .prereq-card:hover .prereq-card-icon {
+            transform: scale(1.12) rotate(-5deg);
+        }
+
+        .prereq-card-title {
+            font-size: 1.25rem;
+            font-weight: 800;
+            color: #1f2937;
+            margin-bottom: 8px;
+            font-family: 'Poppins', sans-serif;
+        }
+
+        .prereq-card-desc {
+            font-size: 0.875rem;
+            color: #6b7280;
+            line-height: 1.6;
+            margin-bottom: 16px;
+        }
+
+        .prereq-card-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            background: var(--badge-bg, rgba(99, 102, 241, 0.1));
+            color: var(--badge-color, #4f46e5);
+            border-radius: 20px;
+            padding: 5px 14px;
+            font-size: 0.75rem;
+            font-weight: 600;
+            letter-spacing: 0.3px;
+        }
+
+        .begin-journey-section {
+            text-align: center;
+            padding: 50px 20px;
+            animation: fadeInUp 1s ease-out 0.6s both;
+            position: relative;
+        }
+
+        .begin-journey-section::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 200px;
+            height: 200px;
+            background: radial-gradient(circle, rgba(99, 102, 241, 0.15) 0%, transparent 70%);
+            border-radius: 50%;
+            filter: blur(60px);
+            animation: pulse 4s ease-in-out infinite;
+        }
+
+        @keyframes pulse {
+
+            0%,
+            100% {
+                transform: translate(-50%, -50%) scale(1);
+                opacity: 0.6;
+            }
+
+            50% {
+                transform: translate(-50%, -50%) scale(1.3);
+                opacity: 0.9;
+            }
+        }
+
+        .begin-journey-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 12px;
+            padding: 18px 40px;
+            font-size: 1.25rem;
+            font-weight: 700;
+            color: white;
+            background: linear-gradient(135deg, #1e3a5f 0%, #c9a227 50%, #1e3a5f 100%);
+            border: none;
+            border-radius: 50px;
+            cursor: pointer;
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            box-shadow:
+                0 20px 60px rgba(30, 58, 95, 0.4),
+                0 10px 30px rgba(201, 162, 39, 0.3),
+                inset 0 1px 0 rgba(255, 255, 255, 0.3);
+            text-decoration: none;
+            font-family: inherit;
+            position: relative;
+            overflow: hidden;
+            letter-spacing: 0.3px;
+        }
+
+        .begin-journey-btn::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 0;
+            height: 0;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.25);
+            transform: translate(-50%, -50%);
+            transition: width 0.6s ease, height 0.6s ease;
+        }
+
+        .begin-journey-btn:hover::before {
+            width: 300px;
+            height: 300px;
+        }
+
+        .begin-journey-btn:hover {
+            transform: translateY(-6px) scale(1.05);
+            box-shadow:
+                0 30px 80px rgba(99, 102, 241, 0.5),
+                0 15px 40px rgba(147, 51, 234, 0.4),
+                0 0 0 8px rgba(99, 102, 241, 0.15),
+                inset 0 1px 0 rgba(255, 255, 255, 0.4);
+        }
+
+        .begin-journey-btn span {
+            font-size: 1.75rem;
+            position: relative;
+            z-index: 1;
+            transition: transform 0.3s ease;
+        }
+
+        .begin-journey-btn:hover span:first-child {
+            transform: rotate(-15deg) scale(1.15);
+        }
+
+        .begin-journey-btn:hover span:last-child {
+            transform: translateX(5px);
+        }
+
+        .begin-journey-btn span:nth-child(2) {
+            position: relative;
+            z-index: 1;
+        }
+
+        .begin-journey-info {
+            margin-top: 20px;
+            color: #6b7280;
+            font-size: 0.95rem;
+            font-weight: 500;
+        }
+
+        @keyframes fadeInDown {
+            from {
+                opacity: 0;
+                transform: translateY(-40px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(40px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                padding: 30px 20px;
+            }
+
+            .header h1 {
+                font-size: 2.25rem;
+            }
+
+            .header .subtitle {
+                font-size: 1.2rem;
+            }
+
+            .overview-section {
+                padding: 24px 18px;
+            }
+
+            .prereq-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        /* Footer Styles */
+        footer {
+            background: linear-gradient(135deg, #0f172a 0%, #1e3a5f 100%);
+            background-size: 200% 200%;
+            animation: gradient-shift 10s ease infinite;
+            color: white;
+            padding: 3rem 1rem;
+            position: relative;
+            overflow: hidden;
+        }
+
+        footer::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background:
+                radial-gradient(circle at 20% 50%, rgba(30, 58, 95, 0.3), transparent 50%),
+                radial-gradient(circle at 80% 80%, rgba(201, 162, 39, 0.1), transparent 50%);
+            pointer-events: none;
+        }
+
+        @keyframes gradient-shift {
+
+            0%,
+            100% {
+                background-position: 0% 50%;
+            }
+
+            50% {
+                background-position: 100% 50%;
+            }
+        }
+
+        .footer-container {
+            max-width: 1280px;
+            margin: 0 auto;
+        }
+
+        .footer-grid {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 2rem;
+            margin-bottom: 2rem;
+        }
+
+        @media (min-width: 768px) {
+            .footer-grid {
+                grid-template-columns: 2fr 1fr;
+            }
+        }
+
+        .footer-logo {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            text-decoration: none;
+            margin-bottom: 1rem;
+        }
+
+        .footer-logo img {
+            height: 32px;
+            width: auto;
+        }
+
+        .footer-description {
+            color: #d1d5db;
+            margin-bottom: 1.5rem;
+            max-width: 28rem;
+        }
+
+        .footer-social {
+            display: flex;
+            gap: 1rem;
+        }
+
+        .social-link {
+            width: 40px;
+            height: 40px;
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(8px);
+            border-radius: 0.75rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s;
+            text-decoration: none;
+            color: white;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .social-link:hover {
+            background: rgba(255, 255, 255, 0.2);
+            transform: translateY(-2px) scale(1.1);
+        }
+
+        .footer-links-title {
+            font-size: 1.125rem;
+            font-weight: 600;
+            margin-bottom: 1rem;
+        }
+
+        .footer-links-list {
+            list-style: none;
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+        }
+
+        .footer-links-list a {
+            color: #d1d5db;
+            text-decoration: none;
+            transition: color 0.2s;
+        }
+
+        .footer-links-list a:hover {
+            color: white;
+        }
+
+        .footer-bottom {
+            border-top: 1px solid rgba(255, 255, 255, 0.2);
+            padding-top: 2rem;
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        @media (min-width: 768px) {
+            .footer-bottom {
+                flex-direction: row;
+            }
+        }
+
+        .footer-copyright {
+            color: #d1d5db;
+            font-size: 0.875rem;
+        }
+
+        .footer-policies {
+            display: flex;
+            gap: 1.5rem;
+        }
+
+        .footer-policies a {
+            color: #d1d5db;
+            text-decoration: none;
+            font-size: 0.875rem;
+            transition: color 0.2s;
+        }
+
+        .footer-policies a:hover {
+            color: white;
+        }
+    </style>
+</head>
+
+<body>
+    <!-- Particles -->
+    <div class="particles" aria-hidden="true">
+        <div class="particle" style="left:10%;animation-delay:0s;animation-duration:20s"></div>
+        <div class="particle" style="left:30%;animation-delay:3s;animation-duration:22s"></div>
+        <div class="particle" style="left:55%;animation-delay:6s;animation-duration:18s"></div>
+        <div class="particle" style="left:75%;animation-delay:9s;animation-duration:25s"></div>
+        <div class="particle" style="left:90%;animation-delay:12s;animation-duration:20s"></div>
+    </div>
+
+    <div class="container">
+        <!-- Header -->
+        <div class="header">
+            <h1>🎓 Prerequisites</h1>
+            <p class="subtitle">Foundation Technologies for Realtime Projects</p>
+            <p class="description">
+                Before diving into the realtime projects, make sure you have a solid understanding of these core
+                technologies. Each section includes video lectures and essential concepts to get you up to speed.
+            </p>
+        </div>
+
+        <!-- Overview Section -->
+        <div class="overview-section">
+            <h2 class="section-title">📚 What You'll Learn</h2>
+            <p class="project-description">
+                These prerequisites cover the four foundational technologies that power every realtime project in this
+                curriculum. Mastering them will ensure you can follow along with the project architecture, implement
+                features
+                confidently, and understand the full-stack development workflow from front-end to database.
+            </p>
+            <div class="features-grid">
+                <div class="feature-card">
+                    <div class="feature-icon">⚡</div>
+                    <div class="feature-title">Antigravity Basics</div>
+                    <div class="feature-description">Understand the AI-first development workflow powering the entire
+                        curriculum</div>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">⚛️</div>
+                    <div class="feature-title">React JS Basics</div>
+                    <div class="feature-description">Build dynamic, component-based user interfaces with React.js</div>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">🐍</div>
+                    <div class="feature-title">FastAPI Basics</div>
+                    <div class="feature-description">Create high-performance REST APIs with Python's modern FastAPI
+                        framework</div>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">🐘</div>
+                    <div class="feature-title">PostgreSQL</div>
+                    <div class="feature-description">Manage relational data with the world's most advanced open-source
+                        database</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Prerequisites Cards -->
+        <div class="prereq-grid">
+            <!-- Antigravity Basics -->
+            <a href="Antigravity_Basics/Overview.html" class="prereq-card"
+                style="--card-gradient: linear-gradient(90deg, #6366f1, #9333ea); --badge-bg: rgba(99,102,241,0.1); --badge-color: #4f46e5;">
+                <span class="prereq-card-icon">⚡</span>
+                <div class="prereq-card-title">Antigravity Basics</div>
+                <p class="prereq-card-desc">
+                    Learn what Antigravity is and how it powers the AI-first development philosophy behind every project
+                    in
+                    this course. Understand the core concepts, agent workflow, and the Antigravity productivity loop.
+                </p>
+                <span class="prereq-card-badge">▶ Start Learning</span>
+            </a>
+
+            <!-- React JS Basics -->
+            <a href="React_JS_Basics/Overview.html" class="prereq-card"
+                style="--card-gradient: linear-gradient(90deg, #06b6d4, #3b82f6); --badge-bg: rgba(6,182,212,0.1); --badge-color: #0891b2;">
+                <span class="prereq-card-icon">⚛️</span>
+                <div class="prereq-card-title">React JS Basics</div>
+                <p class="prereq-card-desc">
+                    Get comfortable with React components, hooks, state management, and JSX. This section sets you up to
+                    build the frontend interfaces in all realtime projects without friction.
+                </p>
+                <span class="prereq-card-badge" style="--badge-bg: rgba(6,182,212,0.1); --badge-color: #0891b2;">▶ Start
+                    Learning</span>
+            </a>
+
+            <!-- FastAPI Basics -->
+            <a href="FastAPI_Basics/Overview.html" class="prereq-card"
+                style="--card-gradient: linear-gradient(90deg, #10b981, #059669); --badge-bg: rgba(16,185,129,0.1); --badge-color: #047857;">
+                <span class="prereq-card-icon">🐍</span>
+                <div class="prereq-card-title">FastAPI Basics</div>
+                <p class="prereq-card-desc">
+                    Explore Python's most developer-friendly API framework. Learn routing, request models, dependency
+                    injection, and how to build production-ready REST endpoints efficiently.
+                </p>
+                <span class="prereq-card-badge" style="--badge-bg: rgba(16,185,129,0.1); --badge-color: #047857;">▶
+                    Start Learning</span>
+            </a>
+
+            <!-- PostgreSQL -->
+            <a href="PostgreSQL_Basics/Overview.html" class="prereq-card"
+                style="--card-gradient: linear-gradient(90deg, #3b82f6, #1d4ed8); --badge-bg: rgba(59,130,246,0.1); --badge-color: #1d4ed8;">
+                <span class="prereq-card-icon">🐘</span>
+                <div class="prereq-card-title">PostgreSQL</div>
+                <p class="prereq-card-desc">
+                    Master relational database concepts with PostgreSQL — from schema design and SQL queries to
+                    connecting
+                    with FastAPI. The backbone of every data-driven project in this curriculum.
+                </p>
+                <span class="prereq-card-badge" style="--badge-bg: rgba(59,130,246,0.1); --badge-color: #1d4ed8;">▶
+                    Start Learning</span>
+            </a>
+        </div>
+
+        <!-- Begin Journey -->
+        <div class="begin-journey-section">
+            <a href="Antigravity_Basics/Overview.html" class="begin-journey-btn">
+                <span>⚡</span>
+                <span>Start with Antigravity Basics</span>
+                <span>→</span>
+            </a>
+            <p class="begin-journey-info">Begin your journey · 4 topics · Video-guided learning</p>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer>
+        <div class="footer-container">
+            <div class="footer-grid">
+                <div>
+                    <a href="/" class="footer-logo">
+                        <img src="lms_logo.svg" alt="GNANAM AI">
+                    </a>
+                    <p class="footer-description">
+                        Empowering digital learning with our comprehensive Learning Management System.
+                        Create, manage, and deliver engaging educational experiences.
+                    </p>
+                    <div class="footer-social">
+                        <a href="#" class="social-link" aria-label="Twitter">
+                            <svg width="20" height="20" fill="currentColor" viewBox="0 0 24 24">
+                                <path
+                                    d="M23.953 4.57a10 10 0 01-2.825.775 4.958 4.958 0 002.163-2.723c-.951.555-2.005.959-3.127 1.184a4.92 4.92 0 00-8.384 4.482C7.69 8.095 4.067 6.13 1.64 3.162a4.822 4.822 0 00-.666 2.475c0 1.71.87 3.213 2.188 4.096a4.904 4.904 0 01-2.228-.616v.06a4.923 4.923 0 003.946 4.827 4.996 4.996 0 01-2.212.085 4.936 4.936 0 004.604 3.417 9.867 9.867 0 01-6.102 2.105c-.39 0-.779-.023-1.17-.067a13.995 13.995 0 007.557 2.209c9.053 0 13.998-7.496 13.998-13.985 0-.21 0-.42-.015-.63A9.935 9.935 0 0024 4.59z" />
+                            </svg>
+                        </a>
+                        <a href="#" class="social-link" aria-label="LinkedIn">
+                            <svg width="20" height="20" fill="currentColor" viewBox="0 0 24 24">
+                                <path
+                                    d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433c-1.144 0-2.063-.926-2.063-2.065 0-1.138.92-2.063 2.063-2.063 1.14 0 2.064.925 2.064 2.063 0 1.139-.925 2.065-2.064 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z" />
+                            </svg>
+                        </a>
+                        <a href="#" class="social-link" aria-label="GitHub">
+                            <svg width="20" height="20" fill="currentColor" viewBox="0 0 24 24">
+                                <path
+                                    d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z" />
+                            </svg>
+                        </a>
+                    </div>
+                </div>
+                <div>
+                    <h3 class="footer-links-title">Quick Links</h3>
+                    <ul class="footer-links-list">
+                        <li><a href="/courses">Browse Courses</a></li>
+                        <li><a href="/about">About Us</a></li>
+                        <li><a href="/contact">Contact</a></li>
+                        <li><a href="/help">Help Center</a></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p class="footer-copyright">© 2025 LMS Platform. All rights reserved.</p>
+                <div class="footer-policies">
+                    <a href="#">Privacy Policy</a>
+                    <a href="#">Terms of Service</a>
+                    <a href="#">Cookie Policy</a>
+                </div>
+            </div>
+        </div>
+    </footer>
+</body>
+
+</html>
