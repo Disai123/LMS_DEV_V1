@@ -47,6 +47,10 @@ const logger = require('./utils/logger');
 const SocketServer = require('./socket/socketServer');
 
 const app = express();
+// Trust Hostinger/nginx proxy so req.protocol and secure cookies are correct in production
+if (process.env.NODE_ENV === 'production') {
+  app.set('trust proxy', 1);
+}
 const PORT = process.env.PORT || 5000;
 
 // Set default environment variables for development

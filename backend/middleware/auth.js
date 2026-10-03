@@ -16,7 +16,19 @@ const authenticate = async (req, res, next) => {
     if (!token && req.query.token) {
       token = req.query.token;
     }
-    
+
+    // Stylesheets/scripts don't send Authorization; parent HTML may only have token in referer URL
+    if (!token && req.get('referer')) {
+      try {
+        const refererUrl = new URL(req.get('referer'));
+        if (refererUrl.pathname.includes('/api/realtime-projects/')) {
+          token = refererUrl.searchParams.get('token') || token;
+        }
+      } catch (e) {
+        // ignore invalid referer
+      }
+    }
+
     if (!token) {
       return res.status(401).json({
         success: false,

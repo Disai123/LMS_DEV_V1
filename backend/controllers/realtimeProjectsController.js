@@ -580,11 +580,24 @@ const serveProjectMainPage = async (req, res, next) => {
     };
 
     // 1. Convert absolute paths like /shared/styles.css to full absolute URLs WITH TOKEN
-    html = html.replace(/(href|src)\s*=\s*(["'])\/(shared|assets|images|js|css|fonts|scripts|styles)\//gi, (match, attr, quote, dir) => {
-      const newPath = addTokenToUrl(`${baseHref}${dir}/`);
-      console.log(`[Path Fix] Converting absolute path: ${match} -> ${attr}=${quote}${newPath}${quote}`);
-      return `${attr}=${quote}${newPath}${quote}`;
-    });
+    html = html.replace(
+      /(href|src)\s*=\s*(["'])\/(shared|assets|images|js|css|fonts|scripts|styles)\/([^"']*?)\2/gi,
+      (match, attr, quote, dir, filePath) => {
+        const newPath = addTokenToUrl(`${baseHref}${dir}/${filePath}`);
+        console.log(`[Path Fix] Converting absolute path: ${match} -> ${attr}=${quote}${newPath}${quote}`);
+        return `${attr}=${quote}${newPath}${quote}`;
+      }
+    );
+
+    // 1b. Relative shared/... from project root (no leading ../)
+    html = html.replace(
+      /(href|src)\s*=\s*(["'])shared\/([^"']*?)\2/gi,
+      (match, attr, quote, filePath) => {
+        const absolutePath = addTokenToUrl(`${baseHref}shared/${filePath}`);
+        console.log(`[Path Fix] Converting shared/ path: ${match} -> ${attr}=${quote}${absolutePath}${quote}`);
+        return `${attr}=${quote}${absolutePath}${quote}`;
+      }
+    );
 
     // 2. Convert relative paths that go up directories (../shared/navigation.js, etc.)
     // Convert to FULL ABSOLUTE URLs with projectId included AND TOKEN
@@ -673,6 +686,26 @@ const serveProjectMainPage = async (req, res, next) => {
         return newMatch;
       }
       return match;
+    });
+
+    // 8. Catch-all: project asset paths (CSS/JS/images) still relative — must include token before browser fetches
+    html = html.replace(/(href|src)\s*=\s*(["'])(?!https?:|\/\/|mailto:|tel:|#|data:|blob:)([^"']+)\2/gi, (match, attr, quote, assetPath) => {
+      if (assetPath.includes('/api/realtime-projects/') || assetPath.includes('token=')) {
+        return match;
+      }
+      if (!assetPath.match(/\.(css|js|png|jpg|jpeg|gif|svg|ico|woff2?|ttf|eot|json|webp|mp4|webm)$/i)
+        && !assetPath.match(/^(shared|assets|images|js|css|fonts|scripts|styles)\//i)
+        && !assetPath.includes('/shared/')
+        && !assetPath.includes('/assets/')) {
+        return match;
+      }
+      let resolved = assetPath.replace(/^(\.\.\/)+/, '');
+      if (resolved.startsWith('/')) {
+        resolved = resolved.replace(/^\//, '');
+      }
+      const absolutePath = addTokenToUrl(`${baseHref}${resolved}`);
+      console.log(`[Path Fix] Catch-all asset path: ${match} -> ${attr}=${quote}${absolutePath}${quote}`);
+      return `${attr}=${quote}${absolutePath}${quote}`;
     });
 
     // Create token injection script that runs IMMEDIATELY (before any other scripts)
