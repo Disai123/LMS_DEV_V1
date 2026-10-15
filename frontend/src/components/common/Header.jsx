@@ -79,6 +79,12 @@ const Header = () => {
             >
               Realtime Projects
             </Link>
+            <Link
+              to="/roadmap/fde"
+              className="text-gray-700 hover:text-amber-600 font-medium transition-colors duration-200"
+            >
+              FDE Roadmap
+            </Link>
             {/* HIDDEN: Hackathons & Internships nav links temporarily hidden */}
             {/* <Link
               to={isAuthenticated ? '/student/hackathons' : '/hackathons'}
@@ -217,6 +223,13 @@ const Header = () => {
                   className="block px-4 py-4 text-gray-700 hover:bg-white/20 rounded-lg transition-colors duration-200 min-h-[44px] flex items-center"
                 >
                   Realtime Projects
+                </Link>
+                <Link
+                  to="/roadmap/fde"
+                  onClick={() => setIsMenuOpen(false)}
+                  className="block px-4 py-4 text-gray-700 hover:bg-white/20 rounded-lg transition-colors duration-200 min-h-[44px] flex items-center"
+                >
+                  FDE Roadmap
                 </Link>
                 {/* HIDDEN: Hackathons & Internships mobile nav links temporarily hidden */}
                 {/* <Link

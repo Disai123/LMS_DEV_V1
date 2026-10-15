@@ -1,0 +1,314 @@
+{
+  "hero": {
+    "eyebrow": "Level 4 · Forward Deployed Engineering",
+    "title": "Forward Deployed Engineer Roadmap",
+    "subtitle": "Work at the intersection of customer, product, engineering and AI. 10 stages — click any stage to jump."
+  },
+  "chips": ["12 weeks", "1 hour a day", "5 days a week", "60 hours"],
+  "phases": [
+    { "label": "Weeks 1-6 · 30 h", "detail": "Steps 1-2: Foundations" },
+    { "label": "Weeks 7-10 · 20 h", "detail": "Steps 3-9: FDE SDLC" },
+    { "label": "Weeks 11-12 · 10 h", "detail": "Step 10: Capstone" }
+  ],
+  "capabilities": [
+    "Build full-stack and AI prototypes customers can evaluate",
+    "Run discovery and translate business goals into scoped use cases",
+    "Design UI/UX and architecture under real enterprise constraints",
+    "Ship POCs and MVPs with clear evaluation and production gaps",
+    "Deploy with observability and pass security and executive reviews",
+    "Deliver an end-to-end capstone engagement pack"
+  ],
+  "faq": [
+    {
+      "question": "How long does this roadmap take?",
+      "answer": "12 weeks at 1 hour a day, 5 days a week — about 60 hours total. Move on when you meet each stage's \"ready to move on\" checkpoint, not only when the week band ends."
+    },
+    {
+      "question": "What does the roadmap cover?",
+      "answer": "Ten stages: Software Engineering, AI Engineering, FDE SDLC (business requirements, UI/UX, architecture), Proof of concept, MVP, Production deployment, Enterprise AI FDE, and Capstone FDE."
+    },
+    {
+      "question": "What will I be able to do after?",
+      "answer": "Stand up apps and RAG prototypes, run customer-style discovery, design solutions under constraints, scope POCs, deploy with monitoring, communicate with security and executives, and complete a capstone engagement."
+    },
+    {
+      "question": "How should I split my time?",
+      "answer": "Weeks 1-6 focus on engineering and AI foundations (steps 1-2). Weeks 7-10 cover the FDE SDLC through enterprise AI (steps 3-9). Weeks 11-12 are the capstone project (step 10)."
+    },
+    {
+      "question": "What should I build to prove readiness?",
+      "answer": "Complete the capstone: discovery notes, ranked use cases, POC scope with pass mark, working prototype with evals, security Q&A, and an executive readout with handover documentation."
+    },
+    {
+      "question": "Is progress saved? Do I need an account?",
+      "answer": "Progress is saved in your browser (localStorage). No login or backend is required for the FDE roadmap."
+    }
+  ],
+  "capstone": {
+    "title": "Capstone: An end-to-end customer engagement",
+    "intro": "Run a realistic FDE engagement from discovery through handover: scoped POC, working prototype on representative data, security review prep, and executive readout.",
+    "deliverables": [
+      "Discovery notes and a ranked use-case scorecard",
+      "A POC scope with a definition of done and an agreed pass mark",
+      "A working prototype on synthetic or public data, with evaluation results",
+      "Written answers to the ten questions a security team will ask",
+      "A 10-minute executive readout and a handover document"
+    ],
+    "strongWork": [
+      {
+        "title": "Problem framing",
+        "body": "The chosen use case clearly follows from discovery and scoring, not from the technology you wanted to demo."
+      },
+      {
+        "title": "Scope discipline",
+        "body": "The POC has a definition of done and a pass mark agreed before building starts."
+      },
+      {
+        "title": "Technical delivery",
+        "body": "The prototype works on representative data, and evaluation results are honest about gaps."
+      },
+      {
+        "title": "Trust and risk",
+        "body": "Security answers are specific, and risks have named owners and mitigations."
+      },
+      {
+        "title": "Executive communication",
+        "body": "The readout leads with the decision and the evidence, without unnecessary jargon."
+      }
+    ],
+    "startStageSlug": "capstone-fde",
+    "startItemSlug": "capstone-rag-permissions-react"
+  },
+  "stages": [
+    {
+      "slug": "software-engineering",
+      "name": "Software Engineering",
+      "icon": "code",
+      "color": "#2fd3a0",
+      "weeksLabel": "Weeks 1-2",
+      "hours": 10,
+      "cardBlurb": "Build robust, scalable and maintainable applications.",
+      "description": "Build robust, scalable and maintainable applications.",
+      "outcomes": [
+        "Build a React frontend that talks to an API",
+        "Build a backend API with a database",
+        "Package it with Docker"
+      ],
+      "readyWhen": "You can stand up a small full-stack app in a day.",
+      "reads": [
+        { "slug": "react-fundamentals", "type": "read", "title": "React fundamentals", "minutes": 30 },
+        { "slug": "backend-api", "type": "read", "title": "Backend API (FastAPI/Node)", "minutes": 30 },
+        { "slug": "sql-databases", "type": "read", "title": "SQL and databases", "minutes": 30 },
+        { "slug": "docker-basics", "type": "read", "title": "Docker basics", "minutes": 20 }
+      ],
+      "practise": [
+        { "slug": "full-stack-crud", "type": "lab", "title": "Full-stack CRUD app", "minutes": 90 },
+        { "slug": "unfamiliar-codebase", "type": "interview", "title": "Add a feature to a codebase you have never seen", "minutes": 15 }
+      ]
+    },
+    {
+      "slug": "ai-engineering",
+      "name": "AI Engineering",
+      "icon": "brain",
+      "color": "#3aa6ff",
+      "weeksLabel": "Weeks 3-6",
+      "hours": 20,
+      "cardBlurb": "Work with LLMs, ML and GenAI technologies to build intelligent solutions.",
+      "description": "Work with LLMs, ML and GenAI technologies to build intelligent solutions.",
+      "outcomes": [
+        "Prompt and call LLM APIs",
+        "Build RAG with citations",
+        "Add tool calling and agents",
+        "Evaluate outputs"
+      ],
+      "readyWhen": "You can build a cited Q&A prototype over documents in two days.",
+      "reads": [
+        { "slug": "llm-fundamentals", "type": "read", "title": "LLM fundamentals", "minutes": 30 },
+        { "slug": "prompt-engineering", "type": "read", "title": "Prompt engineering", "minutes": 30 },
+        { "slug": "embeddings-vector-search", "type": "read", "title": "Embeddings and vector search", "minutes": 30 },
+        { "slug": "rag-pipeline", "type": "read", "title": "RAG pipeline", "minutes": 40 },
+        { "slug": "tool-calling-agents", "type": "read", "title": "Tool calling and agents", "minutes": 40 },
+        { "slug": "evaluation-guardrails", "type": "read", "title": "Evaluation and guardrails", "minutes": 30 }
+      ],
+      "practise": [
+        { "slug": "rag-assistant-project", "type": "project", "title": "RAG assistant over documents", "minutes": 180 },
+        { "slug": "explain-rag-pipeline", "type": "interview", "title": "Explain the full RAG pipeline", "minutes": 20 }
+      ]
+    },
+    {
+      "slug": "fde-sdlc-business-requirement",
+      "name": "FDE SDLC: Business requirement",
+      "icon": "clipboard-list",
+      "color": "#a074ff",
+      "weeksLabel": "Week 7",
+      "hours": 3,
+      "cardBlurb": "Understand business goals, identify use cases and define requirements.",
+      "description": "Understand business goals, identify use cases and define requirements.",
+      "outcomes": [
+        "Run a discovery session",
+        "Score use cases by value, feasibility and risk"
+      ],
+      "readyWhen": "You can turn one discovery session into a ranked use-case list.",
+      "reads": [
+        { "slug": "discovery-requirements", "type": "read", "title": "Discovery and requirements", "minutes": 30 },
+        { "slug": "scoring-use-cases", "type": "read", "title": "Scoring use cases", "minutes": 25 }
+      ],
+      "practise": [
+        { "slug": "ai-assistant-first-30-min", "type": "interview", "title": "Customer wants an AI assistant over docs: first 30 minutes?", "minutes": 15 }
+      ]
+    },
+    {
+      "slug": "fde-sdlc-ui-ux",
+      "name": "FDE SDLC: UI/UX Solution",
+      "icon": "monitor",
+      "color": "#ffd23a",
+      "weeksLabel": "Week 7",
+      "hours": 2,
+      "cardBlurb": "Design intuitive and user-centric UI/UX solutions.",
+      "description": "Design intuitive and user-centric UI/UX solutions.",
+      "outcomes": [
+        "Sketch user flows",
+        "Wireframe a simple AI interface"
+      ],
+      "readyWhen": "You have wireframes the customer can react to.",
+      "reads": [
+        { "slug": "ux-ai-products", "type": "read", "title": "UX for AI products", "minutes": 25 },
+        { "slug": "wireframing-basics", "type": "read", "title": "Wireframing basics", "minutes": 20 }
+      ],
+      "practise": [
+        { "slug": "wireframe-capstone-screens", "type": "lab", "title": "Wireframe the capstone screens", "minutes": 40 }
+      ]
+    },
+    {
+      "slug": "fde-sdlc-architecture",
+      "name": "FDE SDLC: Architecture solution",
+      "icon": "layers",
+      "color": "#ff5a7a",
+      "weeksLabel": "Week 8",
+      "hours": 3,
+      "cardBlurb": "Design secure, scalable and cost-effective architecture solution.",
+      "description": "Design secure, scalable and cost-effective architecture.",
+      "outcomes": [
+        "Design for permissions and data limits",
+        "Estimate cost per month"
+      ],
+      "readyWhen": "You can defend an architecture and its cost estimate.",
+      "reads": [
+        { "slug": "solution-architecture", "type": "read", "title": "Solution architecture", "minutes": 30 },
+        { "slug": "cost-latency-estimation", "type": "read", "title": "Cost and latency estimation", "minutes": 25 }
+      ],
+      "practise": [
+        { "slug": "document-assistant-permissions", "type": "interview", "title": "Document assistant where users only see allowed docs", "minutes": 20 }
+      ]
+    },
+    {
+      "slug": "proof-of-concept",
+      "name": "Proof of concept",
+      "icon": "lightbulb",
+      "color": "#27c4c4",
+      "weeksLabel": "Weeks 8-9",
+      "hours": 3,
+      "cardBlurb": "Build a working prototype to validate feasibility and business value.",
+      "description": "Build a working prototype to validate feasibility and business value.",
+      "outcomes": [
+        "Write a POC scope with a definition of done",
+        "Build a small evaluation set"
+      ],
+      "readyWhen": "POC has a scope, eval set and agreed pass mark.",
+      "reads": [
+        { "slug": "scoping-poc", "type": "read", "title": "Scoping a POC", "minutes": 25 },
+        { "slug": "evals-customer-data", "type": "read", "title": "Evals from customer data", "minutes": 30 }
+      ],
+      "practise": [
+        { "slug": "poc-scope-creep", "type": "interview", "title": "Customer keeps adding small requests mid-POC", "minutes": 15 }
+      ]
+    },
+    {
+      "slug": "minimum-viable-product",
+      "name": "Minimum Viable Product",
+      "icon": "package",
+      "color": "#ff9a2f",
+      "weeksLabel": "Week 9",
+      "hours": 3,
+      "cardBlurb": "Develop an MVP with core features to get real user feedback and demonstrate value.",
+      "description": "Develop an MVP with core features to get real user feedback.",
+      "outcomes": [
+        "Choose what to fake and what must be real",
+        "Ship core features"
+      ],
+      "readyWhen": "You can demo a working MVP with its gaps listed.",
+      "reads": [
+        { "slug": "prototyping-productisation", "type": "read", "title": "Prototyping to productisation", "minutes": 30 }
+      ],
+      "practise": [
+        { "slug": "vp-demo-next-week", "type": "interview", "title": "VP says: just show us a demo next week", "minutes": 15 },
+        { "slug": "build-mvp-slice", "type": "lab", "title": "Build the MVP slice", "minutes": 60 }
+      ]
+    },
+    {
+      "slug": "production-deployment",
+      "name": "Production deployment",
+      "icon": "cloud-upload",
+      "color": "#7a8cff",
+      "weeksLabel": "Weeks 9-10",
+      "hours": 3,
+      "cardBlurb": "Deploy to production with security, monitoring, scalability and operational excellence.",
+      "description": "Deploy to production with security, monitoring and scalability.",
+      "outcomes": [
+        "Deploy the app",
+        "Add logging and monitoring"
+      ],
+      "readyWhen": "Someone else can monitor it and respond to an alert.",
+      "reads": [
+        { "slug": "observability-tracing", "type": "read", "title": "Observability and tracing", "minutes": 30 },
+        { "slug": "cost-reliability", "type": "read", "title": "Cost and reliability", "minutes": 30 }
+      ],
+      "practise": [
+        { "slug": "poc-to-production", "type": "interview", "title": "POC to production: what must change?", "minutes": 20 }
+      ]
+    },
+    {
+      "slug": "enterprise-ai-fde",
+      "name": "Enterprise AI FDE",
+      "icon": "building",
+      "color": "#ff5fa8",
+      "weeksLabel": "Week 10",
+      "hours": 3,
+      "cardBlurb": "Scale the solution across the enterprise, integrate with business processes and enable autonomous operations.",
+      "description": "Scale across the enterprise and integrate with business processes.",
+      "outcomes": [
+        "Pass a security review",
+        "Explain hallucination to executives",
+        "Hand over cleanly"
+      ],
+      "readyWhen": "You can run a security review and executive readout.",
+      "reads": [
+        { "slug": "security-reviews", "type": "read", "title": "Security reviews", "minutes": 30 },
+        { "slug": "executive-communication-handover", "type": "read", "title": "Executive communication and handover", "minutes": 25 }
+      ],
+      "practise": [
+        { "slug": "external-model-blocked", "type": "interview", "title": "Security team blocks external model calls", "minutes": 20 },
+        { "slug": "say-no-use-case", "type": "interview", "title": "How do you say no to a use case?", "minutes": 15 }
+      ]
+    },
+    {
+      "slug": "capstone-fde",
+      "name": "Capstone FDE",
+      "icon": "trophy",
+      "color": "#27d3e0",
+      "weeksLabel": "Weeks 11-12",
+      "hours": 10,
+      "cardBlurb": "End-to-end real-world project demonstrating the complete FDE journey from problem to production.",
+      "description": "End-to-end real-world project from problem to production.",
+      "outcomes": [
+        "Run discovery to handover as one engagement",
+        "Deliver a working product and write-up"
+      ],
+      "readyWhen": "Your engagement pack would survive a customer review.",
+      "reads": [],
+      "practise": [
+        { "slug": "capstone-rag-permissions-react", "type": "project", "title": "Capstone: RAG assistant with permissions + React UI", "minutes": 600 }
+      ]
+    }
+  ]
+}

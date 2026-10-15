@@ -1,0 +1,335 @@
+{
+  "software-engineering/react-fundamentals": {
+    "summary": "React fundamentals — study and apply in the context of Software Engineering.",
+    "sections": [
+      {
+        "heading": "Focus",
+        "body": "Work through this read with a customer mindset: clarify the problem, define done, and note what you would ship vs. defer."
+      }
+    ]
+  },
+  "software-engineering/backend-api": {
+    "summary": "Backend API (FastAPI/Node) — study and apply in the context of Software Engineering.",
+    "sections": [
+      {
+        "heading": "Focus",
+        "body": "Work through this read with a customer mindset: clarify the problem, define done, and note what you would ship vs. defer."
+      }
+    ]
+  },
+  "software-engineering/sql-databases": {
+    "summary": "SQL and databases — study and apply in the context of Software Engineering.",
+    "sections": [
+      {
+        "heading": "Focus",
+        "body": "Work through this read with a customer mindset: clarify the problem, define done, and note what you would ship vs. defer."
+      }
+    ]
+  },
+  "software-engineering/docker-basics": {
+    "summary": "Docker basics — study and apply in the context of Software Engineering.",
+    "sections": [
+      {
+        "heading": "Focus",
+        "body": "Work through this read with a customer mindset: clarify the problem, define done, and note what you would ship vs. defer."
+      }
+    ]
+  },
+  "software-engineering/full-stack-crud": {
+    "summary": "Full-stack CRUD app — study and apply in the context of Software Engineering.",
+    "sections": [
+      {
+        "heading": "Focus",
+        "body": "Work through this lab with a customer mindset: clarify the problem, define done, and note what you would ship vs. defer."
+      }
+    ]
+  },
+  "software-engineering/unfamiliar-codebase": {
+    "summary": "Add a feature to a codebase you have never seen — study and apply in the context of Software Engineering.",
+    "sections": [
+      {
+        "heading": "Focus",
+        "body": "Work through this interview with a customer mindset: clarify the problem, define done, and note what you would ship vs. defer."
+      }
+    ]
+  },
+  "ai-engineering/llm-fundamentals": {
+    "summary": "LLM fundamentals — study and apply in the context of AI Engineering.",
+    "sections": [
+      {
+        "heading": "Focus",
+        "body": "Work through this read with a customer mindset: clarify the problem, define done, and note what you would ship vs. defer."
+      }
+    ]
+  },
+  "ai-engineering/prompt-engineering": {
+    "summary": "Prompt engineering — study and apply in the context of AI Engineering.",
+    "sections": [
+      {
+        "heading": "Focus",
+        "body": "Work through this read with a customer mindset: clarify the problem, define done, and note what you would ship vs. defer."
+      }
+    ]
+  },
+  "ai-engineering/embeddings-vector-search": {
+    "summary": "Embeddings and vector search — study and apply in the context of AI Engineering.",
+    "sections": [
+      {
+        "heading": "Focus",
+        "body": "Work through this read with a customer mindset: clarify the problem, define done, and note what you would ship vs. defer."
+      }
+    ]
+  },
+  "ai-engineering/rag-pipeline": {
+    "summary": "RAG pipeline — study and apply in the context of AI Engineering.",
+    "sections": [
+      {
+        "heading": "Focus",
+        "body": "Work through this read with a customer mindset: clarify the problem, define done, and note what you would ship vs. defer."
+      }
+    ]
+  },
+  "ai-engineering/tool-calling-agents": {
+    "summary": "Tool calling and agents — study and apply in the context of AI Engineering.",
+    "sections": [
+      {
+        "heading": "Focus",
+        "body": "Work through this read with a customer mindset: clarify the problem, define done, and note what you would ship vs. defer."
+      }
+    ]
+  },
+  "ai-engineering/evaluation-guardrails": {
+    "summary": "Evaluation and guardrails — study and apply in the context of AI Engineering.",
+    "sections": [
+      {
+        "heading": "Focus",
+        "body": "Work through this read with a customer mindset: clarify the problem, define done, and note what you would ship vs. defer."
+      }
+    ]
+  },
+  "ai-engineering/rag-assistant-project": {
+    "summary": "RAG assistant over documents — study and apply in the context of AI Engineering.",
+    "sections": [
+      {
+        "heading": "Focus",
+        "body": "Work through this project with a customer mindset: clarify the problem, define done, and note what you would ship vs. defer."
+      }
+    ]
+  },
+  "ai-engineering/explain-rag-pipeline": {
+    "summary": "Explain the full RAG pipeline — study and apply in the context of AI Engineering.",
+    "sections": [
+      {
+        "heading": "Focus",
+        "body": "Work through this interview with a customer mindset: clarify the problem, define done, and note what you would ship vs. defer."
+      }
+    ]
+  },
+  "fde-sdlc-business-requirement/discovery-requirements": {
+    "summary": "Discovery and requirements — study and apply in the context of FDE SDLC: Business requirement.",
+    "sections": [
+      {
+        "heading": "Focus",
+        "body": "Work through this read with a customer mindset: clarify the problem, define done, and note what you would ship vs. defer."
+      }
+    ]
+  },
+  "fde-sdlc-business-requirement/scoring-use-cases": {
+    "summary": "Scoring use cases — study and apply in the context of FDE SDLC: Business requirement.",
+    "sections": [
+      {
+        "heading": "Focus",
+        "body": "Work through this read with a customer mindset: clarify the problem, define done, and note what you would ship vs. defer."
+      }
+    ]
+  },
+  "fde-sdlc-business-requirement/ai-assistant-first-30-min": {
+    "summary": "Customer wants an AI assistant over docs: first 30 minutes? — study and apply in the context of FDE SDLC: Business requirement.",
+    "sections": [
+      {
+        "heading": "Focus",
+        "body": "Work through this interview with a customer mindset: clarify the problem, define done, and note what you would ship vs. defer."
+      }
+    ]
+  },
+  "fde-sdlc-ui-ux/ux-ai-products": {
+    "summary": "UX for AI products — study and apply in the context of FDE SDLC: UI/UX Solution.",
+    "sections": [
+      {
+        "heading": "Focus",
+        "body": "Work through this read with a customer mindset: clarify the problem, define done, and note what you would ship vs. defer."
+      }
+    ]
+  },
+  "fde-sdlc-ui-ux/wireframing-basics": {
+    "summary": "Wireframing basics — study and apply in the context of FDE SDLC: UI/UX Solution.",
+    "sections": [
+      {
+        "heading": "Focus",
+        "body": "Work through this read with a customer mindset: clarify the problem, define done, and note what you would ship vs. defer."
+      }
+    ]
+  },
+  "fde-sdlc-ui-ux/wireframe-capstone-screens": {
+    "summary": "Wireframe the capstone screens — study and apply in the context of FDE SDLC: UI/UX Solution.",
+    "sections": [
+      {
+        "heading": "Focus",
+        "body": "Work through this lab with a customer mindset: clarify the problem, define done, and note what you would ship vs. defer."
+      }
+    ]
+  },
+  "fde-sdlc-architecture/solution-architecture": {
+    "summary": "Solution architecture — study and apply in the context of FDE SDLC: Architecture solution.",
+    "sections": [
+      {
+        "heading": "Focus",
+        "body": "Work through this read with a customer mindset: clarify the problem, define done, and note what you would ship vs. defer."
+      }
+    ]
+  },
+  "fde-sdlc-architecture/cost-latency-estimation": {
+    "summary": "Cost and latency estimation — study and apply in the context of FDE SDLC: Architecture solution.",
+    "sections": [
+      {
+        "heading": "Focus",
+        "body": "Work through this read with a customer mindset: clarify the problem, define done, and note what you would ship vs. defer."
+      }
+    ]
+  },
+  "fde-sdlc-architecture/document-assistant-permissions": {
+    "summary": "Document assistant where users only see allowed docs — study and apply in the context of FDE SDLC: Architecture solution.",
+    "sections": [
+      {
+        "heading": "Focus",
+        "body": "Work through this interview with a customer mindset: clarify the problem, define done, and note what you would ship vs. defer."
+      }
+    ]
+  },
+  "proof-of-concept/scoping-poc": {
+    "summary": "Scoping a POC — study and apply in the context of Proof of concept.",
+    "sections": [
+      {
+        "heading": "Focus",
+        "body": "Work through this read with a customer mindset: clarify the problem, define done, and note what you would ship vs. defer."
+      }
+    ]
+  },
+  "proof-of-concept/evals-customer-data": {
+    "summary": "Evals from customer data — study and apply in the context of Proof of concept.",
+    "sections": [
+      {
+        "heading": "Focus",
+        "body": "Work through this read with a customer mindset: clarify the problem, define done, and note what you would ship vs. defer."
+      }
+    ]
+  },
+  "proof-of-concept/poc-scope-creep": {
+    "summary": "Customer keeps adding small requests mid-POC — study and apply in the context of Proof of concept.",
+    "sections": [
+      {
+        "heading": "Focus",
+        "body": "Work through this interview with a customer mindset: clarify the problem, define done, and note what you would ship vs. defer."
+      }
+    ]
+  },
+  "minimum-viable-product/prototyping-productisation": {
+    "summary": "Prototyping to productisation — study and apply in the context of Minimum Viable Product.",
+    "sections": [
+      {
+        "heading": "Focus",
+        "body": "Work through this read with a customer mindset: clarify the problem, define done, and note what you would ship vs. defer."
+      }
+    ]
+  },
+  "minimum-viable-product/vp-demo-next-week": {
+    "summary": "VP says: just show us a demo next week — study and apply in the context of Minimum Viable Product.",
+    "sections": [
+      {
+        "heading": "Focus",
+        "body": "Work through this interview with a customer mindset: clarify the problem, define done, and note what you would ship vs. defer."
+      }
+    ]
+  },
+  "minimum-viable-product/build-mvp-slice": {
+    "summary": "Build the MVP slice — study and apply in the context of Minimum Viable Product.",
+    "sections": [
+      {
+        "heading": "Focus",
+        "body": "Work through this lab with a customer mindset: clarify the problem, define done, and note what you would ship vs. defer."
+      }
+    ]
+  },
+  "production-deployment/observability-tracing": {
+    "summary": "Observability and tracing — study and apply in the context of Production deployment.",
+    "sections": [
+      {
+        "heading": "Focus",
+        "body": "Work through this read with a customer mindset: clarify the problem, define done, and note what you would ship vs. defer."
+      }
+    ]
+  },
+  "production-deployment/cost-reliability": {
+    "summary": "Cost and reliability — study and apply in the context of Production deployment.",
+    "sections": [
+      {
+        "heading": "Focus",
+        "body": "Work through this read with a customer mindset: clarify the problem, define done, and note what you would ship vs. defer."
+      }
+    ]
+  },
+  "production-deployment/poc-to-production": {
+    "summary": "POC to production: what must change? — study and apply in the context of Production deployment.",
+    "sections": [
+      {
+        "heading": "Focus",
+        "body": "Work through this interview with a customer mindset: clarify the problem, define done, and note what you would ship vs. defer."
+      }
+    ]
+  },
+  "enterprise-ai-fde/security-reviews": {
+    "summary": "Security reviews — study and apply in the context of Enterprise AI FDE.",
+    "sections": [
+      {
+        "heading": "Focus",
+        "body": "Work through this read with a customer mindset: clarify the problem, define done, and note what you would ship vs. defer."
+      }
+    ]
+  },
+  "enterprise-ai-fde/executive-communication-handover": {
+    "summary": "Executive communication and handover — study and apply in the context of Enterprise AI FDE.",
+    "sections": [
+      {
+        "heading": "Focus",
+        "body": "Work through this read with a customer mindset: clarify the problem, define done, and note what you would ship vs. defer."
+      }
+    ]
+  },
+  "enterprise-ai-fde/external-model-blocked": {
+    "summary": "Security team blocks external model calls — study and apply in the context of Enterprise AI FDE.",
+    "sections": [
+      {
+        "heading": "Focus",
+        "body": "Work through this interview with a customer mindset: clarify the problem, define done, and note what you would ship vs. defer."
+      }
+    ]
+  },
+  "enterprise-ai-fde/say-no-use-case": {
+    "summary": "How do you say no to a use case? — study and apply in the context of Enterprise AI FDE.",
+    "sections": [
+      {
+        "heading": "Focus",
+        "body": "Work through this interview with a customer mindset: clarify the problem, define done, and note what you would ship vs. defer."
+      }
+    ]
+  },
+  "capstone-fde/capstone-rag-permissions-react": {
+    "summary": "Capstone: RAG assistant with permissions + React UI — study and apply in the context of Capstone FDE.",
+    "sections": [
+      {
+        "heading": "Focus",
+        "body": "Work through this project with a customer mindset: clarify the problem, define done, and note what you would ship vs. defer."
+      }
+    ]
+  }
+}

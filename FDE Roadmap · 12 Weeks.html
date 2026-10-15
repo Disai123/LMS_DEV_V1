@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>FDE Roadmap · 12 Weeks</title>
+<style>
+:root{--bg:#080b14;--card:#10162a;--tx:#e8ecf7;--mut:#8f9ab8;--bd:#222b47;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+@media (prefers-color-scheme:light){:root:not([data-theme="dark"]){--bg:#f4f6fb;--card:#fff;--tx:#141a2e;--mut:#5b6685;--bd:#d6dcec}}
+:root[data-theme="light"]{--bg:#f4f6fb;--card:#fff;--tx:#141a2e;--mut:#5b6685;--bd:#d6dcec}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--tx);font-family:system-ui,-apple-system,Segoe UI,Roboto,sans-serif;line-height:1.5}
+a{color:inherit;text-decoration:none}
+header{display:flex;gap:16px;align-items:center;justify-content:space-between;padding:14px 20px;border-bottom:1px solid var(--bd);position:sticky;top:env(safe-area-inset-top,0px);background:var(--bg);z-index:5;flex-wrap:wrap}
+.logo{font-weight:700}.nav{display:flex;gap:16px;color:var(--mut);font-size:14px}.nav a:hover{color:var(--tx)}
+main{max-width:1100px;margin:0 auto;padding:24px 20px 60px}
+h1{font-size:clamp(26px,4vw,40px);margin:8px 0}
+.sub{color:var(--mut);max-width:700px}
+.chips{display:flex;gap:8px;flex-wrap:wrap;margin:14px 0}
+.chip{border:1px solid var(--bd);border-radius:99px;padding:3px 12px;font-size:13px;color:var(--mut)}
+.phases{display:grid;grid-template-columns:6fr 4fr 2fr;gap:6px;margin:18px 0}
+.ph{border-radius:8px;padding:8px 10px;font-size:12px;border:1px solid var(--bd);background:var(--card)}
+.ph b{display:block;font-size:13px}
+.strip{display:flex;gap:10px;overflow-x:auto;padding:16px 4px;margin:10px 0 24px}
+.node{flex:0 0 120px;border:1.5px solid var(--c);border-radius:12px;padding:10px;background:var(--card);box-shadow:0 0 14px -6px var(--c);cursor:pointer;text-align:center}
+.node:hover{box-shadow:0 0 18px -2px var(--c)}
+.num{width:30px;height:30px;border-radius:50%;border:2px solid var(--c);display:inline-grid;place-items:center;font-weight:700;margin-bottom:4px}
+.node .ic{font-size:24px}.node .nm{font-size:12px;font-weight:600;color:var(--c)}
+.stage{border:1px solid var(--bd);border-left:4px solid var(--c);background:var(--card);border-radius:12px;padding:18px;margin-bottom:16px;scroll-margin-top:80px}
+.stage h2{margin:0 0 4px;font-size:20px;color:var(--c)}
+.meta{font-size:13px;color:var(--mut);margin-bottom:8px}
+.stage h3{font-size:12px;text-transform:uppercase;letter-spacing:.06em;color:var(--mut);margin:14px 0 6px}
+ul{list-style:none;padding:0;margin:0}
+li a{display:flex;justify-content:space-between;gap:10px;padding:8px 10px;border:1px solid var(--bd);border-radius:8px;margin-bottom:6px;font-size:14px}
+li a:hover{border-color:var(--c)}
+.tag{font-size:11px;color:var(--c);border:1px solid var(--c);border-radius:6px;padding:0 6px;margin-right:8px}
+.done{opacity:.55}.done .t{text-decoration:line-through}
+.bar{height:6px;background:var(--bd);border-radius:9px;overflow:hidden;margin:6px 0 16px}.bar i{display:block;height:100%;background:#35d49a;width:0}
+.btn{display:inline-block;border:1px solid var(--bd);background:var(--card);color:var(--tx);padding:8px 16px;border-radius:8px;cursor:pointer;font-size:14px}
+.btn.on{background:#35d49a;color:#04210f;border-color:#35d49a}
+.back{color:var(--mut);font-size:14px;display:inline-block;margin-bottom:14px}
+.faq details{border:1px solid var(--bd);border-radius:8px;padding:10px 14px;margin-bottom:8px;background:var(--card)}
+.faq summary{cursor:pointer;font-weight:600}
+footer{border-top:1px solid var(--bd);padding:20px;color:var(--mut);font-size:13px;text-align:center}
+@media(max-width:700px){.phases{grid-template-columns:1fr}}
+</style>
+</head>
+<body>
+<header><a class="logo" href="#/">&gt;_ FDE Roadmap</a><nav><a href="#/">Roadmap</a><a href="#/my-learning">My Learning</a><a href="#/capstone">Capstone brief</a></nav></header>
+<main id="app"></main>
+<footer>FDE Roadmap · 12 weeks · progress saved in your browser</footer>
+<script>
+var S=[
+{n:"Software Engineering",ic:"</>",c:"#2fd3a0",w:"Weeks 1-2",h:10,d:"Build robust, scalable and maintainable applications.",o:["Build a React frontend that talks to an API","Build a backend API with a database","Package it with Docker"],r:[["Read","React fundamentals",30],["Read","Backend API (FastAPI/Node)",30],["Read","SQL and databases",30],["Read","Docker basics",20]],p:[["Lab","Full-stack CRUD app",90],["Interview","Add a feature to a codebase you have never seen",15]],ok:"You can stand up a small full-stack app in a day."},
+{n:"AI Engineering",ic:"AI",c:"#3aa6ff",w:"Weeks 3-6",h:20,d:"Work with LLMs, ML and GenAI technologies to build intelligent solutions.",o:["Prompt and call LLM APIs","Build RAG with citations","Add tool calling and agents","Evaluate outputs"],r:[["Read","LLM fundamentals",30],["Read","Prompt engineering",30],["Read","Embeddings and vector search",30],["Read","RAG pipeline",40],["Read","Tool calling and agents",40],["Read","Evaluation and guardrails",30]],p:[["Project","RAG assistant over documents",180],["Interview","Explain the full RAG pipeline",20]],ok:"You can build a cited Q&A prototype over documents in two days."},
+{n:"FDE SDLC: Business requirement",ic:"📋",c:"#a074ff",w:"Week 7",h:3,d:"Understand business goals, identify use cases and define requirements.",o:["Run a discovery session","Score use cases by value, feasibility and risk"],r:[["Read","Discovery and requirements",30],["Read","Scoring use cases",25]],p:[["Interview","Customer wants an AI assistant over docs: first 30 minutes?",15]],ok:"You can turn one discovery session into a ranked use-case list."},
+{n:"FDE SDLC: UI/UX Solution",ic:"🖥",c:"#ffd23a",w:"Week 7",h:2,d:"Design intuitive and user-centric UI/UX solutions.",o:["Sketch user flows","Wireframe a simple AI interface"],r:[["Read","UX for AI products",25],["Read","Wireframing basics",20]],p:[["Lab","Wireframe the capstone screens",40]],ok:"You have wireframes the customer can react to."},
+{n:"FDE SDLC: Architecture solution",ic:"🧱",c:"#ff5a7a",w:"Week 8",h:3,d:"Design secure, scalable and cost-effective architecture.",o:["Design for permissions and data limits","Estimate cost per month"],r:[["Read","Solution architecture",30],["Read","Cost and latency estimation",25]],p:[["Interview","Document assistant where users only see allowed docs",20]],ok:"You can defend an architecture and its cost estimate."},
+{n:"Proof of concept",ic:"💡",c:"#27c4c4",w:"Weeks 8-9",h:3,d:"Build a working prototype to validate feasibility and business value.",o:["Write a POC scope with a definition of done","Build a small evaluation set"],r:[["Read","Scoping a POC",25],["Read","Evals from customer data",30]],p:[["Interview","Customer keeps adding small requests mid-POC",15]],ok:"POC has a scope, eval set and agreed pass mark."},
+{n:"Minimum Viable Product",ic:"📦",c:"#ff9a2f",w:"Week 9",h:3,d:"Develop an MVP with core features to get real user feedback.",o:["Choose what to fake and what must be real","Ship core features"],r:[["Read","Prototyping to productisation",30]],p:[["Interview","VP says: just show us a demo next week",15],["Lab","Build the MVP slice",60]],ok:"You can demo a working MVP with its gaps listed."},
+{n:"Production deployment",ic:"☁",c:"#7a8cff",w:"Weeks 9-10",h:3,d:"Deploy to production with security, monitoring and scalability.",o:["Deploy the app","Add logging and monitoring"],r:[["Read","Observability and tracing",30],["Read","Cost and reliability",30]],p:[["Interview","POC to production: what must change?",20]],ok:"Someone else can monitor it and respond to an alert."},
+{n:"Enterprise AI FDE",ic:"🏢",c:"#ff5fa8",w:"Week 10",h:3,d:"Scale across the enterprise and integrate with business processes.",o:["Pass a security review","Explain hallucination to executives","Hand over cleanly"],r:[["Read","Security reviews",30],["Read","Executive communication and handover",25]],p:[["Interview","Security team blocks external model calls",20],["Interview","How do you say no to a use case?",15]],ok:"You can run a security review and executive readout."},
+{n:"Capstone FDE",ic:"🏆",c:"#27d3e0",w:"Weeks 11-12",h:10,d:"End-to-end real-world project from problem to production.",o:["Run discovery to handover as one engagement","Deliver a working product and write-up"],r:[],p:[["Project","Capstone: RAG assistant with permissions + React UI",600]],ok:"Your engagement pack would survive a customer review."}
+];
+var FAQ=[["How long is this plan?","12 weeks at 1 hour a day, 5 days a week: 60 hours."],["How is time split?","Weeks 1-6 cover steps 1-2, weeks 7-10 cover steps 3-9, and weeks 11-12 are the capstone."],["Is progress saved?","Yes, in your browser (localStorage). No account needed."]];
+var $=function(s){return document.querySelector(s)},app=$("#app");
+function load(){try{return JSON.parse(localStorage.getItem("fde-done")||"[]")}catch(e){return[]}}
+function save(a){try{localStorage.setItem("fde-done",JSON.stringify(a))}catch(e){}}
+function all(i){return S[i].r.concat(S[i].p)}
+function key(s,i){return s+"-"+i}
+function total(){var t=0;S.forEach(function(x,i){t+=all(i).length});return t}
+function pct(){return Math.round(load().length/total()*100)}
+function items(s){var d=load(),st=S[s],out="",idx=0;
+ [["Read",st.r,0],["Practise",st.p,st.r.length]].forEach(function(g){if(!g[1].length)return;
+  out+="<h3>"+g[0]+"</h3><ul>";
+  g[1].forEach(function(it,j){var k=key(s,g[2]+j);
+   out+='<li><a class="'+(d.indexOf(k)>-1?"done":"")+'" href="#/item/'+s+"/"+(g[2]+j)+'"><span><span class="tag">'+it[0]+'</span><span class="t">'+it[1]+'</span></span><span>'+it[2]+" min</span></a></li>"});
+  out+="</ul>"});return out}
+function home(){
+ var h='<div class="sub">Level 4 · Forward Deployed Engineering</div><h1>Forward Deployed Engineer Roadmap</h1><p class="sub">Work at the intersection of customer, product, engineering and AI. 10 stages, click any stage to jump.</p>'
+ +'<div class="chips"><span class="chip">12 weeks</span><span class="chip">1 hour a day</span><span class="chip">5 days a week</span><span class="chip">60 hours</span></div>'
+ +'<div class="phases"><div class="ph"><b>Weeks 1-6 · 30 h</b>Steps 1-2: Foundations</div><div class="ph"><b>Weeks 7-10 · 20 h</b>Steps 3-9: FDE SDLC</div><div class="ph"><b>Weeks 11-12 · 10 h</b>Step 10: Capstone</div></div>'
+ +'<div class="strip">';
+ S.forEach(function(s,i){h+='<div class="node" style="--c:'+s.c+'" data-go="'+i+'"><div class="num">'+(i+1)+'</div><div class="ic">'+s.ic+'</div><div class="nm">'+s.n+"</div></div>"});
+ h+='</div><div>'+load().length+"/"+total()+' items done · '+pct()+'%</div><div class="bar"><i style="width:'+pct()+'%"></i></div><h2>Stage by stage</h2>';
+ S.forEach(function(s,i){
+  h+='<section class="stage" id="s'+i+'" style="--c:'+s.c+'"><h2>'+(i+1)+". "+s.n+'</h2><div class="meta">'+s.w+" · "+s.h+" hours</div><p>"+s.d+"</p><h3>You will be able to</h3><ul>"
+  +s.o.map(function(x){return"<li style='padding:2px 0;font-size:14px'>• "+x+"</li>"}).join("")+"</ul>"+items(i)
+  +'<p class="meta"><b>Ready to move on when:</b> '+s.ok+"</p></section>"});
+ h+='<h2>FAQ</h2><div class="faq">'+FAQ.map(function(f){return"<details><summary>"+f[0]+"</summary><p>"+f[1]+"</p></details>"}).join("")+"</div>";
+ app.innerHTML=h;
+ document.querySelectorAll("[data-go]").forEach(function(n){n.onclick=function(){$("#s"+n.dataset.go).scrollIntoView({behavior:"smooth"})}})}
+function item(s,i){var st=S[s],it=all(s)[i];if(!it)return home();var k=key(s,i),d=load(),on=d.indexOf(k)>-1;
+ app.innerHTML='<a class="back" href="#/">← Back to roadmap</a><div class="stage" style="--c:'+st.c+'"><div class="meta">Stage '+(s+1)+" · "+st.n+' · '+it[0]+' · '+it[2]+' min</div><h1>'+it[1]+'</h1><p class="sub">Placeholder page. Replace this with your own notes, links and exercises for this topic.</p><p><button class="btn '+(on?"on":"")+'" id="mk">'+(on?"✓ Done":"Mark as done")+"</button></p></div>";
+ $("#mk").onclick=function(){var a=load(),x=a.indexOf(k);x>-1?a.splice(x,1):a.push(k);save(a);item(s,i)}}
+function mine(){var h='<a class="back" href="#/">← Back</a><h1>My Learning</h1><div>'+pct()+'% complete</div><div class="bar"><i style="width:'+pct()+'%"></i></div>',d=load();
+ S.forEach(function(s,i){var n=all(i).filter(function(_,j){return d.indexOf(key(i,j))>-1}).length;h+='<div class="stage" style="--c:'+s.c+'"><b><a href="#/">'+(i+1)+". "+s.n+"</a></b><div class='meta'>"+n+"/"+all(i).length+" done · "+s.w+"</div></div>"});
+ app.innerHTML=h}
+function cap(){app.innerHTML='<a class="back" href="#/">← Back</a><h1>Capstone: end-to-end engagement</h1><div class="stage" style="--c:#27d3e0"><h3>What to deliver</h3><ul><li>• Discovery notes and ranked use-case scorecard</li><li>• POC scope, definition of done and pass mark</li><li>• Working prototype with evaluation results</li><li>• Written answers to security-team questions</li><li>• 10-minute executive readout and handover doc</li></ul><p><a class="btn" href="#/item/9/0">Start the capstone project</a></p></div>'}
+function route(){var p=location.hash.replace("#/","").split("/");
+ if(p[0]==="item")item(+p[1],+p[2]);else if(p[0]==="my-learning")mine();else if(p[0]==="capstone")cap();else home();
+ if(p[0]!=="")window.scrollTo(0,0)}
+window.addEventListener("hashchange",route);route();
+</script>
+</body>
+</html>

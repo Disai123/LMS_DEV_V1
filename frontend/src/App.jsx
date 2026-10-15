@@ -53,6 +53,12 @@ import NotFoundPage from './pages/NotFoundPage'
 // import AdminInternshipsPage from './pages/AdminInternshipsPage' // HIDDEN
 // import MyInternshipSubmissionsPage from './pages/MyInternshipSubmissionsPage' // HIDDEN
 import NotificationsPage from './pages/NotificationsPage'
+import { FdeProgressProvider } from './fde/context/FdeProgressContext'
+import FdeLayout from './fde/components/FdeLayout'
+import FdeRoadmapPage from './fde/pages/FdeRoadmapPage'
+import FdeItemPage from './fde/pages/FdeItemPage'
+import FdeMyLearningPage from './fde/pages/FdeMyLearningPage'
+import FdeCapstonePage from './fde/pages/FdeCapstonePage'
 
 // Components
 import ProtectedRoute from './components/auth/ProtectedRoute'
@@ -148,6 +154,20 @@ function App() {
               <Route path="/courses" element={<CourseListPage />} />
               <Route path="/realtime-projects" element={<RealtimeProjectsLandingPage />} />
               <Route path="/realtime-projects/diagnostics" element={<ProjectDiagnostics />} />
+
+              <Route
+                path="/roadmap/fde"
+                element={
+                  <FdeProgressProvider>
+                    <FdeLayout />
+                  </FdeProgressProvider>
+                }
+              >
+                <Route index element={<FdeRoadmapPage />} />
+                <Route path="my-learning" element={<FdeMyLearningPage />} />
+                <Route path="capstone" element={<FdeCapstonePage />} />
+                <Route path="item/:stageSlug/:itemSlug" element={<FdeItemPage />} />
+              </Route>
               {/* HIDDEN: Hackathons & Internships routes temporarily hidden */}
               {/* <Route path="/hackathons" element={<HackathonLandingPage />} /> */}
               {/* <Route path="/internships" element={<InternshipsLandingPage />} /> */}

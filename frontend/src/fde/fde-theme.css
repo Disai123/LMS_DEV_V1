@@ -1,0 +1,25 @@
+.fde-theme {
+  --fde-bg: #080b14;
+  --fde-card: #10162a;
+  --fde-tx: #e8ecf7;
+  --fde-mut: #8f9ab8;
+  --fde-bd: #222b47;
+  background: var(--fde-bg);
+  color: var(--fde-tx);
+}
+
+.fde-theme.fde-light {
+  --fde-bg: #f4f6fb;
+  --fde-card: #ffffff;
+  --fde-tx: #141a2e;
+  --fde-mut: #5b6685;
+  --fde-bd: #d6dcec;
+}
+
+.fde-theme.fde-dark {
+  --fde-bg: #080b14;
+  --fde-card: #10162a;
+  --fde-tx: #e8ecf7;
+  --fde-mut: #8f9ab8;
+  --fde-bd: #222b47;
+}

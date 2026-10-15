@@ -11,6 +11,7 @@ import { ThemeProvider } from './context/ThemeContext.jsx'
 import { PostHogProvider } from './context/PostHogContext.jsx'
 // import { SocketProvider } from './contexts/SocketContext.jsx'
 import './index.css'
+import './fde/fde-theme.css'
 
 // Create a client
 const queryClient = new QueryClient({
