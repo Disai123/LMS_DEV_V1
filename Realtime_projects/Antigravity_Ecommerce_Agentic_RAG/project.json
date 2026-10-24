@@ -1,0 +1,20 @@
+{
+  "id": "antigravity-ecommerce-agentic-rag",
+  "name": "Agentic RAG E-Commerce Assistant",
+  "description": "Build an agentic RAG assistant over e-commerce catalog and policies with cited answers, FastAPI retrieval pipeline, and React on Render.",
+  "category": "Agentic RAG",
+  "difficulty": "advanced",
+  "estimatedHours": 40,
+  "order": 13,
+  "tags": [
+    "RAG",
+    "FastAPI",
+    "Agents",
+    "Langfuse",
+    "React",
+    "Render"
+  ],
+  "version": "1.0.0",
+  "liveDemoUrl": "https://agentic-rag-fastapi-frontend.onrender.com",
+  "promptSourceKey": "agentic-rag"
+}

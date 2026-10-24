@@ -21,8 +21,15 @@ const resolveProjectFilePath = (projectRoot, rawPath) => {
   return resolvedPath;
 };
 
-const FREE_PROJECTS = ['prerequisites', 'todoapp'];
-const BASIC_PROJECTS = [...FREE_PROJECTS, 'ecommerceweb'];
+const FREE_PROJECTS = ['prerequisites'];
+const BASIC_PROJECTS = [
+  ...FREE_PROJECTS,
+  'ecommerceweb',
+  'antigravityecommercefullstack',
+  'antigravityecommercesingleagent',
+  'antigravityecommercemultiagent',
+  'antigravityecommerceagenticrag',
+];
 
 const normalizeProjectId = (projectId) =>
   projectId ? projectId.toLowerCase().replace(/[-_]/g, '') : null;

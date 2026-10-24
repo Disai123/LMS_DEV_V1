@@ -1,0 +1,19 @@
+{
+  "id": "antigravity-ecommerce-single-agent",
+  "name": "E-Commerce AI Shopping Agent",
+  "description": "Add a single AI shopping agent to e-commerce with FastAPI, LangChain, and Langfuse. Natural-language Q&A over store data with a React chat interface on Render.",
+  "category": "Single AI Agent",
+  "difficulty": "advanced",
+  "estimatedHours": 40,
+  "order": 11,
+  "tags": [
+    "FastAPI",
+    "LangChain",
+    "Langfuse",
+    "React",
+    "Render"
+  ],
+  "version": "1.0.0",
+  "liveDemoUrl": "https://ecommerce-single-agent-fastapi-frontend.onrender.com",
+  "promptSourceKey": "single-agent"
+}

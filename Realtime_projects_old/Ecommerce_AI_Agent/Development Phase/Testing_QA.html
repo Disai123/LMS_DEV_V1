@@ -1,0 +1,60 @@
+<div class="content-body">
+  <div class="content-section">
+    <h3 class="content-heading">Testing &amp; QA</h3>
+    <p style="color: #4b5563; line-height: 1.75; margin-bottom: 2rem;">
+      Testing a single AI agent requires both traditional API testing and specialized
+      agentic evaluation to verify the tool execution loop behaves correctly across
+      diverse user inputs.
+    </p>
+
+    <!-- Testing Grid -->
+    <div
+      style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 1.5rem; margin-bottom: 2.5rem;">
+      <!-- Backend Testing -->
+      <div
+        style="background: white; border: 1px solid #e5e7eb; border-radius: 12px; padding: 1.5rem; border-top: 4px solid #10b981;">
+        <h4 style="font-size: 1.1rem; font-weight: 600; color: #1f2937; margin-bottom: 0.75rem;">API Route Tests</h4>
+        <p style="font-size: 0.85rem; color: #6b7280; line-height: 1.5; margin-bottom: 1rem;">
+          Focuses on JWT authentication, conversation creation, and tool execution.
+          Uses <strong>Jest</strong> to mock OpenAI responses and verify tool dispatch logic.
+        </p>
+        <div
+          style="background: #f8fafc; border-radius: 8px; padding: 0.75rem; font-family: monospace; font-size: 0.75rem; color: #475569;">
+          npx jest tests/api/askunicart.test.ts
+        </div>
+      </div>
+
+      <!-- Frontend Testing -->
+      <div
+        style="background: white; border: 1px solid #e5e7eb; border-radius: 12px; padding: 1.5rem; border-top: 4px solid #6366f1;">
+        <h4 style="font-size: 1.1rem; font-weight: 600; color: #1f2937; margin-bottom: 0.75rem;">Frontend Verification
+        </h4>
+        <p style="font-size: 0.85rem; color: #6b7280; line-height: 1.5; margin-bottom: 1rem;">
+          Ensures the chat component renders messages, handles loading states, and
+          submits correctly. Uses <strong>Vitest</strong> for unit and <strong>Playwright</strong> for E2E.
+        </p>
+        <div
+          style="background: #f8fafc; border-radius: 8px; padding: 0.75rem; font-family: monospace; font-size: 0.75rem; color: #475569;">
+          npm run test:e2e
+        </div>
+      </div>
+
+      <!-- Agentic Evals -->
+      <div
+        style="background: white; border: 1px solid #e5e7eb; border-radius: 12px; padding: 1.5rem; border-top: 4px solid #f59e0b; grid-column: 1 / -1;">
+        <h4 style="font-size: 1.1rem; font-weight: 600; color: #1f2937; margin-bottom: 0.75rem;">Agentic Evaluation</h4>
+        <p style="font-size: 0.85rem; color: #6b7280; line-height: 1.5;">
+          Beyond unit tests, we run specialized evals to verify the agent selects the correct tool,
+          passes valid parameters, and produces helpful natural language responses without hallucinating
+          product data.
+        </p>
+        <ul
+          style="list-style: none; display: flex; flex-direction: column; gap: 0.5rem; margin-top: 1rem; color: #4b5563; font-size: 0.8rem;">
+          <li>• <strong>Tool Selection Accuracy:</strong> Does the agent pick the right tool for each query?</li>
+          <li>• <strong>Parameter Validation:</strong> Are product IDs and quantities passed correctly?</li>
+          <li>• <strong>Policy Compliance:</strong> Does the agent refuse unauthorized cart actions?</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</div>

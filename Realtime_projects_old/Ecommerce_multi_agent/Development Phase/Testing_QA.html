@@ -1,0 +1,62 @@
+<div class="content-body">
+    <div class="content-section">
+        <h3 class="content-heading">Testing & QA</h3>
+        <p style="color: #4b5563; line-height: 1.75; margin-bottom: 2rem;">
+            Testing in an agentic system requires a multi-layered approach to ensure reliability.
+            We implement traditional unit tests alongside specialized agentic evaluation patterns.
+        </p>
+
+        <!-- Testing Grid -->
+        <div
+            style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 1.5rem; margin-bottom: 2.5rem;">
+            <!-- Backend Testing -->
+            <div
+                style="background: white; border: 1px solid #e5e7eb; border-radius: 12px; padding: 1.5rem; border-top: 4px solid #6366f1;">
+                <h4 style="font-size: 1.1rem; font-weight: 600; color: #1f2937; margin-bottom: 0.75rem;">Backend Unit
+                    Tests</h4>
+                <p style="font-size: 0.85rem; color: #6b7280; line-height: 1.5; margin-bottom: 1rem;">
+                    Focuses on tool reliability and orchestrator logic. We use <strong>Pytest</strong>
+                    to mock LLM responses and verify worker transitions.
+                </p>
+                <div
+                    style="background: #f8fafc; border-radius: 8px; padding: 0.75rem; font-family: monospace; font-size: 0.75rem; color: #475569;">
+                    pytest tests/test_graph.py
+                </div>
+            </div>
+
+            <!-- Frontend Testing -->
+            <div
+                style="background: white; border: 1px solid #e5e7eb; border-radius: 12px; padding: 1.5rem; border-top: 4px solid #10b981;">
+                <h4 style="font-size: 1.1rem; font-weight: 600; color: #1f2937; margin-bottom: 0.75rem;">Frontend
+                    Verification</h4>
+                <p style="font-size: 0.85rem; color: #6b7280; line-height: 1.5; margin-bottom: 1rem;">
+                    Ensures reactive components synchronize with the agent stream. We use
+                    <strong>Vitest</strong> and <strong>Playwright</strong> for E2E flows.
+                </p>
+                <div
+                    style="background: #f8fafc; border-radius: 8px; padding: 0.75rem; font-family: monospace; font-size: 0.75rem; color: #475569;">
+                    npm run test:e2e
+                </div>
+            </div>
+
+            <!-- Agentic Evals -->
+            <div
+                style="background: white; border: 1px solid #e5e7eb; border-radius: 12px; padding: 1.5rem; border-top: 4px solid #f59e0b; grid-column: 1 / -1;">
+                <h4 style="font-size: 1.1rem; font-weight: 600; color: #1f2937; margin-bottom: 0.75rem;">Agentic
+                    Evaluation (Eval-as-a-Service)</h4>
+                <p style="font-size: 0.85rem; color: #6b7280; line-height: 1.5;">
+                    Beyond unit tests, we run specialized evals to measure reasoning accuracy and trajectory
+                    consistency. This ensures the Supervisor doesn't hallucinate tool arguments or get
+                    stuck in recursive loops.
+                </p>
+                <ul
+                    style="list-style: none; display: flex; flex-direction: column; gap: 0.5rem; margin-top: 1rem; color: #4b5563; font-size: 0.8rem;">
+                    <li>• <strong>Trajectory Matching:</strong> Does the worker path match the expected blueprint?</li>
+                    <li>• <strong>Tool Input Accuracy:</strong> Does the agent provide valid product IDs?</li>
+                    <li>• <strong>Policy Compliance:</strong> Does the assistant refuse to perform unauthorized actions?
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>

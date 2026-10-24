@@ -1,0 +1,18 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 720 420" fill="none">
+  <rect width="720" height="420" fill="#f8fafc"/>
+  <text x="360" y="28" text-anchor="middle" font-family="system-ui,sans-serif" font-size="14" font-weight="600" fill="#1e293b">Ask IT  wireframe reference</text>
+  <rect x="40" y="48" width="640" height="320" rx="8" stroke="#64748b" stroke-width="2" fill="#fff"/>
+  <text x="60" y="82" font-family="system-ui,sans-serif" font-size="13" font-weight="600" fill="#334155">Ask IT</text>
+  <rect x="60" y="96" width="520" height="36" rx="4" stroke="#94a3b8" fill="#f1f5f9"/>
+  <text x="72" y="119" font-family="system-ui,sans-serif" font-size="11" fill="#64748b">Type your IT question&</text>
+  <rect x="590" y="96" width="70" height="36" rx="4" fill="#4338ca"/>
+  <text x="625" y="119" text-anchor="middle" font-family="system-ui,sans-serif" font-size="11" fill="#fff">Ask</text>
+  <text x="60" y="158" font-family="system-ui,sans-serif" font-size="10" fill="#64748b">Answers from approved IT FAQs. Confirm with IT for critical actions.</text>
+  <rect x="60" y="172" width="600" height="120" rx="4" stroke="#cbd5e1" fill="#fafafa"/>
+  <text x="72" y="196" font-family="system-ui,sans-serif" font-size="11" font-weight="600" fill="#334155">Answer</text>
+  <text x="72" y="218" font-family="system-ui,sans-serif" font-size="10" fill="#475569">Short answer text (35 lines).</text>
+  <text x="72" y="242" font-family="system-ui,sans-serif" font-size="10" fill="#4338ca">Source: WiFi-and-VPN-FAQ.pdf</text>
+  <text x="72" y="272" font-family="system-ui,sans-serif" font-size="10" fill="#64748b">=M  =N  ·  Email IT</text>
+  <rect x="60" y="310" width="280" height="44" rx="4" stroke="#e2e8f0" fill="#fff7ed"/>
+  <text x="72" y="336" font-family="system-ui,sans-serif" font-size="10" fill="#9a3412">No answer: Not found in FAQs  contact IT.</text>
+</svg>

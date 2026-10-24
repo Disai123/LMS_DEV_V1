@@ -83,7 +83,7 @@ const Header = () => {
               to="/roadmap/fde"
               className="text-gray-700 hover:text-amber-600 font-medium transition-colors duration-200"
             >
-              FDE Roadmap
+              FDE
             </Link>
             {/* HIDDEN: Hackathons & Internships nav links temporarily hidden */}
             {/* <Link

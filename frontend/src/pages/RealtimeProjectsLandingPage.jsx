@@ -163,6 +163,101 @@ const PROJECT_GLIMPSES = {
     planLabel: 'Pro',
     outcome: 'AI-powered travel planning platform',
   },
+  prerequisites: {
+    emoji: '📘',
+    whatYouBuild: [
+      'React, FastAPI, and PostgreSQL fundamentals',
+      'AI-assisted development workflow basics',
+      'Foundation for e-commerce workshop series',
+      'Hands-on modules before full-stack projects',
+    ],
+    phases: [
+      { label: 'React', detail: 'Components, state, and routing' },
+      { label: 'API', detail: 'FastAPI patterns and data access' },
+      { label: 'Data', detail: 'PostgreSQL essentials' },
+      { label: 'AI', detail: 'LLM integration concepts' },
+      { label: 'Next', detail: 'Path into e-commerce workshops' },
+    ],
+    plan: 'free',
+    planLabel: 'Free',
+    outcome: 'Ready for full-stack and AI e-commerce projects',
+  },
+  'antigravity-ecommerce-fullstack': {
+    emoji: '🛍️',
+    whatYouBuild: [
+      'React + FastAPI + PostgreSQL e-commerce platform',
+      'Customer browse → cart → checkout → orders',
+      'Admin products, categories, and order management',
+      'Live production-style demo on Render',
+    ],
+    phases: [
+      { label: 'BRD', detail: 'Requirements and user stories' },
+      { label: 'UI/UX', detail: 'Screens aligned to live Render UI' },
+      { label: 'Build', detail: 'Full-stack FastAPI + React implementation' },
+      { label: 'QA', detail: 'End-to-end customer & admin flows' },
+      { label: 'Deploy', detail: 'Render production deployment' },
+    ],
+    plan: 'basic',
+    planLabel: 'Basic',
+    outcome: 'Production-style full-stack e-commerce on Render',
+  },
+  'antigravity-ecommerce-single-agent': {
+    emoji: '🤖',
+    whatYouBuild: [
+      '"Ask the Store" single agent on existing e-commerce',
+      'LangChain + Langfuse tracing in FastAPI',
+      'Read-only answers from real PostgreSQL data',
+      'React chat UI wired to deployed backend',
+    ],
+    phases: [
+      { label: 'BRD', detail: 'Agent scope, security & read-only rules' },
+      { label: 'UI/UX', detail: 'Ask the Store chat experience' },
+      { label: 'Build', detail: 'Single-agent FastAPI + LangChain stack' },
+      { label: 'QA', detail: 'Safety, scope, and data accuracy tests' },
+      { label: 'Deploy', detail: 'Single-agent Render deployment' },
+    ],
+    plan: 'pro',
+    planLabel: 'Pro',
+    outcome: 'Production-style single shopping agent',
+  },
+  'antigravity-ecommerce-multi-agent': {
+    emoji: '🧠',
+    whatYouBuild: [
+      'Multi-agent orchestration for e-commerce assistance',
+      'Delegated roles with LangGraph on FastAPI',
+      'Monitoring-friendly agent flows (Langfuse)',
+      'React UI connected to live multi-agent API',
+    ],
+    phases: [
+      { label: 'BRD', detail: 'Agent roles & orchestration requirements' },
+      { label: 'UI/UX', detail: 'Multi-agent UX & status surfaces' },
+      { label: 'Build', detail: 'LangGraph multi-agent implementation' },
+      { label: 'QA', detail: 'Integration & agent handoff testing' },
+      { label: 'Deploy', detail: 'Multi-agent Render deployment' },
+    ],
+    plan: 'pro',
+    planLabel: 'Pro',
+    outcome: 'Multi-agent e-commerce assistant system',
+  },
+  'antigravity-ecommerce-agentic-rag': {
+    emoji: '📚',
+    whatYouBuild: [
+      'Agentic RAG over catalog & policy knowledge',
+      'Cited answers with FastAPI retrieval pipeline',
+      'React UI for Q&A over store data',
+      'Langfuse-ready observability hooks',
+    ],
+    phases: [
+      { label: 'BRD', detail: 'RAG use cases, permissions & eval criteria' },
+      { label: 'UI/UX', detail: 'RAG chat & citation presentation' },
+      { label: 'Build', detail: 'Agentic RAG pipeline and UI' },
+      { label: 'QA', detail: 'Retrieval quality & hallucination checks' },
+      { label: 'Deploy', detail: 'Agentic RAG live on Render' },
+    ],
+    plan: 'pro',
+    planLabel: 'Pro',
+    outcome: 'Agentic RAG e-commerce knowledge assistant',
+  },
 }
 
 const DEFAULT_GLIMPSE = (title) => ({
@@ -410,11 +505,11 @@ const RealtimeProjectsLandingPage = () => {
   }, [])
 
   const getFallback = () => [
-    { id: 'todo-app', title: 'Todo App', description: 'Build a full-featured task manager with authentication, real-time sync, and offline support.', difficulty: 'Beginner', duration: '20 hrs', phases: 5, technologies: ['React', 'Node.js', 'SQLite DB'], category: 'Full-Stack', order: 1, isExtension: false },
-    { id: 'ecommerce-web', title: 'E-Commerce Web Application', description: 'Build a complete, production-ready e-commerce platform from scratch with React, Node.js, and PostgreSQL.', difficulty: 'Intermediate', duration: '40 hrs', phases: 5, technologies: ['React', 'Node.js', 'PostgreSQL', 'Express.js'], category: 'Full-Stack', order: 2, isExtension: false },
-    { id: 'ecommerce-ai-agent', title: 'E-Commerce AI Agent', description: 'Extend your e-commerce platform with an intelligent AI shopping assistant using LangChain and OpenAI.', difficulty: 'Advanced', duration: '30 hrs', phases: 5, technologies: ['Python', 'LangChain', 'GROQ API', 'FastAPI'], category: 'AI/ML', order: 3, isExtension: true },
-    { id: 'multi-agent', title: 'Multi-Agent AI System', description: 'Build an advanced multi-agent AI system with LangGraph orchestration, autonomous tool-calling agents, and a real-time monitoring dashboard.', difficulty: 'Advanced', duration: '45 hrs', phases: 5, technologies: ['LangGraph', 'Python', 'FastAPI', 'Redis', 'GROQ API'], category: 'AI/ML', order: 4, isExtension: true },
-    { id: 'trip-planner', title: 'Trip Planner AI App', description: 'Build an AI-powered travel planning platform with itinerary generation, maps integration, budget tracking and trip sharing.', difficulty: 'Advanced', duration: '35 hrs', phases: 5, technologies: ['React', 'Node.js', 'Open Weather Maps API', 'GROQ API', 'PostgreSQL'], category: 'Full-Stack', order: 5, isExtension: false },
+    { id: 'prerequisites', title: 'Prerequisites', description: 'Essential foundational knowledge for building AI-powered applications. Learn React, FastAPI, PostgreSQL, and AI-assisted development workflows.', difficulty: 'Beginner', duration: '10 hrs', phases: 5, technologies: ['React', 'FastAPI', 'PostgreSQL', 'AI Basics'], category: 'Foundations', order: 1, isExtension: false },
+    { id: 'antigravity-ecommerce-fullstack', title: 'E-Commerce Web Application', description: 'Build a production e-commerce platform with React, API backend, and PostgreSQL deployed on Render.', difficulty: 'Advanced', duration: '48 hrs', phases: 5, technologies: ['React', 'Node.js', 'PostgreSQL', 'Render'], category: 'Full-Stack E-Commerce', order: 10, isExtension: false },
+    { id: 'antigravity-ecommerce-single-agent', title: 'E-Commerce AI Shopping Agent', description: 'Add a single AI shopping agent with FastAPI, LangChain, and Langfuse over your e-commerce data.', difficulty: 'Advanced', duration: '40 hrs', phases: 5, technologies: ['FastAPI', 'LangChain', 'Langfuse', 'React'], category: 'Single AI Agent', order: 11, isExtension: false },
+    { id: 'antigravity-ecommerce-multi-agent', title: 'Multi-Agent E-Commerce Assistant', description: 'Orchestrate multiple AI agents for shopping with LangGraph and FastAPI on Render.', difficulty: 'Advanced', duration: '45 hrs', phases: 5, technologies: ['LangGraph', 'FastAPI', 'Multi-Agent', 'React'], category: 'Multi-Agent AI System', order: 12, isExtension: false },
+    { id: 'antigravity-ecommerce-agentic-rag', title: 'Agentic RAG E-Commerce Assistant', description: 'Build an agentic RAG assistant over catalog and policies with cited answers and React UI.', difficulty: 'Advanced', duration: '40 hrs', phases: 5, technologies: ['RAG', 'FastAPI', 'Agents', 'React'], category: 'Agentic RAG', order: 13, isExtension: false },
   ]
 
   const handleGetStarted = () => {

@@ -1,0 +1,174 @@
+{
+  "proof-of-concept/dev-backend": {
+    "summary": "FastAPI structure, FAQ ingest, POST /ask, role parameter, secrets in environment.",
+    "sections": [
+      {
+        "heading": "Overview",
+        "body": "**Customer for Stages 3–9: a retail company (HQ and stores)**\n\n- Approximately **50 employees** across stores and head office.\n- IT receives **100 messages per week**; many repeat password, Wi‑Fi, VPN, and device questions.\n- Answers exist in **~15 FAQ documents** (PDF or Word). Staff rarely read them.\n- **IT lead (sponsor)** wants an internal **Ask IT** page: typed question, cited answer from FAQs, or a clear escalation to IT.\n- One **restricted FAQ** (“Admin-only IT notes”) must not appear in answers for standard staff. Only **admin** role may retrieve content from that source.\n- **Phase 1 scope:** FAQ assistant only—not a full ticketing or HR system.\n\n\n**Backend deliverables:** ingest FAQ files; tag chunks; expose `POST /ask` with question and role; return answer + `source_file` or structured refusal; enforce role filter before search.\n\n**Acceptance target (with sponsor):** 16+ of 20 regression questions correct, zero admin leaks, source on every valid answer."
+      },
+      {
+        "heading": "Pitfalls",
+        "body": "- Secrets in Git\n- Role check only in UI"
+      }
+    ],
+    "typeExtras": {
+      "objectives": [
+        "List backend endpoints and role rules"
+      ],
+      "checkpointQuestions": [
+        "Where is role validated?"
+      ]
+    }
+  },
+  "proof-of-concept/dev-frontend": {
+    "summary": "Ask IT screens per wireframes: input, answer with source, no-answer state, optional feedback.",
+    "sections": [
+      {
+        "heading": "Overview",
+        "body": "Implement Home, Answer, and No-answer views from Stage 4. Display loading state during API calls. Surface API errors without stack traces.\n\nOptional: staff/admin login selector or test accounts for regression."
+      }
+    ],
+    "typeExtras": {
+      "objectives": [
+        "Map wireframes to components",
+        "Handle loading and errors"
+      ],
+      "checkpointQuestions": [
+        "What displays on timeout?"
+      ]
+    }
+  },
+  "proof-of-concept/dev-rag": {
+    "summary": "Retrieve FAQ chunks, generate answers with citations; refuse when retrieval is insufficient.",
+    "sections": [
+      {
+        "heading": "Overview",
+        "body": "Reuse Stage 2 retrieval patterns. Pass only role-allowed chunks to the generator. Include source file name in the response. When no chunk meets threshold, return the no-answer message—do not hallucinate policy content."
+      }
+    ],
+    "typeExtras": {
+      "objectives": [
+        "Describe retrieval + generation boundary",
+        "Define refusal condition"
+      ],
+      "checkpointQuestions": [
+        "When do you refuse to answer?"
+      ]
+    }
+  },
+  "proof-of-concept/dev-data": {
+    "summary": "FAQ file layout, chunk metadata, staff_ok/admin_only tags, sample data for tests.",
+    "sections": [
+      {
+        "heading": "Overview",
+        "body": "Store FAQs as files or normalized tables; maintain metadata: file name, chunk id, sensitivity tag. Version sample FAQs for regression. Document how to add or update a FAQ and rerun tests."
+      },
+      {
+        "heading": "Template",
+        "body": "```\nChunk metadata: file_name, tag (staff_ok | admin_only), chunk_id\n```"
+      }
+    ],
+    "typeExtras": {
+      "objectives": [
+        "Document FAQ metadata schema",
+        "Provide sample FAQs for pilot"
+      ],
+      "checkpointQuestions": [
+        "How are admin-only files marked?"
+      ]
+    }
+  },
+  "proof-of-concept/eval-set-from-customer-data": {
+    "summary": "CSV with normal, edge, out-of-scope, and admin-as-staff cases for acceptance.",
+    "sections": [
+      {
+        "heading": "Overview",
+        "body": "Create `tests/questions.csv`: ~12 standard, ~4 edge, ~2 out-of-scope (expect refusal), ~2 admin-only topics asked as **staff** (must not leak). Reuse in Stages 7–9."
+      },
+      {
+        "heading": "Example: Retail case",
+        "body": "```\nid,question,expected_file,user_role,notes\n1,Reset password?,Password-FAQ.pdf,staff,\n2,Server room code?,Admin-only.pdf,staff,must refuse\n```"
+      }
+    ],
+    "typeExtras": {
+      "objectives": [
+        "Publish 20-row CSV",
+        "Include admin leak test rows"
+      ],
+      "checkpointQuestions": [
+        "Which rows test admin isolation?"
+      ]
+    }
+  },
+  "proof-of-concept/poc-scope-golden-set": {
+    "summary": "Document build plan, add sample FAQ files, complete questions.csv.",
+    "sections": [
+      {
+        "heading": "Procedure",
+        "body": "1. Write development plan (scope + acceptance numbers).\n2. Add 3–5 sample FAQ files with tags.\n3. Complete questions.csv; peer-review five rows."
+      }
+    ],
+    "typeExtras": {
+      "objectives": [
+        "Plan, sample data, and CSV ready"
+      ],
+      "checkpointQuestions": [
+        "Acceptance numbers agreed?"
+      ],
+      "deliverables": [
+        "Development plan",
+        "questions.csv",
+        "sample FAQs"
+      ]
+    }
+  },
+  "proof-of-concept/northwind-poc-build": {
+    "summary": "End-to-end localhost build; run 20-question regression; short results report.",
+    "sections": [
+      {
+        "heading": "Procedure",
+        "body": "1. Backend ingest, ask API, role filter.\n2. Frontend wired to API.\n3. Execute all CSV rows; log pass/fail.\n4. Fix highest-impact failure; rerun failed rows.\n5. Write results summary."
+      },
+      {
+        "heading": "Template",
+        "body": "```\nRESULTS\nCorrect: __/20\nAdmin leaks: __ (target 0)\nTop failure:\nFix:\n```"
+      }
+    ],
+    "typeExtras": {
+      "objectives": [
+        "Localhost E2E",
+        "Regression logged"
+      ],
+      "checkpointQuestions": [
+        "Met acceptance threshold?"
+      ],
+      "scope": "Ask IT on localhost with regression report",
+      "acceptanceCriteria": [
+        "0 admin leaks",
+        "Source on valid answers"
+      ]
+    }
+  },
+  "proof-of-concept/poc-scope-creep": {
+    "summary": "Defer out-of-scope requests using the BRD and acceptance criteria.",
+    "sections": [
+      {
+        "heading": "Example: Retail case",
+        "body": "\"I will log tickets for phase 2. Phase 1 completes the FAQ assistant and the agreed regression score. Let us finish acceptance on the current plan, then schedule an scope review.\""
+      }
+    ],
+    "typeExtras": {
+      "objectives": [
+        "Reference written scope and metrics"
+      ],
+      "checkpointQuestions": [
+        "Which document defines phase 1?"
+      ],
+      "prompt": "Mid-build request for ticketing and chat integrations.",
+      "rubric": [
+        "Professional deferral",
+        "Cites acceptance criteria"
+      ]
+    }
+  }
+}

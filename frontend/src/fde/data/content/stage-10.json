@@ -1,0 +1,106 @@
+{
+  "capstone-fde/capstone-brief-rubric": {
+    "summary": "Scope, sequence, stack, and evaluation weights for the three capstone modules.",
+    "sections": [
+      {
+        "heading": "Overview",
+        "body": "This capstone applies delivery practices from Stages 3–9 at e-commerce scale. The retail Ask IT exercise is complete; this work is the **Ecommerce Multi RAG agent** track.\n\n\n**Ecommerce Multi RAG agent** is the capstone sequence: three integrated modules on a shared stack (React, FastAPI, PostgreSQL). Complete modules in order.\n\n1. **Ecommerce Full stack** — catalog, cart, checkout, orders.\n2. **Ecommerce Multi Agent** — LangGraph agents with tools over live store data (scoped writes).\n3. **Ecommerce Agentic RAG** — FAISS over approved product manuals; cited answers; no cart mutations.\n\nShared rules: one frontend and API; separate backend packages for multi-agent and agentic RAG; Langfuse for traces and evals; secrets via environment variables only.\n\n```\nbackend/\n  app/\n  ecommerce/\n  agents/multi_agent/\n  agents/agentic_rag/\nfrontend/\n```\n\n\nMaintain a brief decision log per module. Do not commit credentials to Git."
+      },
+      {
+        "heading": "Procedure",
+        "body": "Work packages:\n\n1. Ecommerce Full stack\n2. Ecommerce Multi Agent\n3. Ecommerce Agentic RAG\n\nComplete modules in order. Each module includes build, smoke test, and short handover notes (environment, limits, eval summary where applicable)."
+      },
+      {
+        "heading": "Pitfalls",
+        "body": "- Starting AI modules before commerce checkout is validated.\n- Mixing RAG ingestion with multi-agent tool code without boundaries.\n- Hard-coded API keys or database URLs in the repository."
+      },
+      {
+        "heading": "Evaluation criteria",
+        "body": "```\nModule                    Requirement                              Weight\nEcommerce Full stack      Checkout works before AI modules         35%\nEcommerce Multi Agent     Live DB tools; isolated package          30%\nEcommerce Agentic RAG     FAISS + citations; no cart writes        35%\n```"
+      }
+    ],
+    "typeExtras": {
+      "objectives": [
+        "State module order and shared stack",
+        "Map acceptance criteria to three modules"
+      ],
+      "checkpointQuestions": [
+        "Which module uses FAISS vs live database tools?",
+        "Where does Langfuse attach?"
+      ]
+    }
+  },
+  "capstone-fde/capstone-1-discovery": {
+    "summary": "Catalog, cart, checkout, auth, and PostgreSQL schema; commerce works without AI.",
+    "sections": [
+      {
+        "heading": "Overview",
+        "body": "Deliver storefront flows: browse, cart, checkout, order persistence. Minimal admin or seeded catalog is acceptable for v1.\n\n**Module time (~190 min workshop block):** ~30 min planning and checklist; ~120 min core implementation milestone; ~25 min smoke test; ~15 min handover notes."
+      },
+      {
+        "heading": "Procedure",
+        "body": "1. Schema: users, products, cart, orders.\n2. FastAPI routes and React pages.\n3. One full purchase on localhost.\n4. Document API list and local setup in README."
+      }
+    ],
+    "typeExtras": {
+      "objectives": [
+        "End-to-end purchase without AI",
+        "Schema documented"
+      ],
+      "checkpointQuestions": [
+        "Checkout with AI modules disabled?"
+      ],
+      "scope": "Commerce only—no agent graphs or vector indexes.",
+      "acceptanceCriteria": [
+        "Guest or registered checkout",
+        "Orders persisted in PostgreSQL"
+      ]
+    }
+  },
+  "capstone-fde/capstone-2-design": {
+    "summary": "LangGraph agents, live store tools, isolated agents/multi_agent/, Langfuse traces.",
+    "sections": [
+      {
+        "heading": "Overview",
+        "body": "First chat surface in the React app. Code under `agents/multi_agent/`. Tools read inventory and pricing; writes only on an explicit allow list.\n\n**Module time (~190 min):** tool contracts, graph orchestration, UI wiring, five scripted store queries, trace review in Langfuse."
+      },
+      {
+        "heading": "Procedure",
+        "body": "1. Define tool schemas and authorization rules.\n2. Implement LangGraph flow.\n3. Expose chat API and connect UI.\n4. Langfuse trace on each turn.\n5. Run five scripted store questions."
+      }
+    ],
+    "typeExtras": {
+      "objectives": [
+        "Isolated package",
+        "Live DB tools",
+        "Langfuse traces"
+      ],
+      "checkpointQuestions": [
+        "Actions out of scope for this module?"
+      ]
+    }
+  },
+  "capstone-fde/capstone-3-prototype": {
+    "summary": "FAISS over manuals, second chat UI, citations, agents/agentic_rag/, read-only for orders.",
+    "sections": [
+      {
+        "heading": "Overview",
+        "body": "Second chat surface. Ingest approved PDFs/text into FAISS with metadata. RAG path does not mutate carts or orders.\n\n**Module time (~190 min):** ingestion pipeline, cited answers, ten-question eval set, Langfuse or written eval summary, module handover."
+      },
+      {
+        "heading": "Procedure",
+        "body": "1. Build FAISS index with metadata.\n2. RAG flow with citations in responses.\n3. Second chat panel in frontend.\n4. Ten document-grounded eval questions with recorded scores."
+      }
+    ],
+    "typeExtras": {
+      "objectives": [
+        "FAISS reproducible",
+        "Cited answers",
+        "Separate from multi-agent writes"
+      ],
+      "checkpointQuestions": [
+        "Example response with document citation?"
+      ]
+    }
+  }
+}

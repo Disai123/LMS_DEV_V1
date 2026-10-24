@@ -9,6 +9,7 @@ const TYPE_LABEL = {
   lab: 'Lab',
   interview: 'Interview',
   project: 'Project',
+  capstone: 'Capstone',
 }
 
 export default function FdeItemPage() {
@@ -19,7 +20,7 @@ export default function FdeItemPage() {
   if (!resolved) {
     return (
       <div>
-        <Link to="/roadmap/fde" className="text-sm text-[var(--fde-mut)]">
+        <Link to="/roadmap/fde" className="text-sm text-[var(--fde-mut)] hover:text-[var(--fde-tx)]">
           ← Back to roadmap
         </Link>
         <p className="mt-4">Item not found.</p>
@@ -41,42 +42,51 @@ export default function FdeItemPage() {
         <meta name="description" content={content?.summary || item.title} />
       </Helmet>
 
-      <nav className="text-xs text-[var(--fde-mut)] mb-4 flex flex-wrap gap-1">
+      <nav
+        aria-label="Breadcrumb"
+        className="text-xs text-[var(--fde-mut)] mb-6 flex flex-wrap items-center gap-x-2 gap-y-1"
+      >
         <Link to="/roadmap/fde" className="hover:text-[var(--fde-tx)]">
           Roadmap
         </Link>
-        <span>/</span>
+        <span aria-hidden className="opacity-50">/</span>
         <Link to={`/roadmap/fde#stage-${stage.slug}`} className="hover:text-[var(--fde-tx)]">
           Stage {stageIndex + 1}: {stage.name}
         </Link>
-        <span>/</span>
-        <span className="text-[var(--fde-tx)]">{item.title}</span>
+        <span aria-hidden className="opacity-50">/</span>
+        <span className="text-[var(--fde-tx)] truncate max-w-full">{item.title}</span>
       </nav>
 
-      <Link to={`/roadmap/fde#stage-${stage.slug}`} className="text-sm text-[var(--fde-mut)] inline-block mb-4">
-        ← Back to roadmap
-      </Link>
-
       <div
-        className="border border-[var(--fde-bd)] border-l-4 rounded-xl p-5 bg-[var(--fde-card)]"
+        className="border border-[var(--fde-bd)] border-l-4 rounded-xl px-5 py-6 sm:px-8 sm:py-8 bg-[var(--fde-card)]"
         style={{ borderLeftColor: stage.color }}
       >
-        <p className="text-sm text-[var(--fde-mut)] mb-2">
-          Stage {stageIndex + 1} · {stage.name} ·{' '}
-          <span style={{ color: stage.color }}>{TYPE_LABEL[item.type]}</span> · {item.minutes} min
-        </p>
-        <h1 className="text-2xl sm:text-3xl font-bold mb-6">{item.title}</h1>
+        <div className="flex flex-wrap items-center gap-x-2.5 gap-y-1.5 text-xs text-[var(--fde-mut)] mb-3">
+          <span>
+            Stage {stageIndex + 1} · {stage.name}
+          </span>
+          <span aria-hidden className="opacity-50">·</span>
+          <span
+            className="font-semibold uppercase tracking-wider text-[10px] border rounded px-1.5 py-0.5"
+            style={{ color: stage.color, borderColor: stage.color }}
+          >
+            {TYPE_LABEL[item.type]}
+          </span>
+          <span aria-hidden className="opacity-50">·</span>
+          <span className="tabular-nums">{item.minutes} min</span>
+        </div>
+        <h1 className="text-2xl sm:text-3xl font-bold tracking-tight leading-tight mb-5">{item.title}</h1>
 
         {content && <FdeItemBody content={content} itemType={item.type} />}
 
-        <div className="mt-8 pt-6 border-t border-[var(--fde-bd)] flex flex-wrap gap-3 items-center">
+        <div className="mt-10 pt-6 border-t border-[var(--fde-bd)] flex flex-wrap gap-3 items-center">
           <button
             type="button"
             onClick={() => toggleDone(stageSlug, itemSlug)}
-            className={`text-sm px-4 py-2 rounded-lg border transition-colors ${
+            className={`text-sm font-medium px-4 py-2 rounded-lg border transition-colors ${
               done
                 ? 'bg-[#35d49a] text-[#04210f] border-[#35d49a]'
-                : 'border-[var(--fde-bd)] bg-[var(--fde-card)]'
+                : 'border-[var(--fde-bd)] bg-[var(--fde-card)] hover:border-[#35d49a]'
             }`}
           >
             {done ? '✓ Done' : 'Mark as done'}
@@ -84,13 +94,14 @@ export default function FdeItemPage() {
         </div>
       </div>
 
-      <div className="flex justify-between gap-4 mt-8 text-sm">
+      <nav aria-label="Lesson navigation" className="grid grid-cols-2 gap-4 mt-6 text-sm">
         {prev ? (
           <Link
             to={`/roadmap/fde/item/${prev.stageSlug}/${prev.item.slug}`}
-            className="text-[var(--fde-mut)] hover:text-[var(--fde-tx)] max-w-[45%]"
+            className="group rounded-lg border border-[var(--fde-bd)] bg-[var(--fde-card)] px-4 py-3 hover:border-[var(--fde-mut)]"
           >
-            ← {prev.item.title}
+            <span className="block text-[11px] uppercase tracking-wider text-[var(--fde-mut)] mb-1">← Previous</span>
+            <span className="block text-[var(--fde-tx)] leading-snug">{prev.item.title}</span>
           </Link>
         ) : (
           <span />
@@ -98,12 +109,15 @@ export default function FdeItemPage() {
         {next ? (
           <Link
             to={`/roadmap/fde/item/${next.stageSlug}/${next.item.slug}`}
-            className="text-[var(--fde-mut)] hover:text-[var(--fde-tx)] max-w-[45%] text-right ml-auto"
+            className="group rounded-lg border border-[var(--fde-bd)] bg-[var(--fde-card)] px-4 py-3 text-right hover:border-[var(--fde-mut)]"
           >
-            {next.item.title} →
+            <span className="block text-[11px] uppercase tracking-wider text-[var(--fde-mut)] mb-1">Next →</span>
+            <span className="block text-[var(--fde-tx)] leading-snug">{next.item.title}</span>
           </Link>
-        ) : null}
-      </div>
+        ) : (
+          <span />
+        )}
+      </nav>
     </>
   )
 }

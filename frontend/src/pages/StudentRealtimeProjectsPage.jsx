@@ -62,7 +62,7 @@ const StudentRealtimeProjectsPage = () => {
   const badgeText = planName ? `${planName.charAt(0).toUpperCase() + planName.slice(1)} Plan` : (isPaid ? 'Premium Plan' : 'Free Plan');
 
   // Split projects into Free and Premium
-  const freeAllowedList = ['todoapp', 'prerequisites'];
+  const freeAllowedList = ['prerequisites'];
   const freeProjects = projects.filter(p => freeAllowedList.includes(p.id?.toLowerCase()?.replace(/[-_]/g, '')));
   const premiumProjects = projects.filter(p => !freeAllowedList.includes(p.id?.toLowerCase()?.replace(/[-_]/g, '')));
 

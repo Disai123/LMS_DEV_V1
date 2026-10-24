@@ -1,0 +1,406 @@
+<div class="content-body">
+  <div class="content-section">
+    <h2 style="font-size:1.5rem;font-weight:700;margin-bottom:0.5rem;">Antigravity prompt library</h2>
+    <p style="color:#4b5563;margin-bottom:1.5rem;">Day-by-day prompts for <strong>Antigravity E-Commerce Single Agent (Prompt Workshop)</strong>. Paste into your AI coding assistant one day at a time; test before moving on.</p>
+    
+    <section class="prompt-day" id="day-1" style="margin-bottom:1.5rem;border:1px solid #e5e7eb;border-radius:12px;padding:1rem;background:#fff;">
+      <h3 style="margin:0 0 0.5rem;color:#4338ca;">Day 1: ANTIGRAVITY TASK-WISE PROMPT GUIDE</h3>
+      <pre style="white-space:pre-wrap;font-size:0.8rem;line-height:1.5;background:#f8fafc;padding:1rem;border-radius:8px;max-height:320px;overflow:auto;">ANTIGRAVITY TASK-WISE PROMPT GUIDE
+
+Single Agent Integration into Existing E-Commerce Application
+FastAPI + ReactJS + LangGraph + Langfuse
+Purpose
+This guide gives one clear Antigravity prompt for each day. The first 3 days are only for understanding the agent concepts needed for the project. Days 4-20 build and finish one simple agent feature inside the existing e-commerce application.
+Final Project
+Add one feature called &quot;Ask the Store&quot;.
+The agent answers questions about real e-commerce data such as products, categories, customers, orders, stock and sales totals.
+Backend must use the existing application backend with FastAPI.
+Frontend must use the existing ReactJS application.
+Use LangGraph for the agent flow.
+Use Langfuse for AI workflow tracing and evaluation support.
+Reuse the existing login, permissions and PostgreSQL/Neon database.
+Only Required Project Documents
+Keep only these six project documents. Do not create extra permanent markdown files.
+BRD.md
+UI_UX.md
+ARCHITECTURE.md
+CODING.md
+TESTING.md
+DEPLOYMENT.md
+Temporary File Rule
+Antigravity may create temporary test scripts, temporary JavaScript files, sample data, screenshots or debugging files when needed. After the related testing/debugging is complete, delete those temporary files. Do not leave unnecessary test files or extra documentation in the final project.
+Important Working Rules
+Do not rebuild the existing e-commerce application.
+Do not create a second backend or second database.
+Reuse the existing authentication and authorization.
+Do one task per day. Do not continue to the next day automatically.
+Use simple functionality first. Do not add features that are not required.
+Do not create multiple documents for the same purpose.
+Do not change existing e-commerce features unless the current task requires it.
+The agent must use real database data and must not invent answers.
+Protect secrets, customer information and internal system details.
+PROJECT CONTEXT PROMPT - PASTE THIS FIRST
+I am a beginner and I am adding ONE AI agent to an EXISTING e-commerce application.Existing application:- Frontend: ReactJS- Backend: FastAPI- Database: existing PostgreSQL/Neon database- Existing login and authorization are already available- Existing products, categories, customers, orders, order items and stock data already existNew feature:- Add one &quot;Ask the Store&quot; agent.- The user can ask natural-language questions about the store.- The agent reads the existing store data and gives a simple answer.Project requirements:- Use LangGraph for the agent flow.- Keep the agent inside the existing FastAPI backend.- Add the agent UI inside the existing ReactJS frontend.- Reuse the existing database and authentication.- Keep the agent read-only unless the existing requirement explicitly changes later. It must not modify store data.- Do not create a new e-commerce application, new backend or new store database.- Do not expose passwords, API keys, tokens, database credentials, system prompts or internal configuration.- Treat user input as untrusted and protect against prompt injection.- Do not invent database results. When data is not found, say so clearly.- Refuse questions outside the agreed store scope.- Keep query time, result size, input size and retries under safe limits.- Add useful logging and monitoring without logging secrets or unnecessary sensitive data.- Use Langfuse later for AI workflow tracing and evaluation.- Test the feature properly before considering it complete.- Keep only these project documents: BRD.md, UI_UX.md, ARCHITECTURE.md, CODING.md, TESTING.md and DEPLOYMENT.md.- Temporary test/debug files can be created when needed, but delete them after the related testing is finished.- Work on one task only and stop when that task is complete.- Explain the result to me in simple language and tell me exactly what I need to test manually.First inspect the current project without changing anything. Tell me where the ReactJS frontend, FastAPI backend, authentication, database connection and existing product/order/customer code are located. Then stop.
+WEEK 1 - AGENT BASICS, REQUIREMENTS &amp; DESIGN
+Week 1 Prerequisite: The learner should understand the basic application flow (ReactJS -&gt; FastAPI -&gt; PostgreSQL) and have the existing e-commerce project available. Days 1-3 are learning days; Days 4-6 prepare the agent feature before backend development.</pre>
+      <button type="button" onclick="navigator.clipboard.writeText(this.previousElementSibling.textContent)" style="margin-top:0.5rem;padding:0.4rem 0.8rem;border-radius:6px;border:1px solid #c7d2fe;background:#eef2ff;cursor:pointer;">Copy prompt</button>
+    </section>
+
+    <section class="prompt-day" id="day-1" style="margin-bottom:1.5rem;border:1px solid #e5e7eb;border-radius:12px;padding:1rem;background:#fff;">
+      <h3 style="margin:0 0 0.5rem;color:#4338ca;">Day 1: Agent Basics</h3>
+      <pre style="white-space:pre-wrap;font-size:0.8rem;line-height:1.5;background:#f8fafc;padding:1rem;border-radius:8px;max-height:320px;overflow:auto;">SDLC Phase: Learning
+For this first learning day, do not change the project code.Teach me only the basic ideas I need to understand before building this project:
+What an AI agent is
+How an agent receives a user question
+What a model does
+What a tool is
+What context/state means
+How an agent can use application data
+The difference between a normal chatbot and an application agent
+The difference between a single agent and a multi-agent system
+Use very simple e-commerce examples. Do not create files, do not install packages and do not write project code. At the end, give me a small 5-question check so I can confirm I understood the basics, then stop.</pre>
+      <button type="button" onclick="navigator.clipboard.writeText(this.previousElementSibling.textContent)" style="margin-top:0.5rem;padding:0.4rem 0.8rem;border-radius:6px;border:1px solid #c7d2fe;background:#eef2ff;cursor:pointer;">Copy prompt</button>
+    </section>
+
+    <section class="prompt-day" id="day-2" style="margin-bottom:1.5rem;border:1px solid #e5e7eb;border-radius:12px;padding:1rem;background:#fff;">
+      <h3 style="margin:0 0 0.5rem;color:#4338ca;">Day 2: LangChain Basics Needed for the Project</h3>
+      <pre style="white-space:pre-wrap;font-size:0.8rem;line-height:1.5;background:#f8fafc;padding:1rem;border-radius:8px;max-height:320px;overflow:auto;">SDLC Phase: Learning
+For the second learning day, do not change the project code.Teach me only the LangChain concepts I will actually use for this project:
+Model
+Prompt
+Tool
+Structured input/output
+Calling a tool safely
+How LangChain connects an agent to application data
+Use very simple examples related to products, orders and customers. Explain why each concept is useful for our Ask the Store feature. Do not create project files, do not install packages and do not build anything yet. End with a short 5-question check, then stop.</pre>
+      <button type="button" onclick="navigator.clipboard.writeText(this.previousElementSibling.textContent)" style="margin-top:0.5rem;padding:0.4rem 0.8rem;border-radius:6px;border:1px solid #c7d2fe;background:#eef2ff;cursor:pointer;">Copy prompt</button>
+    </section>
+
+    <section class="prompt-day" id="day-3" style="margin-bottom:1.5rem;border:1px solid #e5e7eb;border-radius:12px;padding:1rem;background:#fff;">
+      <h3 style="margin:0 0 0.5rem;color:#4338ca;">Day 3: LangGraph Basics Needed for the Project</h3>
+      <pre style="white-space:pre-wrap;font-size:0.8rem;line-height:1.5;background:#f8fafc;padding:1rem;border-radius:8px;max-height:320px;overflow:auto;">SDLC Phase: Learning
+For the third learning day, do not change the project code.Teach me only the LangGraph concepts I will use to build our simple agent:
+State
+Nodes
+Edges
+Conditional routing
+Start and end of a graph
+How one step passes information to the next step
+How an error or unsafe request can stop the graph
+Show one very small e-commerce example such as:User question -&gt; check question -&gt; get store data -&gt; create answer.Keep the explanation simple and connect every concept to our real project. Do not create files, do not install packages and do not start implementation. End with a short 5-question check, then stop.</pre>
+      <button type="button" onclick="navigator.clipboard.writeText(this.previousElementSibling.textContent)" style="margin-top:0.5rem;padding:0.4rem 0.8rem;border-radius:6px;border:1px solid #c7d2fe;background:#eef2ff;cursor:pointer;">Copy prompt</button>
+    </section>
+
+    <section class="prompt-day" id="day-4" style="margin-bottom:1.5rem;border:1px solid #e5e7eb;border-radius:12px;padding:1rem;background:#fff;">
+      <h3 style="margin:0 0 0.5rem;color:#4338ca;">Day 4: Initiation and BRD</h3>
+      <pre style="white-space:pre-wrap;font-size:0.8rem;line-height:1.5;background:#f8fafc;padding:1rem;border-radius:8px;max-height:320px;overflow:auto;">SDLC Phase: SDLC - Initiation &amp; Planning
+Inspect the existing e-commerce application and then create or update only BRD.md.BRD.md must clearly describe:
+Business problem
+Goal of Ask the Store
+Target users
+In-scope questions: products, categories, customers, orders, order items, stock and sales/order totals
+Out-of-scope questions
+Main user flow
+Security expectations
+Read-only rule
+Success criteria
+Also record which existing application parts will be reused: ReactJS frontend, FastAPI backend, authentication and PostgreSQL/Neon database.Do not create any other markdown document. Do not build the agent yet. Do not change existing application behavior. After saving BRD.md, explain what was captured and stop.</pre>
+      <button type="button" onclick="navigator.clipboard.writeText(this.previousElementSibling.textContent)" style="margin-top:0.5rem;padding:0.4rem 0.8rem;border-radius:6px;border:1px solid #c7d2fe;background:#eef2ff;cursor:pointer;">Copy prompt</button>
+    </section>
+
+    <section class="prompt-day" id="day-5" style="margin-bottom:1.5rem;border:1px solid #e5e7eb;border-radius:12px;padding:1rem;background:#fff;">
+      <h3 style="margin:0 0 0.5rem;color:#4338ca;">Day 5: UI/UX Design</h3>
+      <pre style="white-space:pre-wrap;font-size:0.8rem;line-height:1.5;background:#f8fafc;padding:1rem;border-radius:8px;max-height:320px;overflow:auto;">SDLC Phase: SDLC - Requirements &amp; UX
+Create or update only UI_UX.md for the new Ask the Store feature.Keep the UI very simple and match the existing ReactJS application's look and feel.Define:
+Where the Ask the Store feature will appear
+Question input box
+Ask button
+Loading state
+Answer area
+No-data message
+Out-of-scope message
+Safe error message
+Empty state
+Basic mobile/responsive behavior
+What information must never be shown to the user
+Do not redesign the existing application. Do not create another UI design document. Do not implement the UI yet. After saving UI_UX.md, stop.</pre>
+      <button type="button" onclick="navigator.clipboard.writeText(this.previousElementSibling.textContent)" style="margin-top:0.5rem;padding:0.4rem 0.8rem;border-radius:6px;border:1px solid #c7d2fe;background:#eef2ff;cursor:pointer;">Copy prompt</button>
+    </section>
+
+    <section class="prompt-day" id="day-6" style="margin-bottom:1.5rem;border:1px solid #e5e7eb;border-radius:12px;padding:1rem;background:#fff;">
+      <h3 style="margin:0 0 0.5rem;color:#4338ca;">Day 6: Architecture Design</h3>
+      <pre style="white-space:pre-wrap;font-size:0.8rem;line-height:1.5;background:#f8fafc;padding:1rem;border-radius:8px;max-height:320px;overflow:auto;">SDLC Phase: SDLC - Design
+Create or update only ARCHITECTURE.md for the Ask the Store feature.Show the simple end-to-end design:ReactJS UI-&gt; FastAPI /agent/ask-&gt; LangGraph agent-&gt; approved store data access-&gt; existing PostgreSQL/Neon database-&gt; final answer-&gt; ReactJS UIClearly describe:
+What the existing application keeps doing
+What the new agent adds
+Where authentication is checked
+How the agent gets store data safely
+How the LangGraph flow works
+How errors and out-of-scope questions are handled
+How logs and request IDs flow through the request
+Do not create another architecture document. Do not write implementation code yet. Keep the design simple and stop after ARCHITECTURE.md is complete.
+WEEK 2 - FASTAPI AGENT DEVELOPMENT &amp; TESTING
+Week 2 Prerequisite: Week 1 must be complete. The existing FastAPI backend, PostgreSQL/Neon connection, authentication and database tables must already work. The learner should be comfortable with the basic LangGraph flow from Week 1.</pre>
+      <button type="button" onclick="navigator.clipboard.writeText(this.previousElementSibling.textContent)" style="margin-top:0.5rem;padding:0.4rem 0.8rem;border-radius:6px;border:1px solid #c7d2fe;background:#eef2ff;cursor:pointer;">Copy prompt</button>
+    </section>
+
+    <section class="prompt-day" id="day-7" style="margin-bottom:1.5rem;border:1px solid #e5e7eb;border-radius:12px;padding:1rem;background:#fff;">
+      <h3 style="margin:0 0 0.5rem;color:#4338ca;">Day 7: Backend Coding Setup</h3>
+      <pre style="white-space:pre-wrap;font-size:0.8rem;line-height:1.5;background:#f8fafc;padding:1rem;border-radius:8px;max-height:320px;overflow:auto;">SDLC Phase: SDLC - Development
+Start the backend implementation inside the existing FastAPI application.Add only the minimum agent structure needed for this feature and reuse the existing project style.The implementation must:
+Use LangGraph
+Reuse existing authentication
+Reuse the existing database connection infrastructure where safe
+Create a separate read-only data access path for the agent
+Keep existing customer/admin APIs unchanged
+Not create a second backend
+Not build the ReactJS UI yet
+Create or update only CODING.md to record the final code structure, important files, configuration values and how the agent code fits into the existing FastAPI backend.Do not create any other permanent markdown files. Test that the application still starts correctly, then stop.</pre>
+      <button type="button" onclick="navigator.clipboard.writeText(this.previousElementSibling.textContent)" style="margin-top:0.5rem;padding:0.4rem 0.8rem;border-radius:6px;border:1px solid #c7d2fe;background:#eef2ff;cursor:pointer;">Copy prompt</button>
+    </section>
+
+    <section class="prompt-day" id="day-8" style="margin-bottom:1.5rem;border:1px solid #e5e7eb;border-radius:12px;padding:1rem;background:#fff;">
+      <h3 style="margin:0 0 0.5rem;color:#4338ca;">Day 8: Build the Core Agent Flow</h3>
+      <pre style="white-space:pre-wrap;font-size:0.8rem;line-height:1.5;background:#f8fafc;padding:1rem;border-radius:8px;max-height:320px;overflow:auto;">SDLC Phase: SDLC - Development
+Build the simplest working LangGraph flow for Ask the Store.The flow should be:User question-&gt; check whether it is a store question-&gt; safely prepare the data request-&gt; validate the data request-&gt; read approved store data-&gt; create the final answerThe agent must:
+Use real database results
+Never invent numbers
+Refuse clearly unrelated questions
+Say no data was found when the database has no matching data
+Keep the flow simple
+Stay read-only
+Use the existing FastAPI backend. Do not build the ReactJS UI yet and do not change unrelated e-commerce features.Update only CODING.md if the code structure or usage needs documenting. Create temporary test files only when needed and delete them after testing.</pre>
+      <button type="button" onclick="navigator.clipboard.writeText(this.previousElementSibling.textContent)" style="margin-top:0.5rem;padding:0.4rem 0.8rem;border-radius:6px;border:1px solid #c7d2fe;background:#eef2ff;cursor:pointer;">Copy prompt</button>
+    </section>
+
+    <section class="prompt-day" id="day-9" style="margin-bottom:1.5rem;border:1px solid #e5e7eb;border-radius:12px;padding:1rem;background:#fff;">
+      <h3 style="margin:0 0 0.5rem;color:#4338ca;">Day 9: Create the Agent API</h3>
+      <pre style="white-space:pre-wrap;font-size:0.8rem;line-height:1.5;background:#f8fafc;padding:1rem;border-radius:8px;max-height:320px;overflow:auto;">SDLC Phase: SDLC - Development
+Add one backend endpoint to the existing FastAPI application: POST /agent/ask.Use the existing authentication and authorization.The endpoint should:
+Accept a simple user question
+Send it to the LangGraph agent
+Return a simple safe answer
+Return a clear response when the user is not authenticated
+Return a clear response for invalid input
+Return a clear response when the agent cannot answer
+Never return secrets, SQL text, stack traces or internal configuration
+Do not add extra endpoints unless the existing application clearly needs one for this feature. Do not build the frontend yet.Test the endpoint using the existing project tools. Delete any temporary test script after testing is complete.</pre>
+      <button type="button" onclick="navigator.clipboard.writeText(this.previousElementSibling.textContent)" style="margin-top:0.5rem;padding:0.4rem 0.8rem;border-radius:6px;border:1px solid #c7d2fe;background:#eef2ff;cursor:pointer;">Copy prompt</button>
+    </section>
+
+    <section class="prompt-day" id="day-10" style="margin-bottom:1.5rem;border:1px solid #e5e7eb;border-radius:12px;padding:1rem;background:#fff;">
+      <h3 style="margin:0 0 0.5rem;color:#4338ca;">Day 10: Connect Real Store Data and Ground Answers</h3>
+      <pre style="white-space:pre-wrap;font-size:0.8rem;line-height:1.5;background:#f8fafc;padding:1rem;border-radius:8px;max-height:320px;overflow:auto;">SDLC Phase: SDLC - Development + QA
+Connect the agent to the existing store data and make real questions work.Test simple questions such as:
+How many products are in the store?
+How many orders are there?
+How many customers are there?
+Show products in a selected category.
+Show the stock for a selected product.
+For every answer, compare the result with the real database and fix the implementation if the answer is wrong.The agent must:
+Query only approved store data
+Use only read operations
+Never expose raw SQL to the user
+Never invent missing information
+Clearly say when no matching data exists
+Do not change unrelated application features. Temporary test files are allowed for this day's validation but must be deleted after testing.</pre>
+      <button type="button" onclick="navigator.clipboard.writeText(this.previousElementSibling.textContent)" style="margin-top:0.5rem;padding:0.4rem 0.8rem;border-radius:6px;border:1px solid #c7d2fe;background:#eef2ff;cursor:pointer;">Copy prompt</button>
+    </section>
+
+    <section class="prompt-day" id="day-11" style="margin-bottom:1.5rem;border:1px solid #e5e7eb;border-radius:12px;padding:1rem;background:#fff;">
+      <h3 style="margin:0 0 0.5rem;color:#4338ca;">Day 11: Safe Behavior and Error Handling</h3>
+      <pre style="white-space:pre-wrap;font-size:0.8rem;line-height:1.5;background:#f8fafc;padding:1rem;border-radius:8px;max-height:320px;overflow:auto;">SDLC Phase: SDLC - QA / Reliability
+Make the Ask the Store agent behave correctly for normal, unclear, unsupported and failed requests.Handle these cases:
+Valid store question
+Question with no matching data
+Unclear store question
+Unrelated question
+Invalid input
+Model failure
+Database failure
+Timeout
+For unclear questions, ask for clarification when needed instead of guessing.For unrelated questions, politely say that the agent only answers about the store.For failures, show a simple safe message to the user and keep internal error details out of the response.Do not add new features. Test each case and delete any temporary test files after the checks are complete.</pre>
+      <button type="button" onclick="navigator.clipboard.writeText(this.previousElementSibling.textContent)" style="margin-top:0.5rem;padding:0.4rem 0.8rem;border-radius:6px;border:1px solid #c7d2fe;background:#eef2ff;cursor:pointer;">Copy prompt</button>
+    </section>
+
+    <section class="prompt-day" id="day-12" style="margin-bottom:1.5rem;border:1px solid #e5e7eb;border-radius:12px;padding:1rem;background:#fff;">
+      <h3 style="margin:0 0 0.5rem;color:#4338ca;">Day 12: Testing and Evaluation</h3>
+      <pre style="white-space:pre-wrap;font-size:0.8rem;line-height:1.5;background:#f8fafc;padding:1rem;border-radius:8px;max-height:320px;overflow:auto;">SDLC Phase: SDLC - Testing / QA / Evaluation
+Create or update only TESTING.md and use it as the final testing document for the project.Test the agent with real existing store data and record PASS/FAIL for:
+Product questions
+Category questions
+Customer questions
+Order questions
+Stock questions
+Sales/order-total questions
+Date-range questions
+No-data questions
+Out-of-scope questions
+Prompt-injection attempts
+Unsafe database requests
+Authentication failures
+Model/database failures
+Timeout and limit cases
+For each test, compare the agent answer with the real database result or the expected safe behavior.Use temporary test scripts, JSON files, JavaScript files or other temporary files only when needed. After testing is complete, delete those temporary files. Keep the final PASS/FAIL results and important findings only in TESTING.md.Do not create separate evaluation documents.
+WEEK 3 - REACTJS FRONTEND &amp; INTEGRATION
+Week 3 Prerequisite: Week 2 must be complete. The FastAPI agent endpoint and existing authentication must work from a test client. The learner should know the basic ReactJS concepts needed to create a simple screen and call an API.</pre>
+      <button type="button" onclick="navigator.clipboard.writeText(this.previousElementSibling.textContent)" style="margin-top:0.5rem;padding:0.4rem 0.8rem;border-radius:6px;border:1px solid #c7d2fe;background:#eef2ff;cursor:pointer;">Copy prompt</button>
+    </section>
+
+    <section class="prompt-day" id="day-13" style="margin-bottom:1.5rem;border:1px solid #e5e7eb;border-radius:12px;padding:1rem;background:#fff;">
+      <h3 style="margin:0 0 0.5rem;color:#4338ca;">Day 13: ReactJS Ask the Store UI</h3>
+      <pre style="white-space:pre-wrap;font-size:0.8rem;line-height:1.5;background:#f8fafc;padding:1rem;border-radius:8px;max-height:320px;overflow:auto;">SDLC Phase: SDLC - Development / Integration
+Build the Ask the Store UI inside the existing ReactJS application using the UI/UX design already defined.The UI must contain only what is needed:
+Question input
+Ask button
+Loading state
+Answer area
+No-data message
+Out-of-scope message
+Friendly error message
+Connect it to POST /agent/ask and show the real backend answer.Reuse the existing ReactJS styling and layout. Do not redesign the application. Do not create a separate frontend application.Test the UI in the browser. Delete any temporary UI test/debug files after testing.</pre>
+      <button type="button" onclick="navigator.clipboard.writeText(this.previousElementSibling.textContent)" style="margin-top:0.5rem;padding:0.4rem 0.8rem;border-radius:6px;border:1px solid #c7d2fe;background:#eef2ff;cursor:pointer;">Copy prompt</button>
+    </section>
+
+    <section class="prompt-day" id="day-14" style="margin-bottom:1.5rem;border:1px solid #e5e7eb;border-radius:12px;padding:1rem;background:#fff;">
+      <h3 style="margin:0 0 0.5rem;color:#4338ca;">Day 14: End-to-End Integration and UAT</h3>
+      <pre style="white-space:pre-wrap;font-size:0.8rem;line-height:1.5;background:#f8fafc;padding:1rem;border-radius:8px;max-height:320px;overflow:auto;">SDLC Phase: SDLC - Integration &amp; UAT
+Run a complete browser-based end-to-end test of the existing e-commerce application with the new Ask the Store feature.Verify:
+Login
+Existing customer/admin access
+Ask the Store UI opens correctly
+A product question returns the correct result
+An order question returns the correct result
+A stock question returns the correct result
+A no-data question is handled correctly
+An unrelated question is refused
+A prompt-injection attempt is refused
+Existing Products, Cart, Checkout, Orders and Admin flows still work
+Fix only issues caused by the new feature. Do not redesign or rebuild existing functionality.Update TESTING.md with the final UAT results. Delete temporary browser/test files after testing.After the end-to-end tests, confirm that the important agent requests are available for Langfuse tracing once Langfuse is connected.</pre>
+      <button type="button" onclick="navigator.clipboard.writeText(this.previousElementSibling.textContent)" style="margin-top:0.5rem;padding:0.4rem 0.8rem;border-radius:6px;border:1px solid #c7d2fe;background:#eef2ff;cursor:pointer;">Copy prompt</button>
+    </section>
+
+    <section class="prompt-day" id="day-15" style="margin-bottom:1.5rem;border:1px solid #e5e7eb;border-radius:12px;padding:1rem;background:#fff;">
+      <h3 style="margin:0 0 0.5rem;color:#4338ca;">Day 15: Final Agent Readiness Check</h3>
+      <pre style="white-space:pre-wrap;font-size:0.8rem;line-height:1.5;background:#f8fafc;padding:1rem;border-radius:8px;max-height:320px;overflow:auto;">SDLC Phase: SDLC - Testing / Final Checkpoint
+Before starting the Langfuse work, do one final check of the Ask the Store feature.Verify:
+The FastAPI agent endpoint works
+The LangGraph flow works
+The ReactJS Ask the Store UI works
+Real store data is returned correctly
+No-data, unclear and unrelated questions are handled correctly
+Existing customer/admin features still work
+Existing security and read-only rules are still active
+TESTING.md contains the current test results
+Temporary test/debug files created during testing are removed
+Do not add a new feature. Fix only issues found in this check. Do not create another observability or security document. Stop when the application is ready for Langfuse integration.
+Checkpoint: Complete this final functional check, confirm the application is stable, and wait before moving to the Langfuse learning day.
+WEEK 4 - LANGFUSE, DEPLOYMENT &amp; FINAL RELEASE
+Week 4 Prerequisite: Complete Days 1-15 first. Day 16 is the Langfuse learning day and Day 17 is the Langfuse implementation day. Do not move ahead until the Langfuse concepts are understood.</pre>
+      <button type="button" onclick="navigator.clipboard.writeText(this.previousElementSibling.textContent)" style="margin-top:0.5rem;padding:0.4rem 0.8rem;border-radius:6px;border:1px solid #c7d2fe;background:#eef2ff;cursor:pointer;">Copy prompt</button>
+    </section>
+
+    <section class="prompt-day" id="day-16" style="margin-bottom:1.5rem;border:1px solid #e5e7eb;border-radius:12px;padding:1rem;background:#fff;">
+      <h3 style="margin:0 0 0.5rem;color:#4338ca;">Day 16: Langfuse Basics</h3>
+      <pre style="white-space:pre-wrap;font-size:0.8rem;line-height:1.5;background:#f8fafc;padding:1rem;border-radius:8px;max-height:320px;overflow:auto;">SDLC Phase: Learning / Langfuse
+For today, do not change the project code.Teach me the basic Langfuse concepts I need for this project:
+What Langfuse is
+Why Langfuse is useful for AI observability and evaluation
+What a trace is
+What an observation/span is in simple terms
+How a model call and tool/database step appear in a trace
+What an evaluation score means
+What a dataset/evaluation test case is
+How prompt versions can be managed in Langfuse
+How prompt-injection and other AI security tests can be monitored and evaluated using Langfuse
+What Langfuse does not replace, such as the application's normal authentication and runtime safety checks
+Use simple examples from our Ask the Store project. Do not create files, do not install packages and do not write project code. End with a short 5-question check and then stop.
+Checkpoint: Complete this learning day, confirm the concepts are understood, and wait before moving to the implementation day.</pre>
+      <button type="button" onclick="navigator.clipboard.writeText(this.previousElementSibling.textContent)" style="margin-top:0.5rem;padding:0.4rem 0.8rem;border-radius:6px;border:1px solid #c7d2fe;background:#eef2ff;cursor:pointer;">Copy prompt</button>
+    </section>
+
+    <section class="prompt-day" id="day-17" style="margin-bottom:1.5rem;border:1px solid #e5e7eb;border-radius:12px;padding:1rem;background:#fff;">
+      <h3 style="margin:0 0 0.5rem;color:#4338ca;">Day 17: Langfuse Implementation: Observability, Evaluation &amp; Security Monitoring</h3>
+      <pre style="white-space:pre-wrap;font-size:0.8rem;line-height:1.5;background:#f8fafc;padding:1rem;border-radius:8px;max-height:320px;overflow:auto;">SDLC Phase: SDLC - Implementation / Observability / Evaluation
+Now implement Langfuse for the Ask the Store project.Use Langfuse to cover the observability, evaluation and AI-security monitoring work that we previously kept as separate tasks.Implement:
+Trace each agent request from the API through the LangGraph flow, model call, approved data/tool step and final answer
+Capture useful timing information and success/failure information
+Capture retries, no-data and refusal results where useful
+Create a small repeatable evaluation set for the important agent questions
+Record evaluation scores and review incorrect answers in Langfuse
+Keep the final PASS/FAIL summary in TESTING.md
+Keep the agent prompts/version information manageable through Langfuse where practical
+Trace and evaluate prompt-injection and unsafe-request test cases so we can see whether the existing runtime safeguards worked
+Do not log passwords, API keys, tokens, database credentials or unnecessary customer information
+Important: Langfuse is being used for tracing, prompt management and evaluation. It is not a replacement for the application's authentication, database permissions or runtime security checks. Keep those existing controls in the application.Test one normal request, one failed request, one no-data request and the main security test cases. Review the traces and evaluation results in Langfuse. Delete temporary test/debug files after testing. Do not create a separate observability, evaluation or security document.
+Checkpoint: Confirm Langfuse traces, evaluations and security-monitoring results are visible and useful before moving to deployment.</pre>
+      <button type="button" onclick="navigator.clipboard.writeText(this.previousElementSibling.textContent)" style="margin-top:0.5rem;padding:0.4rem 0.8rem;border-radius:6px;border:1px solid #c7d2fe;background:#eef2ff;cursor:pointer;">Copy prompt</button>
+    </section>
+
+    <section class="prompt-day" id="day-18" style="margin-bottom:1.5rem;border:1px solid #e5e7eb;border-radius:12px;padding:1rem;background:#fff;">
+      <h3 style="margin:0 0 0.5rem;color:#4338ca;">Day 18: Deployment</h3>
+      <pre style="white-space:pre-wrap;font-size:0.8rem;line-height:1.5;background:#f8fafc;padding:1rem;border-radius:8px;max-height:320px;overflow:auto;">SDLC Phase: SDLC - Release Preparation
+Prepare the completed Ask the Store feature for deployment using the existing application deployment approach.Create or update only DEPLOYMENT.md.Document:
+Required backend environment values
+Required frontend environment values
+How the FastAPI backend is started
+How the ReactJS frontend is built and served
+Required database access/configuration
+Safe secret configuration
+Steps to deploy the new agent without breaking the existing e-commerce application
+Basic post-deployment checks
+How to roll back the agent change if the existing application is affected
+Do not create new infrastructure unless the existing project requires it. Do not put real secrets in DEPLOYMENT.md. Test the deployment steps in the current environment as far as possible and delete temporary deployment test files afterward.
+Checkpoint: Complete this day's task, test it, and wait before moving to the next day.</pre>
+      <button type="button" onclick="navigator.clipboard.writeText(this.previousElementSibling.textContent)" style="margin-top:0.5rem;padding:0.4rem 0.8rem;border-radius:6px;border:1px solid #c7d2fe;background:#eef2ff;cursor:pointer;">Copy prompt</button>
+    </section>
+
+    <section class="prompt-day" id="day-19" style="margin-bottom:1.5rem;border:1px solid #e5e7eb;border-radius:12px;padding:1rem;background:#fff;">
+      <h3 style="margin:0 0 0.5rem;color:#4338ca;">Day 19: Final Release and Cleanup</h3>
+      <pre style="white-space:pre-wrap;font-size:0.8rem;line-height:1.5;background:#f8fafc;padding:1rem;border-radius:8px;max-height:320px;overflow:auto;">SDLC Phase: SDLC - Release &amp; Handoff
+Finish the Ask the Store project and prepare the repository for handoff.Do one final check of the complete flow:ReactJS-&gt; FastAPI /agent/ask-&gt; LangGraph-&gt; approved store data-&gt; PostgreSQL/Neon-&gt; safe final answer-&gt; ReactJS UIThen:
+Confirm the feature meets the BRD.md requirements.
+Confirm the UI matches UI_UX.md.
+Confirm the implementation matches ARCHITECTURE.md.
+Confirm useful code details are recorded in CODING.md.
+Confirm final testing results are recorded in TESTING.md.
+Confirm deployment steps are recorded in DEPLOYMENT.md.
+Remove temporary test, debug, sample, screenshot, evaluation and unused files created during this project.
+Remove unused packages and unused code introduced for this feature.
+Confirm there are no unnecessary markdown files added for the agent.
+Confirm existing e-commerce functionality still works.
+Do not add any new feature. Do not create any additional documentation. Tell me the final status in simple language and stop.</pre>
+      <button type="button" onclick="navigator.clipboard.writeText(this.previousElementSibling.textContent)" style="margin-top:0.5rem;padding:0.4rem 0.8rem;border-radius:6px;border:1px solid #c7d2fe;background:#eef2ff;cursor:pointer;">Copy prompt</button>
+    </section>
+
+    <section class="prompt-day" id="day-20" style="margin-bottom:1.5rem;border:1px solid #e5e7eb;border-radius:12px;padding:1rem;background:#fff;">
+      <h3 style="margin:0 0 0.5rem;color:#4338ca;">Day 20: Final Review and Handover</h3>
+      <pre style="white-space:pre-wrap;font-size:0.8rem;line-height:1.5;background:#f8fafc;padding:1rem;border-radius:8px;max-height:320px;overflow:auto;">SDLC Phase: SDLC - Final Handover
+Perform one final review of the completed Ask the Store project.Check the complete flow:ReactJS -&gt; FastAPI /agent/ask -&gt; LangGraph -&gt; approved store data -&gt; PostgreSQL/Neon -&gt; final answer -&gt; ReactJS UIAlso confirm:
+The BRD.md requirements are complete
+The UI matches UI_UX.md
+The code structure matches ARCHITECTURE.md and CODING.md
+TESTING.md contains the final test results
+DEPLOYMENT.md matches the actual deployment setup
+Langfuse traces are available for the important agent flows
+The final evaluation results are available in Langfuse and TESTING.md
+Temporary test/debug files and unused files are removed
+Existing e-commerce features still work
+Do not add any new feature. Give me the final status in simple language and stop.
+Checkpoint: Complete this day, test it, and wait before finishing the project.
+MASTER FIX PROMPT
+Something is not working in the current day's task.What I was trying to do:[WRITE WHAT I TRIED]What I expected:[WRITE WHAT SHOULD HAPPEN]What actually happened:[WRITE WHAT I SAW]Error message, if any:[PASTE THE REAL ERROR]Find the root cause yourself. Fix only the issue related to the current task. Do not rebuild the application. Do not create a new backend or database. Do not change unrelated e-commerce features. Keep authentication, security, read-only rules, observability and testing in place. Explain the cause in simple language, tell me exactly how to test the fix, and run the relevant test again. Create temporary files only when necessary and delete them after the fix is verified. Stop after the current issue is resolved.
+MASTER DAILY CHECKPOINT PROMPT
+Before I finish today's task, check only the work completed today.Tell me:1. What changed?2. What is working?3. What is not working?4. Did any existing e-commerce feature change unexpectedly?5. Is the agent still following the security rules?6. Did the test for today's task pass?7. What exactly should I test manually?8. Are any temporary files left that should be deleted?9. Is today's task complete?10. Can I safely move to the next day?Use simple language and stop after this checkpoint.
+FINAL REQUIRED DOCUMENTS
+BRD.md
+UI_UX.md
+ARCHITECTURE.md
+CODING.md
+TESTING.md
+DEPLOYMENT.md
+No additional permanent project documents are required for this guide.</pre>
+      <button type="button" onclick="navigator.clipboard.writeText(this.previousElementSibling.textContent)" style="margin-top:0.5rem;padding:0.4rem 0.8rem;border-radius:6px;border:1px solid #c7d2fe;background:#eef2ff;cursor:pointer;">Copy prompt</button>
+    </section>
+  </div>
+</div>

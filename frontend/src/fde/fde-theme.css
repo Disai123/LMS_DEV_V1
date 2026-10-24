@@ -4,8 +4,10 @@
   --fde-tx: #e8ecf7;
   --fde-mut: #8f9ab8;
   --fde-bd: #222b47;
+  --fde-code-bg: #0b1020;
   background: var(--fde-bg);
   color: var(--fde-tx);
+  -webkit-font-smoothing: antialiased;
 }
 
 .fde-theme.fde-light {
@@ -14,6 +16,7 @@
   --fde-tx: #141a2e;
   --fde-mut: #5b6685;
   --fde-bd: #d6dcec;
+  --fde-code-bg: #f1f4fa;
 }
 
 .fde-theme.fde-dark {
@@ -22,4 +25,184 @@
   --fde-tx: #e8ecf7;
   --fde-mut: #8f9ab8;
   --fde-bd: #222b47;
+  --fde-code-bg: #0b1020;
+}
+
+.fde-eyebrow {
+  font-size: 0.75rem;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--fde-mut);
+}
+
+.fde-bullets {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.fde-bullets > li {
+  position: relative;
+  padding-left: 1.1rem;
+  line-height: 1.6;
+}
+
+.fde-bullets > li + li {
+  margin-top: 0.4rem;
+}
+
+.fde-bullets > li::before {
+  content: '';
+  position: absolute;
+  left: 0.15rem;
+  top: 0.65em;
+  width: 0.35rem;
+  height: 0.35rem;
+  border-radius: 9999px;
+  background: var(--fde-accent, var(--fde-mut));
+}
+
+/* Lesson body rendered from markdown */
+.fde-md {
+  font-size: 0.9375rem;
+  line-height: 1.7;
+  color: var(--fde-mut);
+  overflow-wrap: anywhere;
+}
+
+.fde-md > :first-child {
+  margin-top: 0;
+}
+
+.fde-md > :last-child {
+  margin-bottom: 0;
+}
+
+.fde-md p {
+  margin: 0.75rem 0;
+}
+
+.fde-md strong {
+  color: var(--fde-tx);
+  font-weight: 600;
+}
+
+.fde-md a {
+  color: var(--fde-tx);
+  text-decoration: underline;
+  text-underline-offset: 2px;
+}
+
+.fde-md h2,
+.fde-md h3,
+.fde-md h4 {
+  color: var(--fde-tx);
+  font-weight: 600;
+  line-height: 1.35;
+  margin: 1.5rem 0 0.5rem;
+}
+
+.fde-md h2 {
+  font-size: 1.05rem;
+}
+
+.fde-md h3,
+.fde-md h4 {
+  font-size: 0.95rem;
+}
+
+.fde-md ul,
+.fde-md ol {
+  margin: 0.75rem 0;
+  padding-left: 1.35rem;
+}
+
+.fde-md ul {
+  list-style: disc;
+}
+
+.fde-md ol {
+  list-style: decimal;
+}
+
+.fde-md li {
+  margin: 0.35rem 0;
+  padding-left: 0.2rem;
+}
+
+.fde-md li::marker {
+  color: var(--fde-mut);
+}
+
+.fde-md ol > li::marker {
+  font-variant-numeric: tabular-nums;
+  font-weight: 600;
+}
+
+.fde-md li > p {
+  margin: 0.25rem 0;
+}
+
+.fde-md code {
+  font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, 'Liberation Mono', monospace;
+  font-size: 0.85em;
+  color: var(--fde-tx);
+  background: var(--fde-code-bg);
+  border: 1px solid var(--fde-bd);
+  border-radius: 0.3rem;
+  padding: 0.1rem 0.35rem;
+}
+
+.fde-md pre {
+  margin: 1rem 0;
+  padding: 0.9rem 1rem;
+  background: var(--fde-code-bg);
+  border: 1px solid var(--fde-bd);
+  border-radius: 0.6rem;
+  overflow-x: auto;
+  line-height: 1.55;
+}
+
+.fde-md pre code {
+  display: block;
+  font-size: 0.8rem;
+  white-space: pre;
+  background: transparent;
+  border: 0;
+  border-radius: 0;
+  padding: 0;
+}
+
+.fde-md blockquote {
+  margin: 1rem 0;
+  padding: 0.25rem 0 0.25rem 1rem;
+  border-left: 3px solid var(--fde-bd);
+}
+
+.fde-md hr {
+  margin: 1.5rem 0;
+  border: 0;
+  border-top: 1px solid var(--fde-bd);
+}
+
+.fde-md table {
+  width: 100%;
+  margin: 1rem 0;
+  border-collapse: collapse;
+  font-size: 0.875rem;
+}
+
+.fde-md th,
+.fde-md td {
+  border: 1px solid var(--fde-bd);
+  padding: 0.5rem 0.75rem;
+  text-align: left;
+  vertical-align: top;
+}
+
+.fde-md th {
+  color: var(--fde-tx);
+  font-weight: 600;
+  background: var(--fde-code-bg);
 }

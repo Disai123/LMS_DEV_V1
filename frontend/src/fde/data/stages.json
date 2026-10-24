@@ -4,19 +4,33 @@
     "title": "Forward Deployed Engineer Roadmap",
     "subtitle": "Work at the intersection of customer, product, engineering and AI. 10 stages — click any stage to jump."
   },
-  "chips": ["12 weeks", "1 hour a day", "5 days a week", "60 hours"],
+  "chips": [
+    "12 weeks",
+    "1 hour a day",
+    "5 days a week",
+    "60 hours"
+  ],
   "phases": [
-    { "label": "Weeks 1-6 · 30 h", "detail": "Steps 1-2: Foundations" },
-    { "label": "Weeks 7-10 · 20 h", "detail": "Steps 3-9: FDE SDLC" },
-    { "label": "Weeks 11-12 · 10 h", "detail": "Step 10: Capstone" }
+    {
+      "label": "Weeks 1-6 · 30 h",
+      "detail": "Steps 1-2: Python and AI engineering foundations"
+    },
+    {
+      "label": "Weeks 7-10 · 20 h",
+      "detail": "Steps 3-9: FDE SDLC"
+    },
+    {
+      "label": "Weeks 11-12 · 10 h",
+      "detail": "Step 10: Ecommerce Multi RAG agent capstone"
+    }
   ],
   "capabilities": [
-    "Build full-stack and AI prototypes customers can evaluate",
-    "Run discovery and translate business goals into scoped use cases",
-    "Design UI/UX and architecture under real enterprise constraints",
-    "Ship POCs and MVPs with clear evaluation and production gaps",
-    "Deploy with observability and pass security and executive reviews",
-    "Deliver an end-to-end capstone engagement pack"
+    "Write Python apps and a cited FAQ chat helper (RAG)",
+    "Talk to a customer and write a one-page requirements note",
+    "Sketch screens and a reference architecture diagram",
+    "Develop and test a retail Ask IT build with a regression question set",
+    "Deploy to Render or AWS with secrets in env, Langfuse, and a runbook",
+    "Answer basic IT safety questions and hand the project over clearly"
   ],
   "faq": [
     {
@@ -25,19 +39,19 @@
     },
     {
       "question": "What does the roadmap cover?",
-      "answer": "Ten stages: Software Engineering, AI Engineering, FDE SDLC (business requirements, UI/UX, architecture), Proof of concept, MVP, Production deployment, Enterprise AI FDE, and Capstone FDE."
+      "answer": "Ten stages: Software Engineering (Python), AI Engineering (LLMs, RAG, agents, MCP), FDE SDLC (business requirements, UI/UX, architecture), Development, MVP/POC (local and Render validation), Production deployment, Enterprise AI FDE, and Capstone Project. Stages 3–9 use a retail company Ask IT case; Stage 10 is the Ecommerce Multi RAG agent capstone (three modules)."
     },
     {
       "question": "What will I be able to do after?",
-      "answer": "Stand up apps and RAG prototypes, run customer-style discovery, design solutions under constraints, scope POCs, deploy with monitoring, communicate with security and executives, and complete a capstone engagement."
+      "answer": "Stand up apps and RAG prototypes, run discovery, develop and test customer solutions, deploy to Render or AWS, use Langfuse for evals, communicate with IT and sponsors, and deliver the Ecommerce Multi RAG agent capstone."
     },
     {
       "question": "How should I split my time?",
-      "answer": "Weeks 1-6 focus on engineering and AI foundations (steps 1-2). Weeks 7-10 cover the FDE SDLC through enterprise AI (steps 3-9). Weeks 11-12 are the capstone project (step 10)."
+      "answer": "Week 1 is Python (step 1) and Weeks 2–6 are AI engineering (step 2). Weeks 7–10 cover FDE SDLC through enterprise handover (steps 3–9). Weeks 11–12 are the Ecommerce Multi RAG agent capstone (step 10)."
     },
     {
       "question": "What should I build to prove readiness?",
-      "answer": "Complete the capstone: discovery notes, ranked use cases, POC scope with pass mark, working prototype with evals, security Q&A, and an executive readout with handover documentation."
+      "answer": "Complete the three capstone modules: Ecommerce Full stack, Ecommerce Multi Agent, and Ecommerce Agentic RAG, with module acceptance criteria and handover notes (including Langfuse where applicable)."
     },
     {
       "question": "Is progress saved? Do I need an account?",
@@ -45,65 +59,108 @@
     }
   ],
   "capstone": {
-    "title": "Capstone: An end-to-end customer engagement",
-    "intro": "Run a realistic FDE engagement from discovery through handover: scoped POC, working prototype on representative data, security review prep, and executive readout.",
+    "title": "Capstone: Ecommerce Multi RAG agent",
+    "intro": "Three-module capstone on React, FastAPI, and PostgreSQL: Ecommerce Full stack, then Ecommerce Multi Agent (LangGraph, live store tools), then Ecommerce Agentic RAG (FAISS, citations)—isolated backend packages and Langfuse for AI modules.",
     "deliverables": [
-      "Discovery notes and a ranked use-case scorecard",
-      "A POC scope with a definition of done and an agreed pass mark",
-      "A working prototype on synthetic or public data, with evaluation results",
-      "Written answers to the ten questions a security team will ask",
-      "A 10-minute executive readout and a handover document"
+      "Module 1: Ecommerce Full stack (catalog, cart, checkout, PostgreSQL)",
+      "Module 2: Ecommerce Multi Agent (agents/multi_agent/, scoped tools, Langfuse)",
+      "Module 3: Ecommerce Agentic RAG (agents/agentic_rag/, FAISS, citations)"
     ],
     "strongWork": [
       {
-        "title": "Problem framing",
-        "body": "The chosen use case clearly follows from discovery and scoring, not from the technology you wanted to demo."
+        "title": "Commerce validated first",
+        "body": "Checkout and order persistence are tested before AI modules are accepted."
       },
       {
-        "title": "Scope discipline",
-        "body": "The POC has a definition of done and a pass mark agreed before building starts."
+        "title": "Module boundaries",
+        "body": "Multi-agent and agentic RAG code paths are isolated; RAG does not perform cart or order writes."
       },
       {
-        "title": "Technical delivery",
-        "body": "The prototype works on representative data, and evaluation results are honest about gaps."
+        "title": "Shared platform",
+        "body": "Single FastAPI service, one React client, one PostgreSQL database, Langfuse on both AI modules."
       },
       {
-        "title": "Trust and risk",
-        "body": "Security answers are specific, and risks have named owners and mitigations."
-      },
-      {
-        "title": "Executive communication",
-        "body": "The readout leads with the decision and the evidence, without unnecessary jargon."
+        "title": "Documented evaluation",
+        "body": "Scripted store and RAG question sets with recorded scores; module handover notes state limits."
       }
     ],
     "startStageSlug": "capstone-fde",
-    "startItemSlug": "capstone-rag-permissions-react"
+    "startItemSlug": "capstone-brief-rubric"
   },
   "stages": [
     {
       "slug": "software-engineering",
-      "name": "Software Engineering",
+      "name": "Software Engineering (Python)",
       "icon": "code",
       "color": "#2fd3a0",
-      "weeksLabel": "Weeks 1-2",
-      "hours": 10,
-      "cardBlurb": "Build robust, scalable and maintainable applications.",
-      "description": "Build robust, scalable and maintainable applications.",
+      "weeksLabel": "Week 1",
+      "hours": 5,
+      "cardBlurb": "Write reliable Python that calls APIs, validates data and ships as a tested service.",
+      "description": "Write reliable Python that calls APIs, validates data and ships as a tested service.",
       "outcomes": [
-        "Build a React frontend that talks to an API",
-        "Build a backend API with a database",
-        "Package it with Docker"
+        "Write Python scripts that handle files, JSON and errors",
+        "Call REST and LLM APIs with retries and timeouts",
+        "Validate data with Pydantic and run calls in parallel with asyncio",
+        "Ship a tested FastAPI service"
       ],
-      "readyWhen": "You can stand up a small full-stack app in a day.",
+      "readyWhen": "You can stand up a tested API that calls an LLM and returns validated JSON in a day.",
       "reads": [
-        { "slug": "react-fundamentals", "type": "read", "title": "React fundamentals", "minutes": 30 },
-        { "slug": "backend-api", "type": "read", "title": "Backend API (FastAPI/Node)", "minutes": 30 },
-        { "slug": "sql-databases", "type": "read", "title": "SQL and databases", "minutes": 30 },
-        { "slug": "docker-basics", "type": "read", "title": "Docker basics", "minutes": 20 }
+        {
+          "slug": "python-essentials-and-environment-setup",
+          "type": "read",
+          "title": "Python essentials and environment setup",
+          "minutes": 30
+        },
+        {
+          "slug": "data-structures-json-and-pandas",
+          "type": "read",
+          "title": "Data structures, JSON and pandas",
+          "minutes": 30
+        },
+        {
+          "slug": "working-with-apis-reliably",
+          "type": "read",
+          "title": "Working with APIs reliably",
+          "minutes": 30
+        },
+        {
+          "slug": "typing-pydantic-and-async",
+          "type": "read",
+          "title": "Typing, Pydantic and async",
+          "minutes": 30
+        },
+        {
+          "slug": "fastapi-logging-and-pytest",
+          "type": "read",
+          "title": "FastAPI, logging and pytest",
+          "minutes": 30
+        }
       ],
       "practise": [
-        { "slug": "full-stack-crud", "type": "lab", "title": "Full-stack CRUD app", "minutes": 90 },
-        { "slug": "unfamiliar-codebase", "type": "interview", "title": "Add a feature to a codebase you have never seen", "minutes": 15 }
+        {
+          "slug": "log-summariser-and-data-cleaning-script",
+          "type": "lab",
+          "title": "Log summariser and data-cleaning script",
+          "minutes": 30
+        },
+        {
+          "slug": "async-batch-classifier-with-pydantic",
+          "type": "lab",
+          "title": "Async batch classifier with Pydantic",
+          "minutes": 45
+        },
+        {
+          "slug": "document-triage-service-fastapi-llm-tests",
+          "type": "project",
+          "title": "Document Triage Service (FastAPI + LLM + tests)",
+          "minutes": 60
+        },
+        {
+          "slug": "explain-retries-timeouts-and-async",
+          "type": "interview",
+          "title": "Explain retries, timeouts and async",
+          "minutes": 15
+        }
       ]
     },
     {
@@ -111,28 +168,195 @@
       "name": "AI Engineering",
       "icon": "brain",
       "color": "#3aa6ff",
-      "weeksLabel": "Weeks 3-6",
-      "hours": 20,
-      "cardBlurb": "Work with LLMs, ML and GenAI technologies to build intelligent solutions.",
-      "description": "Work with LLMs, ML and GenAI technologies to build intelligent solutions.",
+      "weeksLabel": "Weeks 2-6",
+      "hours": 25,
+      "cardBlurb": "Work with LLMs, RAG, agents and MCP to build and ship intelligent solutions.",
+      "description": "Work with LLMs, RAG, agents and MCP to build and ship intelligent solutions.",
       "outcomes": [
-        "Prompt and call LLM APIs",
-        "Build RAG with citations",
-        "Add tool calling and agents",
-        "Evaluate outputs"
+        "Prompt and call LLM APIs with structured output and tools",
+        "Build RAG with citations, hybrid search and reranking",
+        "Evaluate RAG and agents with measurable metrics",
+        "Build agents with LangGraph, guardrails and human approval",
+        "Expose tools through MCP and package reusable skills"
       ],
-      "readyWhen": "You can build a cited Q&A prototype over documents in two days.",
+      "readyWhen": "You can build a cited, guarded, agent-driven Q&A prototype over documents in a week.",
       "reads": [
-        { "slug": "llm-fundamentals", "type": "read", "title": "LLM fundamentals", "minutes": 30 },
-        { "slug": "prompt-engineering", "type": "read", "title": "Prompt engineering", "minutes": 30 },
-        { "slug": "embeddings-vector-search", "type": "read", "title": "Embeddings and vector search", "minutes": 30 },
-        { "slug": "rag-pipeline", "type": "read", "title": "RAG pipeline", "minutes": 40 },
-        { "slug": "tool-calling-agents", "type": "read", "title": "Tool calling and agents", "minutes": 40 },
-        { "slug": "evaluation-guardrails", "type": "read", "title": "Evaluation and guardrails", "minutes": 30 }
+        {
+          "slug": "llm-fundamentals",
+          "type": "read",
+          "title": "LLM fundamentals",
+          "minutes": 30
+        },
+        {
+          "slug": "model-landscape-and-selection",
+          "type": "read",
+          "title": "Model landscape and selection",
+          "minutes": 30
+        },
+        {
+          "slug": "prompt-engineering",
+          "type": "read",
+          "title": "Prompt engineering",
+          "minutes": 30
+        },
+        {
+          "slug": "structured-outputs-and-tool-calling",
+          "type": "read",
+          "title": "Structured outputs and tool calling",
+          "minutes": 30
+        },
+        {
+          "slug": "llm-evaluation-cost-and-safety",
+          "type": "read",
+          "title": "LLM evaluation, cost and safety",
+          "minutes": 30
+        },
+        {
+          "slug": "rag-foundations-and-ingestion",
+          "type": "read",
+          "title": "RAG foundations and ingestion",
+          "minutes": 40
+        },
+        {
+          "slug": "chunking-embeddings-and-vector-stores",
+          "type": "read",
+          "title": "Chunking, embeddings and vector stores",
+          "minutes": 40
+        },
+        {
+          "slug": "hybrid-search-reranking-and-query-transformation",
+          "type": "read",
+          "title": "Hybrid search, reranking and query transformation",
+          "minutes": 40
+        },
+        {
+          "slug": "rag-evaluation-and-production",
+          "type": "read",
+          "title": "RAG evaluation and production",
+          "minutes": 40
+        },
+        {
+          "slug": "agent-fundamentals-and-langchain",
+          "type": "read",
+          "title": "Agent fundamentals and LangChain",
+          "minutes": 40
+        },
+        {
+          "slug": "langgraph-state-memory-and-human-in-the-loop",
+          "type": "read",
+          "title": "LangGraph: state, memory and human-in-the-loop",
+          "minutes": 40
+        },
+        {
+          "slug": "agentic-rag",
+          "type": "read",
+          "title": "Agentic RAG",
+          "minutes": 30
+        },
+        {
+          "slug": "guardrails-and-agent-safety",
+          "type": "read",
+          "title": "Guardrails and agent safety",
+          "minutes": 30
+        },
+        {
+          "slug": "observability-and-agent-evaluation",
+          "type": "read",
+          "title": "Observability and agent evaluation",
+          "minutes": 30
+        },
+        {
+          "slug": "model-context-protocol-mcp",
+          "type": "read",
+          "title": "Model Context Protocol (MCP)",
+          "minutes": 40
+        },
+        {
+          "slug": "agent-skills-and-cursor-rules",
+          "type": "read",
+          "title": "Agent skills and Cursor rules",
+          "minutes": 30
+        }
       ],
       "practise": [
-        { "slug": "rag-assistant-project", "type": "project", "title": "RAG assistant over documents", "minutes": 180 },
-        { "slug": "explain-rag-pipeline", "type": "interview", "title": "Explain the full RAG pipeline", "minutes": 20 }
+        {
+          "slug": "compare-two-models-with-an-eval-harness",
+          "type": "lab",
+          "title": "Compare two models with an eval harness",
+          "minutes": 45
+        },
+        {
+          "slug": "extraction-pipeline-and-tool-calling-assistant",
+          "type": "lab",
+          "title": "Extraction pipeline and tool-calling assistant",
+          "minutes": 45
+        },
+        {
+          "slug": "policy-assistant-v1-cited-rag-with-langchain",
+          "type": "project",
+          "title": "Policy Assistant v1: cited RAG with LangChain",
+          "minutes": 120
+        },
+        {
+          "slug": "add-hybrid-search-and-a-reranker",
+          "type": "lab",
+          "title": "Add hybrid search and a reranker",
+          "minutes": 60
+        },
+        {
+          "slug": "diagnose-and-fix-three-planted-rag-failures",
+          "type": "lab",
+          "title": "Diagnose and fix three planted RAG failures",
+          "minutes": 90
+        },
+        {
+          "slug": "hardened-rag-service-with-evaluation-suite",
+          "type": "project",
+          "title": "Hardened RAG service with evaluation suite",
+          "minutes": 90
+        },
+        {
+          "slug": "langgraph-agent-with-human-approval",
+          "type": "lab",
+          "title": "LangGraph agent with human approval",
+          "minutes": 90
+        },
+        {
+          "slug": "agentic-rag-assistant",
+          "type": "project",
+          "title": "Agentic RAG assistant",
+          "minutes": 60
+        },
+        {
+          "slug": "red-team-your-agent-and-add-guardrails",
+          "type": "lab",
+          "title": "Red-team your agent and add guardrails",
+          "minutes": 60
+        },
+        {
+          "slug": "build-an-mcp-server-and-connect-it-to-your-agent",
+          "type": "lab",
+          "title": "Build an MCP server and connect it to your agent",
+          "minutes": 90
+        },
+        {
+          "slug": "multi-agent-q-and-a-rag-agents-mcp-and-guardrails",
+          "type": "capstone",
+          "title": "Multi-agent Q&A: RAG, agents, MCP and guardrails",
+          "minutes": 160
+        },
+        {
+          "slug": "explain-the-full-rag-pipeline",
+          "type": "interview",
+          "title": "Explain the full RAG pipeline",
+          "minutes": 20
+        },
+        {
+          "slug": "design-an-agent-with-guardrails",
+          "type": "interview",
+          "title": "Design an agent with guardrails",
+          "minutes": 20
+        }
       ]
     },
     {
@@ -142,19 +366,47 @@
       "color": "#a074ff",
       "weeksLabel": "Week 7",
       "hours": 3,
-      "cardBlurb": "Understand business goals, identify use cases and define requirements.",
-      "description": "Understand business goals, identify use cases and define requirements.",
+      "cardBlurb": "Discovery and a one-page requirements note for the retail Ask IT case.",
+      "description": "Discovery and a one-page requirements note for the retail Ask IT case.",
       "outcomes": [
-        "Run a discovery session",
-        "Score use cases by value, feasibility and risk"
+        "Describe the FDE engagement lifecycle",
+        "Conduct structured discovery with the IT sponsor",
+        "Produce a one-page business requirements document (BRD)"
       ],
-      "readyWhen": "You can turn one discovery session into a ranked use-case list.",
+      "readyWhen": "You have discovery notes and a one-page BRD the IT lead can approve.",
       "reads": [
-        { "slug": "discovery-requirements", "type": "read", "title": "Discovery and requirements", "minutes": 30 },
-        { "slug": "scoring-use-cases", "type": "read", "title": "Scoring use cases", "minutes": 25 }
+        {
+          "slug": "fde-role-engagement-lifecycle",
+          "type": "read",
+          "title": "What is an FDE?",
+          "minutes": 20
+        },
+        {
+          "slug": "running-discovery-session",
+          "type": "read",
+          "title": "Retail discovery and stakeholder questions",
+          "minutes": 25
+        },
+        {
+          "slug": "writing-a-brd",
+          "type": "read",
+          "title": "One-page BRD structure",
+          "minutes": 25
+        }
       ],
       "practise": [
-        { "slug": "ai-assistant-first-30-min", "type": "interview", "title": "Customer wants an AI assistant over docs: first 30 minutes?", "minutes": 15 }
+        {
+          "slug": "northwind-discovery-lab",
+          "type": "lab",
+          "title": "Requirements workshop and BRD draft",
+          "minutes": 95
+        },
+        {
+          "slug": "ai-assistant-first-30-min",
+          "type": "interview",
+          "title": "Practice: first 30 minutes with the sponsor",
+          "minutes": 15
+        }
       ]
     },
     {
@@ -163,20 +415,42 @@
       "icon": "monitor",
       "color": "#ffd23a",
       "weeksLabel": "Week 7",
-      "hours": 2,
-      "cardBlurb": "Design intuitive and user-centric UI/UX solutions.",
-      "description": "Design intuitive and user-centric UI/UX solutions.",
+      "hours": 3,
+      "cardBlurb": "UI rules, user flow, and wireframes for Ask IT.",
+      "description": "UI rules, user flow, and wireframes for Ask IT.",
       "outcomes": [
-        "Sketch user flows",
-        "Wireframe a simple AI interface"
+        "Define UX requirements for an internal FAQ assistant",
+        "Document user flow for answer and no-answer paths",
+        "Produce wireframes aligned to the BRD"
       ],
-      "readyWhen": "You have wireframes the customer can react to.",
+      "readyWhen": "Wireframes and flow are reviewed against the BRD and show source citation and escalation.",
       "reads": [
-        { "slug": "ux-ai-products", "type": "read", "title": "UX for AI products", "minutes": 25 },
-        { "slug": "wireframing-basics", "type": "read", "title": "Wireframing basics", "minutes": 20 }
+        {
+          "slug": "ux-for-ai-products",
+          "type": "read",
+          "title": "Design rules for Ask IT",
+          "minutes": 25
+        },
+        {
+          "slug": "user-flows-wireframing",
+          "type": "read",
+          "title": "User flow and sample wireframe",
+          "minutes": 35
+        }
       ],
       "practise": [
-        { "slug": "wireframe-capstone-screens", "type": "lab", "title": "Wireframe the capstone screens", "minutes": 40 }
+        {
+          "slug": "wireframe-northwind-assistant",
+          "type": "lab",
+          "title": "Wireframe Ask IT screens",
+          "minutes": 90
+        },
+        {
+          "slug": "show-ai-might-be-wrong",
+          "type": "interview",
+          "title": "Practice: incorrect or missing answers",
+          "minutes": 30
+        }
       ]
     },
     {
@@ -186,63 +460,178 @@
       "color": "#ff5a7a",
       "weeksLabel": "Week 8",
       "hours": 3,
-      "cardBlurb": "Design secure, scalable and cost-effective architecture solution.",
-      "description": "Design secure, scalable and cost-effective architecture.",
+      "cardBlurb": "Reference architecture, permissions, cost, and decisions.",
+      "description": "Reference architecture, permissions, cost, and decisions.",
       "outcomes": [
-        "Design for permissions and data limits",
-        "Estimate cost per month"
+        "Document end-to-end architecture for Ask IT",
+        "Define role-based FAQ access on the server",
+        "Estimate monthly AI cost and record one architecture decision"
       ],
-      "readyWhen": "You can defend an architecture and its cost estimate.",
+      "readyWhen": "Diagram, FAQ tags, cost estimate, and ADR are documented and explainable.",
       "reads": [
-        { "slug": "solution-architecture", "type": "read", "title": "Solution architecture", "minutes": 30 },
-        { "slug": "cost-latency-estimation", "type": "read", "title": "Cost and latency estimation", "minutes": 25 }
+        {
+          "slug": "solution-architecture-ai-apps",
+          "type": "read",
+          "title": "Solution architecture and diagram",
+          "minutes": 30
+        },
+        {
+          "slug": "permissions-security-boundaries",
+          "type": "read",
+          "title": "Permission model for restricted FAQs",
+          "minutes": 25
+        },
+        {
+          "slug": "cost-latency-estimation",
+          "type": "read",
+          "title": "Cost and latency estimate",
+          "minutes": 20
+        },
+        {
+          "slug": "architecture-decision-records",
+          "type": "read",
+          "title": "Architecture decision record (ADR)",
+          "minutes": 15
+        }
       ],
       "practise": [
-        { "slug": "document-assistant-permissions", "type": "interview", "title": "Document assistant where users only see allowed docs", "minutes": 20 }
+        {
+          "slug": "northwind-architecture-lab",
+          "type": "lab",
+          "title": "Architecture lab: diagram, tags, cost, ADR",
+          "minutes": 75
+        },
+        {
+          "slug": "document-assistant-permissions",
+          "type": "interview",
+          "title": "Practice: restrict admin FAQ content",
+          "minutes": 15
+        }
       ]
     },
     {
       "slug": "proof-of-concept",
-      "name": "Proof of concept",
+      "name": "Development",
       "icon": "lightbulb",
       "color": "#27c4c4",
       "weeksLabel": "Weeks 8-9",
       "hours": 3,
-      "cardBlurb": "Build a working prototype to validate feasibility and business value.",
-      "description": "Build a working prototype to validate feasibility and business value.",
+      "cardBlurb": "Backend, frontend, RAG, and data modules for Ask IT on localhost.",
+      "description": "Backend, frontend, RAG, and data modules for Ask IT on localhost.",
       "outcomes": [
-        "Write a POC scope with a definition of done",
-        "Build a small evaluation set"
+        "Implement FastAPI backend with role-aware FAQ ingest and ask endpoint",
+        "Build Ask IT frontend wired to the API",
+        "Integrate RAG with citations and refusal behavior",
+        "Run a 20-question regression set with zero admin leaks"
       ],
-      "readyWhen": "POC has a scope, eval set and agreed pass mark.",
+      "readyWhen": "Ask IT runs on localhost, regression is scored, and admin-only content does not leak to staff.",
       "reads": [
-        { "slug": "scoping-poc", "type": "read", "title": "Scoping a POC", "minutes": 25 },
-        { "slug": "evals-customer-data", "type": "read", "title": "Evals from customer data", "minutes": 30 }
+        {
+          "slug": "dev-backend",
+          "type": "read",
+          "title": "Development module: Backend",
+          "minutes": 18
+        },
+        {
+          "slug": "dev-frontend",
+          "type": "read",
+          "title": "Development module: Frontend",
+          "minutes": 18
+        },
+        {
+          "slug": "dev-rag",
+          "type": "read",
+          "title": "Development module: RAG",
+          "minutes": 22
+        },
+        {
+          "slug": "dev-data",
+          "type": "read",
+          "title": "Development module: Database and data",
+          "minutes": 18
+        },
+        {
+          "slug": "eval-set-from-customer-data",
+          "type": "read",
+          "title": "Regression test set (20 questions)",
+          "minutes": 22
+        }
       ],
       "practise": [
-        { "slug": "poc-scope-creep", "type": "interview", "title": "Customer keeps adding small requests mid-POC", "minutes": 15 }
+        {
+          "slug": "poc-scope-golden-set",
+          "type": "lab",
+          "title": "Lab: development plan and sample FAQs",
+          "minutes": 27
+        },
+        {
+          "slug": "northwind-poc-build",
+          "type": "project",
+          "title": "Project: build Ask IT (development slice)",
+          "minutes": 40
+        },
+        {
+          "slug": "poc-scope-creep",
+          "type": "interview",
+          "title": "Practice: scope change during development",
+          "minutes": 15
+        }
       ]
     },
     {
       "slug": "minimum-viable-product",
-      "name": "Minimum Viable Product",
+      "name": "MVP/POC: Local and Render validation",
       "icon": "package",
       "color": "#ff9a2f",
       "weeksLabel": "Week 9",
       "hours": 3,
-      "cardBlurb": "Develop an MVP with core features to get real user feedback and demonstrate value.",
-      "description": "Develop an MVP with core features to get real user feedback.",
+      "cardBlurb": "Repeatable local run, Render POC deploy, regression, and pilot feedback.",
+      "description": "Repeatable local run, Render POC deploy, regression, and pilot feedback.",
       "outcomes": [
-        "Choose what to fake and what must be real",
-        "Ship core features"
+        "Distinguish development, MVP/POC, and production environments",
+        "Document local startup and deploy a Render POC URL",
+        "Run regression and three pilot sessions; triage top fixes"
       ],
-      "readyWhen": "You can demo a working MVP with its gaps listed.",
+      "readyWhen": "Local and Render POC URLs work, regression is scored, three pilots completed, top fixes listed.",
       "reads": [
-        { "slug": "prototyping-productisation", "type": "read", "title": "Prototyping to productisation", "minutes": 30 }
+        {
+          "slug": "poc-mvp-production",
+          "type": "read",
+          "title": "Development vs MVP/POC vs production",
+          "minutes": 20
+        },
+        {
+          "slug": "fake-vs-real",
+          "type": "read",
+          "title": "Repeatable local run",
+          "minutes": 25
+        },
+        {
+          "slug": "render-poc-deploy",
+          "type": "read",
+          "title": "Render POC deployment",
+          "minutes": 30
+        },
+        {
+          "slug": "pilot-feedback-loops",
+          "type": "read",
+          "title": "Regression and pilot feedback",
+          "minutes": 30
+        }
       ],
       "practise": [
-        { "slug": "vp-demo-next-week", "type": "interview", "title": "VP says: just show us a demo next week", "minutes": 15 },
-        { "slug": "build-mvp-slice", "type": "lab", "title": "Build the MVP slice", "minutes": 60 }
+        {
+          "slug": "build-mvp-slice",
+          "type": "lab",
+          "title": "Lab: MVP hardening and staging checklist",
+          "minutes": 60
+        },
+        {
+          "slug": "vp-demo-next-week",
+          "type": "interview",
+          "title": "Practice: POC demo script",
+          "minutes": 15
+        }
       ]
     },
     {
@@ -252,19 +641,53 @@
       "color": "#7a8cff",
       "weeksLabel": "Weeks 9-10",
       "hours": 3,
-      "cardBlurb": "Deploy to production with security, monitoring, scalability and operational excellence.",
-      "description": "Deploy to production with security, monitoring and scalability.",
+      "cardBlurb": "Production on Render or AWS; secrets, runbook, and operations.",
+      "description": "Production on Render or AWS; secrets, runbook, and operations.",
       "outcomes": [
-        "Deploy the app",
-        "Add logging and monitoring"
+        "Deploy Ask IT to Render or AWS with secrets outside Git",
+        "Configure logging and user-facing error handling",
+        "Author a one-page runbook for common failures"
       ],
-      "readyWhen": "Someone else can monitor it and respond to an alert.",
+      "readyWhen": "Production URL is stable, secrets are in environment config, and a peer resolved a simulated outage using the runbook.",
       "reads": [
-        { "slug": "observability-tracing", "type": "read", "title": "Observability and tracing", "minutes": 30 },
-        { "slug": "cost-reliability", "type": "read", "title": "Cost and reliability", "minutes": 30 }
+        {
+          "slug": "deployment-basics",
+          "type": "read",
+          "title": "Deployment fundamentals (Render and AWS)",
+          "minutes": 30
+        },
+        {
+          "slug": "observability-tracing",
+          "type": "read",
+          "title": "Logging and monitoring",
+          "minutes": 25
+        },
+        {
+          "slug": "reliability-cost-incidents",
+          "type": "read",
+          "title": "Timeouts and production errors",
+          "minutes": 25
+        }
       ],
       "practise": [
-        { "slug": "poc-to-production", "type": "interview", "title": "POC to production: what must change?", "minutes": 20 }
+        {
+          "slug": "deploy-with-tracing",
+          "type": "lab",
+          "title": "Lab: production deploy",
+          "minutes": 65
+        },
+        {
+          "slug": "runbook-incident-drill",
+          "type": "lab",
+          "title": "Lab: runbook and outage drill",
+          "minutes": 20
+        },
+        {
+          "slug": "poc-to-production",
+          "type": "interview",
+          "title": "Practice: before wider rollout",
+          "minutes": 15
+        }
       ]
     },
     {
@@ -274,40 +697,109 @@
       "color": "#ff5fa8",
       "weeksLabel": "Week 10",
       "hours": 3,
-      "cardBlurb": "Scale the solution across the enterprise, integrate with business processes and enable autonomous operations.",
-      "description": "Scale across the enterprise and integrate with business processes.",
+      "cardBlurb": "Security, Langfuse observability, evals, and sponsor handover.",
+      "description": "Security, Langfuse observability, evals, and sponsor handover.",
       "outcomes": [
-        "Pass a security review",
-        "Explain hallucination to executives",
-        "Hand over cleanly"
+        "Complete IT security questionnaire with evidence",
+        "Configure Langfuse for traces and regression eval visibility",
+        "Deliver handover package and sponsor readout"
       ],
-      "readyWhen": "You can run a security review and executive readout.",
+      "readyWhen": "Security answers and Langfuse evidence exist; five-minute sponsor readout is rehearsed.",
       "reads": [
-        { "slug": "security-reviews", "type": "read", "title": "Security reviews", "minutes": 30 },
-        { "slug": "executive-communication-handover", "type": "read", "title": "Executive communication and handover", "minutes": 25 }
+        {
+          "slug": "security-reviews",
+          "type": "read",
+          "title": "IT security questionnaire",
+          "minutes": 25
+        },
+        {
+          "slug": "langfuse-observability-evals",
+          "type": "read",
+          "title": "Langfuse: traces, evals, and evidence",
+          "minutes": 25
+        },
+        {
+          "slug": "executive-communication-handover",
+          "type": "read",
+          "title": "Sponsor readout and handover package",
+          "minutes": 20
+        },
+        {
+          "slug": "enterprise-integration",
+          "type": "read",
+          "title": "Phase 2 integrations (documentation only)",
+          "minutes": 20
+        }
       ],
       "practise": [
-        { "slug": "external-model-blocked", "type": "interview", "title": "Security team blocks external model calls", "minutes": 20 },
-        { "slug": "say-no-use-case", "type": "interview", "title": "How do you say no to a use case?", "minutes": 15 }
+        {
+          "slug": "security-questionnaire-lab",
+          "type": "lab",
+          "title": "Lab: Langfuse wiring and eval run",
+          "minutes": 45
+        },
+        {
+          "slug": "executive-readout-lab",
+          "type": "lab",
+          "title": "Lab: rehearse sponsor readout",
+          "minutes": 25
+        },
+        {
+          "slug": "external-model-blocked",
+          "type": "interview",
+          "title": "Practice: approved models only",
+          "minutes": 10
+        },
+        {
+          "slug": "say-no-use-case",
+          "type": "interview",
+          "title": "Practice: defer ticketing scope",
+          "minutes": 10
+        }
       ]
     },
     {
       "slug": "capstone-fde",
-      "name": "Capstone FDE",
+      "name": "Capstone Project",
       "icon": "trophy",
       "color": "#27d3e0",
-      "weeksLabel": "Weeks 11-12",
+      "weeksLabel": "Weeks 11–12",
       "hours": 10,
-      "cardBlurb": "End-to-end real-world project demonstrating the complete FDE journey from problem to production.",
-      "description": "End-to-end real-world project from problem to production.",
+      "cardBlurb": "Ecommerce Multi RAG agent: full stack, multi-agent, and agentic RAG modules.",
+      "description": "Three-module capstone: e-commerce core, multi-agent assistant, agentic RAG assistant.",
       "outcomes": [
-        "Run discovery to handover as one engagement",
-        "Deliver a working product and write-up"
+        "Deliver core commerce flows on React, FastAPI, and PostgreSQL",
+        "Ship multi-agent and agentic RAG modules in isolated packages with Langfuse",
+        "Meet module acceptance criteria documented in the capstone brief"
       ],
-      "readyWhen": "Your engagement pack would survive a customer review.",
-      "reads": [],
+      "readyWhen": "All three modules pass their acceptance checks and module handover notes are complete.",
+      "reads": [
+        {
+          "slug": "capstone-brief-rubric",
+          "type": "read",
+          "title": "Capstone brief and evaluation criteria",
+          "minutes": 30
+        }
+      ],
       "practise": [
-        { "slug": "capstone-rag-permissions-react", "type": "project", "title": "Capstone: RAG assistant with permissions + React UI", "minutes": 600 }
+        {
+          "slug": "capstone-1-discovery",
+          "type": "capstone",
+          "title": "Module 1: Ecommerce Full stack",
+          "minutes": 190
+        },
+        {
+          "slug": "capstone-2-design",
+          "type": "capstone",
+          "title": "Module 2: Ecommerce Multi Agent",
+          "minutes": 190
+        },
+        {
+          "slug": "capstone-3-prototype",
+          "type": "capstone",
+          "title": "Module 3: Ecommerce Agentic RAG",
+          "minutes": 190
+        }
       ]
     }
   ]

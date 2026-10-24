@@ -1,0 +1,19 @@
+{
+  "id": "antigravity-ecommerce-fullstack",
+  "name": "E-Commerce Web Application",
+  "description": "Build a production e-commerce platform with React, API backend, and PostgreSQL. Customer catalog, cart, checkout, and admin workflows deployed on Render.",
+  "category": "Full-Stack E-Commerce",
+  "difficulty": "advanced",
+  "estimatedHours": 48,
+  "order": 10,
+  "tags": [
+    "React",
+    "Node.js",
+    "PostgreSQL",
+    "Render",
+    "SDLC"
+  ],
+  "version": "1.0.0",
+  "liveDemoUrl": "https://ecommerce-frontend-project.onrender.com",
+  "promptSourceKey": "ecommerce-fullstack"
+}

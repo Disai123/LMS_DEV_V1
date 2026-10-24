@@ -1,0 +1,133 @@
+{
+  "minimum-viable-product/poc-mvp-production": {
+    "summary": "Development on localhost; MVP/POC adds repeatable run plus Render pilot URL; production is Stage 8 hardening on Render or AWS.",
+    "sections": [
+      {
+        "heading": "Overview",
+        "body": "- **Development (Stage 6):** feature-complete slice on localhost.\n- **MVP/POC (this stage):** documented startup, staff/admin login, UI polish, **Render POC URL** for sponsor demo, regression and pilots.\n- **Production (Stage 8):** production posture on **Render or AWS**, runbook, monitoring.\n\n\n**Customer for Stages 3–9: a retail company (HQ and stores)**\n\n- Approximately **50 employees** across stores and head office.\n- IT receives **100 messages per week**; many repeat password, Wi‑Fi, VPN, and device questions.\n- Answers exist in **~15 FAQ documents** (PDF or Word). Staff rarely read them.\n- **IT lead (sponsor)** wants an internal **Ask IT** page: typed question, cited answer from FAQs, or a clear escalation to IT.\n- One **restricted FAQ** (“Admin-only IT notes”) must not appear in answers for standard staff. Only **admin** role may retrieve content from that source.\n- **Phase 1 scope:** FAQ assistant only—not a full ticketing or HR system.\n\n\nMVP/POC must-haves: login, Ask IT UI, feedback capture, full 20-question regression after material changes."
+      }
+    ],
+    "typeExtras": {
+      "objectives": [
+        "Contrast three environments",
+        "List MVP/POC additions"
+      ],
+      "checkpointQuestions": [
+        "What does POC add beyond localhost?"
+      ]
+    }
+  },
+  "minimum-viable-product/fake-vs-real": {
+    "summary": "README, .env.example, and startup steps so a peer can run without your machine.",
+    "sections": [
+      {
+        "heading": "Overview",
+        "body": "Document Python/Node versions, dependencies, `.env.example`, and start commands for backend and frontend. A peer should run from README alone.\n\nSecrets remain in environment variables, not Git."
+      },
+      {
+        "heading": "Template",
+        "body": "```\nLOCAL RUN\n1. clone\n2. cp .env.example .env\n3. start backend: ___\n4. start frontend: ___\n5. URL: ___\n```"
+      }
+    ],
+    "typeExtras": {
+      "objectives": [
+        "README validated by peer"
+      ],
+      "checkpointQuestions": [
+        "What blocked your peer?"
+      ]
+    }
+  },
+  "minimum-viable-product/render-poc-deploy": {
+    "summary": "Connect repository, configure environment variables, deploy FastAPI and static frontend, verify public POC URL.",
+    "sections": [
+      {
+        "heading": "Overview",
+        "body": "**Render POC steps:**\n\n1. Push code to Git (no `.env` committed).\n2. Create **Web Service**; connect repository; set start command (e.g. `uvicorn main:app`).\n3. Add environment variables (LLM key, app secrets) in Render dashboard.\n4. Deploy; confirm `/health` and one FAQ question from a device outside localhost.\n5. Record POC URL for sponsor demo.\n\nProduction hardening (custom domain, scaling, AWS) follows in Stage 8."
+      },
+      {
+        "heading": "Procedure",
+        "body": "1. Confirm `.gitignore` excludes secrets.\n2. Deploy backend; attach frontend static site or combined service per your layout.\n3. Smoke-test staff login and one answered question on the public URL."
+      },
+      {
+        "heading": "Pitfalls",
+        "body": "- API keys in repository\n- Skipping health check"
+      }
+    ],
+    "typeExtras": {
+      "objectives": [
+        "Obtain working Render POC URL",
+        "Verify ask flow on public URL"
+      ],
+      "checkpointQuestions": [
+        "Where are secrets configured on Render?"
+      ]
+    }
+  },
+  "minimum-viable-product/build-mvp-slice": {
+    "summary": "Login, feedback persistence, README, local and Render POC smoke tests.",
+    "sections": [
+      {
+        "heading": "Procedure",
+        "body": "1. Enforce staff/admin login on server.\n2. Persist thumbs-down (file or database).\n3. Finalize README local and Render sections.\n4. Smoke: health, one staff answer, one refusal, admin-as-staff leak test on POC URL."
+      }
+    ],
+    "typeExtras": {
+      "objectives": [
+        "Login and feedback on POC",
+        "Smoke tests documented"
+      ],
+      "checkpointQuestions": [
+        "Zero admin leaks on POC?"
+      ],
+      "deliverables": [
+        "README",
+        "POC URL",
+        "Smoke checklist"
+      ]
+    }
+  },
+  "minimum-viable-product/pilot-feedback-loops": {
+    "summary": "Run full 20-question CSV; three pilot sessions; record results and top three fixes.",
+    "sections": [
+      {
+        "heading": "Overview",
+        "body": "Run smoke tests plus full regression; save results under `tests/results/`. Conduct three pilot sessions without hand-holding; note confusion points; prioritize three fixes before production stage."
+      },
+      {
+        "heading": "Procedure",
+        "body": "Regression → save scores → three pilots → top-three fix list."
+      },
+      {
+        "heading": "Pitfalls",
+        "body": "- Skipping regression after UI changes\n- No written pilot notes"
+      }
+    ],
+    "typeExtras": {
+      "objectives": [
+        "Regression file updated",
+        "Three pilots and fix list"
+      ],
+      "checkpointQuestions": [
+        "When must regression rerun?"
+      ]
+    }
+  },
+  "minimum-viable-product/vp-demo-next-week": {
+    "summary": "Demo Render POC with cited answers, refusal, and honest limits before production.",
+    "sections": [
+      {
+        "heading": "Example: Retail case",
+        "body": "\"I will demo on our Render POC: two answered questions with sources, one refusal, staff blocked from admin FAQ content, regression at __/20. Production runbook and AWS/Render production choice follow in Stage 8.\""
+      }
+    ],
+    "typeExtras": {
+      "objectives": [
+        "Timeboxed honest demo outline"
+      ],
+      "checkpointQuestions": [
+        "Include refusal in demo?"
+      ]
+    }
+  }
+}

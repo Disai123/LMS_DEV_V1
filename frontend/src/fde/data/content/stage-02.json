@@ -1,0 +1,582 @@
+{
+  "ai-engineering/llm-fundamentals": {
+    "summary": "Learn how tokens, context windows and sampling shape model behaviour, and why models hallucinate.",
+    "sections": [
+      {
+        "heading": "Focus",
+        "body": "Learn how tokens, context windows and sampling shape model behaviour, and why models hallucinate."
+      }
+    ],
+    "typeExtras": {
+      "objectives": [
+        "Explain tokens, context windows and sampling (temperature, top-p) in plain terms",
+        "Describe pretraining, instruction tuning and preference tuning at a high level",
+        "Explain why models hallucinate and what that means for design"
+      ],
+      "checkpointQuestions": [
+        "Why did the model give two different answers to the same question?",
+        "How do token counts affect cost and limits?"
+      ]
+    }
+  },
+  "ai-engineering/model-landscape-and-selection": {
+    "summary": "Compare model families and choose one against a client’s privacy, cost and latency constraints.",
+    "sections": [
+      {
+        "heading": "Focus",
+        "body": "Compare model families and choose one against a client’s privacy, cost and latency constraints."
+      }
+    ],
+    "typeExtras": {
+      "objectives": [
+        "Compare frontier, open-weight and small models on cost, latency, quality and privacy",
+        "Choose between hosted APIs, Hugging Face models and local inference such as Ollama",
+        "Complete a model-selection matrix for data residency and vendor approval limits"
+      ],
+      "checkpointQuestions": [
+        "Which model would you pick for a client that cannot send data outside its network?",
+        "What would you test before committing to a model?"
+      ]
+    }
+  },
+  "ai-engineering/prompt-engineering": {
+    "summary": "Write prompts that hold up under change, and keep them versioned and out of code.",
+    "sections": [
+      {
+        "heading": "Focus",
+        "body": "Write prompts that hold up under change, and keep them versioned and out of code."
+      }
+    ],
+    "typeExtras": {
+      "objectives": [
+        "Use system, user and assistant roles with zero-shot, few-shot and chain-of-thought prompting",
+        "Build prompt templates and version them",
+        "Decide when prompting is enough and when fine-tuning is justified"
+      ],
+      "checkpointQuestions": [
+        "How do you know a prompt change actually improved results?",
+        "When would you choose fine-tuning over prompting?"
+      ]
+    }
+  },
+  "ai-engineering/structured-outputs-and-tool-calling": {
+    "summary": "Get dependable JSON from models and let them call tools through a controlled loop.",
+    "sections": [
+      {
+        "heading": "Focus",
+        "body": "Get dependable JSON from models and let them call tools through a controlled loop."
+      }
+    ],
+    "typeExtras": {
+      "objectives": [
+        "Use JSON mode and schema-constrained output, and handle invalid output",
+        "Explain the tool-calling request, execution and response loop",
+        "Write clear tool descriptions and recover from tool errors"
+      ],
+      "checkpointQuestions": [
+        "What should the assistant do when a tool fails?",
+        "How do tool descriptions affect which tool gets called?"
+      ]
+    }
+  },
+  "ai-engineering/llm-evaluation-cost-and-safety": {
+    "summary": "Replace “looks good” with eval sets, and control cost, latency and basic safety risks.",
+    "sections": [
+      {
+        "heading": "Focus",
+        "body": "Replace “looks good” with eval sets, and control cost, latency and basic safety risks."
+      }
+    ],
+    "typeExtras": {
+      "objectives": [
+        "Build a golden dataset and use LLM-as-judge while knowing its biases",
+        "Reduce cost and latency with caching, batching, streaming and routing",
+        "Identify prompt injection, PII and data-leakage risks"
+      ],
+      "checkpointQuestions": [
+        "What evidence would convince a client that the model is good enough?",
+        "Which safety risk would you raise first in discovery?"
+      ]
+    }
+  },
+  "ai-engineering/rag-foundations-and-ingestion": {
+    "summary": "Understand the RAG architecture and why messy document parsing decides retrieval quality.",
+    "sections": [
+      {
+        "heading": "Focus",
+        "body": "Understand the RAG architecture and why messy document parsing decides retrieval quality."
+      }
+    ],
+    "typeExtras": {
+      "objectives": [
+        "Compare RAG, fine-tuning and long-context prompting",
+        "Describe ingestion, indexing, retrieval and generation",
+        "Parse PDFs, tables and scans, and capture metadata such as source, date and access level"
+      ],
+      "checkpointQuestions": [
+        "Why does RAG fail on harder questions in a naive pipeline?",
+        "What metadata would you capture for every document?"
+      ]
+    }
+  },
+  "ai-engineering/chunking-embeddings-and-vector-stores": {
+    "summary": "Choose chunking, embedding models and vector stores based on evidence from your own corpus.",
+    "sections": [
+      {
+        "heading": "Focus",
+        "body": "Choose chunking, embedding models and vector stores based on evidence from your own corpus."
+      }
+    ],
+    "typeExtras": {
+      "objectives": [
+        "Compare fixed, recursive, semantic and structure-aware chunking",
+        "Choose embedding models and weigh dimensions, cost and re-embedding",
+        "Compare FAISS, Chroma, pgvector and managed stores, including HNSW and IVF indexes"
+      ],
+      "checkpointQuestions": [
+        "Which chunk size would you start with, and how would you test it?",
+        "Which vector store fits a client already running PostgreSQL?"
+      ]
+    }
+  },
+  "ai-engineering/hybrid-search-reranking-and-query-transformation": {
+    "summary": "Raise retrieval quality with hybrid search, rerankers and smarter queries.",
+    "sections": [
+      {
+        "heading": "Focus",
+        "body": "Raise retrieval quality with hybrid search, rerankers and smarter queries."
+      }
+    ],
+    "typeExtras": {
+      "objectives": [
+        "Combine BM25 and dense search with reciprocal rank fusion",
+        "Apply cross-encoder reranking and tune top-k and MMR",
+        "Use query rewriting, multi-query, HyDE and parent-document retrieval"
+      ],
+      "checkpointQuestions": [
+        "Which question types does each technique help most?",
+        "How do you measure that a reranker helped?"
+      ]
+    }
+  },
+  "ai-engineering/rag-evaluation-and-production": {
+    "summary": "Measure retrieval and answer quality, then prepare a RAG service for enterprise use.",
+    "sections": [
+      {
+        "heading": "Focus",
+        "body": "Measure retrieval and answer quality, then prepare a RAG service for enterprise use."
+      }
+    ],
+    "typeExtras": {
+      "objectives": [
+        "Use recall@k, precision@k, MRR and nDCG, plus faithfulness and context precision with RAGAS",
+        "Run error analysis to tell retrieval, chunking, prompting and model failures apart",
+        "Plan permission-aware retrieval, freshness, caching, cost and observability"
+      ],
+      "checkpointQuestions": [
+        "Is a wrong answer a retrieval problem or a generation problem? How do you tell?",
+        "How do you stop users retrieving documents they may not see?"
+      ]
+    }
+  },
+  "ai-engineering/agent-fundamentals-and-langchain": {
+    "summary": "Learn the agent loop and workflow patterns, and when an agent is the wrong choice.",
+    "sections": [
+      {
+        "heading": "Focus",
+        "body": "Learn the agent loop and workflow patterns, and when an agent is the wrong choice."
+      }
+    ],
+    "typeExtras": {
+      "objectives": [
+        "Explain the agent loop, ReAct and the main workflow patterns",
+        "Decide between a workflow and a true agent for a use case",
+        "Build agents with LangChain tools and retrievers"
+      ],
+      "checkpointQuestions": [
+        "Would a workflow be enough for this client use case?",
+        "What can go wrong when an agent picks its own tools?"
+      ]
+    }
+  },
+  "ai-engineering/langgraph-state-memory-and-human-in-the-loop": {
+    "summary": "Model agent behaviour as a graph with persistence, approvals and multiple agents.",
+    "sections": [
+      {
+        "heading": "Focus",
+        "body": "Model agent behaviour as a graph with persistence, approvals and multiple agents."
+      }
+    ],
+    "typeExtras": {
+      "objectives": [
+        "Use graph state, nodes, edges, conditional routing and reducers",
+        "Add checkpointing, memory and resumable runs",
+        "Add human approval interrupts and a supervisor with specialist agents"
+      ],
+      "checkpointQuestions": [
+        "Which actions in this workflow should need human approval?",
+        "How do you resume a run after a failure?"
+      ]
+    }
+  },
+  "ai-engineering/agentic-rag": {
+    "summary": "Make retrieval a tool the agent can grade, rewrite and retry.",
+    "sections": [
+      {
+        "heading": "Focus",
+        "body": "Make retrieval a tool the agent can grade, rewrite and retry."
+      }
+    ],
+    "typeExtras": {
+      "objectives": [
+        "Describe document grading and query-rewrite loops",
+        "Compare corrective RAG, Self-RAG and adaptive routing",
+        "Weigh agentic RAG against standard RAG on cost, latency and reliability"
+      ],
+      "checkpointQuestions": [
+        "When is the extra cost of agentic RAG worth it?",
+        "What is your fallback when retrieval keeps failing?"
+      ]
+    }
+  },
+  "ai-engineering/guardrails-and-agent-safety": {
+    "summary": "Constrain what agents can see and do, and defend them against injection.",
+    "sections": [
+      {
+        "heading": "Focus",
+        "body": "Constrain what agents can see and do, and defend them against injection."
+      }
+    ],
+    "typeExtras": {
+      "objectives": [
+        "Apply input and output validation and PII redaction",
+        "Scope tool permissions with least privilege and sandboxing",
+        "Defend against direct and indirect prompt injection with approval gates and spend, step and rate limits"
+      ],
+      "checkpointQuestions": [
+        "What is the worst action this agent could take, and what stops it?",
+        "How would an attacker use a retrieved document against it?"
+      ]
+    }
+  },
+  "ai-engineering/observability-and-agent-evaluation": {
+    "summary": "Trace agent runs and evaluate trajectories, tool use and cost per task.",
+    "sections": [
+      {
+        "heading": "Focus",
+        "body": "Trace agent runs and evaluate trajectories, tool use and cost per task."
+      }
+    ],
+    "typeExtras": {
+      "objectives": [
+        "Use tracing tools such as LangSmith, Langfuse or OpenTelemetry",
+        "Evaluate trajectory quality, tool-call accuracy and task success",
+        "Build regression suites and plan deployment, versioning and fallbacks"
+      ],
+      "checkpointQuestions": [
+        "How would you debug an agent that fails one run in twenty?",
+        "What would be on your production dashboard?"
+      ]
+    }
+  },
+  "ai-engineering/model-context-protocol-mcp": {
+    "summary": "Learn how MCP standardises tool and data access for agents and applications.",
+    "sections": [
+      {
+        "heading": "Focus",
+        "body": "Learn how MCP standardises tool and data access for agents and applications."
+      }
+    ],
+    "typeExtras": {
+      "objectives": [
+        "Describe the host, client and server architecture and the tools, resources and prompts primitives",
+        "Compare stdio and HTTP transports and use existing servers",
+        "Apply authentication and trust-boundary practices for MCP servers"
+      ],
+      "checkpointQuestions": [
+        "Why use MCP instead of hard-coding each tool?",
+        "Which MCP servers would you refuse to trust, and why?"
+      ]
+    }
+  },
+  "ai-engineering/agent-skills-and-cursor-rules": {
+    "summary": "Package reusable capabilities and speed up AI-assisted delivery.",
+    "sections": [
+      {
+        "heading": "Focus",
+        "body": "Package reusable capabilities and speed up AI-assisted delivery."
+      }
+    ],
+    "typeExtras": {
+      "objectives": [
+        "Explain SKILL.md structure, progressive loading and bundled scripts",
+        "Use Cursor rules and project instruction files for consistent coding",
+        "Choose between skills, MCP and plain tools, and hand work over to a client team"
+      ],
+      "checkpointQuestions": [
+        "Which parts of your delivery work would you turn into a skill?",
+        "How would a client team maintain it after you leave?"
+      ]
+    }
+  },
+  "ai-engineering/compare-two-models-with-an-eval-harness": {
+    "summary": "Compare two models on the same extraction task and report quality, cost and latency.",
+    "sections": [
+      {
+        "heading": "Focus",
+        "body": "Compare two models on the same extraction task and report quality, cost and latency."
+      }
+    ],
+    "typeExtras": {
+      "objectives": [
+        "Build a small eval set and scoring harness",
+        "Measure quality, cost and latency for both models",
+        "Validate an LLM-as-judge scorer against human labels"
+      ],
+      "checkpointQuestions": [
+        "Which model would you recommend and why?",
+        "Where did the judge disagree with humans?"
+      ]
+    }
+  },
+  "ai-engineering/extraction-pipeline-and-tool-calling-assistant": {
+    "summary": "Build a schema-based extractor and an assistant with calculator, database and web API tools.",
+    "sections": [
+      {
+        "heading": "Focus",
+        "body": "Build a schema-based extractor and an assistant with calculator, database and web API tools."
+      }
+    ],
+    "typeExtras": {
+      "objectives": [
+        "Return a Pydantic schema from an extraction prompt",
+        "Wire up three tools in a tool-calling loop",
+        "Show how the assistant handles a failing tool"
+      ],
+      "checkpointQuestions": [
+        "How does the assistant behave when a tool returns garbage?",
+        "What did you add to your tool descriptions to fix wrong calls?"
+      ]
+    }
+  },
+  "ai-engineering/policy-assistant-v1-cited-rag-with-langchain": {
+    "summary": "Build a Q&A assistant over a policy corpus that cites sources and declines out-of-scope questions.",
+    "sections": [
+      {
+        "heading": "Focus",
+        "body": "Build a Q&A assistant over a policy corpus that cites sources and declines out-of-scope questions."
+      }
+    ],
+    "typeExtras": {
+      "objectives": [
+        "Ingest and index the corpus with a chosen chunking strategy",
+        "Return cited answers with grounded prompts",
+        "Decline questions the documents cannot answer"
+      ],
+      "checkpointQuestions": [
+        "How do you know every citation is correct?",
+        "What happens with a question outside the corpus?"
+      ]
+    }
+  },
+  "ai-engineering/add-hybrid-search-and-a-reranker": {
+    "summary": "Add BM25 and a reranker to the Policy Assistant and measure the change.",
+    "sections": [
+      {
+        "heading": "Focus",
+        "body": "Add BM25 and a reranker to the Policy Assistant and measure the change."
+      }
+    ],
+    "typeExtras": {
+      "objectives": [
+        "Combine keyword and vector retrieval",
+        "Add a reranker and tune top-k",
+        "Compare retrieval quality before and after"
+      ],
+      "checkpointQuestions": [
+        "Which questions improved and which got worse?",
+        "What top-k did you settle on?"
+      ]
+    }
+  },
+  "ai-engineering/diagnose-and-fix-three-planted-rag-failures": {
+    "summary": "Use evaluation results to find and fix bad chunks, stale data and weak retrieval.",
+    "sections": [
+      {
+        "heading": "Focus",
+        "body": "Use evaluation results to find and fix bad chunks, stale data and weak retrieval."
+      }
+    ],
+    "typeExtras": {
+      "objectives": [
+        "Run retrieval and answer metrics on a test set",
+        "Locate each failure in the pipeline",
+        "Show before and after results for each fix"
+      ],
+      "checkpointQuestions": [
+        "How did you prove each fix worked?",
+        "Which failure was hardest to spot?"
+      ]
+    }
+  },
+  "ai-engineering/hardened-rag-service-with-evaluation-suite": {
+    "summary": "Deliver an API with hybrid retrieval, reranking, permission filtering and an evaluation suite.",
+    "sections": [
+      {
+        "heading": "Focus",
+        "body": "Deliver an API with hybrid retrieval, reranking, permission filtering and an evaluation suite."
+      }
+    ],
+    "typeExtras": {
+      "objectives": [
+        "Filter retrieval by document permissions",
+        "Ship an evaluation suite with the service",
+        "Write a deployment and risk note for the client’s IT team"
+      ],
+      "checkpointQuestions": [
+        "How do permissions flow from the source system into retrieval?",
+        "What would you monitor after launch?"
+      ]
+    }
+  },
+  "ai-engineering/langgraph-agent-with-human-approval": {
+    "summary": "Add checkpointing and an approval step before a risky action.",
+    "sections": [
+      {
+        "heading": "Focus",
+        "body": "Add checkpointing and an approval step before a risky action."
+      }
+    ],
+    "typeExtras": {
+      "objectives": [
+        "Build the agent as a LangGraph graph",
+        "Pause for human approval before a risky action",
+        "Resume, edit or reject the action"
+      ],
+      "checkpointQuestions": [
+        "Which action did you gate and why?",
+        "How is state restored after a restart?"
+      ]
+    }
+  },
+  "ai-engineering/agentic-rag-assistant": {
+    "summary": "Build agentic RAG in LangGraph with grading, rewriting and human fallback.",
+    "sections": [
+      {
+        "heading": "Focus",
+        "body": "Build agentic RAG in LangGraph with grading, rewriting and human fallback."
+      }
+    ],
+    "typeExtras": {
+      "objectives": [
+        "Grade retrieved documents and rewrite weak queries",
+        "Route to a human when confidence stays low",
+        "Compare results with the Day 20 service on the same eval set"
+      ],
+      "checkpointQuestions": [
+        "Did the agentic version beat the baseline, and at what cost?",
+        "When does it fall back to a human?"
+      ]
+    }
+  },
+  "ai-engineering/red-team-your-agent-and-add-guardrails": {
+    "summary": "Add at least two guardrails, then attack each other’s agents and fix what breaks.",
+    "sections": [
+      {
+        "heading": "Focus",
+        "body": "Add at least two guardrails, then attack each other’s agents and fix what breaks."
+      }
+    ],
+    "typeExtras": {
+      "objectives": [
+        "Add input and output guardrails",
+        "Attack with direct and indirect prompt injection",
+        "Write a threat model with mitigations"
+      ],
+      "checkpointQuestions": [
+        "Which attack got through first?",
+        "What residual risk would you tell the client about?"
+      ]
+    }
+  },
+  "ai-engineering/build-an-mcp-server-and-connect-it-to-your-agent": {
+    "summary": "Build a Python MCP server that exposes policy search and a ticketing tool, and connect it to the agent.",
+    "sections": [
+      {
+        "heading": "Focus",
+        "body": "Build a Python MCP server that exposes policy search and a ticketing tool, and connect it to the agent."
+      }
+    ],
+    "typeExtras": {
+      "objectives": [
+        "Expose tools and a resource through an MCP server",
+        "Connect it to the LangGraph agent and to Claude or Cursor",
+        "Add input validation and access checks"
+      ],
+      "checkpointQuestions": [
+        "What can an MCP client do that you did not intend?",
+        "How would you authenticate the server in production?"
+      ]
+    }
+  },
+  "ai-engineering/multi-agent-q-and-a-rag-agents-mcp-and-guardrails": {
+    "summary": "Deliver a multi-agent Q&A system that adds one layer a day: retrieval, agents, tools, safety and quality.",
+    "sections": [
+      {
+        "heading": "Focus",
+        "body": "Deliver a multi-agent Q&A system that adds one layer a day: retrieval, agents, tools, safety and quality."
+      }
+    ],
+    "typeExtras": {
+      "objectives": [
+        "Combine advanced RAG, a LangGraph supervisor, an MCP server and guardrails",
+        "Add tracing, an evaluation suite and a regression check",
+        "Deliver the repository, architecture diagram, evaluation report and handoff document with a live demo"
+      ],
+      "checkpointQuestions": [
+        "What are the system’s known limitations?",
+        "What would you improve with another two weeks?"
+      ]
+    }
+  },
+  "ai-engineering/explain-the-full-rag-pipeline": {
+    "summary": "Practise explaining RAG from ingestion to evaluation to a client or interviewer.",
+    "sections": [
+      {
+        "heading": "Focus",
+        "body": "Practise explaining RAG from ingestion to evaluation to a client or interviewer."
+      }
+    ],
+    "typeExtras": {
+      "objectives": [
+        "Walk through ingestion, chunking, retrieval, reranking and generation",
+        "Name the main failure modes and how you evaluate them",
+        "Cover access control and freshness"
+      ],
+      "checkpointQuestions": [
+        "Can you explain this in two minutes without jargon?",
+        "What would you verify on a customer project before relying on it?"
+      ]
+    }
+  },
+  "ai-engineering/design-an-agent-with-guardrails": {
+    "summary": "Design an agent for a client use case and defend your safety choices.",
+    "sections": [
+      {
+        "heading": "Focus",
+        "body": "Design an agent for a client use case and defend your safety choices."
+      }
+    ],
+    "typeExtras": {
+      "objectives": [
+        "Choose between a workflow and an agent, and justify it",
+        "Describe tools, permissions, approvals and limits",
+        "Explain how you would evaluate and monitor it"
+      ],
+      "checkpointQuestions": [
+        "Where does a human stay in the loop?",
+        "How do you handle prompt injection?"
+      ]
+    }
+  }
+}

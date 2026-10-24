@@ -1,0 +1,182 @@
+{
+  "software-engineering/python-essentials-and-environment-setup": {
+    "summary": "Set up uv or venv, a clean project structure and Git, then read and write files with proper exception handling.",
+    "sections": [
+      {
+        "heading": "Focus",
+        "body": "Set up uv or venv, a clean project structure and Git, then read and write files with proper exception handling."
+      }
+    ],
+    "typeExtras": {
+      "objectives": [
+        "Set up an isolated environment and keep secrets in a .env file",
+        "Use functions, modules, file handling and try/except correctly",
+        "Structure a small project and commit it with Git"
+      ],
+      "checkpointQuestions": [
+        "How would you hand a client a project that runs on their machine first time?",
+        "What should happen when an input file is missing or malformed?"
+      ]
+    }
+  },
+  "software-engineering/data-structures-json-and-pandas": {
+    "summary": "Turn nested JSON, CSV and text extracted from PDFs and Word files into clean tables.",
+    "sections": [
+      {
+        "heading": "Focus",
+        "body": "Turn nested JSON, CSV and text extracted from PDFs and Word files into clean tables."
+      }
+    ],
+    "typeExtras": {
+      "objectives": [
+        "Choose between lists, dicts, sets and tuples and use comprehensions",
+        "Parse and flatten JSON and CSV data",
+        "Filter, group, merge and clean data in pandas, including missing values"
+      ],
+      "checkpointQuestions": [
+        "How would you find and handle bad rows in a client’s export?",
+        "How do you get text out of PDF and DOCX files?"
+      ]
+    }
+  },
+  "software-engineering/working-with-apis-reliably": {
+    "summary": "Call REST and LLM APIs without letting timeouts, rate limits or bad responses break the job.",
+    "sections": [
+      {
+        "heading": "Focus",
+        "body": "Call REST and LLM APIs without letting timeouts, rate limits or bad responses break the job."
+      }
+    ],
+    "typeExtras": {
+      "objectives": [
+        "Use requests or httpx with auth headers and check status codes",
+        "Add timeouts, exponential backoff, rate-limit handling and pagination",
+        "Log API calls so failures can be diagnosed later"
+      ],
+      "checkpointQuestions": [
+        "What should happen when an API returns 429 or times out?",
+        "Where do API keys live, and how do they stay out of Git?"
+      ]
+    }
+  },
+  "software-engineering/typing-pydantic-and-async": {
+    "summary": "Validate model output with Pydantic and run many calls concurrently without hitting rate limits.",
+    "sections": [
+      {
+        "heading": "Focus",
+        "body": "Validate model output with Pydantic and run many calls concurrently without hitting rate limits."
+      }
+    ],
+    "typeExtras": {
+      "objectives": [
+        "Model data with type hints and Pydantic, including custom validators",
+        "Run concurrent calls with asyncio and cap concurrency with a semaphore",
+        "Handle validation failures with a repair or retry step"
+      ],
+      "checkpointQuestions": [
+        "Why validate LLM output even when the prompt asks for JSON?",
+        "How do you run 50 parallel calls without hitting rate limits?"
+      ]
+    }
+  },
+  "software-engineering/fastapi-logging-and-pytest": {
+    "summary": "Wrap a model call in a FastAPI service, test it with mocked LLM calls and make failures debuggable.",
+    "sections": [
+      {
+        "heading": "Focus",
+        "body": "Wrap a model call in a FastAPI service, test it with mocked LLM calls and make failures debuggable."
+      }
+    ],
+    "typeExtras": {
+      "objectives": [
+        "Expose a model call through FastAPI with request and response models",
+        "Write pytest tests and mock LLM calls",
+        "Add structured logging and debug failures"
+      ],
+      "checkpointQuestions": [
+        "How do you test code that calls a non-deterministic model?",
+        "How would you scope a vague client request into a measurable task?"
+      ]
+    }
+  },
+  "software-engineering/log-summariser-and-data-cleaning-script": {
+    "summary": "Build a command-line tool that reads a file, cleans it and reports counts and errors.",
+    "sections": [
+      {
+        "heading": "Focus",
+        "body": "Build a command-line tool that reads a file, cleans it and reports counts and errors."
+      }
+    ],
+    "typeExtras": {
+      "objectives": [
+        "Read and clean a messy input file",
+        "Handle bad lines without crashing",
+        "Report counts and a short summary"
+      ],
+      "checkpointQuestions": [
+        "What did you do with rows that could not be parsed?",
+        "How would the tool behave on a file ten times larger?"
+      ]
+    }
+  },
+  "software-engineering/async-batch-classifier-with-pydantic": {
+    "summary": "Classify 50 support tickets concurrently into validated JSON.",
+    "sections": [
+      {
+        "heading": "Focus",
+        "body": "Classify 50 support tickets concurrently into validated JSON."
+      }
+    ],
+    "typeExtras": {
+      "objectives": [
+        "Run calls concurrently with a concurrency limit",
+        "Parse each reply into a Pydantic model",
+        "Retry or repair invalid replies"
+      ],
+      "checkpointQuestions": [
+        "How many replies failed validation, and why?",
+        "What concurrency limit did you choose and why?"
+      ]
+    }
+  },
+  "software-engineering/document-triage-service-fastapi-llm-tests": {
+    "summary": "A FastAPI endpoint accepts a document, calls an LLM, returns validated JSON and ships with tests and logging.",
+    "sections": [
+      {
+        "heading": "Focus",
+        "body": "A FastAPI endpoint accepts a document, calls an LLM, returns validated JSON and ships with tests and logging."
+      }
+    ],
+    "typeExtras": {
+      "objectives": [
+        "Expose a validated endpoint that wraps the model call",
+        "Cover success and failure cases with pytest",
+        "Log each request so a failure can be traced"
+      ],
+      "checkpointQuestions": [
+        "What would you extend first for a batch endpoint?",
+        "How would you explain its limits to the client?"
+      ]
+    }
+  },
+  "software-engineering/explain-retries-timeouts-and-async": {
+    "summary": "Practise explaining reliable API code to a technical interviewer in a few minutes.",
+    "sections": [
+      {
+        "heading": "Focus",
+        "body": "Practise explaining reliable API code to a technical interviewer in a few minutes."
+      }
+    ],
+    "typeExtras": {
+      "objectives": [
+        "Explain backoff, timeouts and rate limits",
+        "Explain when async helps and when it does not",
+        "Give one example from your own lab"
+      ],
+      "checkpointQuestions": [
+        "Can you explain this in two minutes without jargon?",
+        "What breaks first when traffic increases tenfold?"
+      ]
+    }
+  }
+}

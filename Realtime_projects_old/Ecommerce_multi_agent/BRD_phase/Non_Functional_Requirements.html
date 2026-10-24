@@ -1,0 +1,64 @@
+<div class="content-body">
+    <div class="content-section">
+        <h3 class="content-heading">Non-Functional Requirements</h3>
+        <p style="color: #4b5563; line-height: 1.75; margin-bottom: 2rem;">
+            Non-functional requirements specify the operational quality of the Multi-Agent Assistant, focusing on
+            performance, security, and reliability in an agentic context.
+        </p>
+
+        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 1.5rem;">
+            <!-- Performance -->
+            <div
+                style="background: white; border: 1px solid #e5e7eb; border-radius: 12px; padding: 1.5rem; border-left: 4px solid #6366f1;">
+                <h4 style="font-size: 1.1rem; font-weight: 600; color: #1f2937; margin-bottom: 0.75rem;">Performance &
+                    Latency</h4>
+                <ul
+                    style="list-style: none; display: flex; flex-direction: column; gap: 0.5rem; color: #4b5563; font-size: 0.9rem;">
+                    <li>• Reasoning latency for a single turn should not exceed 3 seconds.</li>
+                    <li>• Tool execution (Search/Cart) must return results within 500ms.</li>
+                    <li>• The UI must stream tokens to the user to reduce perceived latency.</li>
+                </ul>
+            </div>
+
+            <!-- Security -->
+            <div
+                style="background: white; border: 1px solid #e5e7eb; border-radius: 12px; padding: 1.5rem; border-left: 4px solid #ef4444;">
+                <h4 style="font-size: 1.1rem; font-weight: 600; color: #1f2937; margin-bottom: 0.75rem;">Security &
+                    Privacy</h4>
+                <ul
+                    style="list-style: none; display: flex; flex-direction: column; gap: 0.5rem; color: #4b5563; font-size: 0.9rem;">
+                    <li>• Zero-trust model: LLMs never see raw database credentials or private PII.</li>
+                    <li>• All tool inputs must be strictly validated against Pydantic schemas.</li>
+                    <li>• API endpoints must be protected with modern authentication headers.</li>
+                </ul>
+            </div>
+
+            <!-- Scalability -->
+            <div
+                style="background: white; border: 1px solid #e5e7eb; border-radius: 12px; padding: 1.5rem; border-left: 4px solid #10b981;">
+                <h4 style="font-size: 1.1rem; font-weight: 600; color: #1f2937; margin-bottom: 0.75rem;">Scalability
+                </h4>
+                <ul
+                    style="list-style: none; display: flex; flex-direction: column; gap: 0.5rem; color: #4b5563; font-size: 0.9rem;">
+                    <li>• The graph state must be persistable in a database to scale horizontally.</li>
+                    <li>• Support for multiple concurrent shopping sessions per user with thread separation.</li>
+                    <li>• Asynchronous tool calling to prevent blocking the supervisor's reasoning loop.</li>
+                </ul>
+            </div>
+
+            <!-- Reliability -->
+            <div
+                style="background: white; border: 1px solid #e5e7eb; border-radius: 12px; padding: 1.5rem; border-left: 4px solid #f59e0b;">
+                <h4 style="font-size: 1.1rem; font-weight: 600; color: #1f2937; margin-bottom: 0.75rem;">Reliability
+                </h4>
+                <ul
+                    style="list-style: none; display: flex; flex-direction: column; gap: 0.5rem; color: #4b5563; font-size: 0.9rem;">
+                    <li>• Graceful degradation if a worker fails (Supervisor must handle tool errors).</li>
+                    <li>• Rate limiting on API calls to prevent agent hallucination loops from exhausting resources.
+                    </li>
+                    <li>• Regular backup of agent state and conversation history.</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,19 @@
+{
+  "id": "antigravity-ecommerce-multi-agent",
+  "name": "Multi-Agent E-Commerce Assistant",
+  "description": "Orchestrate multiple AI agents for shopping with LangGraph and FastAPI. Specialized agents for search, cart, and checkout with a React UI on Render.",
+  "category": "Multi-Agent AI System",
+  "difficulty": "advanced",
+  "estimatedHours": 45,
+  "order": 12,
+  "tags": [
+    "LangGraph",
+    "FastAPI",
+    "Multi-Agent",
+    "React",
+    "Render"
+  ],
+  "version": "1.0.0",
+  "liveDemoUrl": "https://ecommerce-multi-agent-fastapi-frontend.onrender.com",
+  "promptSourceKey": "multi-agent"
+}

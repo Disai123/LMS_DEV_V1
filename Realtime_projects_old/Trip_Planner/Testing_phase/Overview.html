@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Testing Phase - Smart MCP Trip Planner</title>
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Poppins:wght@300;400;500;600;700;800&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="../shared/styles.css">
+    <style>
+        /* Phase-specific styles */
+        .phase-active .sidebar-nav-btn.active {
+            background: #fff7ed;
+            color: #c2410c;
+        }
+
+        .phase-active .next-btn {
+            background: linear-gradient(to right, #f97316, #ea580c);
+        }
+    </style>
+</head>
+
+<body class="phase-active">
+    <!-- Phase Navigation Bar -->
+    <div class="phase-nav-container">
+        <div class="phase-nav-wrapper">
+            <div class="phase-nav-line"></div>
+            <div class="phase-nav-buttons">
+                <button class="phase-nav-btn complete" data-phase="brd" title="Business Requirements">
+                    <div class="phase-nav-circle phase-brd complete">✓</div>
+                    <div class="phase-nav-label">BRD</div>
+                </button>
+                <button class="phase-nav-btn complete" data-phase="uiux" title="UI/UX Design">
+                    <div class="phase-nav-circle phase-uiux complete">✓</div>
+                    <div class="phase-nav-label">UI/UX</div>
+                </button>
+                <button class="phase-nav-btn complete" data-phase="architectural" title="Architectural Design">
+                    <div class="phase-nav-circle phase-architectural complete">✓</div>
+                    <div class="phase-nav-label">Architecture</div>
+                </button>
+                <button class="phase-nav-btn complete" data-phase="code-development" title="Code Development">
+                    <div class="phase-nav-circle phase-development complete">✓</div>
+                    <div class="phase-nav-label">Development</div>
+                </button>
+                <button class="phase-nav-btn active" data-phase="testing" title="Testing & QA">
+                    <div class="phase-nav-circle phase-testing active">🧪</div>
+                    <div class="phase-nav-label">Testing</div>
+                </button>
+                <button class="phase-nav-btn" data-phase="deployment" title="Deployment">
+                    <div class="phase-nav-circle phase-deployment">🚀</div>
+                    <div class="phase-nav-label">Deployment</div>
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Main Container -->
+    <div class="main-container">
+        <!-- Left Sidebar -->
+        <div class="sidebar">
+            <div class="sidebar-header">
+                <button class="back-btn" onclick="window.location.href='../index.html'">
+                    <span>←</span>
+                    <span>Back to Projects</span>
+                </button>
+                <h1 class="sidebar-title">Testing Phase</h1>
+                <p class="sidebar-subtitle">Smart MCP Trip Planner</p>
+            </div>
+
+            <div class="sidebar-nav">
+                <ul class="sidebar-nav-list" id="sidebar-nav">
+                    <!-- Navigation items will be dynamically generated -->
+                </ul>
+            </div>
+
+            <div class="sidebar-progress">
+                <div class="progress-title">Phase Progress</div>
+                <div class="progress-list" id="progress-list">
+                    <!-- Progress items will be dynamically generated -->
+                </div>
+            </div>
+        </div>
+
+        <!-- Main Content Area -->
+        <div class="content-area">
+            <div class="content-wrapper">
+                <div id="current-content">
+                    <!-- Content will be dynamically loaded here -->
+                </div>
+
+                <button id="next-btn" class="next-btn">
+                    <span>Next Module</span>
+                    <span class="next-btn-arrow">→</span>
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer>
+        <div class="footer-container">
+            <div class="footer-grid">
+                <div>
+                    <a href="/" class="footer-logo">
+                        <img src="../lms_logo.svg" alt="GNANAM AI">
+                    </a>
+                    <p class="footer-description">
+                        Empowering digital learning with our comprehensive Learning Management System.
+                        Create, manage, and deliver engaging educational experiences.
+                    </p>
+                </div>
+                <div>
+                    <h3 class="footer-links-title">Quick Links</h3>
+                    <ul class="footer-links-list">
+                        <li><a href="/courses">Browse Courses</a></li>
+                        <li><a href="/about">About Us</a></li>
+                        <li><a href="/contact">Contact</a></li>
+                        <li><a href="/help">Help Center</a></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p class="footer-copyright">© 2025 LMS Platform. All rights reserved.</p>
+                <div class="footer-policies">
+                    <a href="#">Privacy Policy</a>
+                    <a href="#">Terms of Service</a>
+                    <a href="#">Cookie Policy</a>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Page Data for JavaScript -->
+    <script type="application/json" id="page-data">
+    {"phase": "testing", "projectTitle": "Smart MCP Trip Planner"}
+  </script>
+
+    <!-- Navigation Script -->
+    <script src="../shared/navigation.js"></script>
+</body>
+
+</html>

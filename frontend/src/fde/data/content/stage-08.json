@@ -1,0 +1,122 @@
+{
+  "production-deployment/deployment-basics": {
+    "summary": "Always-on hosting via Render or AWS; Git-based deploy; environment secrets; health endpoint.",
+    "sections": [
+      {
+        "heading": "Overview",
+        "body": "**Render:** connect repository, set start command, configure environment variables, deploy, verify URL.\n\n**AWS (when required):** App Runner or Elastic Beanstalk for FastAPI; S3/CloudFront or equivalent for static frontend; RDS if database is required; Secrets Manager or parameter store for credentials; single region documented.\n\n**Common rules:** no secrets in Git; `/health` endpoint; test Ask IT from a network outside your laptop.\n\n\n**Customer for Stages 3–9: a retail company (HQ and stores)**\n\n- Approximately **50 employees** across stores and head office.\n- IT receives **100 messages per week**; many repeat password, Wi‑Fi, VPN, and device questions.\n- Answers exist in **~15 FAQ documents** (PDF or Word). Staff rarely read them.\n- **IT lead (sponsor)** wants an internal **Ask IT** page: typed question, cited answer from FAQs, or a clear escalation to IT.\n- One **restricted FAQ** (“Admin-only IT notes”) must not appear in answers for standard staff. Only **admin** role may retrieve content from that source.\n- **Phase 1 scope:** FAQ assistant only—not a full ticketing or HR system."
+      },
+      {
+        "heading": "Template",
+        "body": "```\nPRODUCTION CHECKLIST\n[ ] Secrets in host env only\n[ ] /health returns OK\n[ ] Public URL tested\n[ ] One FAQ question succeeds\n```"
+      }
+    ],
+    "typeExtras": {
+      "objectives": [
+        "Contrast Render vs AWS use cases",
+        "List deploy safety checks"
+      ],
+      "checkpointQuestions": [
+        "Where do production secrets live?"
+      ]
+    }
+  },
+  "production-deployment/observability-tracing": {
+    "summary": "Request logs, error counts, and feedback records for the IT lead.",
+    "sections": [
+      {
+        "heading": "Overview",
+        "body": "Log timestamp, outcome, and duration per ask request (avoid logging secrets or full API keys). Retain negative feedback with question, answer, and source for FAQ updates. Use host log dashboard (Render or AWS CloudWatch)."
+      },
+      {
+        "heading": "Template",
+        "body": "```\nINCIDENT LOOKUP\n1. Open host logs\n2. Match time window\n3. Cross-check feedback file\n4. Reproduce locally\n```"
+      }
+    ],
+    "typeExtras": {
+      "objectives": [
+        "Enable structured request logs",
+        "Locate logs on chosen host"
+      ],
+      "checkpointQuestions": [
+        "What not to log?"
+      ]
+    }
+  },
+  "production-deployment/reliability-cost-incidents": {
+    "summary": "LLM timeout with friendly message; monitor provider spend during pilot.",
+    "sections": [
+      {
+        "heading": "Overview",
+        "body": "Set request timeout (e.g. 30s). On failure, show a neutral message and IT contact—never raw stack traces. Review provider usage weekly during early production."
+      }
+    ],
+    "typeExtras": {
+      "objectives": [
+        "User-safe error handling",
+        "Timeout configured"
+      ],
+      "checkpointQuestions": [
+        "User-visible text on failure?"
+      ]
+    }
+  },
+  "production-deployment/deploy-with-tracing": {
+    "summary": "Promote POC to production posture on Render or AWS; verify URL and logs.",
+    "sections": [
+      {
+        "heading": "Procedure",
+        "body": "1. Deploy with production env vars.\n2. Verify /health and Ask IT from external network.\n3. Capture log screenshot after successful and failed request."
+      }
+    ],
+    "typeExtras": {
+      "objectives": [
+        "Production URL operational"
+      ],
+      "checkpointQuestions": [
+        "Tested off localhost?"
+      ],
+      "deliverables": [
+        "Production URL",
+        "Log screenshot"
+      ]
+    }
+  },
+  "production-deployment/runbook-incident-drill": {
+    "summary": "One-page runbook; partner simulates bad API key and recovers using runbook only.",
+    "sections": [
+      {
+        "heading": "Template",
+        "body": "```\nRUNBOOK\nURL:\nHealth:\nLogs location:\nIf API errors: check ___ env var\nIf slow: check provider status\nContact:\n```"
+      }
+    ],
+    "typeExtras": {
+      "objectives": [
+        "Runbook validated by drill"
+      ],
+      "checkpointQuestions": [
+        "Missing step identified?"
+      ],
+      "deliverables": [
+        "runbook.md"
+      ]
+    }
+  },
+  "production-deployment/poc-to-production": {
+    "summary": "Checklist before all staff use Ask IT daily.",
+    "sections": [
+      {
+        "heading": "Example: Retail case",
+        "body": "\"Confirm production URL, secrets, role enforcement, runbook, IT lead review of negative feedback, FAQ ownership, and regression after any FAQ update.\""
+      }
+    ],
+    "typeExtras": {
+      "objectives": [
+        "List five rollout gates"
+      ],
+      "checkpointQuestions": [
+        "Why rerun regression after FAQ edits?"
+      ]
+    }
+  }
+}

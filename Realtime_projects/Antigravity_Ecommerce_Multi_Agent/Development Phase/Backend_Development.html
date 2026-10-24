@@ -1,0 +1,74 @@
+<div class="content-body">
+    <div class="content-section">
+        <h3 class="content-heading">Backend Development</h3>
+        <p style="color: #4b5563; line-height: 1.75; margin-bottom: 2rem;">
+            The backend is a fusion of <strong>FastAPI</strong> and <strong>LangGraph</strong>.
+            We implement an event-driven orchestrator that streams agent reasoning directly to the client.
+        </p>
+
+        <!-- Logic Section -->
+        <div
+            style="background: white; border: 1px solid #e5e7eb; border-radius: 12px; padding: 1.5rem; margin-bottom: 2rem; box-shadow: 0 1px 3px rgba(0,0,0,0.1);">
+            <h4 style="font-size: 1.125rem; font-weight: 600; color: #1e293b; margin-bottom: 1rem;">Orchestration Hub
+            </h4>
+            <p style="font-size: 0.9rem; color: #475569; line-height: 1.6; margin-bottom: 1.5rem;">
+                The core logic resides in a state-graph. The Supervisor node uses an LLM to decide whether
+                to call a tool, delegate to a worker, or respond to the user.
+            </p>
+
+            <div style="background: #f8fafc; border: 1px solid #cbd5e1; border-radius: 8px; padding: 1rem;">
+                <div
+                    style="font-weight: 600; font-size: 0.85rem; color: #334155; margin-bottom: 0.5rem; display: flex; align-items: center; gap: 8px;">
+                    <span style="background: #6366f1; width: 6px; height: 6px; border-radius: 50%;"></span>
+                    Worker Delegation Logic
+                </div>
+                <pre
+                    style="font-size: 0.8rem; color: #475569; margin: 0; font-family: 'Courier New', Courier, monospace;">
+def supervisor_node(state):
+    # Analyze state and decide next move
+    prediction = llm.with_structured_output(Router).invoke(state["messages"])
+    if prediction.next == "FINISH":
+        return END
+    return prediction.next # search_worker | cart_worker
+</pre>
+            </div>
+        </div>
+
+        <!-- Technical Stack -->
+        <h4 style="font-size: 1.125rem; font-weight: 600; color: #1e293b; margin-bottom: 1rem;">Development Stack</h4>
+        <div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 1rem;">
+            <div
+                style="background: white; border: 1px solid #e2e8f0; border-radius: 10px; padding: 1rem; display: flex; align-items: center; gap: 12px;">
+                <div style="font-size: 1.5rem;">⚡</div>
+                <div>
+                    <div style="font-weight: 600; font-size: 0.85rem;">FastAPI</div>
+                    <div style="font-size: 0.75rem; color: #64748b;">Asynchronous I/O</div>
+                </div>
+            </div>
+            <div
+                style="background: white; border: 1px solid #e2e8f0; border-radius: 10px; padding: 1rem; display: flex; align-items: center; gap: 12px;">
+                <div style="font-size: 1.5rem;">🎭</div>
+                <div>
+                    <div style="font-weight: 600; font-size: 0.85rem;">LangGraph</div>
+                    <div style="font-size: 0.75rem; color: #64748b;">Cyclic State Management</div>
+                </div>
+            </div>
+            <div
+                style="background: white; border: 1px solid #e2e8f0; border-radius: 10px; padding: 1rem; display: flex; align-items: center; gap: 12px;">
+                <div style="font-size: 1.5rem;">📦</div>
+                <div>
+                    <div style="font-weight: 600; font-size: 0.85rem;">Pydantic</div>
+                    <div style="font-size: 0.75rem; color: #64748b;">Schema Serialization</div>
+                </div>
+            </div>
+            <div
+                style="background: white; border: 1px solid #e2e8f0; border-radius: 10px; padding: 1rem; display: flex; align-items: center; gap: 12px;">
+                <div style="font-size: 1.5rem;">⛓️</div>
+                <div>
+                    <div style="font-weight: 600; font-size: 0.85rem;">LangChain</div>
+                    <div style="font-size: 0.75rem; color: #64748b;">LLM Framework</div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

@@ -1,60 +1,80 @@
 import ReactMarkdown from 'react-markdown'
+import remarkGfm from 'remark-gfm'
 
-function ListBlock({ title, items }) {
+function BlockHeading({ children }) {
+  return <h3 className="fde-eyebrow mb-3">{children}</h3>
+}
+
+function ListBlock({ title, items, ordered = false }) {
   if (!items?.length) return null
+  const ListTag = ordered ? 'ol' : 'ul'
   return (
-    <div className="mt-6">
-      <h3 className="text-sm font-semibold uppercase tracking-wide text-[var(--fde-mut)] mb-2">
-        {title}
-      </h3>
-      <ul className="list-disc pl-5 space-y-1 text-sm">
+    <section className="mt-8">
+      <BlockHeading>{title}</BlockHeading>
+      <ListTag
+        className={
+          ordered
+            ? 'list-decimal pl-5 space-y-1.5 text-[0.9375rem] leading-relaxed text-[var(--fde-mut)] marker:font-semibold marker:text-[var(--fde-mut)]'
+            : 'fde-bullets text-[0.9375rem] text-[var(--fde-mut)]'
+        }
+      >
         {items.map((x) => (
-          <li key={x}>{x}</li>
+          <li key={x} className={ordered ? 'pl-1' : ''}>
+            {x}
+          </li>
         ))}
-      </ul>
-    </div>
+      </ListTag>
+    </section>
   )
 }
 
 export default function FdeItemBody({ content, itemType }) {
   const extras = content.typeExtras || {}
+  const isProject = itemType === 'project' || itemType === 'capstone'
 
   return (
-    <article className="prose prose-sm max-w-none prose-invert:fde text-[var(--fde-tx)]">
-      <p className="text-[var(--fde-mut)] text-base leading-relaxed">{content.summary}</p>
+    <article className="text-[var(--fde-tx)]">
+      <p className="text-base sm:text-lg leading-relaxed text-[var(--fde-mut)] max-w-3xl m-0">
+        {content.summary}
+      </p>
 
       {content.sections.map((sec) => (
-        <div key={sec.heading} className="mt-6">
-          <h2 className="text-lg font-semibold mb-2" style={{ color: 'var(--fde-tx)' }}>
-            {sec.heading}
-          </h2>
-          <div className="text-sm leading-relaxed text-[var(--fde-mut)] [&_strong]:text-[var(--fde-tx)]">
-            <ReactMarkdown>{sec.body}</ReactMarkdown>
+        <section key={sec.heading} className="mt-8 pt-6 border-t border-[var(--fde-bd)]">
+          <h2 className="text-lg font-semibold tracking-tight mb-3 text-[var(--fde-tx)]">{sec.heading}</h2>
+          <div className="fde-md max-w-3xl">
+            <ReactMarkdown remarkPlugins={[remarkGfm]}>{sec.body}</ReactMarkdown>
           </div>
-        </div>
+        </section>
       ))}
 
-      {itemType === 'read' && (
-        <>
-          <ListBlock title="Objectives" items={extras.objectives} />
-          <ListBlock title="Checkpoint questions" items={extras.checkpointQuestions} />
-        </>
+      {Object.keys(extras).length > 0 && <div className="mt-8 border-t border-[var(--fde-bd)]" />}
+
+      {itemType === 'interview' && extras.prompt && (
+        <section className="mt-8 p-4 rounded-lg border border-[var(--fde-bd)] bg-[var(--fde-bg)]">
+          <BlockHeading>Prompt</BlockHeading>
+          <p className="text-[0.9375rem] leading-relaxed m-0">{extras.prompt}</p>
+        </section>
       )}
+
+      {isProject && extras.scope && (
+        <section className="mt-8">
+          <BlockHeading>Scope</BlockHeading>
+          <p className="text-[0.9375rem] leading-relaxed text-[var(--fde-mut)] m-0 max-w-3xl">
+            {extras.scope}
+          </p>
+        </section>
+      )}
+
+      <ListBlock title="Objectives" items={extras.objectives} />
 
       {itemType === 'lab' && (
         <>
           <ListBlock title="Prerequisites" items={extras.prerequisites} />
-          <ListBlock title="Steps" items={extras.steps} />
+          <ListBlock title="Steps" items={extras.steps} ordered />
           <ListBlock title="Deliverables" items={extras.deliverables} />
         </>
       )}
 
-      {itemType === 'interview' && extras.prompt && (
-        <div className="mt-6 p-4 rounded-lg border border-[var(--fde-bd)] bg-[var(--fde-bg)]">
-          <h3 className="text-sm font-semibold mb-2">Prompt</h3>
-          <p className="text-sm m-0">{extras.prompt}</p>
-        </div>
-      )}
       {itemType === 'interview' && (
         <>
           <ListBlock title="How to approach" items={extras.howToApproach} />
@@ -62,20 +82,14 @@ export default function FdeItemBody({ content, itemType }) {
         </>
       )}
 
-      {itemType === 'project' && extras.scope && (
-        <div className="mt-6">
-          <h3 className="text-sm font-semibold uppercase tracking-wide text-[var(--fde-mut)] mb-2">
-            Scope
-          </h3>
-          <p className="text-sm">{extras.scope}</p>
-        </div>
-      )}
-      {itemType === 'project' && (
+      {isProject && (
         <>
-          <ListBlock title="Milestones" items={extras.milestones} />
+          <ListBlock title="Milestones" items={extras.milestones} ordered />
           <ListBlock title="Acceptance criteria" items={extras.acceptanceCriteria} />
         </>
       )}
+
+      <ListBlock title="Checkpoint questions" items={extras.checkpointQuestions} />
     </article>
   )
 }

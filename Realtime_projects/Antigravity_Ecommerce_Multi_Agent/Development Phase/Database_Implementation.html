@@ -1,0 +1,54 @@
+<div class="content-body">
+    <div class="content-section">
+        <h3 class="content-heading">Database Implementation</h3>
+        <p style="color: #4b5563; line-height: 1.75; margin-bottom: 2rem;">
+            The data layer utilizes <strong>PostgreSQL</strong> via <strong>SQLAlchemy</strong>.
+            We implement specialized repositories that the agents use for tool execution,
+            ensuring strict user-bound data access.
+        </p>
+
+        <!-- Code Snippet Card -->
+        <div
+            style="background: #1e293b; padding: 1.5rem; border-radius: 12px; color: #cbd5e1; font-family: 'Courier New', Courier, monospace; font-size: 0.85rem; margin-bottom: 2rem; border: 1px solid #334155; box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);">
+            <div style="color: #6366f1; margin-bottom: 0.5rem;"># Tool Repository Method</div>
+            <div style="margin-bottom: 0.5rem;"><span style="color: #f472b6;">async def</span> <span
+                    style="color: #38bdf8;">add_to_cart</span>(user_id: <span style="color: #fbbf24;">int</span>,
+                product_id: <span style="color: #fbbf24;">int</span>):</div>
+            <div style="padding-left: 1rem; margin-bottom: 0.5rem;">session = <span style="color: #f472b6;">await</span>
+                get_db_session()</div>
+            <div style="padding-left: 1rem; margin-bottom: 0.5rem;">cart_item = CartItem(</div>
+            <div style="padding-left: 2rem; margin-bottom: 0.5rem;">user_id=user_id, <span style="color: #94a3b8;">#
+                    Injected securely from state</span></div>
+            <div style="padding-left: 2rem; margin-bottom: 0.5rem;">product_id=product_id</div>
+            <div style="padding-left: 1rem; margin-bottom: 0.5rem;">)</div>
+            <div style="padding-left: 1rem; margin-bottom: 0.5rem;">session.add(cart_item)</div>
+            <div style="padding-left: 1rem;"><span style="color: #f472b6;">await</span> session.commit()</div>
+        </div>
+
+        <p style="color: #4b5563; line-height: 1.75; margin-bottom: 1.5rem;">
+            The implementation focuses on the <strong>LangGraph Persistence Hub</strong>, which uses a
+            dedicated PostgreSQL table to store binary snapshots of the agent's memory (checkpoints).
+        </p>
+
+        <!-- Feature List -->
+        <div
+            style="background: white; border: 1px solid #e2e8f0; border-radius: 12px; padding: 1.5rem; box-shadow: 0 1px 3px rgba(0,0,0,0.1);">
+            <h4 style="font-size: 1rem; font-weight: 600; color: #1e293b; margin-bottom: 1rem;">Implementation
+                Highlights</h4>
+            <div style="display: flex; flex-direction: column; gap: 0.75rem;">
+                <div style="display: flex; align-items: center; gap: 10px; font-size: 0.85rem; color: #475569;">
+                    <div style="width: 8px; height: 8px; background: #6366f1; border-radius: 50%;"></div>
+                    <span>AsyncPG for high-performance non-blocking database operations.</span>
+                </div>
+                <div style="display: flex; align-items: center; gap: 10px; font-size: 0.85rem; color: #475569;">
+                    <div style="width: 8px; height: 8px; background: #6366f1; border-radius: 50%;"></div>
+                    <span>Alembic for managed schema migrations and versioning.</span>
+                </div>
+                <div style="display: flex; align-items: center; gap: 10px; font-size: 0.85rem; color: #475569;">
+                    <div style="width: 8px; height: 8px; background: #6366f1; border-radius: 50%;"></div>
+                    <span>Secure Repository Pattern to isolate database logic from agents.</span>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

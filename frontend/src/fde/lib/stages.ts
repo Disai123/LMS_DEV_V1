@@ -1,13 +1,13 @@
 import roadmapData from '../data/stages.json'
-import itemContentData from '../data/itemContent.json'
 
-export type ItemType = 'read' | 'lab' | 'interview' | 'project'
+export type ItemType = 'read' | 'lab' | 'interview' | 'project' | 'capstone'
 
 export interface RoadmapItem {
   slug: string
   type: ItemType
   title: string
   minutes: number
+  dayRef?: string
 }
 
 export interface Stage {
@@ -63,7 +63,14 @@ export interface CurriculumEntry {
 }
 
 const data = roadmapData as RoadmapData
-const itemContent = itemContentData as Record<string, ItemContent>
+const contentModules = import.meta.glob('../data/content/*.json', { eager: true }) as Record<
+  string,
+  { default: Record<string, ItemContent> }
+>
+const itemContent: Record<string, ItemContent> = Object.assign(
+  {},
+  ...Object.values(contentModules).map((m) => m.default)
+)
 
 export function getRoadmapData(): RoadmapData {
   return data
@@ -203,7 +210,7 @@ function defaultContent(stage: Stage, item: RoadmapItem): ItemContent {
       'Names risks (data, security, scope, accuracy)',
       'Proposes a concrete next step the customer can approve',
     ]
-  } else if (item.type === 'project') {
+  } else if (item.type === 'project' || item.type === 'capstone') {
     typeExtras.scope =
       'Deliver a demonstrable artifact aligned to the stage outcomes, with honest evaluation of gaps.'
     typeExtras.milestones = [
@@ -233,7 +240,7 @@ export function getItemContent(stageSlug: string, itemSlug: string): ItemContent
       ...defaults,
       ...fromJson,
       sections: fromJson.sections?.length ? fromJson.sections : defaults.sections,
-      typeExtras: { ...defaults.typeExtras, ...(fromJson.typeExtras || {}) },
+      typeExtras: fromJson.typeExtras || defaults.typeExtras,
     }
   }
   return defaults

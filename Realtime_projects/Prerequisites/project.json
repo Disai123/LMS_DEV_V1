@@ -1,6 +1,6 @@
 {
     "name": "Prerequisites",
-    "description": "Essential foundational knowledge for building AI-powered applications. Learn the basics of React, FastAPI, PostgreSQL, and Antigravity principles.",
+    "description": "Essential foundational knowledge for building AI-powered applications. Learn the basics of React, FastAPI, PostgreSQL, and AI-assisted development workflows.",
     "category": "Foundations",
     "difficulty": "beginner",
     "estimatedHours": 10,

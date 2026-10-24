@@ -14,35 +14,39 @@ export default function FdeMyLearningPage() {
         <meta name="description" content="Your FDE roadmap progress saved in this browser." />
       </Helmet>
 
-      <Link to="/roadmap/fde" className="text-sm text-[var(--fde-mut)] inline-block mb-4">
+      <Link to="/roadmap/fde" className="text-sm text-[var(--fde-mut)] hover:text-[var(--fde-tx)] inline-block mb-6">
         ← Back to roadmap
       </Link>
-      <h1 className="text-3xl font-bold mb-2">My Learning</h1>
-      <p className="text-lg mb-2">{percent}% complete</p>
-      <ProgressBar percent={percent} className="mb-8 max-w-md" />
+      <h1 className="text-3xl sm:text-4xl font-bold tracking-tight mb-3">My Learning</h1>
+      <p className="text-lg font-semibold tabular-nums mb-3">{percent}% complete</p>
+      <ProgressBar percent={percent} className="mb-10 max-w-md" />
 
       <div className="space-y-3">
         {stageStats.map(({ stage, done, total, readsDone, readsTotal, practiseDone, practiseTotal }, index) => (
           <div
             key={stage.slug}
-            className="border border-[var(--fde-bd)] border-l-4 rounded-xl p-4 bg-[var(--fde-card)]"
+            className="border border-[var(--fde-bd)] border-l-4 rounded-xl px-5 py-4 bg-[var(--fde-card)]"
             style={{ borderLeftColor: stage.color }}
           >
-            <Link
-              to={`/roadmap/fde#stage-${stage.slug}`}
-              className="font-semibold hover:underline"
-              style={{ color: stage.color }}
-            >
-              {index + 1}. {stage.name}
-            </Link>
-            <p className="text-sm text-[var(--fde-mut)] mt-1">
-              {done}/{total} done · {stage.weeksLabel}
-              {readsTotal > 0 && ` · Read ${readsDone}/${readsTotal}`}
-              {practiseTotal > 0 && ` · Practise ${practiseDone}/${practiseTotal}`}
-            </p>
-            {total > 0 && <ProgressBar percent={(done / total) * 100} className="mt-2 max-w-xs" />}
+            <div className="flex flex-wrap items-start justify-between gap-x-6 gap-y-2">
+              <div className="min-w-0">
+                <Link
+                  to={`/roadmap/fde#stage-${stage.slug}`}
+                  className="font-semibold tracking-tight hover:underline underline-offset-2"
+                  style={{ color: stage.color }}
+                >
+                  {index + 1}. {stage.name}
+                </Link>
+                <p className="text-sm text-[var(--fde-mut)] mt-1 mb-0 tabular-nums">
+                  {done}/{total} done · {stage.weeksLabel}
+                  {readsTotal > 0 && ` · Read ${readsDone}/${readsTotal}`}
+                  {practiseTotal > 0 && ` · Practise ${practiseDone}/${practiseTotal}`}
+                </p>
+              </div>
+              {total > 0 && <ProgressBar percent={(done / total) * 100} className="w-full sm:w-48 sm:mt-2" />}
+            </div>
             {done < total && (
-              <ul className="mt-3 space-y-1 text-sm">
+              <ul className="mt-3 pt-3 border-t border-[var(--fde-bd)] space-y-1.5 text-sm">
                 {getAllItems(stage)
                   .filter((it) => !isDone(stage.slug, it.slug))
                   .slice(0, 3)
