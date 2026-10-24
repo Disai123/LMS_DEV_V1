@@ -13,7 +13,7 @@
           <div>
             <div
               style="color: #7dd3fc; font-size: 0.7rem; text-transform: uppercase; letter-spacing: 0.08em; font-weight: 600; margin-bottom: 2px;">
-              ✅ Single Agent Assistant Live &amp; Deployed</div>
+              ✅ Ask the Store live on Render</div>
             <div style="color: #e2e8f0; font-size: 0.95rem; font-weight: 600; font-family: monospace;">
               https://ecommerce-single-agent-fastapi-frontend.onrender.com</div>
           </div>
@@ -21,7 +21,7 @@
         <a href="https://ecommerce-single-agent-fastapi-frontend.onrender.com" target="_blank"
           style="display: inline-flex; align-items: center; gap: 6px; background: linear-gradient(135deg, #6366f1, #9333ea); color: white; padding: 10px 20px; border-radius: 30px; text-decoration: none; font-weight: 700; font-size: 0.875rem; box-shadow: 0 4px 16px rgba(99,102,241,0.4); white-space: nowrap;"
           onmouseover="this.style.transform='translateY(-2px)'" onmouseout="this.style.transform='none'">
-          🤖 Launch Agent
+          Open live store
         </a>
       </div>
     </div>
@@ -57,21 +57,20 @@
 
     <div>
       <p style="color: #4b5563; line-height: 1.75; margin-bottom: 1.5rem;">
-        This phase focuses on deploying the <strong>askunicart AI agent</strong> to production environments and ensuring
-        smooth operation with proper monitoring, maintenance, and scalability measures in place. The deployment process
-        includes setting up the Next.js application, configuring the database, and integrating with AI services.
+        This phase deploys Ask the Store with the existing application. FastAPI, React, LangGraph, Langfuse, and PostgreSQL
+        go to Render. Do not create new infrastructure unless the current project already requires it.
       </p>
 
       <div style="background: #fff7ed; border-radius: 0.5rem; padding: 1.5rem; margin-bottom: 1.5rem;">
         <h4 style="font-size: 1.125rem; font-weight: 600; color: #1f2937; margin-bottom: 0.75rem;">Phase Objectives</h4>
         <ul
           style="list-style: disc; list-style-position: inside; display: flex; flex-direction: column; gap: 0.5rem; color: #4b5563;">
-          <li>Deploy askunicart AI agent to production environment</li>
-          <li>Set up monitoring and logging systems for AI interactions</li>
-          <li>Configure database migrations and schema deployment</li>
-          <li>Implement CI/CD pipeline for automated deployments</li>
-          <li>Establish backup and disaster recovery procedures</li>
-          <li>Configure AI model API keys and rate limiting</li>
+          <li>Record backend and frontend environment values in DEPLOYMENT.md</li>
+          <li>Start FastAPI and serve the existing React build</li>
+          <li>Confirm PostgreSQL/Neon access without putting secrets in the document</li>
+          <li>Deploy the agent without breaking catalog, cart, checkout, or admin</li>
+          <li>Run post-deployment checks on POST /agent/ask</li>
+          <li>Document how to roll back the agent change</li>
         </ul>
       </div>
 
@@ -79,35 +78,29 @@
         <h4 style="font-size: 1.125rem; font-weight: 600; color: #1f2937; margin-bottom: 0.75rem;">Deliverables</h4>
         <ul
           style="list-style: disc; list-style-position: inside; display: flex; flex-direction: column; gap: 0.5rem; color: #4b5563;">
-          <li>Production-ready askunicart AI agent deployment</li>
-          <li>Environment configuration and setup (development, staging, production)</li>
-          <li>CI/CD pipeline implementation</li>
-          <li>Database migration and deployment scripts</li>
-          <li>Monitoring and alerting systems for AI agent performance</li>
-          <li>Documentation and deployment runbooks</li>
-          <li>Performance optimization and scaling plan</li>
+          <li>DEPLOYMENT.md for Ask the Store</li>
+          <li>Render environment notes for FastAPI and React</li>
+          <li>PostgreSQL/Neon and Langfuse configuration pointers</li>
+          <li>Post-deploy checks and rollback steps</li>
         </ul>
       </div>
 
       <div style="background: #eff6ff; border-radius: 0.5rem; padding: 1.5rem; margin-top: 1.5rem;">
-        <h4 style="font-size: 1.125rem; font-weight: 600; color: #1f2937; margin-bottom: 0.75rem;">Deployment Platforms
+        <h4 style="font-size: 1.125rem; font-weight: 600; color: #1f2937; margin-bottom: 0.75rem;">Deployment Stack
         </h4>
         <div
           style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1rem; margin-top: 1rem;">
           <div style="background: white; padding: 1rem; border-radius: 0.5rem; border: 1px solid #e5e7eb;">
-            <div style="font-size: 1.5rem; margin-bottom: 0.5rem;">•</div>
-            <div style="font-weight: 600; color: #1f2937; margin-bottom: 0.25rem;">Vercel</div>
-            <div style="font-size: 0.875rem; color: #6b7280;">Recommended for Next.js</div>
+            <div style="font-weight: 600; color: #1f2937; margin-bottom: 0.25rem;">Render</div>
+            <div style="font-size: 0.875rem; color: #6b7280;">FastAPI + React hosting</div>
           </div>
           <div style="background: white; padding: 1rem; border-radius: 0.5rem; border: 1px solid #e5e7eb;">
-            <div style="font-size: 1.5rem; margin-bottom: 0.5rem;">•</div>
-            <div style="font-weight: 600; color: #1f2937; margin-bottom: 0.25rem;">AWS</div>
-            <div style="font-size: 0.875rem; color: #6b7280;">Enterprise deployment</div>
+            <div style="font-weight: 600; color: #1f2937; margin-bottom: 0.25rem;">PostgreSQL/Neon</div>
+            <div style="font-size: 0.875rem; color: #6b7280;">Existing store database</div>
           </div>
           <div style="background: white; padding: 1rem; border-radius: 0.5rem; border: 1px solid #e5e7eb;">
-            <div style="font-size: 1.5rem; margin-bottom: 0.5rem;">•</div>
-            <div style="font-weight: 600; color: #1f2937; margin-bottom: 0.25rem;">Google Cloud</div>
-            <div style="font-size: 0.875rem; color: #6b7280;">AI/ML integration</div>
+            <div style="font-weight: 600; color: #1f2937; margin-bottom: 0.25rem;">Langfuse</div>
+            <div style="font-size: 0.875rem; color: #6b7280;">Tracing after the feature works</div>
           </div>
         </div>
       </div>

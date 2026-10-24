@@ -3,9 +3,8 @@
     <h3 class="content-heading">Conclusion</h3>
     <div style="max-width: none;">
       <p style="color: #4b5563; line-height: 1.75; margin-bottom: 1.5rem;">
-        The Architectural Design phase has established a comprehensive system architecture for the askunicart AI agent.
-        We have designed a scalable, secure, and maintainable system that integrates OpenAI GPT models with
-        e-commerce functionality.
+        The Architectural Design phase describes the Agentic RAG assistant on the existing store.
+        React talks to FastAPI <code>POST /rag/ask</code>. LangGraph retrieves embeddings from FAISS and returns a grounded answer with citations.
       </p>
 
       <div class="card" style="margin-bottom: 2rem;">
@@ -13,13 +12,13 @@
           Decisions</h4>
         <ul
           style="list-style: disc; list-style-position: inside; display: flex; flex-direction: column; gap: 0.75rem; color: #4b5563;">
-          <li>✅ Layered architecture (Frontend → API → AI → Tools → Database)</li>
-          <li>✅ RESTful API design with JWT authentication</li>
-          <li>✅ OpenAI GPT-4o-mini for cost-effective AI processing</li>
-          <li>✅ Function calling for tool integration</li>
-          <li>✅ PostgreSQL with Prisma for data management</li>
-          <li>✅ Conversation history limited to 20 messages for performance</li>
-          <li>✅ User data isolation for privacy</li>
+          <li>React chat UI → FastAPI POST /rag/ask → LangGraph RAG agent</li>
+          <li>Document ingest → clean → chunk → embeddings → FAISS index</li>
+          <li>Relevance check and one retrieval retry</li>
+          <li>Grounded answers with citations from approved manuals</li>
+          <li>Reuse existing auth and catalog; no second store database</li>
+          <li>Langfuse traces for retrieval, grounding, and source scores</li>
+          <li>Prompt-injection and secret-handling rules</li>
         </ul>
       </div>
 
@@ -29,23 +28,23 @@
         <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1rem;">
           <div style="background: #eff6ff; padding: 1rem; border-radius: 0.5rem; border-left: 4px solid #3b82f6;">
             <div style="font-weight: 600; color: #1f2937; margin-bottom: 0.5rem;">Frontend</div>
-            <div style="font-size: 0.875rem; color: #6b7280;">React chat component</div>
+            <div style="font-size: 0.875rem; color: #6b7280;">Existing React chat UI</div>
           </div>
           <div style="background: #f0fdf4; padding: 1rem; border-radius: 0.5rem; border-left: 4px solid #10b981;">
-            <div style="font-weight: 600; color: #1f2937; margin-bottom: 0.5rem;">API Routes</div>
-            <div style="font-size: 0.875rem; color: #6b7280;">Next.js API endpoints</div>
+            <div style="font-weight: 600; color: #1f2937; margin-bottom: 0.5rem;">API</div>
+            <div style="font-size: 0.875rem; color: #6b7280;">FastAPI POST /rag/ask</div>
           </div>
           <div style="background: #faf5ff; padding: 1rem; border-radius: 0.5rem; border-left: 4px solid #a855f7;">
-            <div style="font-weight: 600; color: #1f2937; margin-bottom: 0.5rem;">AI Integration</div>
-            <div style="font-size: 0.875rem; color: #6b7280;">OpenAI GPT-4o-mini</div>
+            <div style="font-weight: 600; color: #1f2937; margin-bottom: 0.5rem;">RAG Agent</div>
+            <div style="font-size: 0.875rem; color: #6b7280;">LangGraph flow</div>
           </div>
           <div style="background: #fff7ed; padding: 1rem; border-radius: 0.5rem; border-left: 4px solid #f97316;">
-            <div style="font-weight: 600; color: #1f2937; margin-bottom: 0.5rem;">Tool Modules</div>
-            <div style="font-size: 0.875rem; color: #6b7280;">4 specialized tools</div>
+            <div style="font-weight: 600; color: #1f2937; margin-bottom: 0.5rem;">Retrieval</div>
+            <div style="font-size: 0.875rem; color: #6b7280;">Embeddings + FAISS</div>
           </div>
           <div style="background: #eef2ff; padding: 1rem; border-radius: 0.5rem; border-left: 4px solid #6366f1;">
-            <div style="font-weight: 600; color: #1f2937; margin-bottom: 0.5rem;">Database</div>
-            <div style="font-size: 0.875rem; color: #6b7280;">PostgreSQL + Prisma</div>
+            <div style="font-weight: 600; color: #1f2937; margin-bottom: 0.5rem;">Knowledge</div>
+            <div style="font-size: 0.875rem; color: #6b7280;">Approved manuals</div>
           </div>
         </div>
       </div>
@@ -53,19 +52,18 @@
       <div class="card" style="background: linear-gradient(135deg, #eef2ff 0%, #f0fdf4 100%);">
         <h4 style="font-size: 1.25rem; font-weight: 600; color: #1f2937; margin-bottom: 1rem;">Next Steps</h4>
         <p style="color: #4b5563; line-height: 1.75; margin-bottom: 1rem;">
-          With the architecture design complete, we're ready to move to the <strong>Development Phase</strong>,
-          where we'll implement the API routes, tool modules, frontend chat component, database schema, and
-          AI integration code.
+          Next we implement ingest, chunking, embeddings, FAISS, the LangGraph flow, FastAPI <code>POST /rag/ask</code>,
+          and the React assistant UI.
         </p>
         <div style="background: white; padding: 1rem; border-radius: 0.5rem; border: 1px solid #e5e7eb;">
           <div style="font-weight: 600; color: #1f2937; margin-bottom: 0.5rem;">📋 Phase Deliverables Summary:</div>
           <ul
             style="font-size: 0.875rem; color: #4b5563; display: flex; flex-direction: column; gap: 0.25rem; list-style: disc; list-style-position: inside;">
-            <li>System Architecture Diagram</li>
-            <li>Database Schema Design (Conversation, Message)</li>
-            <li>API Endpoint Specifications</li>
-            <li>AI Integration Architecture</li>
-            <li>Security Architecture Documentation</li>
+            <li>System architecture: React → FastAPI /rag/ask → FAISS</li>
+            <li>Document chunk and embedding layout</li>
+            <li>POST /rag/ask contract</li>
+            <li>LangGraph retrieval and grounding flow</li>
+            <li>Security and citation rules</li>
           </ul>
         </div>
       </div>

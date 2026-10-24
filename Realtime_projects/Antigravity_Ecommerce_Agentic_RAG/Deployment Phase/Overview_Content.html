@@ -13,7 +13,7 @@
           <div>
             <div
               style="color: #7dd3fc; font-size: 0.7rem; text-transform: uppercase; letter-spacing: 0.08em; font-weight: 600; margin-bottom: 2px;">
-              ✅ AI Agent Live &amp; Deployed</div>
+              Agentic RAG assistant live</div>
             <div style="color: #e2e8f0; font-size: 0.95rem; font-weight: 600; font-family: monospace;">
               https://agentic-rag-fastapi-frontend.onrender.com</div>
           </div>
@@ -21,7 +21,7 @@
         <a href="https://agentic-rag-fastapi-frontend.onrender.com" target="_blank"
           style="display: inline-flex; align-items: center; gap: 6px; background: linear-gradient(135deg, #6366f1, #9333ea); color: white; padding: 10px 20px; border-radius: 30px; text-decoration: none; font-weight: 700; font-size: 0.875rem; box-shadow: 0 4px 16px rgba(99,102,241,0.4); white-space: nowrap;"
           onmouseover="this.style.transform='translateY(-2px)'" onmouseout="this.style.transform='none'">
-          🤖 Launch Agent
+          Open live demo
         </a>
       </div>
     </div>
@@ -57,21 +57,20 @@
 
     <div>
       <p style="color: #4b5563; line-height: 1.75; margin-bottom: 1.5rem;">
-        This phase focuses on deploying the <strong>askunicart AI agent</strong> to production environments and ensuring
-        smooth operation with proper monitoring, maintenance, and scalability measures in place. The deployment process
-        includes setting up the Next.js application, configuring the database, and integrating with AI services.
+        This phase deploys the Agentic RAG assistant with the existing <strong>React</strong> frontend,
+        <strong>FastAPI</strong> backend, <strong>FAISS</strong> index, embeddings, LangGraph, and Langfuse.
+        The live demo is on Render. Do not treat this as a separate store rebuild.
       </p>
 
       <div style="background: #fff7ed; border-radius: 0.5rem; padding: 1.5rem; margin-bottom: 1.5rem;">
         <h4 style="font-size: 1.125rem; font-weight: 600; color: #1f2937; margin-bottom: 0.75rem;">Phase Objectives</h4>
         <ul
           style="list-style: disc; list-style-position: inside; display: flex; flex-direction: column; gap: 0.5rem; color: #4b5563;">
-          <li>Deploy askunicart AI agent to production environment</li>
-          <li>Set up monitoring and logging systems for AI interactions</li>
-          <li>Configure database migrations and schema deployment</li>
-          <li>Implement CI/CD pipeline for automated deployments</li>
-          <li>Establish backup and disaster recovery procedures</li>
-          <li>Configure AI model API keys and rate limiting</li>
+          <li>Deploy React and FastAPI together on Render</li>
+          <li>Ship the FAISS index and metadata with the backend</li>
+          <li>Configure embeddings, LangGraph, and Langfuse keys</li>
+          <li>Document how to rebuild the index after a manual update</li>
+          <li>Keep existing store login and catalog working</li>
         </ul>
       </div>
 
@@ -79,35 +78,29 @@
         <h4 style="font-size: 1.125rem; font-weight: 600; color: #1f2937; margin-bottom: 0.75rem;">Deliverables</h4>
         <ul
           style="list-style: disc; list-style-position: inside; display: flex; flex-direction: column; gap: 0.5rem; color: #4b5563;">
-          <li>Production-ready askunicart AI agent deployment</li>
-          <li>Environment configuration and setup (development, staging, production)</li>
-          <li>CI/CD pipeline implementation</li>
-          <li>Database migration and deployment scripts</li>
-          <li>Monitoring and alerting systems for AI agent performance</li>
-          <li>Documentation and deployment runbooks</li>
-          <li>Performance optimization and scaling plan</li>
+          <li>DEPLOYMENT.md for React, FastAPI, FAISS, and Render</li>
+          <li>Environment configuration for embeddings and Langfuse</li>
+          <li>Index rebuild steps after document updates</li>
+          <li>Live demo: https://agentic-rag-fastapi-frontend.onrender.com</li>
         </ul>
       </div>
 
       <div style="background: #eff6ff; border-radius: 0.5rem; padding: 1.5rem; margin-top: 1.5rem;">
-        <h4 style="font-size: 1.125rem; font-weight: 600; color: #1f2937; margin-bottom: 0.75rem;">Deployment Platforms
+        <h4 style="font-size: 1.125rem; font-weight: 600; color: #1f2937; margin-bottom: 0.75rem;">Deployment Platform
         </h4>
         <div
           style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1rem; margin-top: 1rem;">
           <div style="background: white; padding: 1rem; border-radius: 0.5rem; border: 1px solid #e5e7eb;">
-            <div style="font-size: 1.5rem; margin-bottom: 0.5rem;">•</div>
-            <div style="font-weight: 600; color: #1f2937; margin-bottom: 0.25rem;">Vercel</div>
-            <div style="font-size: 0.875rem; color: #6b7280;">Recommended for Next.js</div>
+            <div style="font-weight: 600; color: #1f2937; margin-bottom: 0.25rem;">Render</div>
+            <div style="font-size: 0.875rem; color: #6b7280;">React frontend + FastAPI backend</div>
           </div>
           <div style="background: white; padding: 1rem; border-radius: 0.5rem; border: 1px solid #e5e7eb;">
-            <div style="font-size: 1.5rem; margin-bottom: 0.5rem;">•</div>
-            <div style="font-weight: 600; color: #1f2937; margin-bottom: 0.25rem;">AWS</div>
-            <div style="font-size: 0.875rem; color: #6b7280;">Enterprise deployment</div>
+            <div style="font-weight: 600; color: #1f2937; margin-bottom: 0.25rem;">FAISS files</div>
+            <div style="font-size: 0.875rem; color: #6b7280;">Index and metadata on the backend</div>
           </div>
           <div style="background: white; padding: 1rem; border-radius: 0.5rem; border: 1px solid #e5e7eb;">
-            <div style="font-size: 1.5rem; margin-bottom: 0.5rem;">•</div>
-            <div style="font-weight: 600; color: #1f2937; margin-bottom: 0.25rem;">Google Cloud</div>
-            <div style="font-size: 0.875rem; color: #6b7280;">AI/ML integration</div>
+            <div style="font-weight: 600; color: #1f2937; margin-bottom: 0.25rem;">Langfuse</div>
+            <div style="font-size: 0.875rem; color: #6b7280;">Traces and RAG evals</div>
           </div>
         </div>
       </div>

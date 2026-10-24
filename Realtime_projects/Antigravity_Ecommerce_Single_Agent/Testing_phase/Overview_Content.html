@@ -19,20 +19,19 @@
 
     <div>
       <p style="color: #4b5563; line-height: 1.75; margin-bottom: 1.5rem;">
-        This phase covers comprehensive testing of the <strong>askunicart AI agent</strong> to ensure reliability, 
-        performance, and user experience. Testing includes unit tests, integration tests, UI/UX tests, and 
-        performance validation.
+        This phase tests <strong>Ask the Store</strong> against real store data in PostgreSQL.
+        Each answer is compared with the database or with the expected refusal. Results stay in TESTING.md.
       </p>
       
       <div style="background: #fff7ed; border-radius: 0.5rem; padding: 1.5rem; margin-bottom: 1.5rem;">
         <h4 style="font-size: 1.125rem; font-weight: 600; color: #1f2937; margin-bottom: 0.75rem;">Testing Objectives</h4>
         <ul style="list-style: disc; list-style-position: inside; display: flex; flex-direction: column; gap: 0.5rem; color: #4b5563;">
-          <li>Verify all tool modules function correctly</li>
-          <li>Test API endpoints and authentication</li>
-          <li>Validate AI integration and tool calling</li>
-          <li>Test chat interface functionality</li>
-          <li>Measure performance metrics</li>
-          <li>Ensure error handling works properly</li>
+          <li>Confirm product, category, customer, order, stock, and sales answers match the database</li>
+          <li>Confirm POST /agent/ask requires the existing login</li>
+          <li>Confirm no-data and out-of-scope messages</li>
+          <li>Confirm the React screen shows the real backend answer</li>
+          <li>Confirm existing catalog, cart, checkout, and admin still work</li>
+          <li>Confirm prompt-injection and write requests are refused</li>
         </ul>
       </div>
 
@@ -40,28 +39,23 @@
         <h4 style="font-size: 1.125rem; font-weight: 600; color: #1f2937; margin-bottom: 0.75rem;">Testing Types</h4>
         <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1rem; margin-top: 1rem;">
           <div style="background: white; padding: 1rem; border-radius: 0.5rem; border: 1px solid #e5e7eb;">
-            <div style="font-size: 1.5rem; margin-bottom: 0.5rem;">•</div>
             <div style="font-weight: 600; color: #1f2937; margin-bottom: 0.25rem;">Unit Testing</div>
-            <div style="font-size: 0.875rem; color: #6b7280;">Tool module functions</div>
+            <div style="font-size: 0.875rem; color: #6b7280;">LangGraph nodes and read path</div>
           </div>
           <div style="background: white; padding: 1rem; border-radius: 0.5rem; border: 1px solid #e5e7eb;">
-            <div style="font-size: 1.5rem; margin-bottom: 0.5rem;">•</div>
             <div style="font-weight: 600; color: #1f2937; margin-bottom: 0.25rem;">Integration Testing</div>
-            <div style="font-size: 0.875rem; color: #6b7280;">API & AI integration</div>
+            <div style="font-size: 0.875rem; color: #6b7280;">POST /agent/ask and PostgreSQL</div>
           </div>
           <div style="background: white; padding: 1rem; border-radius: 0.5rem; border: 1px solid #e5e7eb;">
-            <div style="font-size: 1.5rem; margin-bottom: 0.5rem;">•</div>
             <div style="font-weight: 600; color: #1f2937; margin-bottom: 0.25rem;">UI Testing</div>
-            <div style="font-size: 0.875rem; color: #6b7280;">Chat interface</div>
+            <div style="font-size: 0.875rem; color: #6b7280;">Ask the Store in React</div>
           </div>
           <div style="background: white; padding: 1rem; border-radius: 0.5rem; border: 1px solid #e5e7eb;">
-            <div style="font-size: 1.5rem; margin-bottom: 0.5rem;">•</div>
             <div style="font-weight: 600; color: #1f2937; margin-bottom: 0.25rem;">Performance Testing</div>
-            <div style="font-size: 0.875rem; color: #6b7280;">Response times</div>
+            <div style="font-size: 0.875rem; color: #6b7280;">Limits, timeouts, result size</div>
           </div>
         </div>
       </div>
     </div>
   </div>
 </div>
-

@@ -3,8 +3,7 @@
     <div style="text-align: center; margin-bottom: 2rem;">
       <h3 style="font-size: 1.875rem; font-weight: 700; color: #1f2937; margin-bottom: 1rem;">E-Commerce Deployment Planning</h3>
       <p style="font-size: 1.125rem; color: #4b5563; max-width: 48rem; margin: 0 auto;">
-        Comprehensive deployment strategy for E-commerce applications covering local development 
-        setup and cloud deployment options for production environments.
+        Run React and FastAPI locally, then deploy both services and PostgreSQL on Render.
       </p>
     </div>
 
@@ -21,7 +20,7 @@
               </h6>
               <div style="font-size: 0.875rem; color: #4b5563; display: flex; flex-direction: column; gap: 0.25rem;">
                 <div><strong>Purpose:</strong> Development and testing</div>
-                <div><strong>Requirements:</strong> Node.js, PostgreSQL, Git</div>
+                <div><strong>Requirements:</strong> Python, PostgreSQL, Git, and a React build toolchain</div>
                 <div><strong>Benefits:</strong> Fast development, offline work</div>
                 <div><strong>Limitations:</strong> Single user, limited scalability</div>
               </div>
@@ -46,25 +45,25 @@
             <div style="background: linear-gradient(to bottom right, #fff7ed, #ffedd5); border-radius: 0.5rem; padding: 1rem; border: 1px solid #fed7aa;">
               <h6 style="font-weight: 600; color: #1f2937; margin-bottom: 0.5rem; display: flex; align-items: center; gap: 0.5rem;">
                 <span style="font-size: 1.25rem;">☁️</span>
-                AWS Deployment
+                Render Deployment
               </h6>
               <div style="font-size: 0.875rem; color: #4b5563; display: flex; flex-direction: column; gap: 0.25rem;">
-                <div><strong>Services:</strong> EC2, RDS, S3, CloudFront</div>
-                <div><strong>Benefits:</strong> Scalable, reliable, global reach</div>
-                <div><strong>Cost:</strong> Pay-as-you-use, enterprise-grade</div>
-                <div><strong>Best For:</strong> Production, high-traffic applications</div>
+                <div><strong>Services:</strong> Web Service (FastAPI), Static Site (React), PostgreSQL</div>
+                <div><strong>Benefits:</strong> One host for frontend, backend, and database</div>
+                <div><strong>Cost:</strong> Free tier for student projects</div>
+                <div><strong>Best For:</strong> The live ShopEasy demo</div>
               </div>
             </div>
             <div style="background: linear-gradient(to bottom right, #faf5ff, #f3e8ff); border-radius: 0.5rem; padding: 1rem; border: 1px solid #e9d5ff;">
               <h6 style="font-weight: 600; color: #1f2937; margin-bottom: 0.5rem; display: flex; align-items: center; gap: 0.5rem;">
                 <span style="font-size: 1.25rem;">🌐</span>
-                Google Cloud Platform
+                Render Hosting
               </h6>
               <div style="font-size: 0.875rem; color: #4b5563; display: flex; flex-direction: column; gap: 0.25rem;">
-                <div><strong>Services:</strong> Compute Engine, Cloud SQL, Storage</div>
-                <div><strong>Benefits:</strong> AI/ML integration, global network</div>
-                <div><strong>Cost:</strong> Competitive pricing, free tier</div>
-                <div><strong>Best For:</strong> Data-driven applications, analytics</div>
+                <div><strong>Services:</strong> Render dashboard, GitHub auto-deploy</div>
+                <div><strong>Benefits:</strong> Connect DATABASE_URL and FRONTEND_URL</div>
+                <div><strong>Cost:</strong> Free PostgreSQL instance for development</div>
+                <div><strong>Best For:</strong> FastAPI + React student apps</div>
               </div>
             </div>
           </div>
@@ -79,15 +78,16 @@
           <h5 style="font-size: 1.125rem; font-weight: 500; color: #1f2937; margin-bottom: 1rem;">Prerequisites Installation</h5>
           <div style="display: flex; flex-direction: column; gap: 1rem;">
             <div style="background: #f9fafb; border-radius: 0.5rem; padding: 1rem;">
-              <h6 style="font-weight: 500; color: #1f2937; margin-bottom: 0.5rem;">Node.js & npm Installation</h6>
+              <h6 style="font-weight: 500; color: #1f2937; margin-bottom: 0.5rem;">Python and React tooling</h6>
               <pre style="font-size: 0.75rem; color: #374151; background: #f3f4f6; padding: 0.75rem; border-radius: 0.25rem; overflow-x: auto; line-height: 1.5;">
-# Install Node.js (LTS version)
-curl -fsSL https://deb.nodesource.com/setup_lts.x | sudo -E bash -
-sudo apt-get install -y nodejs
+# Install Python 3 and create a virtual environment
+python -m venv .venv
+# Windows: .venv\Scripts\activate
+source .venv/bin/activate
+pip install fastapi uvicorn sqlalchemy psycopg2-binary alembic python-jose passlib
 
-# Verify installation
-node --version
-npm --version
+# React frontend uses npm only for the UI
+# (install Node separately if you need the React build tools)
               </pre>
             </div>
             <div style="background: #f9fafb; border-radius: 0.5rem; padding: 1rem;">
@@ -122,10 +122,10 @@ git clone https://github.com/your-username/ecommerce-app.git
 cd ecommerce-app
 
 # Install dependencies
-npm install
+npm install   # React frontend dependencies
 
-# Install Prisma CLI globally
-npm install -g prisma
+# Install Alembic globally
+pip install fastapi uvicorn sqlalchemy psycopg2-binary alembic
               </pre>
             </div>
             <div style="background: #f9fafb; border-radius: 0.5rem; padding: 1rem;">
@@ -136,25 +136,26 @@ cp .env.example .env
 
 # Configure environment variables
 DATABASE_URL="postgresql://ecommerce_user:your_password@localhost:5432/ecommerce_db"
-NEXTAUTH_SECRET="your-nextauth-secret"
-NEXTAUTH_URL="http://localhost:3000"
-STRIPE_SECRET_KEY="sk_test_your_stripe_secret_key"
-STRIPE_PUBLISHABLE_KEY="pk_test_your_stripe_publishable_key"
+JWT_SECRET="your-fastapi-jwt-secret"
+FRONTEND_URL="http://localhost:3000"
+SECRET_KEY="your-app-secret"
+VITE_API_BASE_URL="http://localhost:8000"
               </pre>
             </div>
             <div style="background: #f9fafb; border-radius: 0.5rem; padding: 1rem;">
               <h6 style="font-weight: 500; color: #1f2937; margin-bottom: 0.5rem;">Database Setup and Migration</h6>
               <pre style="font-size: 0.75rem; color: #374151; background: #f3f4f6; padding: 0.75rem; border-radius: 0.25rem; overflow-x: auto; line-height: 1.5;">
-# Generate Prisma client
-npx prisma generate
+# Generate SQLAlchemy session
+alembic upgrade head
 
 # Run database migrations
-npx prisma db push
+alembic upgrade head
 
 # Seed the database with sample data
-npx prisma db seed
+python seed.py
 
-# Start the development server
+# Start FastAPI, then the React frontend
+uvicorn main:app --reload
 npm run dev
               </pre>
             </div>
@@ -167,29 +168,29 @@ npm run dev
       <h4 style="font-size: 1.5rem; font-weight: 600; color: #1f2937; margin-bottom: 1.5rem; text-align: center;">Cloud Deployment Options</h4>
       <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 2rem; width: 100%;">
         <div>
-          <h5 style="font-size: 1.125rem; font-weight: 500; color: #1f2937; margin-bottom: 1rem;">AWS Deployment</h5>
+          <h5 style="font-size: 1.125rem; font-weight: 500; color: #1f2937; margin-bottom: 1rem;">Render Deployment</h5>
           <div style="display: flex; flex-direction: column; gap: 1rem;">
             <div style="background: #fff7ed; border-radius: 0.5rem; padding: 1rem; border: 1px solid #fed7aa;">
-              <h6 style="font-weight: 600; color: #1f2937; margin-bottom: 0.5rem;">AWS Services Setup</h6>
+              <h6 style="font-weight: 600; color: #1f2937; margin-bottom: 0.5rem;">Render Services Setup</h6>
               <div style="font-size: 0.875rem; color: #4b5563; display: flex; flex-direction: column; gap: 0.5rem;">
-                <div><strong>EC2 Instance:</strong> t3.medium (2 vCPU, 4GB RAM)</div>
-                <div><strong>RDS PostgreSQL:</strong> db.t3.micro for development</div>
-                <div><strong>S3 Bucket:</strong> For file storage and static assets</div>
-                <div><strong>CloudFront:</strong> CDN for global content delivery</div>
+                <div><strong>Web Service:</strong> FastAPI on Render</div>
+                <div><strong>PostgreSQL:</strong> Render managed database</div>
+                <div><strong>Static Site:</strong> Built React frontend</div>
+                <div><strong>Env vars:</strong> DATABASE_URL, JWT_SECRET, FRONTEND_URL</div>
               </div>
             </div>
           </div>
         </div>
         <div>
-          <h5 style="font-size: 1.125rem; font-weight: 500; color: #1f2937; margin-bottom: 1rem;">Google Cloud Platform</h5>
+          <h5 style="font-size: 1.125rem; font-weight: 500; color: #1f2937; margin-bottom: 1rem;">Render Hosting</h5>
           <div style="display: flex; flex-direction: column; gap: 1rem;">
             <div style="background: #faf5ff; border-radius: 0.5rem; padding: 1rem; border: 1px solid #e9d5ff;">
-              <h6 style="font-weight: 600; color: #1f2937; margin-bottom: 0.5rem;">GCP Services Setup</h6>
+              <h6 style="font-weight: 600; color: #1f2937; margin-bottom: 0.5rem;">Render Database Setup</h6>
               <div style="font-size: 0.875rem; color: #4b5563; display: flex; flex-direction: column; gap: 0.5rem;">
-                <div><strong>Compute Engine:</strong> e2-medium (2 vCPU, 4GB RAM)</div>
-                <div><strong>Cloud SQL:</strong> PostgreSQL instance</div>
-                <div><strong>Cloud Storage:</strong> For file storage and backups</div>
-                <div><strong>Cloud CDN:</strong> Global content delivery</div>
+                <div><strong>Backend service:</strong> uvicorn start command</div>
+                <div><strong>Database:</strong> Render PostgreSQL</div>
+                <div><strong>Frontend:</strong> React static build on Render</div>
+                <div><strong>Live URL:</strong> https://ecommerce-frontend-project.onrender.com</div>
               </div>
             </div>
           </div>

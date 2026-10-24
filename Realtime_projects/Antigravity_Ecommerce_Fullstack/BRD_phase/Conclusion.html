@@ -3,20 +3,19 @@
     <h3 class="content-heading">Conclusion & Next Steps</h3>
     <div style="max-width: none;">
       <p style="color: #4b5563; line-height: 1.75; margin-bottom: 1.5rem;">
-        The Business Requirements Document (BRD) provides a comprehensive foundation for the E-Commerce Web Application
-        project.
-        This document serves as the single source of truth for all stakeholders and development team members.
+        BRD.md now describes ShopEasy. Customers can register, shop, check out, and view orders.
+        Admins can manage products, categories, and order status. Extra features stay out of scope.
       </p>
 
       <div style="background: #eff6ff; border-radius: 0.5rem; padding: 1.5rem; margin-bottom: 1.5rem;">
         <h4 style="font-size: 1.125rem; font-weight: 600; color: #1f2937; margin-bottom: 1rem;">BRD Summary</h4>
         <ul
           style="list-style: disc; list-style-position: inside; display: flex; flex-direction: column; gap: 0.5rem; color: #4b5563;">
-          <li>Clear project scope and objectives defined</li>
-          <li>Functional requirements documented with user stories</li>
-          <li>Non-functional requirements specified for performance and quality</li>
-          <li>Stakeholder roles and responsibilities identified</li>
-          <li>Success criteria and acceptance criteria established</li>
+          <li>Customer and admin users are defined</li>
+          <li>In-scope journeys cover catalog, cart, checkout, and admin CRUD</li>
+          <li>Out of scope includes payment gateways and wishlist</li>
+          <li>Stack is ReactJS, FastAPI, PostgreSQL, and Render</li>
+          <li>Success means the main customer and admin flows work</li>
         </ul>
       </div>
 
@@ -31,7 +30,6 @@
           <div style="background: white; border-radius: 0.5rem; padding: 1rem;">
             <h5
               style="font-weight: 500; color: #1f2937; margin-bottom: 0.5rem; display: flex; align-items: center; gap: 0.5rem;">
-              <span>}</span>
               Design System
             </h5>
             <p style="font-size: 0.875rem; color: #4b5563;">Color palette, typography, and components</p>
@@ -39,7 +37,6 @@
           <div style="background: white; border-radius: 0.5rem; padding: 1rem;">
             <h5
               style="font-weight: 500; color: #1f2937; margin-bottom: 0.5rem; display: flex; align-items: center; gap: 0.5rem;">
-              <span></span>
               Customer Pages
             </h5>
             <p style="font-size: 0.875rem; color: #4b5563;">Customer-facing pages and interfaces</p>
@@ -47,7 +44,6 @@
           <div style="background: white; border-radius: 0.5rem; padding: 1rem;">
             <h5
               style="font-weight: 500; color: #1f2937; margin-bottom: 0.5rem; display: flex; align-items: center; gap: 0.5rem;">
-              <span>"️</span>
               Admin Pages
             </h5>
             <p style="font-size: 0.875rem; color: #4b5563;">Administrative interface and management</p>
@@ -55,7 +51,6 @@
           <div style="background: white; border-radius: 0.5rem; padding: 1rem;">
             <h5
               style="font-weight: 500; color: #1f2937; margin-bottom: 0.5rem; display: flex; align-items: center; gap: 0.5rem;">
-              <span></span>
               Navigation Flow
             </h5>
             <p style="font-size: 0.875rem; color: #4b5563;">User journey maps and navigation patterns</p>
@@ -64,16 +59,6 @@
       </div>
 
       
-      <div class="antigravity-phase-prompt" style="background:#f8fafc;border:1px solid #c7d2fe;border-radius:0.5rem;padding:1.25rem;margin-bottom:1.5rem;">
-        <h4 style="font-size:1.125rem;font-weight:600;color:#1e293b;margin:0 0 0.5rem;">Antigravity prompt  BRD</h4>
-        <p style="font-size:0.875rem;color:#64748b;margin:0 0 0.75rem;">Business Requirements. Copy into your AI coding assistant:</p>
-        <pre style="white-space:pre-wrap;font-size:0.8rem;line-height:1.55;background:#fff;border:1px solid #e2e8f0;border-radius:0.5rem;padding:1rem;margin:0 0 0.75rem;max-height:280px;overflow:auto;color:#334155;">DAY 2  Business Requirements
-SDLC Phase: Requirements
-Prompt
-Create BRD.md for this e-commerce application.Customer features:- Register- Login- Browse products- Search products- View product details- Add product to cart- Change quantity- Remove product- Checkout- Place order- View order historyAdmin features:- Login- Add, edit and delete products- Add, edit and delete categories- View customer orders- Update order statusAlso include:- Project goal- Users- Main customer and admin journeys- In scope- Out of scope- Simple success criteriaKeep it simple. Do not add extra features.
-Checkpoint: BRD.md is created and clearly describes the project scope and main user journeys.</pre>
-        <button type="button" onclick="navigator.clipboard.writeText(this.previousElementSibling.textContent)" style="padding:0.5rem 1rem;background:#eef2ff;color:#4338ca;border:1px solid #c7d2fe;border-radius:0.5rem;font-weight:500;cursor:pointer;">Copy prompt</button>
-      </div>
       
       <div class="antigravity-phase-prompt" style="background:#f8fafc;border:1px solid #c7d2fe;border-radius:0.5rem;padding:1.25rem;margin-bottom:1.5rem;">
         <h4 style="font-size:1.125rem;font-weight:600;color:#1e293b;margin:0 0 0.5rem;">Antigravity prompt — BRD</h4>
@@ -81,7 +66,33 @@ Checkpoint: BRD.md is created and clearly describes the project scope and main u
         <pre style="white-space:pre-wrap;font-size:0.8rem;line-height:1.55;background:#fff;border:1px solid #e2e8f0;border-radius:0.5rem;padding:1rem;margin:0 0 0.75rem;max-height:280px;overflow:auto;color:#334155;">DAY 2 — Business Requirements
 SDLC Phase: Requirements
 Prompt
-Create BRD.md for this e-commerce application.Customer features:- Register- Login- Browse products- Search products- View product details- Add product to cart- Change quantity- Remove product- Checkout- Place order- View order historyAdmin features:- Login- Add, edit and delete products- Add, edit and delete categories- View customer orders- Update order statusAlso include:- Project goal- Users- Main customer and admin journeys- In scope- Out of scope- Simple success criteriaKeep it simple. Do not add extra features.
+Create BRD.md for this e-commerce application.
+Customer features:
+- Register
+- Login
+- Browse products
+- Search products
+- View product details
+- Add product to cart
+- Change quantity
+- Remove product
+- Checkout
+- Place order
+- View order history
+Admin features:
+- Login
+- Add, edit and delete products
+- Add, edit and delete categories
+- View customer orders
+- Update order status
+Also include:
+- Project goal
+- Users
+- Main customer and admin journeys
+- In scope
+- Out of scope
+- Simple success criteria
+Keep it simple. Do not add extra features.
 Checkpoint: BRD.md is created and clearly describes the project scope and main user journeys.</pre>
         <button type="button" onclick="navigator.clipboard.writeText(this.previousElementSibling.textContent)" style="padding:0.5rem 1rem;background:#eef2ff;color:#4338ca;border:1px solid #c7d2fe;border-radius:0.5rem;font-weight:500;cursor:pointer;">Copy prompt</button>
       </div>

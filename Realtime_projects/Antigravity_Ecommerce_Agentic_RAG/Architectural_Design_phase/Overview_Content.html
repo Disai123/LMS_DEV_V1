@@ -19,38 +19,32 @@
 
     <div>
       <p style="color: #4b5563; line-height: 1.75; margin-bottom: 1.5rem;">
-        This phase defines the system architecture for the <strong>askunicart AI agent</strong>. The architecture 
-        encompasses the frontend chat interface, backend API routes, AI integration with OpenAI, tool modules, 
-        and database schema for conversation management.
+        This phase defines the architecture for the <strong>Agentic RAG E-Commerce Assistant</strong>.
+        The existing React frontend and FastAPI backend stay in place. The new path is React chat UI to FastAPI <code>POST /rag/ask</code> to a LangGraph RAG agent to FAISS retrieval of embeddings to a grounded answer with citations.
       </p>
       
       <div style="background: #eef2ff; border-radius: 0.5rem; padding: 1.5rem; margin-bottom: 1.5rem;">
         <h4 style="font-size: 1.125rem; font-weight: 600; color: #1f2937; margin-bottom: 0.75rem;">Architecture Layers</h4>
         <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1rem; margin-top: 1rem;">
           <div style="background: white; padding: 1rem; border-radius: 0.5rem; border: 1px solid #e5e7eb;">
-            <div style="font-size: 1.5rem; margin-bottom: 0.5rem;">•</div>
             <div style="font-weight: 600; color: #1f2937; margin-bottom: 0.25rem;">Frontend</div>
-            <div style="font-size: 0.875rem; color: #6b7280;">React chat component</div>
+            <div style="font-size: 0.875rem; color: #6b7280;">Existing React chat UI</div>
           </div>
           <div style="background: white; padding: 1rem; border-radius: 0.5rem; border: 1px solid #e5e7eb;">
-            <div style="font-size: 1.5rem; margin-bottom: 0.5rem;">•</div>
             <div style="font-weight: 600; color: #1f2937; margin-bottom: 0.25rem;">API Layer</div>
-            <div style="font-size: 0.875rem; color: #6b7280;">Next.js API routes</div>
+            <div style="font-size: 0.875rem; color: #6b7280;">FastAPI POST /rag/ask</div>
           </div>
           <div style="background: white; padding: 1rem; border-radius: 0.5rem; border: 1px solid #e5e7eb;">
-            <div style="font-size: 1.5rem; margin-bottom: 0.5rem;">•</div>
-            <div style="font-weight: 600; color: #1f2937; margin-bottom: 0.25rem;">AI Integration</div>
-            <div style="font-size: 0.875rem; color: #6b7280;">OpenAI GPT-4o-mini</div>
+            <div style="font-weight: 600; color: #1f2937; margin-bottom: 0.25rem;">RAG Agent</div>
+            <div style="font-size: 0.875rem; color: #6b7280;">LangChain / LangGraph</div>
           </div>
           <div style="background: white; padding: 1rem; border-radius: 0.5rem; border: 1px solid #e5e7eb;">
-            <div style="font-size: 1.5rem; margin-bottom: 0.5rem;">•</div>
-            <div style="font-weight: 600; color: #1f2937; margin-bottom: 0.25rem;">Tool Modules</div>
-            <div style="font-size: 0.875rem; color: #6b7280;">Catalog, Cart, Inventory, Recommendations</div>
+            <div style="font-weight: 600; color: #1f2937; margin-bottom: 0.25rem;">Retrieval</div>
+            <div style="font-size: 0.875rem; color: #6b7280;">Embeddings + FAISS</div>
           </div>
           <div style="background: white; padding: 1rem; border-radius: 0.5rem; border: 1px solid #e5e7eb;">
-            <div style="font-size: 1.5rem; margin-bottom: 0.5rem;">•</div>
-            <div style="font-weight: 600; color: #1f2937; margin-bottom: 0.25rem;">Database</div>
-            <div style="font-size: 0.875rem; color: #6b7280;">PostgreSQL with Prisma</div>
+            <div style="font-weight: 600; color: #1f2937; margin-bottom: 0.25rem;">Knowledge</div>
+            <div style="font-size: 0.875rem; color: #6b7280;">Approved manuals and FAQs</div>
           </div>
         </div>
       </div>
@@ -58,15 +52,13 @@
       <div style="background: #f0fdf4; border-radius: 0.5rem; padding: 1.5rem;">
         <h4 style="font-size: 1.125rem; font-weight: 600; color: #1f2937; margin-bottom: 0.75rem;">Deliverables</h4>
         <ul style="list-style: disc; list-style-position: inside; display: flex; flex-direction: column; gap: 0.5rem; color: #4b5563;">
-          <li>System Architecture Diagram</li>
-          <li>Database Schema Design</li>
-          <li>API Endpoint Specifications</li>
-          <li>AI Integration Architecture</li>
-          <li>Security Architecture</li>
-          <li>Tool Module Architecture</li>
+          <li>Ask flow: React → FastAPI /rag/ask → RAG agent → FAISS → cited answer</li>
+          <li>Ingest flow: documents → clean → chunk → embeddings → FAISS index</li>
+          <li>API contract for POST /rag/ask</li>
+          <li>Document metadata and index layout</li>
+          <li>Grounding, citation, and injection-safety rules</li>
         </ul>
       </div>
     </div>
   </div>
 </div>
-

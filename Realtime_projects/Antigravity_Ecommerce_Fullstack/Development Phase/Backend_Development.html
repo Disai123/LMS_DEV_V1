@@ -3,8 +3,7 @@
     <div style="text-align: center; margin-bottom: 2rem;">
       <h3 style="font-size: 1.875rem; font-weight: 700; color: #1f2937; margin-bottom: 1rem;">Backend Development</h3>
       <p style="font-size: 1.125rem; color: #4b5563; max-width: 48rem; margin: 0 auto;">
-        Comprehensive backend implementation using Next.js API routes, Prisma ORM, and modern web technologies 
-        to create a robust and scalable e-commerce server infrastructure.
+        FastAPI talks to PostgreSQL with SQLAlchemy. Routes cover auth, products, categories, cart, checkout, and orders.
       </p>
     </div>
 
@@ -35,7 +34,7 @@
           <ul style="font-size: 0.875rem; color: #4b5563; display: flex; flex-direction: column; gap: 0.5rem;">
             <li style="display: flex; align-items: center; gap: 0.5rem;">
               <span style="width: 0.5rem; height: 0.5rem; background: #3b82f6; border-radius: 50%;"></span>
-              <code style="background: #ffffff; padding: 0.25rem 0.5rem; border-radius: 0.25rem; font-size: 0.75rem;">/api/auth/[...nextauth]</code> - NextAuth configuration
+              <code style="background: #ffffff; padding: 0.25rem 0.5rem; border-radius: 0.25rem; font-size: 0.75rem;">/api/auth/profile</code> - Customer profile
             </li>
             <li style="display: flex; align-items: center; gap: 0.5rem;">
               <span style="width: 0.5rem; height: 0.5rem; background: #3b82f6; border-radius: 50%;"></span>
@@ -98,7 +97,7 @@
           <ul style="font-size: 0.875rem; color: #4b5563; display: flex; flex-direction: column; gap: 0.5rem;">
             <li style="display: flex; align-items: center; gap: 0.5rem;">
               <span style="width: 0.5rem; height: 0.5rem; background: #f97316; border-radius: 50%;"></span>
-              <code style="background: #ffffff; padding: 0.25rem 0.5rem; border-radius: 0.25rem; font-size: 0.75rem;">/api/admin/dashboard</code> - Admin analytics
+              <code style="background: #ffffff; padding: 0.25rem 0.5rem; border-radius: 0.25rem; font-size: 0.75rem;">/api/admin/orders</code> - View and update orders
             </li>
             <li style="display: flex; align-items: center; gap: 0.5rem;">
               <span style="width: 0.5rem; height: 0.5rem; background: #f97316; border-radius: 50%;"></span>
@@ -122,10 +121,10 @@
             <div style="background: #eff6ff; border-radius: 0.5rem; padding: 1rem;">
               <div style="display: flex; align-items: center; gap: 0.75rem; margin-bottom: 0.5rem;">
                 <span style="font-size: 1.25rem;">🔐</span>
-                <h6 style="font-weight: 500; color: #1f2937;">Authentication (lib/auth.ts)</h6>
+                <h6 style="font-weight: 500; color: #1f2937;">Authentication (auth.py)</h6>
               </div>
               <ul style="font-size: 0.875rem; color: #4b5563; display: flex; flex-direction: column; gap: 0.25rem; list-style: none; padding: 0;">
-                <li>• NextAuth configuration</li>
+                <li>• FastAPI JWT configuration</li>
                 <li>• JWT token management</li>
                 <li>• Session handling</li>
                 <li>• Role-based access control</li>
@@ -134,10 +133,10 @@
             <div style="background: #f0fdf4; border-radius: 0.5rem; padding: 1rem;">
               <div style="display: flex; align-items: center; gap: 0.75rem; margin-bottom: 0.5rem;">
                 <span style="font-size: 1.25rem;">🗄️</span>
-                <h6 style="font-weight: 500; color: #1f2937;">Database (lib/db.ts)</h6>
+                <h6 style="font-weight: 500; color: #1f2937;">Database (database.py)</h6>
               </div>
               <ul style="font-size: 0.875rem; color: #4b5563; display: flex; flex-direction: column; gap: 0.25rem; list-style: none; padding: 0;">
-                <li>• Prisma client configuration</li>
+                <li>• SQLAlchemy session configuration</li>
                 <li>• Connection pooling</li>
                 <li>• Database utilities</li>
                 <li>• Error handling</li>
@@ -146,13 +145,13 @@
             <div style="background: #faf5ff; border-radius: 0.5rem; padding: 1rem;">
               <div style="display: flex; align-items: center; gap: 0.75rem; margin-bottom: 0.5rem;">
                 <span style="font-size: 1.25rem;">💳</span>
-                <h6 style="font-weight: 500; color: #1f2937;">Payment (lib/stripe.ts)</h6>
+                <h6 style="font-weight: 500; color: #1f2937;">Checkout (routers/checkout.py)</h6>
               </div>
               <ul style="font-size: 0.875rem; color: #4b5563; display: flex; flex-direction: column; gap: 0.25rem; list-style: none; padding: 0;">
-                <li>• Stripe integration</li>
-                <li>• Payment processing</li>
-                <li>• Webhook handling</li>
-                <li>• Error management</li>
+                <li>• Start checkout with delivery details</li>
+                <li>• Place order and create order items</li>
+                <li>• Update cart and product stock</li>
+                <li>• Return confirmation data</li>
               </ul>
             </div>
           </div>
@@ -164,37 +163,37 @@
             <div style="background: #d1fae5; border-radius: 0.5rem; padding: 1rem;">
               <div style="display: flex; align-items: center; gap: 0.75rem; margin-bottom: 0.5rem;">
                 <span style="font-size: 1.25rem;">📊</span>
-                <h6 style="font-weight: 500; color: #1f2937;">Prisma Schema (prisma/schema.prisma)</h6>
+                <h6 style="font-weight: 500; color: #1f2937;">SQLAlchemy Models (models.py)</h6>
               </div>
               <ul style="font-size: 0.875rem; color: #4b5563; display: flex; flex-direction: column; gap: 0.25rem; list-style: none; padding: 0;">
                 <li>• User and authentication models</li>
                 <li>• Product and category schemas</li>
                 <li>• Order and cart relationships</li>
-                <li>• Admin and analytics models</li>
+                <li>• Admin order status field</li>
               </ul>
             </div>
             <div style="background: #fef3c7; border-radius: 0.5rem; padding: 1rem;">
               <div style="display: flex; align-items: center; gap: 0.75rem; margin-bottom: 0.5rem;">
                 <span style="font-size: 1.25rem;">🛒</span>
-                <h6 style="font-weight: 500; color: #1f2937;">State Management (store/cart-store.ts)</h6>
+                <h6 style="font-weight: 500; color: #1f2937;">Cart and orders (routers/cart.py)</h6>
               </div>
               <ul style="font-size: 0.875rem; color: #4b5563; display: flex; flex-direction: column; gap: 0.25rem; list-style: none; padding: 0;">
-                <li>• Shopping cart state</li>
-                <li>• User session management</li>
-                <li>• Product state tracking</li>
-                <li>• Order processing state</li>
+                <li>• Cart stored in PostgreSQL</li>
+                <li>• JWT identifies the customer</li>
+                <li>• Quantity changes update cart_items</li>
+                <li>• Orders persist after checkout</li>
               </ul>
             </div>
             <div style="background: #fee2e2; border-radius: 0.5rem; padding: 1rem;">
               <div style="display: flex; align-items: center; gap: 0.75rem; margin-bottom: 0.5rem;">
                 <span style="font-size: 1.25rem;">🧪</span>
-                <h6 style="font-weight: 500; color: #1f2937;">Testing (__tests__/)</h6>
+                <h6 style="font-weight: 500; color: #1f2937;">Testing (pytest)</h6>
               </div>
               <ul style="font-size: 0.875rem; color: #4b5563; display: flex; flex-direction: column; gap: 0.25rem; list-style: none; padding: 0;">
-                <li>• API endpoint testing</li>
+                <li>• API endpoint tests</li>
                 <li>• Database integration tests</li>
-                <li>• Authentication testing</li>
-                <li>• Payment processing tests</li>
+                <li>• Login and JWT tests</li>
+                <li>• Checkout and order tests</li>
               </ul>
             </div>
           </div>
@@ -206,24 +205,20 @@
       <h4 style="font-size: 1.25rem; font-weight: 600; color: #1f2937; margin-bottom: 1.5rem;">Backend Technology Stack</h4>
       <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 1rem;">
         <div style="text-align: center; padding: 1rem; background: #ffffff; border-radius: 0.5rem; box-shadow: 0 1px 3px rgba(0,0,0,0.1);">
-          <div style="font-size: 1.5rem; margin-bottom: 0.5rem;">•</div>
-          <div style="font-size: 0.875rem; font-weight: 500; color: #1f2937;">Next.js API</div>
+          <div style="font-size: 0.875rem; font-weight: 500; color: #1f2937;">FastAPI</div>
           <div style="font-size: 0.75rem; color: #4b5563;">API Routes</div>
         </div>
         <div style="text-align: center; padding: 1rem; background: #ffffff; border-radius: 0.5rem; box-shadow: 0 1px 3px rgba(0,0,0,0.1);">
-          <div style="font-size: 1.5rem; margin-bottom: 0.5rem;">•</div>
-          <div style="font-size: 0.875rem; font-weight: 500; color: #1f2937;">Prisma</div>
+          <div style="font-size: 0.875rem; font-weight: 500; color: #1f2937;">SQLAlchemy</div>
           <div style="font-size: 0.75rem; color: #4b5563;">Database ORM</div>
         </div>
         <div style="text-align: center; padding: 1rem; background: #ffffff; border-radius: 0.5rem; box-shadow: 0 1px 3px rgba(0,0,0,0.1);">
-          <div style="font-size: 1.5rem; margin-bottom: 0.5rem;">•</div>
-          <div style="font-size: 0.875rem; font-weight: 500; color: #1f2937;">NextAuth</div>
+          <div style="font-size: 0.875rem; font-weight: 500; color: #1f2937;">FastAPI JWT</div>
           <div style="font-size: 0.75rem; color: #4b5563;">Authentication</div>
         </div>
         <div style="text-align: center; padding: 1rem; background: #ffffff; border-radius: 0.5rem; box-shadow: 0 1px 3px rgba(0,0,0,0.1);">
-          <div style="font-size: 1.5rem; margin-bottom: 0.5rem;">•</div>
-          <div style="font-size: 0.875rem; font-weight: 500; color: #1f2937;">Stripe</div>
-          <div style="font-size: 0.75rem; color: #4b5563;">Payment Processing</div>
+          <div style="font-size: 0.875rem; font-weight: 500; color: #1f2937;">PostgreSQL</div>
+          <div style="font-size: 0.75rem; color: #4b5563;">Database</div>
         </div>
       </div>
     </div>

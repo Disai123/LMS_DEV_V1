@@ -1,5 +1,5 @@
 <div class="content-body">
-<p style="padding:1rem;background:#ecfdf5;border-left:4px solid #10b981;border-radius:8px;margin-bottom:1rem;"><strong>Live demo:</strong> Live app: <a href="https://ecommerce-multi-agent-fastapi-frontend.onrender.com" target="_blank" rel="noopener">https://ecommerce-multi-agent-fastapi-frontend.onrender.com</a></p>
+<p style="padding:1rem;background:#ecfdf5;border-left:4px solid #10b981;border-radius:8px;margin-bottom:1rem;"><strong>Live demo:</strong> <a href="https://ecommerce-multi-agent-fastapi-frontend.onrender.com" target="_blank" rel="noopener">https://ecommerce-multi-agent-fastapi-frontend.onrender.com</a></p>
     <div class="content-section">
         <h3 class="content-heading">Project Overview</h3>
 
@@ -20,9 +20,8 @@
 
         <div>
             <p style="color: #4b5563; line-height: 1.75; margin-bottom: 1.5rem;">
-                This phase focuses on creating a comprehensive Business Requirements Document (BRD) for the Multi-Agent E-Commerce
-                E-commerce Assistant. The BRD serves as the strategic blueprint, ensuring that the assistant
-                provides a seamless, secure, and intelligent shopping experience across all customer touchpoints.
+                This phase writes BRD.md for one multi-agent feature on the existing ShopEasy store.
+                The user talks to one chat. An Orchestrator picks a specialist. Specialists reuse the existing React, FastAPI, and PostgreSQL application. Do not rebuild the store.
             </p>
 
             <div style="background: #fdf4ff; border-radius: 0.5rem; padding: 1.5rem; margin-bottom: 1.5rem;">
@@ -30,11 +29,11 @@
                     Objectives</h4>
                 <ul
                     style="list-style: disc; list-style-position: inside; display: flex; flex-direction: column; gap: 0.5rem; color: #4b5563;">
-                    <li>Define the Supervisor-Worker orchestration requirements</li>
-                    <li>Establish secure tool execution boundaries for agents</li>
-                    <li>Identify core e-commerce capabilities (Search, Cart, Profiles)</li>
-                    <li>Map the conversational user journey and proactive state transitions</li>
-                    <li>Detail the technical stack requirements (LangGraph, FastAPI, PostgreSQL)</li>
+                    <li>Define the Orchestrator and three specialists: Product Search, Cart, and Order Management</li>
+                    <li>Keep Product Search read-only. Cart and Order Management may only use existing allowed actions</li>
+                    <li>Reuse existing login, permissions, and the PostgreSQL/Neon database</li>
+                    <li>Record in-scope and out-of-scope requests for each agent</li>
+                    <li>Set the stack: ReactJS, FastAPI, LangGraph, LangChain, Langfuse</li>
                 </ul>
             </div>
 

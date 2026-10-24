@@ -4,7 +4,7 @@
       <h3 style="font-size: 1.875rem; font-weight: 700; color: #1f2937; margin-bottom: 1rem;">E-Commerce Development
         Complete</h3>
       <p style="font-size: 1.125rem; color: #4b5563; max-width: 48rem; margin: 0 auto;">
-        The Code Development phase has been successfully completed for the the e-commerce application.
+        The Code Development phase has been successfully completed for the e-commerce application.
         We have built a fully functional online shopping platform with modern technologies and
         comprehensive e-commerce features.
       </p>
@@ -25,12 +25,12 @@
             </h5>
             <ul
               style="font-size: 0.875rem; color: #4b5563; display: flex; flex-direction: column; gap: 0.25rem; list-style: none; padding: 0;">
-              <li>• Next.js 14+ with App Router architecture</li>
-              <li>• React components with TypeScript</li>
+              <li>• ReactJS with React Router</li>
+              <li>• React components with React Router</li>
               <li>• Tailwind CSS for responsive design</li>
-              <li>• Shopping cart with Zustand state management</li>
+              <li>• Shopping cart stored in PostgreSQL through FastAPI</li>
               <li>• Product catalog and search functionality</li>
-              <li>• Checkout and payment integration</li>
+              <li>• Checkout and place-order pages</li>
             </ul>
           </div>
 
@@ -43,10 +43,10 @@
             </h5>
             <ul
               style="font-size: 0.875rem; color: #4b5563; display: flex; flex-direction: column; gap: 0.25rem; list-style: none; padding: 0;">
-              <li>• Next.js API routes for serverless functions</li>
-              <li>• Prisma ORM for database operations</li>
-              <li>• NextAuth for authentication</li>
-              <li>• Stripe integration for payments</li>
+              <li>• FastAPI routes for backend services</li>
+              <li>• SQLAlchemy for database operations</li>
+              <li>• FastAPI JWT for authentication</li>
+              <li>• Simple checkout and order placement</li>
               <li>• RESTful API design</li>
               <li>• Admin panel functionality</li>
             </ul>
@@ -63,7 +63,7 @@
             </h5>
             <ul
               style="font-size: 0.875rem; color: #4b5563; display: flex; flex-direction: column; gap: 0.25rem; list-style: none; padding: 0;">
-              <li>• PostgreSQL database with Prisma schema</li>
+              <li>• PostgreSQL database with SQLAlchemy models</li>
               <li>• User authentication and management</li>
               <li>• Product catalog and inventory</li>
               <li>• Order processing and tracking</li>
@@ -81,10 +81,10 @@
             </h5>
             <ul
               style="font-size: 0.875rem; color: #4b5563; display: flex; flex-direction: column; gap: 0.25rem; list-style: none; padding: 0;">
-              <li>• Jest and React Testing Library</li>
-              <li>• Cypress for E2E testing</li>
+              <li>• pytest and FastAPI TestClient</li>
+              <li>• browser checks for end-to-end flows</li>
               <li>• Component and API testing</li>
-              <li>• Payment flow validation</li>
+              <li>• Checkout and order tests</li>
               <li>• Cross-browser compatibility</li>
               <li>• Performance optimization</li>
             </ul>
@@ -99,23 +99,18 @@
       <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 1.5rem;">
         <div
           style="text-align: center; padding: 1.5rem; background: linear-gradient(to bottom right, #eff6ff, #dbeafe); border-radius: 0.5rem;">
-          <div style="font-size: 1.875rem; margin-bottom: 0.75rem;">•</div>
           <h5 style="font-weight: 600; color: #1f2937; margin-bottom: 0.5rem;">Shopping Experience</h5>
           <p style="font-size: 0.875rem; color: #4b5563;">Product browsing, search, filtering, and cart management</p>
         </div>
         <div
           style="text-align: center; padding: 1.5rem; background: linear-gradient(to bottom right, #f0fdf4, #dcfce7); border-radius: 0.5rem;">
-          <div style="font-size: 1.875rem; margin-bottom: 0.75rem;">•</div>
-          <h5 style="font-weight: 600; color: #1f2937; margin-bottom: 0.5rem;">Payment Processing</h5>
-          <p style="font-size: 0.875rem; color: #4b5563;">Secure checkout with Stripe integration and order management
-          </p>
+          <h5 style="font-weight: 600; color: #1f2937; margin-bottom: 0.5rem;">Order Placement</h5>
+          <p style="font-size: 0.875rem; color: #4b5563;">Simple checkout with delivery details and order history</p>
         </div>
         <div
           style="text-align: center; padding: 1.5rem; background: linear-gradient(to bottom right, #faf5ff, #f3e8ff); border-radius: 0.5rem;">
-          <div style="font-size: 1.875rem; margin-bottom: 0.75rem;">•</div>
           <h5 style="font-weight: 600; color: #1f2937; margin-bottom: 0.5rem;">Admin Dashboard</h5>
-          <p style="font-size: 0.875rem; color: #4b5563;">Comprehensive admin panel for managing products, orders, and
-            users</p>
+          <p style="font-size: 0.875rem; color: #4b5563;">Admin panel for products, categories, and order status</p>
         </div>
       </div>
     </div>
@@ -154,7 +149,17 @@
         <pre style="white-space:pre-wrap;font-size:0.8rem;line-height:1.55;background:#fff;border:1px solid #e2e8f0;border-radius:0.5rem;padding:1rem;margin:0 0 0.75rem;max-height:280px;overflow:auto;color:#334155;">DAY 7 — FastAPI Project Structure &amp; Authentication APIs
 SDLC Phase: Development
 Prompt
-Prepare the FastAPI backend for feature development and build authentication.Create or update CODING.md with only the simple coding structure we actually use.Then build:- Customer registration- Customer login- Customer logout- Customer profile- Admin loginUse the existing users table and keep the implementation simple.After building, test:Register → Login → Profile → Logoutand verify that an admin can log in.
+Prepare the FastAPI backend for feature development and build authentication.
+Create or update CODING.md with only the simple coding structure we actually use.
+Then build:
+- Customer registration
+- Customer login
+- Customer logout
+- Customer profile
+- Admin login
+Use the existing users table and keep the implementation simple.
+After building, test:
+Register → Login → Profile → Logoutand verify that an admin can log in.
 Checkpoint: FastAPI starts correctly, CODING.md matches the real project, and customer/admin login flows work.</pre>
         <button type="button" onclick="navigator.clipboard.writeText(this.previousElementSibling.textContent)" style="padding:0.5rem 1rem;background:#eef2ff;color:#4338ca;border:1px solid #c7d2fe;border-radius:0.5rem;font-weight:500;cursor:pointer;">Copy prompt</button>
       </div>

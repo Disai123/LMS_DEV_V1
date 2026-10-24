@@ -19,38 +19,33 @@
 
     <div>
       <p style="color: #4b5563; line-height: 1.75; margin-bottom: 1.5rem;">
-        This phase defines the system architecture for the <strong>askunicart AI agent</strong>. The architecture 
-        encompasses the frontend chat interface, backend API routes, AI integration with OpenAI, tool modules, 
-        and database schema for conversation management.
+        This phase records the architecture for <strong>Ask the Store</strong>. The agent is added to the existing store.
+        The path is: React chat UI → FastAPI <code>POST /agent/ask</code> → LangGraph → approved store data → PostgreSQL/Neon → answer.
+        Langfuse is used later for tracing. We do not create a second backend or database.
       </p>
       
       <div style="background: #eef2ff; border-radius: 0.5rem; padding: 1.5rem; margin-bottom: 1.5rem;">
         <h4 style="font-size: 1.125rem; font-weight: 600; color: #1f2937; margin-bottom: 0.75rem;">Architecture Layers</h4>
         <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1rem; margin-top: 1rem;">
           <div style="background: white; padding: 1rem; border-radius: 0.5rem; border: 1px solid #e5e7eb;">
-            <div style="font-size: 1.5rem; margin-bottom: 0.5rem;">•</div>
             <div style="font-weight: 600; color: #1f2937; margin-bottom: 0.25rem;">Frontend</div>
-            <div style="font-size: 0.875rem; color: #6b7280;">React chat component</div>
+            <div style="font-size: 0.875rem; color: #6b7280;">Existing React chat UI</div>
           </div>
           <div style="background: white; padding: 1rem; border-radius: 0.5rem; border: 1px solid #e5e7eb;">
-            <div style="font-size: 1.5rem; margin-bottom: 0.5rem;">•</div>
             <div style="font-weight: 600; color: #1f2937; margin-bottom: 0.25rem;">API Layer</div>
-            <div style="font-size: 0.875rem; color: #6b7280;">Next.js API routes</div>
+            <div style="font-size: 0.875rem; color: #6b7280;">Existing FastAPI POST /agent/ask</div>
           </div>
           <div style="background: white; padding: 1rem; border-radius: 0.5rem; border: 1px solid #e5e7eb;">
-            <div style="font-size: 1.5rem; margin-bottom: 0.5rem;">•</div>
-            <div style="font-weight: 600; color: #1f2937; margin-bottom: 0.25rem;">AI Integration</div>
-            <div style="font-size: 0.875rem; color: #6b7280;">OpenAI GPT-4o-mini</div>
+            <div style="font-weight: 600; color: #1f2937; margin-bottom: 0.25rem;">Agent Flow</div>
+            <div style="font-size: 0.875rem; color: #6b7280;">LangGraph + configured LLM via LangChain</div>
           </div>
           <div style="background: white; padding: 1rem; border-radius: 0.5rem; border: 1px solid #e5e7eb;">
-            <div style="font-size: 1.5rem; margin-bottom: 0.5rem;">•</div>
-            <div style="font-weight: 600; color: #1f2937; margin-bottom: 0.25rem;">Tool Modules</div>
-            <div style="font-size: 0.875rem; color: #6b7280;">Catalog, Cart, Inventory, Recommendations</div>
+            <div style="font-weight: 600; color: #1f2937; margin-bottom: 0.25rem;">Store Data</div>
+            <div style="font-size: 0.875rem; color: #6b7280;">Read-only products, orders, stock</div>
           </div>
           <div style="background: white; padding: 1rem; border-radius: 0.5rem; border: 1px solid #e5e7eb;">
-            <div style="font-size: 1.5rem; margin-bottom: 0.5rem;">•</div>
             <div style="font-weight: 600; color: #1f2937; margin-bottom: 0.25rem;">Database</div>
-            <div style="font-size: 0.875rem; color: #6b7280;">PostgreSQL with Prisma</div>
+            <div style="font-size: 0.875rem; color: #6b7280;">Existing PostgreSQL/Neon</div>
           </div>
         </div>
       </div>
@@ -58,15 +53,14 @@
       <div style="background: #f0fdf4; border-radius: 0.5rem; padding: 1.5rem;">
         <h4 style="font-size: 1.125rem; font-weight: 600; color: #1f2937; margin-bottom: 0.75rem;">Deliverables</h4>
         <ul style="list-style: disc; list-style-position: inside; display: flex; flex-direction: column; gap: 0.5rem; color: #4b5563;">
-          <li>System Architecture Diagram</li>
-          <li>Database Schema Design</li>
-          <li>API Endpoint Specifications</li>
-          <li>AI Integration Architecture</li>
-          <li>Security Architecture</li>
-          <li>Tool Module Architecture</li>
+          <li>ARCHITECTURE.md for Ask the Store</li>
+          <li>End-to-end request path</li>
+          <li>Reuse of existing login and PostgreSQL tables</li>
+          <li>Read-only data access rules</li>
+          <li>Error, refusal, and request-id notes</li>
+          <li>Langfuse tracing later</li>
         </ul>
       </div>
     </div>
   </div>
 </div>
-

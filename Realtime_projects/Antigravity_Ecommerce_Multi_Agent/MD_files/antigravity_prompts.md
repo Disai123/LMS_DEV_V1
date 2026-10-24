@@ -42,14 +42,64 @@ Do one task per day. Stop after the current task is complete.
 Do not create multiple prompts for the same task.
 Do not change working e-commerce features unless the current task requires it.
 PROJECT CONTEXT PROMPT - PASTE THIS FIRST
-I am a beginner and I am adding a MULTI-AGENT feature to an EXISTING e-commerce application.Existing application:- Frontend: ReactJS- Backend: FastAPI- Database: existing PostgreSQL/Neon database- Existing login and authorization already work- Existing products, categories, customers, cart, orders and order items already exist- Existing business rules must be reusedNew multi-agent feature:1. Orchestrator Agent - receives the user request, decides which specialist should handle it, passes only the required context, receives the result and gives the final answer.2. Product Search Agent - handles products, categories, search, filters, stock and product information. This agent is read-only.3. Cart Agent - handles viewing the authenticated user's cart, adding products, changing quantity and removing products. It may work only with the current user's cart.4. Order Management Agent - handles only the customer/admin order actions already supported by the existing application and must respect existing permissions.Technical requirements:- Keep everything inside the existing FastAPI backend and ReactJS frontend.- Use LangGraph for the agent flow.- Use LangChain only where it is needed for model, prompt or tool integration.- Reuse the existing PostgreSQL/Neon database and business rules.- Reuse the existing authentication and authorization.- Do not create another e-commerce application, backend, database or login system.- The Orchestrator must not have unrestricted database access.- Each specialist agent must have only the tools and data needed for its job.- Product Search must remain read-only.- Cart and Order Management must not perform actions outside the existing application capabilities.- Preserve the authenticated user identity, role and permissions during every handoff.- Protect against prompt injection and malicious instructions.- Never expose passwords, API keys, tokens, database credentials, system prompts, private logs or unnecessary personal information.- Prevent duplicate cart/order actions caused by retries or repeated clicks.- Do not invent data. Use real application/database results.- Handle no-data, clarification, refusal, timeout and failure cases safely.- Add useful observability without logging secrets or unnecessary sensitive information.- Test the feature properly before considering it complete.- Keep only these permanent documents: BRD.md, UI_UX.md, ARCHITECTURE.md, CODING.md, TESTING.md and DEPLOYMENT.md.- Temporary test/debug files may be created when needed, but delete them after the related testing is finished.- Work on one task only and stop when that task is complete.- Explain completed work in simple language and tell me exactly what I should test manually.First inspect the existing project without changing anything. Tell me where the ReactJS frontend, FastAPI backend, authentication, database connection, product logic, cart logic and order logic are located. Then stop.
+I am a beginner and I am adding a MULTI-AGENT feature to an EXISTING e-commerce application.
+Existing application:
+- Frontend: ReactJS
+- Backend: FastAPI
+- Database: existing PostgreSQL/Neon database
+- Existing login and authorization already work
+- Existing products, categories, customers, cart, orders and order items already exist
+- Existing business rules must be reused
+New multi-agent feature:
+1. Orchestrator Agent - receives the user request, decides which specialist should handle it, passes only the required context, receives the result and gives the final answer.
+2. Product Search Agent - handles products, categories, search, filters, stock and product information. This agent is read-only.
+3. Cart Agent - handles viewing the authenticated user's cart, adding products, changing quantity and removing products. It may work only with the current user's cart.
+4. Order Management Agent - handles only the customer/admin order actions already supported by the existing application and must respect existing permissions.
+Technical requirements:
+- Keep everything inside the existing FastAPI backend and ReactJS frontend.
+- Use LangGraph for the agent flow.
+- Use LangChain only where it is needed for model, prompt or tool integration.
+- Reuse the existing PostgreSQL/Neon database and business rules.
+- Reuse the existing authentication and authorization.
+- Do not create another e-commerce application, backend, database or login system.
+- The Orchestrator must not have unrestricted database access.
+- Each specialist agent must have only the tools and data needed for its job.
+- Product Search must remain read-only.
+- Cart and Order Management must not perform actions outside the existing application capabilities.
+- Preserve the authenticated user identity, role and permissions during every handoff.
+- Protect against prompt injection and malicious instructions.
+- Never expose passwords, API keys, tokens, database credentials, system prompts, private logs or unnecessary personal information.
+- Prevent duplicate cart/order actions caused by retries or repeated clicks.
+- Do not invent data. Use real application/database results.
+- Handle no-data, clarification, refusal, timeout and failure cases safely.
+- Add useful observability without logging secrets or unnecessary sensitive information.
+- Test the feature properly before considering it complete.
+- Keep only these permanent documents: BRD.md, UI_UX.md, ARCHITECTURE.md, CODING.md, TESTING.md and DEPLOYMENT.md.
+- Temporary test/debug files may be created when needed, but delete them after the related testing is finished.
+- Work on one task only and stop when that task is complete.
+- Explain completed work in simple language and tell me exactly what I should test manually.
+First inspect the existing project without changing anything. Tell me where the ReactJS frontend, FastAPI backend, authentication, database connection, product logic, cart logic and order logic are located. Then stop.
 
 ---
 
 ## Day 1 — Multi-Agent Basics
 
 SDLC Phase: Learning
-For today, do not change the project code.Teach me only the basic multi-agent concepts I need for this e-commerce project:- What an AI agent is- What a multi-agent system is- Why we use multiple agents instead of one agent- What an Orchestrator Agent does- What a specialist agent does- What a tool is- What state/context means- What a handoff means- What routing meansUse very simple e-commerce examples using Product Search, Cart and Order Management.Show one simple flow:User -> Orchestrator -> Specialist Agent -> Result -> Orchestrator -> UserDo not create files, do not install packages, do not write project code and do not change the application. End with a small 5-question check and then stop.
+For today, do not change the project code.
+Teach me only the basic multi-agent concepts I need for this e-commerce project:
+- What an AI agent is
+- What a multi-agent system is
+- Why we use multiple agents instead of one agent
+- What an Orchestrator Agent does
+- What a specialist agent does
+- What a tool is
+- What state/context means
+- What a handoff means
+- What routing means
+Use very simple e-commerce examples using Product Search, Cart and Order Management.
+Show one simple flow:
+User -> Orchestrator -> Specialist Agent -> Result -> Orchestrator -> User
+Do not create files, do not install packages, do not write project code and do not change the application. End with a small 5-question check and then stop.
 Checkpoint: Complete this day, test it, and wait before moving to the next day.
 
 ---
@@ -57,7 +107,17 @@ Checkpoint: Complete this day, test it, and wait before moving to the next day.
 ## Day 2 — LangChain Basics Needed for the Project
 
 SDLC Phase: Learning
-For today, do not change the project code.Teach me only the LangChain concepts we actually need for this multi-agent project:- Model- Prompt- Tool- Structured input/output- Calling tools safely- How an agent uses application data through tools- Where LangChain fits in our FastAPI applicationUse very simple examples such as searching products, viewing a cart and checking an order.Do not create project files, do not install packages and do not build anything yet. End with a short 5-question check and then stop.
+For today, do not change the project code.
+Teach me only the LangChain concepts we actually need for this multi-agent project:
+- Model
+- Prompt
+- Tool
+- Structured input/output
+- Calling tools safely
+- How an agent uses application data through tools
+- Where LangChain fits in our FastAPI application
+Use very simple examples such as searching products, viewing a cart and checking an order.
+Do not create project files, do not install packages and do not build anything yet. End with a short 5-question check and then stop.
 Checkpoint: Complete this day, test it, and wait before moving to the next day.
 
 ---
@@ -65,7 +125,21 @@ Checkpoint: Complete this day, test it, and wait before moving to the next day.
 ## Day 3 — LangGraph and Multi-Agent Flow
 
 SDLC Phase: Learning
-For today, do not change the project code.Teach me only the LangGraph concepts we will use for our four-agent application:- State- Nodes- Edges- Conditional routing- Orchestrator node- Specialist-agent nodes- Handoff between agents- Start and end of the graph- How an unsafe request or failed step stops the flow safely- How user identity and required context move through the graphShow one small example:User question -> Orchestrator -> Product Search or Cart or Order Management -> Result -> Orchestrator -> UserKeep the explanation simple and connected to our real project. Do not create files, do not install packages and do not start implementation. End with a short 5-question check and then stop.
+For today, do not change the project code.
+Teach me only the LangGraph concepts we will use for our four-agent application:
+- State
+- Nodes
+- Edges
+- Conditional routing
+- Orchestrator node
+- Specialist-agent nodes
+- Handoff between agents
+- Start and end of the graph
+- How an unsafe request or failed step stops the flow safely
+- How user identity and required context move through the graph
+Show one small example:
+User question -> Orchestrator -> Product Search or Cart or Order Management -> Result -> Orchestrator -> User
+Keep the explanation simple and connected to our real project. Do not create files, do not install packages and do not start implementation. End with a short 5-question check and then stop.
 Checkpoint: Complete this day, test it, and wait before moving to the next day.
 
 ---
@@ -73,7 +147,23 @@ Checkpoint: Complete this day, test it, and wait before moving to the next day.
 ## Day 4 — Initiation and BRD
 
 SDLC Phase: SDLC - Initiation & Planning
-Inspect the existing e-commerce application and then create or update ONLY BRD.md.BRD.md must clearly describe:- Business problem- Goal of the multi-agent feature- Target users- The four agents and their simple responsibilities- Product/search use cases- Cart use cases- Order Management use cases- Main user flow- What is in scope- What is out of scope- Security expectations- User/role permission expectations- Success criteriaRecord that the project will reuse the existing ReactJS frontend, FastAPI backend, authentication, PostgreSQL/Neon database and existing business rules.Do not create any other permanent markdown file. Do not build the agents yet. Do not change existing application behavior. Stop after BRD.md is complete and tell me what I should verify.
+Inspect the existing e-commerce application and then create or update ONLY BRD.md.
+BRD.md must clearly describe:
+- Business problem
+- Goal of the multi-agent feature
+- Target users
+- The four agents and their simple responsibilities
+- Product/search use cases
+- Cart use cases
+- Order Management use cases
+- Main user flow
+- What is in scope
+- What is out of scope
+- Security expectations
+- User/role permission expectations
+- Success criteria
+Record that the project will reuse the existing ReactJS frontend, FastAPI backend, authentication, PostgreSQL/Neon database and existing business rules.
+Do not create any other permanent markdown file. Do not build the agents yet. Do not change existing application behavior. Stop after BRD.md is complete and tell me what I should verify.
 Checkpoint: Complete this day, test it, and wait before moving to the next day.
 
 ---
@@ -81,7 +171,22 @@ Checkpoint: Complete this day, test it, and wait before moving to the next day.
 ## Day 5 — UI/UX Design
 
 SDLC Phase: SDLC - Requirements & UX
-Create or update ONLY UI_UX.md for the multi-agent feature.Keep the UI very simple and match the existing ReactJS application's look and feel.Define one user-facing chat entry point such as "Shop Assistant". The user must talk only to the Orchestrator. Do not create separate chat screens for individual agents.Define:- Where the chat entry point appears- Question input box- Ask/send button- Loading state- Final answer area- No-data message- Clarification message- Safe error message- Refusal message- Basic responsive behavior- What information must never be shown to the userDo not redesign the existing e-commerce application. Do not create another UI design document. Do not implement the UI yet. Stop after UI_UX.md is complete.
+Create or update ONLY UI_UX.md for the multi-agent feature.
+Keep the UI very simple and match the existing ReactJS application's look and feel.
+Define one user-facing chat entry point such as "Shop Assistant". The user must talk only to the Orchestrator. Do not create separate chat screens for individual agents.
+Define:
+- Where the chat entry point appears
+- Question input box
+- Ask/send button
+- Loading state
+- Final answer area
+- No-data message
+- Clarification message
+- Safe error message
+- Refusal message
+- Basic responsive behavior
+- What information must never be shown to the user
+Do not redesign the existing e-commerce application. Do not create another UI design document. Do not implement the UI yet. Stop after UI_UX.md is complete.
 Checkpoint: Complete this day, test it, and wait before moving to the next day.
 
 ---
@@ -89,7 +194,27 @@ Checkpoint: Complete this day, test it, and wait before moving to the next day.
 ## Day 6 — Architecture Design
 
 SDLC Phase: SDLC - Design
-Create or update ONLY ARCHITECTURE.md for the multi-agent feature.Show this simple end-to-end flow:ReactJS Shop Assistant-> FastAPI /agent/ask-> Orchestrator Agent-> Product Search Agent OR Cart Agent OR Order Management Agent-> Existing application business/data layer-> Existing PostgreSQL/Neon database when data is needed-> Specialist result-> Orchestrator-> ReactJS UIClearly explain:- What the existing e-commerce application keeps doing- What the multi-agent feature adds- Where authentication and authorization are checked- How the Orchestrator routes a request- What each specialist can access- How identity, role, permissions and request ID move through the flow- How errors, no-data, clarification and unsafe requests are handled- How observability will trace a requestKeep the architecture simple. Do not create another architecture document. Do not write implementation code yet. Stop after ARCHITECTURE.md is complete.
+Create or update ONLY ARCHITECTURE.md for the multi-agent feature.
+Show this simple end-to-end flow:
+ReactJS Shop Assistant
+-> FastAPI /agent/ask
+-> Orchestrator Agent
+-> Product Search Agent OR Cart Agent OR Order Management Agent
+-> Existing application business/data layer
+-> Existing PostgreSQL/Neon database when data is needed
+-> Specialist result
+-> Orchestrator
+-> ReactJS UI
+Clearly explain:
+- What the existing e-commerce application keeps doing
+- What the multi-agent feature adds
+- Where authentication and authorization are checked
+- How the Orchestrator routes a request
+- What each specialist can access
+- How identity, role, permissions and request ID move through the flow
+- How errors, no-data, clarification and unsafe requests are handled
+- How observability will trace a request
+Keep the architecture simple. Do not create another architecture document. Do not write implementation code yet. Stop after ARCHITECTURE.md is complete.
 Checkpoint: Complete this day, test it, and wait before moving to the next day.
 
 ---
@@ -97,7 +222,21 @@ Checkpoint: Complete this day, test it, and wait before moving to the next day.
 ## Day 7 — Backend Coding Setup
 
 SDLC Phase: SDLC - Development
-Start the backend implementation inside the existing FastAPI application.Add only the minimum multi-agent structure needed for this project:- Orchestrator- Product Search Agent- Cart Agent- Order Management Agent- shared state/context- routing/handoff flow- tool boundaries- basic safety checks- /agent/ask endpointUse LangGraph for the flow and keep the implementation simple.Reuse existing authentication, authorization, database and business logic. Do not create a second backend or database. Do not build the ReactJS UI yet.Update ONLY CODING.md with the final code structure, important files, configuration values and where the multi-agent code fits into the existing FastAPI backend.Do not create any other permanent markdown file. You may create temporary files only when needed and delete one-time files after testing. First make sure the existing application still starts, then stop.
+Start the backend implementation inside the existing FastAPI application.
+Add only the minimum multi-agent structure needed for this project:
+- Orchestrator
+- Product Search Agent
+- Cart Agent
+- Order Management Agent
+- shared state/context
+- routing/handoff flow
+- tool boundaries
+- basic safety checks
+- /agent/ask endpoint
+Use LangGraph for the flow and keep the implementation simple.
+Reuse existing authentication, authorization, database and business logic. Do not create a second backend or database. Do not build the ReactJS UI yet.
+Update ONLY CODING.md with the final code structure, important files, configuration values and where the multi-agent code fits into the existing FastAPI backend.
+Do not create any other permanent markdown file. You may create temporary files only when needed and delete one-time files after testing. First make sure the existing application still starts, then stop.
 Checkpoint: Complete this day, test it, and wait before moving to the next day.
 
 ---
@@ -105,7 +244,22 @@ Checkpoint: Complete this day, test it, and wait before moving to the next day.
 ## Day 8 — Orchestrator Agent
 
 SDLC Phase: SDLC - Development
-Build the Orchestrator Agent and connect it to the existing /agent/ask endpoint.The Orchestrator must:- Receive the user's request- Understand the request intent- Select Product Search, Cart or Order Management- Pass only the required information to the specialist- Preserve authenticated user identity, role and permissions- Receive the specialist result- Return a clear final answer- Ask for clarification instead of guessing when the request is unclearRouting examples:- Product, category, search, filter or stock -> Product Search- View/add/change/remove cart -> Cart- Order history, order details, checkout/order actions or admin order actions -> Order ManagementThe Orchestrator must not have unrestricted database access and must not bypass specialist permissions.Test several routing examples. Do not build new UI today. Update CODING.md only when the code structure has changed. Delete any one-time test/debug files after testing.
+Build the Orchestrator Agent and connect it to the existing /agent/ask endpoint.
+The Orchestrator must:
+- Receive the user's request
+- Understand the request intent
+- Select Product Search, Cart or Order Management
+- Pass only the required information to the specialist
+- Preserve authenticated user identity, role and permissions
+- Receive the specialist result
+- Return a clear final answer
+- Ask for clarification instead of guessing when the request is unclear
+Routing examples:
+- Product, category, search, filter or stock -> Product Search
+- View/add/change/remove cart -> Cart
+- Order history, order details, checkout/order actions or admin order actions -> Order Management
+The Orchestrator must not have unrestricted database access and must not bypass specialist permissions.
+Test several routing examples. Do not build new UI today. Update CODING.md only when the code structure has changed. Delete any one-time test/debug files after testing.
 Checkpoint: Complete this day, test it, and wait before moving to the next day.
 
 ---
@@ -113,7 +267,18 @@ Checkpoint: Complete this day, test it, and wait before moving to the next day.
 ## Day 9 — Product Search Agent
 
 SDLC Phase: SDLC - Development
-Build the Product Search Agent using the existing product/catalog functionality.Support only these simple capabilities:- Product search- Category search- Filters- Sorting- Product details- Stock questionsUse real application data. Reuse existing business rules.The Product Search Agent must be read-only. It must not add, edit or delete products, change stock, change carts, change orders or access private customer information unless an existing application rule explicitly requires it.Connect it to the Orchestrator and test normal, no-data and unusual product questions against real results.Do not create extra permanent documents. Update CODING.md only if needed. Delete temporary test/debug files after testing.
+Build the Product Search Agent using the existing product/catalog functionality.
+Support only these simple capabilities:
+- Product search
+- Category search
+- Filters
+- Sorting
+- Product details
+- Stock questions
+Use real application data. Reuse existing business rules.
+The Product Search Agent must be read-only. It must not add, edit or delete products, change stock, change carts, change orders or access private customer information unless an existing application rule explicitly requires it.
+Connect it to the Orchestrator and test normal, no-data and unusual product questions against real results.
+Do not create extra permanent documents. Update CODING.md only if needed. Delete temporary test/debug files after testing.
 Checkpoint: Complete this day, test it, and wait before moving to the next day.
 
 ---
@@ -121,7 +286,19 @@ Checkpoint: Complete this day, test it, and wait before moving to the next day.
 ## Day 10 — Cart Agent
 
 SDLC Phase: SDLC - Development
-Build the Cart Agent using the existing cart functionality and business rules.Support only:- View the current user's cart- Add a product to the current user's cart- Change quantity- Remove a product- Show the current cart totalThe Cart Agent must use the existing authenticated user. It must never access or change another user's cart.Protect the actions against invalid products, invalid quantities, over-stock quantities, incorrect totals and duplicate actions caused by repeated requests or retries.Connect the Cart Agent to the Orchestrator and test:View cart -> Add product -> View cart -> Change quantity -> Remove product.Compare the results with the normal e-commerce cart behavior.Do not create extra permanent documents. Update CODING.md only if needed. Delete one-time test/debug files after testing.
+Build the Cart Agent using the existing cart functionality and business rules.
+Support only:
+- View the current user's cart
+- Add a product to the current user's cart
+- Change quantity
+- Remove a product
+- Show the current cart total
+The Cart Agent must use the existing authenticated user. It must never access or change another user's cart.
+Protect the actions against invalid products, invalid quantities, over-stock quantities, incorrect totals and duplicate actions caused by repeated requests or retries.
+Connect the Cart Agent to the Orchestrator and test:
+View cart -> Add product -> View cart -> Change quantity -> Remove product.
+Compare the results with the normal e-commerce cart behavior.
+Do not create extra permanent documents. Update CODING.md only if needed. Delete one-time test/debug files after testing.
 Checkpoint: Complete this day, test it, and wait before moving to the next day.
 
 ---
@@ -129,7 +306,17 @@ Checkpoint: Complete this day, test it, and wait before moving to the next day.
 ## Day 11 — Order Management Agent
 
 SDLC Phase: SDLC - Development
-Build the Order Management Agent using the existing order functionality and business rules.Support only the customer and admin order capabilities that already exist in the application, such as:- View order history- View order details- Checkout/order creation when already supported- Existing customer order actions- Existing admin order actionsEnforce the existing role and permission rules. Customers must not see or change another customer's orders. Customers must not perform admin actions. Do not invent new order rules.Protect order-changing actions against duplicate requests and use the existing safe transaction behavior.Connect the Order Management Agent to the Orchestrator and test the supported customer and admin flows.Do not create extra permanent documents. Update CODING.md only if needed. Delete temporary test/debug files after testing.
+Build the Order Management Agent using the existing order functionality and business rules.
+Support only the customer and admin order capabilities that already exist in the application, such as:
+- View order history
+- View order details
+- Checkout/order creation when already supported
+- Existing customer order actions
+- Existing admin order actions
+Enforce the existing role and permission rules. Customers must not see or change another customer's orders. Customers must not perform admin actions. Do not invent new order rules.
+Protect order-changing actions against duplicate requests and use the existing safe transaction behavior.
+Connect the Order Management Agent to the Orchestrator and test the supported customer and admin flows.
+Do not create extra permanent documents. Update CODING.md only if needed. Delete temporary test/debug files after testing.
 Checkpoint: Complete this day, test it, and wait before moving to the next day.
 
 ---
@@ -137,7 +324,20 @@ Checkpoint: Complete this day, test it, and wait before moving to the next day.
 ## Day 12 — Multi-Agent Handoffs and Context
 
 SDLC Phase: SDLC - Development & Integration
-Connect the Orchestrator with all three specialist agents and make the complete handoff flow work.For every handoff, preserve only what is required:- authenticated user identity- role- permissions- request/trace ID- the actual task context needed by the specialistDo not pass passwords, tokens, secrets or unnecessary personal information.Test these flows:- Orchestrator -> Product Search -> result -> Orchestrator- Orchestrator -> Cart -> result -> Orchestrator- Orchestrator -> Order Management -> result -> OrchestratorAlso handle unclear requests, specialist failure, timeout and partial failure with a simple user-facing response.Do not create another permanent document. Update CODING.md if the final handoff structure changed. Delete temporary test/debug files after testing.
+Connect the Orchestrator with all three specialist agents and make the complete handoff flow work.
+For every handoff, preserve only what is required:
+- authenticated user identity
+- role
+- permissions
+- request/trace ID
+- the actual task context needed by the specialist
+Do not pass passwords, tokens, secrets or unnecessary personal information.
+Test these flows:
+- Orchestrator -> Product Search -> result -> Orchestrator
+- Orchestrator -> Cart -> result -> Orchestrator
+- Orchestrator -> Order Management -> result -> Orchestrator
+Also handle unclear requests, specialist failure, timeout and partial failure with a simple user-facing response.
+Do not create another permanent document. Update CODING.md if the final handoff structure changed. Delete temporary test/debug files after testing.
 Checkpoint: Complete this day, test it, and wait before moving to the next day.
 
 ---
@@ -145,7 +345,25 @@ Checkpoint: Complete this day, test it, and wait before moving to the next day.
 ## Day 13 — Testing and Evaluation
 
 SDLC Phase: SDLC - Testing / QA / Evaluation
-Complete the testing work for the multi-agent feature and create or update ONLY TESTING.md.TESTING.md must contain a simple test checklist covering:- Product Search questions and no-data cases- Cart view/add/change/remove behavior- Order history/details and supported order actions- Correct Orchestrator routing- Correct specialist result returned to the user- User identity and role preservation- Unauthorized access attempts- Prompt-injection attempts- Cross-agent misuse attempts- Duplicate cart/order action attempts- Timeout/failure handling- API response behavior- ReactJS UI behavior when connected later- Existing e-commerce regression checksRun the tests against the real application wherever practical and record PASS/FAIL results.Use temporary test scripts only when needed. Delete any one-time test JavaScript, Python, sample-data or debug files after the related testing is complete. Keep reusable automated tests only if they are genuinely part of the finished application.Do not create another testing document. Stop after TESTING.md and the relevant tests are complete.
+Complete the testing work for the multi-agent feature and create or update ONLY TESTING.md.
+TESTING.md must contain a simple test checklist covering:
+- Product Search questions and no-data cases
+- Cart view/add/change/remove behavior
+- Order history/details and supported order actions
+- Correct Orchestrator routing
+- Correct specialist result returned to the user
+- User identity and role preservation
+- Unauthorized access attempts
+- Prompt-injection attempts
+- Cross-agent misuse attempts
+- Duplicate cart/order action attempts
+- Timeout/failure handling
+- API response behavior
+- ReactJS UI behavior when connected later
+- Existing e-commerce regression checks
+Run the tests against the real application wherever practical and record PASS/FAIL results.
+Use temporary test scripts only when needed. Delete any one-time test JavaScript, Python, sample-data or debug files after the related testing is complete. Keep reusable automated tests only if they are genuinely part of the finished application.
+Do not create another testing document. Stop after TESTING.md and the relevant tests are complete.
 Checkpoint: Complete this day, test it, and wait before moving to the next day.
 
 ---
@@ -153,7 +371,19 @@ Checkpoint: Complete this day, test it, and wait before moving to the next day.
 ## Day 14 — ReactJS UI Integration
 
 SDLC Phase: SDLC - Integration
-Add the ONLY new user-facing UI needed for the multi-agent feature inside the existing ReactJS application.Create one simple "Shop Assistant" chat entry point. The user should talk only to the Orchestrator.The UI must include:- question input- Ask/Send button- loading state- final answer area- no-data message- clarification/refusal message- safe error messageConnect it to the existing FastAPI POST /agent/ask endpoint and reuse the existing authentication/session behavior.Do not create separate screens for Product Search, Cart and Order Management agents. Do not redesign the existing e-commerce UI.Do not show SQL, secrets, system prompts, stack traces or internal configuration.Test the browser flow with one product request, one cart request and one order request. Delete any one-time UI test/debug files after testing.
+Add the ONLY new user-facing UI needed for the multi-agent feature inside the existing ReactJS application.
+Create one simple "Shop Assistant" chat entry point. The user should talk only to the Orchestrator.
+The UI must include:
+- question input
+- Ask/Send button
+- loading state
+- final answer area
+- no-data message
+- clarification/refusal message
+- safe error message
+Connect it to the existing FastAPI POST /agent/ask endpoint and reuse the existing authentication/session behavior.
+Do not create separate screens for Product Search, Cart and Order Management agents. Do not redesign the existing e-commerce UI.Do not show SQL, secrets, system prompts, stack traces or internal configuration.
+Test the browser flow with one product request, one cart request and one order request. Delete any one-time UI test/debug files after testing.
 Checkpoint: Complete this day, test it, and wait before moving to the next day.
 
 ---
@@ -161,7 +391,17 @@ Checkpoint: Complete this day, test it, and wait before moving to the next day.
 ## Day 15 — Final Multi-Agent Readiness Check
 
 SDLC Phase: SDLC - Testing / Final Checkpoint
-Before starting the Langfuse work, do one final check of the complete multi-agent feature.Verify:- Orchestrator routes correctly- Product Search, Cart and Order Management agents work- Handoffs preserve the correct user context and permissions- The ReactJS chat entry point works- Existing e-commerce customer/admin flows still work- TESTING.md contains the current test results- Existing security rules and agent boundaries are still active- Temporary test/debug files are removedDo not add a new feature. Fix only issues found in this check. Do not create another observability or security document. Stop when the application is ready for Langfuse integration.
+Before starting the Langfuse work, do one final check of the complete multi-agent feature.
+Verify:
+- Orchestrator routes correctly
+- Product Search, Cart and Order Management agents work
+- Handoffs preserve the correct user context and permissions
+- The ReactJS chat entry point works
+- Existing e-commerce customer/admin flows still work
+- TESTING.md contains the current test results
+- Existing security rules and agent boundaries are still active
+- Temporary test/debug files are removed
+Do not add a new feature. Fix only issues found in this check. Do not create another observability or security document. Stop when the application is ready for Langfuse integration.
 Checkpoint: Complete this final functional check, confirm the application is stable, and wait before moving to the Langfuse learning day.
 WEEK 4 - LANGFUSE, DEPLOYMENT & FINAL RELEASE
 Week 4 Prerequisite: Complete Days 1-15 first. Day 16 is the Langfuse learning day and Day 17 is the Langfuse implementation day. Do not move ahead until the Langfuse concepts are understood.
@@ -171,7 +411,20 @@ Week 4 Prerequisite: Complete Days 1-15 first. Day 16 is the Langfuse learning d
 ## Day 16 — Langfuse Basics
 
 SDLC Phase: Learning / Langfuse
-For today, do not change the project code.Teach me the basic Langfuse concepts I need for this multi-agent project:- What Langfuse is- Why Langfuse is useful for AI observability and evaluation- What a trace is- What an observation/span is in simple terms- How the Orchestrator and specialist-agent steps appear in one trace- How handoffs can be understood from the trace- What an evaluation score means- What a dataset/evaluation test case is- How prompt versions can be managed in Langfuse- How prompt-injection and other AI security tests can be monitored and evaluated using Langfuse- What Langfuse does not replace, such as the application's normal authentication and runtime safety checksUse simple examples from the Orchestrator, Product Search, Cart and Order Management agents. Do not create files, do not install packages and do not write project code. End with a short 5-question check and then stop.
+For today, do not change the project code.
+Teach me the basic Langfuse concepts I need for this multi-agent project:
+- What Langfuse is
+- Why Langfuse is useful for AI observability and evaluation
+- What a trace is
+- What an observation/span is in simple terms
+- How the Orchestrator and specialist-agent steps appear in one trace
+- How handoffs can be understood from the trace
+- What an evaluation score means
+- What a dataset/evaluation test case is
+- How prompt versions can be managed in Langfuse
+- How prompt-injection and other AI security tests can be monitored and evaluated using Langfuse
+- What Langfuse does not replace, such as the application's normal authentication and runtime safety checks
+Use simple examples from the Orchestrator, Product Search, Cart and Order Management agents. Do not create files, do not install packages and do not write project code. End with a short 5-question check and then stop.
 Checkpoint: Complete this learning day, confirm the concepts are understood, and wait before moving to the implementation day.
 
 ---
@@ -179,7 +432,19 @@ Checkpoint: Complete this learning day, confirm the concepts are understood, and
 ## Day 17 — Langfuse Implementation: Observability, Evaluation & Security Monitoring
 
 SDLC Phase: SDLC - Implementation / Observability / Evaluation
-Now implement Langfuse for the multi-agent project.Use Langfuse to cover the observability, evaluation and AI-security monitoring work that we previously kept as separate tasks.Implement:- Trace each request from the API through the Orchestrator, selected specialist, tool/database step and final answer- Show handoffs, timings, retries and failures in the trace- Create a small repeatable evaluation set for routing and specialist-agent behavior- Record evaluation scores and review incorrect routing or answers in Langfuse- Keep the final PASS/FAIL summary in TESTING.md- Keep agent prompts/version information manageable through Langfuse where practical- Trace and evaluate prompt-injection, cross-agent misuse and unauthorized-action test cases so we can see whether the existing runtime safeguards worked- Do not log passwords, API keys, tokens, database credentials or unnecessary customer/order informationImportant: Langfuse is being used for tracing, prompt management and evaluation. It is not a replacement for the application's authentication, authorization, tool restrictions or runtime security checks. Keep those existing controls in the application.Test one normal request for each specialist, one failed/timeout request and the main security test cases. Review the complete traces and evaluation results in Langfuse. Delete temporary test/debug files after testing. Do not create a separate observability, evaluation or security document.
+Now implement Langfuse for the multi-agent project.
+Use Langfuse to cover the observability, evaluation and AI-security monitoring work that we previously kept as separate tasks.
+Implement:
+- Trace each request from the API through the Orchestrator, selected specialist, tool/database step and final answer
+- Show handoffs, timings, retries and failures in the trace
+- Create a small repeatable evaluation set for routing and specialist-agent behavior
+- Record evaluation scores and review incorrect routing or answers in Langfuse
+- Keep the final PASS/FAIL summary in TESTING.md
+- Keep agent prompts/version information manageable through Langfuse where practical
+- Trace and evaluate prompt-injection, cross-agent misuse and unauthorized-action test cases so we can see whether the existing runtime safeguards worked
+- Do not log passwords, API keys, tokens, database credentials or unnecessary customer/order information
+Important: Langfuse is being used for tracing, prompt management and evaluation. It is not a replacement for the application's authentication, authorization, tool restrictions or runtime security checks. Keep those existing controls in the application.
+Test one normal request for each specialist, one failed/timeout request and the main security test cases. Review the complete traces and evaluation results in Langfuse. Delete temporary test/debug files after testing. Do not create a separate observability, evaluation or security document.
 Checkpoint: Confirm Langfuse traces, evaluations and security-monitoring results are visible and useful before moving to deployment.
 
 ---
@@ -187,7 +452,20 @@ Checkpoint: Confirm Langfuse traces, evaluations and security-monitoring results
 ## Day 18 — Deployment Preparation
 
 SDLC Phase: SDLC - Deployment
-Prepare the multi-agent feature for deployment using the existing application deployment setup.Create or update ONLY DEPLOYMENT.md.DEPLOYMENT.md must clearly contain:- What needs to be configured for the FastAPI backend- What needs to be configured for the ReactJS frontend- Required environment variables and where they belong, without writing real secrets- How the existing database connection is used- How the existing authentication continues to work- How the multi-agent endpoint is exposed- How the application is started in the target environment- Basic health check steps- Basic rollback steps- Final smoke-test steps after deploymentDo not create a separate deployment document. Do not expose real credentials or secret values. Test the deployment steps as far as the current environment allows. Delete temporary deployment/debug files after testing.
+Prepare the multi-agent feature for deployment using the existing application deployment setup.
+Create or update ONLY DEPLOYMENT.md.
+DEPLOYMENT.md must clearly contain:
+- What needs to be configured for the FastAPI backend
+- What needs to be configured for the ReactJS frontend
+- Required environment variables and where they belong, without writing real secrets
+- How the existing database connection is used
+- How the existing authentication continues to work
+- How the multi-agent endpoint is exposed
+- How the application is started in the target environment
+- Basic health check steps
+- Basic rollback steps
+- Final smoke-test steps after deployment
+Do not create a separate deployment document. Do not expose real credentials or secret values. Test the deployment steps as far as the current environment allows. Delete temporary deployment/debug files after testing.
 Checkpoint: Complete this day, test it, and wait before moving to the next day.
 
 ---
@@ -195,7 +473,19 @@ Checkpoint: Complete this day, test it, and wait before moving to the next day.
 ## Day 19 — Deploy and Smoke Test
 
 SDLC Phase: SDLC - Deployment / Smoke Test
-Deploy the completed multi-agent feature using the existing application deployment setup.Verify:- FastAPI starts correctly- ReactJS loads correctly- Login still works- Orchestrator routes correctly- Product Search works- Cart works- Order Management works- Langfuse traces are being received- A sample evaluation can be reviewed in Langfuse- Existing e-commerce features still workFix only deployment or integration issues found during this smoke test. Delete temporary deployment/debug files after testing. Do not create another permanent document.
+Deploy the completed multi-agent feature using the existing application deployment setup.
+Verify:
+- FastAPI starts correctly
+- ReactJS loads correctly
+- Login still works
+- Orchestrator routes correctly
+- Product Search works
+- Cart works
+- Order Management works
+- Langfuse traces are being received
+- A sample evaluation can be reviewed in Langfuse
+- Existing e-commerce features still work
+Fix only deployment or integration issues found during this smoke test. Delete temporary deployment/debug files after testing. Do not create another permanent document.
 Checkpoint: Complete the deployment smoke test and wait before the final review.
 
 ---
@@ -203,11 +493,65 @@ Checkpoint: Complete the deployment smoke test and wait before the final review.
 ## Day 20 — Final Review and Handover
 
 SDLC Phase: SDLC - Final Handover
-Perform a final review of the completed multi-agent project.Confirm:- BRD.md is complete- UI_UX.md matches the final UI- ARCHITECTURE.md matches the implementation- CODING.md contains the final useful code details- TESTING.md contains the final PASS/FAIL results- DEPLOYMENT.md matches the actual deployment- Langfuse traces can be reviewed- Langfuse evaluation results can be reviewed- Existing security/runtime controls remain active- Temporary files are removed- No unnecessary permanent documents were created- Existing e-commerce functionality still worksIf everything is complete, give me MULTI-AGENT INTEGRATION COMPLETE and stop.
+Perform a final review of the completed multi-agent project.
+Confirm:
+- BRD.md is complete
+- UI_UX.md matches the final UI
+- ARCHITECTURE.md matches the implementation
+- CODING.md contains the final useful code details
+- TESTING.md contains the final PASS/FAIL results
+- DEPLOYMENT.md matches the actual deployment
+- Langfuse traces can be reviewed
+- Langfuse evaluation results can be reviewed
+- Existing security/runtime controls remain active
+- Temporary files are removed
+- No unnecessary permanent documents were created
+- Existing e-commerce functionality still works
+If everything is complete, give me MULTI-AGENT INTEGRATION COMPLETE and stop.
 Checkpoint: The multi-agent project is complete, tested, observed and ready for handover.
 MASTER FIX PROMPT
-Something is not working in the current multi-agent task.What I was trying to do:[WRITE WHAT I TRIED]What I expected:[WRITE WHAT SHOULD HAPPEN]What actually happened:[WRITE WHAT I SAW]Error message:[PASTE THE REAL ERROR]Please:1. Find the root cause yourself.2. Identify whether the problem is in the ReactJS UI, FastAPI backend, Orchestrator, specialist agent, handoff, tool, database, authentication or deployment.3. Fix only the current problem.4. Do not rebuild the existing e-commerce application.5. Do not create another backend, database or login system.6. Do not bypass authentication or authorization.7. Do not give an agent access to tools or data it does not need.8. Do not weaken security, observability or testing to hide the problem.9. Keep Product Search read-only and keep Cart/Order actions within existing business rules.10. Do not create unnecessary permanent documents.11. Delete one-time test/debug files after testing.12. Explain the problem in simple language.13. Tell me exactly how to test the fix.14. Re-run the relevant tests after fixing the problem.15. Stop after the current problem is fixed. Do not continue to the next task automatically.
+Something is not working in the current multi-agent task.
+What I was trying to do:
+[WRITE WHAT I TRIED]
+What I expected:
+[WRITE WHAT SHOULD HAPPEN]
+What actually happened:
+[WRITE WHAT I SAW]
+Error message:
+[PASTE THE REAL ERROR]
+Please:
+1. Find the root cause yourself.
+2. Identify whether the problem is in the ReactJS UI, FastAPI backend, Orchestrator, specialist agent, handoff, tool, database, authentication or deployment.
+3. Fix only the current problem.
+4. Do not rebuild the existing e-commerce application.
+5. Do not create another backend, database or login system.
+6. Do not bypass authentication or authorization.
+7. Do not give an agent access to tools or data it does not need.
+8. Do not weaken security, observability or testing to hide the problem.
+9. Keep Product Search read-only and keep Cart/Order actions within existing business rules.
+10. Do not create unnecessary permanent documents.
+11. Delete one-time test/debug files after testing.
+12. Explain the problem in simple language.
+13. Tell me exactly how to test the fix.
+14. Re-run the relevant tests after fixing the problem.
+15. Stop after the current problem is fixed. Do not continue to the next task automatically.
 MASTER DAILY CHECKPOINT PROMPT
-Before I finish today's multi-agent task, check only the work completed today.Tell me:1. What did we add or change?2. What is working?3. What is not working?4. Did we unnecessarily change an existing e-commerce feature?5. Did the Orchestrator route correctly?6. Did the specialist use only its allowed tools and data?7. Are user identity and permissions preserved through the handoff?8. Is security still active?9. Is observability working?10. Are the relevant tests passing?11. Did we delete one-time test/debug files that are no longer needed?12. Are we keeping only the six required permanent documents?13. What should I test manually?14. Can I safely move to the next SDLC task?Use simple language and stop after this checkpoint.
+Before I finish today's multi-agent task, check only the work completed today.
+Tell me:
+1. What did we add or change?
+2. What is working?
+3. What is not working?
+4. Did we unnecessarily change an existing e-commerce feature?
+5. Did the Orchestrator route correctly?
+6. Did the specialist use only its allowed tools and data?
+7. Are user identity and permissions preserved through the handoff?
+8. Is security still active?
+9. Is observability working?
+10. Are the relevant tests passing?
+11. Did we delete one-time test/debug files that are no longer needed?
+12. Are we keeping only the six required permanent documents?
+13. What should I test manually?
+14. Can I safely move to the next SDLC task?
+Use simple language and stop after this checkpoint.
 
 ---

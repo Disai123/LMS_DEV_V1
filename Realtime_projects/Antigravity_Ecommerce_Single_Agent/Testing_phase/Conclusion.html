@@ -3,41 +3,41 @@
     <h3 class="content-heading">Conclusion</h3>
     <div style="max-width: none;">
       <p style="color: #4b5563; line-height: 1.75; margin-bottom: 1.5rem;">
-        The Testing phase has validated all functionality, performance, and user experience of the askunicart
-        AI agent. All test cases pass, and the system meets performance requirements.
+        Testing compared Ask the Store answers with real PostgreSQL data.
+        The feature is ready for Langfuse traces and then Render deployment when TESTING.md shows the required PASS results.
       </p>
 
       <div class="card" style="margin-bottom: 2rem;">
         <h4 style="font-size: 1.25rem; font-weight: 600; color: #1f2937; margin-bottom: 1rem;">Test Results Summary</h4>
         <ul
           style="list-style: disc; list-style-position: inside; display: flex; flex-direction: column; gap: 0.75rem; color: #4b5563;">
-          <li>✅ All unit tests pass (100% tool module coverage)</li>
-          <li>✅ All integration tests pass (API, database, AI)</li>
-          <li>✅ Chat interface tests pass (UI/UX validated)</li>
-          <li>✅ Performance targets met (response time &lt; 2s)</li>
-          <li>✅ Token usage optimized (within limits)</li>
-          <li>✅ Error handling verified (graceful failures)</li>
+          <li>✅ Product, category, stock, order, customer, and sales questions match the database</li>
+          <li>✅ POST /agent/ask rejects unauthenticated and invalid input</li>
+          <li>✅ React Ask the Store screen shows the real backend answer</li>
+          <li>✅ No-data, unclear, and out-of-scope cases return safe messages</li>
+          <li>✅ Write requests and prompt-injection attempts are refused</li>
+          <li>✅ Existing Products, Cart, Checkout, Orders, and Admin flows still work</li>
         </ul>
       </div>
 
       <div class="card" style="margin-bottom: 2rem;">
-        <h4 style="font-size: 1.25rem; font-weight: 600; color: #1f2937; margin-bottom: 1rem;">Performance Metrics</h4>
+        <h4 style="font-size: 1.25rem; font-weight: 600; color: #1f2937; margin-bottom: 1rem;">What Was Checked</h4>
         <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1rem;">
           <div style="background: #f0fdf4; padding: 1rem; border-radius: 0.5rem; border-left: 4px solid #10b981;">
-            <div style="font-weight: 600; color: #1f2937; margin-bottom: 0.5rem;">Response Time</div>
-            <div style="font-size: 0.875rem; color: #6b7280;">1.8s average (p75)</div>
+            <div style="font-weight: 600; color: #1f2937; margin-bottom: 0.5rem;">Grounded Answers</div>
+            <div style="font-size: 0.875rem; color: #6b7280;">Match PostgreSQL rows</div>
           </div>
           <div style="background: #eff6ff; padding: 1rem; border-radius: 0.5rem; border-left: 4px solid #3b82f6;">
-            <div style="font-weight: 600; color: #1f2937; margin-bottom: 0.5rem;">Tool Execution</div>
-            <div style="font-size: 0.875rem; color: #6b7280;">300ms average</div>
+            <div style="font-weight: 600; color: #1f2937; margin-bottom: 0.5rem;">Read-Only Rule</div>
+            <div style="font-size: 0.875rem; color: #6b7280;">No cart or order writes</div>
           </div>
           <div style="background: #faf5ff; padding: 1rem; border-radius: 0.5rem; border-left: 4px solid #a855f7;">
-            <div style="font-weight: 600; color: #1f2937; margin-bottom: 0.5rem;">Token Usage</div>
-            <div style="font-size: 0.875rem; color: #6b7280;">800 tokens average</div>
+            <div style="font-weight: 600; color: #1f2937; margin-bottom: 0.5rem;">FastAPI + React</div>
+            <div style="font-size: 0.875rem; color: #6b7280;">Existing app still starts</div>
           </div>
           <div style="background: #fff7ed; padding: 1rem; border-radius: 0.5rem; border-left: 4px solid #f97316;">
-            <div style="font-weight: 600; color: #1f2937; margin-bottom: 0.5rem;">Success Rate</div>
-            <div style="font-size: 0.875rem; color: #6b7280;">99%+</div>
+            <div style="font-weight: 600; color: #1f2937; margin-bottom: 0.5rem;">Safe Failures</div>
+            <div style="font-size: 0.875rem; color: #6b7280;">Timeouts and model errors</div>
           </div>
         </div>
       </div>
@@ -45,19 +45,17 @@
       <div class="card" style="background: linear-gradient(135deg, #fff7ed 0%, #fef2f2 100%);">
         <h4 style="font-size: 1.25rem; font-weight: 600; color: #1f2937; margin-bottom: 1rem;">Next Steps</h4>
         <p style="color: #4b5563; line-height: 1.75; margin-bottom: 1rem;">
-          With testing complete, we're ready to move to the <strong>Deployment Phase</strong>, where we'll
-          set up the production environment, configure environment variables, run database migrations, and
-          deploy the AI agent to production.
+          After TESTING.md is current, connect Langfuse for traces, then deploy FastAPI, React, LangGraph, and PostgreSQL on Render.
         </p>
         <div style="background: white; padding: 1rem; border-radius: 0.5rem; border: 1px solid #e5e7eb;">
-          <div style="font-weight: 600; color: #1f2937; margin-bottom: 0.5rem;">📋 Phase Deliverables Summary:</div>
+          <div style="font-weight: 600; color: #1f2937; margin-bottom: 0.5rem;">Phase deliverables:</div>
           <ul
             style="font-size: 0.875rem; color: #4b5563; display: flex; flex-direction: column; gap: 0.25rem; list-style: disc; list-style-position: inside;">
-            <li>Test Plan Document</li>
-            <li>Unit Test Results</li>
-            <li>Integration Test Results</li>
-            <li>UI/UX Test Results</li>
-            <li>Performance Test Report</li>
+            <li>TESTING.md PASS/FAIL list</li>
+            <li>Product, order, and stock checks</li>
+            <li>Refusal and injection checks</li>
+            <li>React UAT notes</li>
+            <li>Existing store regression notes</li>
           </ul>
         </div>
       </div>
@@ -67,7 +65,8 @@
         <h4 style="font-size:1.125rem;font-weight:600;color:#1e293b;margin:0 0 0.5rem;">Antigravity prompt — Testing</h4>
         <p style="font-size:0.875rem;color:#64748b;margin:0 0 0.75rem;">Testing and Evaluation. Copy into your AI coding assistant:</p>
         <pre style="white-space:pre-wrap;font-size:0.8rem;line-height:1.55;background:#fff;border:1px solid #e2e8f0;border-radius:0.5rem;padding:1rem;margin:0 0 0.75rem;max-height:280px;overflow:auto;color:#334155;">SDLC Phase: SDLC - Testing / QA / Evaluation
-Create or update only TESTING.md and use it as the final testing document for the project.Test the agent with real existing store data and record PASS/FAIL for:
+Create or update only TESTING.md and use it as the final testing document for the project.
+Test the agent with real existing store data and record PASS/FAIL for:
 Product questions
 Category questions
 Customer questions
@@ -82,7 +81,9 @@ Unsafe database requests
 Authentication failures
 Model/database failures
 Timeout and limit cases
-For each test, compare the agent answer with the real database result or the expected safe behavior.Use temporary test scripts, JSON files, JavaScript files or other temporary files only when needed. After testing is complete, delete those temporary files. Keep the final PASS/FAIL results and important findings only in TESTING.md.Do not create separate evaluation documents.
+For each test, compare the agent answer with the real database result or the expected safe behavior.
+Use temporary test scripts, JSON files, JavaScript files or other temporary files only when needed. After testing is complete, delete those temporary files. Keep the final PASS/FAIL results and important findings only in TESTING.md.
+Do not create separate evaluation documents.
 WEEK 3 - REACTJS FRONTEND &amp; INTEGRATION
 Week 3 Prerequisite: Week 2 must be complete. The FastAPI agent endpoint and existing authentication must work from a test client. The learner should know the basic ReactJS concepts needed to create a simple screen and call an API.</pre>
         <button type="button" onclick="navigator.clipboard.writeText(this.previousElementSibling.textContent)" style="padding:0.5rem 1rem;background:#eef2ff;color:#4338ca;border:1px solid #c7d2fe;border-radius:0.5rem;font-weight:500;cursor:pointer;">Copy prompt</button>
@@ -92,8 +93,7 @@ Week 3 Prerequisite: Week 2 must be complete. The FastAPI agent endpoint and exi
       <div style="background: linear-gradient(to right, #faf5ff, #eff6ff); border-radius: 0.5rem; padding: 1.5rem;">
         <h4 style="font-size: 1.125rem; font-weight: 600; color: #1f2937; margin-bottom: 1rem;">Ready to Proceed?</h4>
         <p style="color: #4b5563; margin-bottom: 1rem;">
-          This Testing phase is now complete. You can proceed to the next phase (Deployment)
-          or review any section of this document as needed.
+          Testing for Ask the Store is complete. Continue to Deployment to record FastAPI, React, LangGraph, Langfuse, PostgreSQL, and Render steps.
         </p>
         <div style="display: flex; gap: 1rem; flex-wrap: wrap;">
           <button

@@ -3,8 +3,9 @@
     <h3 class="content-heading">System Architecture</h3>
     <div style="max-width: none;">
       <p style="color: #4b5563; line-height: 1.75; margin-bottom: 1.5rem;">
-        The system architecture for askunicart follows a layered approach, separating concerns between frontend, 
-        API, AI integration, and data layers. This ensures scalability, maintainability, and security.
+        The Agentic RAG assistant sits inside the existing e-commerce app. React sends questions to FastAPI.
+        LangGraph runs query understanding, FAISS retrieval of embeddings, a relevance check, and a grounded answer with citations.
+        We do not add a second store database for catalog data.
       </p>
       
       <div style="display: flex; flex-direction: column; gap: 2rem;">
@@ -18,37 +19,33 @@
             <div style="font-family: monospace; font-size: 0.875rem; color: #1f2937; line-height: 1.8;">
               <div style="margin-bottom: 1rem;">
                 <strong style="color: #3b82f6;">┌─────────────────────────────────────────┐</strong><br>
-                <strong style="color: #3b82f6;">│</strong>  <strong>Frontend Layer</strong> (React/Next.js)        <strong style="color: #3b82f6;">│</strong><br>
-                <strong style="color: #3b82f6;">│</strong>  • AskUnicartChat Component          <strong style="color: #3b82f6;">│</strong><br>
-                <strong style="color: #3b82f6;">│</strong>  • Zustand Store (chat state)        <strong style="color: #3b82f6;">│</strong><br>
+                <strong style="color: #3b82f6;">│</strong>  <strong>Frontend</strong> (existing ReactJS)        <strong style="color: #3b82f6;">│</strong><br>
+                <strong style="color: #3b82f6;">│</strong>  • Assistant entry point             <strong style="color: #3b82f6;">│</strong><br>
+                <strong style="color: #3b82f6;">│</strong>  • Answer + citation area           <strong style="color: #3b82f6;">│</strong><br>
                 <strong style="color: #3b82f6;">└─────────────────────────────────────────┘</strong><br>
-                <div style="text-align: center; color: #6b7280; margin: 0.5rem 0;">↓ HTTP Request</div>
+                <div style="text-align: center; color: #6b7280; margin: 0.5rem 0;">↓ POST /rag/ask</div>
                 <strong style="color: #10b981;">┌─────────────────────────────────────────┐</strong><br>
-                <strong style="color: #10b981;">│</strong>  <strong>API Layer</strong> (Next.js API Routes)      <strong style="color: #10b981;">│</strong><br>
-                <strong style="color: #10b981;">│</strong>  • POST /api/askunicart             <strong style="color: #10b981;">│</strong><br>
-                <strong style="color: #10b981;">│</strong>  • GET /api/askunicart               <strong style="color: #10b981;">│</strong><br>
-                <strong style="color: #10b981;">│</strong>  • Authentication Middleware         <strong style="color: #10b981;">│</strong><br>
+                <strong style="color: #10b981;">│</strong>  <strong>API</strong> (existing FastAPI)             <strong style="color: #10b981;">│</strong><br>
+                <strong style="color: #10b981;">│</strong>  • POST /rag/ask                    <strong style="color: #10b981;">│</strong><br>
+                <strong style="color: #10b981;">│</strong>  • Reuse existing auth              <strong style="color: #10b981;">│</strong><br>
                 <strong style="color: #10b981;">└─────────────────────────────────────────┘</strong><br>
-                <div style="text-align: center; color: #6b7280; margin: 0.5rem 0;">↓ OpenAI SDK</div>
+                <div style="text-align: center; color: #6b7280; margin: 0.5rem 0;">↓ LangGraph</div>
                 <strong style="color: #a855f7;">┌─────────────────────────────────────────┐</strong><br>
-                <strong style="color: #a855f7;">│</strong>  <strong>AI Integration</strong> (OpenAI)            <strong style="color: #a855f7;">│</strong><br>
-                <strong style="color: #a855f7;">│</strong>  • GPT-4o-mini Model                <strong style="color: #a855f7;">│</strong><br>
-                <strong style="color: #a855f7;">│</strong>  • Function Calling                 <strong style="color: #a855f7;">│</strong><br>
-                <strong style="color: #a855f7;">│</strong>  • Context Management               <strong style="color: #a855f7;">│</strong><br>
+                <strong style="color: #a855f7;">│</strong>  <strong>RAG Agent</strong> (LangChain / LangGraph)  <strong style="color: #a855f7;">│</strong><br>
+                <strong style="color: #a855f7;">│</strong>  • Understand question              <strong style="color: #a855f7;">│</strong><br>
+                <strong style="color: #a855f7;">│</strong>  • Query rewrite / search plan      <strong style="color: #a855f7;">│</strong><br>
+                <strong style="color: #a855f7;">│</strong>  • Relevance check + retry          <strong style="color: #a855f7;">│</strong><br>
                 <strong style="color: #a855f7;">└─────────────────────────────────────────┘</strong><br>
-                <div style="text-align: center; color: #6b7280; margin: 0.5rem 0;">↓ Tool Calls</div>
+                <div style="text-align: center; color: #6b7280; margin: 0.5rem 0;">↓ embeddings search</div>
                 <strong style="color: #f97316;">┌─────────────────────────────────────────┐</strong><br>
-                <strong style="color: #f97316;">│</strong>  <strong>Tool Modules</strong> (lib/askunicart)      <strong style="color: #f97316;">│</strong><br>
-                <strong style="color: #f97316;">│</strong>  • Catalog Scout                   <strong style="color: #f97316;">│</strong><br>
-                <strong style="color: #f97316;">│</strong>  • Inventory Sentinel               <strong style="color: #f97316;">│</strong><br>
-                <strong style="color: #f97316;">│</strong>  • Recommendation Engine            <strong style="color: #f97316;">│</strong><br>
-                <strong style="color: #f97316;">│</strong>  • Cart Manager                     <strong style="color: #f97316;">│</strong><br>
+                <strong style="color: #f97316;">│</strong>  <strong>FAISS + embeddings</strong>                 <strong style="color: #f97316;">│</strong><br>
+                <strong style="color: #f97316;">│</strong>  • Chunk vectors                    <strong style="color: #f97316;">│</strong><br>
+                <strong style="color: #f97316;">│</strong>  • Document / section metadata      <strong style="color: #f97316;">│</strong><br>
                 <strong style="color: #f97316;">└─────────────────────────────────────────┘</strong><br>
-                <div style="text-align: center; color: #6b7280; margin: 0.5rem 0;">↓ Database Queries</div>
+                <div style="text-align: center; color: #6b7280; margin: 0.5rem 0;">↓ grounded answer + citations</div>
                 <strong style="color: #6366f1;">┌─────────────────────────────────────────┐</strong><br>
-                <strong style="color: #6366f1;">│</strong>  <strong>Database</strong> (PostgreSQL + Prisma)     <strong style="color: #6366f1;">│</strong><br>
-                <strong style="color: #6366f1;">│</strong>  • Conversation & Message Tables     <strong style="color: #6366f1;">│</strong><br>
-                <strong style="color: #6366f1;">│</strong>  • Product, Cart, User Tables      <strong style="color: #6366f1;">│</strong><br>
+                <strong style="color: #6366f1;">│</strong>  <strong>Approved documents</strong>                 <strong style="color: #6366f1;">│</strong><br>
+                <strong style="color: #6366f1;">│</strong>  • Product manuals, FAQs, warranty  <strong style="color: #6366f1;">│</strong><br>
                 <strong style="color: #6366f1;">└─────────────────────────────────────────┘</strong>
               </div>
             </div>
@@ -66,8 +63,8 @@
               <div style="display: flex; align-items: start; gap: 1rem;">
                 <div style="background: #3b82f6; color: white; width: 32px; height: 32px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: 600; flex-shrink: 0;">1</div>
                 <div>
-                  <div style="font-weight: 600; color: #1f2937; margin-bottom: 0.25rem;">User sends message</div>
-                  <div style="font-size: 0.875rem; color: #6b7280;">Chat component sends POST request to /api/askunicart</div>
+                  <div style="font-weight: 600; color: #1f2937; margin-bottom: 0.25rem;">User asks a question</div>
+                  <div style="font-size: 0.875rem; color: #6b7280;">React chat UI posts to FastAPI POST /rag/ask</div>
                 </div>
               </div>
               
@@ -76,8 +73,8 @@
               <div style="display: flex; align-items: start; gap: 1rem;">
                 <div style="background: #10b981; color: white; width: 32px; height: 32px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: 600; flex-shrink: 0;">2</div>
                 <div>
-                  <div style="font-weight: 600; color: #1f2937; margin-bottom: 0.25rem;">API validates & authenticates</div>
-                  <div style="font-size: 0.875rem; color: #6b7280;">JWT token verified, user ID extracted</div>
+                  <div style="font-weight: 600; color: #1f2937; margin-bottom: 0.25rem;">Reuse existing auth</div>
+                  <div style="font-size: 0.875rem; color: #6b7280;">Optional product context is passed from a product page</div>
                 </div>
               </div>
               
@@ -86,8 +83,8 @@
               <div style="display: flex; align-items: start; gap: 1rem;">
                 <div style="background: #a855f7; color: white; width: 32px; height: 32px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: 600; flex-shrink: 0;">3</div>
                 <div>
-                  <div style="font-weight: 600; color: #1f2937; margin-bottom: 0.25rem;">Load conversation history</div>
-                  <div style="font-size: 0.875rem; color: #6b7280;">Retrieve last 20 messages from database</div>
+                  <div style="font-weight: 600; color: #1f2937; margin-bottom: 0.25rem;">Understand and plan search</div>
+                  <div style="font-size: 0.875rem; color: #6b7280;">LangGraph decides whether to search and may rewrite the query</div>
                 </div>
               </div>
               
@@ -96,8 +93,8 @@
               <div style="display: flex; align-items: start; gap: 1rem;">
                 <div style="background: #f97316; color: white; width: 32px; height: 32px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: 600; flex-shrink: 0;">4</div>
                 <div>
-                  <div style="font-weight: 600; color: #1f2937; margin-bottom: 0.25rem;">Call OpenAI API</div>
-                  <div style="font-size: 0.875rem; color: #6b7280;">Send message with context and available tools</div>
+                  <div style="font-weight: 600; color: #1f2937; margin-bottom: 0.25rem;">FAISS retrieval</div>
+                  <div style="font-size: 0.875rem; color: #6b7280;">Embed the question and search the document chunk index</div>
                 </div>
               </div>
               
@@ -106,8 +103,8 @@
               <div style="display: flex; align-items: start; gap: 1rem;">
                 <div style="background: #ef4444; color: white; width: 32px; height: 32px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: 600; flex-shrink: 0;">5</div>
                 <div>
-                  <div style="font-weight: 600; color: #1f2937; margin-bottom: 0.25rem;">Execute tool calls</div>
-                  <div style="font-size: 0.875rem; color: #6b7280;">AI requests tool execution (e.g., searchProducts)</div>
+                  <div style="font-weight: 600; color: #1f2937; margin-bottom: 0.25rem;">Relevance check</div>
+                  <div style="font-size: 0.875rem; color: #6b7280;">If context is weak, retrieve again with a better query</div>
                 </div>
               </div>
               
@@ -116,28 +113,8 @@
               <div style="display: flex; align-items: start; gap: 1rem;">
                 <div style="background: #6366f1; color: white; width: 32px; height: 32px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: 600; flex-shrink: 0;">6</div>
                 <div>
-                  <div style="font-weight: 600; color: #1f2937; margin-bottom: 0.25rem;">Query database</div>
-                  <div style="font-size: 0.875rem; color: #6b7280;">Tool modules query PostgreSQL via Prisma</div>
-                </div>
-              </div>
-              
-              <div style="display: flex; align-items: center; justify-content: center; color: #9ca3af; font-size: 1.5rem;">↓</div>
-              
-              <div style="display: flex; align-items: start; gap: 1rem;">
-                <div style="background: #10b981; color: white; width: 32px; height: 32px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: 600; flex-shrink: 0;">7</div>
-                <div>
-                  <div style="font-weight: 600; color: #1f2937; margin-bottom: 0.25rem;">AI generates response</div>
-                  <div style="font-size: 0.875rem; color: #6b7280;">OpenAI creates natural language response from tool results</div>
-                </div>
-              </div>
-              
-              <div style="display: flex; align-items: center; justify-content: center; color: #9ca3af; font-size: 1.5rem;">↓</div>
-              
-              <div style="display: flex; align-items: start; gap: 1rem;">
-                <div style="background: #3b82f6; color: white; width: 32px; height: 32px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: 600; flex-shrink: 0;">8</div>
-                <div>
-                  <div style="font-weight: 600; color: #1f2937; margin-bottom: 0.25rem;">Save & return response</div>
-                  <div style="font-size: 0.875rem; color: #6b7280;">Messages saved to database, response sent to frontend</div>
+                  <div style="font-weight: 600; color: #1f2937; margin-bottom: 0.25rem;">Grounded answer with citations</div>
+                  <div style="font-size: 0.875rem; color: #6b7280;">Answer only from retrieved manuals. If not found, say so.</div>
                 </div>
               </div>
             </div>
@@ -152,42 +129,38 @@
           
           <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 1.5rem;">
             <div style="background: #eff6ff; border-radius: 0.5rem; padding: 1rem; border-left: 4px solid #3b82f6;">
-              <h5 style="font-weight: 600; color: #1f2937; margin-bottom: 0.5rem;">Frontend (React)</h5>
+              <h5 style="font-weight: 600; color: #1f2937; margin-bottom: 0.5rem;">React UI</h5>
               <ul style="font-size: 0.875rem; color: #4b5563; list-style: disc; list-style-position: inside;">
-                <li>Render chat UI</li>
-                <li>Handle user input</li>
-                <li>Display messages</li>
-                <li>Manage local state</li>
+                <li>Question box and ask action</li>
+                <li>Loading, error, and no-data states</li>
+                <li>Show citations / source references</li>
               </ul>
             </div>
 
             <div style="background: #f0fdf4; border-radius: 0.5rem; padding: 1rem; border-left: 4px solid #10b981;">
-              <h5 style="font-weight: 600; color: #1f2937; margin-bottom: 0.5rem;">API Route</h5>
+              <h5 style="font-weight: 600; color: #1f2937; margin-bottom: 0.5rem;">FastAPI /rag/ask</h5>
               <ul style="font-size: 0.875rem; color: #4b5563; list-style: disc; list-style-position: inside;">
-                <li>Authenticate requests</li>
-                <li>Manage conversations</li>
-                <li>Integrate with OpenAI</li>
-                <li>Handle tool execution</li>
+                <li>Reuse existing authentication</li>
+                <li>Accept optional product context</li>
+                <li>Return answer plus safe sources</li>
               </ul>
             </div>
 
             <div style="background: #faf5ff; border-radius: 0.5rem; padding: 1rem; border-left: 4px solid #a855f7;">
-              <h5 style="font-weight: 600; color: #1f2937; margin-bottom: 0.5rem;">Tool Modules</h5>
+              <h5 style="font-weight: 600; color: #1f2937; margin-bottom: 0.5rem;">LangGraph agent</h5>
               <ul style="font-size: 0.875rem; color: #4b5563; list-style: disc; list-style-position: inside;">
-                <li>Product search</li>
-                <li>Stock checking</li>
-                <li>Cart operations</li>
-                <li>Recommendations</li>
+                <li>Query rewrite</li>
+                <li>Context check and retry</li>
+                <li>Grounded answer step</li>
               </ul>
             </div>
 
             <div style="background: #eef2ff; border-radius: 0.5rem; padding: 1rem; border-left: 4px solid #6366f1;">
-              <h5 style="font-weight: 600; color: #1f2937; margin-bottom: 0.5rem;">Database</h5>
+              <h5 style="font-weight: 600; color: #1f2937; margin-bottom: 0.5rem;">FAISS index</h5>
               <ul style="font-size: 0.875rem; color: #4b5563; list-style: disc; list-style-position: inside;">
-                <li>Store conversations</li>
-                <li>Store messages</li>
-                <li>Product data</li>
-                <li>Cart data</li>
+                <li>Store document embeddings</li>
+                <li>Return matching chunks</li>
+                <li>Keep document and section metadata</li>
               </ul>
             </div>
           </div>
@@ -196,4 +169,3 @@
     </div>
   </div>
 </div>
-

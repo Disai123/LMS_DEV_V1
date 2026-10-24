@@ -4,7 +4,7 @@
       <h3 style="font-size: 1.875rem; font-weight: 700; color: #1f2937; margin-bottom: 1rem;">Database Design</h3>
       <p style="font-size: 1.125rem; color: #4b5563; max-width: 48rem; margin: 0 auto;">
         The database design defines the data structure, relationships, and storage requirements 
-        for the the e-commerce application, ensuring efficient data management and optimal performance.
+        for the e-commerce application, ensuring efficient data management and optimal performance.
       </p>
     </div>
     
@@ -72,11 +72,11 @@
           </li>
           <li style="display: flex; align-items: center; gap: 0.5rem;">
             <span style="width: 0.5rem; height: 0.5rem; background: #10b981; border-radius: 50%;"></span>
-            Wishlist (User-Product Favorites)
+            Cart table for the logged-in customer
           </li>
           <li style="display: flex; align-items: center; gap: 0.5rem;">
             <span style="width: 0.5rem; height: 0.5rem; background: #10b981; border-radius: 50%;"></span>
-            Product Categories (Many-to-Many)
+            Cart items linked to products
           </li>
         </ul>
       </div>
@@ -88,23 +88,23 @@
           </div>
           <h4 style="font-size: 1.125rem; font-weight: 600; color: #1f2937;">Support Tables</h4>
         </div>
-        <p style="font-size: 0.875rem; color: #4b5563; margin-bottom: 1rem;">Additional tables for enhanced functionality</p>
+        <p style="font-size: 0.875rem; color: #4b5563; margin-bottom: 1rem;">Only the tables the store actually uses</p>
         <ul style="display: flex; flex-direction: column; gap: 0.5rem; font-size: 0.875rem; color: #374151;">
           <li style="display: flex; align-items: center; gap: 0.5rem;">
             <span style="width: 0.5rem; height: 0.5rem; background: #9333ea; border-radius: 50%;"></span>
-            Addresses (User Locations)
+            Users (customer and admin)
           </li>
           <li style="display: flex; align-items: center; gap: 0.5rem;">
             <span style="width: 0.5rem; height: 0.5rem; background: #9333ea; border-radius: 50%;"></span>
-            Reviews (Product Feedback)
+            Cart header for each customer
           </li>
           <li style="display: flex; align-items: center; gap: 0.5rem;">
             <span style="width: 0.5rem; height: 0.5rem; background: #9333ea; border-radius: 50%;"></span>
-            Payments (Transaction Records)
+            Order items copied at checkout
           </li>
           <li style="display: flex; align-items: center; gap: 0.5rem;">
             <span style="width: 0.5rem; height: 0.5rem; background: #9333ea; border-radius: 50%;"></span>
-            Inventory (Stock Management)
+            Product stock column
           </li>
         </ul>
       </div>
@@ -130,7 +130,7 @@
             </div>
             <div style="display: flex; align-items: center; gap: 0.75rem; padding: 0.75rem; background: #fff7ed; border-radius: 0.5rem;">
               <div style="width: 2rem; height: 2rem; background: #f97316; color: #ffffff; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 0.875rem; font-weight: 700;">4</div>
-              <span style="font-size: 0.875rem; color: #374151;">Products ↔ Categories (Many-to-Many)</span>
+              <span style="font-size: 0.875rem; color: #374151;">Users → Cart → Cart Items</span>
             </div>
           </div>
         </div>
@@ -217,7 +217,7 @@
           <div style="background: #ffffff; border-radius: 0.5rem; padding: 0.75rem;">
             <h5 style="font-size: 0.875rem; font-weight: 500; color: #1f2937; margin-bottom: 0.5rem;">Caching Strategy</h5>
             <ul style="font-size: 0.75rem; color: #4b5563; display: flex; flex-direction: column; gap: 0.25rem; list-style: none; padding: 0;">
-              <li>• Redis for session data</li>
+              <li>• JWT tokens stored by the React app</li>
               <li>• Product catalog caching</li>
               <li>• Query result caching</li>
             </ul>
@@ -230,24 +230,20 @@
       <h4 style="font-size: 1.25rem; font-weight: 600; color: #1f2937; margin-bottom: 1.5rem;">Database Technology Stack</h4>
       <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 1rem; width: 100%;">
         <div style="text-align: center; padding: 1rem; background: #ffffff; border-radius: 0.5rem; box-shadow: 0 1px 3px rgba(0,0,0,0.1);">
-          <div style="font-size: 1.5rem; margin-bottom: 0.5rem;">•</div>
           <div style="font-size: 0.875rem; font-weight: 500; color: #1f2937;">PostgreSQL</div>
           <div style="font-size: 0.75rem; color: #4b5563;">Primary Database</div>
         </div>
         <div style="text-align: center; padding: 1rem; background: #ffffff; border-radius: 0.5rem; box-shadow: 0 1px 3px rgba(0,0,0,0.1);">
-          <div style="font-size: 1.5rem; margin-bottom: 0.5rem;">•</div>
-          <div style="font-size: 0.875rem; font-weight: 500; color: #1f2937;">Prisma ORM</div>
-          <div style="font-size: 0.75rem; color: #4b5563;">Database Toolkit</div>
+          <div style="font-size: 0.875rem; font-weight: 500; color: #1f2937;">SQLAlchemy</div>
+          <div style="font-size: 0.75rem; color: #4b5563;">ORM used by FastAPI</div>
         </div>
         <div style="text-align: center; padding: 1rem; background: #ffffff; border-radius: 0.5rem; box-shadow: 0 1px 3px rgba(0,0,0,0.1);">
-          <div style="font-size: 1.5rem; margin-bottom: 0.5rem;">•</div>
-          <div style="font-size: 0.875rem; font-weight: 500; color: #1f2937;">Redis</div>
-          <div style="font-size: 0.75rem; color: #4b5563;">Caching Layer</div>
+          <div style="font-size: 0.875rem; font-weight: 500; color: #1f2937;">psycopg</div>
+          <div style="font-size: 0.75rem; color: #4b5563;">PostgreSQL driver</div>
         </div>
         <div style="text-align: center; padding: 1rem; background: #ffffff; border-radius: 0.5rem; box-shadow: 0 1px 3px rgba(0,0,0,0.1);">
-          <div style="font-size: 1.5rem; margin-bottom: 0.5rem;">•</div>
-          <div style="font-size: 0.875rem; font-weight: 500; color: #1f2937;">Neon</div>
-          <div style="font-size: 0.75rem; color: #4b5563;">Cloud Database</div>
+          <div style="font-size: 0.875rem; font-weight: 500; color: #1f2937;">Render PostgreSQL</div>
+          <div style="font-size: 0.75rem; color: #4b5563;">Hosted database</div>
         </div>
       </div>
     </div>

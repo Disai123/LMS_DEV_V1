@@ -3,38 +3,39 @@
     <h3 class="content-heading">API Design</h3>
     <div style="max-width: none;">
       <p style="color: #4b5563; line-height: 1.75; margin-bottom: 1.5rem;">
-        The API design defines RESTful endpoints for the AI agent, handling message sending, conversation 
-        retrieval, and AI interactions. All endpoints require authentication via JWT tokens.
+        The RAG feature adds one FastAPI endpoint to the existing backend: <code>POST /rag/ask</code>.
+        It reuses existing authentication and returns a grounded answer plus safe source references.
+        Existing store APIs are not changed.
       </p>
       
       <div style="display: flex; flex-direction: column; gap: 2rem;">
         <div class="card">
           <h4 style="font-size: 1.25rem; font-weight: 600; color: #1f2937; margin-bottom: 1.5rem; display: flex; align-items: center; gap: 0.5rem;">
             <span style="font-size: 1.5rem;">📤</span>
-            POST /api/askunicart
+            POST /rag/ask
           </h4>
           
           <div style="background: #f9fafb; border-radius: 0.5rem; padding: 1.5rem;">
             <div style="margin-bottom: 1rem;">
               <h5 style="font-weight: 600; color: #1f2937; margin-bottom: 0.75rem;">Description</h5>
               <p style="font-size: 0.875rem; color: #6b7280;">
-                Send a message to the AI assistant and receive a response. Creates or updates conversation 
-                as needed.
+                Send a product-knowledge question. The LangGraph agent searches FAISS, checks relevance,
+                retrieves again if needed, and returns a grounded answer with citations.
               </p>
             </div>
 
             <div style="margin-bottom: 1rem;">
               <h5 style="font-weight: 600; color: #1f2937; margin-bottom: 0.75rem;">Request</h5>
               <div style="background: #1f2937; color: #10b981; padding: 1rem; border-radius: 0.5rem; font-family: monospace; font-size: 0.875rem; overflow-x: auto;">
-                <pre>POST /api/askunicart
+                <pre>POST /rag/ask
 Headers:
-  Authorization: Bearer &lt;JWT_TOKEN&gt;
+  Authorization: Bearer &lt;EXISTING_TOKEN&gt;
   Content-Type: application/json
 
 Body:
 {
-  "message": "Show me laptops",
-  "conversationId": "optional-conversation-id"
+  "question": "How do I pair the wireless headphones?",
+  "product_id": "optional-existing-product-id"
 }</pre>
               </div>
             </div>
@@ -43,10 +44,15 @@ Body:
               <h5 style="font-weight: 600; color: #1f2937; margin-bottom: 0.75rem;">Response</h5>
               <div style="background: #1f2937; color: #3b82f6; padding: 1rem; border-radius: 0.5rem; font-family: monospace; font-size: 0.875rem; overflow-x: auto;">
                 <pre>{
-  "success": true,
-  "message": "Here are some laptops...",
-  "conversationId": "conv_123",
-  "toolCalls": [] // Optional: if tools were used
+  "answer": "Hold the power button until the LED flashes blue...",
+  "found": true,
+  "sources": [
+    {
+      "document": "Headphones User Manual",
+      "section": "Pairing",
+      "product": "Premium Wireless Headphones"
+    }
+  ]
 }</pre>
               </div>
             </div>
@@ -55,52 +61,21 @@ Body:
 
         <div class="card">
           <h4 style="font-size: 1.25rem; font-weight: 600; color: #1f2937; margin-bottom: 1.5rem; display: flex; align-items: center; gap: 0.5rem;">
-            <span style="font-size: 1.5rem;">📥</span>
-            GET /api/askunicart
+            <span style="font-size: 1.5rem;">📭</span>
+            No-data response
           </h4>
           
           <div style="background: #f9fafb; border-radius: 0.5rem; padding: 1.5rem;">
-            <div style="margin-bottom: 1rem;">
-              <h5 style="font-weight: 600; color: #1f2937; margin-bottom: 0.75rem;">Description</h5>
-              <p style="font-size: 0.875rem; color: #6b7280;">
-                Retrieve conversation history. Can get all conversations for a user or a specific conversation.
-              </p>
-            </div>
-
-            <div style="margin-bottom: 1rem;">
-              <h5 style="font-weight: 600; color: #1f2937; margin-bottom: 0.75rem;">Request</h5>
-              <div style="background: #1f2937; color: #10b981; padding: 1rem; border-radius: 0.5rem; font-family: monospace; font-size: 0.875rem; overflow-x: auto;">
-                <pre>GET /api/askunicart?conversationId=conv_123
-Headers:
-  Authorization: Bearer &lt;JWT_TOKEN&gt;</pre>
-              </div>
-            </div>
-
-            <div>
-              <h5 style="font-weight: 600; color: #1f2937; margin-bottom: 0.75rem;">Response</h5>
-              <div style="background: #1f2937; color: #3b82f6; padding: 1rem; border-radius: 0.5rem; font-family: monospace; font-size: 0.875rem; overflow-x: auto;">
-                <pre>{
-  "success": true,
-  "conversation": {
-    "id": "conv_123",
-    "title": "Product Search",
-    "messages": [
-      {
-        "id": "msg_1",
-        "role": "user",
-        "content": "Show me laptops",
-        "createdAt": "2025-01-20T10:00:00Z"
-      },
-      {
-        "id": "msg_2",
-        "role": "assistant",
-        "content": "Here are some laptops...",
-        "createdAt": "2025-01-20T10:00:01Z"
-      }
-    ]
-  }
+            <p style="font-size: 0.875rem; color: #6b7280; margin-bottom: 1rem;">
+              If FAISS retrieval finds no useful approved content, the API still succeeds.
+              It does not invent specs, warranty terms, or safety guidance.
+            </p>
+            <div style="background: #1f2937; color: #3b82f6; padding: 1rem; border-radius: 0.5rem; font-family: monospace; font-size: 0.875rem; overflow-x: auto;">
+              <pre>{
+  "answer": "That information is not in the approved product documents.",
+  "found": false,
+  "sources": []
 }</pre>
-              </div>
             </div>
           </div>
         </div>
@@ -114,27 +89,25 @@ Headers:
           <div style="background: #f9fafb; border-radius: 0.5rem; padding: 1.5rem;">
             <div style="display: flex; flex-direction: column; gap: 1rem;">
               <div style="border-left: 4px solid #ef4444; padding-left: 1rem;">
-                <h5 style="font-weight: 600; color: #1f2937; margin-bottom: 0.5rem;">JWT Token Required</h5>
+                <h5 style="font-weight: 600; color: #1f2937; margin-bottom: 0.5rem;">Reuse existing auth</h5>
                 <p style="font-size: 0.875rem; color: #6b7280;">
-                  All endpoints require a valid JWT token in the Authorization header. 
-                  Token is validated via middleware before processing requests.
+                  POST /rag/ask uses the store's current login. Do not add a separate auth system.
                 </p>
               </div>
 
               <div style="border-left: 4px solid #f59e0b; padding-left: 1rem;">
-                <h5 style="font-weight: 600; color: #1f2937; margin-bottom: 0.5rem;">User Isolation</h5>
+                <h5 style="font-weight: 600; color: #1f2937; margin-bottom: 0.5rem;">Safe sources only</h5>
                 <p style="font-size: 0.875rem; color: #6b7280;">
-                  User ID is extracted from JWT token. All conversations and messages are 
-                  isolated per user to ensure privacy.
+                  The response may include document name and section. It must not leak prompts, keys, or internal paths.
                 </p>
               </div>
 
               <div style="border-left: 4px solid #10b981; padding-left: 1rem;">
                 <h5 style="font-weight: 600; color: #1f2937; margin-bottom: 0.5rem;">Error Responses</h5>
                 <div style="font-size: 0.875rem; color: #6b7280;">
-                  <p style="margin-bottom: 0.5rem;">401 Unauthorized: Invalid or missing token</p>
-                  <p style="margin-bottom: 0.5rem;">400 Bad Request: Invalid request body</p>
-                  <p>500 Internal Server Error: Server or AI API error</p>
+                  <p style="margin-bottom: 0.5rem;">401 Unauthorized: missing or invalid existing session</p>
+                  <p style="margin-bottom: 0.5rem;">400 Bad Request: empty or invalid question</p>
+                  <p>500 Internal Server Error: retrieval or answer-generation failure</p>
                 </div>
               </div>
             </div>
@@ -150,23 +123,23 @@ Headers:
           <div style="background: #f9fafb; border-radius: 0.5rem; padding: 1.5rem;">
             <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 1rem;">
               <div style="background: white; padding: 1rem; border-radius: 0.5rem; border: 1px solid #e5e7eb;">
-                <h5 style="font-weight: 600; color: #1f2937; margin-bottom: 0.5rem;">Context Limiting</h5>
+                <h5 style="font-weight: 600; color: #1f2937; margin-bottom: 0.5rem;">Result limit</h5>
                 <p style="font-size: 0.875rem; color: #6b7280;">
-                  Only last 20 messages loaded for context to optimize token usage and response time.
+                  Return a small set of FAISS chunks so the answer stays focused.
                 </p>
               </div>
 
               <div style="background: white; padding: 1rem; border-radius: 0.5rem; border: 1px solid #e5e7eb;">
-                <h5 style="font-weight: 600; color: #1f2937; margin-bottom: 0.5rem;">Timeout Handling</h5>
+                <h5 style="font-weight: 600; color: #1f2937; margin-bottom: 0.5rem;">One retry</h5>
                 <p style="font-size: 0.875rem; color: #6b7280;">
-                  API route configured with 60-second timeout for AI requests (maxDuration).
+                  Retry retrieval once with a rewritten query. Do not add extra agent loops.
                 </p>
               </div>
 
               <div style="background: white; padding: 1rem; border-radius: 0.5rem; border: 1px solid #e5e7eb;">
-                <h5 style="font-weight: 600; color: #1f2937; margin-bottom: 0.5rem;">Error Handling</h5>
+                <h5 style="font-weight: 600; color: #1f2937; margin-bottom: 0.5rem;">Langfuse traces</h5>
                 <p style="font-size: 0.875rem; color: #6b7280;">
-                  Graceful error handling with user-friendly messages for API failures.
+                  Trace embedding, FAISS search, retries, and the final grounded answer.
                 </p>
               </div>
             </div>
@@ -176,4 +149,3 @@ Headers:
     </div>
   </div>
 </div>
-

@@ -1,12 +1,11 @@
 <div class="content-body">
   <div class="content-section">
     <div style="text-align: center; margin-bottom: 2rem;">
-      <h3 style="font-size: 1.875rem; font-weight: 700; color: #1f2937; margin-bottom: 1rem;">Single AI Agent
+      <h3 style="font-size: 1.875rem; font-weight: 700; color: #1f2937; margin-bottom: 1rem;">Agentic RAG
         Development Complete</h3>
       <p style="font-size: 1.125rem; color: #4b5563; max-width: 48rem; margin: 0 auto;">
-        The Code Development phase has been successfully completed.
-        We have built a fully functional AI-powered shopping assistant with OpenAI function calling,
-        4 tool modules, a React chat widget, and a persistent conversation database.
+        The existing React and FastAPI store now include a document RAG assistant.
+        Approved manuals are chunked, embedded, and stored in FAISS. <code>POST /rag/ask</code> returns grounded answers with citations.
       </p>
     </div>
 
@@ -24,26 +23,26 @@
             </h5>
             <ul
               style="font-size: 0.875rem; color: #4b5563; display: flex; flex-direction: column; gap: 0.25rem; list-style: none; padding: 0;">
-              <li>• React floating chat widget</li>
-              <li>• Zustand global state management</li>
-              <li>• Auto-scroll and loading states</li>
-              <li>• Welcome message empty state</li>
-              <li>• JWT-secured API calls</li>
+              <li>• React assistant on the existing store</li>
+              <li>• Question box and ask action</li>
+              <li>• Answer, citation, and no-data states</li>
+              <li>• Optional product-page context</li>
+              <li>• Existing auth reused</li>
             </ul>
           </div>
           <div
             style="background: #ffffff; border-radius: 0.5rem; padding: 1rem; box-shadow: 0 1px 3px rgba(0,0,0,0.1);">
             <h5
               style="font-size: 1.125rem; font-weight: 600; color: #1f2937; margin-bottom: 0.75rem; display: flex; align-items: center; gap: 0.5rem;">
-              <span style="font-size: 1.5rem;">🧠</span> AI Agent Backend
+              <span style="font-size: 1.5rem;">🧠</span> RAG Backend
             </h5>
             <ul
               style="font-size: 0.875rem; color: #4b5563; display: flex; flex-direction: column; gap: 0.25rem; list-style: none; padding: 0;">
-              <li>• Next.js API route with JWT auth</li>
-              <li>• OpenAI function calling loop</li>
-              <li>• Tool dispatch map pattern</li>
-              <li>• Conversation history (last 20 msgs)</li>
-              <li>• Graceful error handling</li>
+              <li>• FastAPI POST /rag/ask</li>
+              <li>• LangGraph understand / retrieve / check</li>
+              <li>• One retrieval retry when needed</li>
+              <li>• Grounded answers only</li>
+              <li>• Existing store APIs unchanged</li>
             </ul>
           </div>
         </div>
@@ -52,30 +51,30 @@
             style="background: #ffffff; border-radius: 0.5rem; padding: 1rem; box-shadow: 0 1px 3px rgba(0,0,0,0.1);">
             <h5
               style="font-size: 1.125rem; font-weight: 600; color: #1f2937; margin-bottom: 0.75rem; display: flex; align-items: center; gap: 0.5rem;">
-              <span style="font-size: 1.5rem;">💾</span> Data &amp; Tools
+              <span style="font-size: 1.5rem;">💾</span> Documents &amp; Index
             </h5>
             <ul
               style="font-size: 0.875rem; color: #4b5563; display: flex; flex-direction: column; gap: 0.25rem; list-style: none; padding: 0;">
-              <li>• Prisma schema for Conversation + Message</li>
-              <li>• PostgreSQL persistence layer</li>
-              <li>• 4 tool modules implemented</li>
-              <li>• Stock validation before cart ops</li>
-              <li>• User-bound data isolation</li>
+              <li>• Ingest approved manuals and FAQs</li>
+              <li>• Chunk size plus overlap</li>
+              <li>• Embeddings stored in FAISS</li>
+              <li>• Metadata for citations</li>
+              <li>• No second catalog database</li>
             </ul>
           </div>
           <div
             style="background: #ffffff; border-radius: 0.5rem; padding: 1rem; box-shadow: 0 1px 3px rgba(0,0,0,0.1);">
             <h5
               style="font-size: 1.125rem; font-weight: 600; color: #1f2937; margin-bottom: 0.75rem; display: flex; align-items: center; gap: 0.5rem;">
-              <span style="font-size: 1.5rem;">🧪</span> Integration &amp; QA
+              <span style="font-size: 1.5rem;">🧪</span> Checks
             </h5>
             <ul
               style="font-size: 0.875rem; color: #4b5563; display: flex; flex-direction: column; gap: 0.25rem; list-style: none; padding: 0;">
-              <li>• API route unit tests with Jest</li>
-              <li>• Tool selection accuracy evals</li>
-              <li>• Frontend E2E with Playwright</li>
-              <li>• Parameter validation checks</li>
-              <li>• Error handling for API failures</li>
+              <li>• Retrieval relevance</li>
+              <li>• Citation accuracy</li>
+              <li>• Hallucination refusal</li>
+              <li>• Langfuse traces planned</li>
+              <li>• Existing store still works</li>
             </ul>
           </div>
         </div>
@@ -86,25 +85,25 @@
       <h4 style="font-size: 1.125rem; font-weight: 600; color: #1f2937; margin-bottom: 1rem;">Next Phase: Testing &amp;
         Quality Assurance</h4>
       <p style="color: #4b5563; margin-bottom: 1rem;">
-        With the core code implemented, we now transition to formal testing to ensure
-        reliability and function calling accuracy across all e-commerce scenarios.
+        Formal tests now focus on retrieval quality, citation accuracy, and hallucination checks,
+        plus a browser pass of the React assistant.
       </p>
       <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1rem;">
         <div style="background: #ffffff; border-radius: 0.5rem; padding: 1rem;">
           <h5 style="font-weight: 500; color: #1f2937; margin-bottom: 0.5rem;">Test Planning</h5>
-          <p style="font-size: 0.875rem; color: #4b5563;">Overall strategy &amp; tool eval</p>
+          <p style="font-size: 0.875rem; color: #4b5563;">Manual questions and no-data cases</p>
         </div>
         <div style="background: #ffffff; border-radius: 0.5rem; padding: 1rem;">
           <h5 style="font-weight: 500; color: #1f2937; margin-bottom: 0.5rem;">Unit Testing</h5>
-          <p style="font-size: 0.875rem; color: #4b5563;">Tool modules and API logic</p>
+          <p style="font-size: 0.875rem; color: #4b5563;">Chunking, embeddings, FAISS</p>
         </div>
         <div style="background: #ffffff; border-radius: 0.5rem; padding: 1rem;">
           <h5 style="font-weight: 500; color: #1f2937; margin-bottom: 0.5rem;">Integration Testing</h5>
-          <p style="font-size: 0.875rem; color: #4b5563;">End-to-end chat flows</p>
+          <p style="font-size: 0.875rem; color: #4b5563;">POST /rag/ask end to end</p>
         </div>
         <div style="background: #ffffff; border-radius: 0.5rem; padding: 1rem;">
           <h5 style="font-weight: 500; color: #1f2937; margin-bottom: 0.5rem;">Performance Testing</h5>
-          <p style="font-size: 0.875rem; color: #4b5563;">Response speed &amp; token costs</p>
+          <p style="font-size: 0.875rem; color: #4b5563;">Retrieval and answer time</p>
         </div>
       </div>
     </div>
@@ -120,8 +119,8 @@ Checkpoint: Test the completed work and confirm it is stable before moving to th
       </div>
         Ready to Proceed?</h4>
       <p style="color: #4b5563; margin-bottom: 1rem;">
-        This Development phase is now complete. You can proceed to the next phase (Testing &amp; QA)
-        or review any component code as needed.
+        This Development phase is now complete. You can proceed to Testing &amp; QA
+        or review any component as needed.
       </p>
       <div style="display: flex; gap: 1rem; flex-wrap: wrap;">
         <button

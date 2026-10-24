@@ -28,27 +28,27 @@
       <h4 style="font-size: 1.25rem; font-weight: 600; color: #1f2937; margin-bottom: 1.5rem;">Testing Framework Configuration</h4>
       <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 2rem;">
         <div>
-          <h5 style="font-size: 1.125rem; font-weight: 500; color: #1f2937; margin-bottom: 1rem;">Jest & React Testing Library</h5>
+          <h5 style="font-size: 1.125rem; font-weight: 500; color: #1f2937; margin-bottom: 1rem;">pytest and FastAPI TestClient</h5>
           <div style="background: linear-gradient(to bottom right, #eff6ff, #dbeafe); border-radius: 0.5rem; padding: 1rem; border: 1px solid #bfdbfe; margin-bottom: 1rem;">
             <div style="display: flex; align-items: center; gap: 0.75rem; margin-bottom: 0.5rem;">
               <span style="font-size: 1.25rem;">🧪</span>
               <h6 style="font-weight: 600; color: #1f2937;">Unit Testing Setup</h6>
             </div>
             <ul style="font-size: 0.875rem; color: #4b5563; display: flex; flex-direction: column; gap: 0.25rem; list-style: none; padding: 0;">
-              <li>• Jest configuration with Next.js integration</li>
-              <li>• React Testing Library for component testing</li>
-              <li>• JSDOM environment for DOM testing</li>
-              <li>• Path mapping for clean imports (@/)</li>
-              <li>• Setup files for global test configuration</li>
+              <li>• pytest for FastAPI route tests</li>
+              <li>• TestClient for register, login, cart, and checkout</li>
+              <li>• Browser checks for React pages</li>
+              <li>• Isolated test database or transactions</li>
+              <li>• conftest.py fixtures for users and products</li>
             </ul>
           </div>
           <div style="background: #f9fafb; border-radius: 0.5rem; padding: 1rem;">
             <h6 style="font-weight: 500; color: #1f2937; margin-bottom: 0.5rem;">Test Configuration Files</h6>
             <ul style="font-size: 0.875rem; color: #4b5563; display: flex; flex-direction: column; gap: 0.25rem; list-style: none; padding: 0;">
-              <li>• <code style="background: #ffffff; padding: 0.125rem 0.25rem; border-radius: 0.25rem;">jest.config.js</code> - Jest configuration</li>
-              <li>• <code style="background: #ffffff; padding: 0.125rem 0.25rem; border-radius: 0.25rem;">jest.setup.js</code> - Test setup and mocks</li>
-              <li>• <code style="background: #ffffff; padding: 0.125rem 0.25rem; border-radius: 0.25rem;">tsconfig.json</code> - TypeScript configuration</li>
-              <li>• <code style="background: #ffffff; padding: 0.125rem 0.25rem; border-radius: 0.25rem;">package.json</code> - Test scripts and dependencies</li>
+              <li>• <code style="background: #ffffff; padding: 0.125rem 0.25rem; border-radius: 0.25rem;">pytest.ini</code> - pytest configuration</li>
+              <li>• <code style="background: #ffffff; padding: 0.125rem 0.25rem; border-radius: 0.25rem;">conftest.py</code> - Fixtures and test client</li>
+              <li>• <code style="background: #ffffff; padding: 0.125rem 0.25rem; border-radius: 0.25rem;">tests/</code> - API and order tests</li>
+              <li>• <code style="background: #ffffff; padding: 0.125rem 0.25rem; border-radius: 0.25rem;">requirements.txt</code> - pytest and test extras</li>
             </ul>
           </div>
         </div>
@@ -58,14 +58,14 @@
           <div style="background: linear-gradient(to bottom right, #faf5ff, #f3e8ff); border-radius: 0.5rem; padding: 1rem; border: 1px solid #e9d5ff; margin-bottom: 1rem;">
             <div style="display: flex; align-items: center; gap: 0.75rem; margin-bottom: 0.5rem;">
               <span style="font-size: 1.25rem;">🎭</span>
-              <h6 style="font-weight: 600; color: #1f2937;">Cypress & Playwright</h6>
+              <h6 style="font-weight: 600; color: #1f2937;">pytest and browser checks</h6>
             </div>
             <ul style="font-size: 0.875rem; color: #4b5563; display: flex; flex-direction: column; gap: 0.25rem; list-style: none; padding: 0;">
-              <li>• Cypress for user journey testing</li>
-              <li>• Playwright for cross-browser testing</li>
+              <li>• manual browser checks for user journeys</li>
+              <li>• manual browser checks on Chrome and Edge</li>
               <li>• Visual regression testing</li>
               <li>• Mobile responsive testing</li>
-              <li>• Payment flow validation</li>
+              <li>• Checkout and place-order validation</li>
             </ul>
           </div>
           <div style="background: #f9fafb; border-radius: 0.5rem; padding: 1rem;">
@@ -74,7 +74,7 @@
               <li>• User registration and authentication</li>
               <li>• Product browsing and search</li>
               <li>• Shopping cart functionality</li>
-              <li>• Checkout and payment process</li>
+              <li>• Checkout and place-order process</li>
               <li>• Admin panel operations</li>
             </ul>
           </div>
@@ -103,14 +103,14 @@
           <div style="background: linear-gradient(to bottom right, #fff7ed, #ffedd5); border-radius: 0.5rem; padding: 1rem; border: 1px solid #fed7aa;">
             <div style="display: flex; align-items: center; gap: 0.75rem; margin-bottom: 0.5rem;">
               <span style="font-size: 1.25rem;">💳</span>
-              <h6 style="font-weight: 600; color: #1f2937;">Payment Flow</h6>
+              <h6 style="font-weight: 600; color: #1f2937;">Checkout Flow</h6>
             </div>
             <ul style="font-size: 0.875rem; color: #4b5563; display: flex; flex-direction: column; gap: 0.25rem; list-style: none; padding: 0;">
-              <li>• Stripe integration testing</li>
-              <li>• Payment method validation</li>
+              <li>• Delivery details and place-order testing</li>
+              <li>• Empty cart and stock checks</li>
               <li>• Order confirmation</li>
               <li>• Error handling</li>
-              <li>• Receipt generation</li>
+              <li>• Confirmation and order history</li>
             </ul>
           </div>
         </div>
@@ -169,8 +169,8 @@
               <li>• Product CRUD operations</li>
               <li>• Order management</li>
               <li>• User management</li>
-              <li>• Dashboard analytics</li>
-              <li>• System configuration</li>
+              <li>• Category CRUD</li>
+              <li>• Update order status</li>
             </ul>
           </div>
         </div>
@@ -246,22 +246,18 @@
       <h4 style="font-size: 1.25rem; font-weight: 600; color: #1f2937; margin-bottom: 1.5rem;">Testing Tools & Automation</h4>
       <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 1rem;">
         <div style="text-align: center; padding: 1rem; background: #ffffff; border-radius: 0.5rem; box-shadow: 0 1px 3px rgba(0,0,0,0.1);">
-          <div style="font-size: 1.5rem; margin-bottom: 0.5rem;">•</div>
-          <div style="font-size: 0.875rem; font-weight: 500; color: #1f2937;">Jest</div>
+          <div style="font-size: 0.875rem; font-weight: 500; color: #1f2937;">pytest</div>
           <div style="font-size: 0.75rem; color: #4b5563;">Unit & Integration</div>
         </div>
         <div style="text-align: center; padding: 1rem; background: #ffffff; border-radius: 0.5rem; box-shadow: 0 1px 3px rgba(0,0,0,0.1);">
-          <div style="font-size: 1.5rem; margin-bottom: 0.5rem;">•</div>
-          <div style="font-size: 0.875rem; font-weight: 500; color: #1f2937;">Cypress</div>
+          <div style="font-size: 0.875rem; font-weight: 500; color: #1f2937;">browser checks</div>
           <div style="font-size: 0.75rem; color: #4b5563;">E2E Testing</div>
         </div>
         <div style="text-align: center; padding: 1rem; background: #ffffff; border-radius: 0.5rem; box-shadow: 0 1px 3px rgba(0,0,0,0.1);">
-          <div style="font-size: 1.5rem; margin-bottom: 0.5rem;">•</div>
-          <div style="font-size: 0.875rem; font-weight: 500; color: #1f2937;">Playwright</div>
-          <div style="font-size: 0.75rem; color: #4b5563;">Cross-browser</div>
+          <div style="font-size: 0.875rem; font-weight: 500; color: #1f2937;">Browser checks</div>
+          <div style="font-size: 0.75rem; color: #4b5563;">Manual UI paths</div>
         </div>
         <div style="text-align: center; padding: 1rem; background: #ffffff; border-radius: 0.5rem; box-shadow: 0 1px 3px rgba(0,0,0,0.1);">
-          <div style="font-size: 1.5rem; margin-bottom: 0.5rem;">•</div>
           <div style="font-size: 0.875rem; font-weight: 500; color: #1f2937;">Coverage</div>
           <div style="font-size: 0.75rem; color: #4b5563;">Reporting</div>
         </div>

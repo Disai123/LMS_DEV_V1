@@ -2,32 +2,26 @@
   <div class="content-section">
     <h3 class="content-heading">Database Implementation</h3>
     <p style="color: #4b5563; line-height: 1.75; margin-bottom: 2rem;">
-      The data layer uses <strong>PostgreSQL</strong> via <strong>Prisma ORM</strong>.
-      We implement Conversation and Message models that persist chat history,
-      and integrate with the existing e-commerce product and cart tables.
+      Ask the Store reuses the <strong>existing PostgreSQL/Neon</strong> connection.
+      The agent reads products, categories, customers, orders, order items, and stock.
+      It does not add a second database and it does not write store rows.
     </p>
 
     <!-- Code Snippet Card -->
     <div
       style="background: #1e293b; padding: 1.5rem; border-radius: 12px; color: #cbd5e1; font-family: 'Courier New', Courier, monospace; font-size: 0.85rem; margin-bottom: 2rem; border: 1px solid #334155; box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);">
-      <div style="color: #10b981; margin-bottom: 0.5rem;">// Prisma Schema — Conversation Model</div>
-      <div style="margin-bottom: 0.5rem;"><span style="color: #f472b6;">model</span> <span
-          style="color: #38bdf8;">Conversation</span> {</div>
-      <div style="padding-left: 1rem; margin-bottom: 0.5rem;">id <span style="color: #fbbf24;">String</span> @id
-        @default(cuid())</div>
-      <div style="padding-left: 1rem; margin-bottom: 0.5rem;">userId <span style="color: #fbbf24;">String</span> <span
-          style="color: #94a3b8;">// Bound to JWT user</span></div>
-      <div style="padding-left: 1rem; margin-bottom: 0.5rem;">messages <span style="color: #fbbf24;">Message[]</span>
-      </div>
-      <div style="padding-left: 1rem; margin-bottom: 0.5rem;">createdAt <span style="color: #fbbf24;">DateTime</span>
-        @default(now())</div>
-      <div>}</div>
+      <div style="color: #10b981; margin-bottom: 0.5rem;"># Read-only agent query example</div>
+      <div style="margin-bottom: 0.5rem;"><span style="color: #f472b6;">SELECT</span> name, price, stock</div>
+      <div style="margin-bottom: 0.5rem;"><span style="color: #f472b6;">FROM</span> products</div>
+      <div style="margin-bottom: 0.5rem;"><span style="color: #f472b6;">WHERE</span> category = <span
+          style="color: #fbbf24;">:category</span></div>
+      <div style="margin-bottom: 0.5rem;"><span style="color: #f472b6;">LIMIT</span> <span style="color: #fbbf24;">approved_max</span></div>
+      <div style="color: #94a3b8; margin-top: 0.75rem;"># Never shown to the user. Writes are not allowed.</div>
     </div>
 
     <p style="color: #4b5563; line-height: 1.75; margin-bottom: 1.5rem;">
-      The implementation focuses on <strong>user-bound data isolation</strong> — every query is
-      scoped by <code>userId</code> extracted from the validated JWT token, ensuring no cross-user
-      data leakage.
+      Queries stay on an approved field list and use the signed-in user's permissions.
+      If no row matches, the agent says so. It never invents a count or total.
     </p>
 
     <!-- Feature List -->
@@ -37,19 +31,19 @@
       <div style="display: flex; flex-direction: column; gap: 0.75rem;">
         <div style="display: flex; align-items: center; gap: 10px; font-size: 0.85rem; color: #475569;">
           <div style="width: 8px; height: 8px; background: #10b981; border-radius: 50%;"></div>
-          <span>Prisma for type-safe, non-blocking database operations.</span>
+          <span>Reuse the existing FastAPI database connection.</span>
         </div>
         <div style="display: flex; align-items: center; gap: 10px; font-size: 0.85rem; color: #475569;">
           <div style="width: 8px; height: 8px; background: #10b981; border-radius: 50%;"></div>
-          <span>Prisma Migrate for managed schema versioning and migrations.</span>
+          <span>Keep a separate read-only path for the agent.</span>
         </div>
         <div style="display: flex; align-items: center; gap: 10px; font-size: 0.85rem; color: #475569;">
           <div style="width: 8px; height: 8px; background: #10b981; border-radius: 50%;"></div>
-          <span>Message history capped at 20 records to control token usage.</span>
+          <span>Bound result size so answers stay small and safe.</span>
         </div>
         <div style="display: flex; align-items: center; gap: 10px; font-size: 0.85rem; color: #475569;">
           <div style="width: 8px; height: 8px; background: #10b981; border-radius: 50%;"></div>
-          <span>Cascade delete on Conversation ensures clean message cleanup.</span>
+          <span>Leave existing store tables and APIs unchanged.</span>
         </div>
       </div>
     </div>

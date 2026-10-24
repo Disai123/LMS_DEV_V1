@@ -787,13 +787,12 @@
   <div class="container">
     <!-- Header Section -->
     <div class="header">
-      <div style="display:inline-block;margin-bottom:1rem;padding:0.35rem 0.85rem;border-radius:999px;background:rgba(99,102,241,0.15);color:#4338ca;font-size:0.75rem;font-weight:700;letter-spacing:0.04em;">ANTIGRAVITY · PROMPT WORKSHOP · LIVE ON RENDER</div>
+      <div style="display:inline-block;margin-bottom:1rem;padding:0.35rem 0.85rem;border-radius:999px;background:rgba(99,102,241,0.15);color:#4338ca;font-size:0.75rem;font-weight:700;letter-spacing:0.04em;">LIVE ON RENDER</div>
 <h1>🤖 Agentic RAG E-Commerce Assistant</h1>
-      <p class="subtitle">askunicart - AI-Powered Shopping Assistant</p>
+      <p class="subtitle">Document RAG over product manuals, with citations</p>
       <p class="description">
-        A comprehensive implementation guide for building an AI-powered shopping assistant using OpenAI GPT models.
-        Learn how to integrate natural language processing into e-commerce platforms, covering all phases from
-        business requirements to deployment.
+        Add an Agentic RAG assistant to an existing React + FastAPI store. Ingest approved manuals, chunk them,
+        create embeddings, store them in FAISS, and answer only from retrieved documents.
       </p>
     </div>
 
@@ -807,7 +806,7 @@
         <div style="display: flex; align-items: center; gap: 14px;">
           <div style="width: 12px; height: 12px; background: #22c55e; border-radius: 50%; box-shadow: 0 0 8px #22c55e; animation: pulse-green 2s ease-in-out infinite; flex-shrink: 0;"></div>
           <div>
-            <div style="color: #a5f3fc; font-size: 0.75rem; font-weight: 600; letter-spacing: 0.1em; text-transform: uppercase; margin-bottom: 4px;">🤖 AI Agent Deployed on Render.com</div>
+            <div style="color: #a5f3fc; font-size: 0.75rem; font-weight: 600; letter-spacing: 0.1em; text-transform: uppercase; margin-bottom: 4px;">Agentic RAG assistant on Render</div>
             <div style="color: #e2e8f0; font-size: 1rem; font-weight: 600; font-family: 'SF Mono','Fira Code',monospace;">https://agentic-rag-fastapi-frontend.onrender.com</div>
           </div>
         </div>
@@ -957,9 +956,9 @@
       </style>
 
       <p style="color: #4b5563; margin-bottom: 20px; font-size: 0.95rem; line-height: 1.7;">
-        The <strong>askunicart AI Agent</strong> is <strong>live and fully deployed</strong> on Render.com.
-        Below are screenshots from the production environment showing the AI-powered shopping assistant in action.
-        Click any slide or <strong>"Try Live Agent"</strong> to chat with it yourself!
+        The <strong>Agentic RAG E-Commerce Assistant</strong> is live on Render.
+        It answers product-manual questions from approved documents and shows citations.
+        Open the live app to ask a usage, FAQ, or warranty question.
       </p>
 
       <!-- Screenshot Slider -->
@@ -981,7 +980,7 @@
                   <!-- Navbar -->
                   <div
                     style="background:#fff; padding:10px 18px; display:flex; align-items:center; justify-content:space-between; border-bottom:1px solid #e5e7eb;">
-                    <span style="color:#4f46e5; font-weight:800; font-size:1rem;">ShopEasy</span>
+                    <span style="color:#4f46e5; font-weight:800; font-size:1rem;">Store</span>
                     <div style="display:flex; align-items:center; gap:12px;">
                       <span style="color:#374151; font-size:0.8rem;">Home</span>
                       <span style="font-size:0.8rem;">🛒</span>
@@ -994,23 +993,22 @@
                   <!-- Hero Banner -->
                   <div
                     style="background:linear-gradient(135deg,#4f46e5,#6366f1); padding:16px 20px; position:relative;">
-                    <div style="color:#fff; font-weight:800; font-size:1rem; margin-bottom:3px;">Welcome to ShopEasy
+                    <div style="color:#fff; font-weight:800; font-size:1rem; margin-bottom:3px;">Existing store + RAG assistant
                     </div>
-                    <div style="color:rgba(255,255,255,0.85); font-size:0.7rem; margin-bottom:8px;">Discover our premium
-                      collection, now automated with AI.</div>
+                    <div style="color:rgba(255,255,255,0.85); font-size:0.7rem; margin-bottom:8px;">Ask about approved product manuals without rebuilding the store.</div>
                     <div
                       style="background:rgba(255,255,255,0.15); border-radius:20px; padding:5px 12px; font-size:0.7rem; color:#fff; display:inline-flex; align-items:center; gap:6px; border:1px solid rgba(255,255,255,0.3);">
                       🔍 Search for products, categories...</div>
                     <!-- AI Chat bubble (floating) -->
                     <div
                       style="position:absolute; right:10px; top:8px; background:#fff; border-radius:10px; padding:8px 12px; box-shadow:0 4px 16px rgba(0,0,0,0.15); width:160px; border:1px solid #e5e7eb;">
-                      <div style="font-size:0.65rem; font-weight:700; color:#111827; margin-bottom:2px;">🤖 AI Assistant
+                      <div style="font-size:0.65rem; font-weight:700; color:#111827; margin-bottom:2px;">🤖 Manuals assistant
                       </div>
-                      <div style="font-size:0.55rem; color:#6b7280; margin-bottom:4px;">Powered by LangGraph &amp; MCP
+                      <div style="font-size:0.55rem; color:#6b7280; margin-bottom:4px;">FAISS + embeddings + citations
                       </div>
                       <div
                         style="font-size:0.6rem; color:#374151; background:#f9fafb; border-radius:6px; padding:4px 6px;">
-                        Hi! I can find products and even checkout for you!</div>
+                        Ask a product-manual question. I answer only from approved documents.</div>
                     </div>
                   </div>
                   <!-- Products -->
@@ -1049,8 +1047,8 @@
                   </div>
                 </div>
               </div>
-              <div class="slide-caption"><span style="font-size:1.1rem;">🏠</span> <strong style="color:#a5b4fc;">Home
-                  Page</strong> — ShopEasy with AI Assistant Chat Widget (LangGraph &amp; MCP)</div>
+              <div class="slide-caption"><span style="font-size:1.1rem;">🏠</span> <strong style="color:#a5b4fc;">Existing
+                  store</strong> — React assistant over approved product manuals</div>
             </div>
 
             <!-- Slide 2: AI Searching Products -->
@@ -1060,36 +1058,35 @@
                   <!-- Navbar -->
                   <div
                     style="background:#fff; padding:10px 18px; display:flex; align-items:center; justify-content:space-between; border-bottom:1px solid #e5e7eb;">
-                    <span style="color:#4f46e5; font-weight:800; font-size:1rem;">ShopEasy</span>
+                    <span style="color:#4f46e5; font-weight:800; font-size:1rem;">Store</span>
                     <div style="display:flex; align-items:center; gap:10px;"><span
                         style="color:#374151; font-size:0.8rem;">Home</span><span style="font-size:0.8rem;">🛒</span>
                     </div>
                   </div>
                   <!-- AI Chat Expanded -->
                   <div style="padding:12px;">
-                    <div style="font-weight:700; font-size:0.85rem; color:#111827; margin-bottom:8px;">🤖 AI Shopping
-                      Assistant</div>
+                    <div style="font-weight:700; font-size:0.85rem; color:#111827; margin-bottom:8px;">🤖 Product manuals
+                      assistant</div>
                     <div
                       style="background:#f9fafb; border:1px solid #e5e7eb; border-radius:10px; padding:10px; display:flex; flex-direction:column; gap:6px;">
                       <!-- User message -->
                       <div style="display:flex; justify-content:flex-end;">
                         <div
                           style="background:#4f46e5; color:#fff; border-radius:10px 10px 2px 10px; padding:6px 10px; font-size:0.68rem; max-width:70%;">
-                          Show me wireless headphones under $200</div>
+                          How do I pair the wireless headphones?</div>
                       </div>
                       <!-- AI tool call indicator -->
                       <div
                         style="background:#f0fdf4; border:1px solid #bbf7d0; border-radius:6px; padding:5px 8px; font-size:0.62rem; color:#166534; display:flex; align-items:center; gap:4px;">
-                        <span></span> <span>Calling tool: <strong>search_products</strong> → "wireless
-                          headphones"</span>
+                        <span>FAISS retrieval → Headphones User Manual, Pairing</span>
                       </div>
                       <!-- AI response -->
                       <div style="display:flex; align-items:flex-start; gap:6px;">
                         <span style="font-size:0.9rem;">🤖</span>
                         <div
                           style="background:#fff; border:1px solid #e5e7eb; border-radius:2px 10px 10px 10px; padding:6px 10px; font-size:0.68rem; color:#374151; max-width:80%;">
-                          Found 3 wireless headphones! 🎧 <strong>Premium Wireless Headphones</strong> at $129.99 is our
-                          top pick. Shall I add it to your cart?</div>
+                          Hold the power button until the LED flashes blue, then select the headphones in Bluetooth.
+                          <strong>Source:</strong> Headphones User Manual, Pairing</div>
                       </div>
                       <!-- Input bar -->
                       <div
@@ -1102,8 +1099,8 @@
                   </div>
                 </div>
               </div>
-              <div class="slide-caption"><span style="font-size:1.1rem;">🔍</span> <strong style="color:#a5b4fc;">AI
-                  Product Search</strong> — Natural language search with tool-calling (search_products)</div>
+              <div class="slide-caption"><span style="font-size:1.1rem;">🔍</span> <strong style="color:#a5b4fc;">Manual
+                  question</strong> — FAISS retrieval with a citation from the user manual</div>
             </div>
 
             <!-- Slide 3: AI Adding to Cart -->
@@ -1113,31 +1110,31 @@
                   <!-- Navbar -->
                   <div
                     style="background:#fff; padding:10px 18px; display:flex; align-items:center; justify-content:space-between; border-bottom:1px solid #e5e7eb;">
-                    <span style="color:#4f46e5; font-weight:800; font-size:1rem;">ShopEasy</span>
+                    <span style="color:#4f46e5; font-weight:800; font-size:1rem;">Store</span>
                     <div style="display:flex; align-items:center; gap:10px;"><span style="font-size:0.8rem;">🛒
                         1</span><span style="color:#374151; font-size:0.8rem;">Admin</span></div>
                   </div>
                   <!-- Cart + AI -->
                   <div style="padding:12px;">
-                    <div style="font-weight:700; font-size:0.85rem; color:#111827; margin-bottom:8px;">🛒 Cart
-                      Management via AI</div>
+                    <div style="font-weight:700; font-size:0.85rem; color:#111827; margin-bottom:8px;">📎 Cited
+                      warranty answer</div>
                     <div
                       style="background:#f9fafb; border:1px solid #e5e7eb; border-radius:10px; padding:10px; display:flex; flex-direction:column; gap:6px;">
                       <div style="display:flex; justify-content:flex-end;">
                         <div
                           style="background:#4f46e5; color:#fff; border-radius:10px 10px 2px 10px; padding:6px 10px; font-size:0.68rem; max-width:70%;">
-                          Yes, add the headphones to my cart!</div>
+                          What does the headphone warranty cover?</div>
                       </div>
                       <div
                         style="background:#f0fdf4; border:1px solid #bbf7d0; border-radius:6px; padding:5px 8px; font-size:0.62rem; color:#166534; display:flex; align-items:center; gap:4px;">
-                        <span></span> <span>Calling tool: <strong>add_to_cart</strong> → product_id: 1, qty: 1</span>
+                        <span>Relevance check passed → Warranty Guide, Coverage</span>
                       </div>
                       <div style="display:flex; align-items:flex-start; gap:6px;">
                         <span style="font-size:0.9rem;">🤖</span>
                         <div
                           style="background:#fff; border:1px solid #e5e7eb; border-radius:2px 10px 10px 10px; padding:6px 10px; font-size:0.68rem; color:#374151;">
-                          ✅ Added <strong>Premium Wireless Headphones</strong> ($129.99) to your cart! Your cart now has
-                          1 item. Would you like to checkout?
+                          The limited warranty covers manufacturing defects for 12 months. Damage from misuse is not covered.
+                          <strong>Source:</strong> Warranty Guide, Coverage
                         </div>
                       </div>
                       <!-- Cart preview -->
@@ -1154,8 +1151,7 @@
                   </div>
                 </div>
               </div>
-              <div class="slide-caption"><span style="font-size:1.1rem;">🛒</span> <strong style="color:#a5b4fc;">AI
-                  Cart Manager</strong> — Add to cart via natural language (add_to_cart tool)</div>
+              <div class="slide-caption"><span style="font-size:1.1rem;">📎</span> <strong style="color:#a5b4fc;">Citations</strong> — Grounded warranty answer with a source reference</div>
             </div>
 
             <!-- Slide 4: AI Checkout -->
@@ -1165,45 +1161,44 @@
                   <!-- Navbar -->
                   <div
                     style="background:#fff; padding:10px 18px; display:flex; align-items:center; justify-content:space-between; border-bottom:1px solid #e5e7eb;">
-                    <span style="color:#4f46e5; font-weight:800; font-size:1rem;">ShopEasy</span>
+                    <span style="color:#4f46e5; font-weight:800; font-size:1rem;">Store</span>
                     <div style="display:flex; align-items:center; gap:10px;"><span style="font-size:0.8rem;">🛒
                         1</span><span style="color:#374151; font-size:0.8rem;">System Admin</span></div>
                   </div>
                   <!-- Checkout via AI -->
                   <div style="padding:12px;">
-                    <div style="font-weight:700; font-size:0.85rem; color:#111827; margin-bottom:8px;">💳 AI-Assisted
-                      Checkout</div>
+                    <div style="font-weight:700; font-size:0.85rem; color:#111827; margin-bottom:8px;">🚫 Honest
+                      not-found reply</div>
                     <div
                       style="background:#f9fafb; border:1px solid #e5e7eb; border-radius:10px; padding:10px; display:flex; flex-direction:column; gap:6px;">
                       <div style="display:flex; justify-content:flex-end;">
                         <div
                           style="background:#4f46e5; color:#fff; border-radius:10px 10px 2px 10px; padding:6px 10px; font-size:0.68rem; max-width:70%;">
-                          Yes please, go ahead and checkout</div>
+                          Does this charger work at 240V?</div>
                       </div>
                       <div
                         style="background:#f0fdf4; border:1px solid #bbf7d0; border-radius:6px; padding:5px 8px; font-size:0.62rem; color:#166534; display:flex; align-items:center; gap:4px;">
-                        <span></span> <span>Calling tool: <strong>checkout</strong> → processing order...</span>
+                        <span>No useful FAISS match → refuse to invent specs</span>
                       </div>
                       <div style="display:flex; align-items:flex-start; gap:6px;">
                         <span style="font-size:0.9rem;">🤖</span>
                         <div
                           style="background:#fff; border:1px solid #e5e7eb; border-radius:2px 10px 10px 10px; padding:6px 10px; font-size:0.68rem; color:#374151;">
-                          🎉 <strong>Order placed successfully!</strong> Order #1042 confirmed. 1x Premium Wireless
-                          Headphones for $129.99. Thank you for shopping with ShopEasy!
+                          That voltage rating is not in the approved product documents. I will not invent a spec.
                         </div>
                       </div>
                       <div
                         style="background:#f0fdf4; border:1px solid #bbf7d0; border-radius:8px; padding:8px; text-align:center;">
                         <div style="font-size:1rem;">✅</div>
-                        <div style="font-size:0.65rem; font-weight:700; color:#166534;">Order #1042 Confirmed!</div>
-                        <div style="font-size:0.6rem; color:#4b7c5e;">Total: $129.99</div>
+                        <div style="font-size:0.65rem; font-weight:700; color:#166534;">Information not found</div>
+                        <div style="font-size:0.6rem; color:#4b7c5e;">Answer only from approved manuals</div>
                       </div>
                     </div>
                   </div>
                 </div>
               </div>
-              <div class="slide-caption"><span style="font-size:1.1rem;">💳</span> <strong style="color:#a5b4fc;">AI
-                  Checkout</strong> — Complete order via chat (checkout tool) — Order #1042 confirmed!</div>
+              <div class="slide-caption"><span style="font-size:1.1rem;">🚫</span> <strong style="color:#a5b4fc;">Hallucination
+                  refusal</strong> — If the manuals do not support the answer, say so</div>
             </div>
 
           </div>
@@ -1251,60 +1246,73 @@
     <div class="overview-section">
       <h2 class="section-title">Project Overview</h2>
       <p class="project-description">
-        This Agentic RAG E-Commerce Assistant project focuses exclusively on implementing the <strong>askunicart</strong> AI assistant
-        for e-commerce platforms. It demonstrates how to build an intelligent shopping assistant that helps customers
-        browse products, check stock, get recommendations, and manage their cart through natural language conversations.
-        The project is structured into six distinct phases, covering everything from requirements gathering to
-        production
-        deployment.
+        This project adds an <strong>Agentic RAG assistant</strong> to an existing e-commerce app.
+        The knowledge source is approved product manuals, user manuals, usage guides, FAQs, and warranty documents.
+        Documents are cleaned, chunked, embedded, and stored in FAISS. Answers come only from retrieved text and include citations.
       </p>
 
       <div class="features-grid">
         <div class="feature-card">
-          <div class="feature-icon">💬</div>
-          <div class="feature-title">Natural Language Chat</div>
+          <div class="feature-icon">📄</div>
+          <div class="feature-title">Document Ingestion</div>
           <div class="feature-description">
-            Conversational AI interface for product search and queries
+            Load approved manuals, FAQs, and warranty files
           </div>
         </div>
 
         <div class="feature-card">
-          <div class="feature-icon">🔍</div>
-          <div class="feature-title">Product Search</div>
+          <div class="feature-icon">✂️</div>
+          <div class="feature-title">Chunking</div>
           <div class="feature-description">
-            Intelligent product discovery via natural language
+            Split text with chunk size and overlap
           </div>
         </div>
 
         <div class="feature-card">
-          <div class="feature-icon">📦</div>
-          <div class="feature-title">Stock Checking</div>
+          <div class="feature-icon">🧮</div>
+          <div class="feature-title">Embeddings</div>
           <div class="feature-description">
-            Real-time inventory availability queries
+            Turn chunks and questions into vectors
           </div>
         </div>
 
         <div class="feature-card">
-          <div class="feature-icon">🛒</div>
-          <div class="feature-title">Cart Management</div>
+          <div class="feature-icon">🗂️</div>
+          <div class="feature-title">FAISS Retrieval</div>
           <div class="feature-description">
-            Add, update, and remove items via chat
+            Search the vector index, then check relevance
           </div>
         </div>
 
         <div class="feature-card">
-          <div class="feature-icon">🎯</div>
-          <div class="feature-title">Recommendations</div>
+          <div class="feature-icon">✅</div>
+          <div class="feature-title">Grounded Answers</div>
           <div class="feature-description">
-            AI-powered product suggestions
+            Answer only from retrieved approved documents
           </div>
         </div>
 
         <div class="feature-card">
-          <div class="feature-icon">🧠</div>
-          <div class="feature-title">OpenAI Integration</div>
+          <div class="feature-icon">📎</div>
+          <div class="feature-title">Citations</div>
           <div class="feature-description">
-            GPT-4o-mini with function calling
+            Show document name and section references
+          </div>
+        </div>
+
+        <div class="feature-card">
+          <div class="feature-icon">🚫</div>
+          <div class="feature-title">Hallucination Refusal</div>
+          <div class="feature-description">
+            Say not found. Never invent specs or warranty
+          </div>
+        </div>
+
+        <div class="feature-card">
+          <div class="feature-icon">📊</div>
+          <div class="feature-title">Langfuse Evals</div>
+          <div class="feature-description">
+            Trace retrieval quality, grounding, and sources
           </div>
         </div>
       </div>
@@ -1322,15 +1330,13 @@
       </div>
       <div class="video-info">
         <h3>Complete Project Walkthrough</h3>
-        <p>Watch this comprehensive video to understand the entire askunicart AI agent project journey, from initial
-          planning to final deployment.</p>
+        <p>Watch this walkthrough of the Agentic RAG assistant: ingest manuals, retrieve with FAISS, and cite sources.</p>
       </div>
     </div>
 
     <!-- Begin Journey Button -->
     <div class="begin-journey-section">
       <a href="BRD_phase/Overview.html" class="begin-journey-btn">
-        <span></span>
         <span>Begin Your Journey</span>
         <span>→</span>
       </a>

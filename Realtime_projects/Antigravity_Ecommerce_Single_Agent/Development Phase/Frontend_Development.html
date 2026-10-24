@@ -2,44 +2,42 @@
   <div class="content-section">
     <h3 class="content-heading">Frontend Development</h3>
     <p style="color: #4b5563; line-height: 1.75; margin-bottom: 2rem;">
-      The frontend is a <strong>React 18 + Next.js 14</strong> floating chat widget. It uses
-      <strong>Zustand</strong> for global state management, providing a seamless shopping assistant
-      interface accessible from any page of the e-commerce storefront.
+      The frontend change is a simple Ask the Store screen inside the <strong>existing ReactJS application</strong>.
+      Reuse the current styling and login. Do not create a separate frontend.
     </p>
 
     <!-- Dynamic Interface Cards -->
     <div style="display: grid; grid-template-columns: 1fr; gap: 1.5rem; margin-bottom: 2.5rem;">
       <div
         style="background: #ffffff; border: 1px solid #e5e7eb; border-radius: 16px; padding: 1.5rem; box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05); border-top: 4px solid #6366f1;">
-        <h4 style="font-size: 1.1rem; font-weight: 700; color: #1e293b; margin-bottom: 1rem;">Chat Component
-          Architecture</h4>
+        <h4 style="font-size: 1.1rem; font-weight: 700; color: #1e293b; margin-bottom: 1rem;">Ask the Store Screen
+          </h4>
         <p style="font-size: 0.9rem; color: #64748b; line-height: 1.6; margin-bottom: 1.25rem;">
-          <code>AskUnicartChat.tsx</code> is a floating button component. On click it expands
-          into a full chat window with message history, loading states, and an input field
-          that posts to the backend API route.
+          The screen has a question input, an Ask button, a loading state, and an answer area.
+          It posts the question to the existing FastAPI endpoint and shows the real backend reply.
         </p>
         <div style="background: #f8fafc; border-radius: 8px; padding: 1rem;">
-          <div style="font-weight: 600; font-size: 0.85rem; color: #334155; margin-bottom: 0.5rem;">sendMessage Action
-            (Zustand)</div>
-          <pre style="font-size: 0.8rem; color: #475569; margin: 0; font-family: monospace;">const response = await fetch('/api/askunicart', {
+          <div style="font-weight: 600; font-size: 0.85rem; color: #334155; margin-bottom: 0.5rem;">Ask action
+            </div>
+          <pre style="font-size: 0.8rem; color: #475569; margin: 0; font-family: monospace;">const response = await fetch('/agent/ask', {
     method: 'POST',
-    headers: { Authorization: `Bearer ${token}` },
-    body: JSON.stringify({ message, conversationId })
+    headers: { 'Content-Type': 'application/json' },
+    credentials: 'include',
+    body: JSON.stringify({ question })
 });</pre>
         </div>
       </div>
 
       <div
         style="background: #ffffff; border: 1px solid #e5e7eb; border-radius: 16px; padding: 1.5rem; box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05); border-top: 4px solid #10b981;">
-        <h4 style="font-size: 1.1rem; font-weight: 700; color: #1e293b; margin-bottom: 1rem;">Zustand Store State</h4>
+        <h4 style="font-size: 1.1rem; font-weight: 700; color: #1e293b; margin-bottom: 1rem;">UI State</h4>
         <p style="font-size: 0.9rem; color: #64748b; line-height: 1.6; margin-bottom: 1.25rem;">
-          The global chat store manages all conversation state. The UI stays in sync
-          without any manual page refreshes or prop drilling.
+          Keep local state small. Show the last question, the answer, and whether a request is running.
         </p>
         <div style="display: flex; gap: 1rem; flex-wrap: wrap;">
           <div
             style="background: #f0fdf4; border: 1px solid #bbf7d0; padding: 0.75rem 1rem; border-radius: 8px; flex: 1; text-align: center;">
-            <span style="font-weight: 700; color: #15803d; font-size: 0.8rem;">messages[ ]</span>
+            <span style="font-weight: 700; color: #15803d; font-size: 0.8rem;">question</span>
           </div>
           <div
             style="background: #f0fdf4; border: 1px solid #bbf7d0; padding: 0.75rem 1rem; border-radius: 8px; flex: 1; text-align: center;">
@@ -47,7 +45,7 @@
           </div>
           <div
             style="background: #f0fdf4; border: 1px solid #bbf7d0; padding: 0.75rem 1rem; border-radius: 8px; flex: 1; text-align: center;">
-            <span style="font-weight: 700; color: #15803d; font-size: 0.8rem;">conversationId</span>
+            <span style="font-weight: 700; color: #15803d; font-size: 0.8rem;">answer / status</span>
           </div>
         </div>
       </div>
@@ -57,18 +55,13 @@
     <h4 style="font-size: 1.25rem; font-weight: 600; color: #1e293b; margin-bottom: 1rem;">Frontend Stack</h4>
     <div style="display: flex; flex-wrap: wrap; gap: 0.75rem;">
       <span
-        style="background: #eef2ff; color: #4338ca; padding: 6px 16px; border-radius: 20px; font-weight: 600; font-size: 0.85rem; border: 1px solid #c7d2fe;">React
-        18</span>
+        style="background: #eef2ff; color: #4338ca; padding: 6px 16px; border-radius: 20px; font-weight: 600; font-size: 0.85rem; border: 1px solid #c7d2fe;">Existing ReactJS</span>
       <span
-        style="background: #eef2ff; color: #4338ca; padding: 6px 16px; border-radius: 20px; font-weight: 600; font-size: 0.85rem; border: 1px solid #c7d2fe;">Next.js
-        14</span>
+        style="background: #eef2ff; color: #4338ca; padding: 6px 16px; border-radius: 20px; font-weight: 600; font-size: 0.85rem; border: 1px solid #c7d2fe;">Existing login</span>
       <span
-        style="background: #eef2ff; color: #4338ca; padding: 6px 16px; border-radius: 20px; font-weight: 600; font-size: 0.85rem; border: 1px solid #c7d2fe;">Zustand</span>
+        style="background: #eef2ff; color: #4338ca; padding: 6px 16px; border-radius: 20px; font-weight: 600; font-size: 0.85rem; border: 1px solid #c7d2fe;">POST /agent/ask</span>
       <span
-        style="background: #eef2ff; color: #4338ca; padding: 6px 16px; border-radius: 20px; font-weight: 600; font-size: 0.85rem; border: 1px solid #c7d2fe;">TypeScript</span>
-      <span
-        style="background: #eef2ff; color: #4338ca; padding: 6px 16px; border-radius: 20px; font-weight: 600; font-size: 0.85rem; border: 1px solid #c7d2fe;">Tailwind
-        CSS</span>
+        style="background: #eef2ff; color: #4338ca; padding: 6px 16px; border-radius: 20px; font-weight: 600; font-size: 0.85rem; border: 1px solid #c7d2fe;">Existing store styles</span>
     </div>
   </div>
 </div>

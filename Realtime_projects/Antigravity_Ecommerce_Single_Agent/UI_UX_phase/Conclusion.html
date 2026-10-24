@@ -3,43 +3,43 @@
     <h3 class="content-heading">Conclusion</h3>
     <div style="max-width: none;">
       <p style="color: #4b5563; line-height: 1.75; margin-bottom: 1.5rem;">
-        The UI/UX Design phase has established a comprehensive design system and user experience flows for the
-        askunicart AI agent. We have created intuitive chat interface components that enable seamless natural
-        language interactions.
+        The UI/UX phase defined a simple Ask the Store screen inside the existing React application.
+        Users type a question, press Ask, and see a grounded answer or a safe status message.
+        The existing store layout is not redesigned.
       </p>
 
       <div class="card" style="margin-bottom: 2rem;">
         <h4 style="font-size: 1.25rem; font-weight: 600; color: #1f2937; margin-bottom: 1rem;">Key Design Decisions</h4>
         <ul
           style="list-style: disc; list-style-position: inside; display: flex; flex-direction: column; gap: 0.75rem; color: #4b5563;">
-          <li>✅ Floating chat button for easy access from any page</li>
-          <li>✅ Distinct visual styles for user vs AI messages</li>
-          <li>✅ Clear loading states to indicate AI processing</li>
-          <li>✅ Mobile-first responsive design approach</li>
-          <li>✅ Accessible color contrast and touch targets</li>
-          <li>✅ Error handling with user-friendly messages</li>
+          <li>✅ Add the screen to the existing React app, not a new frontend</li>
+          <li>✅ Keep one question input and one Ask button</li>
+          <li>✅ Show loading while POST /agent/ask is in progress</li>
+          <li>✅ Use distinct messages for no-data, out-of-scope, and errors</li>
+          <li>✅ Match existing colors, type, and spacing</li>
+          <li>✅ Never display secrets, SQL, stack traces, or system prompts</li>
         </ul>
       </div>
 
       <div class="card" style="margin-bottom: 2rem;">
-        <h4 style="font-size: 1.25rem; font-weight: 600; color: #1f2937; margin-bottom: 1rem;">Design Components Created
+        <h4 style="font-size: 1.25rem; font-weight: 600; color: #1f2937; margin-bottom: 1rem;">Screen Pieces Defined
         </h4>
         <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1rem;">
           <div style="background: #eff6ff; padding: 1rem; border-radius: 0.5rem; border-left: 4px solid #3b82f6;">
-            <div style="font-weight: 600; color: #1f2937; margin-bottom: 0.5rem;">Chat Button</div>
-            <div style="font-size: 0.875rem; color: #6b7280;">Floating action button</div>
+            <div style="font-weight: 600; color: #1f2937; margin-bottom: 0.5rem;">Question Input</div>
+            <div style="font-size: 0.875rem; color: #6b7280;">Natural-language store question</div>
           </div>
           <div style="background: #f0fdf4; padding: 1rem; border-radius: 0.5rem; border-left: 4px solid #10b981;">
-            <div style="font-weight: 600; color: #1f2937; margin-bottom: 0.5rem;">Chat Window</div>
-            <div style="font-size: 0.875rem; color: #6b7280;">400×600px interface</div>
+            <div style="font-weight: 600; color: #1f2937; margin-bottom: 0.5rem;">Ask Button</div>
+            <div style="font-size: 0.875rem; color: #6b7280;">Calls POST /agent/ask</div>
           </div>
           <div style="background: #fef2f2; padding: 1rem; border-radius: 0.5rem; border-left: 4px solid #ef4444;">
-            <div style="font-weight: 600; color: #1f2937; margin-bottom: 0.5rem;">Message Bubbles</div>
-            <div style="font-size: 0.875rem; color: #6b7280;">User and AI styles</div>
+            <div style="font-weight: 600; color: #1f2937; margin-bottom: 0.5rem;">Answer Area</div>
+            <div style="font-size: 0.875rem; color: #6b7280;">Grounded reply from the agent</div>
           </div>
           <div style="background: #faf5ff; padding: 1rem; border-radius: 0.5rem; border-left: 4px solid #a855f7;">
-            <div style="font-weight: 600; color: #1f2937; margin-bottom: 0.5rem;">Input Field</div>
-            <div style="font-size: 0.875rem; color: #6b7280;">Text input with send</div>
+            <div style="font-weight: 600; color: #1f2937; margin-bottom: 0.5rem;">Status Messages</div>
+            <div style="font-size: 0.875rem; color: #6b7280;">Empty, loading, refusal, error</div>
           </div>
         </div>
       </div>
@@ -49,7 +49,9 @@
         <h4 style="font-size:1.125rem;font-weight:600;color:#1e293b;margin:0 0 0.5rem;">Antigravity prompt — UI/UX</h4>
         <p style="font-size:0.875rem;color:#64748b;margin:0 0 0.75rem;">UI/UX Design. Copy into your AI coding assistant:</p>
         <pre style="white-space:pre-wrap;font-size:0.8rem;line-height:1.55;background:#fff;border:1px solid #e2e8f0;border-radius:0.5rem;padding:1rem;margin:0 0 0.75rem;max-height:280px;overflow:auto;color:#334155;">SDLC Phase: SDLC - Requirements &amp; UX
-Create or update only UI_UX.md for the new Ask the Store feature.Keep the UI very simple and match the existing ReactJS application's look and feel.Define:
+Create or update only UI_UX.md for the new Ask the Store feature.
+Keep the UI very simple and match the existing ReactJS application's look and feel.
+Define:
 Where the Ask the Store feature will appear
 Question input box
 Ask button
@@ -69,8 +71,7 @@ Do not redesign the existing application. Do not create another UI design docume
       <div style="background: linear-gradient(to right, #faf5ff, #eff6ff); border-radius: 0.5rem; padding: 1.5rem;">
         <h4 style="font-size: 1.125rem; font-weight: 600; color: #1f2937; margin-bottom: 1rem;">Ready to Proceed?</h4>
         <p style="color: #4b5563; margin-bottom: 1rem;">
-          This UI/UX Design phase is now complete. You can proceed to the next phase (Architectural Design)
-          or review any section of this document as needed.
+          The Ask the Store UI notes are complete. Continue to Architectural Design to map React, FastAPI, LangGraph, and PostgreSQL.
         </p>
         <div style="display: flex; gap: 1rem; flex-wrap: wrap;">
           <button

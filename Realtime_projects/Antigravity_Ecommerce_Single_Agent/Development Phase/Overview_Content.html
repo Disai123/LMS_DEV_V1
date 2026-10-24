@@ -19,9 +19,9 @@
     </div>
 
     <p style="color: #4b5563; line-height: 1.75; margin-bottom: 2rem;">
-      Development in this project focuses on building a <strong>Single Single Agent Assistant</strong> powered by
-      OpenAI function calling. We build deterministic tool modules first, then wire the backend API
-      route that orchestrates the agent's reasoning loop and tool execution.
+      Development adds <strong>Ask the Store</strong> to the existing FastAPI backend and React frontend.
+      First we add a LangGraph flow and POST /agent/ask. Then we connect a read-only path to PostgreSQL.
+      The React screen is built last and only after the endpoint works.
     </p>
 
     <!-- Development Timeline -->
@@ -34,9 +34,8 @@
             style="width: 24px; height: 24px; background: #10b981; color: #fff; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 0.75rem; flex-shrink: 0;">
             1</div>
           <div>
-            <div style="font-weight: 600; font-size: 0.9rem;">Tool Module Development</div>
-            <div style="font-size: 0.8rem; color: #6b7280;">Implementing Catalog Scout, Inventory Sentinel,
-              Recommendation Engine, and Cart Manager.</div>
+            <div style="font-weight: 600; font-size: 0.9rem;">FastAPI Agent Structure</div>
+            <div style="font-size: 0.8rem; color: #6b7280;">Add LangGraph, reuse login, and create a read-only data path. Do not create a second backend.</div>
           </div>
         </div>
         <div style="display: flex; gap: 12px;">
@@ -44,9 +43,8 @@
             style="width: 24px; height: 24px; background: #3b82f6; color: #fff; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 0.75rem; flex-shrink: 0;">
             2</div>
           <div>
-            <div style="font-weight: 600; font-size: 0.9rem;">Backend API Route</div>
-            <div style="font-size: 0.8rem; color: #6b7280;">Next.js API route with JWT auth, conversation history, and
-              OpenAI function calling loop.</div>
+            <div style="font-weight: 600; font-size: 0.9rem;">POST /agent/ask</div>
+            <div style="font-size: 0.8rem; color: #6b7280;">Accept a question, run LangGraph, return a grounded answer from PostgreSQL.</div>
           </div>
         </div>
         <div style="display: flex; gap: 12px;">
@@ -54,9 +52,8 @@
             style="width: 24px; height: 24px; background: #a855f7; color: #fff; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 0.75rem; flex-shrink: 0;">
             3</div>
           <div>
-            <div style="font-weight: 600; font-size: 0.9rem;">Reactive UI Widget</div>
-            <div style="font-size: 0.8rem; color: #6b7280;">React chat component with Zustand state management for
-              floating chat interface.</div>
+            <div style="font-weight: 600; font-size: 0.9rem;">React Ask the Store UI</div>
+            <div style="font-size: 0.8rem; color: #6b7280;">Add a simple question box and answer area inside the existing React app.</div>
           </div>
         </div>
       </div>
@@ -66,10 +63,10 @@
       <h4 style="font-size: 1rem; font-weight: 600; color: #166534; margin-bottom: 0.75rem;">Quality Standards</h4>
       <ul
         style="list-style: none; display: flex; flex-direction: column; gap: 0.75rem; font-size: 0.9rem; color: #15803d;">
-        <li>✅ JWT-validated authentication on every request</li>
-        <li>✅ Tool execution sandboxed per user_id</li>
-        <li>✅ Response time target &lt; 2 seconds end-to-end</li>
-        <li>✅ Full TypeScript type safety throughout</li>
+        <li>✅ Existing authentication on POST /agent/ask</li>
+        <li>✅ Read-only queries only; no cart or order writes</li>
+        <li>✅ Answers match real database rows or say no data was found</li>
+        <li>✅ Existing catalog, cart, checkout, and admin still start and work</li>
       </ul>
     </div>
   </div>

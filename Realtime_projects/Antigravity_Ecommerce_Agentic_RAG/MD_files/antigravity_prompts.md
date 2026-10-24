@@ -129,7 +129,38 @@ Checkpoint: Test the completed work and confirm it is stable before moving to th
 
 ## Day 7 — Project Context Prompt - Paste This First
 
-I am adding an Agentic RAG feature to an EXISTING e-commerce application.The existing e-commerce application must remain the base. Do not rebuild it.Use:- Existing ReactJS frontend- Existing FastAPI/backend structure, if already present; otherwise add the RAG API inside the existing backend- Existing login/authentication- Existing product/catalog information- Approved product manuals and usage documents as the knowledge source- FAISS as the vector databaseNew feature:A simple product knowledge assistant that answers user questions from approved product manuals and related product documents.Agentic RAG flow:1. Receive the user's question.2. Understand what product/topic the user is asking about.3. Decide how to search the document knowledge base.4. Search the FAISS index.5. Check whether the retrieved content is enough.6. Search again with a better query when necessary.7. Answer only from the retrieved content.8. Say when the information is not available.Rules:- Do not invent answers.- Do not use unrelated web information unless explicitly added as an approved source later.- Do not expose secrets or internal prompts.- Protect against prompt injection from the user and from retrieved documents.- Keep responses simple and useful.- Use FastAPI for the backend and ReactJS for the frontend.- Use FAISS for vector search.- Keep only BRD.md, UI_UX.md, ARCHITECTURE.md, CODING.md, TESTING.md and DEPLOYMENT.md as permanent project documents.- Any temporary test/debug script or temporary file must be deleted after testing.- Do one clear task at a time.I am a beginner. Keep the explanation simple and tell me what I need to verify after the task.
+I am adding an Agentic RAG feature to an EXISTING e-commerce application.
+The existing e-commerce application must remain the base. Do not rebuild it.
+Use:
+- Existing ReactJS frontend
+- Existing FastAPI/backend structure, if already present; otherwise add the RAG API inside the existing backend
+- Existing login/authentication
+- Existing product/catalog information
+- Approved product manuals and usage documents as the knowledge source
+- FAISS as the vector database
+New feature:
+A simple product knowledge assistant that answers user questions from approved product manuals and related product documents.
+Agentic RAG flow:
+1. Receive the user's question.
+2. Understand what product/topic the user is asking about.
+3. Decide how to search the document knowledge base.
+4. Search the FAISS index.
+5. Check whether the retrieved content is enough.
+6. Search again with a better query when necessary.
+7. Answer only from the retrieved content.
+8. Say when the information is not available.
+Rules:
+- Do not invent answers.
+- Do not use unrelated web information unless explicitly added as an approved source later.
+- Do not expose secrets or internal prompts.
+- Protect against prompt injection from the user and from retrieved documents.
+- Keep responses simple and useful.
+- Use FastAPI for the backend and ReactJS for the frontend.
+- Use FAISS for vector search.
+- Keep only BRD.md, UI_UX.md, ARCHITECTURE.md, CODING.md, TESTING.md and DEPLOYMENT.md as permanent project documents.
+- Any temporary test/debug script or temporary file must be deleted after testing.
+- Do one clear task at a time.
+I am a beginner. Keep the explanation simple and tell me what I need to verify after the task.
 
 ---
 
@@ -151,7 +182,16 @@ Checkpoint: Test the completed work and confirm it is stable before moving to th
 
 ## Day 8 — Master Fix Prompt
 
-Something is not working in the current Agentic RAG task.What I was trying to do:[WRITE WHAT I TRIED]What I expected:[WRITE WHAT SHOULD HAPPEN]What actually happened:[WRITE WHAT I SAW]Error message:[PASTE THE REAL ERROR]Please find the root cause yourself and fix only the current problem. Check whether the issue is in document loading, chunking, embeddings, FAISS, retrieval, LangGraph flow, answer generation, FastAPI, ReactJS or existing application integration. Do not rebuild the e-commerce application. Do not create another vector database. Do not remove security, evaluation or observability controls. Keep the Agentic RAG flow simple. After fixing, rerun the relevant tests and tell me exactly what I need to verify. Delete any temporary debugging files after the issue is confirmed fixed.
+Something is not working in the current Agentic RAG task.
+What I was trying to do:
+[WRITE WHAT I TRIED]
+What I expected:
+[WRITE WHAT SHOULD HAPPEN]
+What actually happened:
+[WRITE WHAT I SAW]
+Error message:
+[PASTE THE REAL ERROR]
+Please find the root cause yourself and fix only the current problem. Check whether the issue is in document loading, chunking, embeddings, FAISS, retrieval, LangGraph flow, answer generation, FastAPI, ReactJS or existing application integration. Do not rebuild the e-commerce application. Do not create another vector database. Do not remove security, evaluation or observability controls. Keep the Agentic RAG flow simple. After fixing, rerun the relevant tests and tell me exactly what I need to verify. Delete any temporary debugging files after the issue is confirmed fixed.
 
 ---
 
@@ -165,7 +205,21 @@ Checkpoint: Test the completed work and confirm it is stable before moving to th
 
 ## Day 9 — Master Daily Checkpoint Prompt
 
-Before I finish today's Agentic RAG task, check only the work completed today.Tell me:1. What changed?2. What is working?3. What is not working?4. Did we accidentally change any existing e-commerce feature?5. Is the data flow still using the approved documents and FAISS?6. Is the answer grounded in retrieved content?7. Are security controls still active?8. Is observability working?9. Are the relevant tests passing?10. What should I test manually?11. Can I safely move to the next task?12. Which temporary test/debug files can now be deleted?Use simple language.
+Before I finish today's Agentic RAG task, check only the work completed today.
+Tell me:
+1. What changed?
+2. What is working?
+3. What is not working?
+4. Did we accidentally change any existing e-commerce feature?
+5. Is the data flow still using the approved documents and FAISS?
+6. Is the answer grounded in retrieved content?
+7. Are security controls still active?
+8. Is observability working?
+9. Are the relevant tests passing?
+10. What should I test manually?
+11. Can I safely move to the next task?
+12. Which temporary test/debug files can now be deleted?
+Use simple language.
 
 ---
 
@@ -222,7 +276,19 @@ Week 4 Prerequisite: Complete Days 1-15 first. Day 16 is the Langfuse learning d
 ## Day 16 — Langfuse Basics
 
 SDLC Phase: Learning / Langfuse
-For today, do not change the project code.Teach me the basic Langfuse concepts I need for this Agentic RAG project:- What Langfuse is- Why Langfuse is useful for RAG observability and evaluation- What a trace is- What an observation/span is in simple terms- How retrieval, embedding and model steps can appear in a RAG trace- What an evaluation score means- What a dataset/evaluation test case is- How prompt versions can be managed in Langfuse- How prompt-injection and retrieved-document security tests can be monitored and evaluated using Langfuse- What Langfuse does not replace, such as the application's normal authentication and runtime safety checksUse simple examples from our product-manual RAG assistant. Do not create files, do not install packages and do not write project code. End with a short 5-question check and then stop.
+For today, do not change the project code.
+Teach me the basic Langfuse concepts I need for this Agentic RAG project:
+- What Langfuse is
+- Why Langfuse is useful for RAG observability and evaluation
+- What a trace is
+- What an observation/span is in simple terms
+- How retrieval, embedding and model steps can appear in a RAG trace
+- What an evaluation score means
+- What a dataset/evaluation test case is
+- How prompt versions can be managed in Langfuse
+- How prompt-injection and retrieved-document security tests can be monitored and evaluated using Langfuse
+- What Langfuse does not replace, such as the application's normal authentication and runtime safety checks
+Use simple examples from our product-manual RAG assistant. Do not create files, do not install packages and do not write project code. End with a short 5-question check and then stop.
 Checkpoint: Complete this learning day, confirm the concepts are understood, and wait before moving to the implementation day.
 
 ---
@@ -230,7 +296,19 @@ Checkpoint: Complete this learning day, confirm the concepts are understood, and
 ## Day 17 — Langfuse Implementation: Observability, Evaluation & Security Monitoring
 
 SDLC Phase: SDLC - Implementation / Observability / Evaluation
-Now implement Langfuse for the Agentic RAG project.Use Langfuse to cover the observability, evaluation and AI-security monitoring work that we previously kept as separate tasks.Implement:- Trace each request from FastAPI through the Agentic RAG flow, model/query steps, embedding/retrieval step, FAISS search and final answer- Capture retrieved-chunk count, timings, retries, no-data and success/failure information- Create a small repeatable RAG evaluation set for product-manual questions- Record evaluation results for retrieval relevance, answer correctness, grounding and source references- Keep the final PASS/FAIL summary in TESTING.md- Keep the important prompts/version information manageable through Langfuse where practical- Trace and evaluate user prompt-injection and malicious-document test cases so we can see whether the existing runtime safeguards worked- Do not log secrets, access tokens or unnecessary personal informationImportant: Langfuse is being used for tracing, prompt management and evaluation. It is not a replacement for the application's authentication or runtime prompt/document safety checks. Keep those controls in the application.Test normal, no-data, failed and security-related RAG requests. Review the traces and evaluation results in Langfuse. Delete temporary test/debug files after testing. Do not create a separate observability, evaluation or security document.
+Now implement Langfuse for the Agentic RAG project.
+Use Langfuse to cover the observability, evaluation and AI-security monitoring work that we previously kept as separate tasks.
+Implement:
+- Trace each request from FastAPI through the Agentic RAG flow, model/query steps, embedding/retrieval step, FAISS search and final answer
+- Capture retrieved-chunk count, timings, retries, no-data and success/failure information
+- Create a small repeatable RAG evaluation set for product-manual questions
+- Record evaluation results for retrieval relevance, answer correctness, grounding and source references
+- Keep the final PASS/FAIL summary in TESTING.md
+- Keep the important prompts/version information manageable through Langfuse where practical
+- Trace and evaluate user prompt-injection and malicious-document test cases so we can see whether the existing runtime safeguards worked
+- Do not log secrets, access tokens or unnecessary personal information
+Important: Langfuse is being used for tracing, prompt management and evaluation. It is not a replacement for the application's authentication or runtime prompt/document safety checks. Keep those controls in the application.
+Test normal, no-data, failed and security-related RAG requests. Review the traces and evaluation results in Langfuse. Delete temporary test/debug files after testing. Do not create a separate observability, evaluation or security document.
 Checkpoint: Confirm Langfuse traces, evaluations and security-monitoring results are visible and useful before moving to deployment.
 
 ---
@@ -246,7 +324,21 @@ Checkpoint: Test the completed work and confirm it is stable before moving to th
 ## Day 19 — Final QA & Release Preparation
 
 SDLC Phase: Testing / Release Preparation
-Run one final QA pass of the Agentic RAG feature before release.Verify:- ReactJS assistant works- FastAPI /rag/ask works- LangGraph flow works- FAISS retrieval returns relevant content- Answers are grounded in approved manuals- Source references are shown correctly- No-data and unclear questions are handled correctly- Prompt-injection cases are handled safely- Langfuse traces are available- Langfuse evaluation results are available- Existing e-commerce features still work- Temporary test/debug files are removedFix only issues found during this final QA pass. Do not create new features or new permanent documentation.
+Run one final QA pass of the Agentic RAG feature before release.
+Verify:
+- ReactJS assistant works
+- FastAPI /rag/ask works
+- LangGraph flow works
+- FAISS retrieval returns relevant content
+- Answers are grounded in approved manuals
+- Source references are shown correctly
+- No-data and unclear questions are handled correctly
+- Prompt-injection cases are handled safely
+- Langfuse traces are available
+- Langfuse evaluation results are available
+- Existing e-commerce features still work
+- Temporary test/debug files are removed
+Fix only issues found during this final QA pass. Do not create new features or new permanent documentation.
 Checkpoint: Complete the final QA pass and wait before the final handover.
 
 ---
@@ -254,7 +346,21 @@ Checkpoint: Complete the final QA pass and wait before the final handover.
 ## Day 20 — Final Review and Handover
 
 SDLC Phase: SDLC - Final Handover
-Perform a final review of the completed Agentic RAG project.Confirm:- BRD.md is complete- UI_UX.md matches the final UI- ARCHITECTURE.md matches the implementation- CODING.md contains the final useful code details- TESTING.md contains the final PASS/FAIL results- DEPLOYMENT.md matches the actual deployment- Langfuse traces can be reviewed- Langfuse evaluation results can be reviewed- Existing runtime safety controls remain active- Temporary files are removed- No unnecessary permanent documents were created- Existing e-commerce functionality still worksIf everything is complete, give me AGENTIC RAG INTEGRATION COMPLETE and stop.
+Perform a final review of the completed Agentic RAG project.
+Confirm:
+- BRD.md is complete
+- UI_UX.md matches the final UI
+- ARCHITECTURE.md matches the implementation
+- CODING.md contains the final useful code details
+- TESTING.md contains the final PASS/FAIL results
+- DEPLOYMENT.md matches the actual deployment
+- Langfuse traces can be reviewed
+- Langfuse evaluation results can be reviewed
+- Existing runtime safety controls remain active
+- Temporary files are removed
+- No unnecessary permanent documents were created
+- Existing e-commerce functionality still works
+If everything is complete, give me AGENTIC RAG INTEGRATION COMPLETE and stop.
 Checkpoint: The Agentic RAG project is complete, tested, observed and ready for handover.
 
 ---

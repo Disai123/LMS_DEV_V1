@@ -1,12 +1,12 @@
 <div class="content-body">
   <div class="content-section">
     <div style="text-align: center; margin-bottom: 2rem;">
-      <h3 style="font-size: 1.875rem; font-weight: 700; color: #1f2937; margin-bottom: 1rem;">Single Single Agent Assistant
+      <h3 style="font-size: 1.875rem; font-weight: 700; color: #1f2937; margin-bottom: 1rem;">Ask the Store
         Development Complete</h3>
       <p style="font-size: 1.125rem; color: #4b5563; max-width: 48rem; margin: 0 auto;">
-        The Code Development phase has been successfully completed.
-        We have built a fully functional AI-powered shopping assistant with OpenAI function calling,
-        4 tool modules, a React chat widget, and a persistent conversation database.
+        The development phase added one read-only agent to the existing store.
+        FastAPI exposes POST /agent/ask. LangGraph reads approved PostgreSQL data.
+        The React screen shows the answer. Langfuse tracing is added later.
       </p>
     </div>
 
@@ -24,26 +24,26 @@
             </h5>
             <ul
               style="font-size: 0.875rem; color: #4b5563; display: flex; flex-direction: column; gap: 0.25rem; list-style: none; padding: 0;">
-              <li>• React floating chat widget</li>
-              <li>• Zustand global state management</li>
-              <li>• Auto-scroll and loading states</li>
-              <li>• Welcome message empty state</li>
-              <li>• JWT-secured API calls</li>
+              <li>• Ask the Store screen in the existing React app</li>
+              <li>• Question input and Ask button</li>
+              <li>• Loading, no-data, and refusal states</li>
+              <li>• Empty-state store-question examples</li>
+              <li>• Calls POST /agent/ask with the current login</li>
             </ul>
           </div>
           <div
             style="background: #ffffff; border-radius: 0.5rem; padding: 1rem; box-shadow: 0 1px 3px rgba(0,0,0,0.1);">
             <h5
               style="font-size: 1.125rem; font-weight: 600; color: #1f2937; margin-bottom: 0.75rem; display: flex; align-items: center; gap: 0.5rem;">
-              <span style="font-size: 1.5rem;">🧠</span> Single Agent Assistant Backend
+              <span style="font-size: 1.5rem;">🧠</span> FastAPI Agent Backend
             </h5>
             <ul
               style="font-size: 0.875rem; color: #4b5563; display: flex; flex-direction: column; gap: 0.25rem; list-style: none; padding: 0;">
-              <li>• Next.js API route with JWT auth</li>
-              <li>• OpenAI function calling loop</li>
-              <li>• Tool dispatch map pattern</li>
-              <li>• Conversation history (last 20 msgs)</li>
-              <li>• Graceful error handling</li>
+              <li>• POST /agent/ask on the existing FastAPI app</li>
+              <li>• LangGraph flow with LangChain LLM access</li>
+              <li>• Reused authentication and permissions</li>
+              <li>• Read-only store data path</li>
+              <li>• Safe errors without internals</li>
             </ul>
           </div>
         </div>
@@ -52,30 +52,30 @@
             style="background: #ffffff; border-radius: 0.5rem; padding: 1rem; box-shadow: 0 1px 3px rgba(0,0,0,0.1);">
             <h5
               style="font-size: 1.125rem; font-weight: 600; color: #1f2937; margin-bottom: 0.75rem; display: flex; align-items: center; gap: 0.5rem;">
-              <span style="font-size: 1.5rem;">💾</span> Data &amp; Tools
+              <span style="font-size: 1.5rem;">💾</span> Data Access
             </h5>
             <ul
               style="font-size: 0.875rem; color: #4b5563; display: flex; flex-direction: column; gap: 0.25rem; list-style: none; padding: 0;">
-              <li>• Prisma schema for Conversation + Message</li>
-              <li>• PostgreSQL persistence layer</li>
-              <li>• 4 tool modules implemented</li>
-              <li>• Stock validation before cart ops</li>
-              <li>• User-bound data isolation</li>
+              <li>• Existing PostgreSQL/Neon tables</li>
+              <li>• Products, categories, customers, orders, stock</li>
+              <li>• No second database</li>
+              <li>• No cart or order writes</li>
+              <li>• Existing authorization still applies</li>
             </ul>
           </div>
           <div
             style="background: #ffffff; border-radius: 0.5rem; padding: 1rem; box-shadow: 0 1px 3px rgba(0,0,0,0.1);">
             <h5
               style="font-size: 1.125rem; font-weight: 600; color: #1f2937; margin-bottom: 0.75rem; display: flex; align-items: center; gap: 0.5rem;">
-              <span style="font-size: 1.5rem;">🧪</span> Integration &amp; QA
+              <span style="font-size: 1.5rem;">🧪</span> Checks During Development
             </h5>
             <ul
               style="font-size: 0.875rem; color: #4b5563; display: flex; flex-direction: column; gap: 0.25rem; list-style: none; padding: 0;">
-              <li>• API route unit tests with Jest</li>
-              <li>• Tool selection accuracy evals</li>
-              <li>• Frontend E2E with Playwright</li>
-              <li>• Parameter validation checks</li>
-              <li>• Error handling for API failures</li>
+              <li>• Compare answers with real database rows</li>
+              <li>• Test no-data and out-of-scope questions</li>
+              <li>• Confirm existing store flows still work</li>
+              <li>• Delete temporary test files after checks</li>
+              <li>• Record structure in CODING.md</li>
             </ul>
           </div>
         </div>
@@ -86,25 +86,25 @@
       <h4 style="font-size: 1.125rem; font-weight: 600; color: #1f2937; margin-bottom: 1rem;">Next Phase: Testing &amp;
         Quality Assurance</h4>
       <p style="color: #4b5563; margin-bottom: 1rem;">
-        With the core code implemented, we now transition to formal testing to ensure
-        reliability and function calling accuracy across all e-commerce scenarios.
+        Formal testing compares each Ask the Store answer with the real database and records PASS/FAIL in TESTING.md.
+        Langfuse evaluation comes after the feature is stable.
       </p>
       <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1rem;">
         <div style="background: #ffffff; border-radius: 0.5rem; padding: 1rem;">
           <h5 style="font-weight: 500; color: #1f2937; margin-bottom: 0.5rem;">Test Planning</h5>
-          <p style="font-size: 0.875rem; color: #4b5563;">Overall strategy &amp; tool eval</p>
+          <p style="font-size: 0.875rem; color: #4b5563;">Product, order, stock, and refusal cases</p>
         </div>
         <div style="background: #ffffff; border-radius: 0.5rem; padding: 1rem;">
           <h5 style="font-weight: 500; color: #1f2937; margin-bottom: 0.5rem;">Unit Testing</h5>
-          <p style="font-size: 0.875rem; color: #4b5563;">Tool modules and API logic</p>
+          <p style="font-size: 0.875rem; color: #4b5563;">LangGraph nodes and read-only access</p>
         </div>
         <div style="background: #ffffff; border-radius: 0.5rem; padding: 1rem;">
           <h5 style="font-weight: 500; color: #1f2937; margin-bottom: 0.5rem;">Integration Testing</h5>
-          <p style="font-size: 0.875rem; color: #4b5563;">End-to-end chat flows</p>
+          <p style="font-size: 0.875rem; color: #4b5563;">POST /agent/ask with real store data</p>
         </div>
         <div style="background: #ffffff; border-radius: 0.5rem; padding: 1rem;">
           <h5 style="font-weight: 500; color: #1f2937; margin-bottom: 0.5rem;">Performance Testing</h5>
-          <p style="font-size: 0.875rem; color: #4b5563;">Response speed &amp; token costs</p>
+          <p style="font-size: 0.875rem; color: #4b5563;">Query time, size, and timeout limits</p>
         </div>
       </div>
     </div>
@@ -114,7 +114,9 @@
         <h4 style="font-size:1.125rem;font-weight:600;color:#1e293b;margin:0 0 0.5rem;">Antigravity prompt — Development</h4>
         <p style="font-size:0.875rem;color:#64748b;margin:0 0 0.75rem;">Backend Coding Setup. Copy into your AI coding assistant:</p>
         <pre style="white-space:pre-wrap;font-size:0.8rem;line-height:1.55;background:#fff;border:1px solid #e2e8f0;border-radius:0.5rem;padding:1rem;margin:0 0 0.75rem;max-height:280px;overflow:auto;color:#334155;">SDLC Phase: SDLC - Development
-Start the backend implementation inside the existing FastAPI application.Add only the minimum agent structure needed for this feature and reuse the existing project style.The implementation must:
+Start the backend implementation inside the existing FastAPI application.
+Add only the minimum agent structure needed for this feature and reuse the existing project style.
+The implementation must:
 Use LangGraph
 Reuse existing authentication
 Reuse the existing database connection infrastructure where safe
@@ -122,13 +124,13 @@ Create a separate read-only data access path for the agent
 Keep existing customer/admin APIs unchanged
 Not create a second backend
 Not build the ReactJS UI yet
-Create or update only CODING.md to record the final code structure, important files, configuration values and how the agent code fits into the existing FastAPI backend.Do not create any other permanent markdown files. Test that the application still starts correctly, then stop.</pre>
+Create or update only CODING.md to record the final code structure, important files, configuration values and how the agent code fits into the existing FastAPI backend.
+Do not create any other permanent markdown files. Test that the application still starts correctly, then stop.</pre>
         <button type="button" onclick="navigator.clipboard.writeText(this.previousElementSibling.textContent)" style="padding:0.5rem 1rem;background:#eef2ff;color:#4338ca;border:1px solid #c7d2fe;border-radius:0.5rem;font-weight:500;cursor:pointer;">Copy prompt</button>
       </div>
         Ready to Proceed?</h4>
       <p style="color: #4b5563; margin-bottom: 1rem;">
-        This Development phase is now complete. You can proceed to the next phase (Testing &amp; QA)
-        or review any component code as needed.
+        Development for Ask the Store is complete. Continue to Testing to record PASS/FAIL results against real store data.
       </p>
       <div style="display: flex; gap: 1rem; flex-wrap: wrap;">
         <button

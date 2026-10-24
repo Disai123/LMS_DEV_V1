@@ -1,40 +1,37 @@
 <div class="content-body">
   <div class="content-section">
-    <h3 class="content-heading">AI Integration Architecture</h3>
+    <h3 class="content-heading">RAG Agent Architecture</h3>
     <div style="max-width: none;">
       <p style="color: #4b5563; line-height: 1.75; margin-bottom: 1.5rem;">
-        The AI integration architecture defines how OpenAI GPT models are integrated into the system, including 
-        function calling, context management, and tool execution patterns.
+        LangChain and LangGraph run a small Agentic RAG flow. The agent understands the question, searches FAISS,
+        checks retrieved context, retries once if needed, and writes a grounded answer with citations.
       </p>
       
       <div style="display: flex; flex-direction: column; gap: 2rem;">
         <div class="card">
           <h4 style="font-size: 1.25rem; font-weight: 600; color: #1f2937; margin-bottom: 1.5rem; display: flex; align-items: center; gap: 0.5rem;">
             <span style="font-size: 1.5rem;">🤖</span>
-            OpenAI Configuration
+            Agent Roles
           </h4>
           
           <div style="background: #f9fafb; border-radius: 0.5rem; padding: 1.5rem;">
             <div style="display: flex; flex-direction: column; gap: 1rem;">
               <div style="border-left: 4px solid #3b82f6; padding-left: 1rem;">
-                <h5 style="font-weight: 600; color: #1f2937; margin-bottom: 0.5rem;">Model Selection</h5>
+                <h5 style="font-weight: 600; color: #1f2937; margin-bottom: 0.5rem;">Understand the question</h5>
                 <ul style="font-size: 0.875rem; color: #4b5563; list-style: disc; list-style-position: inside;">
-                  <li><strong>Model:</strong> gpt-4o-mini (cost-effective, fast)</li>
-                  <li><strong>API Key:</strong> Stored in environment variable (OPENAI_API_KEY)</li>
-                  <li><strong>Temperature:</strong> 0.7 (balanced creativity/consistency)</li>
-                  <li><strong>Max Tokens:</strong> 1000 (sufficient for responses)</li>
+                  <li>Detect product, topic, and whether a search is needed</li>
+                  <li>Use product context from a product page when present</li>
+                  <li>Ask a short clarification instead of guessing</li>
                 </ul>
               </div>
 
               <div style="border-left: 4px solid #10b981; padding-left: 1rem;">
-                <h5 style="font-weight: 600; color: #1f2937; margin-bottom: 0.5rem;">System Prompt</h5>
-                <p style="font-size: 0.875rem; color: #6b7280; margin-bottom: 0.5rem;">
-                  Defines AI personality and behavior:
-                </p>
+                <h5 style="font-weight: 600; color: #1f2937; margin-bottom: 0.5rem;">Grounding rule</h5>
                 <div style="background: #1f2937; color: #10b981; padding: 1rem; border-radius: 0.5rem; font-family: monospace; font-size: 0.75rem; overflow-x: auto;">
-                  <pre>"You are askunicart, the friendly shopping assistant. 
-You help customers browse products, check stock, 
-recommend products, and manage carts..."</pre>
+                  <pre>Answer only from retrieved approved documents.
+If the manuals do not support the answer, say so.
+Never invent specs, warranty conditions, or safety guidance.
+Include document name and section as citations.</pre>
                 </div>
               </div>
             </div>
@@ -44,56 +41,51 @@ recommend products, and manage carts..."</pre>
         <div class="card">
           <h4 style="font-size: 1.25rem; font-weight: 600; color: #1f2937; margin-bottom: 1.5rem; display: flex; align-items: center; gap: 0.5rem;">
             <span style="font-size: 1.5rem;">🔧</span>
-            Function Calling (Tools)
+            LangGraph Steps
           </h4>
           
           <div style="background: #f9fafb; border-radius: 0.5rem; padding: 1.5rem;">
             <div style="margin-bottom: 1rem;">
-              <h5 style="font-weight: 600; color: #1f2937; margin-bottom: 0.75rem;">Available Tools</h5>
+              <h5 style="font-weight: 600; color: #1f2937; margin-bottom: 0.75rem;">Small graph</h5>
               <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1rem;">
                 <div style="background: white; padding: 1rem; border-radius: 0.5rem; border: 1px solid #e5e7eb;">
-                  <div style="font-weight: 600; color: #1f2937; margin-bottom: 0.25rem;">searchProducts</div>
-                  <div style="font-size: 0.75rem; color: #6b7280;">Search products by query, category, price</div>
+                  <div style="font-weight: 600; color: #1f2937; margin-bottom: 0.25rem;">understand</div>
+                  <div style="font-size: 0.75rem; color: #6b7280;">Parse the user question</div>
                 </div>
                 <div style="background: white; padding: 1rem; border-radius: 0.5rem; border: 1px solid #e5e7eb;">
-                  <div style="font-weight: 600; color: #1f2937; margin-bottom: 0.25rem;">getProductDetails</div>
-                  <div style="font-size: 0.75rem; color: #6b7280;">Get detailed product information</div>
+                  <div style="font-weight: 600; color: #1f2937; margin-bottom: 0.25rem;">rewrite</div>
+                  <div style="font-size: 0.75rem; color: #6b7280;">Build a search query</div>
                 </div>
                 <div style="background: white; padding: 1rem; border-radius: 0.5rem; border: 1px solid #e5e7eb;">
-                  <div style="font-weight: 600; color: #1f2937; margin-bottom: 0.25rem;">checkStock</div>
-                  <div style="font-size: 0.75rem; color: #6b7280;">Check product availability</div>
+                  <div style="font-weight: 600; color: #1f2937; margin-bottom: 0.25rem;">retrieve</div>
+                  <div style="font-size: 0.75rem; color: #6b7280;">FAISS + embeddings</div>
                 </div>
                 <div style="background: white; padding: 1rem; border-radius: 0.5rem; border: 1px solid #e5e7eb;">
-                  <div style="font-weight: 600; color: #1f2937; margin-bottom: 0.25rem;">getRecommendations</div>
-                  <div style="font-size: 0.75rem; color: #6b7280;">Get product recommendations</div>
+                  <div style="font-weight: 600; color: #1f2937; margin-bottom: 0.25rem;">check</div>
+                  <div style="font-size: 0.75rem; color: #6b7280;">Relevance of chunks</div>
                 </div>
                 <div style="background: white; padding: 1rem; border-radius: 0.5rem; border: 1px solid #e5e7eb;">
-                  <div style="font-weight: 600; color: #1f2937; margin-bottom: 0.25rem;">addToCart</div>
-                  <div style="font-size: 0.75rem; color: #6b7280;">Add product to cart</div>
+                  <div style="font-weight: 600; color: #1f2937; margin-bottom: 0.25rem;">retry</div>
+                  <div style="font-size: 0.75rem; color: #6b7280;">Search again if needed</div>
                 </div>
                 <div style="background: white; padding: 1rem; border-radius: 0.5rem; border: 1px solid #e5e7eb;">
-                  <div style="font-weight: 600; color: #1f2937; margin-bottom: 0.25rem;">getCart</div>
-                  <div style="font-size: 0.75rem; color: #6b7280;">Get cart contents</div>
-                </div>
-                <div style="background: white; padding: 1rem; border-radius: 0.5rem; border: 1px solid #e5e7eb;">
-                  <div style="font-weight: 600; color: #1f2937; margin-bottom: 0.25rem;">updateCartItem</div>
-                  <div style="font-size: 0.75rem; color: #6b7280;">Update cart item quantity</div>
-                </div>
-                <div style="background: white; padding: 1rem; border-radius: 0.5rem; border: 1px solid #e5e7eb;">
-                  <div style="font-weight: 600; color: #1f2937; margin-bottom: 0.25rem;">removeFromCart</div>
-                  <div style="font-size: 0.75rem; color: #6b7280;">Remove item from cart</div>
+                  <div style="font-weight: 600; color: #1f2937; margin-bottom: 0.25rem;">answer</div>
+                  <div style="font-size: 0.75rem; color: #6b7280;">Grounded text + citations</div>
                 </div>
               </div>
             </div>
 
             <div>
-              <h5 style="font-weight: 600; color: #1f2937; margin-bottom: 0.75rem;">Tool Execution Flow</h5>
+              <h5 style="font-weight: 600; color: #1f2937; margin-bottom: 0.75rem;">Flow</h5>
               <div style="background: #1f2937; color: #10b981; padding: 1rem; border-radius: 0.5rem; font-family: monospace; font-size: 0.75rem; overflow-x: auto;">
-                <pre>1. AI decides to call a tool
-2. Tool function executed with parameters
-3. Tool result returned to AI
-4. AI generates response using tool result
-5. Response sent to user</pre>
+                <pre>1. Receive the question on POST /rag/ask
+2. Understand product and topic
+3. Rewrite the search query
+4. Retrieve chunks from FAISS
+5. Check relevance
+6. Retrieve again once if context is weak
+7. Answer only from retrieved content
+8. Return citations or a not-found message</pre>
               </div>
             </div>
           </div>
@@ -102,38 +94,24 @@ recommend products, and manage carts..."</pre>
         <div class="card">
           <h4 style="font-size: 1.25rem; font-weight: 600; color: #1f2937; margin-bottom: 1.5rem; display: flex; align-items: center; gap: 0.5rem;">
             <span style="font-size: 1.5rem;">💾</span>
-            Context Management
+            Context Selection
           </h4>
           
           <div style="background: #f9fafb; border-radius: 0.5rem; padding: 1.5rem;">
             <div style="display: flex; flex-direction: column; gap: 1rem;">
               <div style="border-left: 4px solid #3b82f6; padding-left: 1rem;">
-                <h5 style="font-weight: 600; color: #1f2937; margin-bottom: 0.5rem;">Conversation History</h5>
+                <h5 style="font-weight: 600; color: #1f2937; margin-bottom: 0.5rem;">Retrieved manuals only</h5>
                 <p style="font-size: 0.875rem; color: #6b7280;">
-                  Last 20 messages loaded from database and sent to OpenAI as context. 
-                  This enables multi-turn conversations while limiting token usage.
+                  The answer step sees selected chunks and their metadata. It does not browse the open web.
                 </p>
               </div>
 
-              <div style="border-left: 4px solid #10b981; padding-left: 1rem;">
-                <h5 style="font-weight: 600; color: #1f2937; margin-bottom: 0.5rem;">Message Format</h5>
-                <div style="background: #1f2937; color: #3b82f6; padding: 1rem; border-radius: 0.5rem; font-family: monospace; font-size: 0.75rem; overflow-x: auto;">
-                  <pre>[
-  { role: "system", content: "System prompt..." },
-  { role: "user", content: "Message 1" },
-  { role: "assistant", content: "Response 1" },
-  { role: "user", content: "Message 2" }
-]</pre>
-                </div>
-              </div>
-
               <div style="border-left: 4px solid #a855f7; padding-left: 1rem;">
-                <h5 style="font-weight: 600; color: #1f2937; margin-bottom: 0.5rem;">Token Optimization</h5>
+                <h5 style="font-weight: 600; color: #1f2937; margin-bottom: 0.5rem;">Langfuse</h5>
                 <ul style="font-size: 0.875rem; color: #4b5563; list-style: disc; list-style-position: inside;">
-                  <li>Limit context to 20 messages</li>
-                  <li>Truncate very long messages if needed</li>
-                  <li>Use concise tool descriptions</li>
-                  <li>Monitor token usage per request</li>
+                  <li>Trace embedding, retrieval, retry, and answer</li>
+                  <li>Score retrieval relevance, grounding, and citations</li>
+                  <li>Langfuse does not replace runtime safety checks</li>
                 </ul>
               </div>
             </div>
@@ -149,23 +127,23 @@ recommend products, and manage carts..."</pre>
           <div style="background: #f9fafb; border-radius: 0.5rem; padding: 1.5rem;">
             <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 1rem;">
               <div style="background: white; padding: 1rem; border-radius: 0.5rem; border: 1px solid #e5e7eb;">
-                <h5 style="font-weight: 600; color: #1f2937; margin-bottom: 0.5rem;">API Errors</h5>
+                <h5 style="font-weight: 600; color: #1f2937; margin-bottom: 0.5rem;">No useful chunks</h5>
                 <p style="font-size: 0.875rem; color: #6b7280;">
-                  Handle OpenAI API failures gracefully with retry logic and user-friendly error messages.
+                  Return a clear not-found message. Do not invent an answer.
                 </p>
               </div>
 
               <div style="background: white; padding: 1rem; border-radius: 0.5rem; border: 1px solid #e5e7eb;">
-                <h5 style="font-weight: 600; color: #1f2937; margin-bottom: 0.5rem;">Tool Errors</h5>
+                <h5 style="font-weight: 600; color: #1f2937; margin-bottom: 0.5rem;">Index errors</h5>
                 <p style="font-size: 0.875rem; color: #6b7280;">
-                  Catch tool execution errors and inform AI, allowing it to provide alternative responses.
+                  If FAISS or embeddings fail, show a simple error and keep the store working.
                 </p>
               </div>
 
               <div style="background: white; padding: 1rem; border-radius: 0.5rem; border: 1px solid #e5e7eb;">
-                <h5 style="font-weight: 600; color: #1f2937; margin-bottom: 0.5rem;">Timeout Handling</h5>
+                <h5 style="font-weight: 600; color: #1f2937; margin-bottom: 0.5rem;">Prompt injection</h5>
                 <p style="font-size: 0.875rem; color: #6b7280;">
-                  60-second timeout for AI requests. Return timeout error if exceeded.
+                  Treat user text and retrieved document text as untrusted.
                 </p>
               </div>
             </div>
@@ -175,4 +153,3 @@ recommend products, and manage carts..."</pre>
     </div>
   </div>
 </div>
-

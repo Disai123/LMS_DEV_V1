@@ -3,9 +3,9 @@
     <h3 class="content-heading">Conclusion</h3>
     <div style="max-width: none;">
       <p style="color: #4b5563; line-height: 1.75; margin-bottom: 1.5rem;">
-        The Architectural Design phase has established a comprehensive system architecture for the askunicart AI agent.
-        We have designed a scalable, secure, and maintainable system that integrates OpenAI GPT models with
-        e-commerce functionality.
+        The architecture for Ask the Store is a single read-only path through the existing application.
+        React sends a question to FastAPI. LangGraph reads approved PostgreSQL data and returns a safe answer.
+        Langfuse is added later for tracing.
       </p>
 
       <div class="card" style="margin-bottom: 2rem;">
@@ -13,13 +13,13 @@
           Decisions</h4>
         <ul
           style="list-style: disc; list-style-position: inside; display: flex; flex-direction: column; gap: 0.75rem; color: #4b5563;">
-          <li>✅ Layered architecture (Frontend → API → AI → Tools → Database)</li>
-          <li>✅ RESTful API design with JWT authentication</li>
-          <li>✅ OpenAI GPT-4o-mini for cost-effective AI processing</li>
-          <li>✅ Function calling for tool integration</li>
-          <li>✅ PostgreSQL with Prisma for data management</li>
-          <li>✅ Conversation history limited to 20 messages for performance</li>
-          <li>✅ User data isolation for privacy</li>
+          <li>✅ React chat UI → FastAPI POST /agent/ask → LangGraph → approved store data → PostgreSQL → answer</li>
+          <li>✅ Reuse existing login, permissions, and FastAPI middleware</li>
+          <li>✅ Configured LLM via LangChain, used by the LangGraph flow</li>
+          <li>✅ Read-only data path; no cart or order writes</li>
+          <li>✅ Existing PostgreSQL/Neon tables; we do not use a second database</li>
+          <li>✅ Clear refusals for out-of-scope and write requests</li>
+          <li>✅ Langfuse for traces after the feature works</li>
         </ul>
       </div>
 
@@ -29,23 +29,23 @@
         <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1rem;">
           <div style="background: #eff6ff; padding: 1rem; border-radius: 0.5rem; border-left: 4px solid #3b82f6;">
             <div style="font-weight: 600; color: #1f2937; margin-bottom: 0.5rem;">Frontend</div>
-            <div style="font-size: 0.875rem; color: #6b7280;">React chat component</div>
+            <div style="font-size: 0.875rem; color: #6b7280;">Existing React Ask the Store UI</div>
           </div>
           <div style="background: #f0fdf4; padding: 1rem; border-radius: 0.5rem; border-left: 4px solid #10b981;">
-            <div style="font-weight: 600; color: #1f2937; margin-bottom: 0.5rem;">API Routes</div>
-            <div style="font-size: 0.875rem; color: #6b7280;">Next.js API endpoints</div>
+            <div style="font-weight: 600; color: #1f2937; margin-bottom: 0.5rem;">API</div>
+            <div style="font-size: 0.875rem; color: #6b7280;">FastAPI POST /agent/ask</div>
           </div>
           <div style="background: #faf5ff; padding: 1rem; border-radius: 0.5rem; border-left: 4px solid #a855f7;">
-            <div style="font-weight: 600; color: #1f2937; margin-bottom: 0.5rem;">AI Integration</div>
-            <div style="font-size: 0.875rem; color: #6b7280;">OpenAI GPT-4o-mini</div>
+            <div style="font-weight: 600; color: #1f2937; margin-bottom: 0.5rem;">Agent</div>
+            <div style="font-size: 0.875rem; color: #6b7280;">LangGraph + LangChain</div>
           </div>
           <div style="background: #fff7ed; padding: 1rem; border-radius: 0.5rem; border-left: 4px solid #f97316;">
-            <div style="font-weight: 600; color: #1f2937; margin-bottom: 0.5rem;">Tool Modules</div>
-            <div style="font-size: 0.875rem; color: #6b7280;">4 specialized tools</div>
+            <div style="font-weight: 600; color: #1f2937; margin-bottom: 0.5rem;">Data Access</div>
+            <div style="font-size: 0.875rem; color: #6b7280;">Approved read-only store queries</div>
           </div>
           <div style="background: #eef2ff; padding: 1rem; border-radius: 0.5rem; border-left: 4px solid #6366f1;">
             <div style="font-weight: 600; color: #1f2937; margin-bottom: 0.5rem;">Database</div>
-            <div style="font-size: 0.875rem; color: #6b7280;">PostgreSQL + Prisma</div>
+            <div style="font-size: 0.875rem; color: #6b7280;">Existing PostgreSQL/Neon</div>
           </div>
         </div>
       </div>
@@ -53,19 +53,18 @@
       <div class="card" style="background: linear-gradient(135deg, #eef2ff 0%, #f0fdf4 100%);">
         <h4 style="font-size: 1.25rem; font-weight: 600; color: #1f2937; margin-bottom: 1rem;">Next Steps</h4>
         <p style="color: #4b5563; line-height: 1.75; margin-bottom: 1rem;">
-          With the architecture design complete, we're ready to move to the <strong>Development Phase</strong>,
-          where we'll implement the API routes, tool modules, frontend chat component, database schema, and
-          AI integration code.
+          With the design recorded, the Development phase adds LangGraph and POST /agent/ask inside the existing FastAPI backend,
+          then a simple React screen that calls it.
         </p>
         <div style="background: white; padding: 1rem; border-radius: 0.5rem; border: 1px solid #e5e7eb;">
-          <div style="font-weight: 600; color: #1f2937; margin-bottom: 0.5rem;">📋 Phase Deliverables Summary:</div>
+          <div style="font-weight: 600; color: #1f2937; margin-bottom: 0.5rem;">Phase deliverables:</div>
           <ul
             style="font-size: 0.875rem; color: #4b5563; display: flex; flex-direction: column; gap: 0.25rem; list-style: disc; list-style-position: inside;">
-            <li>System Architecture Diagram</li>
-            <li>Database Schema Design (Conversation, Message)</li>
-            <li>API Endpoint Specifications</li>
-            <li>AI Integration Architecture</li>
-            <li>Security Architecture Documentation</li>
+            <li>End-to-end Ask the Store path</li>
+            <li>Reuse of existing store tables</li>
+            <li>POST /agent/ask contract</li>
+            <li>LangGraph flow and read-only data access</li>
+            <li>Security, refusal, and logging notes</li>
           </ul>
         </div>
       </div>
@@ -75,7 +74,16 @@
         <h4 style="font-size:1.125rem;font-weight:600;color:#1e293b;margin:0 0 0.5rem;">Antigravity prompt — Architecture</h4>
         <p style="font-size:0.875rem;color:#64748b;margin:0 0 0.75rem;">Architecture Design. Copy into your AI coding assistant:</p>
         <pre style="white-space:pre-wrap;font-size:0.8rem;line-height:1.55;background:#fff;border:1px solid #e2e8f0;border-radius:0.5rem;padding:1rem;margin:0 0 0.75rem;max-height:280px;overflow:auto;color:#334155;">SDLC Phase: SDLC - Design
-Create or update only ARCHITECTURE.md for the Ask the Store feature.Show the simple end-to-end design:ReactJS UI-&gt; FastAPI /agent/ask-&gt; LangGraph agent-&gt; approved store data access-&gt; existing PostgreSQL/Neon database-&gt; final answer-&gt; ReactJS UIClearly describe:
+Create or update only ARCHITECTURE.md for the Ask the Store feature.
+Show the simple end-to-end design:
+ReactJS UI
+-&gt; FastAPI /agent/ask
+-&gt; LangGraph agent
+-&gt; approved store data access
+-&gt; existing PostgreSQL/Neon database
+-&gt; final answer
+-&gt; ReactJS UI
+Clearly describe:
 What the existing application keeps doing
 What the new agent adds
 Where authentication is checked
@@ -93,8 +101,7 @@ Week 2 Prerequisite: Week 1 must be complete. The existing FastAPI backend, Post
       <div style="background: linear-gradient(to right, #faf5ff, #eff6ff); border-radius: 0.5rem; padding: 1.5rem;">
         <h4 style="font-size: 1.125rem; font-weight: 600; color: #1f2937; margin-bottom: 1rem;">Ready to Proceed?</h4>
         <p style="color: #4b5563; margin-bottom: 1rem;">
-          This Architectural Design phase is now complete. You can proceed to the next phase (Development)
-          or review any section of this document as needed.
+          The Ask the Store architecture is complete. Continue to Development to implement the FastAPI agent and React screen.
         </p>
         <div style="display: flex; gap: 1rem; flex-wrap: wrap;">
           <button

@@ -22,19 +22,18 @@
       </div>
 
       <p style="color: #4b5563; line-height: 1.75; margin-bottom: 1.5rem;">
-        This phase focuses on designing a robust and scalable technical architecture for the E-Commerce Web Application. 
-        The architectural design phase transforms the UI/UX requirements into a comprehensive technical blueprint 
-        that ensures system reliability, performance, and maintainability.
+        This phase describes the ShopEasy stack: React frontend, FastAPI backend, PostgreSQL, and Render hosting.
+        Auth uses FastAPI JWT. Checkout is a simple place-order flow, not a payment gateway.
       </p>
       
       <div style="background: #eef2ff; border-radius: 0.5rem; padding: 1.5rem; margin-bottom: 1.5rem;">
         <h4 style="font-size: 1.125rem; font-weight: 600; color: #1f2937; margin-bottom: 0.75rem;">Phase Objectives</h4>
         <ul style="list-style: disc; list-style-position: inside; display: flex; flex-direction: column; gap: 0.5rem; color: #4b5563;">
-          <li>Define system architecture and component relationships</li>
-          <li>Design database schema and data flow</li>
-          <li>Create API specifications and endpoints</li>
-          <li>Implement security measures and protocols</li>
-          <li>Ensure scalability and performance requirements</li>
+          <li>Show React calling FastAPI, and FastAPI talking to PostgreSQL</li>
+          <li>Design tables for users, categories, products, cart, and orders</li>
+          <li>List FastAPI routes for auth, catalog, cart, checkout, and admin</li>
+          <li>Document JWT auth and admin role checks</li>
+          <li>Plan a Render deploy for frontend, backend, and the database</li>
         </ul>
       </div>
 

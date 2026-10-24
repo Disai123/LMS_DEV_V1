@@ -1,11 +1,11 @@
-# Agentic RAG E-Commerce Assistant (askunicart) - HTML Documentation
+# Agentic RAG E-Commerce Assistant - HTML Documentation
 
-This folder contains the complete askunicart AI agent project documentation recreated as static HTML pages.
+This folder contains the student HTML for adding a document RAG assistant to an existing e-commerce app.
 
 ## 📁 Project Structure
 
 ```
-Ecommerce_AI_Agent/
+Antigravity_Ecommerce_Agentic_RAG/
 ├── index.html                    # Landing page (start here!)
 ├── BRD_phase/                    # Business Requirements Document phase
 │   ├── Overview.html
@@ -33,14 +33,14 @@ Simply double-click on `index.html` or any `Overview.html` file to open in your 
 **Windows:**
 1. Open PowerShell/Command Prompt and run:
    ```bash
-   cd Realtime_projects\Ecommerce_AI_Agent
+   cd Realtime_projects\Antigravity_Ecommerce_Agentic_RAG
    python -m http.server 8000
    ```
 
 **Mac/Linux:**
 1. Open Terminal and run:
    ```bash
-   cd Realtime_projects/Ecommerce_AI_Agent
+   cd Realtime_projects/Antigravity_Ecommerce_Agentic_RAG
    python3 -m http.server 8000
    ```
 
@@ -55,7 +55,7 @@ Then open your browser and go to: **http://localhost:8000**
 
 2. Navigate to the folder and run:
    ```bash
-   cd Realtime_projects/Ecommerce_AI_Agent
+   cd Realtime_projects/Antigravity_Ecommerce_Agentic_RAG
    http-server -p 8000
    ```
 
@@ -82,16 +82,15 @@ If you use VS Code:
 - ✅ Sidebar navigation
 - ✅ Phase progress tracking
 - ✅ Replica of original React pages
-- ✅ All content extracted from askunicart AI agent source code
+- ✅ Student pages describe document RAG with FAISS, embeddings, and citations
 
-## 🤖 About askunicart AI Agent
+## 🤖 About the Agentic RAG assistant
 
-The askunicart AI agent is an intelligent e-commerce shopping assistant that helps users:
-- **Cart Management**: Add, update, and manage shopping cart items
-- **Product Discovery**: Search and browse products with natural language
-- **Inventory Checking**: Check real-time stock availability
-- **Recommendations**: Get personalized product recommendations
-- **Natural Conversations**: Interact using natural language queries
+The assistant is added to an existing React + FastAPI store. It helps users:
+- **Ask manuals**: Usage, FAQ, and warranty questions
+- **Retrieve**: FAISS search over document embeddings
+- **Cite sources**: Document name and section references
+- **Refuse**: Say not found instead of inventing specs
 
 ## 🔧 Troubleshooting
 
@@ -110,7 +109,7 @@ The askunicart AI agent is an intelligent e-commerce shopping assistant that hel
 - Navigation between subphases uses JavaScript (requires a web server)
 - Content files are loaded dynamically via fetch API
 - Compatible with all modern browsers
-- Documentation focuses specifically on the askunicart AI agent implementation
+- Documentation focuses on the Agentic RAG document assistant, not a cart agent
 
 ## 🎯 Project Phases
 

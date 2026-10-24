@@ -3,7 +3,7 @@
     <div style="text-align: center; margin-bottom: 2rem;">
       <h3 style="font-size: 1.875rem; font-weight: 700; color: #1f2937; margin-bottom: 1rem;">Database Implementation</h3>
       <p style="font-size: 1.125rem; color: #4b5563; max-width: 48rem; margin: 0 auto;">
-        Comprehensive database implementation using PostgreSQL and Prisma ORM to create a robust, 
+        Comprehensive database implementation using PostgreSQL and SQLAlchemy to create a robust, 
         scalable data layer for the e-commerce application with optimized relationships and performance.
       </p>
     </div>
@@ -36,11 +36,11 @@
                 <h6 style="font-weight: 600; color: #1f2937;">Users Table</h6>
               </div>
               <ul style="font-size: 0.875rem; color: #4b5563; display: flex; flex-direction: column; gap: 0.25rem; list-style: none; padding: 0;">
-                <li>• <code style="background: #ffffff; padding: 0.125rem 0.25rem; border-radius: 0.25rem;">id</code> - Primary key (CUID)</li>
+                <li>• <code style="background: #ffffff; padding: 0.125rem 0.25rem; border-radius: 0.25rem;">id</code> - Primary key (integer)</li>
                 <li>• <code style="background: #ffffff; padding: 0.125rem 0.25rem; border-radius: 0.25rem;">email</code> - Unique email address</li>
                 <li>• <code style="background: #ffffff; padding: 0.125rem 0.25rem; border-radius: 0.25rem;">name</code> - User display name</li>
                 <li>• <code style="background: #ffffff; padding: 0.125rem 0.25rem; border-radius: 0.25rem;">password</code> - Hashed password</li>
-                <li>• <code style="background: #ffffff; padding: 0.125rem 0.25rem; border-radius: 0.25rem;">createdAt, updatedAt</code> - Timestamps</li>
+                <li>• <code style="background: #ffffff; padding: 0.125rem 0.25rem; border-radius: 0.25rem;">created_at, updated_at</code> - Timestamps</li>
               </ul>
             </div>
             
@@ -50,7 +50,7 @@
                 <h6 style="font-weight: 600; color: #1f2937;">Products Table</h6>
               </div>
               <ul style="font-size: 0.875rem; color: #4b5563; display: flex; flex-direction: column; gap: 0.25rem; list-style: none; padding: 0;">
-                <li>• <code style="background: #ffffff; padding: 0.125rem 0.25rem; border-radius: 0.25rem;">id</code> - Primary key (CUID)</li>
+                <li>• <code style="background: #ffffff; padding: 0.125rem 0.25rem; border-radius: 0.25rem;">id</code> - Primary key (integer)</li>
                 <li>• <code style="background: #ffffff; padding: 0.125rem 0.25rem; border-radius: 0.25rem;">name</code> - Product name (unique)</li>
                 <li>• <code style="background: #ffffff; padding: 0.125rem 0.25rem; border-radius: 0.25rem;">description</code> - Product details</li>
                 <li>• <code style="background: #ffffff; padding: 0.125rem 0.25rem; border-radius: 0.25rem;">price</code> - Decimal price value</li>
@@ -70,12 +70,12 @@
                 <h6 style="font-weight: 600; color: #1f2937;">Orders Table</h6>
               </div>
               <ul style="font-size: 0.875rem; color: #4b5563; display: flex; flex-direction: column; gap: 0.25rem; list-style: none; padding: 0;">
-                <li>• <code style="background: #ffffff; padding: 0.125rem 0.25rem; border-radius: 0.25rem;">id</code> - Primary key (CUID)</li>
-                <li>• <code style="background: #ffffff; padding: 0.125rem 0.25rem; border-radius: 0.25rem;">orderNumber</code> - Unique order identifier</li>
-                <li>• <code style="background: #ffffff; padding: 0.125rem 0.25rem; border-radius: 0.25rem;">userId</code> - Foreign key to users</li>
+                <li>• <code style="background: #ffffff; padding: 0.125rem 0.25rem; border-radius: 0.25rem;">id</code> - Primary key (integer)</li>
+                <li>• <code style="background: #ffffff; padding: 0.125rem 0.25rem; border-radius: 0.25rem;">order_number</code> - Unique order identifier</li>
+                <li>• <code style="background: #ffffff; padding: 0.125rem 0.25rem; border-radius: 0.25rem;">user_id</code> - Foreign key to users</li>
                 <li>• <code style="background: #ffffff; padding: 0.125rem 0.25rem; border-radius: 0.25rem;">total</code> - Order total amount</li>
                 <li>• <code style="background: #ffffff; padding: 0.125rem 0.25rem; border-radius: 0.25rem;">status</code> - Order status enum</li>
-                <li>• <code style="background: #ffffff; padding: 0.125rem 0.25rem; border-radius: 0.25rem;">shippingAddress</code> - JSON address data</li>
+                <li>• <code style="background: #ffffff; padding: 0.125rem 0.25rem; border-radius: 0.25rem;">shipping_address</code> - Delivery address</li>
               </ul>
             </div>
 
@@ -85,11 +85,11 @@
                 <h6 style="font-weight: 600; color: #1f2937;">Cart Items Table</h6>
               </div>
               <ul style="font-size: 0.875rem; color: #4b5563; display: flex; flex-direction: column; gap: 0.25rem; list-style: none; padding: 0;">
-                <li>• <code style="background: #ffffff; padding: 0.125rem 0.25rem; border-radius: 0.25rem;">id</code> - Primary key (CUID)</li>
-                <li>• <code style="background: #ffffff; padding: 0.125rem 0.25rem; border-radius: 0.25rem;">userId</code> - Foreign key to users</li>
-                <li>• <code style="background: #ffffff; padding: 0.125rem 0.25rem; border-radius: 0.25rem;">productId</code> - Foreign key to products</li>
+                <li>• <code style="background: #ffffff; padding: 0.125rem 0.25rem; border-radius: 0.25rem;">id</code> - Primary key (integer)</li>
+                <li>• <code style="background: #ffffff; padding: 0.125rem 0.25rem; border-radius: 0.25rem;">user_id</code> - Foreign key to users</li>
+                <li>• <code style="background: #ffffff; padding: 0.125rem 0.25rem; border-radius: 0.25rem;">product_id</code> - Foreign key to products</li>
                 <li>• <code style="background: #ffffff; padding: 0.125rem 0.25rem; border-radius: 0.25rem;">quantity</code> - Item quantity</li>
-                <li>• <code style="background: #ffffff; padding: 0.125rem 0.25rem; border-radius: 0.25rem;">UNIQUE(userId, productId)</code> - Composite unique</li>
+                <li>• <code style="background: #ffffff; padding: 0.125rem 0.25rem; border-radius: 0.25rem;">UNIQUE(user_id, product_id)</code> - Composite unique</li>
               </ul>
             </div>
           </div>
@@ -128,7 +128,7 @@
               <div style="width: 0.5rem; height: 0.5rem; background: #6366f1; border-radius: 50%; margin-top: 0.5rem;"></div>
               <div>
                 <span style="font-size: 0.875rem; font-weight: 500; color: #1f2937;">Primary Keys</span>
-                <p style="font-size: 0.75rem; color: #4b5563;">CUID-based unique identifiers for all tables</p>
+                <p style="font-size: 0.75rem; color: #4b5563;">Integer primary keys for all tables</p>
               </div>
             </div>
             <div style="display: flex; align-items: flex-start; gap: 0.75rem;">
@@ -158,7 +158,7 @@
     </div>
 
     <div class="card" style="margin-bottom: 2rem;">
-      <h4 style="font-size: 1.25rem; font-weight: 600; color: #1f2937; margin-bottom: 1.5rem;">Prisma ORM Configuration</h4>
+      <h4 style="font-size: 1.25rem; font-weight: 600; color: #1f2937; margin-bottom: 1.5rem;">SQLAlchemy Configuration</h4>
       <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 2rem;">
         <div>
           <h5 style="font-size: 1.125rem; font-weight: 500; color: #1f2937; margin-bottom: 1rem;">Schema Configuration</h5>
@@ -169,13 +169,13 @@
                 <li>• PostgreSQL as primary database</li>
                 <li>• Environment variable configuration</li>
                 <li>• Connection string management</li>
-                <li>• Prisma client generation</li>
+                <li>• SQLAlchemy session generation</li>
               </ul>
             </div>
             <div style="background: #f9fafb; border-radius: 0.5rem; padding: 1rem;">
               <h6 style="font-weight: 500; color: #1f2937; margin-bottom: 0.5rem;">Data Types</h6>
               <ul style="font-size: 0.875rem; color: #4b5563; display: flex; flex-direction: column; gap: 0.25rem; list-style: none; padding: 0;">
-                <li>• String fields with CUID generation</li>
+                <li>• Integer IDs and string fields</li>
                 <li>• Decimal for precise price calculations</li>
                 <li>• JSON for flexible address storage</li>
                 <li>• DateTime for audit trails</li>
@@ -213,17 +213,14 @@
       <h4 style="font-size: 1.25rem; font-weight: 600; color: #1f2937; margin-bottom: 1.5rem;">Database Performance & Optimization</h4>
       <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1.5rem;">
         <div style="text-align: center; padding: 1rem; background: #ffffff; border-radius: 0.5rem; box-shadow: 0 1px 3px rgba(0,0,0,0.1);">
-          <div style="font-size: 1.5rem; margin-bottom: 0.5rem;">•</div>
           <div style="font-size: 0.875rem; font-weight: 500; color: #1f2937;">Query Optimization</div>
           <div style="font-size: 0.75rem; color: #4b5563;">Efficient data retrieval</div>
         </div>
         <div style="text-align: center; padding: 1rem; background: #ffffff; border-radius: 0.5rem; box-shadow: 0 1px 3px rgba(0,0,0,0.1);">
-          <div style="font-size: 1.5rem; margin-bottom: 0.5rem;">•</div>
           <div style="font-size: 0.875rem; font-weight: 500; color: #1f2937;">Relationships</div>
           <div style="font-size: 0.75rem; color: #4b5563;">Optimized joins</div>
         </div>
         <div style="text-align: center; padding: 1rem; background: #ffffff; border-radius: 0.5rem; box-shadow: 0 1px 3px rgba(0,0,0,0.1);">
-          <div style="font-size: 1.5rem; margin-bottom: 0.5rem;">•</div>
           <div style="font-size: 0.875rem; font-weight: 500; color: #1f2937;">Data Integrity</div>
           <div style="font-size: 0.75rem; color: #4b5563;">Referential integrity</div>
         </div>

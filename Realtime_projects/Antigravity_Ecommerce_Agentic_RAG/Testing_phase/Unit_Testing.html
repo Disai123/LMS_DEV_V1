@@ -3,38 +3,34 @@
     <h3 class="content-heading">Unit Testing</h3>
     <div style="max-width: none;">
       <p style="color: #4b5563; line-height: 1.75; margin-bottom: 1.5rem;">
-        Unit tests verify that individual tool module functions work correctly in isolation. Each tool function 
-        is tested with various inputs and edge cases.
+        Unit tests cover ingest, chunking, embeddings, and FAISS retrieval in isolation.
+        They do not test cart tools. Compare returned chunks with the expected manual section.
       </p>
       
       <div style="display: flex; flex-direction: column; gap: 2rem;">
         <div class="card">
           <h4 style="font-size: 1.25rem; font-weight: 600; color: #1f2937; margin-bottom: 1.5rem; display: flex; align-items: center; gap: 0.5rem;">
-            <span style="font-size: 1.5rem;">📚</span>
-            Catalog Scout Tests
+            <span style="font-size: 1.5rem;">📄</span>
+            Ingest and Chunking Tests
           </h4>
           
           <div style="background: #f9fafb; border-radius: 0.5rem; padding: 1.5rem;">
             <div style="display: flex; flex-direction: column; gap: 1rem;">
               <div style="border-left: 4px solid #3b82f6; padding-left: 1rem;">
-                <h5 style="font-weight: 600; color: #1f2937; margin-bottom: 0.5rem;">searchProducts Tests</h5>
+                <h5 style="font-weight: 600; color: #1f2937; margin-bottom: 0.5rem;">Document loading</h5>
                 <ul style="font-size: 0.875rem; color: #4b5563; list-style: disc; list-style-position: inside;">
-                  <li>✅ Search by product name returns correct results</li>
-                  <li>✅ Search by category filters correctly</li>
-                  <li>✅ Price range filtering works</li>
-                  <li>✅ In-stock filter works</li>
-                  <li>✅ Empty search returns all products</li>
-                  <li>✅ Limit parameter respected</li>
+                  <li>Approved manuals load and extract text</li>
+                  <li>Obvious noise is removed</li>
+                  <li>Document name and product metadata are attached</li>
                 </ul>
               </div>
 
               <div style="border-left: 4px solid #10b981; padding-left: 1rem;">
-                <h5 style="font-weight: 600; color: #1f2937; margin-bottom: 0.5rem;">getProductDetails Tests</h5>
+                <h5 style="font-weight: 600; color: #1f2937; margin-bottom: 0.5rem;">Chunking</h5>
                 <ul style="font-size: 0.875rem; color: #4b5563; list-style: disc; list-style-position: inside;">
-                  <li>✅ Returns product by ID</li>
-                  <li>✅ Returns product by slug</li>
-                  <li>✅ Returns null for invalid ID</li>
-                  <li>✅ Includes all required fields</li>
+                  <li>Chunks respect size and overlap</li>
+                  <li>Section names are kept when present</li>
+                  <li>Empty or tiny leftover chunks are not stored</li>
                 </ul>
               </div>
             </div>
@@ -43,41 +39,27 @@
 
         <div class="card">
           <h4 style="font-size: 1.25rem; font-weight: 600; color: #1f2937; margin-bottom: 1.5rem; display: flex; align-items: center; gap: 0.5rem;">
-            <span style="font-size: 1.5rem;">🛒</span>
-            Cart Manager Tests
+            <span style="font-size: 1.5rem;">🔎</span>
+            Embeddings and FAISS Tests
           </h4>
           
           <div style="background: #f9fafb; border-radius: 0.5rem; padding: 1.5rem;">
             <div style="display: flex; flex-direction: column; gap: 1rem;">
               <div style="border-left: 4px solid #ef4444; padding-left: 1rem;">
-                <h5 style="font-weight: 600; color: #1f2937; margin-bottom: 0.5rem;">addToCart Tests</h5>
+                <h5 style="font-weight: 600; color: #1f2937; margin-bottom: 0.5rem;">Index build</h5>
                 <ul style="font-size: 0.875rem; color: #4b5563; list-style: disc; list-style-position: inside;">
-                  <li>✅ Adds product by ID</li>
-                  <li>✅ Adds product by name (searches first)</li>
-                  <li>✅ Validates stock before adding</li>
-                  <li>✅ Rejects out-of-stock items</li>
-                  <li>✅ Handles quantity specification</li>
-                  <li>✅ Updates existing cart items</li>
+                  <li>Each chunk gets an embedding</li>
+                  <li>FAISS index writes successfully</li>
+                  <li>Metadata maps vector ids back to sources</li>
                 </ul>
               </div>
 
               <div style="border-left: 4px solid #6366f1; padding-left: 1rem;">
-                <h5 style="font-weight: 600; color: #1f2937; margin-bottom: 0.5rem;">getCart Tests</h5>
+                <h5 style="font-weight: 600; color: #1f2937; margin-bottom: 0.5rem;">Sample retrieval</h5>
                 <ul style="font-size: 0.875rem; color: #4b5563; list-style: disc; list-style-position: inside;">
-                  <li>✅ Returns empty cart for new user</li>
-                  <li>✅ Returns all cart items</li>
-                  <li>✅ Calculates totals correctly</li>
-                  <li>✅ Includes product details</li>
-                </ul>
-              </div>
-
-              <div style="border-left: 4px solid #8b5cf6; padding-left: 1rem;">
-                <h5 style="font-weight: 600; color: #1f2937; margin-bottom: 0.5rem;">updateCartItem Tests</h5>
-                <ul style="font-size: 0.875rem; color: #4b5563; list-style: disc; list-style-position: inside;">
-                  <li>✅ Updates quantity correctly</li>
-                  <li>✅ Validates stock limits</li>
-                  <li>✅ Removes item if quantity = 0</li>
-                  <li>✅ Returns error for invalid productId</li>
+                  <li>A known pairing question returns the pairing section</li>
+                  <li>Unrelated queries stay below the relevance threshold</li>
+                  <li>Result limit is respected</li>
                 </ul>
               </div>
             </div>
@@ -86,38 +68,17 @@
 
         <div class="card">
           <h4 style="font-size: 1.25rem; font-weight: 600; color: #1f2937; margin-bottom: 1.5rem; display: flex; align-items: center; gap: 0.5rem;">
-            <span style="font-size: 1.5rem;">📦</span>
-            Inventory Sentinel Tests
-          </h4>
-          
-          <div style="background: #f9fafb; border-radius: 0.5rem; padding: 1.5rem;">
-            <div style="border-left: 4px solid #f97316; padding-left: 1rem;">
-              <h5 style="font-weight: 600; color: #1f2937; margin-bottom: 0.5rem;">checkStock Tests</h5>
-              <ul style="font-size: 0.875rem; color: #4b5563; list-style: disc; list-style-position: inside;">
-                <li>✅ Returns stock quantity for valid product</li>
-                <li>✅ Returns 0 for out-of-stock items</li>
-                <li>✅ Handles invalid product IDs</li>
-                <li>✅ Checks stock by category</li>
-              </ul>
-            </div>
-          </div>
-        </div>
-
-        <div class="card">
-          <h4 style="font-size: 1.25rem; font-weight: 600; color: #1f2937; margin-bottom: 1.5rem; display: flex; align-items: center; gap: 0.5rem;">
-            <span style="font-size: 1.5rem;">🎯</span>
-            Recommendation Engine Tests
+            <span style="font-size: 1.5rem;">📎</span>
+            Grounding Helpers
           </h4>
           
           <div style="background: #f9fafb; border-radius: 0.5rem; padding: 1.5rem;">
             <div style="border-left: 4px solid #06b6d4; padding-left: 1rem;">
-              <h5 style="font-weight: 600; color: #1f2937; margin-bottom: 0.5rem;">getRecommendations Tests</h5>
+              <h5 style="font-weight: 600; color: #1f2937; margin-bottom: 0.5rem;">Citation and refusal helpers</h5>
               <ul style="font-size: 0.875rem; color: #4b5563; list-style: disc; list-style-position: inside;">
-                <li>✅ Returns recommendations by category</li>
-                <li>✅ Returns similar products for productId</li>
-                <li>✅ Respects limit parameter</li>
-                <li>✅ Prioritizes in-stock items</li>
-                <li>✅ Returns empty array if no matches</li>
+                <li>Source list is built from retrieved metadata</li>
+                <li>Empty retrieval produces a not-found result</li>
+                <li>Clarification is requested when the product is missing</li>
               </ul>
             </div>
           </div>
@@ -126,4 +87,3 @@
     </div>
   </div>
 </div>
-

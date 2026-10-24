@@ -19,45 +19,40 @@
 
     <div>
       <p style="color: #4b5563; line-height: 1.75; margin-bottom: 1.5rem;">
-        This phase focuses on designing the user interface and user experience for the <strong>askunicart AI agent</strong>. 
-        The design emphasizes creating an intuitive, accessible, and engaging chat interface that enables natural 
-        language interactions between customers and the AI shopping assistant.
+        This phase designs the Ask the Store screen inside the <strong>existing ReactJS application</strong>.
+        The UI stays simple and matches the current store look. We do not build a second frontend.
       </p>
       
       <div style="background: #faf5ff; border-radius: 0.5rem; padding: 1.5rem; margin-bottom: 1.5rem;">
         <h4 style="font-size: 1.125rem; font-weight: 600; color: #1f2937; margin-bottom: 0.75rem;">Phase Objectives</h4>
         <ul style="list-style: disc; list-style-position: inside; display: flex; flex-direction: column; gap: 0.5rem; color: #4b5563;">
-          <li>Design intuitive chat interface components</li>
-          <li>Create user experience flows for AI interactions</li>
-          <li>Establish design system for chat UI</li>
-          <li>Ensure mobile responsiveness and accessibility</li>
-          <li>Design error states and loading indicators</li>
-          <li>Plan navigation integration with main application</li>
+          <li>Decide where Ask the Store appears in the existing React app</li>
+          <li>Define a question input, Ask button, loading state, and answer area</li>
+          <li>Plan no-data, out-of-scope, and safe error messages</li>
+          <li>Reuse the current layout, colors, and typography</li>
+          <li>Keep the screen usable on mobile</li>
+          <li>List information that must never appear in the UI</li>
         </ul>
       </div>
 
       <div style="background: #eff6ff; border-radius: 0.5rem; padding: 1.5rem; margin-bottom: 1.5rem;">
-        <h4 style="font-size: 1.125rem; font-weight: 600; color: #1f2937; margin-bottom: 0.75rem;">Chat Interface Components</h4>
+        <h4 style="font-size: 1.125rem; font-weight: 600; color: #1f2937; margin-bottom: 0.75rem;">Ask the Store Screen</h4>
         <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1rem; margin-top: 1rem;">
           <div style="background: white; padding: 1rem; border-radius: 0.5rem; border: 1px solid #e5e7eb;">
-            <div style="font-size: 1.5rem; margin-bottom: 0.5rem;">•</div>
-            <div style="font-weight: 600; color: #1f2937; margin-bottom: 0.25rem;">Chat Window</div>
-            <div style="font-size: 0.875rem; color: #6b7280;">Floating chat interface</div>
+            <div style="font-weight: 600; color: #1f2937; margin-bottom: 0.25rem;">Question Input</div>
+            <div style="font-size: 0.875rem; color: #6b7280;">Text box for a store question</div>
           </div>
           <div style="background: white; padding: 1rem; border-radius: 0.5rem; border: 1px solid #e5e7eb;">
-            <div style="font-size: 1.5rem; margin-bottom: 0.5rem;">•</div>
-            <div style="font-weight: 600; color: #1f2937; margin-bottom: 0.25rem;">Message Bubbles</div>
-            <div style="font-size: 0.875rem; color: #6b7280;">User and AI messages</div>
+            <div style="font-weight: 600; color: #1f2937; margin-bottom: 0.25rem;">Ask Button</div>
+            <div style="font-size: 0.875rem; color: #6b7280;">Sends POST /agent/ask</div>
           </div>
           <div style="background: white; padding: 1rem; border-radius: 0.5rem; border: 1px solid #e5e7eb;">
-            <div style="font-size: 1.5rem; margin-bottom: 0.5rem;">•</div>
-            <div style="font-weight: 600; color: #1f2937; margin-bottom: 0.25rem;">Input Field</div>
-            <div style="font-size: 0.875rem; color: #6b7280;">Text input with send button</div>
+            <div style="font-weight: 600; color: #1f2937; margin-bottom: 0.25rem;">Answer Area</div>
+            <div style="font-size: 0.875rem; color: #6b7280;">Shows the grounded reply</div>
           </div>
           <div style="background: white; padding: 1rem; border-radius: 0.5rem; border: 1px solid #e5e7eb;">
-            <div style="font-size: 1.5rem; margin-bottom: 0.5rem;">•</div>
-            <div style="font-weight: 600; color: #1f2937; margin-bottom: 0.25rem;">Loading States</div>
-            <div style="font-size: 0.875rem; color: #6b7280;">AI processing indicators</div>
+            <div style="font-weight: 600; color: #1f2937; margin-bottom: 0.25rem;">Status Messages</div>
+            <div style="font-size: 0.875rem; color: #6b7280;">Loading, no-data, refusal, error</div>
           </div>
         </div>
       </div>
@@ -65,15 +60,13 @@
       <div style="background: #f0fdf4; border-radius: 0.5rem; padding: 1.5rem;">
         <h4 style="font-size: 1.125rem; font-weight: 600; color: #1f2937; margin-bottom: 0.75rem;">Deliverables</h4>
         <ul style="list-style: disc; list-style-position: inside; display: flex; flex-direction: column; gap: 0.5rem; color: #4b5563;">
-          <li>Chat Interface Design Specifications</li>
-          <li>Design System (colors, typography, components)</li>
-          <li>User Experience Flow Diagrams</li>
-          <li>Navigation Integration Plan</li>
-          <li>Responsive Design Guidelines</li>
-          <li>Accessibility Compliance Plan</li>
+          <li>UI_UX.md for Ask the Store</li>
+          <li>Placement of the chat screen in the existing React app</li>
+          <li>Message states: empty, loading, answer, no-data, out-of-scope, error</li>
+          <li>Mobile and responsive notes</li>
+          <li>List of data that must never be shown</li>
         </ul>
       </div>
     </div>
   </div>
 </div>
-

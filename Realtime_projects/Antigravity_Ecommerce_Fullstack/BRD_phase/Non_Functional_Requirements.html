@@ -99,7 +99,7 @@
               <div style="display: flex; flex-direction: column; gap: 0.75rem;">
                 <div style="background: #fef2f2; border-radius: 0.5rem; padding: 1rem;">
                   <div style="font-weight: 500; color: #991b1b; margin-bottom: 0.25rem;">User Authentication</div>
-                  <div style="font-size: 0.875rem; color: #b91c1c; margin-bottom: 0.5rem;">JWT with 2FA support via NextAuth.js</div>
+                  <div style="font-size: 0.875rem; color: #b91c1c; margin-bottom: 0.5rem;">FastAPI JWT for customer and admin login</div>
                   <div style="font-size: 0.75rem; color: #dc2626;">Customer trust and data protection</div>
                 </div>
                 <div style="background: #fff7ed; border-radius: 0.5rem; padding: 1rem;">
@@ -129,9 +129,9 @@
                   <div style="font-size: 0.75rem; color: #16a34a;">Customer privacy protection</div>
                 </div>
                 <div style="background: #ecfdf5; border-radius: 0.5rem; padding: 1rem;">
-                  <div style="font-weight: 500; color: #047857; margin-bottom: 0.25rem;">Payment Security</div>
-                  <div style="font-size: 0.875rem; color: #059669; margin-bottom: 0.5rem;">PCI DSS compliance via Stripe</div>
-                  <div style="font-size: 0.75rem; color: #10b981;">Legal compliance and trust</div>
+                  <div style="font-weight: 500; color: #047857; margin-bottom: 0.25rem;">Checkout Safety</div>
+                  <div style="font-size: 0.875rem; color: #059669; margin-bottom: 0.5rem;">No card data is stored; checkout stays in-app</div>
+                  <div style="font-size: 0.75rem; color: #10b981;">Simple order placement, not a card processor</div>
                 </div>
                 <div style="background: #f0fdfa; border-radius: 0.5rem; padding: 1rem;">
                   <div style="font-weight: 500; color: #0d9488; margin-bottom: 0.25rem;">Database Security</div>
@@ -140,7 +140,7 @@
                 </div>
                 <div style="background: #ecfeff; border-radius: 0.5rem; padding: 1rem;">
                   <div style="font-weight: 500; color: #0891b2; margin-bottom: 0.25rem;">Input Validation</div>
-                  <div style="font-size: 0.875rem; color: #06b6d4; margin-bottom: 0.5rem;">Server-side validation with Prisma ORM</div>
+                  <div style="font-size: 0.875rem; color: #06b6d4; margin-bottom: 0.5rem;">FastAPI validates input; SQLAlchemy uses parameterized queries</div>
                   <div style="font-size: 0.75rem; color: #22d3ee;">SQL injection prevention</div>
                 </div>
               </div>
@@ -293,12 +293,12 @@
               <div style="display: flex; flex-direction: column; gap: 0.75rem;">
                 <div style="background: #fff7ed; border-radius: 0.5rem; padding: 1rem;">
                   <div style="font-weight: 500; color: #c2410c; margin-bottom: 0.25rem;">User Growth</div>
-                  <div style="font-size: 0.875rem; color: #ea580c; margin-bottom: 0.5rem;">10x current capacity with auto-scaling</div>
+                  <div style="font-size: 0.875rem; color: #ea580c; margin-bottom: 0.5rem;">Render can restart frontend and backend services</div>
                   <div style="font-size: 0.75rem; color: #f97316;">Business expansion capability</div>
                 </div>
                 <div style="background: #fffbeb; border-radius: 0.5rem; padding: 1rem;">
                   <div style="font-weight: 500; color: #d97706; margin-bottom: 0.25rem;">Product Catalog</div>
-                  <div style="font-size: 0.875rem; color: #f59e0b; margin-bottom: 0.5rem;">100,000+ products with database optimization</div>
+                  <div style="font-size: 0.875rem; color: #f59e0b; margin-bottom: 0.5rem;">Catalog stored in PostgreSQL with sample products</div>
                   <div style="font-size: 0.75rem; color: #fbbf24;">Inventory management</div>
                 </div>
                 <div style="background: #fefce8; border-radius: 0.5rem; padding: 1rem;">
@@ -318,13 +318,13 @@
               <h5 style="font-weight: 600; color: #374151; font-size: 1.125rem;">Performance Scaling</h5>
               <div style="display: flex; flex-direction: column; gap: 0.75rem;">
                 <div style="background: #f0fdf4; border-radius: 0.5rem; padding: 1rem;">
-                  <div style="font-weight: 500; color: #059669; margin-bottom: 0.25rem;">CDN Integration</div>
-                  <div style="font-size: 0.875rem; color: #10b981; margin-bottom: 0.5rem;">Global content delivery via Vercel CDN</div>
+                  <div style="font-weight: 500; color: #059669; margin-bottom: 0.25rem;">Static React Assets</div>
+                  <div style="font-size: 0.875rem; color: #10b981; margin-bottom: 0.5rem;">Static React build served from Render</div>
                   <div style="font-size: 0.75rem; color: #16a34a;">International reach</div>
                 </div>
                 <div style="background: #ecfdf5; border-radius: 0.5rem; padding: 1rem;">
                   <div style="font-weight: 500; color: #047857; margin-bottom: 0.25rem;">Caching Strategy</div>
-                  <div style="font-size: 0.875rem; color: #059669; margin-bottom: 0.5rem;">Multi-layer caching with Redis and browser</div>
+                  <div style="font-size: 0.875rem; color: #059669; margin-bottom: 0.5rem;">PostgreSQL indexes and browser cache for product pages</div>
                   <div style="font-size: 0.75rem; color: #10b981;">Performance optimization</div>
                 </div>
                 <div style="background: #f0fdfa; border-radius: 0.5rem; padding: 1rem;">

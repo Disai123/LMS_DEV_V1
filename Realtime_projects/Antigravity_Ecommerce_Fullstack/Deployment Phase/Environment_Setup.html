@@ -3,7 +3,7 @@
     <div style="text-align: center; margin-bottom: 2rem;">
       <h3 style="font-size: 1.875rem; font-weight: 700; color: #1f2937; margin-bottom: 1rem;">Environment Setup</h3>
       <p style="font-size: 1.125rem; color: #4b5563; max-width: 48rem; margin: 0 auto;">
-        Configure development, staging, and production environments for the the e-commerce application 
+        Configure development, staging, and production environments for the e-commerce application 
         with proper security, monitoring, and scalability settings.
       </p>
     </div>
@@ -67,7 +67,7 @@
               <ul style="font-size: 0.875rem; color: #4b5563; display: flex; flex-direction: column; gap: 0.25rem; list-style: none; padding: 0;">
                 <li>• High availability setup</li>
                 <li>• Auto-scaling enabled</li>
-                <li>• CDN integration</li>
+                <li>• HTTPS on Render</li>
                 <li>• Full monitoring suite</li>
               </ul>
             </div>
@@ -107,11 +107,11 @@
         </div>
         
         <div style="background: #ffffff; border-radius: 0.5rem; padding: 1rem;">
-          <h5 style="font-weight: 500; color: #1f2937; margin-bottom: 0.5rem;">External Services</h5>
+          <h5 style="font-weight: 500; color: #1f2937; margin-bottom: 0.5rem;">Frontend and Auth</h5>
           <div style="background: #f3f4f6; padding: 0.75rem; border-radius: 0.25rem; font-family: monospace; font-size: 0.875rem;">
-            <div>PAYMENT_API_KEY=sk_live_...</div>
-            <div>EMAIL_SERVICE_URL=https://api.sendgrid.com</div>
-            <div>CDN_URL=https://cdn.example.com</div>
+            <div>FRONTEND_URL=https://ecommerce-frontend-project.onrender.com</div>
+            <div>JWT_SECRET=your-fastapi-jwt-secret</div>
+            <div>VITE_API_BASE_URL=https://your-fastapi-service.onrender.com</div>
           </div>
         </div>
       </div>

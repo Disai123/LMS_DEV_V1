@@ -3,132 +3,116 @@
     <h3 class="content-heading">Chat Interface Design</h3>
     <div style="max-width: none;">
       <p style="color: #4b5563; line-height: 1.75; margin-bottom: 1.5rem;">
-        The chat interface is the primary touchpoint between users and the AI agent. This section details the design 
-        specifications for all chat UI components, ensuring a cohesive and intuitive user experience.
+        Ask the Store uses a simple chat panel inside the existing React store. The panel has a question box, an Ask button, and an answer area.
+        It is not a new website and it does not offer cart actions.
       </p>
       
       <div style="display: flex; flex-direction: column; gap: 2rem;">
-        <!-- Chat Button -->
+        <!-- Placement -->
         <div class="card">
           <h4 style="font-size: 1.25rem; font-weight: 600; color: #1f2937; margin-bottom: 1.5rem; display: flex; align-items: center; gap: 0.5rem;">
-            <span style="font-size: 1.5rem;">🔵</span>
-            Chat Button (Floating)
+            <span style="font-size: 1.5rem;">📍</span>
+            Placement in the Existing App
           </h4>
           
           <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 1.5rem;">
             <div style="background: #eff6ff; border-radius: 0.5rem; padding: 1rem;">
-              <h5 style="font-weight: 600; color: #1f2937; margin-bottom: 0.75rem;">Specifications</h5>
+              <h5 style="font-weight: 600; color: #1f2937; margin-bottom: 0.75rem;">Where it appears</h5>
               <ul style="font-size: 0.875rem; color: #4b5563; list-style: disc; list-style-position: inside; display: flex; flex-direction: column; gap: 0.25rem;">
-                <li><strong>Size:</strong> 56px × 56px (desktop), 48px × 48px (mobile)</li>
-                <li><strong>Shape:</strong> Circular with rounded corners</li>
-                <li><strong>Position:</strong> Fixed, bottom-right (24px from edges)</li>
-                <li><strong>Z-index:</strong> 9999 (always on top)</li>
-                <li><strong>Background:</strong> Blue gradient (#3b82f6 to #2563eb)</li>
-                <li><strong>Icon:</strong> MessageCircle icon, white color</li>
-                <li><strong>Shadow:</strong> Large shadow for depth</li>
-                <li><strong>Hover:</strong> Scale to 1.1, darker blue</li>
+                <li><strong>Host:</strong> Existing ReactJS store</li>
+                <li><strong>Access:</strong> After the current login</li>
+                <li><strong>Look:</strong> Same header, colors, and type</li>
+                <li><strong>Scope:</strong> Questions only, read-only answers</li>
               </ul>
             </div>
 
             <div style="background: #f0fdf4; border-radius: 0.5rem; padding: 1rem;">
-              <h5 style="font-weight: 600; color: #1f2937; margin-bottom: 0.75rem;">States</h5>
+              <h5 style="font-weight: 600; color: #1f2937; margin-bottom: 0.75rem;">What it does not do</h5>
               <ul style="font-size: 0.875rem; color: #4b5563; list-style: disc; list-style-position: inside; display: flex; flex-direction: column; gap: 0.25rem;">
-                <li><strong>Default:</strong> Visible when chat is closed</li>
-                <li><strong>Hidden:</strong> Hidden when chat window is open</li>
-                <li><strong>Hover:</strong> Slight scale and shadow increase</li>
-                <li><strong>Active:</strong> Pressed state with scale down</li>
+                <li>Does not rebuild the store UI</li>
+                <li>Does not add a second frontend</li>
+                <li>Does not add or remove cart items</li>
+                <li>Does not show secrets or SQL</li>
               </ul>
             </div>
           </div>
         </div>
 
-        <!-- Chat Window -->
+        <!-- Ask the Store panel -->
         <div class="card">
           <h4 style="font-size: 1.25rem; font-weight: 600; color: #1f2937; margin-bottom: 1.5rem; display: flex; align-items: center; gap: 0.5rem;">
             <span style="font-size: 1.5rem;">💬</span>
-            Chat Window
+            Ask the Store Panel
           </h4>
           
           <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 1.5rem;">
             <div style="background: #eff6ff; border-radius: 0.5rem; padding: 1rem;">
               <h5 style="font-weight: 600; color: #1f2937; margin-bottom: 0.75rem;">Layout</h5>
               <ul style="font-size: 0.875rem; color: #4b5563; list-style: disc; list-style-position: inside; display: flex; flex-direction: column; gap: 0.25rem;">
-                <li><strong>Dimensions:</strong> 400px × 600px (desktop)</li>
-                <li><strong>Position:</strong> Fixed, bottom-right</li>
-                <li><strong>Border Radius:</strong> 12px (rounded corners)</li>
-                <li><strong>Shadow:</strong> Large shadow (2xl)</li>
-                <li><strong>Background:</strong> White (#FFFFFF)</li>
-                <li><strong>Structure:</strong> Header, Messages, Input</li>
+                <li><strong>Structure:</strong> Title, answer area, input, Ask button</li>
+                <li><strong>Width:</strong> Fits the existing page content</li>
+                <li><strong>Background:</strong> Same surface as the store</li>
+                <li><strong>Title:</strong> Ask the Store</li>
               </ul>
             </div>
 
             <div style="background: #f0fdf4; border-radius: 0.5rem; padding: 1rem;">
               <h5 style="font-weight: 600; color: #1f2937; margin-bottom: 0.75rem;">Header</h5>
               <ul style="font-size: 0.875rem; color: #4b5563; list-style: disc; list-style-position: inside; display: flex; flex-direction: column; gap: 0.25rem;">
-                <li><strong>Background:</strong> Blue (#3b82f6)</li>
-                <li><strong>Text:</strong> White, "askunicart" title</li>
-                <li><strong>Actions:</strong> Clear chat, Close button</li>
-                <li><strong>Height:</strong> 48px</li>
-                <li><strong>Padding:</strong> 12px 16px</li>
+                <li><strong>Text:</strong> Ask the Store</li>
+                <li><strong>Note:</strong> Read-only store questions</li>
+                <li><strong>Style:</strong> Match existing page headings</li>
+                <li><strong>No extra chrome:</strong> Keep the panel simple</li>
               </ul>
             </div>
 
             <div style="background: #fef2f2; border-radius: 0.5rem; padding: 1rem;">
-              <h5 style="font-weight: 600; color: #1f2937; margin-bottom: 0.75rem;">Messages Area</h5>
+              <h5 style="font-weight: 600; color: #1f2937; margin-bottom: 0.75rem;">Answer Area</h5>
               <ul style="font-size: 0.875rem; color: #4b5563; list-style: disc; list-style-position: inside; display: flex; flex-direction: column; gap: 0.25rem;">
-                <li><strong>Scrollable:</strong> Vertical scroll with auto-scroll</li>
-                <li><strong>Padding:</strong> 16px</li>
-                <li><strong>Empty State:</strong> Welcome message with icon</li>
-                <li><strong>Spacing:</strong> 16px gap between messages</li>
-                <li><strong>Max Height:</strong> Flexible (fills available space)</li>
+                <li><strong>Empty:</strong> Short prompt to ask about the store</li>
+                <li><strong>Answer:</strong> Plain text from POST /agent/ask</li>
+                <li><strong>No-data:</strong> Clear "no matching data" message</li>
+                <li><strong>Out-of-scope:</strong> Agent only answers about the store</li>
               </ul>
             </div>
 
             <div style="background: #faf5ff; border-radius: 0.5rem; padding: 1rem;">
               <h5 style="font-weight: 600; color: #1f2937; margin-bottom: 0.75rem;">Input Area</h5>
               <ul style="font-size: 0.875rem; color: #4b5563; list-style: disc; list-style-position: inside; display: flex; flex-direction: column; gap: 0.25rem;">
-                <li><strong>Text Input:</strong> Full width, rounded</li>
-                <li><strong>Send Button:</strong> Icon button, right side</li>
-                <li><strong>Placeholder:</strong> "Type your message..."</li>
-                <li><strong>Disabled:</strong> When loading or empty</li>
-                <li><strong>Padding:</strong> 12px 16px</li>
+                <li><strong>Question box:</strong> One text field</li>
+                <li><strong>Ask button:</strong> Disabled while loading or empty</li>
+                <li><strong>Placeholder:</strong> "Ask about products, stock, or orders"</li>
+                <li><strong>Submit:</strong> POST /agent/ask with the signed-in session</li>
               </ul>
             </div>
           </div>
         </div>
 
-        <!-- Message Bubbles -->
+        <!-- Messages -->
         <div class="card">
           <h4 style="font-size: 1.25rem; font-weight: 600; color: #1f2937; margin-bottom: 1.5rem; display: flex; align-items: center; gap: 0.5rem;">
             <span style="font-size: 1.5rem;">💭</span>
-            Message Bubbles
+            Question and Answer Styles
           </h4>
           
           <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 1.5rem;">
             <div style="background: #eff6ff; border-radius: 0.5rem; padding: 1rem; border-left: 4px solid #3b82f6;">
-              <h5 style="font-weight: 600; color: #1f2937; margin-bottom: 0.75rem;">User Messages</h5>
+              <h5 style="font-weight: 600; color: #1f2937; margin-bottom: 0.75rem;">User Question</h5>
               <ul style="font-size: 0.875rem; color: #4b5563; list-style: disc; list-style-position: inside; display: flex; flex-direction: column; gap: 0.25rem;">
-                <li><strong>Alignment:</strong> Right-aligned</li>
-                <li><strong>Background:</strong> Blue (#3b82f6)</li>
-                <li><strong>Text Color:</strong> White</li>
-                <li><strong>Border Radius:</strong> 12px (rounded)</li>
-                <li><strong>Max Width:</strong> 80% of chat width</li>
-                <li><strong>Padding:</strong> 12px 16px</li>
-                <li><strong>Font Size:</strong> 14px</li>
+                <li><strong>Alignment:</strong> Right-aligned or labeled as You</li>
+                <li><strong>Background:</strong> Existing primary color</li>
+                <li><strong>Content:</strong> The typed store question</li>
+                <li><strong>Max width:</strong> Fit the existing content column</li>
               </ul>
             </div>
 
             <div style="background: #f3f4f6; border-radius: 0.5rem; padding: 1rem; border-left: 4px solid #6b7280;">
-              <h5 style="font-weight: 600; color: #1f2937; margin-bottom: 0.75rem;">AI Messages</h5>
+              <h5 style="font-weight: 600; color: #1f2937; margin-bottom: 0.75rem;">Agent Answer</h5>
               <ul style="font-size: 0.875rem; color: #4b5563; list-style: disc; list-style-position: inside; display: flex; flex-direction: column; gap: 0.25rem;">
                 <li><strong>Alignment:</strong> Left-aligned</li>
-                <li><strong>Background:</strong> Light gray (#f3f4f6)</li>
-                <li><strong>Text Color:</strong> Dark gray (#1f2937)</li>
-                <li><strong>Border Radius:</strong> 12px (rounded)</li>
-                <li><strong>Max Width:</strong> 80% of chat width</li>
-                <li><strong>Padding:</strong> 12px 16px</li>
-                <li><strong>Font Size:</strong> 14px</li>
-                <li><strong>Line Height:</strong> 1.5 (readable)</li>
+                <li><strong>Background:</strong> Neutral surface from the store theme</li>
+                <li><strong>Content:</strong> Factual answer from store data</li>
+                <li><strong>Never shown:</strong> Secrets, SQL, stack traces, prompts</li>
               </ul>
             </div>
           </div>
@@ -138,38 +122,34 @@
         <div class="card">
           <h4 style="font-size: 1.25rem; font-weight: 600; color: #1f2937; margin-bottom: 1.5rem; display: flex; align-items: center; gap: 0.5rem;">
             <span style="font-size: 1.5rem;">⏳</span>
-            Loading & Error States
+            Loading and Status Messages
           </h4>
           
           <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 1.5rem;">
             <div style="background: #faf5ff; border-radius: 0.5rem; padding: 1rem;">
-              <h5 style="font-weight: 600; color: #1f2937; margin-bottom: 0.75rem;">Loading Indicator</h5>
+              <h5 style="font-weight: 600; color: #1f2937; margin-bottom: 0.75rem;">Loading</h5>
               <ul style="font-size: 0.875rem; color: #4b5563; list-style: disc; list-style-position: inside; display: flex; flex-direction: column; gap: 0.25rem;">
-                <li><strong>Type:</strong> Animated spinner (Loader2 icon)</li>
-                <li><strong>Position:</strong> Left-aligned (AI message style)</li>
-                <li><strong>Animation:</strong> Rotating, smooth</li>
-                <li><strong>Color:</strong> Gray (#6b7280)</li>
-                <li><strong>Size:</strong> 20px × 20px</li>
+                <li>Shown after Ask is pressed</li>
+                <li>Ask button stays disabled</li>
+                <li>Uses the existing spinner style</li>
               </ul>
             </div>
 
             <div style="background: #fef2f2; border-radius: 0.5rem; padding: 1rem;">
-              <h5 style="font-weight: 600; color: #1f2937; margin-bottom: 0.75rem;">Error Messages</h5>
+              <h5 style="font-weight: 600; color: #1f2937; margin-bottom: 0.75rem;">Safe Error</h5>
               <ul style="font-size: 0.875rem; color: #4b5563; list-style: disc; list-style-position: inside; display: flex; flex-direction: column; gap: 0.25rem;">
-                <li><strong>Style:</strong> Red text or border</li>
-                <li><strong>Position:</strong> Inline with message or toast</li>
-                <li><strong>Message:</strong> User-friendly error text</li>
-                <li><strong>Action:</strong> Retry option when applicable</li>
+                <li>Friendly message only</li>
+                <li>No stack traces or config</li>
+                <li>User can ask again</li>
               </ul>
             </div>
 
             <div style="background: #fffbeb; border-radius: 0.5rem; padding: 1rem;">
               <h5 style="font-weight: 600; color: #1f2937; margin-bottom: 0.75rem;">Empty State</h5>
               <ul style="font-size: 0.875rem; color: #4b5563; list-style: disc; list-style-position: inside; display: flex; flex-direction: column; gap: 0.25rem;">
-                <li><strong>Icon:</strong> Large MessageCircle icon</li>
-                <li><strong>Text:</strong> Welcome message</li>
-                <li><strong>Subtext:</strong> Example queries</li>
-                <li><strong>Centered:</strong> Vertically and horizontally</li>
+                <li>Invite a store question</li>
+                <li>Examples: products, stock, orders</li>
+                <li>Remind that answers are read-only</li>
               </ul>
             </div>
           </div>
@@ -178,4 +158,3 @@
     </div>
   </div>
 </div>
-

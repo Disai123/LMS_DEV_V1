@@ -1,73 +1,68 @@
 <div class="content-body">
   <div class="content-section">
-    <h3 class="content-heading">Tool Modules Development</h3>
+    <h3 class="content-heading">Approved Store Data Access</h3>
     <p style="color: #4b5563; line-height: 1.75; margin-bottom: 2rem;">
-      Tool modules are specialized functions the AI can call to interact with the e-commerce system.
-      Each module handles a specific domain. They are registered with the OpenAI SDK so the model
-      can decide when and how to invoke them.
+      Ask the Store does not add cart-writing tools. LangGraph uses a small set of read-only data steps
+      for products, categories, customers, orders, stock, and sales totals.
     </p>
 
     <!-- Tool Cards Grid -->
     <div style="display: grid; grid-template-columns: 1fr; gap: 1.5rem; margin-bottom: 2.5rem;">
       <div
         style="background: #ffffff; border: 1px solid #e5e7eb; border-radius: 16px; padding: 1.5rem; box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05); border-top: 4px solid #3b82f6;">
-        <h4 style="font-size: 1.1rem; font-weight: 700; color: #1e293b; margin-bottom: 1rem;">📚 Catalog Scout</h4>
+        <h4 style="font-size: 1.1rem; font-weight: 700; color: #1e293b; margin-bottom: 1rem;">📚 Product Lookup</h4>
         <p style="font-size: 0.9rem; color: #64748b; line-height: 1.6; margin-bottom: 1.25rem;">
-          Handles all product discovery. Accepts natural language queries and translates them into
-          Prisma database searches with category, price, and stock filters.
+          Reads the existing product catalog. Answers counts, names, prices, and category lists from real rows.
         </p>
         <div
           style="background: #f8fafc; border-radius: 8px; padding: 0.75rem; font-family: monospace; font-size: 0.75rem; color: #475569;">
-          searchProducts · getProductDetails · getCategories
+          count_products · list_products_in_category · get_product_details
         </div>
       </div>
 
       <div
         style="background: #ffffff; border: 1px solid #e5e7eb; border-radius: 16px; padding: 1.5rem; box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05); border-top: 4px solid #10b981;">
-        <h4 style="font-size: 1.1rem; font-weight: 700; color: #1e293b; margin-bottom: 1rem;">📦 Inventory Sentinel</h4>
+        <h4 style="font-size: 1.1rem; font-weight: 700; color: #1e293b; margin-bottom: 1rem;">📦 Stock Questions</h4>
         <p style="font-size: 0.9rem; color: #64748b; line-height: 1.6; margin-bottom: 1.25rem;">
-          Checks real-time stock availability. Accepts productId, productSlug, or category as
-          input and returns stock quantity and status, handling out-of-stock scenarios gracefully.
+          Reads current stock for a selected product. Zero stock is reported as zero. Stock is never reserved or changed.
         </p>
         <div
           style="background: #f8fafc; border-radius: 8px; padding: 0.75rem; font-family: monospace; font-size: 0.75rem; color: #475569;">
-          checkStock · getStockStatus
+          get_stock_for_product
         </div>
       </div>
 
       <div
         style="background: #ffffff; border: 1px solid #e5e7eb; border-radius: 16px; padding: 1.5rem; box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05); border-top: 4px solid #a855f7;">
-        <h4 style="font-size: 1.1rem; font-weight: 700; color: #1e293b; margin-bottom: 1rem;">🎯 Recommendation Engine
+        <h4 style="font-size: 1.1rem; font-weight: 700; color: #1e293b; margin-bottom: 1rem;">📋 Orders and Sales Totals
         </h4>
         <p style="font-size: 0.9rem; color: #64748b; line-height: 1.6; margin-bottom: 1.25rem;">
-          Generates product recommendations by category or similarity to a given product.
-          Prioritizes in-stock items and returns the top N results (default: 5).
+          Reads allowed order history, order-item counts, and sales totals. Date-range questions use stored order dates only.
         </p>
         <div
           style="background: #f8fafc; border-radius: 8px; padding: 0.75rem; font-family: monospace; font-size: 0.75rem; color: #475569;">
-          getRecommendations · getSimilarProducts
+          count_orders · get_order_totals · get_allowed_order_history
         </div>
       </div>
 
       <div
         style="background: #ffffff; border: 1px solid #e5e7eb; border-radius: 16px; padding: 1.5rem; box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05); border-top: 4px solid #f97316;">
-        <h4 style="font-size: 1.1rem; font-weight: 700; color: #1e293b; margin-bottom: 1rem;">🛒 Cart Manager</h4>
+        <h4 style="font-size: 1.1rem; font-weight: 700; color: #1e293b; margin-bottom: 1rem;">🛡️ Refusals</h4>
         <p style="font-size: 0.9rem; color: #64748b; line-height: 1.6; margin-bottom: 1.25rem;">
-          Handles all cart mutations. Accepts natural language (product name) or direct productId.
-          Validates stock before adding, calculates totals including tax and shipping.
+          Write requests and unrelated questions are refused. The agent does not add, update, or remove cart items.
         </p>
         <div style="display: flex; gap: 1rem;">
           <div
             style="background: #fff7ed; border: 1px solid #fed7aa; padding: 0.75rem 1rem; border-radius: 8px; flex: 1; text-align: center;">
-            <span style="font-weight: 700; color: #c2410c; font-size: 0.8rem;">addToCart</span>
+            <span style="font-weight: 700; color: #c2410c; font-size: 0.8rem;">refuse_write</span>
           </div>
           <div
             style="background: #fff7ed; border: 1px solid #fed7aa; padding: 0.75rem 1rem; border-radius: 8px; flex: 1; text-align: center;">
-            <span style="font-weight: 700; color: #c2410c; font-size: 0.8rem;">getCart</span>
+            <span style="font-weight: 700; color: #c2410c; font-size: 0.8rem;">refuse_out_of_scope</span>
           </div>
           <div
             style="background: #fff7ed; border: 1px solid #fed7aa; padding: 0.75rem 1rem; border-radius: 8px; flex: 1; text-align: center;">
-            <span style="font-weight: 700; color: #c2410c; font-size: 0.8rem;">removeFromCart</span>
+            <span style="font-weight: 700; color: #c2410c; font-size: 0.8rem;">no_data_found</span>
           </div>
         </div>
       </div>

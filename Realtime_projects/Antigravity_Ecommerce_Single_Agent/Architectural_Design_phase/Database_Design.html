@@ -3,75 +3,67 @@
     <h3 class="content-heading">Database Design</h3>
     <div style="max-width: none;">
       <p style="color: #4b5563; line-height: 1.75; margin-bottom: 1.5rem;">
-        The database schema for the AI agent focuses on storing conversation history and messages. It integrates 
-        with existing e-commerce tables (User, Product, CartItem) to provide context for AI interactions.
+        Ask the Store reuses the existing PostgreSQL/Neon database. The agent reads products, categories, customers, orders, order items, and stock.
+        It does not create a second database and it does not write store rows.
       </p>
       
       <div style="display: flex; flex-direction: column; gap: 2rem;">
         <div class="card">
           <h4 style="font-size: 1.25rem; font-weight: 600; color: #1f2937; margin-bottom: 1.5rem; display: flex; align-items: center; gap: 0.5rem;">
-            <span style="font-size: 1.5rem;">💬</span>
-            Conversation Model
+            <span style="font-size: 1.5rem;">🗃️</span>
+            Existing Store Tables
           </h4>
           
           <div style="background: #f9fafb; border-radius: 0.5rem; padding: 1.5rem; overflow-x: auto;">
-            <pre style="font-family: 'Courier New', monospace; font-size: 0.875rem; color: #1f2937; line-height: 1.6; margin: 0;"><code>model Conversation {
-  id        String   @id @default(cuid())
-  userId    String
-  user      User     @relation(fields: [userId], references: [id])
-  title     String?  // Auto-generated from first message
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-  
-  messages  Message[]
-  
-  @@index([userId])
-  @@map("conversations")
-}</code></pre>
+            <pre style="font-family: 'Courier New', monospace; font-size: 0.875rem; color: #1f2937; line-height: 1.6; margin: 0;"><code>Approved read-only tables (already in the store):
+
+  products
+  categories
+  customers / users
+  orders
+  order_items
+  stock / inventory fields on products
+
+The agent uses the existing FastAPI database connection.
+It does not add a second schema for shopping-cart writes.</code></pre>
           </div>
           
           <div style="margin-top: 1rem; padding: 1rem; background: #eff6ff; border-radius: 0.5rem;">
-            <h5 style="font-weight: 600; color: #1f2937; margin-bottom: 0.5rem;">Key Fields:</h5>
+            <h5 style="font-weight: 600; color: #1f2937; margin-bottom: 0.5rem;">What the agent may read:</h5>
             <ul style="font-size: 0.875rem; color: #4b5563; list-style: disc; list-style-position: inside;">
-              <li><strong>id:</strong> Unique conversation identifier</li>
-              <li><strong>userId:</strong> Links to User table (one-to-many)</li>
-              <li><strong>title:</strong> Optional title for conversation</li>
-              <li><strong>messages:</strong> One-to-many relationship with Message</li>
+              <li><strong>products:</strong> name, price, category, description, stock</li>
+              <li><strong>categories:</strong> names and product counts</li>
+              <li><strong>customers:</strong> counts and allowed profile fields only</li>
+              <li><strong>orders / order items:</strong> counts, totals, and allowed history</li>
             </ul>
           </div>
         </div>
 
         <div class="card">
           <h4 style="font-size: 1.25rem; font-weight: 600; color: #1f2937; margin-bottom: 1.5rem; display: flex; align-items: center; gap: 0.5rem;">
-            <span style="font-size: 1.5rem;">📝</span>
-            Message Model
+            <span style="font-size: 1.5rem;">🔒</span>
+            Read-Only Access Path
           </h4>
           
           <div style="background: #f9fafb; border-radius: 0.5rem; padding: 1.5rem; overflow-x: auto;">
-            <pre style="font-family: 'Courier New', monospace; font-size: 0.875rem; color: #1f2937; line-height: 1.6; margin: 0;"><code>model Message {
-  id             String       @id @default(cuid())
-  conversationId String
-  conversation   Conversation @relation(fields: [conversationId], references: [id], onDelete: Cascade)
-  role           String       // "user" | "assistant"
-  content        String       @db.Text
-  toolCalls      Json?        // Store tool calls if any
-  createdAt      DateTime     @default(now())
-  
-  @@index([conversationId])
-  @@index([createdAt])
-  @@map("messages")
-}</code></pre>
+            <pre style="font-family: 'Courier New', monospace; font-size: 0.875rem; color: #1f2937; line-height: 1.6; margin: 0;"><code>Agent data access rules:
+
+  1. Use the existing connection infrastructure
+  2. Allow SELECT-style reads only
+  3. Limit columns to an approved list
+  4. Bound result size
+  5. Never expose raw SQL to the user
+  6. If no row matches, return no-data
+  7. Never invent a product, price, or total</code></pre>
           </div>
           
           <div style="margin-top: 1rem; padding: 1rem; background: #f0fdf4; border-radius: 0.5rem;">
-            <h5 style="font-weight: 600; color: #1f2937; margin-bottom: 0.5rem;">Key Fields:</h5>
+            <h5 style="font-weight: 600; color: #1f2937; margin-bottom: 0.5rem;">What the agent must not do:</h5>
             <ul style="font-size: 0.875rem; color: #4b5563; list-style: disc; list-style-position: inside;">
-              <li><strong>id:</strong> Unique message identifier</li>
-              <li><strong>conversationId:</strong> Links to Conversation (many-to-one)</li>
-              <li><strong>role:</strong> "user" or "assistant" (AI response)</li>
-              <li><strong>content:</strong> Message text content</li>
-              <li><strong>toolCalls:</strong> JSON field storing tool call metadata</li>
-              <li><strong>createdAt:</strong> Timestamp for ordering messages</li>
+              <li>Insert, update, or delete store rows</li>
+              <li>Change cart, checkout, or order state</li>
+              <li>Create a second database or migration set for the agent</li>
+              <li>Read passwords, tokens, or secrets</li>
             </ul>
           </div>
         </div>
@@ -79,30 +71,30 @@
         <div class="card">
           <h4 style="font-size: 1.25rem; font-weight: 600; color: #1f2937; margin-bottom: 1.5rem; display: flex; align-items: center; gap: 0.5rem;">
             <span style="font-size: 1.5rem;">🔗</span>
-            Relationships
+            How Data Is Used
           </h4>
           
           <div style="background: #f9fafb; border-radius: 0.5rem; padding: 1.5rem;">
             <div style="display: flex; flex-direction: column; gap: 1rem;">
               <div style="border-left: 4px solid #3b82f6; padding-left: 1rem;">
-                <h5 style="font-weight: 600; color: #1f2937; margin-bottom: 0.5rem;">User → Conversation</h5>
+                <h5 style="font-weight: 600; color: #1f2937; margin-bottom: 0.5rem;">Existing Store Tables Stay Primary</h5>
                 <p style="font-size: 0.875rem; color: #6b7280;">
-                  One user can have many conversations. Each conversation is isolated per user.
+                  Catalog, cart, checkout, and admin continue to use the same tables. Ask the Store only reads them.
                 </p>
               </div>
 
               <div style="border-left: 4px solid #10b981; padding-left: 1rem;">
-                <h5 style="font-weight: 600; color: #1f2937; margin-bottom: 0.5rem;">Conversation → Message</h5>
+                <h5 style="font-weight: 600; color: #1f2937; margin-bottom: 0.5rem;">No New Cart Schema</h5>
                 <p style="font-size: 0.875rem; color: #6b7280;">
-                  One conversation contains many messages. Messages are ordered by createdAt.
+                  Cart tables remain for the existing store UI. The agent does not write cart items.
                 </p>
               </div>
 
               <div style="border-left: 4px solid #a855f7; padding-left: 1rem;">
-                <h5 style="font-weight: 600; color: #1f2937; margin-bottom: 0.5rem;">Integration with E-commerce Tables</h5>
+                <h5 style="font-weight: 600; color: #1f2937; margin-bottom: 0.5rem;">Optional Logs</h5>
                 <p style="font-size: 0.875rem; color: #6b7280;">
-                  Tool modules query Product, CartItem, Category tables for AI responses. 
-                  No direct foreign keys, accessed via Prisma queries.
+                  Request IDs and safe logs can be stored if the existing project already has a logging table.
+                  Langfuse later holds traces. Do not log secrets or extra customer data.
                 </p>
               </div>
             </div>
@@ -112,24 +104,24 @@
         <div class="card">
           <h4 style="font-size: 1.25rem; font-weight: 600; color: #1f2937; margin-bottom: 1.5rem; display: flex; align-items: center; gap: 0.5rem;">
             <span style="font-size: 1.5rem;">📊</span>
-            Indexes & Performance
+            Indexes and Limits
           </h4>
           
           <div style="background: #f9fafb; border-radius: 0.5rem; padding: 1.5rem;">
             <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 1rem;">
               <div style="background: white; padding: 1rem; border-radius: 0.5rem; border: 1px solid #e5e7eb;">
-                <h5 style="font-weight: 600; color: #1f2937; margin-bottom: 0.5rem;">Conversation Indexes</h5>
+                <h5 style="font-weight: 600; color: #1f2937; margin-bottom: 0.5rem;">Reuse Existing Indexes</h5>
                 <ul style="font-size: 0.875rem; color: #4b5563; list-style: disc; list-style-position: inside;">
-                  <li>userId (for user queries)</li>
-                  <li>createdAt (for sorting)</li>
+                  <li>Product and category lookups</li>
+                  <li>Order and customer filters already in the store</li>
                 </ul>
               </div>
 
               <div style="background: white; padding: 1rem; border-radius: 0.5rem; border: 1px solid #e5e7eb;">
-                <h5 style="font-weight: 600; color: #1f2937; margin-bottom: 0.5rem;">Message Indexes</h5>
+                <h5 style="font-weight: 600; color: #1f2937; margin-bottom: 0.5rem;">Query Limits</h5>
                 <ul style="font-size: 0.875rem; color: #4b5563; list-style: disc; list-style-position: inside;">
-                  <li>conversationId (for loading messages)</li>
-                  <li>createdAt (for chronological order)</li>
+                  <li>Cap rows returned to the agent</li>
+                  <li>Keep date-range and count queries bounded</li>
                 </ul>
               </div>
             </div>
@@ -139,4 +131,3 @@
     </div>
   </div>
 </div>
-

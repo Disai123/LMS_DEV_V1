@@ -4,7 +4,7 @@
       <h3 style="font-size: 1.875rem; font-weight: 700; color: #1f2937; margin-bottom: 1rem;">E-Commerce Test Planning</h3>
       <p style="font-size: 1.125rem; color: #4b5563; max-width: 48rem; margin: 0 auto;">
         Comprehensive test planning strategy specifically designed for E-commerce applications, 
-        covering all critical shopping flows, payment processing, and user interactions.
+        covering all critical shopping flows, order placement, and user interactions.
       </p>
     </div>
 
@@ -24,20 +24,20 @@
                 <li>• Shopping cart add/remove/update operations</li>
                 <li>• Checkout process and order placement</li>
                 <li>• Product filtering and sorting</li>
-                <li>• Wishlist and favorites management</li>
+                <li>• Order history after checkout</li>
               </ul>
             </div>
             <div style="background: linear-gradient(to bottom right, #f0fdf4, #dcfce7); border-radius: 0.5rem; padding: 1rem; border: 1px solid #bbf7d0;">
               <h6 style="font-weight: 600; color: #1f2937; margin-bottom: 0.5rem; display: flex; align-items: center; gap: 0.5rem;">
                 <span style="font-size: 1.25rem;">💳</span>
-                Payment Processing
+                Order Placement
               </h6>
               <ul style="font-size: 0.875rem; color: #4b5563; display: flex; flex-direction: column; gap: 0.25rem; list-style: none; padding: 0;">
-                <li>• Stripe payment integration testing</li>
-                <li>• Payment method validation</li>
-                <li>• Order confirmation and receipts</li>
-                <li>• Refund and cancellation processing</li>
-                <li>• Payment security and fraud prevention</li>
+                <li>• Simple checkout and place-order testing</li>
+                <li>• Delivery details validation</li>
+                <li>• Order confirmation page</li>
+                <li>• Empty cart and out-of-stock handling</li>
+                <li>• JWT required before checkout</li>
               </ul>
             </div>
           </div>
@@ -86,8 +86,8 @@
               <h6 style="font-weight: 500; color: #1f2937; margin-bottom: 0.5rem;">TC_EC_001: Complete Purchase Flow</h6>
               <div style="font-size: 0.875rem; color: #4b5563; display: flex; flex-direction: column; gap: 0.25rem;">
                 <div><strong>Objective:</strong> Verify complete purchase process</div>
-                <div><strong>Steps:</strong> Browse → Add to Cart → Checkout → Payment → Confirmation</div>
-                <div><strong>Expected:</strong> Order placed successfully, confirmation email sent</div>
+                <div><strong>Steps:</strong> Browse → Add to Cart → Checkout → Place Order → Confirmation</div>
+                <div><strong>Expected:</strong> Order placed and shown in order history</div>
                 <div><strong>Priority:</strong> Critical</div>
               </div>
             </div>
@@ -95,7 +95,7 @@
               <h6 style="font-weight: 500; color: #1f2937; margin-bottom: 0.5rem;">TC_EC_002: User Registration & Login</h6>
               <div style="font-size: 0.875rem; color: #4b5563; display: flex; flex-direction: column; gap: 0.25rem;">
                 <div><strong>Objective:</strong> Verify user account creation and authentication</div>
-                <div><strong>Steps:</strong> Register → Verify Email → Login → Access Profile</div>
+                <div><strong>Steps:</strong> Register → Login → Access Profile</div>
                 <div><strong>Expected:</strong> Account created, user logged in, profile accessible</div>
                 <div><strong>Priority:</strong> High</div>
               </div>
@@ -103,14 +103,14 @@
           </div>
         </div>
         <div>
-          <h5 style="font-size: 1.125rem; font-weight: 500; color: #1f2937; margin-bottom: 1rem;">Payment & Security Tests</h5>
+          <h5 style="font-size: 1.125rem; font-weight: 500; color: #1f2937; margin-bottom: 1rem;">Checkout & Security Tests</h5>
           <div style="display: flex; flex-direction: column; gap: 0.75rem;">
             <div style="background: #ffffff; border-radius: 0.5rem; padding: 1rem; box-shadow: 0 1px 3px rgba(0,0,0,0.1);">
-              <h6 style="font-weight: 500; color: #1f2937; margin-bottom: 0.5rem;">TC_EC_003: Payment Processing</h6>
+              <h6 style="font-weight: 500; color: #1f2937; margin-bottom: 0.5rem;">TC_EC_003: Order Placement</h6>
               <div style="font-size: 0.875rem; color: #4b5563; display: flex; flex-direction: column; gap: 0.25rem;">
-                <div><strong>Objective:</strong> Verify Stripe payment integration</div>
-                <div><strong>Steps:</strong> Add items → Checkout → Enter payment → Process</div>
-                <div><strong>Expected:</strong> Payment processed, order confirmed</div>
+                <div><strong>Objective:</strong> Verify simple checkout</div>
+                <div><strong>Steps:</strong> Add items → Checkout → Enter delivery details → Place order</div>
+                <div><strong>Expected:</strong> Order created and cart cleared</div>
                 <div><strong>Priority:</strong> Critical</div>
               </div>
             </div>
@@ -132,17 +132,14 @@
       <h4 style="font-size: 1.5rem; font-weight: 600; color: #1f2937; margin-bottom: 1.5rem; text-align: center;">Test Environment Configuration</h4>
       <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 1.5rem;">
         <div style="text-align: center; padding: 1.5rem; background: linear-gradient(to bottom right, #eff6ff, #dbeafe); border-radius: 0.5rem;">
-          <div style="font-size: 1.875rem; margin-bottom: 0.75rem;">•</div>
           <h5 style="font-weight: 600; color: #1f2937; margin-bottom: 0.5rem;">Development Environment</h5>
           <p style="font-size: 0.875rem; color: #4b5563;">Local testing with mock data and services</p>
         </div>
         <div style="text-align: center; padding: 1.5rem; background: linear-gradient(to bottom right, #f0fdf4, #dcfce7); border-radius: 0.5rem;">
-          <div style="font-size: 1.875rem; margin-bottom: 0.75rem;">•</div>
           <h5 style="font-weight: 600; color: #1f2937; margin-bottom: 0.5rem;">Staging Environment</h5>
           <p style="font-size: 0.875rem; color: #4b5563;">Production-like setup with test data</p>
         </div>
         <div style="text-align: center; padding: 1.5rem; background: linear-gradient(to bottom right, #faf5ff, #f3e8ff); border-radius: 0.5rem;">
-          <div style="font-size: 1.875rem; margin-bottom: 0.75rem;">•</div>
           <h5 style="font-weight: 600; color: #1f2937; margin-bottom: 0.5rem;">Device Testing</h5>
           <p style="font-size: 0.875rem; color: #4b5563;">Cross-device and browser compatibility</p>
         </div>

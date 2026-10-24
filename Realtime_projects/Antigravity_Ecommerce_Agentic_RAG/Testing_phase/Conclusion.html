@@ -3,20 +3,20 @@
     <h3 class="content-heading">Conclusion</h3>
     <div style="max-width: none;">
       <p style="color: #4b5563; line-height: 1.75; margin-bottom: 1.5rem;">
-        The Testing phase has validated all functionality, performance, and user experience of the askunicart
-        AI agent. All test cases pass, and the system meets performance requirements.
+        The Testing phase checks retrieval quality, citation accuracy, and hallucination refusal
+        for the Agentic RAG assistant. Existing store flows still work.
       </p>
 
       <div class="card" style="margin-bottom: 2rem;">
         <h4 style="font-size: 1.25rem; font-weight: 600; color: #1f2937; margin-bottom: 1rem;">Test Results Summary</h4>
         <ul
           style="list-style: disc; list-style-position: inside; display: flex; flex-direction: column; gap: 0.75rem; color: #4b5563;">
-          <li>✅ All unit tests pass (100% tool module coverage)</li>
-          <li>✅ All integration tests pass (API, database, AI)</li>
-          <li>✅ Chat interface tests pass (UI/UX validated)</li>
-          <li>✅ Performance targets met (response time &lt; 2s)</li>
-          <li>✅ Token usage optimized (within limits)</li>
-          <li>✅ Error handling verified (graceful failures)</li>
+          <li>Unit tests cover ingest, chunking, embeddings, and FAISS</li>
+          <li>POST /rag/ask integration tests cover auth, answers, and no-data</li>
+          <li>React assistant shows citations and not-found states</li>
+          <li>Hallucination checks refuse invented specs and warranty claims</li>
+          <li>Langfuse can record retrieval and grounding scores</li>
+          <li>Existing login, catalog, cart, and checkout still work</li>
         </ul>
       </div>
 
@@ -24,20 +24,20 @@
         <h4 style="font-size: 1.25rem; font-weight: 600; color: #1f2937; margin-bottom: 1rem;">Performance Metrics</h4>
         <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1rem;">
           <div style="background: #f0fdf4; padding: 1rem; border-radius: 0.5rem; border-left: 4px solid #10b981;">
-            <div style="font-weight: 600; color: #1f2937; margin-bottom: 0.5rem;">Response Time</div>
-            <div style="font-size: 0.875rem; color: #6b7280;">1.8s average (p75)</div>
+            <div style="font-weight: 600; color: #1f2937; margin-bottom: 0.5rem;">Retrieval</div>
+            <div style="font-size: 0.875rem; color: #6b7280;">Relevant FAISS chunks</div>
           </div>
           <div style="background: #eff6ff; padding: 1rem; border-radius: 0.5rem; border-left: 4px solid #3b82f6;">
-            <div style="font-weight: 600; color: #1f2937; margin-bottom: 0.5rem;">Tool Execution</div>
-            <div style="font-size: 0.875rem; color: #6b7280;">300ms average</div>
+            <div style="font-weight: 600; color: #1f2937; margin-bottom: 0.5rem;">Citations</div>
+            <div style="font-size: 0.875rem; color: #6b7280;">Document and section match</div>
           </div>
           <div style="background: #faf5ff; padding: 1rem; border-radius: 0.5rem; border-left: 4px solid #a855f7;">
-            <div style="font-weight: 600; color: #1f2937; margin-bottom: 0.5rem;">Token Usage</div>
-            <div style="font-size: 0.875rem; color: #6b7280;">800 tokens average</div>
+            <div style="font-weight: 600; color: #1f2937; margin-bottom: 0.5rem;">Refusal</div>
+            <div style="font-size: 0.875rem; color: #6b7280;">Not found when manuals lack it</div>
           </div>
           <div style="background: #fff7ed; padding: 1rem; border-radius: 0.5rem; border-left: 4px solid #f97316;">
-            <div style="font-weight: 600; color: #1f2937; margin-bottom: 0.5rem;">Success Rate</div>
-            <div style="font-size: 0.875rem; color: #6b7280;">99%+</div>
+            <div style="font-weight: 600; color: #1f2937; margin-bottom: 0.5rem;">Store health</div>
+            <div style="font-size: 0.875rem; color: #6b7280;">Existing flows unchanged</div>
           </div>
         </div>
       </div>
@@ -45,19 +45,17 @@
       <div class="card" style="background: linear-gradient(135deg, #fff7ed 0%, #fef2f2 100%);">
         <h4 style="font-size: 1.25rem; font-weight: 600; color: #1f2937; margin-bottom: 1rem;">Next Steps</h4>
         <p style="color: #4b5563; line-height: 1.75; margin-bottom: 1rem;">
-          With testing complete, we're ready to move to the <strong>Deployment Phase</strong>, where we'll
-          set up the production environment, configure environment variables, run database migrations, and
-          deploy the AI agent to production.
+          Next we deploy the React frontend, FastAPI backend, FAISS index, and Langfuse settings to Render.
         </p>
         <div style="background: white; padding: 1rem; border-radius: 0.5rem; border: 1px solid #e5e7eb;">
           <div style="font-weight: 600; color: #1f2937; margin-bottom: 0.5rem;">📋 Phase Deliverables Summary:</div>
           <ul
             style="font-size: 0.875rem; color: #4b5563; display: flex; flex-direction: column; gap: 0.25rem; list-style: disc; list-style-position: inside;">
-            <li>Test Plan Document</li>
-            <li>Unit Test Results</li>
-            <li>Integration Test Results</li>
-            <li>UI/UX Test Results</li>
-            <li>Performance Test Report</li>
+            <li>TESTING.md with PASS/FAIL RAG evals</li>
+            <li>Retrieval and citation results</li>
+            <li>Hallucination and injection checks</li>
+            <li>Assistant UI results</li>
+            <li>Existing store regression check</li>
           </ul>
         </div>
       </div>

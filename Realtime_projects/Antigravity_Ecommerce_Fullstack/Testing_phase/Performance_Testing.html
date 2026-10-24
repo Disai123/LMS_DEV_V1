@@ -33,7 +33,7 @@
               </h6>
               <div style="font-size: 0.875rem; color: #4b5563; display: flex; flex-direction: column; gap: 0.25rem;">
                 <div><strong>Users:</strong> 50-100 concurrent checkouts</div>
-                <div><strong>Activities:</strong> Payment processing, order creation</div>
+                <div><strong>Activities:</strong> Checkout and order creation</div>
                 <div><strong>Response Time:</strong> &lt; 3 seconds</div>
                 <div><strong>Success Rate:</strong> 99.5% transaction success</div>
               </div>
@@ -123,14 +123,14 @@
           </div>
         </div>
         <div>
-          <h5 style="font-size: 1.125rem; font-weight: 500; color: #1f2937; margin-bottom: 1rem;">Payment & Order Performance</h5>
+          <h5 style="font-size: 1.125rem; font-weight: 500; color: #1f2937; margin-bottom: 1rem;">Checkout & Order Performance</h5>
           <div style="display: flex; flex-direction: column; gap: 1rem;">
             <div style="background: #f9fafb; border-radius: 0.5rem; padding: 1rem;">
-              <h6 style="font-weight: 500; color: #1f2937; margin-bottom: 0.5rem;">Payment Processing</h6>
+              <h6 style="font-weight: 500; color: #1f2937; margin-bottom: 0.5rem;">Order Placement</h6>
               <div style="font-size: 0.875rem; color: #4b5563; display: flex; flex-direction: column; gap: 0.25rem;">
-                <div><strong>Test:</strong> Stripe payment processing under load</div>
+                <div><strong>Test:</strong> checkout and order placement under load</div>
                 <div><strong>Target:</strong> &lt; 3 seconds completion time</div>
-                <div><strong>Optimization:</strong> Payment optimization, retry logic</div>
+                <div><strong>Optimization:</strong> Fast order insert and stock update</div>
               </div>
             </div>
             <div style="background: #f9fafb; border-radius: 0.5rem; padding: 1rem;">
@@ -150,7 +150,6 @@
       <h4 style="font-size: 1.5rem; font-weight: 600; color: #1f2937; margin-bottom: 1.5rem; text-align: center;">E-Commerce Performance Optimization</h4>
       <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 1.5rem;">
         <div style="text-align: center; padding: 1.5rem; background: #ffffff; border-radius: 0.5rem; box-shadow: 0 1px 3px rgba(0,0,0,0.1);">
-          <div style="font-size: 1.875rem; margin-bottom: 0.75rem;">•</div>
           <h5 style="font-weight: 600; color: #1f2937; margin-bottom: 0.5rem;">Frontend Optimization</h5>
           <div style="font-size: 0.875rem; color: #4b5563; display: flex; flex-direction: column; gap: 0.25rem; text-align: left;">
             <div>• Code splitting & lazy loading</div>
@@ -160,20 +159,18 @@
           </div>
         </div>
         <div style="text-align: center; padding: 1.5rem; background: #ffffff; border-radius: 0.5rem; box-shadow: 0 1px 3px rgba(0,0,0,0.1);">
-          <div style="font-size: 1.875rem; margin-bottom: 0.75rem;">•</div>
           <h5 style="font-weight: 600; color: #1f2937; margin-bottom: 0.5rem;">Database Optimization</h5>
           <div style="font-size: 0.875rem; color: #4b5563; display: flex; flex-direction: column; gap: 0.25rem; text-align: left;">
             <div>• Query optimization & indexing</div>
             <div>• Connection pooling</div>
-            <div>• Redis caching layer</div>
+            <div>• PostgreSQL indexes for product search</div>
             <div>• Database monitoring</div>
           </div>
         </div>
         <div style="text-align: center; padding: 1.5rem; background: #ffffff; border-radius: 0.5rem; box-shadow: 0 1px 3px rgba(0,0,0,0.1);">
-          <div style="font-size: 1.875rem; margin-bottom: 0.75rem;">•</div>
           <h5 style="font-weight: 600; color: #1f2937; margin-bottom: 0.5rem;">Infrastructure</h5>
           <div style="font-size: 0.875rem; color: #4b5563; display: flex; flex-direction: column; gap: 0.25rem; text-align: left;">
-            <div>• CDN implementation</div>
+            <div>• Static React assets on Render</div>
             <div>• Load balancing</div>
             <div>• Auto-scaling groups</div>
             <div>• Edge computing</div>
@@ -201,8 +198,8 @@
               <span style="font-size: 0.875rem; font-weight: 500; color: #10b981;">✅ Secure</span>
             </div>
             <div style="display: flex; justify-content: space-between; align-items: center; padding: 0.75rem; background: #ffffff; border-radius: 0.5rem; box-shadow: 0 1px 3px rgba(0,0,0,0.1);">
-              <span style="font-size: 0.875rem; color: #4b5563;">Payment Security</span>
-              <span style="font-size: 0.875rem; font-weight: 500; color: #10b981;">✅ PCI Compliant</span>
+              <span style="font-size: 0.875rem; color: #4b5563;">Checkout Safety</span>
+              <span style="font-size: 0.875rem; font-weight: 500; color: #10b981;">✅ No card data collected</span>
             </div>
           </div>
         </div>

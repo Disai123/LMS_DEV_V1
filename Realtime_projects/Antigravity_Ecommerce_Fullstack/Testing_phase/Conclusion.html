@@ -4,8 +4,8 @@
       <h3 style="font-size: 1.875rem; font-weight: 700; color: #1f2937; margin-bottom: 1rem;">E-Commerce Testing
         Complete</h3>
       <p style="font-size: 1.125rem; color: #4b5563; max-width: 48rem; margin: 0 auto;">
-        The comprehensive testing and quality assurance phase for the the e-commerce application has been
-        successfully completed. All critical shopping features, payment processing, and user interactions
+        The comprehensive testing and quality assurance phase for the e-commerce application has been
+        successfully completed. All critical shopping features, order placement, and user interactions
         have been thoroughly tested and validated.
       </p>
     </div>
@@ -24,15 +24,14 @@
                 style="width: 1.5rem; height: 1.5rem; background: #10b981; color: #ffffff; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 0.875rem; font-weight: 700;">
                 ✓</div>
               <span style="font-size: 0.875rem; color: #374151;">Complete shopping flow testing (browse → cart →
-                checkout → payment)</span>
+                checkout → place order)</span>
             </div>
             <div
               style="display: flex; align-items: center; gap: 0.75rem; padding: 0.75rem; background: #f0fdf4; border-radius: 0.5rem;">
               <div
                 style="width: 1.5rem; height: 1.5rem; background: #10b981; color: #ffffff; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 0.875rem; font-weight: 700;">
                 ✓</div>
-              <span style="font-size: 0.875rem; color: #374151;">Stripe payment integration testing with 100% success
-                rate</span>
+              <span style="font-size: 0.875rem; color: #374151;">Simple checkout and order placement checks</span>
             </div>
             <div
               style="display: flex; align-items: center; gap: 0.75rem; padding: 0.75rem; background: #f0fdf4; border-radius: 0.5rem;">
@@ -100,31 +99,28 @@
       <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 1.5rem;">
         <div
           style="text-align: center; padding: 1.5rem; background: #ffffff; border-radius: 0.5rem; box-shadow: 0 1px 3px rgba(0,0,0,0.1);">
-          <div style="font-size: 1.875rem; margin-bottom: 0.75rem;">•</div>
           <h5 style="font-weight: 600; color: #1f2937; margin-bottom: 0.5rem;">Shopping Experience</h5>
           <div
             style="font-size: 0.875rem; color: #4b5563; display: flex; flex-direction: column; gap: 0.25rem; text-align: left;">
             <div>• Product browsing & search</div>
             <div>• Shopping cart management</div>
-            <div>• Wishlist functionality</div>
+            <div>• Order history</div>
             <div>• Product filtering & sorting</div>
           </div>
         </div>
         <div
           style="text-align: center; padding: 1.5rem; background: #ffffff; border-radius: 0.5rem; box-shadow: 0 1px 3px rgba(0,0,0,0.1);">
-          <div style="font-size: 1.875rem; margin-bottom: 0.75rem;">•</div>
-          <h5 style="font-weight: 600; color: #1f2937; margin-bottom: 0.5rem;">Payment Processing</h5>
+          <h5 style="font-weight: 600; color: #1f2937; margin-bottom: 0.5rem;">Order Placement</h5>
           <div
             style="font-size: 0.875rem; color: #4b5563; display: flex; flex-direction: column; gap: 0.25rem; text-align: left;">
-            <div>• Stripe integration</div>
+            <div>• Simple checkout</div>
             <div>• Order processing</div>
-            <div>• Payment validation</div>
-            <div>• Receipt generation</div>
+            <div>• Place-order validation</div>
+            <div>• Confirmation page</div>
           </div>
         </div>
         <div
           style="text-align: center; padding: 1.5rem; background: #ffffff; border-radius: 0.5rem; box-shadow: 0 1px 3px rgba(0,0,0,0.1);">
-          <div style="font-size: 1.875rem; margin-bottom: 0.75rem;">•</div>
           <h5 style="font-weight: 600; color: #1f2937; margin-bottom: 0.5rem;">User Management</h5>
           <div
             style="font-size: 0.875rem; color: #4b5563; display: flex; flex-direction: column; gap: 0.25rem; text-align: left;">
@@ -141,7 +137,7 @@
       <h4 style="font-size: 1.125rem; font-weight: 600; color: #1f2937; margin-bottom: 1rem;">Next Phase: Deployment
       </h4>
       <p style="color: #4b5563; margin-bottom: 1rem;">
-        With the testing phase completed, the next phase will focus on deploying the the e-commerce application
+        With the testing phase completed, the next phase will focus on deploying the e-commerce application
         to production, ensuring all infrastructure is properly configured and the application is ready for launch.
       </p>
       <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1rem;">
@@ -167,14 +163,76 @@
         <pre style="white-space:pre-wrap;font-size:0.8rem;line-height:1.55;background:#fff;border:1px solid #e2e8f0;border-radius:0.5rem;padding:1rem;margin:0 0 0.75rem;max-height:280px;overflow:auto;color:#334155;">DAY 21 — Final QA, Cleanup &amp; Release Handover
 SDLC Phase: Testing / Release / Final Handover
 Prompt
-Perform the final end-to-end review of the application.Test the Customer flow:Register → Login → Browse → Search → Product Details → Cart → Checkout → Order HistoryTest the Admin flow:Login → Products → Categories → Orders → Update Order StatusCheck:- ReactJS frontend works- FastAPI backend works- PostgreSQL data is correct- deployed frontend reaches FastAPI- FastAPI reaches PostgreSQL- desktop and mobile layouts are usable- important error and empty messages are understandable- temporary test/debug files are deleted- only these permanent documents remain:  BRD.md  UI_UX.md  ARCHITECTURE.md  CODING.md  TESTING.md  DEPLOYMENT.mdRecord the final PASS/FAIL results in TESTING.md.Update DEPLOYMENT.md only if the final deployment is different from the actual deployment.If everything works, give me:ECOMMERCE APPLICATION COMPLETEThen give me a simple final demonstration checklist.
+Perform the final end-to-end review of the application.
+Test the Customer flow:
+Register → Login → Browse → Search → Product Details → Cart → Checkout → Order History
+Test the Admin flow:
+Login → Products → Categories → Orders → Update Order Status
+Check:
+- ReactJS frontend works
+- FastAPI backend works
+- PostgreSQL data is correct
+- deployed frontend reaches FastAPI
+- FastAPI reaches PostgreSQL
+- desktop and mobile layouts are usable
+- important error and empty messages are understandable
+- temporary test/debug files are deleted
+- only these permanent documents remain:  BRD.md  UI_UX.md  ARCHITECTURE.md  CODING.md  TESTING.md  DEPLOYMENT.md
+Record the final PASS/FAIL results in TESTING.md.
+Update DEPLOYMENT.md only if the final deployment is different from the actual deployment.
+If everything works, give me:
+ECOMMERCE APPLICATION COMPLETE
+Then give me a simple final demonstration checklist.
 Checkpoint: The initial e-commerce application is complete, tested, cleaned up and ready for future Single Agent, Multi-Agent and Agentic RAG integration.
 MASTER FIX PROMPT — Use Whenever Something Breaks
-Something is not working in the current e-commerce task.I am a fresher and I do not understand the technical cause.What I was trying to do:[WRITE WHAT I TRIED]What I expected:[WRITE WHAT SHOULD HAVE HAPPENED]What actually happened:[WRITE WHAT YOU SAW]Error message, if there is one:[PASTE THE REAL ERROR]Please:1. Find the cause yourself.2. Fix only the current issue.3. Do not break features that already work.4. Keep ReactJS as the frontend.5. Keep FastAPI with Python as the backend.6. Keep PostgreSQL as the database.7. Do not create another backend or database.8. Do not create unnecessary documentation.9. If a temporary test/debug file is needed, delete it after testing.10. Explain the problem in very simple language.11. Tell me exactly how to test the fix.12. Re-run the relevant test.13. Stop after the current issue is fixed and wait for my confirmation.
+Something is not working in the current e-commerce task.
+I am a fresher and I do not understand the technical cause.
+What I was trying to do:
+[WRITE WHAT I TRIED]
+What I expected:
+[WRITE WHAT SHOULD HAVE HAPPENED]
+What actually happened:
+[WRITE WHAT YOU SAW]
+Error message, if there is one:
+[PASTE THE REAL ERROR]
+Please:
+1. Find the cause yourself.
+2. Fix only the current issue.
+3. Do not break features that already work.
+4. Keep ReactJS as the frontend.
+5. Keep FastAPI with Python as the backend.
+6. Keep PostgreSQL as the database.
+7. Do not create another backend or database.
+8. Do not create unnecessary documentation.
+9. If a temporary test/debug file is needed, delete it after testing.
+10. Explain the problem in very simple language.
+11. Tell me exactly how to test the fix.
+12. Re-run the relevant test.
+13. Stop after the current issue is fixed and wait for my confirmation.
 MASTER DAILY CHECKPOINT PROMPT — Use at the End of Each Day
-Before I finish today's e-commerce task, check only the work completed today.Tell me:1. What was completed?2. What is working?3. What is not working?4. What should I test manually?5. Did today's work match BRD.md and the current task?6. Did we use ReactJS for the frontend and FastAPI for the backend?7. Did we avoid unnecessary files and documents?8. Were temporary test/debug files removed?9. Is today's Definition of Done satisfied?10. Can I safely move to the next day's task?Use simple language.Do not start tomorrow's task automatically.
+Before I finish today's e-commerce task, check only the work completed today.
+Tell me:
+1. What was completed?
+2. What is working?
+3. What is not working?
+4. What should I test manually?
+5. Did today's work match BRD.md and the current task?
+6. Did we use ReactJS for the frontend and FastAPI for the backend?
+7. Did we avoid unnecessary files and documents?
+8. Were temporary test/debug files removed?
+9. Is today's Definition of Done satisfied?
+10. Can I safely move to the next day's task?
+Use simple language.
+Do not start tomorrow's task automatically.
 IMPORTANT — DO NOT LET ANTIGRAVITY RUN AHEAD
-Stop for now.I want to work on one small task at a time.Do not build the next feature.Do not combine multiple days of work.Finish the current task first.Test it.Tell me what I need to verify.Wait for my confirmation before moving to the next task.</pre>
+Stop for now.
+I want to work on one small task at a time.
+Do not build the next feature.
+Do not combine multiple days of work.
+Finish the current task first.
+Test it.
+Tell me what I need to verify.
+Wait for my confirmation before moving to the next task.</pre>
         <button type="button" onclick="navigator.clipboard.writeText(this.previousElementSibling.textContent)" style="padding:0.5rem 1rem;background:#eef2ff;color:#4338ca;border:1px solid #c7d2fe;border-radius:0.5rem;font-weight:500;cursor:pointer;">Copy prompt</button>
       </div>
 

@@ -38,7 +38,7 @@ graph TD
     end
     
     subgraph "External AI Provider"
-        AgentService -->|LLM Inference| LLM[LLM Provider (e.g., OpenAI/Gemini)]
+        AgentService -->|LLM Inference| LLM[LLM used only after FAISS retrieval]
     end
 ```
 

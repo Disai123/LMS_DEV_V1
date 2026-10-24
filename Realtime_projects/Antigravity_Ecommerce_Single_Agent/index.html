@@ -4,7 +4,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>E-Commerce AI Shopping Agent - Overview</title>
+  <title>Ask the Store - Overview</title>
   <!-- Google Fonts -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -788,12 +788,12 @@
     <!-- Header Section -->
     <div class="header">
       <div style="display:inline-block;margin-bottom:1rem;padding:0.35rem 0.85rem;border-radius:999px;background:rgba(99,102,241,0.15);color:#4338ca;font-size:0.75rem;font-weight:700;letter-spacing:0.04em;">ANTIGRAVITY · PROMPT WORKSHOP · LIVE ON RENDER</div>
-<h1>🤖 E-Commerce AI Shopping Agent</h1>
-      <p class="subtitle">askunicart - AI-Powered Shopping Assistant</p>
+<h1>🤖 Ask the Store</h1>
+      <p class="subtitle">One read-only AI agent on the existing store</p>
       <p class="description">
-        A comprehensive implementation guide for building an AI-powered shopping assistant using OpenAI GPT models.
-        Learn how to integrate natural language processing into e-commerce platforms, covering all phases from
-        business requirements to deployment.
+        Add Ask the Store to an existing React and FastAPI e-commerce application.
+        The agent answers questions about real products, categories, customers, orders, stock, and sales totals.
+        It does not change store data and it does not rebuild the shop.
       </p>
     </div>
 
@@ -807,7 +807,7 @@
         <div style="display: flex; align-items: center; gap: 14px;">
           <div style="width: 12px; height: 12px; background: #22c55e; border-radius: 50%; box-shadow: 0 0 8px #22c55e; animation: pulse-green 2s ease-in-out infinite; flex-shrink: 0;"></div>
           <div>
-            <div style="color: #a5f3fc; font-size: 0.75rem; font-weight: 600; letter-spacing: 0.1em; text-transform: uppercase; margin-bottom: 4px;">🤖 Single Agent Assistant Deployed on Render.com</div>
+            <div style="color: #a5f3fc; font-size: 0.75rem; font-weight: 600; letter-spacing: 0.1em; text-transform: uppercase; margin-bottom: 4px;">🤖 Ask the Store deployed on Render</div>
             <div style="color: #e2e8f0; font-size: 1rem; font-weight: 600; font-family: 'SF Mono','Fira Code',monospace;">https://ecommerce-single-agent-fastapi-frontend.onrender.com</div>
           </div>
         </div>
@@ -957,9 +957,8 @@
       </style>
 
       <p style="color: #4b5563; margin-bottom: 20px; font-size: 0.95rem; line-height: 1.7;">
-        The <strong>askunicart Single Agent Assistant</strong> is <strong>live and fully deployed</strong> on Render.com.
-        Below are screenshots from the production environment showing the AI-powered shopping assistant in action.
-        Click any slide or <strong>"Try Live Agent"</strong> to chat with it yourself!
+        <strong>Ask the Store</strong> is live on Render. The existing React store now includes one read-only agent.
+        The slides below show product, stock, order, and out-of-scope questions. Click a slide or <strong>Try Live Agent</strong> to open the app.
       </p>
 
       <!-- Screenshot Slider -->
@@ -1004,13 +1003,13 @@
                     <!-- AI Chat bubble (floating) -->
                     <div
                       style="position:absolute; right:10px; top:8px; background:#fff; border-radius:10px; padding:8px 12px; box-shadow:0 4px 16px rgba(0,0,0,0.15); width:160px; border:1px solid #e5e7eb;">
-                      <div style="font-size:0.65rem; font-weight:700; color:#111827; margin-bottom:2px;">🤖 AI Assistant
+                      <div style="font-size:0.65rem; font-weight:700; color:#111827; margin-bottom:2px;">🤖 Ask the Store
                       </div>
-                      <div style="font-size:0.55rem; color:#6b7280; margin-bottom:4px;">Powered by LangGraph &amp; MCP
+                      <div style="font-size:0.55rem; color:#6b7280; margin-bottom:4px;">Read-only · LangGraph
                       </div>
                       <div
                         style="font-size:0.6rem; color:#374151; background:#f9fafb; border-radius:6px; padding:4px 6px;">
-                        Hi! I can find products and even checkout for you!</div>
+                        Ask about products, stock, or orders. I do not change the cart.</div>
                     </div>
                   </div>
                   <!-- Products -->
@@ -1050,7 +1049,7 @@
                 </div>
               </div>
               <div class="slide-caption"><span style="font-size:1.1rem;">🏠</span> <strong style="color:#a5b4fc;">Home
-                  Page</strong> — ShopEasy with AI Assistant Chat Widget (LangGraph &amp; MCP)</div>
+                  Page</strong> — Existing store with Ask the Store (read-only LangGraph agent)</div>
             </div>
 
             <!-- Slide 2: AI Searching Products -->
@@ -1067,29 +1066,27 @@
                   </div>
                   <!-- AI Chat Expanded -->
                   <div style="padding:12px;">
-                    <div style="font-weight:700; font-size:0.85rem; color:#111827; margin-bottom:8px;">🤖 AI Shopping
-                      Assistant</div>
+                    <div style="font-weight:700; font-size:0.85rem; color:#111827; margin-bottom:8px;">🤖 Ask the Store
+                    </div>
                     <div
                       style="background:#f9fafb; border:1px solid #e5e7eb; border-radius:10px; padding:10px; display:flex; flex-direction:column; gap:6px;">
                       <!-- User message -->
                       <div style="display:flex; justify-content:flex-end;">
                         <div
                           style="background:#4f46e5; color:#fff; border-radius:10px 10px 2px 10px; padding:6px 10px; font-size:0.68rem; max-width:70%;">
-                          Show me wireless headphones under $200</div>
+                          How many products are in Electronics?</div>
                       </div>
                       <!-- AI tool call indicator -->
                       <div
                         style="background:#f0fdf4; border:1px solid #bbf7d0; border-radius:6px; padding:5px 8px; font-size:0.62rem; color:#166534; display:flex; align-items:center; gap:4px;">
-                        <span></span> <span>Calling tool: <strong>search_products</strong> → "wireless
-                          headphones"</span>
+                        <span>Reading approved store data → products in Electronics</span>
                       </div>
                       <!-- AI response -->
                       <div style="display:flex; align-items:flex-start; gap:6px;">
                         <span style="font-size:0.9rem;">🤖</span>
                         <div
                           style="background:#fff; border:1px solid #e5e7eb; border-radius:2px 10px 10px 10px; padding:6px 10px; font-size:0.68rem; color:#374151; max-width:80%;">
-                          Found 3 wireless headphones! 🎧 <strong>Premium Wireless Headphones</strong> at $129.99 is our
-                          top pick. Shall I add it to your cart?</div>
+                          Electronics has 2 products: <strong>Premium Wireless Headphones</strong> ($129.99) and Smart Watch Series 7.</div>
                       </div>
                       <!-- Input bar -->
                       <div
@@ -1102,11 +1099,11 @@
                   </div>
                 </div>
               </div>
-              <div class="slide-caption"><span style="font-size:1.1rem;">🔍</span> <strong style="color:#a5b4fc;">AI
-                  Product Search</strong> — Natural language search with tool-calling (search_products)</div>
+              <div class="slide-caption"><span style="font-size:1.1rem;">🔍</span> <strong style="color:#a5b4fc;">Product
+                  lookup</strong> — Grounded category answer from PostgreSQL</div>
             </div>
 
-            <!-- Slide 3: AI Adding to Cart -->
+            <!-- Slide 3: Stock and order history -->
             <div class="slide">
               <div class="slide-visual" style="background: linear-gradient(135deg, #fafafa 0%, #e0e7ff 100%);">
                 <div class="slide-inner">
@@ -1117,48 +1114,48 @@
                     <div style="display:flex; align-items:center; gap:10px;"><span style="font-size:0.8rem;">🛒
                         1</span><span style="color:#374151; font-size:0.8rem;">Admin</span></div>
                   </div>
-                  <!-- Cart + AI -->
+                  <!-- Stock + orders -->
                   <div style="padding:12px;">
-                    <div style="font-weight:700; font-size:0.85rem; color:#111827; margin-bottom:8px;">🛒 Cart
-                      Management via AI</div>
+                    <div style="font-weight:700; font-size:0.85rem; color:#111827; margin-bottom:8px;">📦 Stock and
+                      order history</div>
                     <div
                       style="background:#f9fafb; border:1px solid #e5e7eb; border-radius:10px; padding:10px; display:flex; flex-direction:column; gap:6px;">
                       <div style="display:flex; justify-content:flex-end;">
                         <div
                           style="background:#4f46e5; color:#fff; border-radius:10px 10px 2px 10px; padding:6px 10px; font-size:0.68rem; max-width:70%;">
-                          Yes, add the headphones to my cart!</div>
+                          How many Premium Wireless Headphones are in stock?</div>
                       </div>
                       <div
                         style="background:#f0fdf4; border:1px solid #bbf7d0; border-radius:6px; padding:5px 8px; font-size:0.62rem; color:#166534; display:flex; align-items:center; gap:4px;">
-                        <span></span> <span>Calling tool: <strong>add_to_cart</strong> → product_id: 1, qty: 1</span>
+                        <span>Reading approved store data → stock for product 1</span>
                       </div>
                       <div style="display:flex; align-items:flex-start; gap:6px;">
                         <span style="font-size:0.9rem;">🤖</span>
                         <div
                           style="background:#fff; border:1px solid #e5e7eb; border-radius:2px 10px 10px 10px; padding:6px 10px; font-size:0.68rem; color:#374151;">
-                          ✅ Added <strong>Premium Wireless Headphones</strong> ($129.99) to your cart! Your cart now has
-                          1 item. Would you like to checkout?
+                          There are <strong>24 units</strong> of Premium Wireless Headphones in stock. I can also
+                          show recent orders that include this product.
                         </div>
                       </div>
-                      <!-- Cart preview -->
+                      <!-- Stock preview -->
                       <div
                         style="background:#fff; border:1px solid #e5e7eb; border-radius:8px; padding:8px; display:flex; align-items:center; gap:8px;">
                         <span style="font-size:1.2rem;">🎧</span>
                         <div style="flex:1;">
                           <div style="font-size:0.65rem; font-weight:600;">Premium Wireless Headphones</div>
-                          <div style="font-size:0.6rem; color:#6b7280;">Qty: 1</div>
+                          <div style="font-size:0.6rem; color:#6b7280;">In stock · from PostgreSQL</div>
                         </div>
-                        <div style="font-size:0.7rem; font-weight:700; color:#4f46e5;">$129.99</div>
+                        <div style="font-size:0.7rem; font-weight:700; color:#4f46e5;">24 units</div>
                       </div>
                     </div>
                   </div>
                 </div>
               </div>
-              <div class="slide-caption"><span style="font-size:1.1rem;">🛒</span> <strong style="color:#a5b4fc;">AI
-                  Cart Manager</strong> — Add to cart via natural language (add_to_cart tool)</div>
+              <div class="slide-caption"><span style="font-size:1.1rem;">📦</span> <strong style="color:#a5b4fc;">Stock
+                  and orders</strong> — Read-only answers from the existing database</div>
             </div>
 
-            <!-- Slide 4: AI Checkout -->
+            <!-- Slide 4: Out-of-scope refusal -->
             <div class="slide">
               <div class="slide-visual" style="background: linear-gradient(135deg, #f8fafc 0%, #eff6ff 100%);">
                 <div class="slide-inner">
@@ -1169,41 +1166,41 @@
                     <div style="display:flex; align-items:center; gap:10px;"><span style="font-size:0.8rem;">🛒
                         1</span><span style="color:#374151; font-size:0.8rem;">System Admin</span></div>
                   </div>
-                  <!-- Checkout via AI -->
+                  <!-- Refusal via AI -->
                   <div style="padding:12px;">
-                    <div style="font-weight:700; font-size:0.85rem; color:#111827; margin-bottom:8px;">💳 AI-Assisted
-                      Checkout</div>
+                    <div style="font-weight:700; font-size:0.85rem; color:#111827; margin-bottom:8px;">🚫 Out-of-scope
+                      refusal</div>
                     <div
                       style="background:#f9fafb; border:1px solid #e5e7eb; border-radius:10px; padding:10px; display:flex; flex-direction:column; gap:6px;">
                       <div style="display:flex; justify-content:flex-end;">
                         <div
                           style="background:#4f46e5; color:#fff; border-radius:10px 10px 2px 10px; padding:6px 10px; font-size:0.68rem; max-width:70%;">
-                          Yes please, go ahead and checkout</div>
+                          Add the headphones to my cart and check out</div>
                       </div>
                       <div
-                        style="background:#f0fdf4; border:1px solid #bbf7d0; border-radius:6px; padding:5px 8px; font-size:0.62rem; color:#166534; display:flex; align-items:center; gap:4px;">
-                        <span></span> <span>Calling tool: <strong>checkout</strong> → processing order...</span>
+                        style="background:#fef3c7; border:1px solid #fde68a; border-radius:6px; padding:5px 8px; font-size:0.62rem; color:#92400e; display:flex; align-items:center; gap:4px;">
+                        <span>Request is write-side. Agent stays read-only.</span>
                       </div>
                       <div style="display:flex; align-items:flex-start; gap:6px;">
                         <span style="font-size:0.9rem;">🤖</span>
                         <div
                           style="background:#fff; border:1px solid #e5e7eb; border-radius:2px 10px 10px 10px; padding:6px 10px; font-size:0.68rem; color:#374151;">
-                          🎉 <strong>Order placed successfully!</strong> Order #1042 confirmed. 1x Premium Wireless
-                          Headphones for $129.99. Thank you for shopping with ShopEasy!
+                          I can tell you about products, stock, and orders. I cannot add items to the cart or
+                          place an order. Use the existing store pages for those actions.
                         </div>
                       </div>
                       <div
-                        style="background:#f0fdf4; border:1px solid #bbf7d0; border-radius:8px; padding:8px; text-align:center;">
-                        <div style="font-size:1rem;">✅</div>
-                        <div style="font-size:0.65rem; font-weight:700; color:#166534;">Order #1042 Confirmed!</div>
-                        <div style="font-size:0.6rem; color:#4b7c5e;">Total: $129.99</div>
+                        style="background:#fef3c7; border:1px solid #fde68a; border-radius:8px; padding:8px; text-align:center;">
+                        <div style="font-size:1rem;">🚫</div>
+                        <div style="font-size:0.65rem; font-weight:700; color:#92400e;">No store data changed</div>
+                        <div style="font-size:0.6rem; color:#a16207;">Ask the Store is read-only</div>
                       </div>
                     </div>
                   </div>
                 </div>
               </div>
-              <div class="slide-caption"><span style="font-size:1.1rem;">💳</span> <strong style="color:#a5b4fc;">AI
-                  Checkout</strong> — Complete order via chat (checkout tool) — Order #1042 confirmed!</div>
+              <div class="slide-caption"><span style="font-size:1.1rem;">🚫</span> <strong style="color:#a5b4fc;">Out of
+                  scope</strong> — The agent refuses cart changes and invented data</div>
             </div>
 
           </div>
@@ -1251,12 +1248,10 @@
     <div class="overview-section">
       <h2 class="section-title">Project Overview</h2>
       <p class="project-description">
-        This E-Commerce AI Shopping Agent project focuses exclusively on implementing the <strong>askunicart</strong> AI assistant
-        for e-commerce platforms. It demonstrates how to build an intelligent shopping assistant that helps customers
-        browse products, check stock, get recommendations, and manage their cart through natural language conversations.
-        The project is structured into six distinct phases, covering everything from requirements gathering to
-        production
-        deployment.
+        This project adds <strong>Ask the Store</strong> to an existing React and FastAPI e-commerce application.
+        One read-only agent answers questions about real products, categories, customers, orders, stock, and sales totals.
+        It does not change store data, rebuild the shop, or create a second backend or database.
+        The work is split into six phases, from requirements through deployment on Render.
       </p>
 
       <div class="features-grid">
@@ -1285,26 +1280,26 @@
         </div>
 
         <div class="feature-card">
-          <div class="feature-icon">🛒</div>
-          <div class="feature-title">Cart Management</div>
+          <div class="feature-icon">🧾</div>
+          <div class="feature-title">Order History</div>
           <div class="feature-description">
-            Add, update, and remove items via chat
+            Answer order and sales questions from the existing database
           </div>
         </div>
 
         <div class="feature-card">
-          <div class="feature-icon">🎯</div>
-          <div class="feature-title">Recommendations</div>
+          <div class="feature-icon">🚫</div>
+          <div class="feature-title">Out-of-scope Refusal</div>
           <div class="feature-description">
-            AI-powered product suggestions
+            Refuse cart changes and do not invent data
           </div>
         </div>
 
         <div class="feature-card">
           <div class="feature-icon">🧠</div>
-          <div class="feature-title">OpenAI Integration</div>
+          <div class="feature-title">LangGraph Agent</div>
           <div class="feature-description">
-            GPT-4o-mini with function calling
+            Configured LLM via LangChain on POST /agent/ask
           </div>
         </div>
       </div>
@@ -1322,15 +1317,13 @@
       </div>
       <div class="video-info">
         <h3>Complete Project Walkthrough</h3>
-        <p>Watch this comprehensive video to understand the entire askunicart AI agent project journey, from initial
-          planning to final deployment.</p>
+        <p>Watch this walkthrough of Ask the Store, from requirements through the live Render deployment.</p>
       </div>
     </div>
 
     <!-- Begin Journey Button -->
     <div class="begin-journey-section">
       <a href="BRD_phase/Overview.html" class="begin-journey-btn">
-        <span></span>
         <span>Begin Your Journey</span>
         <span>→</span>
       </a>

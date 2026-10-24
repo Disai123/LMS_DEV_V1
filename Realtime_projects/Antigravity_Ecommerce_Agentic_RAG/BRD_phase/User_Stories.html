@@ -3,199 +3,138 @@
     <h3 class="content-heading">User Stories</h3>
     <div style="max-width: none;">
       <p style="color: #4b5563; line-height: 1.75; margin-bottom: 1.5rem;">
-        User stories describe the AI agent features from the customer's perspective. Each story follows the format: 
-        "As a [user type], I want [goal] so that [benefit]."
+        User stories describe the Agentic RAG assistant from the customer and store-operator view.
+        Each story follows: "As a [user type], I want [goal] so that [benefit]."
       </p>
-      
+
       <div style="display: flex; flex-direction: column; gap: 2rem;">
-        <!-- Story 1 -->
         <div class="card">
           <div style="display: flex; align-items: start; gap: 1rem;">
-            <div style="font-size: 2rem;">👤</div>
+            <div style="font-size: 2rem;">📘</div>
             <div style="flex: 1;">
               <h4 style="font-size: 1.125rem; font-weight: 600; color: #1f2937; margin-bottom: 0.5rem;">
-                US-AI-001: Product Search via Natural Language
+                US-RAG-001: Ask About a Manual
               </h4>
               <p style="color: #4b5563; line-height: 1.75; margin-bottom: 1rem;">
-                <strong>As a</strong> customer, <strong>I want to</strong> search for products by describing them in natural language 
-                <strong>so that</strong> I can find what I'm looking for without knowing exact product names or navigating complex filters.
+                <strong>As a</strong> customer, <strong>I want to</strong> ask how to use a product
+                <strong>so that</strong> I get instructions from the approved user manual, not a guessed answer.
               </p>
               <div style="background: #eff6ff; border-radius: 0.5rem; padding: 1rem;">
                 <p style="font-size: 0.875rem; font-weight: 600; color: #1e40af; margin-bottom: 0.5rem;">Example Queries:</p>
                 <ul style="font-size: 0.875rem; color: #1e3a8a; display: flex; flex-direction: column; gap: 0.25rem; list-style: disc; list-style-position: inside;">
-                  <li>"Show me laptops under $1000"</li>
-                  <li>"I need running shoes for men"</li>
-                  <li>"What electronics do you have?"</li>
-                  <li>"Find wireless headphones"</li>
+                  <li>"How do I pair these wireless headphones?"</li>
+                  <li>"What does the warranty cover for the smart watch?"</li>
+                  <li>"How do I clean the office chair fabric?"</li>
                 </ul>
               </div>
             </div>
           </div>
         </div>
 
-        <!-- Story 2 -->
         <div class="card">
           <div style="display: flex; align-items: start; gap: 1rem;">
-            <div style="font-size: 2rem;">📦</div>
+            <div style="font-size: 2rem;">🔗</div>
             <div style="flex: 1;">
               <h4 style="font-size: 1.125rem; font-weight: 600; color: #1f2937; margin-bottom: 0.5rem;">
-                US-AI-002: Check Stock Availability
+                US-RAG-002: See Citations
               </h4>
               <p style="color: #4b5563; line-height: 1.75; margin-bottom: 1rem;">
-                <strong>As a</strong> customer, <strong>I want to</strong> check if products are in stock by asking the AI 
-                <strong>so that</strong> I know availability before adding items to my cart.
+                <strong>As a</strong> customer, <strong>I want to</strong> see the source document and section
+                <strong>so that</strong> I can check the answer against the original manual.
               </p>
               <div style="background: #f0fdf4; border-radius: 0.5rem; padding: 1rem;">
-                <p style="font-size: 0.875rem; font-weight: 600; color: #059669; margin-bottom: 0.5rem;">Example Queries:</p>
+                <p style="font-size: 0.875rem; font-weight: 600; color: #059669; margin-bottom: 0.5rem;">Example Result:</p>
                 <ul style="font-size: 0.875rem; color: #047857; display: flex; flex-direction: column; gap: 0.25rem; list-style: disc; list-style-position: inside;">
-                  <li>"Is the iPhone 15 in stock?"</li>
-                  <li>"Do you have yoga mats available?"</li>
-                  <li>"Check stock for electronics category"</li>
+                  <li>Answer text grounded in retrieved chunks</li>
+                  <li>Source: Headphones User Manual, Pairing section</li>
                 </ul>
               </div>
             </div>
           </div>
         </div>
 
-        <!-- Story 3 -->
+        <div class="card">
+          <div style="display: flex; align-items: start; gap: 1rem;">
+            <div style="font-size: 2rem;">🚫</div>
+            <div style="flex: 1;">
+              <h4 style="font-size: 1.125rem; font-weight: 600; color: #1f2937; margin-bottom: 0.5rem;">
+                US-RAG-003: Honest No-Data Reply
+              </h4>
+              <p style="color: #4b5563; line-height: 1.75; margin-bottom: 1rem;">
+                <strong>As a</strong> customer, <strong>I want to</strong> be told when the manuals do not contain the answer
+                <strong>so that</strong> I do not follow invented specs or safety advice.
+              </p>
+              <div style="background: #fef2f2; border-radius: 0.5rem; padding: 1rem;">
+                <p style="font-size: 0.875rem; font-weight: 600; color: #b91c1c; margin-bottom: 0.5rem;">Example Queries:</p>
+                <ul style="font-size: 0.875rem; color: #991b1b; display: flex; flex-direction: column; gap: 0.25rem; list-style: disc; list-style-position: inside;">
+                  <li>"Does this charger work at 240V?" when the FAQ never states it</li>
+                  <li>"What is the return policy for order #1042?" (out of scope)</li>
+                </ul>
+              </div>
+            </div>
+          </div>
+        </div>
+
         <div class="card">
           <div style="display: flex; align-items: start; gap: 1rem;">
             <div style="font-size: 2rem;">🛒</div>
             <div style="flex: 1;">
               <h4 style="font-size: 1.125rem; font-weight: 600; color: #1f2937; margin-bottom: 0.5rem;">
-                US-AI-003: Add Products to Cart via Chat
+                US-RAG-004: Ask From a Product Page
               </h4>
               <p style="color: #4b5563; line-height: 1.75; margin-bottom: 1rem;">
-                <strong>As a</strong> customer, <strong>I want to</strong> add products to my cart by telling the AI 
-                <strong>so that</strong> I can build my shopping list through conversation without navigating multiple pages.
-              </p>
-              <div style="background: #fef2f2; border-radius: 0.5rem; padding: 1rem;">
-                <p style="font-size: 0.875rem; font-weight: 600; color: #b91c1c; margin-bottom: 0.5rem;">Example Queries:</p>
-                <ul style="font-size: 0.875rem; color: #991b1b; display: flex; flex-direction: column; gap: 0.25rem; list-style: disc; list-style-position: inside;">
-                  <li>"Add a laptop to my cart"</li>
-                  <li>"Add 2 yoga mats to cart"</li>
-                  <li>"Put the iPhone in my cart"</li>
-                </ul>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        <!-- Story 4 -->
-        <div class="card">
-          <div style="display: flex; align-items: start; gap: 1rem;">
-            <div style="font-size: 2rem;">📋</div>
-            <div style="flex: 1;">
-              <h4 style="font-size: 1.125rem; font-weight: 600; color: #1f2937; margin-bottom: 0.5rem;">
-                US-AI-004: View Cart Contents
-              </h4>
-              <p style="color: #4b5563; line-height: 1.75; margin-bottom: 1rem;">
-                <strong>As a</strong> customer, <strong>I want to</strong> ask the AI what's in my cart 
-                <strong>so that</strong> I can review my items and totals without leaving the chat.
+                <strong>As a</strong> customer, <strong>I want to</strong> open the assistant on a product page
+                <strong>so that</strong> my question uses that product context when searching manuals.
               </p>
               <div style="background: #eef2ff; border-radius: 0.5rem; padding: 1rem;">
                 <p style="font-size: 0.875rem; font-weight: 600; color: #4338ca; margin-bottom: 0.5rem;">Example Queries:</p>
                 <ul style="font-size: 0.875rem; color: #3730a3; display: flex; flex-direction: column; gap: 0.25rem; list-style: disc; list-style-position: inside;">
-                  <li>"What's in my cart?"</li>
-                  <li>"Show me my cart"</li>
-                  <li>"What items do I have?"</li>
+                  <li>"How long is the battery warranty?" on the Smart Watch page</li>
+                  <li>"What is in the box?" on the headphones page</li>
                 </ul>
               </div>
             </div>
           </div>
         </div>
 
-        <!-- Story 5 -->
         <div class="card">
           <div style="display: flex; align-items: start; gap: 1rem;">
-            <div style="font-size: 2rem;">🔄</div>
+            <div style="font-size: 2rem;">❓</div>
             <div style="flex: 1;">
               <h4 style="font-size: 1.125rem; font-weight: 600; color: #1f2937; margin-bottom: 0.5rem;">
-                US-AI-005: Update Cart Items
+                US-RAG-005: Clarify Vague Questions
               </h4>
               <p style="color: #4b5563; line-height: 1.75; margin-bottom: 1rem;">
-                <strong>As a</strong> customer, <strong>I want to</strong> update quantities or remove items from my cart via chat 
-                <strong>so that</strong> I can manage my cart without switching to the cart page.
+                <strong>As a</strong> customer, <strong>I want</strong> the assistant to ask which product I mean
+                <strong>so that</strong> it does not retrieve the wrong manual.
               </p>
-              <div style="background: #f5f3ff; border-radius: 0.5rem; padding: 1rem;">
-                <p style="font-size: 0.875rem; font-weight: 600; color: #6d28d9; margin-bottom: 0.5rem;">Example Queries:</p>
-                <ul style="font-size: 0.875rem; color: #5b21b6; display: flex; flex-direction: column; gap: 0.25rem; list-style: disc; list-style-position: inside;">
-                  <li>"Change laptop quantity to 2"</li>
-                  <li>"Remove the yoga mat from cart"</li>
-                  <li>"Update iPhone quantity to 1"</li>
-                </ul>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        <!-- Story 6 -->
-        <div class="card">
-          <div style="display: flex; align-items: start; gap: 1rem;">
-            <div style="font-size: 2rem;">🎯</div>
-            <div style="flex: 1;">
-              <h4 style="font-size: 1.125rem; font-weight: 600; color: #1f2937; margin-bottom: 0.5rem;">
-                US-AI-006: Get Product Recommendations
-              </h4>
-              <p style="color: #4b5563; line-height: 1.75; margin-bottom: 1rem;">
-                <strong>As a</strong> customer, <strong>I want to</strong> ask the AI for product recommendations 
-                <strong>so that</strong> I can discover new products that match my interests.
-              </p>
-              <div style="background: #ecfeff; border-radius: 0.5rem; padding: 1rem;">
-                <p style="font-size: 0.875rem; font-weight: 600; color: #0891b2; margin-bottom: 0.5rem;">Example Queries:</p>
-                <ul style="font-size: 0.875rem; color: #0e7490; display: flex; flex-direction: column; gap: 0.25rem; list-style: disc; list-style-position: inside;">
-                  <li>"What do you recommend?"</li>
-                  <li>"Show me similar products to the iPhone"</li>
-                  <li>"Recommend electronics for me"</li>
-                </ul>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        <!-- Story 7 -->
-        <div class="card">
-          <div style="display: flex; align-items: start; gap: 1rem;">
-            <div style="font-size: 2rem;">💬</div>
-            <div style="flex: 1;">
-              <h4 style="font-size: 1.125rem; font-weight: 600; color: #1f2937; margin-bottom: 0.5rem;">
-                US-AI-007: Multi-Turn Conversations
-              </h4>
-              <p style="color: #4b5563; line-height: 1.75; margin-bottom: 1rem;">
-                <strong>As a</strong> customer, <strong>I want to</strong> have natural conversations with the AI that remember context 
-                <strong>so that</strong> I can ask follow-up questions without repeating information.
-              </p>
-              <div style="background: #f0fdfa; border-radius: 0.5rem; padding: 1rem;">
-                <p style="font-size: 0.875rem; font-weight: 600; color: #0d9488; margin-bottom: 0.5rem;">Example Conversation:</p>
-                <div style="font-size: 0.875rem; color: #0f766e; display: flex; flex-direction: column; gap: 0.5rem;">
-                  <div><strong>User:</strong> "Show me laptops"</div>
-                  <div><strong>AI:</strong> "Here are some laptops..."</div>
-                  <div><strong>User:</strong> "Add the first one to cart"</div>
-                  <div><strong>AI:</strong> "Added [laptop name] to your cart"</div>
+              <div style="background: #fffbeb; border-radius: 0.5rem; padding: 1rem;">
+                <p style="font-size: 0.875rem; font-weight: 600; color: #d97706; margin-bottom: 0.5rem;">Example Conversation:</p>
+                <div style="font-size: 0.875rem; color: #b45309; display: flex; flex-direction: column; gap: 0.5rem;">
+                  <div><strong>User:</strong> "How do I charge it?"</div>
+                  <div><strong>Assistant:</strong> "Which product are you asking about?"</div>
                 </div>
               </div>
             </div>
           </div>
         </div>
 
-        <!-- Story 8 -->
         <div class="card">
           <div style="display: flex; align-items: start; gap: 1rem;">
             <div style="font-size: 2rem;">📚</div>
             <div style="flex: 1;">
               <h4 style="font-size: 1.125rem; font-weight: 600; color: #1f2937; margin-bottom: 0.5rem;">
-                US-AI-008: Browse Categories
+                US-RAG-006: Update Manuals
               </h4>
               <p style="color: #4b5563; line-height: 1.75; margin-bottom: 1rem;">
-                <strong>As a</strong> customer, <strong>I want to</strong> explore product categories through conversation 
-                <strong>so that</strong> I can discover products by browsing rather than searching.
+                <strong>As a</strong> store operator, <strong>I want to</strong> add or replace an approved manual
+                <strong>so that</strong> the FAISS index can be rebuilt and answers stay current.
               </p>
-              <div style="background: #fffbeb; border-radius: 0.5rem; padding: 1rem;">
-                <p style="font-size: 0.875rem; font-weight: 600; color: #d97706; margin-bottom: 0.5rem;">Example Queries:</p>
-                <ul style="font-size: 0.875rem; color: #b45309; display: flex; flex-direction: column; gap: 0.25rem; list-style: disc; list-style-position: inside;">
-                  <li>"What categories do you have?"</li>
-                  <li>"Show me electronics"</li>
-                  <li>"What's in the clothing category?"</li>
+              <div style="background: #f0fdfa; border-radius: 0.5rem; padding: 1rem;">
+                <p style="font-size: 0.875rem; font-weight: 600; color: #0d9488; margin-bottom: 0.5rem;">Example Tasks:</p>
+                <ul style="font-size: 0.875rem; color: #0f766e; display: flex; flex-direction: column; gap: 0.25rem; list-style: disc; list-style-position: inside;">
+                  <li>Add a new warranty PDF</li>
+                  <li>Re-run ingest, chunking, embeddings, and FAISS index</li>
                 </ul>
               </div>
             </div>
@@ -205,4 +144,3 @@
     </div>
   </div>
 </div>
-

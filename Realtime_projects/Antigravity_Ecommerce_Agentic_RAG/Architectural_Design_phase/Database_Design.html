@@ -1,108 +1,93 @@
 <div class="content-body">
   <div class="content-section">
-    <h3 class="content-heading">Database Design</h3>
+    <h3 class="content-heading">Document Index Design</h3>
     <div style="max-width: none;">
       <p style="color: #4b5563; line-height: 1.75; margin-bottom: 1.5rem;">
-        The database schema for the AI agent focuses on storing conversation history and messages. It integrates 
-        with existing e-commerce tables (User, Product, CartItem) to provide context for AI interactions.
+        The knowledge store for this feature is a FAISS vector index of document embeddings, not a second store catalog.
+        Existing product and user tables stay as they are. Manuals, FAQs, and warranty files are chunked, embedded, and mapped back to source metadata.
       </p>
       
       <div style="display: flex; flex-direction: column; gap: 2rem;">
         <div class="card">
           <h4 style="font-size: 1.25rem; font-weight: 600; color: #1f2937; margin-bottom: 1.5rem; display: flex; align-items: center; gap: 0.5rem;">
-            <span style="font-size: 1.5rem;">💬</span>
-            Conversation Model
+            <span style="font-size: 1.5rem;">📄</span>
+            Approved Document Record
           </h4>
           
           <div style="background: #f9fafb; border-radius: 0.5rem; padding: 1.5rem; overflow-x: auto;">
-            <pre style="font-family: 'Courier New', monospace; font-size: 0.875rem; color: #1f2937; line-height: 1.6; margin: 0;"><code>model Conversation {
-  id        String   @id @default(cuid())
-  userId    String
-  user      User     @relation(fields: [userId], references: [id])
-  title     String?  // Auto-generated from first message
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-  
-  messages  Message[]
-  
-  @@index([userId])
-  @@map("conversations")
-}</code></pre>
+            <pre style="font-family: 'Courier New', monospace; font-size: 0.875rem; color: #1f2937; line-height: 1.6; margin: 0;"><code>Document
+  id              local file or document id
+  name            Headphones User Manual
+  product_name    Premium Wireless Headphones
+  type            manual | faq | warranty | usage guide
+  source_path     local approved-documents folder
+</code></pre>
           </div>
           
           <div style="margin-top: 1rem; padding: 1rem; background: #eff6ff; border-radius: 0.5rem;">
-            <h5 style="font-weight: 600; color: #1f2937; margin-bottom: 0.5rem;">Key Fields:</h5>
+            <h5 style="font-weight: 600; color: #1f2937; margin-bottom: 0.5rem;">Rules:</h5>
             <ul style="font-size: 0.875rem; color: #4b5563; list-style: disc; list-style-position: inside;">
-              <li><strong>id:</strong> Unique conversation identifier</li>
-              <li><strong>userId:</strong> Links to User table (one-to-many)</li>
-              <li><strong>title:</strong> Optional title for conversation</li>
-              <li><strong>messages:</strong> One-to-many relationship with Message</li>
+              <li>Only approved product documents are ingested</li>
+              <li>Do not copy the store catalog into a new database</li>
+              <li>Reuse existing product names when attaching metadata</li>
             </ul>
           </div>
         </div>
 
         <div class="card">
           <h4 style="font-size: 1.25rem; font-weight: 600; color: #1f2937; margin-bottom: 1.5rem; display: flex; align-items: center; gap: 0.5rem;">
-            <span style="font-size: 1.5rem;">📝</span>
-            Message Model
+            <span style="font-size: 1.5rem;">✂️</span>
+            Chunk + Embedding Record
           </h4>
           
           <div style="background: #f9fafb; border-radius: 0.5rem; padding: 1.5rem; overflow-x: auto;">
-            <pre style="font-family: 'Courier New', monospace; font-size: 0.875rem; color: #1f2937; line-height: 1.6; margin: 0;"><code>model Message {
-  id             String       @id @default(cuid())
-  conversationId String
-  conversation   Conversation @relation(fields: [conversationId], references: [id], onDelete: Cascade)
-  role           String       // "user" | "assistant"
-  content        String       @db.Text
-  toolCalls      Json?        // Store tool calls if any
-  createdAt      DateTime     @default(now())
-  
-  @@index([conversationId])
-  @@index([createdAt])
-  @@map("messages")
-}</code></pre>
+            <pre style="font-family: 'Courier New', monospace; font-size: 0.875rem; color: #1f2937; line-height: 1.6; margin: 0;"><code>Chunk
+  chunk_id        unique id
+  document_name   Headphones User Manual
+  product_name    Premium Wireless Headphones
+  section         Pairing
+  text            cleaned chunk text
+  embedding       vector used by FAISS
+  source_location page or heading when available
+</code></pre>
           </div>
           
           <div style="margin-top: 1rem; padding: 1rem; background: #f0fdf4; border-radius: 0.5rem;">
-            <h5 style="font-weight: 600; color: #1f2937; margin-bottom: 0.5rem;">Key Fields:</h5>
+            <h5 style="font-weight: 600; color: #1f2937; margin-bottom: 0.5rem;">Why this exists:</h5>
             <ul style="font-size: 0.875rem; color: #4b5563; list-style: disc; list-style-position: inside;">
-              <li><strong>id:</strong> Unique message identifier</li>
-              <li><strong>conversationId:</strong> Links to Conversation (many-to-one)</li>
-              <li><strong>role:</strong> "user" or "assistant" (AI response)</li>
-              <li><strong>content:</strong> Message text content</li>
-              <li><strong>toolCalls:</strong> JSON field storing tool call metadata</li>
-              <li><strong>createdAt:</strong> Timestamp for ordering messages</li>
+              <li>Chunk size and overlap keep enough context for retrieval</li>
+              <li>Embeddings let FAISS find similar manual text</li>
+              <li>Metadata becomes the citation on the answer</li>
             </ul>
           </div>
         </div>
 
         <div class="card">
           <h4 style="font-size: 1.25rem; font-weight: 600; color: #1f2937; margin-bottom: 1.5rem; display: flex; align-items: center; gap: 0.5rem;">
-            <span style="font-size: 1.5rem;">🔗</span>
-            Relationships
+            <span style="font-size: 1.5rem;">🗂️</span>
+            FAISS Index Layout
           </h4>
           
           <div style="background: #f9fafb; border-radius: 0.5rem; padding: 1.5rem;">
             <div style="display: flex; flex-direction: column; gap: 1rem;">
               <div style="border-left: 4px solid #3b82f6; padding-left: 1rem;">
-                <h5 style="font-weight: 600; color: #1f2937; margin-bottom: 0.5rem;">User → Conversation</h5>
+                <h5 style="font-weight: 600; color: #1f2937; margin-bottom: 0.5rem;">Index files</h5>
                 <p style="font-size: 0.875rem; color: #6b7280;">
-                  One user can have many conversations. Each conversation is isolated per user.
+                  Keep the FAISS index and a metadata file in a clear local folder. Rebuild both when manuals change.
                 </p>
               </div>
 
               <div style="border-left: 4px solid #10b981; padding-left: 1rem;">
-                <h5 style="font-weight: 600; color: #1f2937; margin-bottom: 0.5rem;">Conversation → Message</h5>
+                <h5 style="font-weight: 600; color: #1f2937; margin-bottom: 0.5rem;">Lookup</h5>
                 <p style="font-size: 0.875rem; color: #6b7280;">
-                  One conversation contains many messages. Messages are ordered by createdAt.
+                  FAISS returns vector ids. Metadata maps each id to document, product, section, and chunk text.
                 </p>
               </div>
 
               <div style="border-left: 4px solid #a855f7; padding-left: 1rem;">
-                <h5 style="font-weight: 600; color: #1f2937; margin-bottom: 0.5rem;">Integration with E-commerce Tables</h5>
+                <h5 style="font-weight: 600; color: #1f2937; margin-bottom: 0.5rem;">Existing store tables</h5>
                 <p style="font-size: 0.875rem; color: #6b7280;">
-                  Tool modules query Product, CartItem, Category tables for AI responses. 
-                  No direct foreign keys, accessed via Prisma queries.
+                  Login and catalog stay on the existing backend. This feature does not create a second store database.
                 </p>
               </div>
             </div>
@@ -112,24 +97,26 @@
         <div class="card">
           <h4 style="font-size: 1.25rem; font-weight: 600; color: #1f2937; margin-bottom: 1.5rem; display: flex; align-items: center; gap: 0.5rem;">
             <span style="font-size: 1.5rem;">📊</span>
-            Indexes & Performance
+            Rebuild and Retrieval
           </h4>
           
           <div style="background: #f9fafb; border-radius: 0.5rem; padding: 1.5rem;">
             <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 1rem;">
               <div style="background: white; padding: 1rem; border-radius: 0.5rem; border: 1px solid #e5e7eb;">
-                <h5 style="font-weight: 600; color: #1f2937; margin-bottom: 0.5rem;">Conversation Indexes</h5>
+                <h5 style="font-weight: 600; color: #1f2937; margin-bottom: 0.5rem;">Rebuild</h5>
                 <ul style="font-size: 0.875rem; color: #4b5563; list-style: disc; list-style-position: inside;">
-                  <li>userId (for user queries)</li>
-                  <li>createdAt (for sorting)</li>
+                  <li>Ingest new manuals</li>
+                  <li>Re-chunk and re-embed</li>
+                  <li>Write a new FAISS index</li>
                 </ul>
               </div>
 
               <div style="background: white; padding: 1rem; border-radius: 0.5rem; border: 1px solid #e5e7eb;">
-                <h5 style="font-weight: 600; color: #1f2937; margin-bottom: 0.5rem;">Message Indexes</h5>
+                <h5 style="font-weight: 600; color: #1f2937; margin-bottom: 0.5rem;">Query</h5>
                 <ul style="font-size: 0.875rem; color: #4b5563; list-style: disc; list-style-position: inside;">
-                  <li>conversationId (for loading messages)</li>
-                  <li>createdAt (for chronological order)</li>
+                  <li>Embed the user question</li>
+                  <li>Search FAISS</li>
+                  <li>Filter by relevance threshold</li>
                 </ul>
               </div>
             </div>
@@ -139,4 +126,3 @@
     </div>
   </div>
 </div>
-

@@ -19,20 +19,20 @@
 
     <div>
       <p style="color: #4b5563; line-height: 1.75; margin-bottom: 1.5rem;">
-        This phase covers comprehensive testing of the <strong>askunicart AI agent</strong> to ensure reliability, 
-        performance, and user experience. Testing includes unit tests, integration tests, UI/UX tests, and 
-        performance validation.
+        This phase tests the <strong>Agentic RAG E-Commerce Assistant</strong>.
+        The main checks are retrieval quality, citation accuracy, and hallucination refusal.
+        Also confirm the existing store still works.
       </p>
       
       <div style="background: #fff7ed; border-radius: 0.5rem; padding: 1.5rem; margin-bottom: 1.5rem;">
         <h4 style="font-size: 1.125rem; font-weight: 600; color: #1f2937; margin-bottom: 0.75rem;">Testing Objectives</h4>
         <ul style="list-style: disc; list-style-position: inside; display: flex; flex-direction: column; gap: 0.5rem; color: #4b5563;">
-          <li>Verify all tool modules function correctly</li>
-          <li>Test API endpoints and authentication</li>
-          <li>Validate AI integration and tool calling</li>
-          <li>Test chat interface functionality</li>
-          <li>Measure performance metrics</li>
-          <li>Ensure error handling works properly</li>
+          <li>Check FAISS retrieval against real manuals</li>
+          <li>Verify citations match the used sections</li>
+          <li>Confirm no-data and prompt-injection cases are safe</li>
+          <li>Test POST /rag/ask with existing auth</li>
+          <li>Test the React assistant states in the browser</li>
+          <li>Record Langfuse eval scores where available</li>
         </ul>
       </div>
 
@@ -40,28 +40,23 @@
         <h4 style="font-size: 1.125rem; font-weight: 600; color: #1f2937; margin-bottom: 0.75rem;">Testing Types</h4>
         <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1rem; margin-top: 1rem;">
           <div style="background: white; padding: 1rem; border-radius: 0.5rem; border: 1px solid #e5e7eb;">
-            <div style="font-size: 1.5rem; margin-bottom: 0.5rem;">•</div>
             <div style="font-weight: 600; color: #1f2937; margin-bottom: 0.25rem;">Unit Testing</div>
-            <div style="font-size: 0.875rem; color: #6b7280;">Tool module functions</div>
+            <div style="font-size: 0.875rem; color: #6b7280;">Chunking and embeddings</div>
           </div>
           <div style="background: white; padding: 1rem; border-radius: 0.5rem; border: 1px solid #e5e7eb;">
-            <div style="font-size: 1.5rem; margin-bottom: 0.5rem;">•</div>
             <div style="font-weight: 600; color: #1f2937; margin-bottom: 0.25rem;">Integration Testing</div>
-            <div style="font-size: 0.875rem; color: #6b7280;">API & AI integration</div>
+            <div style="font-size: 0.875rem; color: #6b7280;">/rag/ask and FAISS</div>
           </div>
           <div style="background: white; padding: 1rem; border-radius: 0.5rem; border: 1px solid #e5e7eb;">
-            <div style="font-size: 1.5rem; margin-bottom: 0.5rem;">•</div>
             <div style="font-weight: 600; color: #1f2937; margin-bottom: 0.25rem;">UI Testing</div>
-            <div style="font-size: 0.875rem; color: #6b7280;">Chat interface</div>
+            <div style="font-size: 0.875rem; color: #6b7280;">Answer and citations</div>
           </div>
           <div style="background: white; padding: 1rem; border-radius: 0.5rem; border: 1px solid #e5e7eb;">
-            <div style="font-size: 1.5rem; margin-bottom: 0.5rem;">•</div>
-            <div style="font-weight: 600; color: #1f2937; margin-bottom: 0.25rem;">Performance Testing</div>
-            <div style="font-size: 0.875rem; color: #6b7280;">Response times</div>
+            <div style="font-weight: 600; color: #1f2937; margin-bottom: 0.25rem;">RAG Evals</div>
+            <div style="font-size: 0.875rem; color: #6b7280;">Grounding and refusal</div>
           </div>
         </div>
       </div>
     </div>
   </div>
 </div>
-

@@ -53,7 +53,27 @@
         <h4 style="font-size:1.125rem;font-weight:600;color:#1e293b;margin:0 0 0.5rem;">Antigravity prompt — Architecture</h4>
         <p style="font-size:0.875rem;color:#64748b;margin:0 0 0.75rem;">Architecture Design. Copy into your AI coding assistant:</p>
         <pre style="white-space:pre-wrap;font-size:0.8rem;line-height:1.55;background:#fff;border:1px solid #e2e8f0;border-radius:0.5rem;padding:1rem;margin:0 0 0.75rem;max-height:280px;overflow:auto;color:#334155;">SDLC Phase: SDLC - Design
-Create or update ONLY ARCHITECTURE.md for the multi-agent feature.Show this simple end-to-end flow:ReactJS Shop Assistant-&gt; FastAPI /agent/ask-&gt; Orchestrator Agent-&gt; Product Search Agent OR Cart Agent OR Order Management Agent-&gt; Existing application business/data layer-&gt; Existing PostgreSQL/Neon database when data is needed-&gt; Specialist result-&gt; Orchestrator-&gt; ReactJS UIClearly explain:- What the existing e-commerce application keeps doing- What the multi-agent feature adds- Where authentication and authorization are checked- How the Orchestrator routes a request- What each specialist can access- How identity, role, permissions and request ID move through the flow- How errors, no-data, clarification and unsafe requests are handled- How observability will trace a requestKeep the architecture simple. Do not create another architecture document. Do not write implementation code yet. Stop after ARCHITECTURE.md is complete.
+Create or update ONLY ARCHITECTURE.md for the multi-agent feature.
+Show this simple end-to-end flow:
+ReactJS Shop Assistant
+-&gt; FastAPI /agent/ask
+-&gt; Orchestrator Agent
+-&gt; Product Search Agent OR Cart Agent OR Order Management Agent
+-&gt; Existing application business/data layer
+-&gt; Existing PostgreSQL/Neon database when data is needed
+-&gt; Specialist result
+-&gt; Orchestrator
+-&gt; ReactJS UI
+Clearly explain:
+- What the existing e-commerce application keeps doing
+- What the multi-agent feature adds
+- Where authentication and authorization are checked
+- How the Orchestrator routes a request
+- What each specialist can access
+- How identity, role, permissions and request ID move through the flow
+- How errors, no-data, clarification and unsafe requests are handled
+- How observability will trace a request
+Keep the architecture simple. Do not create another architecture document. Do not write implementation code yet. Stop after ARCHITECTURE.md is complete.
 Checkpoint: Complete this day, test it, and wait before moving to the next day.</pre>
         <button type="button" onclick="navigator.clipboard.writeText(this.previousElementSibling.textContent)" style="padding:0.5rem 1rem;background:#eef2ff;color:#4338ca;border:1px solid #c7d2fe;border-radius:0.5rem;font-weight:500;cursor:pointer;">Copy prompt</button>
       </div>

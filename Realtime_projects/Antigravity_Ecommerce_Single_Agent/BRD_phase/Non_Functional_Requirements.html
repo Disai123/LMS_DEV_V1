@@ -3,8 +3,7 @@
     <h3 class="content-heading">Non-Functional Requirements</h3>
     <div style="max-width: none;">
       <p style="color: #4b5563; line-height: 1.75; margin-bottom: 1.5rem;">
-        Non-functional requirements define the quality attributes and constraints of the AI agent system. 
-        These requirements ensure the system performs well, is secure, and provides a good user experience.
+        These requirements set quality limits for Ask the Store. The agent must stay safe, read-only, and within the existing FastAPI, React, and PostgreSQL application.
       </p>
       
       <div style="display: flex; flex-direction: column; gap: 2rem;">
@@ -28,32 +27,32 @@
               <tbody>
                 <tr>
                   <td style="padding: 0.75rem; border: 1px solid #e5e7eb;">NFR-PF-001</td>
-                  <td style="padding: 0.75rem; border: 1px solid #e5e7eb;">AI Response Time</td>
-                  <td style="padding: 0.75rem; border: 1px solid #e5e7eb;">&lt; 2 seconds (p75)</td>
+                  <td style="padding: 0.75rem; border: 1px solid #e5e7eb;">Agent Response Time</td>
+                  <td style="padding: 0.75rem; border: 1px solid #e5e7eb;">Keep query time under a safe project limit</td>
                   <td style="padding: 0.75rem; border: 1px solid #e5e7eb;">High</td>
                 </tr>
                 <tr style="background: #f9fafb;">
                   <td style="padding: 0.75rem; border: 1px solid #e5e7eb;">NFR-PF-002</td>
-                  <td style="padding: 0.75rem; border: 1px solid #e5e7eb;">Tool Execution Time</td>
-                  <td style="padding: 0.75rem; border: 1px solid #e5e7eb;">&lt; 500ms per tool call</td>
+                  <td style="padding: 0.75rem; border: 1px solid #e5e7eb;">Approved Data Read Time</td>
+                  <td style="padding: 0.75rem; border: 1px solid #e5e7eb;">Read-only queries stay small and bounded</td>
                   <td style="padding: 0.75rem; border: 1px solid #e5e7eb;">High</td>
                 </tr>
                 <tr>
                   <td style="padding: 0.75rem; border: 1px solid #e5e7eb;">NFR-PF-003</td>
                   <td style="padding: 0.75rem; border: 1px solid #e5e7eb;">Database Query Latency</td>
-                  <td style="padding: 0.75rem; border: 1px solid #e5e7eb;">&lt; 100ms (p95)</td>
+                  <td style="padding: 0.75rem; border: 1px solid #e5e7eb;">Use the existing PostgreSQL/Neon connection</td>
                   <td style="padding: 0.75rem; border: 1px solid #e5e7eb;">Medium</td>
                 </tr>
                 <tr style="background: #f9fafb;">
                   <td style="padding: 0.75rem; border: 1px solid #e5e7eb;">NFR-PF-004</td>
-                  <td style="padding: 0.75rem; border: 1px solid #e5e7eb;">Token Usage Optimization</td>
-                  <td style="padding: 0.75rem; border: 1px solid #e5e7eb;">Minimize tokens per request</td>
+                  <td style="padding: 0.75rem; border: 1px solid #e5e7eb;">Input and Result Size</td>
+                  <td style="padding: 0.75rem; border: 1px solid #e5e7eb;">Limit question length, result size, and retries</td>
                   <td style="padding: 0.75rem; border: 1px solid #e5e7eb;">Medium</td>
                 </tr>
                 <tr>
                   <td style="padding: 0.75rem; border: 1px solid #e5e7eb;">NFR-PF-005</td>
-                  <td style="padding: 0.75rem; border: 1px solid #e5e7eb;">Chat Interface Load Time</td>
-                  <td style="padding: 0.75rem; border: 1px solid #e5e7eb;">&lt; 1 second</td>
+                  <td style="padding: 0.75rem; border: 1px solid #e5e7eb;">Ask the Store UI Load</td>
+                  <td style="padding: 0.75rem; border: 1px solid #e5e7eb;">Chat screen loads with the existing React app</td>
                   <td style="padding: 0.75rem; border: 1px solid #e5e7eb;">High</td>
                 </tr>
               </tbody>
@@ -81,20 +80,20 @@
               <tbody>
                 <tr>
                   <td style="padding: 0.75rem; border: 1px solid #e5e7eb;">NFR-SC-001</td>
-                  <td style="padding: 0.75rem; border: 1px solid #e5e7eb;">Concurrent Conversations</td>
-                  <td style="padding: 0.75rem; border: 1px solid #e5e7eb;">Support 1,000+ simultaneous chats</td>
+                  <td style="padding: 0.75rem; border: 1px solid #e5e7eb;">Reuse Existing Capacity</td>
+                  <td style="padding: 0.75rem; border: 1px solid #e5e7eb;">Run the agent on the existing FastAPI service</td>
                   <td style="padding: 0.75rem; border: 1px solid #e5e7eb;">High</td>
                 </tr>
                 <tr style="background: #f9fafb;">
                   <td style="padding: 0.75rem; border: 1px solid #e5e7eb;">NFR-SC-002</td>
-                  <td style="padding: 0.75rem; border: 1px solid #e5e7eb;">API Rate Limiting</td>
-                  <td style="padding: 0.75rem; border: 1px solid #e5e7eb;">Handle 100 requests/min per user</td>
+                  <td style="padding: 0.75rem; border: 1px solid #e5e7eb;">Request Limits</td>
+                  <td style="padding: 0.75rem; border: 1px solid #e5e7eb;">Keep retries and result size under safe limits</td>
                   <td style="padding: 0.75rem; border: 1px solid #e5e7eb;">Medium</td>
                 </tr>
                 <tr>
                   <td style="padding: 0.75rem; border: 1px solid #e5e7eb;">NFR-SC-003</td>
-                  <td style="padding: 0.75rem; border: 1px solid #e5e7eb;">Database Connection Pooling</td>
-                  <td style="padding: 0.75rem; border: 1px solid #e5e7eb;">Efficient connection management</td>
+                  <td style="padding: 0.75rem; border: 1px solid #e5e7eb;">Database Connections</td>
+                  <td style="padding: 0.75rem; border: 1px solid #e5e7eb;">Reuse the existing PostgreSQL/Neon pool</td>
                   <td style="padding: 0.75rem; border: 1px solid #e5e7eb;">High</td>
                 </tr>
               </tbody>
@@ -122,38 +121,38 @@
               <tbody>
                 <tr>
                   <td style="padding: 0.75rem; border: 1px solid #e5e7eb;">NFR-SE-001</td>
-                  <td style="padding: 0.75rem; border: 1px solid #e5e7eb;">Authentication Required</td>
-                  <td style="padding: 0.75rem; border: 1px solid #e5e7eb;">All API endpoints require valid JWT token</td>
+                  <td style="padding: 0.75rem; border: 1px solid #e5e7eb;">Reuse Existing Login</td>
+                  <td style="padding: 0.75rem; border: 1px solid #e5e7eb;">POST /agent/ask uses the current authentication and roles</td>
                   <td style="padding: 0.75rem; border: 1px solid #e5e7eb;">High</td>
                 </tr>
                 <tr style="background: #f9fafb;">
                   <td style="padding: 0.75rem; border: 1px solid #e5e7eb;">NFR-SE-002</td>
-                  <td style="padding: 0.75rem; border: 1px solid #e5e7eb;">OpenAI API Key Security</td>
-                  <td style="padding: 0.75rem; border: 1px solid #e5e7eb;">API key stored securely in environment variables</td>
+                  <td style="padding: 0.75rem; border: 1px solid #e5e7eb;">Secret Protection</td>
+                  <td style="padding: 0.75rem; border: 1px solid #e5e7eb;">Never expose API keys, tokens, passwords, or database credentials</td>
                   <td style="padding: 0.75rem; border: 1px solid #e5e7eb;">High</td>
                 </tr>
                 <tr>
                   <td style="padding: 0.75rem; border: 1px solid #e5e7eb;">NFR-SE-003</td>
-                  <td style="padding: 0.75rem; border: 1px solid #e5e7eb;">User Data Isolation</td>
-                  <td style="padding: 0.75rem; border: 1px solid #e5e7eb;">Conversations isolated per user ID</td>
+                  <td style="padding: 0.75rem; border: 1px solid #e5e7eb;">Permission Boundaries</td>
+                  <td style="padding: 0.75rem; border: 1px solid #e5e7eb;">Customer and admin data access follows existing authorization</td>
                   <td style="padding: 0.75rem; border: 1px solid #e5e7eb;">High</td>
                 </tr>
                 <tr style="background: #f9fafb;">
                   <td style="padding: 0.75rem; border: 1px solid #e5e7eb;">NFR-SE-004</td>
-                  <td style="padding: 0.75rem; border: 1px solid #e5e7eb;">Input Validation</td>
-                  <td style="padding: 0.75rem; border: 1px solid #e5e7eb;">All user inputs validated before processing</td>
+                  <td style="padding: 0.75rem; border: 1px solid #e5e7eb;">Untrusted Input</td>
+                  <td style="padding: 0.75rem; border: 1px solid #e5e7eb;">Treat questions as untrusted and block prompt injection</td>
                   <td style="padding: 0.75rem; border: 1px solid #e5e7eb;">High</td>
                 </tr>
                 <tr>
                   <td style="padding: 0.75rem; border: 1px solid #e5e7eb;">NFR-SE-005</td>
-                  <td style="padding: 0.75rem; border: 1px solid #e5e7eb;">Rate Limiting</td>
-                  <td style="padding: 0.75rem; border: 1px solid #e5e7eb;">Limit requests to prevent abuse</td>
-                  <td style="padding: 0.75rem; border: 1px solid #e5e7eb;">Medium</td>
+                  <td style="padding: 0.75rem; border: 1px solid #e5e7eb;">Read-Only Data Path</td>
+                  <td style="padding: 0.75rem; border: 1px solid #e5e7eb;">Agent data access is read-only and cannot modify store tables</td>
+                  <td style="padding: 0.75rem; border: 1px solid #e5e7eb;">High</td>
                 </tr>
                 <tr style="background: #f9fafb;">
                   <td style="padding: 0.75rem; border: 1px solid #e5e7eb;">NFR-SE-006</td>
-                  <td style="padding: 0.75rem; border: 1px solid #e5e7eb;">Data Encryption</td>
-                  <td style="padding: 0.75rem; border: 1px solid #e5e7eb;">All data encrypted in transit (TLS 1.3)</td>
+                  <td style="padding: 0.75rem; border: 1px solid #e5e7eb;">Safe Responses</td>
+                  <td style="padding: 0.75rem; border: 1px solid #e5e7eb;">No SQL, stack traces, system prompts, or internal config in replies</td>
                   <td style="padding: 0.75rem; border: 1px solid #e5e7eb;">High</td>
                 </tr>
               </tbody>
@@ -181,20 +180,20 @@
               <tbody>
                 <tr>
                   <td style="padding: 0.75rem; border: 1px solid #e5e7eb;">NFR-AV-001</td>
-                  <td style="padding: 0.75rem; border: 1px solid #e5e7eb;">System Uptime</td>
-                  <td style="padding: 0.75rem; border: 1px solid #e5e7eb;">≥ 99.9% monthly SLA</td>
+                  <td style="padding: 0.75rem; border: 1px solid #e5e7eb;">Existing App Stability</td>
+                  <td style="padding: 0.75rem; border: 1px solid #e5e7eb;">Adding the agent must not break the live store</td>
                   <td style="padding: 0.75rem; border: 1px solid #e5e7eb;">High</td>
                 </tr>
                 <tr style="background: #f9fafb;">
                   <td style="padding: 0.75rem; border: 1px solid #e5e7eb;">NFR-AV-002</td>
-                  <td style="padding: 0.75rem; border: 1px solid #e5e7eb;">Error Handling</td>
-                  <td style="padding: 0.75rem; border: 1px solid #e5e7eb;">Graceful error messages for users</td>
+                  <td style="padding: 0.75rem; border: 1px solid #e5e7eb;">Safe Error Messages</td>
+                  <td style="padding: 0.75rem; border: 1px solid #e5e7eb;">Users see a simple message on model, database, or timeout failure</td>
                   <td style="padding: 0.75rem; border: 1px solid #e5e7eb;">High</td>
                 </tr>
                 <tr>
                   <td style="padding: 0.75rem; border: 1px solid #e5e7eb;">NFR-AV-003</td>
-                  <td style="padding: 0.75rem; border: 1px solid #e5e7eb;">OpenAI API Fallback</td>
-                  <td style="padding: 0.75rem; border: 1px solid #e5e7eb;">Handle API failures gracefully</td>
+                  <td style="padding: 0.75rem; border: 1px solid #e5e7eb;">Model or Database Failure</td>
+                  <td style="padding: 0.75rem; border: 1px solid #e5e7eb;">LangGraph stops safely; the rest of the store keeps working</td>
                   <td style="padding: 0.75rem; border: 1px solid #e5e7eb;">Medium</td>
                 </tr>
               </tbody>
@@ -222,26 +221,26 @@
               <tbody>
                 <tr>
                   <td style="padding: 0.75rem; border: 1px solid #e5e7eb;">NFR-US-001</td>
-                  <td style="padding: 0.75rem; border: 1px solid #e5e7eb;">Mobile Responsive</td>
-                  <td style="padding: 0.75rem; border: 1px solid #e5e7eb;">Chat interface works on all screen sizes</td>
+                  <td style="padding: 0.75rem; border: 1px solid #e5e7eb;">Match Existing React UI</td>
+                  <td style="padding: 0.75rem; border: 1px solid #e5e7eb;">Simple question box, Ask button, and answer area in the current app</td>
                   <td style="padding: 0.75rem; border: 1px solid #e5e7eb;">High</td>
                 </tr>
                 <tr style="background: #f9fafb;">
                   <td style="padding: 0.75rem; border: 1px solid #e5e7eb;">NFR-US-002</td>
-                  <td style="padding: 0.75rem; border: 1px solid #e5e7eb;">Loading States</td>
-                  <td style="padding: 0.75rem; border: 1px solid #e5e7eb;">Clear loading indicators during AI processing</td>
+                  <td style="padding: 0.75rem; border: 1px solid #e5e7eb;">Loading State</td>
+                  <td style="padding: 0.75rem; border: 1px solid #e5e7eb;">Show a loading state while POST /agent/ask is running</td>
                   <td style="padding: 0.75rem; border: 1px solid #e5e7eb;">High</td>
                 </tr>
                 <tr>
                   <td style="padding: 0.75rem; border: 1px solid #e5e7eb;">NFR-US-003</td>
-                  <td style="padding: 0.75rem; border: 1px solid #e5e7eb;">Error Messages</td>
-                  <td style="padding: 0.75rem; border: 1px solid #e5e7eb;">User-friendly error messages</td>
+                  <td style="padding: 0.75rem; border: 1px solid #e5e7eb;">Clear Outcome Messages</td>
+                  <td style="padding: 0.75rem; border: 1px solid #e5e7eb;">No-data, out-of-scope, and error messages are easy to read</td>
                   <td style="padding: 0.75rem; border: 1px solid #e5e7eb;">High</td>
                 </tr>
                 <tr style="background: #f9fafb;">
                   <td style="padding: 0.75rem; border: 1px solid #e5e7eb;">NFR-US-004</td>
-                  <td style="padding: 0.75rem; border: 1px solid #e5e7eb;">Accessibility</td>
-                  <td style="padding: 0.75rem; border: 1px solid #e5e7eb;">WCAG 2.1 Level AA compliance</td>
+                  <td style="padding: 0.75rem; border: 1px solid #e5e7eb;">Mobile Layout</td>
+                  <td style="padding: 0.75rem; border: 1px solid #e5e7eb;">The Ask the Store screen remains usable on small screens</td>
                   <td style="padding: 0.75rem; border: 1px solid #e5e7eb;">Medium</td>
                 </tr>
               </tbody>
@@ -252,4 +251,3 @@
     </div>
   </div>
 </div>
-

@@ -37,12 +37,10 @@
               <div style="background: #f0fdf4; border-radius: 0.5rem; padding: 0.75rem;">
                 <p style="font-size: 0.75rem; font-weight: 500; color: #059669; margin-bottom: 0.5rem;">Acceptance Criteria:</p>
                 <ul style="font-size: 0.75rem; color: #047857; display: flex; flex-direction: column; gap: 0.25rem;">
-                  <li>• High-quality images with zoom functionality</li>
-                  <li>• Detailed specifications and descriptions</li>
-                  <li>• Stock availability and pricing information</li>
-                  <li>• Customer reviews and ratings</li>
-                  <li>• Related product recommendations</li>
-                  <li>• Shipping information and delivery times</li>
+                  <li>• Product image, name, description, and price</li>
+                  <li>• Category and current stock count</li>
+                  <li>• Add to cart from the details page</li>
+                  <li>• Clear message when the product is out of stock</li>
                 </ul>
               </div>
             </div>
@@ -53,10 +51,10 @@
               <div style="background: #faf5ff; border-radius: 0.5rem; padding: 0.75rem;">
                 <p style="font-size: 0.75rem; font-weight: 500; color: #7c3aed; margin-bottom: 0.5rem;">Acceptance Criteria:</p>
                 <ul style="font-size: 0.75rem; color: #6d28d9; display: flex; flex-direction: column; gap: 0.25rem;">
-                  <li>• Real-time search suggestions</li>
-                  <li>• Results ranked by relevance</li>
-                  <li>• Filter and sort search results</li>
-                  <li>• Handle "no results found" gracefully</li>
+                  <li>• Search products by name or keyword</li>
+                  <li>• Filter listing by category and price</li>
+                  <li>• Sort products when the listing supports it</li>
+                  <li>• Show a clear empty state when nothing matches</li>
                 </ul>
               </div>
             </div>
@@ -77,28 +75,25 @@
               <div style="background: #fff7ed; border-radius: 0.5rem; padding: 0.75rem;">
                 <p style="font-size: 0.75rem; font-weight: 500; color: #c2410c; margin-bottom: 0.5rem;">Acceptance Criteria:</p>
                 <ul style="font-size: 0.75rem; color: #b45309; display: flex; flex-direction: column; gap: 0.25rem;">
-                  <li>• Add products with quantity selection</li>
-                  <li>• View all items with images and details</li>
-                  <li>• Modify quantities and remove items</li>
-                  <li>• See total price including taxes and shipping</li>
-                  <li>• Persistent cart across browser sessions</li>
-                  <li>• Cart badge with item count in header</li>
+                  <li>• Add a product while logged in</li>
+                  <li>• View cart items, quantities, and cart total</li>
+                  <li>• Increase, decrease, or remove a line</li>
+                  <li>• Block a quantity above available stock</li>
                 </ul>
               </div>
             </div>
 
             <div style="border-left: 4px solid #ef4444; padding-left: 1rem;">
-              <h5 style="font-weight: 600; color: #1f2937; margin-bottom: 0.5rem;">Secure Checkout (US-005)</h5>
-              <p style="color: #4b5563; font-size: 0.875rem; margin-bottom: 0.75rem;">Complete purchases securely with confidence</p>
+              <h5 style="font-weight: 600; color: #1f2937; margin-bottom: 0.5rem;">Simple Checkout (US-005)</h5>
+              <p style="color: #4b5563; font-size: 0.875rem; margin-bottom: 0.75rem;">Place an order from the cart without a payment gateway</p>
               <div style="background: #fef2f2; border-radius: 0.5rem; padding: 0.75rem;">
                 <p style="font-size: 0.75rem; font-weight: 500; color: #b91c1c; margin-bottom: 0.5rem;">Acceptance Criteria:</p>
                 <ul style="font-size: 0.75rem; color: #991b1b; display: flex; flex-direction: column; gap: 0.25rem;">
-                  <li>• Enter shipping address and contact information</li>
-                  <li>• Select shipping method and delivery option</li>
-                  <li>• Review order summary with itemized costs</li>
-                  <li>• Select secure payment method</li>
-                  <li>• Complete payment process safely</li>
-                  <li>• Receive order confirmation</li>
+                  <li>• Start checkout while logged in</li>
+                  <li>• Enter delivery information</li>
+                  <li>• Review items and total</li>
+                  <li>• Place the order in the app</li>
+                  <li>• See order confirmation data</li>
                 </ul>
               </div>
             </div>
@@ -109,11 +104,10 @@
               <div style="background: #eef2ff; border-radius: 0.5rem; padding: 0.75rem;">
                 <p style="font-size: 0.75rem; font-weight: 500; color: #4338ca; margin-bottom: 0.5rem;">Acceptance Criteria:</p>
                 <ul style="font-size: 0.75rem; color: #3730a3; display: flex; flex-direction: column; gap: 0.25rem;">
-                  <li>• Order confirmation number and details</li>
-                  <li>• Shipping information and estimated delivery</li>
-                  <li>• Email confirmation with order details</li>
-                  <li>• Access to order tracking information</li>
-                  <li>• Shopping cart cleared after successful order</li>
+                  <li>• Confirmation page with order number and items</li>
+                  <li>• Cart is cleared after a successful order</li>
+                  <li>• Stock is reduced for purchased items</li>
+                  <li>• Customer can open the same order later in history</li>
                 </ul>
               </div>
             </div>
@@ -134,11 +128,10 @@
               <div style="background: #f0fdfa; border-radius: 0.5rem; padding: 0.75rem;">
                 <p style="font-size: 0.75rem; font-weight: 500; color: #0d9488; margin-bottom: 0.5rem;">Acceptance Criteria:</p>
                 <ul style="font-size: 0.75rem; color: #0f766e; display: flex; flex-direction: column; gap: 0.25rem;">
-                  <li>• Create account with email and password</li>
-                  <li>• Secure sign-in to account</li>
-                  <li>• Password reset functionality</li>
-                  <li>• Update account information</li>
-                  <li>• Secure sign-out from any device</li>
+                  <li>• Register with email and password</li>
+                  <li>• Log in as customer or admin</li>
+                  <li>• Receive a FastAPI JWT for later requests</li>
+                  <li>• Log out and clear the session</li>
                 </ul>
               </div>
             </div>
@@ -149,11 +142,9 @@
               <div style="background: #ecfeff; border-radius: 0.5rem; padding: 0.75rem;">
                 <p style="font-size: 0.75rem; font-weight: 500; color: #0891b2; margin-bottom: 0.5rem;">Acceptance Criteria:</p>
                 <ul style="font-size: 0.75rem; color: #0e7490; display: flex; flex-direction: column; gap: 0.25rem;">
-                  <li>• View complete order history</li>
-                  <li>• See status of each order</li>
-                  <li>• Track shipping and delivery information</li>
-                  <li>• Reorder previous purchases</li>
-                  <li>• Download order receipts and invoices</li>
+                  <li>• View the customer's own order history</li>
+                  <li>• See each order's current status</li>
+                  <li>• Open an order to see its items and total</li>
                 </ul>
               </div>
             </div>
@@ -164,36 +155,33 @@
               <div style="background: #f0fdf4; border-radius: 0.5rem; padding: 0.75rem;">
                 <p style="font-size: 0.75rem; font-weight: 500; color: #059669; margin-bottom: 0.5rem;">Acceptance Criteria:</p>
                 <ul style="font-size: 0.75rem; color: #047857; display: flex; flex-direction: column; gap: 0.25rem;">
-                  <li>• Update personal information</li>
-                  <li>• Manage multiple shipping addresses</li>
-                  <li>• Set account preferences and notifications</li>
-                  <li>• View and update payment methods</li>
-                  <li>• Manage communication preferences</li>
+                  <li>• View the logged-in profile</li>
+                  <li>• Update basic account details</li>
+                  <li>• Keep profile data in PostgreSQL</li>
                 </ul>
               </div>
             </div>
           </div>
         </div>
 
-        <!-- Epic 4: Business Analytics & Management -->
+        <!-- Epic 4: Admin Catalog & Orders -->
         <div class="card">
           <h4 style="font-size: 1.25rem; font-weight: 600; color: #1f2937; margin-bottom: 1.5rem; display: flex; align-items: center; gap: 0.5rem;">
             <span style="font-size: 1.5rem;">📊</span>
-            Business Analytics & Management
+            Admin Catalog & Orders
           </h4>
           
           <div style="display: flex; flex-direction: column; gap: 1.5rem;">
             <div style="border-left: 4px solid #f59e0b; padding-left: 1rem;">
-              <h5 style="font-weight: 600; color: #1f2937; margin-bottom: 0.5rem;">Sales Analytics (US-010)</h5>
-              <p style="color: #4b5563; font-size: 0.875rem; margin-bottom: 0.75rem;">View sales analytics and performance metrics for informed business decisions</p>
+              <h5 style="font-weight: 600; color: #1f2937; margin-bottom: 0.5rem;">Product Management (US-010)</h5>
+              <p style="color: #4b5563; font-size: 0.875rem; margin-bottom: 0.75rem;">Admins add, edit, and delete products in the catalog</p>
               <div style="background: #fffbeb; border-radius: 0.5rem; padding: 0.75rem;">
                 <p style="font-size: 0.75rem; font-weight: 500; color: #d97706; margin-bottom: 0.5rem;">Acceptance Criteria:</p>
                 <ul style="font-size: 0.75rem; color: #b45309; display: flex; flex-direction: column; gap: 0.25rem;">
-                  <li>• View key performance indicators and metrics</li>
-                  <li>• See sales trends and analytics charts</li>
-                  <li>• Analyze customer behavior and preferences</li>
-                  <li>• View order distribution and patterns</li>
-                  <li>• Export data for further analysis</li>
+                  <li>• Admin can add a product with name, price, stock, and category</li>
+                  <li>• Admin can edit an existing product</li>
+                  <li>• Admin can delete a product</li>
+                  <li>• Customer listing shows the updated catalog</li>
                 </ul>
               </div>
             </div>
@@ -204,26 +192,24 @@
               <div style="background: #fff1f2; border-radius: 0.5rem; padding: 0.75rem;">
                 <p style="font-size: 0.75rem; font-weight: 500; color: #e11d48; margin-bottom: 0.5rem;">Acceptance Criteria:</p>
                 <ul style="font-size: 0.75rem; color: #be185d; display: flex; flex-direction: column; gap: 0.25rem;">
-                  <li>• View all orders in comprehensive table</li>
-                  <li>• Filter orders by status, date, and customer</li>
-                  <li>• Update order status and add notes</li>
-                  <li>• View detailed order information</li>
-                  <li>• Process refunds and cancellations</li>
+                  <li>• View customer orders in the admin area</li>
+                  <li>• Open an order to see items and customer</li>
+                  <li>• Update order status</li>
+                  <li>• Customer history shows the new status</li>
                 </ul>
               </div>
             </div>
 
             <div style="border-left: 4px solid #64748b; padding-left: 1rem;">
-              <h5 style="font-weight: 600; color: #1f2937; margin-bottom: 0.5rem;">System Monitoring (US-012)</h5>
-              <p style="color: #4b5563; font-size: 0.875rem; margin-bottom: 0.75rem;">Monitor system performance and health for reliable customer service</p>
+              <h5 style="font-weight: 600; color: #1f2937; margin-bottom: 0.5rem;">Category Management (US-012)</h5>
+              <p style="color: #4b5563; font-size: 0.875rem; margin-bottom: 0.75rem;">Admins add, edit, and delete product categories</p>
               <div style="background: #f8fafc; border-radius: 0.5rem; padding: 0.75rem;">
                 <p style="font-size: 0.75rem; font-weight: 500; color: #475569; margin-bottom: 0.5rem;">Acceptance Criteria:</p>
                 <ul style="font-size: 0.75rem; color: #334155; display: flex; flex-direction: column; gap: 0.25rem;">
-                  <li>• View system uptime and performance metrics</li>
-                  <li>• Monitor user activity and system load</li>
-                  <li>• Receive alerts for system issues</li>
-                  <li>• Access error logs and diagnostics</li>
-                  <li>• View security and compliance status</li>
+                  <li>• Admin can add a category</li>
+                  <li>• Admin can edit a category name</li>
+                  <li>• Admin can delete a category that is not required</li>
+                  <li>• Products can be assigned to a category</li>
                 </ul>
               </div>
             </div>
@@ -240,37 +226,37 @@
             <div style="display: flex; flex-direction: column; gap: 0.75rem;">
               <h5 style="font-weight: 500; color: #374151;">Authentication & Security</h5>
               <ul style="font-size: 0.875rem; color: #4b5563; display: flex; flex-direction: column; gap: 0.25rem;">
-                <li>• Users must be authenticated to make purchases</li>
-                <li>• JWT tokens expire after 30 minutes of inactivity</li>
-                <li>• Passwords must meet minimum security requirements</li>
-                <li>• Admin users have role-based access control</li>
+                <li>• Cart, checkout, and profile require a logged-in customer</li>
+                <li>• FastAPI issues a JWT after login</li>
+                <li>• Passwords are stored hashed in PostgreSQL</li>
+                <li>• Admin routes require an admin user</li>
               </ul>
             </div>
             <div style="display: flex; flex-direction: column; gap: 0.75rem;">
               <h5 style="font-weight: 500; color: #374151;">Order Processing</h5>
               <ul style="font-size: 0.875rem; color: #4b5563; display: flex; flex-direction: column; gap: 0.25rem;">
-                <li>• Inventory must be checked before order confirmation</li>
-                <li>• Payment must be processed before order fulfillment</li>
-                <li>• Minimum order value of $25 for free shipping</li>
-                <li>• Orders can be cancelled within 24 hours</li>
+                <li>• Stock is checked before an order is placed</li>
+                <li>• Quantity cannot exceed available stock</li>
+                <li>• Placing an order writes order and order_items rows</li>
+                <li>• The cart is updated after a successful order</li>
               </ul>
             </div>
             <div style="display: flex; flex-direction: column; gap: 0.75rem;">
               <h5 style="font-weight: 500; color: #374151;">Product Management</h5>
               <ul style="font-size: 0.875rem; color: #4b5563; display: flex; flex-direction: column; gap: 0.25rem;">
-                <li>• Products must have valid images and descriptions</li>
-                <li>• Inventory levels must be tracked in real-time</li>
-                <li>• Product categories must be properly assigned</li>
-                <li>• Price changes require admin approval</li>
+                <li>• Products belong to a category</li>
+                <li>• Stock is stored on the product row</li>
+                <li>• Only admins can create, edit, or delete products</li>
+                <li>• Sample catalog data is enough to test the store</li>
               </ul>
             </div>
             <div style="display: flex; flex-direction: column; gap: 0.75rem;">
               <h5 style="font-weight: 500; color: #374151;">Customer Experience</h5>
               <ul style="font-size: 0.875rem; color: #4b5563; display: flex; flex-direction: column; gap: 0.25rem;">
-                <li>• Shopping cart persists for 30 days</li>
-                <li>• Customer support response within 24 hours</li>
-                <li>• Return policy: 30-day return window</li>
-                <li>• Guest checkout available for quick purchases</li>
+                <li>• Cart is stored in PostgreSQL for the logged-in user</li>
+                <li>• Checkout collects delivery information only</li>
+                <li>• No guest checkout and no payment gateway</li>
+                <li>• Empty cart and failed login show a clear message</li>
               </ul>
             </div>
           </div>

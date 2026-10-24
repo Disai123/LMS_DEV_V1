@@ -3,8 +3,7 @@
     <div style="text-align: center; margin-bottom: 2rem;">
       <h3 style="font-size: 1.875rem; font-weight: 700; color: #1f2937; margin-bottom: 1rem;">Frontend Development</h3>
       <p style="font-size: 1.125rem; color: #4b5563; max-width: 48rem; margin: 0 auto;">
-        Comprehensive frontend implementation using React.js, Next.js, and modern web technologies 
-        to create an intuitive and responsive e-commerce user interface.
+        React pages call FastAPI. Customers browse, search, manage the cart, check out, and view orders. Admins manage products, categories, and order status.
       </p>
     </div>
 
@@ -110,30 +109,30 @@
         <div style="background: linear-gradient(to right, #eef2ff, #eff6ff); border-radius: 0.5rem; padding: 1rem; border: 1px solid #c7d2fe;">
           <div style="display: flex; align-items: center; gap: 0.75rem; margin-bottom: 0.75rem;">
             <span style="font-size: 1.25rem;">📄</span>
-            <h5 style="font-weight: 600; color: #1f2937;">Pages Directory (<code style="background: #ffffff; padding: 0.25rem 0.5rem; border-radius: 0.25rem; font-size: 0.875rem;">app/</code>)</h5>
+            <h5 style="font-weight: 600; color: #1f2937;">Pages Directory (<code style="background: #ffffff; padding: 0.25rem 0.5rem; border-radius: 0.25rem; font-size: 0.875rem;">src/pages/</code>)</h5>
           </div>
-          <p style="font-size: 0.875rem; color: #4b5563; margin-bottom: 0.75rem;">Contains all application pages and routing components using Next.js App Router</p>
+          <p style="font-size: 0.875rem; color: #4b5563; margin-bottom: 0.75rem;">Contains all application pages and routing components using React Router</p>
           <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 0.75rem; width: 100%;">
             <div style="background: #ffffff; border-radius: 0.5rem; padding: 0.75rem;">
               <h6 style="font-weight: 500; color: #1f2937; margin-bottom: 0.5rem;">Customer Pages</h6>
               <ul style="font-size: 0.75rem; color: #4b5563; display: flex; flex-direction: column; gap: 0.25rem; list-style: none; padding: 0;">
-                <li>• <code style="background: #f3f4f6; padding: 0.125rem 0.25rem; border-radius: 0.25rem;">page.tsx</code> - Homepage with hero section</li>
-                <li>• <code style="background: #f3f4f6; padding: 0.125rem 0.25rem; border-radius: 0.25rem;">products/page.tsx</code> - Product catalog listing</li>
-                <li>• <code style="background: #f3f4f6; padding: 0.125rem 0.25rem; border-radius: 0.25rem;">products/[id]/page.tsx</code> - Individual product details</li>
-                <li>• <code style="background: #f3f4f6; padding: 0.125rem 0.25rem; border-radius: 0.25rem;">cart/page.tsx</code> - Shopping cart</li>
-                <li>• <code style="background: #f3f4f6; padding: 0.125rem 0.25rem; border-radius: 0.25rem;">checkout/page.tsx</code> - Checkout process</li>
-                <li>• <code style="background: #f3f4f6; padding: 0.125rem 0.25rem; border-radius: 0.25rem;">login/page.tsx</code> - User authentication</li>
-                <li>• <code style="background: #f3f4f6; padding: 0.125rem 0.25rem; border-radius: 0.25rem;">register/page.tsx</code> - User registration</li>
+                <li>• <code style="background: #f3f4f6; padding: 0.125rem 0.25rem; border-radius: 0.25rem;">Home.jsx</code> - Homepage with product highlights</li>
+                <li>• <code style="background: #f3f4f6; padding: 0.125rem 0.25rem; border-radius: 0.25rem;">Products.jsx</code> - Product catalog and search</li>
+                <li>• <code style="background: #f3f4f6; padding: 0.125rem 0.25rem; border-radius: 0.25rem;">ProductDetails.jsx</code> - Product details</li>
+                <li>• <code style="background: #f3f4f6; padding: 0.125rem 0.25rem; border-radius: 0.25rem;">Cart.jsx</code> - Cart quantity and remove</li>
+                <li>• <code style="background: #f3f4f6; padding: 0.125rem 0.25rem; border-radius: 0.25rem;">Checkout.jsx</code> - Delivery details and place order</li>
+                <li>• <code style="background: #f3f4f6; padding: 0.125rem 0.25rem; border-radius: 0.25rem;">Login.jsx</code> - Customer and admin login</li>
+                <li>• <code style="background: #f3f4f6; padding: 0.125rem 0.25rem; border-radius: 0.25rem;">Register.jsx</code> - Customer registration</li>
               </ul>
             </div>
             <div style="background: #ffffff; border-radius: 0.5rem; padding: 0.75rem;">
               <h6 style="font-weight: 500; color: #1f2937; margin-bottom: 0.5rem;">Admin Pages</h6>
               <ul style="font-size: 0.75rem; color: #4b5563; display: flex; flex-direction: column; gap: 0.25rem; list-style: none; padding: 0;">
-                <li>• <code style="background: #f3f4f6; padding: 0.125rem 0.25rem; border-radius: 0.25rem;">admin/page.tsx</code> - Admin dashboard</li>
-                <li>• <code style="background: #f3f4f6; padding: 0.125rem 0.25rem; border-radius: 0.25rem;">admin/products/page.tsx</code> - Product management</li>
-                <li>• <code style="background: #f3f4f6; padding: 0.125rem 0.25rem; border-radius: 0.25rem;">admin/orders/page.tsx</code> - Order management</li>
-                <li>• <code style="background: #f3f4f6; padding: 0.125rem 0.25rem; border-radius: 0.25rem;">about/page.tsx</code> - About page</li>
-                <li>• <code style="background: #f3f4f6; padding: 0.125rem 0.25rem; border-radius: 0.25rem;">contact/page.tsx</code> - Contact page</li>
+                <li>• <code style="background: #f3f4f6; padding: 0.125rem 0.25rem; border-radius: 0.25rem;">Profile.jsx</code> - Customer profile</li>
+                <li>• <code style="background: #f3f4f6; padding: 0.125rem 0.25rem; border-radius: 0.25rem;">Orders.jsx</code> - Order history</li>
+                <li>• <code style="background: #f3f4f6; padding: 0.125rem 0.25rem; border-radius: 0.25rem;">AdminProducts.jsx</code> - Product CRUD</li>
+                <li>• <code style="background: #f3f4f6; padding: 0.125rem 0.25rem; border-radius: 0.25rem;">AdminCategories.jsx</code> - Category CRUD</li>
+                <li>• <code style="background: #f3f4f6; padding: 0.125rem 0.25rem; border-radius: 0.25rem;">AdminOrders.jsx</code> - View and update orders</li>
               </ul>
             </div>
           </div>
@@ -149,19 +148,19 @@
             <div style="background: #ffffff; border-radius: 0.5rem; padding: 0.75rem;">
               <h6 style="font-weight: 500; color: #1f2937; margin-bottom: 0.5rem;">Layout Components</h6>
               <ul style="font-size: 0.75rem; color: #4b5563; display: flex; flex-direction: column; gap: 0.25rem; list-style: none; padding: 0;">
-                <li>• <code style="background: #f3f4f6; padding: 0.125rem 0.25rem; border-radius: 0.25rem;">layout/header.tsx</code> - Navigation header</li>
-                <li>• <code style="background: #f3f4f6; padding: 0.125rem 0.25rem; border-radius: 0.25rem;">layout/footer.tsx</code> - Site footer</li>
-                <li>• <code style="background: #f3f4f6; padding: 0.125rem 0.25rem; border-radius: 0.25rem;">providers/session-provider.tsx</code> - Auth provider</li>
+                <li>• <code style="background: #f3f4f6; padding: 0.125rem 0.25rem; border-radius: 0.25rem;">layout/Header.jsx</code> - Navigation header</li>
+                <li>• <code style="background: #f3f4f6; padding: 0.125rem 0.25rem; border-radius: 0.25rem;">layout/Footer.jsx</code> - Site footer</li>
+                <li>• <code style="background: #f3f4f6; padding: 0.125rem 0.25rem; border-radius: 0.25rem;">context/AuthContext.jsx</code> - JWT session</li>
               </ul>
             </div>
             <div style="background: #ffffff; border-radius: 0.5rem; padding: 0.75rem;">
               <h6 style="font-weight: 500; color: #1f2937; margin-bottom: 0.5rem;">UI Components</h6>
               <ul style="font-size: 0.75rem; color: #4b5563; display: flex; flex-direction: column; gap: 0.25rem; list-style: none; padding: 0;">
-                <li>• <code style="background: #f3f4f6; padding: 0.125rem 0.25rem; border-radius: 0.25rem;">ui/button.tsx</code> - Reusable buttons</li>
-                <li>• <code style="background: #f3f4f6; padding: 0.125rem 0.25rem; border-radius: 0.25rem;">ui/card.tsx</code> - Product cards</li>
-                <li>• <code style="background: #f3f4f6; padding: 0.125rem 0.25rem; border-radius: 0.25rem;">ui/input.tsx</code> - Form inputs</li>
-                <li>• <code style="background: #f3f4f6; padding: 0.125rem 0.25rem; border-radius: 0.25rem;">ui/badge.tsx</code> - Status badges</li>
-                <li>• <code style="background: #f3f4f6; padding: 0.125rem 0.25rem; border-radius: 0.25rem;">ui/label.tsx</code> - Form labels</li>
+                <li>• <code style="background: #f3f4f6; padding: 0.125rem 0.25rem; border-radius: 0.25rem;">ui/Button.jsx</code> - Reusable buttons</li>
+                <li>• <code style="background: #f3f4f6; padding: 0.125rem 0.25rem; border-radius: 0.25rem;">ui/ProductCard.jsx</code> - Product cards</li>
+                <li>• <code style="background: #f3f4f6; padding: 0.125rem 0.25rem; border-radius: 0.25rem;">ui/Input.jsx</code> - Form inputs</li>
+                <li>• <code style="background: #f3f4f6; padding: 0.125rem 0.25rem; border-radius: 0.25rem;">ui/Badge.jsx</code> - Order status badges</li>
+                <li>• <code style="background: #f3f4f6; padding: 0.125rem 0.25rem; border-radius: 0.25rem;">ui/Label.jsx</code> - Form labels</li>
               </ul>
             </div>
             <div style="background: #ffffff; border-radius: 0.5rem; padding: 0.75rem;">
@@ -170,7 +169,7 @@
                 <li>• Product listing components</li>
                 <li>• Shopping cart functionality</li>
                 <li>• Checkout process components</li>
-                <li>• Payment integration</li>
+                <li>• Place-order form (no payment gateway)</li>
                 <li>• Order management</li>
               </ul>
             </div>
@@ -180,25 +179,25 @@
         <div style="background: linear-gradient(to right, #fff7ed, #ffedd5); border-radius: 0.5rem; padding: 1rem; border: 1px solid #fed7aa;">
           <div style="display: flex; align-items: center; gap: 0.75rem; margin-bottom: 0.75rem;">
             <span style="font-size: 1.25rem;">🔌</span>
-            <h5 style="font-weight: 600; color: #1f2937;">API Routes Directory (<code style="background: #ffffff; padding: 0.25rem 0.5rem; border-radius: 0.25rem; font-size: 0.875rem;">app/api/</code>)</h5>
+            <h5 style="font-weight: 600; color: #1f2937;">API Client (<code style="background: #ffffff; padding: 0.25rem 0.5rem; border-radius: 0.25rem; font-size: 0.875rem;">src/api/</code>)</h5>
           </div>
-          <p style="font-size: 0.875rem; color: #4b5563; margin-bottom: 0.75rem;">Next.js API routes for backend functionality</p>
+          <p style="font-size: 0.875rem; color: #4b5563; margin-bottom: 0.75rem;">React calls FastAPI routers. Routes live on the Python backend, not in the frontend.</p>
           <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 0.75rem; width: 100%;">
             <div style="background: #ffffff; border-radius: 0.5rem; padding: 0.75rem;">
               <h6 style="font-weight: 500; color: #1f2937; margin-bottom: 0.5rem;">E-commerce APIs</h6>
               <ul style="font-size: 0.75rem; color: #4b5563; display: flex; flex-direction: column; gap: 0.25rem; list-style: none; padding: 0;">
-                <li>• <code style="background: #f3f4f6; padding: 0.125rem 0.25rem; border-radius: 0.25rem;">products/route.ts</code> - Product management</li>
-                <li>• <code style="background: #f3f4f6; padding: 0.125rem 0.25rem; border-radius: 0.25rem;">cart/route.ts</code> - Shopping cart API</li>
-                <li>• <code style="background: #f3f4f6; padding: 0.125rem 0.25rem; border-radius: 0.25rem;">orders/route.ts</code> - Order processing</li>
-                <li>• <code style="background: #f3f4f6; padding: 0.125rem 0.25rem; border-radius: 0.25rem;">auth/[...nextauth]/route.ts</code> - Authentication</li>
+                <li>• <code style="background: #f3f4f6; padding: 0.125rem 0.25rem; border-radius: 0.25rem;">products.js</code> - GET /api/products</li>
+                <li>• <code style="background: #f3f4f6; padding: 0.125rem 0.25rem; border-radius: 0.25rem;">cart.js</code> - Cart add, update, remove</li>
+                <li>• <code style="background: #f3f4f6; padding: 0.125rem 0.25rem; border-radius: 0.25rem;">orders.js</code> - Checkout and order history</li>
+                <li>• <code style="background: #f3f4f6; padding: 0.125rem 0.25rem; border-radius: 0.25rem;">auth.js</code> - Register, login, profile</li>
               </ul>
             </div>
             <div style="background: #ffffff; border-radius: 0.5rem; padding: 0.75rem;">
               <h6 style="font-weight: 500; color: #1f2937; margin-bottom: 0.5rem;">Admin APIs</h6>
               <ul style="font-size: 0.75rem; color: #4b5563; display: flex; flex-direction: column; gap: 0.25rem; list-style: none; padding: 0;">
-                <li>• <code style="background: #f3f4f6; padding: 0.125rem 0.25rem; border-radius: 0.25rem;">admin/products/route.ts</code> - Admin product management</li>
-                <li>• <code style="background: #f3f4f6; padding: 0.125rem 0.25rem; border-radius: 0.25rem;">admin/orders/route.ts</code> - Admin order management</li>
-                <li>• <code style="background: #f3f4f6; padding: 0.125rem 0.25rem; border-radius: 0.25rem;">admin/dashboard/route.ts</code> - Admin analytics</li>
+                <li>• <code style="background: #f3f4f6; padding: 0.125rem 0.25rem; border-radius: 0.25rem;">adminProducts.js</code> - Admin product CRUD</li>
+                <li>• <code style="background: #f3f4f6; padding: 0.125rem 0.25rem; border-radius: 0.25rem;">adminCategories.js</code> - Admin category CRUD</li>
+                <li>• <code style="background: #f3f4f6; padding: 0.125rem 0.25rem; border-radius: 0.25rem;">adminOrders.js</code> - View orders and update status</li>
               </ul>
             </div>
           </div>
@@ -213,9 +212,9 @@
           <div style="background: #eff6ff; border-radius: 0.5rem; padding: 1rem;">
             <div style="display: flex; align-items: center; gap: 0.75rem; margin-bottom: 0.5rem;">
               <span style="font-size: 1.5rem;">⚛️</span>
-              <h5 style="font-weight: 500; color: #1f2937;">Next.js 14+</h5>
+              <h5 style="font-weight: 500; color: #1f2937;">ReactJS</h5>
             </div>
-            <p style="font-size: 0.875rem; color: #4b5563;">Full-stack React framework with App Router, Server Components, and API routes</p>
+            <p style="font-size: 0.875rem; color: #4b5563;">React SPA with React Router. Pages call FastAPI over HTTPS.</p>
           </div>
           <div style="background: #f0fdf4; border-radius: 0.5rem; padding: 1rem;">
             <div style="display: flex; align-items: center; gap: 0.75rem; margin-bottom: 0.5rem;">
@@ -227,16 +226,16 @@
           <div style="background: #faf5ff; border-radius: 0.5rem; padding: 1rem;">
             <div style="display: flex; align-items: center; gap: 0.75rem; margin-bottom: 0.5rem;">
               <span style="font-size: 1.5rem;">🔄</span>
-              <h5 style="font-weight: 500; color: #1f2937;">App Router</h5>
+              <h5 style="font-weight: 500; color: #1f2937;">React Router</h5>
             </div>
-            <p style="font-size: 0.875rem; color: #4b5563;">File-based routing with Server and Client Components</p>
+            <p style="font-size: 0.875rem; color: #4b5563;">Client routes for shop, cart, checkout, orders, and admin pages</p>
           </div>
           <div style="background: #fff7ed; border-radius: 0.5rem; padding: 1rem;">
             <div style="display: flex; align-items: center; gap: 0.75rem; margin-bottom: 0.5rem;">
               <span style="font-size: 1.5rem;">📊</span>
-              <h5 style="font-weight: 500; color: #1f2937;">Prisma ORM</h5>
+              <h5 style="font-weight: 500; color: #1f2937;">SQLAlchemy</h5>
             </div>
-            <p style="font-size: 0.875rem; color: #4b5563;">Type-safe database access and query builder</p>
+            <p style="font-size: 0.875rem; color: #4b5563;">Used only on the FastAPI backend. The React app calls HTTP APIs.</p>
           </div>
         </div>
       </div>
@@ -266,7 +265,7 @@
             <h5 style="font-weight: 500; color: #1f2937; margin-bottom: 0.5rem;">E-commerce Features</h5>
             <ul style="font-size: 0.875rem; color: #4b5563; display: flex; flex-direction: column; gap: 0.25rem; list-style: none; padding: 0;">
               <li>• Shopping cart functionality</li>
-              <li>• Payment processing with Stripe</li>
+              <li>• Simple checkout and place-order flow</li>
               <li>• Order management system</li>
               <li>• Product search and filtering</li>
             </ul>
@@ -279,22 +278,18 @@
       <h4 style="font-size: 1.25rem; font-weight: 600; color: #1f2937; margin-bottom: 1.5rem;">Development Workflow & Best Practices</h4>
       <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 1rem; width: 100%;">
         <div style="text-align: center; padding: 1rem; background: #ffffff; border-radius: 0.5rem;">
-          <div style="font-size: 1.5rem; margin-bottom: 0.5rem;">•</div>
           <div style="font-size: 0.875rem; font-weight: 500; color: #1f2937;">Component Design</div>
           <div style="font-size: 0.75rem; color: #4b5563;">Reusable, composable components</div>
         </div>
         <div style="text-align: center; padding: 1rem; background: #ffffff; border-radius: 0.5rem;">
-          <div style="font-size: 1.5rem; margin-bottom: 0.5rem;">•</div>
           <div style="font-size: 0.875rem; font-weight: 500; color: #1f2937;">State Management</div>
           <div style="font-size: 0.75rem; color: #4b5563;">Context API and local state</div>
         </div>
         <div style="text-align: center; padding: 1rem; background: #ffffff; border-radius: 0.5rem;">
-          <div style="font-size: 1.5rem; margin-bottom: 0.5rem;">•</div>
           <div style="font-size: 0.875rem; font-weight: 500; color: #1f2937;">API Integration</div>
-          <div style="font-size: 0.75rem; color: #4b5563;">Next.js API routes and Prisma</div>
+          <div style="font-size: 0.75rem; color: #4b5563;">FastAPI routes and SQLAlchemy</div>
         </div>
         <div style="text-align: center; padding: 1rem; background: #ffffff; border-radius: 0.5rem;">
-          <div style="font-size: 1.5rem; margin-bottom: 0.5rem;">•</div>
           <div style="font-size: 0.875rem; font-weight: 500; color: #1f2937;">Testing</div>
           <div style="font-size: 0.75rem; color: #4b5563;">Unit and integration tests</div>
         </div>

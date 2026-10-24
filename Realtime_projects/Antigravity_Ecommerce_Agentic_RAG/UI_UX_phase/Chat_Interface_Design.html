@@ -3,8 +3,8 @@
     <h3 class="content-heading">Chat Interface Design</h3>
     <div style="max-width: none;">
       <p style="color: #4b5563; line-height: 1.75; margin-bottom: 1.5rem;">
-        The chat interface is the primary touchpoint between users and the AI agent. This section details the design 
-        specifications for all chat UI components, ensuring a cohesive and intuitive user experience.
+        The React assistant is the only new UI. Users ask questions about approved manuals.
+        The layout stays simple: question box, answer, citations, and clear empty or error states.
       </p>
       
       <div style="display: flex; flex-direction: column; gap: 2rem;">
@@ -66,7 +66,7 @@
               <h5 style="font-weight: 600; color: #1f2937; margin-bottom: 0.75rem;">Header</h5>
               <ul style="font-size: 0.875rem; color: #4b5563; list-style: disc; list-style-position: inside; display: flex; flex-direction: column; gap: 0.25rem;">
                 <li><strong>Background:</strong> Blue (#3b82f6)</li>
-                <li><strong>Text:</strong> White, "askunicart" title</li>
+                <li><strong>Text:</strong> White, "Product manuals assistant" title</li>
                 <li><strong>Actions:</strong> Clear chat, Close button</li>
                 <li><strong>Height:</strong> 48px</li>
                 <li><strong>Padding:</strong> 12px 16px</li>
@@ -89,7 +89,7 @@
               <ul style="font-size: 0.875rem; color: #4b5563; list-style: disc; list-style-position: inside; display: flex; flex-direction: column; gap: 0.25rem;">
                 <li><strong>Text Input:</strong> Full width, rounded</li>
                 <li><strong>Send Button:</strong> Icon button, right side</li>
-                <li><strong>Placeholder:</strong> "Type your message..."</li>
+                <li><strong>Placeholder:</strong> "Ask about a product manual..."</li>
                 <li><strong>Disabled:</strong> When loading or empty</li>
                 <li><strong>Padding:</strong> 12px 16px</li>
               </ul>
@@ -129,6 +129,7 @@
                 <li><strong>Padding:</strong> 12px 16px</li>
                 <li><strong>Font Size:</strong> 14px</li>
                 <li><strong>Line Height:</strong> 1.5 (readable)</li>
+                <li><strong>Citations:</strong> Document name and section under the answer</li>
               </ul>
             </div>
           </div>
@@ -167,8 +168,8 @@
               <h5 style="font-weight: 600; color: #1f2937; margin-bottom: 0.75rem;">Empty State</h5>
               <ul style="font-size: 0.875rem; color: #4b5563; list-style: disc; list-style-position: inside; display: flex; flex-direction: column; gap: 0.25rem;">
                 <li><strong>Icon:</strong> Large MessageCircle icon</li>
-                <li><strong>Text:</strong> Welcome message</li>
-                <li><strong>Subtext:</strong> Example queries</li>
+                <li><strong>Text:</strong> Ask about manuals, FAQs, or warranty</li>
+                <li><strong>Subtext:</strong> Example: "How do I pair these headphones?"</li>
                 <li><strong>Centered:</strong> Vertically and horizontally</li>
               </ul>
             </div>

@@ -1,5 +1,5 @@
 <div class="content-body">
-<p style="padding:1rem;background:#ecfdf5;border-left:4px solid #10b981;border-radius:8px;margin-bottom:1rem;"><strong>Live demo:</strong> Live app: <a href="https://agentic-rag-fastapi-frontend.onrender.com" target="_blank" rel="noopener">https://agentic-rag-fastapi-frontend.onrender.com</a></p>
+<p style="padding:1rem;background:#ecfdf5;border-left:4px solid #10b981;border-radius:8px;margin-bottom:1rem;"><strong>Live demo:</strong> <a href="https://agentic-rag-fastapi-frontend.onrender.com" target="_blank" rel="noopener">https://agentic-rag-fastapi-frontend.onrender.com</a></p>
   <div class="content-section">
     <h3 class="content-heading">Project Overview</h3>
 
@@ -20,55 +20,49 @@
 
     <div>
       <p style="color: #4b5563; line-height: 1.75; margin-bottom: 1.5rem;">
-        This phase focuses on creating a comprehensive Business Requirements Document (BRD) for the <strong>askunicart
-          AI Agent</strong>.
-        The BRD serves as the foundation for all subsequent development phases and ensures that all stakeholders
-        have a clear understanding of the project's objectives, scope, and requirements for implementing an AI-powered
-        shopping assistant.
+        This phase writes the Business Requirements Document for the <strong>Agentic RAG E-Commerce Assistant</strong>.
+        The feature is added to an existing store. It answers product questions from approved manuals, usage guides, FAQs, and warranty documents.
+        It does not rebuild the store and it does not query orders or cart data as its main job.
       </p>
 
       <div style="background: #eff6ff; border-radius: 0.5rem; padding: 1.5rem; margin-bottom: 1.5rem;">
         <h4 style="font-size: 1.125rem; font-weight: 600; color: #1f2937; margin-bottom: 0.75rem;">Phase Objectives</h4>
         <ul
           style="list-style: disc; list-style-position: inside; display: flex; flex-direction: column; gap: 0.5rem; color: #4b5563;">
-          <li>Define clear scope for AI agent implementation</li>
-          <li>Identify key stakeholders and their requirements</li>
-          <li>Document functional requirements for AI chat interface</li>
-          <li>Specify non-functional requirements (performance, security)</li>
-          <li>Create user stories for AI agent interactions</li>
-          <li>Establish success criteria and metrics</li>
+          <li>Define in-scope questions about manuals, FAQs, warranty, and usage</li>
+          <li>List approved document types and where they are stored</li>
+          <li>Document the ingest, chunk, embed, retrieve, and cite flow</li>
+          <li>State that answers must be grounded and include source references</li>
+          <li>Mark out-of-scope work: rebuilding the store or inventing specs</li>
+          <li>Set success criteria for retrieval quality and hallucination refusal</li>
         </ul>
       </div>
 
       <div style="background: #f0fdf4; border-radius: 0.5rem; padding: 1.5rem; margin-bottom: 1.5rem;">
-        <h4 style="font-size: 1.125rem; font-weight: 600; color: #1f2937; margin-bottom: 0.75rem;">What is askunicart?
+        <h4 style="font-size: 1.125rem; font-weight: 600; color: #1f2937; margin-bottom: 0.75rem;">What is the Agentic RAG assistant?
         </h4>
         <p style="color: #4b5563; line-height: 1.75; margin-bottom: 1rem;">
-          askunicart is an AI-powered shopping assistant integrated into the e-commerce platform. It helps customers
-          browse products, check stock availability, get recommendations, and manage their shopping cart through
-          natural language conversations powered by OpenAI GPT models.
+          It is a product-knowledge assistant inside the existing e-commerce app. Users ask natural-language questions.
+          FastAPI <code>POST /rag/ask</code> runs an agentic RAG flow over a FAISS index of embeddings.
+          Answers come only from retrieved approved documents and include citations.
         </p>
         <div
           style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1rem; margin-top: 1rem;">
           <div style="background: white; padding: 1rem; border-radius: 0.5rem; border: 1px solid #e5e7eb;">
-            <div style="font-size: 1.5rem; margin-bottom: 0.5rem;">•</div>
-            <div style="font-weight: 600; color: #1f2937; margin-bottom: 0.25rem;">Natural Language</div>
-            <div style="font-size: 0.875rem; color: #6b7280;">Chat-based interface</div>
+            <div style="font-weight: 600; color: #1f2937; margin-bottom: 0.25rem;">Document Ingestion</div>
+            <div style="font-size: 0.875rem; color: #6b7280;">Manuals, FAQs, warranty docs</div>
           </div>
           <div style="background: white; padding: 1rem; border-radius: 0.5rem; border: 1px solid #e5e7eb;">
-            <div style="font-size: 1.5rem; margin-bottom: 0.5rem;">•</div>
-            <div style="font-weight: 600; color: #1f2937; margin-bottom: 0.25rem;">Product Search</div>
-            <div style="font-size: 0.875rem; color: #6b7280;">Intelligent discovery</div>
+            <div style="font-weight: 600; color: #1f2937; margin-bottom: 0.25rem;">Chunking</div>
+            <div style="font-size: 0.875rem; color: #6b7280;">Size plus overlap</div>
           </div>
           <div style="background: white; padding: 1rem; border-radius: 0.5rem; border: 1px solid #e5e7eb;">
-            <div style="font-size: 1.5rem; margin-bottom: 0.5rem;">•</div>
-            <div style="font-weight: 600; color: #1f2937; margin-bottom: 0.25rem;">Cart Management</div>
-            <div style="font-size: 0.875rem; color: #6b7280;">Via conversation</div>
+            <div style="font-weight: 600; color: #1f2937; margin-bottom: 0.25rem;">Embeddings + FAISS</div>
+            <div style="font-size: 0.875rem; color: #6b7280;">Vector retrieval</div>
           </div>
           <div style="background: white; padding: 1rem; border-radius: 0.5rem; border: 1px solid #e5e7eb;">
-            <div style="font-size: 1.5rem; margin-bottom: 0.5rem;">•</div>
-            <div style="font-weight: 600; color: #1f2937; margin-bottom: 0.25rem;">AI-Powered</div>
-            <div style="font-size: 0.875rem; color: #6b7280;">OpenAI GPT-4o-mini</div>
+            <div style="font-weight: 600; color: #1f2937; margin-bottom: 0.25rem;">Grounded Answers</div>
+            <div style="font-size: 0.875rem; color: #6b7280;">Citations or “not found”</div>
           </div>
         </div>
       </div>
@@ -77,11 +71,10 @@
         <h4 style="font-size: 1.125rem; font-weight: 600; color: #1f2937; margin-bottom: 0.75rem;">Deliverables</h4>
         <ul
           style="list-style: disc; list-style-position: inside; display: flex; flex-direction: column; gap: 0.5rem; color: #4b5563;">
-          <li>Business Requirements Document for AI Agent</li>
-          <li>Functional Requirements Specification</li>
-          <li>Non-Functional Requirements Specification</li>
-          <li>User Stories for AI Interactions</li>
-          <li>Success Criteria and Metrics</li>
+          <li>BRD.md with goal, users, in-scope and out-of-scope questions</li>
+          <li>Approved document types and success criteria</li>
+          <li>List of existing store features that must not change</li>
+          <li>User stories for asking, citing, and refusing unknown answers</li>
         </ul>
       </div>
     </div>

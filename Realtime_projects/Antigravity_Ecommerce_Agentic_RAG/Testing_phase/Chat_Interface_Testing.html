@@ -3,8 +3,8 @@
     <h3 class="content-heading">Chat Interface Testing</h3>
     <div style="max-width: none;">
       <p style="color: #4b5563; line-height: 1.75; margin-bottom: 1.5rem;">
-        Chat interface testing verifies the user experience, UI components, interactions, and responsive design 
-        of the chat component.
+        These checks confirm the React assistant can ask POST /rag/ask and show a grounded answer, citations,
+        a no-data message, a clarification, or an error.
       </p>
       
       <div style="display: flex; flex-direction: column; gap: 2rem;">
@@ -39,10 +39,10 @@
               <div style="background: white; padding: 1rem; border-radius: 0.5rem; border: 1px solid #e5e7eb;">
                 <h5 style="font-weight: 600; color: #1f2937; margin-bottom: 0.5rem;">Message Display</h5>
                 <ul style="font-size: 0.875rem; color: #4b5563; list-style: disc; list-style-position: inside;">
-                  <li>✅ User messages right-aligned</li>
-                  <li>✅ AI messages left-aligned</li>
-                  <li>✅ Messages scroll correctly</li>
-                  <li>✅ Empty state displays</li>
+                  <li>User questions right-aligned</li>
+                  <li>Grounded answers left-aligned</li>
+                  <li>Citations visible under the answer</li>
+                  <li>No-data message displays when found is false</li>
                 </ul>
               </div>
 
@@ -81,10 +81,10 @@
               <div style="border-left: 4px solid #10b981; padding-left: 1rem;">
                 <h5 style="font-weight: 600; color: #1f2937; margin-bottom: 0.5rem;">State Management</h5>
                 <ul style="font-size: 0.875rem; color: #4b5563; list-style: disc; list-style-position: inside;">
-                  <li>✅ Zustand store updates correctly</li>
-                  <li>✅ Messages persist in state</li>
-                  <li>✅ Loading state toggles</li>
-                  <li>✅ Error state handled</li>
+                  <li>Loading state while /rag/ask runs</li>
+                  <li>Answer and sources update together</li>
+                  <li>Clarification state is shown when needed</li>
+                  <li>Error state is handled</li>
                 </ul>
               </div>
             </div>

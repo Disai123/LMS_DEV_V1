@@ -3,8 +3,8 @@
     <h3 class="content-heading">User Experience Flow</h3>
     <div style="max-width: none;">
       <p style="color: #4b5563; line-height: 1.75; margin-bottom: 1.5rem;">
-        User experience flows define how customers interact with the AI agent through various scenarios. These flows 
-        ensure smooth, intuitive conversations that guide users to their goals.
+        These flows show how a signed-in user asks the existing store a question. The agent only reads approved data.
+        It never adds items to the cart or changes an order.
       </p>
       
       <div style="display: flex; flex-direction: column; gap: 2rem;">
@@ -12,7 +12,7 @@
         <div class="card">
           <h4 style="font-size: 1.25rem; font-weight: 600; color: #1f2937; margin-bottom: 1.5rem; display: flex; align-items: center; gap: 0.5rem;">
             <span style="font-size: 1.5rem;">🔍</span>
-            Product Search Flow
+            Product Question Flow
           </h4>
           
           <div style="background: #f9fafb; border-radius: 0.5rem; padding: 1.5rem; margin-bottom: 1rem;">
@@ -20,8 +20,8 @@
               <div style="display: flex; align-items: start; gap: 1rem;">
                 <div style="background: #3b82f6; color: white; width: 32px; height: 32px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: 600; flex-shrink: 0;">1</div>
                 <div>
-                  <div style="font-weight: 600; color: #1f2937; margin-bottom: 0.25rem;">User Opens Chat</div>
-                  <div style="font-size: 0.875rem; color: #6b7280;">Clicks chat button, sees welcome message</div>
+                  <div style="font-weight: 600; color: #1f2937; margin-bottom: 0.25rem;">User Signs In</div>
+                  <div style="font-size: 0.875rem; color: #6b7280;">Uses the existing store login, then opens Ask the Store</div>
                 </div>
               </div>
               
@@ -30,8 +30,8 @@
               <div style="display: flex; align-items: start; gap: 1rem;">
                 <div style="background: #3b82f6; color: white; width: 32px; height: 32px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: 600; flex-shrink: 0;">2</div>
                 <div>
-                  <div style="font-weight: 600; color: #1f2937; margin-bottom: 0.25rem;">User Types Query</div>
-                  <div style="font-size: 0.875rem; color: #6b7280;">Example: "Show me laptops under $1000"</div>
+                  <div style="font-weight: 600; color: #1f2937; margin-bottom: 0.25rem;">User Types a Question</div>
+                  <div style="font-size: 0.875rem; color: #6b7280;">Example: "How many products are in the store?"</div>
                 </div>
               </div>
               
@@ -40,8 +40,8 @@
               <div style="display: flex; align-items: start; gap: 1rem;">
                 <div style="background: #10b981; color: white; width: 32px; height: 32px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: 600; flex-shrink: 0;">3</div>
                 <div>
-                  <div style="font-weight: 600; color: #1f2937; margin-bottom: 0.25rem;">AI Processes Request</div>
-                  <div style="font-size: 0.875rem; color: #6b7280;">Loading indicator shown, AI calls searchProducts tool</div>
+                  <div style="font-weight: 600; color: #1f2937; margin-bottom: 0.25rem;">React Calls FastAPI</div>
+                  <div style="font-size: 0.875rem; color: #6b7280;">Loading state is shown while POST /agent/ask runs</div>
                 </div>
               </div>
               
@@ -50,19 +50,19 @@
               <div style="display: flex; align-items: start; gap: 1rem;">
                 <div style="background: #10b981; color: white; width: 32px; height: 32px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: 600; flex-shrink: 0;">4</div>
                 <div>
-                  <div style="font-weight: 600; color: #1f2937; margin-bottom: 0.25rem;">AI Responds</div>
-                  <div style="font-size: 0.875rem; color: #6b7280;">Displays product list with details (name, price, stock)</div>
+                  <div style="font-weight: 600; color: #1f2937; margin-bottom: 0.25rem;">Agent Answers from Store Data</div>
+                  <div style="font-size: 0.875rem; color: #6b7280;">LangGraph reads approved PostgreSQL data and returns a factual answer</div>
                 </div>
               </div>
             </div>
           </div>
         </div>
 
-        <!-- Flow 2: Add to Cart -->
+        <!-- Flow 2: Stock / order history (replaces add to cart) -->
         <div class="card">
           <h4 style="font-size: 1.25rem; font-weight: 600; color: #1f2937; margin-bottom: 1.5rem; display: flex; align-items: center; gap: 0.5rem;">
-            <span style="font-size: 1.5rem;">🛒</span>
-            Add to Cart Flow
+            <span style="font-size: 1.5rem;">📦</span>
+            Stock or Order History Flow
           </h4>
           
           <div style="background: #f9fafb; border-radius: 0.5rem; padding: 1.5rem;">
@@ -70,8 +70,8 @@
               <div style="display: flex; align-items: start; gap: 1rem;">
                 <div style="background: #3b82f6; color: white; width: 32px; height: 32px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: 600; flex-shrink: 0;">1</div>
                 <div>
-                  <div style="font-weight: 600; color: #1f2937; margin-bottom: 0.25rem;">User Requests Add</div>
-                  <div style="font-size: 0.875rem; color: #6b7280;">"Add the first laptop to my cart"</div>
+                  <div style="font-weight: 600; color: #1f2937; margin-bottom: 0.25rem;">User Asks a Data Question</div>
+                  <div style="font-size: 0.875rem; color: #6b7280;">"Show the stock for Premium Wireless Headphones"</div>
                 </div>
               </div>
               
@@ -80,8 +80,8 @@
               <div style="display: flex; align-items: start; gap: 1rem;">
                 <div style="background: #f59e0b; color: white; width: 32px; height: 32px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: 600; flex-shrink: 0;">2</div>
                 <div>
-                  <div style="font-weight: 600; color: #1f2937; margin-bottom: 0.25rem;">AI Confirms</div>
-                  <div style="font-size: 0.875rem; color: #6b7280;">AI confirms product selection before adding</div>
+                  <div style="font-weight: 600; color: #1f2937; margin-bottom: 0.25rem;">Scope Check</div>
+                  <div style="font-size: 0.875rem; color: #6b7280;">LangGraph confirms this is an allowed store question</div>
                 </div>
               </div>
               
@@ -90,8 +90,8 @@
               <div style="display: flex; align-items: start; gap: 1rem;">
                 <div style="background: #10b981; color: white; width: 32px; height: 32px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: 600; flex-shrink: 0;">3</div>
                 <div>
-                  <div style="font-weight: 600; color: #1f2937; margin-bottom: 0.25rem;">Stock Check</div>
-                  <div style="font-size: 0.875rem; color: #6b7280;">AI verifies product is in stock</div>
+                  <div style="font-weight: 600; color: #1f2937; margin-bottom: 0.25rem;">Read-Only Data Access</div>
+                  <div style="font-size: 0.875rem; color: #6b7280;">Approved store tables are read. Nothing is written.</div>
                 </div>
               </div>
               
@@ -100,8 +100,8 @@
               <div style="display: flex; align-items: start; gap: 1rem;">
                 <div style="background: #10b981; color: white; width: 32px; height: 32px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: 600; flex-shrink: 0;">4</div>
                 <div>
-                  <div style="font-weight: 600; color: #1f2937; margin-bottom: 0.25rem;">Item Added</div>
-                  <div style="font-size: 0.875rem; color: #6b7280;">AI confirms addition with cart summary</div>
+                  <div style="font-weight: 600; color: #1f2937; margin-bottom: 0.25rem;">Grounded Answer</div>
+                  <div style="font-size: 0.875rem; color: #6b7280;">The UI shows the real stock or order figure, or a no-data message</div>
                 </div>
               </div>
             </div>
@@ -112,39 +112,39 @@
         <div class="card">
           <h4 style="font-size: 1.25rem; font-weight: 600; color: #1f2937; margin-bottom: 1.5rem; display: flex; align-items: center; gap: 0.5rem;">
             <span style="font-size: 1.5rem;">⚠️</span>
-            Error Handling Flow
+            Status and Refusal Flow
           </h4>
           
           <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 1.5rem;">
             <div style="background: #fef2f2; border-radius: 0.5rem; padding: 1rem; border-left: 4px solid #ef4444;">
-              <h5 style="font-weight: 600; color: #1f2937; margin-bottom: 0.5rem;">Product Not Found</h5>
-              <p style="font-size: 0.875rem; color: #6b7280; margin-bottom: 0.5rem;">When user searches for non-existent product</p>
+              <h5 style="font-weight: 600; color: #1f2937; margin-bottom: 0.5rem;">No Matching Data</h5>
+              <p style="font-size: 0.875rem; color: #6b7280; margin-bottom: 0.5rem;">When the database has no matching row</p>
               <div style="background: white; padding: 0.75rem; border-radius: 0.25rem; font-size: 0.75rem; color: #991b1b;">
-                AI: "I couldn't find that product. Would you like to search for something similar?"
+                Agent: "No matching data was found for that question."
               </div>
             </div>
 
             <div style="background: #fef2f2; border-radius: 0.5rem; padding: 1rem; border-left: 4px solid #ef4444;">
-              <h5 style="font-weight: 600; color: #1f2937; margin-bottom: 0.5rem;">Out of Stock</h5>
-              <p style="font-size: 0.875rem; color: #6b7280; margin-bottom: 0.5rem;">When user tries to add out-of-stock item</p>
+              <h5 style="font-weight: 600; color: #1f2937; margin-bottom: 0.5rem;">Write Request Refused</h5>
+              <p style="font-size: 0.875rem; color: #6b7280; margin-bottom: 0.5rem;">When the user asks to change the cart or an order</p>
               <div style="background: white; padding: 0.75rem; border-radius: 0.25rem; font-size: 0.75rem; color: #991b1b;">
-                AI: "Sorry, that product is currently out of stock. Would you like to see similar products?"
+                Agent: "Ask the Store is read-only. I can answer questions about store data, but I cannot change the cart or orders."
               </div>
             </div>
 
             <div style="background: #fef2f2; border-radius: 0.5rem; padding: 1rem; border-left: 4px solid #ef4444;">
-              <h5 style="font-weight: 600; color: #1f2937; margin-bottom: 0.5rem;">API Error</h5>
-              <p style="font-size: 0.875rem; color: #6b7280; margin-bottom: 0.5rem;">When OpenAI API fails</p>
+              <h5 style="font-weight: 600; color: #1f2937; margin-bottom: 0.5rem;">Model or Database Failure</h5>
+              <p style="font-size: 0.875rem; color: #6b7280; margin-bottom: 0.5rem;">When LangGraph or PostgreSQL fails</p>
               <div style="background: white; padding: 0.75rem; border-radius: 0.25rem; font-size: 0.75rem; color: #991b1b;">
-                AI: "I'm having trouble processing that. Please try again in a moment."
+                Agent: "I could not complete that request. Please try again."
               </div>
             </div>
 
             <div style="background: #fef2f2; border-radius: 0.5rem; padding: 1rem; border-left: 4px solid #ef4444;">
-              <h5 style="font-weight: 600; color: #1f2937; margin-bottom: 0.5rem;">Ambiguous Query</h5>
-              <p style="font-size: 0.875rem; color: #6b7280; margin-bottom: 0.5rem;">When user query is unclear</p>
+              <h5 style="font-weight: 600; color: #1f2937; margin-bottom: 0.5rem;">Unclear Question</h5>
+              <p style="font-size: 0.875rem; color: #6b7280; margin-bottom: 0.5rem;">When the store question is incomplete</p>
               <div style="background: white; padding: 0.75rem; border-radius: 0.25rem; font-size: 0.75rem; color: #991b1b;">
-                AI: "Could you clarify what you're looking for? For example, are you looking for a specific brand or price range?"
+                Agent: "Which product or category do you mean? Please give a name."
               </div>
             </div>
           </div>
@@ -154,20 +154,20 @@
         <div class="card">
           <h4 style="font-size: 1.25rem; font-weight: 600; color: #1f2937; margin-bottom: 1.5rem; display: flex; align-items: center; gap: 0.5rem;">
             <span style="font-size: 1.5rem;">💬</span>
-            Multi-Turn Conversation Example
+            Read-Only Conversation Example
           </h4>
           
           <div style="background: #f9fafb; border-radius: 0.5rem; padding: 1.5rem;">
             <div style="display: flex; flex-direction: column; gap: 1rem;">
               <div style="display: flex; justify-content: flex-end;">
                 <div style="background: #3b82f6; color: white; padding: 0.75rem 1rem; border-radius: 12px; max-width: 70%;">
-                  <div style="font-size: 0.875rem;">Show me electronics</div>
+                  <div style="font-size: 0.875rem;">Show products in Electronics</div>
                 </div>
               </div>
               
               <div style="display: flex; justify-content: flex-start;">
                 <div style="background: #f3f4f6; color: #1f2937; padding: 0.75rem 1rem; border-radius: 12px; max-width: 70%;">
-                  <div style="font-size: 0.875rem;">Here are some electronics products: [list of products]</div>
+                  <div style="font-size: 0.875rem;">Electronics has 2 products: Premium Wireless Headphones and Smart Watch Series 7.</div>
                 </div>
               </div>
               
@@ -179,7 +179,7 @@
               
               <div style="display: flex; justify-content: flex-start;">
                 <div style="background: #f3f4f6; color: #1f2937; padding: 0.75rem 1rem; border-radius: 12px; max-width: 70%;">
-                  <div style="font-size: 0.875rem;">I've added [Product Name] to your cart. Your cart now has 1 item.</div>
+                  <div style="font-size: 0.875rem;">I cannot change the cart. Ask the Store only answers questions about store data. You can add items using the existing cart page.</div>
                 </div>
               </div>
             </div>
@@ -189,4 +189,3 @@
     </div>
   </div>
 </div>
-

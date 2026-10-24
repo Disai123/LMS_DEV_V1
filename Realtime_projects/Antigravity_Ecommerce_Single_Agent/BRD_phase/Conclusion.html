@@ -3,45 +3,43 @@
     <h3 class="content-heading">Conclusion</h3>
     <div style="max-width: none;">
       <p style="color: #4b5563; line-height: 1.75; margin-bottom: 1.5rem;">
-        The Business Requirements Document phase has established a comprehensive foundation for the askunicart AI agent
-        implementation.
-        We have defined clear functional and non-functional requirements, user stories, and success criteria that will
-        guide the
-        development process.
+        The BRD phase has defined Ask the Store as one read-only agent on the existing store.
+        The document lists who will use it, which store questions are in scope, and what the agent must refuse.
+        Existing React, FastAPI, login, and PostgreSQL pieces stay in place.
       </p>
 
       <div class="card" style="margin-bottom: 2rem;">
         <h4 style="font-size: 1.25rem; font-weight: 600; color: #1f2937; margin-bottom: 1rem;">Key Achievements</h4>
         <ul
           style="list-style: disc; list-style-position: inside; display: flex; flex-direction: column; gap: 0.75rem; color: #4b5563;">
-          <li>S& Defined 10+ functional requirements for AI agent features</li>
-          <li>S& Established performance targets (response time &lt; 2 seconds)</li>
-          <li>S& Documented security requirements for API key and data protection</li>
-          <li>S& Created 8 user stories covering all major use cases</li>
-          <li>S& Set scalability targets (1,000+ concurrent conversations)</li>
-          <li>S& Defined usability requirements for chat interface</li>
+          <li>✅ Recorded the goal: answer questions about real store data</li>
+          <li>✅ Listed in-scope topics: products, categories, customers, orders, stock, and sales totals</li>
+          <li>✅ Set the read-only rule: the agent must not modify store data</li>
+          <li>✅ Required reuse of existing login, permissions, React UI, FastAPI, and PostgreSQL/Neon</li>
+          <li>✅ Defined out-of-scope refusals and no invented answers</li>
+          <li>✅ Wrote user stories for signed-in customers and staff</li>
         </ul>
       </div>
 
       <div class="card" style="margin-bottom: 2rem;">
-        <h4 style="font-size: 1.25rem; font-weight: 600; color: #1f2937; margin-bottom: 1rem;">Core Features Identified
+        <h4 style="font-size: 1.25rem; font-weight: 600; color: #1f2937; margin-bottom: 1rem;">Core Capabilities
         </h4>
         <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 1rem;">
           <div style="background: #eff6ff; padding: 1rem; border-radius: 0.5rem; border-left: 4px solid #3b82f6;">
-            <div style="font-weight: 600; color: #1f2937; margin-bottom: 0.5rem;">Product Search</div>
-            <div style="font-size: 0.875rem; color: #4b5563;">Natural language product discovery</div>
+            <div style="font-weight: 600; color: #1f2937; margin-bottom: 0.5rem;">Product Lookup</div>
+            <div style="font-size: 0.875rem; color: #4b5563;">Answer questions about products and categories</div>
           </div>
           <div style="background: #f0fdf4; padding: 1rem; border-radius: 0.5rem; border-left: 4px solid #10b981;">
-            <div style="font-weight: 600; color: #1f2937; margin-bottom: 0.5rem;">Stock Checking</div>
-            <div style="font-size: 0.875rem; color: #4b5563;">Real-time inventory queries</div>
+            <div style="font-weight: 600; color: #1f2937; margin-bottom: 0.5rem;">Stock and Sales</div>
+            <div style="font-size: 0.875rem; color: #4b5563;">Report stock levels and order totals from the database</div>
           </div>
           <div style="background: #fef2f2; padding: 1rem; border-radius: 0.5rem; border-left: 4px solid #ef4444;">
-            <div style="font-weight: 600; color: #1f2937; margin-bottom: 0.5rem;">: Cart Management</div>
-            <div style="font-size: 0.875rem; color: #4b5563;">Add, update, remove via chat</div>
+            <div style="font-weight: 600; color: #1f2937; margin-bottom: 0.5rem;">Out-of-Scope Refusal</div>
+            <div style="font-size: 0.875rem; color: #4b5563;">Refuse unrelated questions and write actions</div>
           </div>
           <div style="background: #faf5ff; padding: 1rem; border-radius: 0.5rem; border-left: 4px solid #a855f7;">
-            <div style="font-weight: 600; color: #1f2937; margin-bottom: 0.5rem;">}Recommendations</div>
-            <div style="font-size: 0.875rem; color: #4b5563;">AI-powered product suggestions</div>
+            <div style="font-weight: 600; color: #1f2937; margin-bottom: 0.5rem;">Grounded Answers</div>
+            <div style="font-size: 0.875rem; color: #4b5563;">Use real data only; say when nothing matches</div>
           </div>
         </div>
       </div>
@@ -50,61 +48,44 @@
         <h4 style="font-size: 1.25rem; font-weight: 600; color: #1f2937; margin-bottom: 1rem;">Success Criteria</h4>
         <div style="display: flex; flex-direction: column; gap: 1rem;">
           <div style="display: flex; align-items: center; gap: 0.75rem;">
-            <span style="font-size: 1.5rem;">S&</span>
+            <span style="font-size: 1.5rem;">✅</span>
             <div>
-              <div style="font-weight: 600; color: #1f2937;">Response Time</div>
-              <div style="font-size: 0.875rem; color: #6b7280;">AI responses delivered within 2 seconds (75th
-                percentile)</div>
+              <div style="font-weight: 600; color: #1f2937;">Correct Store Data</div>
+              <div style="font-size: 0.875rem; color: #6b7280;">Answers match the existing PostgreSQL/Neon records</div>
             </div>
           </div>
           <div style="display: flex; align-items: center; gap: 0.75rem;">
-            <span style="font-size: 1.5rem;">S&</span>
+            <span style="font-size: 1.5rem;">✅</span>
             <div>
-              <div style="font-weight: 600; color: #1f2937;">Accuracy</div>
-              <div style="font-size: 0.875rem; color: #6b7280;">95%+ accuracy in understanding user intent</div>
+              <div style="font-weight: 600; color: #1f2937;">Read-Only</div>
+              <div style="font-size: 0.875rem; color: #6b7280;">The agent never updates products, orders, customers, or stock</div>
             </div>
           </div>
           <div style="display: flex; align-items: center; gap: 0.75rem;">
-            <span style="font-size: 1.5rem;">S&</span>
+            <span style="font-size: 1.5rem;">✅</span>
             <div>
-              <div style="font-weight: 600; color: #1f2937;">User Satisfaction</div>
-              <div style="font-size: 0.875rem; color: #6b7280;">4.5/5 average rating for chat experience</div>
+              <div style="font-weight: 600; color: #1f2937;">Safe Refusals</div>
+              <div style="font-size: 0.875rem; color: #6b7280;">Unrelated questions and missing data get a clear message</div>
             </div>
           </div>
           <div style="display: flex; align-items: center; gap: 0.75rem;">
-            <span style="font-size: 1.5rem;">S&</span>
+            <span style="font-size: 1.5rem;">✅</span>
             <div>
-              <div style="font-weight: 600; color: #1f2937;">Uptime</div>
-              <div style="font-size: 0.875rem; color: #6b7280;">99.9% system availability</div>
+              <div style="font-weight: 600; color: #1f2937;">Existing Store Unchanged</div>
+              <div style="font-size: 0.875rem; color: #6b7280;">Login, catalog, cart, and admin flows still work as before</div>
             </div>
           </div>
         </div>
       </div>
 
       
-      <div class="antigravity-phase-prompt" style="background:#f8fafc;border:1px solid #c7d2fe;border-radius:0.5rem;padding:1.25rem;margin-bottom:1.5rem;">
-        <h4 style="font-size:1.125rem;font-weight:600;color:#1e293b;margin:0 0 0.5rem;">Antigravity prompt  BRD</h4>
-        <p style="font-size:0.875rem;color:#64748b;margin:0 0 0.75rem;">Initiation and BRD. Copy into your AI coding assistant:</p>
-        <pre style="white-space:pre-wrap;font-size:0.8rem;line-height:1.55;background:#fff;border:1px solid #e2e8f0;border-radius:0.5rem;padding:1rem;margin:0 0 0.75rem;max-height:280px;overflow:auto;color:#334155;">SDLC Phase: SDLC - Initiation &amp; Planning
-Inspect the existing e-commerce application and then create or update only BRD.md.BRD.md must clearly describe:
-Business problem
-Goal of Ask the Store
-Target users
-In-scope questions: products, categories, customers, orders, order items, stock and sales/order totals
-Out-of-scope questions
-Main user flow
-Security expectations
-Read-only rule
-Success criteria
-Also record which existing application parts will be reused: ReactJS frontend, FastAPI backend, authentication and PostgreSQL/Neon database.Do not create any other markdown document. Do not build the agent yet. Do not change existing application behavior. After saving BRD.md, explain what was captured and stop.</pre>
-        <button type="button" onclick="navigator.clipboard.writeText(this.previousElementSibling.textContent)" style="padding:0.5rem 1rem;background:#eef2ff;color:#4338ca;border:1px solid #c7d2fe;border-radius:0.5rem;font-weight:500;cursor:pointer;">Copy prompt</button>
-      </div>
       
       <div class="antigravity-phase-prompt" style="background:#f8fafc;border:1px solid #c7d2fe;border-radius:0.5rem;padding:1.25rem;margin-bottom:1.5rem;">
         <h4 style="font-size:1.125rem;font-weight:600;color:#1e293b;margin:0 0 0.5rem;">Antigravity prompt — BRD</h4>
         <p style="font-size:0.875rem;color:#64748b;margin:0 0 0.75rem;">Initiation and BRD. Copy into your AI coding assistant:</p>
         <pre style="white-space:pre-wrap;font-size:0.8rem;line-height:1.55;background:#fff;border:1px solid #e2e8f0;border-radius:0.5rem;padding:1rem;margin:0 0 0.75rem;max-height:280px;overflow:auto;color:#334155;">SDLC Phase: SDLC - Initiation &amp; Planning
-Inspect the existing e-commerce application and then create or update only BRD.md.BRD.md must clearly describe:
+Inspect the existing e-commerce application and then create or update only BRD.md.
+BRD.md must clearly describe:
 Business problem
 Goal of Ask the Store
 Target users
@@ -114,15 +95,15 @@ Main user flow
 Security expectations
 Read-only rule
 Success criteria
-Also record which existing application parts will be reused: ReactJS frontend, FastAPI backend, authentication and PostgreSQL/Neon database.Do not create any other markdown document. Do not build the agent yet. Do not change existing application behavior. After saving BRD.md, explain what was captured and stop.</pre>
+Also record which existing application parts will be reused: ReactJS frontend, FastAPI backend, authentication and PostgreSQL/Neon database.
+Do not create any other markdown document. Do not build the agent yet. Do not change existing application behavior. After saving BRD.md, explain what was captured and stop.</pre>
         <button type="button" onclick="navigator.clipboard.writeText(this.previousElementSibling.textContent)" style="padding:0.5rem 1rem;background:#eef2ff;color:#4338ca;border:1px solid #c7d2fe;border-radius:0.5rem;font-weight:500;cursor:pointer;">Copy prompt</button>
       </div>
 
       <div style="background: linear-gradient(to right, #faf5ff, #eff6ff); border-radius: 0.5rem; padding: 1.5rem;">
         <h4 style="font-size: 1.125rem; font-weight: 600; color: #1f2937; margin-bottom: 1rem;">Ready to Proceed?</h4>
         <p style="color: #4b5563; margin-bottom: 1rem;">
-          This BRD phase is now complete. You can proceed to the next phase (UI/UX Design) or review
-          any section of this document as needed.
+          The BRD for Ask the Store is complete. Continue to UI/UX Design to plan the simple chat screen inside the existing React app.
         </p>
         <div style="display: flex; gap: 1rem; flex-wrap: wrap;">
           <button

@@ -20,8 +20,8 @@
                 Complete Purchase Flow
               </h6>
               <div style="font-size: 0.875rem; color: #4b5563; display: flex; flex-direction: column; gap: 0.25rem;">
-                <div><strong>Flow:</strong> Browse → Add to Cart → Checkout → Payment → Order</div>
-                <div><strong>Components:</strong> Frontend → API → Database → Stripe → Email</div>
+                <div><strong>Flow:</strong> Browse → Add to Cart → Checkout → Place Order</div>
+                <div><strong>Components:</strong> Frontend → API → Database → checkout → Email</div>
                 <div><strong>Validation:</strong> Data consistency, error handling, rollback</div>
               </div>
             </div>
@@ -32,7 +32,7 @@
               </h6>
               <div style="font-size: 0.875rem; color: #4b5563; display: flex; flex-direction: column; gap: 0.25rem;">
                 <div><strong>Flow:</strong> Register → Verify → Login → Session → Profile</div>
-                <div><strong>Components:</strong> Frontend → NextAuth → Database → JWT</div>
+                <div><strong>Components:</strong> Frontend → FastAPI JWT → Database → JWT</div>
                 <div><strong>Validation:</strong> Token validation, session persistence</div>
               </div>
             </div>
@@ -72,17 +72,15 @@
       <h4 style="font-size: 1.5rem; font-weight: 600; color: #1f2937; margin-bottom: 1.5rem; text-align: center;">Third-Party Service Integration</h4>
       <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 1.5rem;">
         <div style="text-align: center; padding: 1rem; background: #ffffff; border-radius: 0.5rem; box-shadow: 0 1px 3px rgba(0,0,0,0.1);">
-          <div style="font-size: 1.875rem; margin-bottom: 0.75rem;">•</div>
-          <h5 style="font-weight: 600; color: #1f2937; margin-bottom: 0.5rem;">Stripe Payment Integration</h5>
+          <h5 style="font-weight: 600; color: #1f2937; margin-bottom: 0.5rem;">checkout Simple Checkout</h5>
           <div style="font-size: 0.875rem; color: #4b5563; display: flex; flex-direction: column; gap: 0.25rem; text-align: left;">
-            <div>• Payment processing flow</div>
+            <div>• Checkout and place-order flow</div>
             <div>• Webhook verification</div>
             <div>• Error handling & retries</div>
             <div>• Refund processing</div>
           </div>
         </div>
         <div style="text-align: center; padding: 1rem; background: #ffffff; border-radius: 0.5rem; box-shadow: 0 1px 3px rgba(0,0,0,0.1);">
-          <div style="font-size: 1.875rem; margin-bottom: 0.75rem;">•</div>
           <h5 style="font-weight: 600; color: #1f2937; margin-bottom: 0.5rem;">Email Service Integration</h5>
           <div style="font-size: 0.875rem; color: #4b5563; display: flex; flex-direction: column; gap: 0.25rem; text-align: left;">
             <div>• Order confirmations</div>
@@ -92,12 +90,11 @@
           </div>
         </div>
         <div style="text-align: center; padding: 1rem; background: #ffffff; border-radius: 0.5rem; box-shadow: 0 1px 3px rgba(0,0,0,0.1);">
-          <div style="font-size: 1.875rem; margin-bottom: 0.75rem;">•</div>
           <h5 style="font-weight: 600; color: #1f2937; margin-bottom: 0.5rem;">File Storage Integration</h5>
           <div style="font-size: 0.875rem; color: #4b5563; display: flex; flex-direction: column; gap: 0.25rem; text-align: left;">
             <div>• Product image uploads</div>
             <div>• Image optimization</div>
-            <div>• CDN integration</div>
+            <div>• Render frontend talking to FastAPI</div>
             <div>• File security</div>
           </div>
         </div>
@@ -121,9 +118,9 @@
             <div style="background: #f9fafb; border-radius: 0.5rem; padding: 1rem;">
               <h6 style="font-weight: 500; color: #1f2937; margin-bottom: 0.5rem;">Order Processing Flow</h6>
               <div style="font-size: 0.875rem; color: #4b5563; display: flex; flex-direction: column; gap: 0.25rem;">
-                <div><strong>Test:</strong> Cart → Order → Payment → Inventory update</div>
+                <div><strong>Test:</strong> Cart → Place order → Inventory update</div>
                 <div><strong>Validation:</strong> Stock availability, data integrity</div>
-                <div><strong>Rollback:</strong> Payment failure recovery</div>
+                <div><strong>Rollback:</strong> Failed checkout leaves cart unchanged</div>
               </div>
             </div>
           </div>
@@ -184,7 +181,7 @@
               <span style="font-size: 0.875rem; font-weight: 500; color: #10b981;">100%</span>
             </div>
             <div style="display: flex; justify-content: space-between; align-items: center; padding: 0.75rem; background: #ffffff; border-radius: 0.5rem; box-shadow: 0 1px 3px rgba(0,0,0,0.1);">
-              <span style="font-size: 0.875rem; color: #4b5563;">Payment Integration</span>
+              <span style="font-size: 0.875rem; color: #4b5563;">Simple Checkout</span>
               <span style="font-size: 0.875rem; font-weight: 500; color: #10b981;">100%</span>
             </div>
             <div style="display: flex; justify-content: space-between; align-items: center; padding: 0.75rem; background: #ffffff; border-radius: 0.5rem; box-shadow: 0 1px 3px rgba(0,0,0,0.1);">
