@@ -168,6 +168,9 @@ function App() {
                 <Route path="capstone" element={<FdeCapstonePage />} />
                 <Route path="item/:stageSlug/:itemSlug" element={<FdeItemPage />} />
               </Route>
+              <Route path="/fde-capstone" element={<Navigate to="/roadmap/fde/capstone" replace />} />
+              <Route path="/capstone/fde" element={<Navigate to="/roadmap/fde/capstone" replace />} />
+              <Route path="/fde/capstone" element={<Navigate to="/roadmap/fde/capstone" replace />} />
               {/* HIDDEN: Hackathons & Internships routes temporarily hidden */}
               {/* <Route path="/hackathons" element={<HackathonLandingPage />} /> */}
               {/* <Route path="/internships" element={<InternshipsLandingPage />} /> */}

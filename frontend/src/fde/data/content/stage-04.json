@@ -1,98 +1,115 @@
 {
-  "fde-sdlc-ui-ux/ux-for-ai-products": {
-    "summary": "Citation of FAQ source, explicit uncertainty, and escalation when the assistant cannot answer.",
+  "fde-sdlc-ui-ux-solution/recap-and-brd-review": {
+    "summary": "Review requirements, assumptions and acceptance criteria from Session 1.",
     "sections": [
       {
         "heading": "Overview",
-        "body": "**Customer for Stages 3–9: a retail company (HQ and stores)**\n\n- Approximately **50 employees** across stores and head office.\n- IT receives **100 messages per week**; many repeat password, Wi‑Fi, VPN, and device questions.\n- Answers exist in **~15 FAQ documents** (PDF or Word). Staff rarely read them.\n- **IT lead (sponsor)** wants an internal **Ask IT** page: typed question, cited answer from FAQs, or a clear escalation to IT.\n- One **restricted FAQ** (“Admin-only IT notes”) must not appear in answers for standard staff. Only **admin** role may retrieve content from that source.\n- **Phase 1 scope:** FAQ assistant only—not a full ticketing or HR system.\n\n\n**Required UI elements:**\n\n1. **Question input** — single field and submit action.\n2. **Answer panel** — concise text plus **FAQ file name** used.\n3. **No-answer state** — clear message and contact path to IT.\n4. **Trust line** — answers are FAQ-based; users should verify critical actions with IT.\n5. **Optional feedback** — thumbs up/down for the IT lead to review.\n\nDo not present the assistant as infallible."
-      },
-      {
-        "heading": "Template",
-        "body": "```\nUI CHECKLIST\n[ ] Question input\n[ ] Answer + source file\n[ ] No-answer + contact IT\n[ ] Trust disclaimer\n[ ] Feedback (optional)\n```"
+        "body": "- Review requirements\n- Assumptions and acceptance criteria from Session 1"
       }
     ],
     "typeExtras": {
       "objectives": [
-        "List required UI elements",
-        "Define the no-answer state"
-      ],
-      "checkpointQuestions": [
-        "What must appear under every valid answer?"
+        "Translate the BRD into a simple user experience for an internal FAQ assistant.",
+        "Map the main user journey, including answer, no-answer, source citation and escalation paths.",
+        "Create wireframes and review them against requirements and user roles.",
+        "Explain how UX decisions reduce confusion when an AI answer is uncertain or unavailable."
       ]
     }
   },
-  "fde-sdlc-ui-ux/user-flows-wireframing": {
-    "summary": "Happy path and refusal path; reference wireframe for layout.",
+  "fde-sdlc-ui-ux-solution/design-rules-for-ask-it": {
+    "summary": "Clear question input, readable answers, visible citations, loading/error states, no-answer messages and escalation.",
     "sections": [
       {
         "heading": "Overview",
-        "body": "**Flow:** Open Ask IT → enter question → receive answer with source **or** receive no-answer guidance → optional feedback or email IT.\n\n**Minimum screens:** Home (input), Answer, No answer.\n\n**Reference wireframe (layout only):**\n\n![Ask IT wireframe reference](/fde/retail-ask-it-wireframe.svg)\n\nUse the wireframe as a layout guide; adapt labels to your BRD."
-      },
-      {
-        "heading": "Example: Retail case",
-        "body": "```\nOpen Ask IT → Ask → Found → Answer screen\n                 → Not found → No-answer screen\n```"
+        "body": "- Clear question input\n- Readable answers\n- Visible citations\n- Loading/error states\n- No-answer messages and escalation"
       }
     ],
     "typeExtras": {
       "objectives": [
-        "Document dual-path flow",
-        "Relate wireframe to three screens"
-      ],
-      "checkpointQuestions": [
-        "Minimum screen count?",
-        "Action after no-answer?"
+        "Translate the BRD into a simple user experience for an internal FAQ assistant.",
+        "Map the main user journey, including answer, no-answer, source citation and escalation paths.",
+        "Create wireframes and review them against requirements and user roles.",
+        "Explain how UX decisions reduce confusion when an AI answer is uncertain or unavailable."
       ]
     }
   },
-  "fde-sdlc-ui-ux/wireframe-northwind-assistant": {
-    "summary": "Produce flow diagram and wireframes for Home, Answer, and No answer; optional admin feedback view.",
+  "fde-sdlc-ui-ux-solution/user-flow-and-edge-cases": {
+    "summary": "Map the journey from question to retrieval, cited response, refusal/no-answer and support escalation.",
     "sections": [
       {
-        "heading": "Procedure",
-        "body": "1. Draw the user flow (answer vs no-answer).\n2. Wireframe Home, Answer, and No answer screens.\n3. Optional: admin view of negative feedback entries.\n4. Cross-check against the Stage 3 BRD."
-      },
-      {
-        "heading": "Pitfalls",
-        "body": "- Omitting source file on Answer screen\n- No escalation path"
+        "heading": "Overview",
+        "body": "- Map the journey from question to retrieval\n- Cited response\n- Refusal/no-answer and support escalation"
       }
     ],
     "typeExtras": {
       "objectives": [
-        "Flow plus three wireframes delivered"
-      ],
-      "checkpointQuestions": [
-        "Where is the FAQ source shown?"
-      ],
-      "prerequisites": [
-        "Stage 3 BRD"
-      ],
-      "deliverables": [
-        "Flow diagram",
-        "Wireframe images or exports"
+        "Translate the BRD into a simple user experience for an internal FAQ assistant.",
+        "Map the main user journey, including answer, no-answer, source citation and escalation paths.",
+        "Create wireframes and review them against requirements and user roles.",
+        "Explain how UX decisions reduce confusion when an AI answer is uncertain or unavailable."
       ]
     }
   },
-  "fde-sdlc-ui-ux/show-ai-might-be-wrong": {
-    "summary": "Explain UX mitigations when the model err or FAQs do not contain the answer.",
+  "fde-sdlc-ui-ux-solution/wireframe-walkthrough": {
+    "summary": "Sketch the main screen, answer state, source panel, error state and role-specific behaviour.",
     "sections": [
       {
-        "heading": "Example: Retail case",
-        "body": "\"We display the FAQ source, refuse to invent content when retrieval fails, provide a direct IT contact, and log negative feedback for the IT lead to review and update FAQs.\""
+        "heading": "Overview",
+        "body": "- Sketch the main screen\n- Answer state\n- Source panel\n- Error state and role-specific behaviour"
       }
     ],
     "typeExtras": {
       "objectives": [
-        "Cover citation, refusal, escalation, feedback"
-      ],
-      "checkpointQuestions": [
-        "Why show the source file name?"
-      ],
-      "prompt": "How do you design Ask IT when answers may be wrong or absent?",
-      "rubric": [
-        "Source visibility",
-        "Refusal behavior",
-        "Human escalation"
+        "Translate the BRD into a simple user experience for an internal FAQ assistant.",
+        "Map the main user journey, including answer, no-answer, source citation and escalation paths.",
+        "Create wireframes and review them against requirements and user roles.",
+        "Explain how UX decisions reduce confusion when an AI answer is uncertain or unavailable."
       ]
     }
+  },
+  "fde-sdlc-ui-ux-solution/lab-2-wireframe-ask-it": {
+    "summary": "Create low-fidelity screens and a user-flow diagram aligned to the BRD.",
+    "sections": [
+      {
+        "heading": "Overview",
+        "body": "- Ask IT user flow and wireframes.\n- Create low-fidelity wireframes for the question screen, cited answer, no-answer/error state and escalation path.\n- Annotate where role and document permissions affect what a user sees."
+      },
+      {
+        "heading": "Done when",
+        "body": "Every screen maps to a BRD requirement, source citations are visible, and the no-answer/escalation path is clear."
+      }
+    ],
+    "typeExtras": {}
+  },
+  "fde-sdlc-ui-ux-solution/review-and-assignment-brief": {
+    "summary": "Check whether every important requirement appears in the flow or screen design.",
+    "sections": [
+      {
+        "heading": "Overview",
+        "body": "Check whether every important requirement appears in the flow or screen design."
+      }
+    ],
+    "typeExtras": {
+      "objectives": [
+        "Translate the BRD into a simple user experience for an internal FAQ assistant.",
+        "Map the main user journey, including answer, no-answer, source citation and escalation paths.",
+        "Create wireframes and review them against requirements and user roles.",
+        "Explain how UX decisions reduce confusion when an AI answer is uncertain or unavailable."
+      ]
+    }
+  },
+  "fde-sdlc-ui-ux-solution/revise-the-flow-and-wireframes": {
+    "summary": "Revise the flow and wireframes using peer feedback. Add a short note explaining how the UI avoids presenting unsupported answers as facts.",
+    "sections": [
+      {
+        "heading": "Overview",
+        "body": "Revise the flow and wireframes using peer feedback. Add a short note explaining how the UI avoids presenting unsupported answers as facts."
+      },
+      {
+        "heading": "Details",
+        "body": "- Deliverable: User-flow diagram, wireframes and UX decision notes\n- Due: Before Session 3"
+      }
+    ],
+    "typeExtras": {}
   }
 }

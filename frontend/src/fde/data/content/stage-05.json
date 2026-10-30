@@ -1,139 +1,115 @@
 {
-  "fde-sdlc-architecture/solution-architecture-ai-apps": {
-    "summary": "Browser, API, FAQ storage, retrieval, and LLM—with hosting on Render or AWS when deployed.",
+  "fde-sdlc-architecture-solution/recap-and-architecture-goals": {
+    "summary": "Review the BRD and wireframes; identify technical constraints and unknowns.",
     "sections": [
       {
         "heading": "Overview",
-        "body": "**Customer for Stages 3–9: a retail company (HQ and stores)**\n\n- Approximately **50 employees** across stores and head office.\n- IT receives **100 messages per week**; many repeat password, Wi‑Fi, VPN, and device questions.\n- Answers exist in **~15 FAQ documents** (PDF or Word). Staff rarely read them.\n- **IT lead (sponsor)** wants an internal **Ask IT** page: typed question, cited answer from FAQs, or a clear escalation to IT.\n- One **restricted FAQ** (“Admin-only IT notes”) must not appear in answers for standard staff. Only **admin** role may retrieve content from that source.\n- **Phase 1 scope:** FAQ assistant only—not a full ticketing or HR system.\n\n\n**Components:** web client, FastAPI backend, FAQ storage, retrieval (RAG), LLM API. Authentication distinguishes **staff** and **admin**; role checks occur on the server.\n\n**Reference diagram:**\n\n![Ask IT reference architecture](/fde/retail-ask-it-architecture.svg)\n\nPilot hosting may use **Render** or **AWS** (App Runner, Elastic Beanstalk, or equivalent); secrets via environment variables only."
-      },
-      {
-        "heading": "Procedure",
-        "body": "1. Label each box in the diagram for your implementation.\n2. Explain the data path in three minutes to a peer."
-      },
-      {
-        "heading": "Pitfalls",
-        "body": "- Client-only role checks\n- API keys in source control"
+        "body": "- Review the BRD and wireframes\n- Identify technical constraints and unknowns"
       }
     ],
     "typeExtras": {
       "objectives": [
-        "Name five architectural components",
-        "Explain staff vs admin data path"
-      ],
-      "checkpointQuestions": [
-        "Where is role enforced?",
-        "Where do FAQ files live?"
+        "Draw an end-to-end architecture for Ask IT and explain each component's responsibility.",
+        "Define how FAQ metadata and role-based permissions are enforced on the server.",
+        "Estimate indicative monthly AI cost and identify latency considerations.",
+        "Record a key architecture choice in a short architecture decision record (ADR)."
       ]
     }
   },
-  "fde-sdlc-architecture/permissions-security-boundaries": {
-    "summary": "Tag FAQ chunks as staff_ok or admin_only; filter retrieval by authenticated role on the server.",
+  "fde-sdlc-architecture-solution/reference-architecture": {
+    "summary": "Frontend, FastAPI, authentication/role context, document ingestion, retrieval/vector store, model API and logging.",
     "sections": [
       {
         "heading": "Overview",
-        "body": "Tag each chunk **staff_ok** or **admin_only**. Staff queries search staff_ok only; admin may search both. Enforce in FastAPI before returning any answer.\n\nStore LLM and provider credentials in **.env** or host environment—never in Git."
-      },
-      {
-        "heading": "Template",
-        "body": "```\nFAQ TAGS\nFile                    | staff_ok | admin_only\nWiFi-FAQ.pdf            |    x     |\nAdmin-only-notes.pdf    |          |     x\n```"
+        "body": "- Frontend\n- FastAPI\n- Authentication/role context\n- Document ingestion\n- Retrieval/vector store\n- Model API and logging"
       }
     ],
     "typeExtras": {
       "objectives": [
-        "Define tagging and server-side filter",
-        "Plan one staff negative test"
-      ],
-      "checkpointQuestions": [
-        "Why server-side enforcement?"
+        "Draw an end-to-end architecture for Ask IT and explain each component's responsibility.",
+        "Define how FAQ metadata and role-based permissions are enforced on the server.",
+        "Estimate indicative monthly AI cost and identify latency considerations.",
+        "Record a key architecture choice in a short architecture decision record (ADR)."
       ]
     }
   },
-  "fde-sdlc-architecture/cost-latency-estimation": {
-    "summary": "Monthly question volume × unit cost; expect roughly 2–5 seconds per answer with loading state.",
+  "fde-sdlc-architecture-solution/permissions-and-trust-boundaries": {
+    "summary": "Staff-visible vs admin-only FAQ tags; server-side filtering; why hiding UI elements alone is not access control.",
     "sections": [
       {
         "heading": "Overview",
-        "body": "Estimate monthly questions from user count and usage assumptions. Multiply by provider price per request. Add host cost (Render or AWS). Document a monthly range for the sponsor.\n\nShow a loading indicator during retrieval and generation; set a timeout with a user-friendly error message."
+        "body": "- Staff-visible vs admin-only FAQ tags\n- Server-side filtering\n- Why hiding UI elements alone is not access control"
+      }
+    ],
+    "typeExtras": {
+      "objectives": [
+        "Draw an end-to-end architecture for Ask IT and explain each component's responsibility.",
+        "Define how FAQ metadata and role-based permissions are enforced on the server.",
+        "Estimate indicative monthly AI cost and identify latency considerations.",
+        "Record a key architecture choice in a short architecture decision record (ADR)."
+      ]
+    }
+  },
+  "fde-sdlc-architecture-solution/cost-latency-and-architecture-decisions": {
+    "summary": "Estimate requests, tokens and model cost; discuss caching, timeout behaviour and provider constraints.",
+    "sections": [
+      {
+        "heading": "Overview",
+        "body": "- Estimate requests\n- Tokens and model cost\n- Discuss caching\n- Timeout behaviour and provider constraints"
+      }
+    ],
+    "typeExtras": {
+      "objectives": [
+        "Draw an end-to-end architecture for Ask IT and explain each component's responsibility.",
+        "Define how FAQ metadata and role-based permissions are enforced on the server.",
+        "Estimate indicative monthly AI cost and identify latency considerations.",
+        "Record a key architecture choice in a short architecture decision record (ADR)."
+      ]
+    }
+  },
+  "fde-sdlc-architecture-solution/lab-3-diagram-tags-cost-and-adr": {
+    "summary": "Create the architecture diagram, FAQ metadata schema, rough cost estimate and one ADR.",
+    "sections": [
+      {
+        "heading": "Overview",
+        "body": "- Architecture design pack.\n- Create a component diagram and data flow, define document metadata including access level and source/version, estimate a simple monthly cost scenario, and document one decision with alternatives and rationale."
       },
       {
-        "heading": "Template",
-        "body": "```\nQuestions/month: __\nCost per question (est.): $__\nMonthly AI + host (range): $__\n```"
+        "heading": "Done when",
+        "body": "The diagram shows data flow and trust boundaries; restricted content is filtered server-side; the ADR states context, decision and trade-offs."
+      }
+    ],
+    "typeExtras": {}
+  },
+  "fde-sdlc-architecture-solution/review-and-assignment-brief": {
+    "summary": "Explain trade-offs and confirm the design is buildable within the POC scope.",
+    "sections": [
+      {
+        "heading": "Overview",
+        "body": "Explain trade-offs and confirm the design is buildable within the POC scope."
       }
     ],
     "typeExtras": {
       "objectives": [
-        "Produce a written cost range",
-        "State expected latency"
-      ],
-      "checkpointQuestions": [
-        "What drives monthly AI cost?"
+        "Draw an end-to-end architecture for Ask IT and explain each component's responsibility.",
+        "Define how FAQ metadata and role-based permissions are enforced on the server.",
+        "Estimate indicative monthly AI cost and identify latency considerations.",
+        "Record a key architecture choice in a short architecture decision record (ADR)."
       ]
     }
   },
-  "fde-sdlc-architecture/architecture-decision-records": {
-    "summary": "One half-page ADR: decision, rationale, alternatives rejected.",
+  "fde-sdlc-architecture-solution/update-the-architecture-pack": {
+    "summary": "Update the architecture pack and list three implementation tasks in priority order for the development slice.",
     "sections": [
       {
-        "heading": "Example: Retail case",
-        "body": "```\nDecision: FAQ folder + RAG for phase 1.\nBecause: Existing FAQs; fastest validated outcome.\nNot chosen: Full ITSM integration in phase 1.\n```"
+        "heading": "Overview",
+        "body": "Update the architecture pack and list three implementation tasks in priority order for the development slice."
       },
       {
-        "heading": "Template",
-        "body": "```\nADR-001\nDecision:\nBecause:\nNot chosen:\n```"
+        "heading": "Details",
+        "body": "- Deliverable: Architecture diagram, FAQ permission model, cost estimate and ADR\n- Due: Before Session 4"
       }
     ],
-    "typeExtras": {
-      "objectives": [
-        "Write ADR-001"
-      ],
-      "checkpointQuestions": [
-        "What is explicitly deferred to phase 2?"
-      ]
-    }
-  },
-  "fde-sdlc-architecture/northwind-architecture-lab": {
-    "summary": "Complete diagram labels, FAQ tag table, cost estimate, and ADR-001.",
-    "sections": [
-      {
-        "heading": "Procedure",
-        "body": "1. Annotate architecture diagram for your repo layout.\n2. Complete FAQ tag table.\n3. Fill cost template.\n4. Save ADR-001 under docs/.\n5. Three-minute walkthrough with a peer."
-      }
-    ],
-    "typeExtras": {
-      "objectives": [
-        "Deliver diagram, tags, cost, ADR"
-      ],
-      "checkpointQuestions": [
-        "Can a peer explain the diagram back?"
-      ],
-      "deliverables": [
-        "Diagram export",
-        "FAQ tags",
-        "Cost note",
-        "ADR-001"
-      ]
-    }
-  },
-  "fde-sdlc-architecture/document-assistant-permissions": {
-    "summary": "Explain how staff cannot receive answers sourced from admin-only FAQs.",
-    "sections": [
-      {
-        "heading": "Example: Retail case",
-        "body": "\"Chunks are tagged by sensitivity. The API filters the retrieval index by role before generation. We verify with a staff login question that exists only in admin-only content—it must refuse, not leak.\""
-      }
-    ],
-    "typeExtras": {
-      "objectives": [
-        "Explain tags, server filter, and test case"
-      ],
-      "checkpointQuestions": [
-        "Where is the filter applied?"
-      ],
-      "prompt": "Some FAQ files are admin-only. How do you prevent staff from seeing those answers?",
-      "rubric": [
-        "Server-side enforcement",
-        "Concrete test"
-      ]
-    }
+    "typeExtras": {}
   }
 }

@@ -1,133 +1,132 @@
 {
-  "minimum-viable-product/poc-mvp-production": {
-    "summary": "Development on localhost; MVP/POC adds repeatable run plus Render pilot URL; production is Stage 8 hardening on Render or AWS.",
+  "mvp-poc-local-render/recap-and-environment-readiness": {
+    "summary": "Review regression results and list blockers to a usable POC.",
     "sections": [
       {
         "heading": "Overview",
-        "body": "- **Development (Stage 6):** feature-complete slice on localhost.\n- **MVP/POC (this stage):** documented startup, staff/admin login, UI polish, **Render POC URL** for sponsor demo, regression and pilots.\n- **Production (Stage 8):** production posture on **Render or AWS**, runbook, monitoring.\n\n\n**Customer for Stages 3–9: a retail company (HQ and stores)**\n\n- Approximately **50 employees** across stores and head office.\n- IT receives **100 messages per week**; many repeat password, Wi‑Fi, VPN, and device questions.\n- Answers exist in **~15 FAQ documents** (PDF or Word). Staff rarely read them.\n- **IT lead (sponsor)** wants an internal **Ask IT** page: typed question, cited answer from FAQs, or a clear escalation to IT.\n- One **restricted FAQ** (“Admin-only IT notes”) must not appear in answers for standard staff. Only **admin** role may retrieve content from that source.\n- **Phase 1 scope:** FAQ assistant only—not a full ticketing or HR system.\n\n\nMVP/POC must-haves: login, Ask IT UI, feedback capture, full 20-question regression after material changes."
+        "body": "Review regression results and list blockers to a usable POC."
       }
     ],
     "typeExtras": {
       "objectives": [
-        "Contrast three environments",
-        "List MVP/POC additions"
-      ],
-      "checkpointQuestions": [
-        "What does POC add beyond localhost?"
+        "Distinguish a development build, MVP/POC and production deployment.",
+        "Document a repeatable local startup process and prepare a POC deployment.",
+        "Deploy or walk through deploying the application to Render using environment configuration.",
+        "Plan three pilot sessions and capture feedback as actionable fixes."
       ]
     }
   },
-  "minimum-viable-product/fake-vs-real": {
-    "summary": "README, .env.example, and startup steps so a peer can run without your machine.",
+  "mvp-poc-local-render/development-vs-mvp-poc-vs-production": {
+    "summary": "Explain the purpose and acceptance criteria of each environment.",
     "sections": [
       {
         "heading": "Overview",
-        "body": "Document Python/Node versions, dependencies, `.env.example`, and start commands for backend and frontend. A peer should run from README alone.\n\nSecrets remain in environment variables, not Git."
-      },
-      {
-        "heading": "Template",
-        "body": "```\nLOCAL RUN\n1. clone\n2. cp .env.example .env\n3. start backend: ___\n4. start frontend: ___\n5. URL: ___\n```"
+        "body": "Explain the purpose and acceptance criteria of each environment."
       }
     ],
     "typeExtras": {
       "objectives": [
-        "README validated by peer"
-      ],
-      "checkpointQuestions": [
-        "What blocked your peer?"
+        "Distinguish a development build, MVP/POC and production deployment.",
+        "Document a repeatable local startup process and prepare a POC deployment.",
+        "Deploy or walk through deploying the application to Render using environment configuration.",
+        "Plan three pilot sessions and capture feedback as actionable fixes."
       ]
     }
   },
-  "minimum-viable-product/render-poc-deploy": {
-    "summary": "Connect repository, configure environment variables, deploy FastAPI and static frontend, verify public POC URL.",
+  "mvp-poc-local-render/repeatable-local-run": {
+    "summary": "Dependency setup, configuration, seed data, startup commands and health check.",
     "sections": [
       {
         "heading": "Overview",
-        "body": "**Render POC steps:**\n\n1. Push code to Git (no `.env` committed).\n2. Create **Web Service**; connect repository; set start command (e.g. `uvicorn main:app`).\n3. Add environment variables (LLM key, app secrets) in Render dashboard.\n4. Deploy; confirm `/health` and one FAQ question from a device outside localhost.\n5. Record POC URL for sponsor demo.\n\nProduction hardening (custom domain, scaling, AWS) follows in Stage 8."
-      },
-      {
-        "heading": "Procedure",
-        "body": "1. Confirm `.gitignore` excludes secrets.\n2. Deploy backend; attach frontend static site or combined service per your layout.\n3. Smoke-test staff login and one answered question on the public URL."
-      },
-      {
-        "heading": "Pitfalls",
-        "body": "- API keys in repository\n- Skipping health check"
+        "body": "- Dependency setup\n- Configuration\n- Seed data\n- Startup commands and health check"
       }
     ],
     "typeExtras": {
       "objectives": [
-        "Obtain working Render POC URL",
-        "Verify ask flow on public URL"
-      ],
-      "checkpointQuestions": [
-        "Where are secrets configured on Render?"
+        "Distinguish a development build, MVP/POC and production deployment.",
+        "Document a repeatable local startup process and prepare a POC deployment.",
+        "Deploy or walk through deploying the application to Render using environment configuration.",
+        "Plan three pilot sessions and capture feedback as actionable fixes."
       ]
     }
   },
-  "minimum-viable-product/build-mvp-slice": {
-    "summary": "Login, feedback persistence, README, local and Render POC smoke tests.",
-    "sections": [
-      {
-        "heading": "Procedure",
-        "body": "1. Enforce staff/admin login on server.\n2. Persist thumbs-down (file or database).\n3. Finalize README local and Render sections.\n4. Smoke: health, one staff answer, one refusal, admin-as-staff leak test on POC URL."
-      }
-    ],
-    "typeExtras": {
-      "objectives": [
-        "Login and feedback on POC",
-        "Smoke tests documented"
-      ],
-      "checkpointQuestions": [
-        "Zero admin leaks on POC?"
-      ],
-      "deliverables": [
-        "README",
-        "POC URL",
-        "Smoke checklist"
-      ]
-    }
-  },
-  "minimum-viable-product/pilot-feedback-loops": {
-    "summary": "Run full 20-question CSV; three pilot sessions; record results and top three fixes.",
+  "mvp-poc-local-render/render-poc-deployment": {
+    "summary": "Service configuration, build/start commands, environment variables, logs and deployment smoke test.",
     "sections": [
       {
         "heading": "Overview",
-        "body": "Run smoke tests plus full regression; save results under `tests/results/`. Conduct three pilot sessions without hand-holding; note confusion points; prioritize three fixes before production stage."
-      },
-      {
-        "heading": "Procedure",
-        "body": "Regression → save scores → three pilots → top-three fix list."
-      },
-      {
-        "heading": "Pitfalls",
-        "body": "- Skipping regression after UI changes\n- No written pilot notes"
+        "body": "- Service configuration\n- Build/start commands\n- Environment variables\n- Logs and deployment smoke test"
       }
     ],
     "typeExtras": {
       "objectives": [
-        "Regression file updated",
-        "Three pilots and fix list"
-      ],
-      "checkpointQuestions": [
-        "When must regression rerun?"
+        "Distinguish a development build, MVP/POC and production deployment.",
+        "Document a repeatable local startup process and prepare a POC deployment.",
+        "Deploy or walk through deploying the application to Render using environment configuration.",
+        "Plan three pilot sessions and capture feedback as actionable fixes."
       ]
     }
   },
-  "minimum-viable-product/vp-demo-next-week": {
-    "summary": "Demo Render POC with cited answers, refusal, and honest limits before production.",
+  "mvp-poc-local-render/lab-6-poc-hardening": {
+    "summary": "Prepare deployment settings or follow the deployment walkthrough; validate the POC URL and run smoke tests.",
     "sections": [
       {
-        "heading": "Example: Retail case",
-        "body": "\"I will demo on our Render POC: two answered questions with sources, one refusal, staff blocked from admin FAQ content, regression at __/20. Production runbook and AWS/Render production choice follow in Stage 8.\""
+        "heading": "Overview",
+        "body": "- POC validation checklist.\n- Make the local run repeatable and deploy the app to a POC environment where access is available.\n- Run smoke tests and prepare a lightweight pilot feedback form."
+      },
+      {
+        "heading": "Done when",
+        "body": "The local setup is documented; the POC URL or deployment evidence is available; smoke-test results and the top fixes are recorded."
+      }
+    ],
+    "typeExtras": {}
+  },
+  "mvp-poc-local-render/pilot-feedback-and-triage": {
+    "summary": "Plan three pilot sessions, capture issues and rank fixes by user impact and risk.",
+    "sections": [
+      {
+        "heading": "Overview",
+        "body": "- Plan three pilot sessions\n- Capture issues and rank fixes by user impact and risk"
       }
     ],
     "typeExtras": {
       "objectives": [
-        "Timeboxed honest demo outline"
-      ],
-      "checkpointQuestions": [
-        "Include refusal in demo?"
+        "Distinguish a development build, MVP/POC and production deployment.",
+        "Document a repeatable local startup process and prepare a POC deployment.",
+        "Deploy or walk through deploying the application to Render using environment configuration.",
+        "Plan three pilot sessions and capture feedback as actionable fixes."
       ]
     }
+  },
+  "mvp-poc-local-render/wrap-up-and-assignment-brief": {
+    "summary": "Record deployment status, known limitations and pilot questions.",
+    "sections": [
+      {
+        "heading": "Overview",
+        "body": "- Record deployment status\n- Known limitations and pilot questions"
+      }
+    ],
+    "typeExtras": {
+      "objectives": [
+        "Distinguish a development build, MVP/POC and production deployment.",
+        "Document a repeatable local startup process and prepare a POC deployment.",
+        "Deploy or walk through deploying the application to Render using environment configuration.",
+        "Plan three pilot sessions and capture feedback as actionable fixes."
+      ]
+    }
+  },
+  "mvp-poc-local-render/staging-checklist-and-pilot-plan": {
+    "summary": "Complete a staging checklist and a pilot plan for three sessions, including the feedback questions and issue-prioritisation method.",
+    "sections": [
+      {
+        "heading": "Overview",
+        "body": "Complete a staging checklist and a pilot plan for three sessions, including the feedback questions and issue-prioritisation method."
+      },
+      {
+        "heading": "Details",
+        "body": "- Deliverable: Local run instructions, POC deployment evidence, smoke-test checklist and pilot plan\n- Due: Before Session 7"
+      }
+    ],
+    "typeExtras": {}
   }
 }

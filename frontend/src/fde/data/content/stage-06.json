@@ -1,174 +1,228 @@
 {
-  "proof-of-concept/dev-backend": {
-    "summary": "FastAPI structure, FAQ ingest, POST /ask, role parameter, secrets in environment.",
+  "development/recap-and-development-plan": {
+    "summary": "Review architecture and turn it into small, testable work items.",
     "sections": [
       {
         "heading": "Overview",
-        "body": "**Customer for Stages 3–9: a retail company (HQ and stores)**\n\n- Approximately **50 employees** across stores and head office.\n- IT receives **100 messages per week**; many repeat password, Wi‑Fi, VPN, and device questions.\n- Answers exist in **~15 FAQ documents** (PDF or Word). Staff rarely read them.\n- **IT lead (sponsor)** wants an internal **Ask IT** page: typed question, cited answer from FAQs, or a clear escalation to IT.\n- One **restricted FAQ** (“Admin-only IT notes”) must not appear in answers for standard staff. Only **admin** role may retrieve content from that source.\n- **Phase 1 scope:** FAQ assistant only—not a full ticketing or HR system.\n\n\n**Backend deliverables:** ingest FAQ files; tag chunks; expose `POST /ask` with question and role; return answer + `source_file` or structured refusal; enforce role filter before search.\n\n**Acceptance target (with sponsor):** 16+ of 20 regression questions correct, zero admin leaks, source on every valid answer."
+        "body": "- Review architecture and turn it into small\n- Testable work items"
+      }
+    ],
+    "typeExtras": {
+      "objectives": [
+        "Break the solution into backend, frontend, RAG and data modules.",
+        "Define the FastAPI endpoints and request/response models needed for Ask IT.",
+        "Build or scaffold the application foundation and connect the UI to the backend.",
+        "Use the sample FAQ data model consistently across the application."
+      ]
+    }
+  },
+  "development/backend-module": {
+    "summary": "FastAPI structure, health endpoint, ask endpoint, request/response models and error responses.",
+    "sections": [
+      {
+        "heading": "Overview",
+        "body": "- FastAPI structure\n- Health endpoint\n- Ask endpoint\n- Request/response models and error responses"
+      }
+    ],
+    "typeExtras": {
+      "objectives": [
+        "Break the solution into backend, frontend, RAG and data modules.",
+        "Define the FastAPI endpoints and request/response models needed for Ask IT.",
+        "Build or scaffold the application foundation and connect the UI to the backend.",
+        "Use the sample FAQ data model consistently across the application."
+      ]
+    }
+  },
+  "development/frontend-module": {
+    "summary": "Question input, answer display, loading/error states and API integration.",
+    "sections": [
+      {
+        "heading": "Overview",
+        "body": "- Question input\n- Answer display\n- Loading/error states and API integration"
+      }
+    ],
+    "typeExtras": {
+      "objectives": [
+        "Break the solution into backend, frontend, RAG and data modules.",
+        "Define the FastAPI endpoints and request/response models needed for Ask IT.",
+        "Build or scaffold the application foundation and connect the UI to the backend.",
+        "Use the sample FAQ data model consistently across the application."
+      ]
+    }
+  },
+  "development/database-and-faq-data": {
+    "summary": "FAQ fields, source, version/date, access level and a small seed dataset.",
+    "sections": [
+      {
+        "heading": "Overview",
+        "body": "- FAQ fields\n- Source\n- Version/date\n- Access level and a small seed dataset"
+      }
+    ],
+    "typeExtras": {
+      "objectives": [
+        "Break the solution into backend, frontend, RAG and data modules.",
+        "Define the FastAPI endpoints and request/response models needed for Ask IT.",
+        "Build or scaffold the application foundation and connect the UI to the backend.",
+        "Use the sample FAQ data model consistently across the application."
+      ]
+    }
+  },
+  "development/lab-4-application-skeleton": {
+    "summary": "Create or extend the FastAPI service, define schemas, load sample FAQs and connect a basic UI call.",
+    "sections": [
+      {
+        "heading": "Overview",
+        "body": "- Build the application foundation.\n- Implement a minimal FastAPI service with health and ask routes, typed request/response models, sample FAQ records and a basic frontend request.\n- Use the architecture's chosen stack and repository structure."
       },
       {
-        "heading": "Pitfalls",
-        "body": "- Secrets in Git\n- Role check only in UI"
+        "heading": "Done when",
+        "body": "The app starts locally, the frontend reaches the backend, sample FAQ data can be loaded, and invalid requests return a clear error."
+      }
+    ],
+    "typeExtras": {}
+  },
+  "development/review-and-assignment-brief-session-4": {
+    "summary": "Run locally and record what is working and what remains.",
+    "sections": [
+      {
+        "heading": "Overview",
+        "body": "Run locally and record what is working and what remains."
       }
     ],
     "typeExtras": {
       "objectives": [
-        "List backend endpoints and role rules"
-      ],
-      "checkpointQuestions": [
-        "Where is role validated?"
+        "Break the solution into backend, frontend, RAG and data modules.",
+        "Define the FastAPI endpoints and request/response models needed for Ask IT.",
+        "Build or scaffold the application foundation and connect the UI to the backend.",
+        "Use the sample FAQ data model consistently across the application."
       ]
     }
   },
-  "proof-of-concept/dev-frontend": {
-    "summary": "Ask IT screens per wireframes: input, answer with source, no-answer state, optional feedback.",
+  "development/startup-instructions-and-tests": {
+    "summary": "Complete the local startup instructions and add tests for the health route and request validation.",
     "sections": [
       {
         "heading": "Overview",
-        "body": "Implement Home, Answer, and No-answer views from Stage 4. Display loading state during API calls. Surface API errors without stack traces.\n\nOptional: staff/admin login selector or test accounts for regression."
-      }
-    ],
-    "typeExtras": {
-      "objectives": [
-        "Map wireframes to components",
-        "Handle loading and errors"
-      ],
-      "checkpointQuestions": [
-        "What displays on timeout?"
-      ]
-    }
-  },
-  "proof-of-concept/dev-rag": {
-    "summary": "Retrieve FAQ chunks, generate answers with citations; refuse when retrieval is insufficient.",
-    "sections": [
-      {
-        "heading": "Overview",
-        "body": "Reuse Stage 2 retrieval patterns. Pass only role-allowed chunks to the generator. Include source file name in the response. When no chunk meets threshold, return the no-answer message—do not hallucinate policy content."
-      }
-    ],
-    "typeExtras": {
-      "objectives": [
-        "Describe retrieval + generation boundary",
-        "Define refusal condition"
-      ],
-      "checkpointQuestions": [
-        "When do you refuse to answer?"
-      ]
-    }
-  },
-  "proof-of-concept/dev-data": {
-    "summary": "FAQ file layout, chunk metadata, staff_ok/admin_only tags, sample data for tests.",
-    "sections": [
-      {
-        "heading": "Overview",
-        "body": "Store FAQs as files or normalized tables; maintain metadata: file name, chunk id, sensitivity tag. Version sample FAQs for regression. Document how to add or update a FAQ and rerun tests."
+        "body": "Complete the local startup instructions and add tests for the health route and request validation."
       },
       {
-        "heading": "Template",
-        "body": "```\nChunk metadata: file_name, tag (staff_ok | admin_only), chunk_id\n```"
+        "heading": "Details",
+        "body": "- Deliverable: Working application skeleton, sample FAQ schema and startup README\n- Due: Before Session 5"
       }
     ],
-    "typeExtras": {
-      "objectives": [
-        "Document FAQ metadata schema",
-        "Provide sample FAQs for pilot"
-      ],
-      "checkpointQuestions": [
-        "How are admin-only files marked?"
-      ]
-    }
+    "typeExtras": {}
   },
-  "proof-of-concept/eval-set-from-customer-data": {
-    "summary": "CSV with normal, edge, out-of-scope, and admin-as-staff cases for acceptance.",
+  "development/recap-and-development-status": {
+    "summary": "Review the application skeleton and tests from Session 4.",
     "sections": [
       {
         "heading": "Overview",
-        "body": "Create `tests/questions.csv`: ~12 standard, ~4 edge, ~2 out-of-scope (expect refusal), ~2 admin-only topics asked as **staff** (must not leak). Reuse in Stages 7–9."
+        "body": "Review the application skeleton and tests from Session 4."
+      }
+    ],
+    "typeExtras": {
+      "objectives": [
+        "Integrate document retrieval and generate answers grounded in retrieved FAQ content.",
+        "Return source citations and handle unsupported questions with an appropriate no-answer response.",
+        "Apply server-side permission filtering for staff and admin users.",
+        "Run a 20-question regression set and confirm there are zero admin-only content leaks."
+      ]
+    }
+  },
+  "development/rag-integration": {
+    "summary": "FAQ ingestion, chunking/indexing at a practical level, retrieval, grounded generation and citation metadata.",
+    "sections": [
+      {
+        "heading": "Overview",
+        "body": "- FAQ ingestion\n- Chunking/indexing at a practical level\n- Retrieval\n- Grounded generation and citation metadata"
+      }
+    ],
+    "typeExtras": {
+      "objectives": [
+        "Integrate document retrieval and generate answers grounded in retrieved FAQ content.",
+        "Return source citations and handle unsupported questions with an appropriate no-answer response.",
+        "Apply server-side permission filtering for staff and admin users.",
+        "Run a 20-question regression set and confirm there are zero admin-only content leaks."
+      ]
+    }
+  },
+  "development/no-answer-and-permission-behaviour": {
+    "summary": "Confidence/fallback behaviour, staff/admin test identities and permission filters before context reaches the model.",
+    "sections": [
+      {
+        "heading": "Overview",
+        "body": "- Confidence/fallback behaviour\n- Staff/admin test identities and permission filters before context reaches the model"
+      }
+    ],
+    "typeExtras": {
+      "objectives": [
+        "Integrate document retrieval and generate answers grounded in retrieved FAQ content.",
+        "Return source citations and handle unsupported questions with an appropriate no-answer response.",
+        "Apply server-side permission filtering for staff and admin users.",
+        "Run a 20-question regression set and confirm there are zero admin-only content leaks."
+      ]
+    }
+  },
+  "development/regression-test-design": {
+    "summary": "20 representative questions, expected sources/answers, unsupported questions and access-control cases.",
+    "sections": [
+      {
+        "heading": "Overview",
+        "body": "- 20 representative questions\n- Expected sources/answers\n- Unsupported questions and access-control cases"
+      }
+    ],
+    "typeExtras": {
+      "objectives": [
+        "Integrate document retrieval and generate answers grounded in retrieved FAQ content.",
+        "Return source citations and handle unsupported questions with an appropriate no-answer response.",
+        "Apply server-side permission filtering for staff and admin users.",
+        "Run a 20-question regression set and confirm there are zero admin-only content leaks."
+      ]
+    }
+  },
+  "development/lab-5-connect-rag-and-test": {
+    "summary": "Wire retrieval into Ask IT, show citations and run the regression set.",
+    "sections": [
+      {
+        "heading": "Overview",
+        "body": "- RAG integration and regression run.\n- Connect the RAG pipeline to the ask endpoint, return citations, refuse or escalate when the corpus cannot answer, and test staff/admin access against sample FAQs."
       },
       {
-        "heading": "Example: Retail case",
-        "body": "```\nid,question,expected_file,user_role,notes\n1,Reset password?,Password-FAQ.pdf,staff,\n2,Server room code?,Admin-only.pdf,staff,must refuse\n```"
+        "heading": "Done when",
+        "body": "The 20-question test set is recorded; citations point to retrieved sources; unsupported questions follow the no-answer path; staff queries never expose admin-only content."
+      }
+    ],
+    "typeExtras": {}
+  },
+  "development/review-and-assignment-brief-session-5": {
+    "summary": "Review failed cases and identify whether the cause is data, retrieval, permissions or generation.",
+    "sections": [
+      {
+        "heading": "Overview",
+        "body": "- Review failed cases and identify whether the cause is data\n- Retrieval\n- Permissions or generation"
       }
     ],
     "typeExtras": {
       "objectives": [
-        "Publish 20-row CSV",
-        "Include admin leak test rows"
-      ],
-      "checkpointQuestions": [
-        "Which rows test admin isolation?"
+        "Integrate document retrieval and generate answers grounded in retrieved FAQ content.",
+        "Return source citations and handle unsupported questions with an appropriate no-answer response.",
+        "Apply server-side permission filtering for staff and admin users.",
+        "Run a 20-question regression set and confirm there are zero admin-only content leaks."
       ]
     }
   },
-  "proof-of-concept/poc-scope-golden-set": {
-    "summary": "Document build plan, add sample FAQ files, complete questions.csv.",
+  "development/fix-a-failed-test-and-rerun": {
+    "summary": "Fix at least one failed test, document the cause and rerun the relevant regression cases.",
     "sections": [
       {
-        "heading": "Procedure",
-        "body": "1. Write development plan (scope + acceptance numbers).\n2. Add 3–5 sample FAQ files with tags.\n3. Complete questions.csv; peer-review five rows."
-      }
-    ],
-    "typeExtras": {
-      "objectives": [
-        "Plan, sample data, and CSV ready"
-      ],
-      "checkpointQuestions": [
-        "Acceptance numbers agreed?"
-      ],
-      "deliverables": [
-        "Development plan",
-        "questions.csv",
-        "sample FAQs"
-      ]
-    }
-  },
-  "proof-of-concept/northwind-poc-build": {
-    "summary": "End-to-end localhost build; run 20-question regression; short results report.",
-    "sections": [
-      {
-        "heading": "Procedure",
-        "body": "1. Backend ingest, ask API, role filter.\n2. Frontend wired to API.\n3. Execute all CSV rows; log pass/fail.\n4. Fix highest-impact failure; rerun failed rows.\n5. Write results summary."
+        "heading": "Overview",
+        "body": "Fix at least one failed test, document the cause and rerun the relevant regression cases."
       },
       {
-        "heading": "Template",
-        "body": "```\nRESULTS\nCorrect: __/20\nAdmin leaks: __ (target 0)\nTop failure:\nFix:\n```"
+        "heading": "Details",
+        "body": "- Deliverable: Local Ask IT slice, 20-question regression results and a short failure log\n- Due: Before Session 6"
       }
     ],
-    "typeExtras": {
-      "objectives": [
-        "Localhost E2E",
-        "Regression logged"
-      ],
-      "checkpointQuestions": [
-        "Met acceptance threshold?"
-      ],
-      "scope": "Ask IT on localhost with regression report",
-      "acceptanceCriteria": [
-        "0 admin leaks",
-        "Source on valid answers"
-      ]
-    }
-  },
-  "proof-of-concept/poc-scope-creep": {
-    "summary": "Defer out-of-scope requests using the BRD and acceptance criteria.",
-    "sections": [
-      {
-        "heading": "Example: Retail case",
-        "body": "\"I will log tickets for phase 2. Phase 1 completes the FAQ assistant and the agreed regression score. Let us finish acceptance on the current plan, then schedule an scope review.\""
-      }
-    ],
-    "typeExtras": {
-      "objectives": [
-        "Reference written scope and metrics"
-      ],
-      "checkpointQuestions": [
-        "Which document defines phase 1?"
-      ],
-      "prompt": "Mid-build request for ticketing and chat integrations.",
-      "rubric": [
-        "Professional deferral",
-        "Cites acceptance criteria"
-      ]
-    }
+    "typeExtras": {}
   }
 }

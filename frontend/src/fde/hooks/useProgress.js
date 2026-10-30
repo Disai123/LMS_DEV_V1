@@ -49,7 +49,16 @@ export function useProgressState() {
     })
   }, [])
 
-  const doneCount = doneKeys.length
+  const doneCount = useMemo(() => {
+    const allValidKeys = new Set()
+    getStages().forEach((s) => {
+      getAllItems(s).forEach((it) => {
+        allValidKeys.add(getProgressKey(s.slug, it.slug))
+      })
+    })
+    return doneKeys.filter((k) => allValidKeys.has(k)).length
+  }, [doneKeys])
+
   const percent = totalItems ? Math.round((doneCount / totalItems) * 100) : 0
 
   const stageStats = useMemo(() => {

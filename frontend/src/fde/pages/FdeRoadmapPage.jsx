@@ -28,7 +28,7 @@ export default function FdeRoadmapPage() {
         <title>Forward Deployed Engineer Roadmap · GNANAM AI</title>
         <meta
           name="description"
-          content="12-week FDE roadmap: software engineering, AI, discovery, architecture, development, MVP testing, production, enterprise AI, and Unified Commerce AI capstone."
+          content="48-hour FDE roadmap: software engineering, AI engineering, discovery, architecture, development, MVP testing, production, enterprise AI, and four hands-on capstone projects."
         />
       </Helmet>
 
@@ -51,7 +51,7 @@ export default function FdeRoadmapPage() {
         </div>
       </header>
 
-      <div className="grid grid-cols-1 md:grid-cols-[6fr_4fr_2fr] gap-2 mt-6">
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-2 mt-6">
         {data.phases.map((ph) => (
           <div
             key={ph.label}

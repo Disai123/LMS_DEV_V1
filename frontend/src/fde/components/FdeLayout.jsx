@@ -5,7 +5,7 @@ import { useFdeTheme } from '../hooks/useFdeTheme'
 const NAV = [
   { to: '/roadmap/fde', label: 'Roadmap', end: true },
   { to: '/roadmap/fde/my-learning', label: 'My Learning' },
-  { to: '/roadmap/fde/capstone', label: 'Capstone brief' },
+  { to: '/roadmap/fde/capstone', label: 'Capstone Projects' },
 ]
 
 export default function FdeLayout() {

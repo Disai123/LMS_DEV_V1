@@ -6,7 +6,7 @@ export interface RoadmapItem {
   slug: string
   type: ItemType
   title: string
-  minutes: number
+  minutes: number | string
   dayRef?: string
 }
 
@@ -16,6 +16,7 @@ export interface Stage {
   icon: string
   color: string
   weeksLabel: string
+  sectionLabel?: string
   hours: number
   cardBlurb: string
   description: string

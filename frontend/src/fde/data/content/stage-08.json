@@ -1,122 +1,112 @@
 {
-  "production-deployment/deployment-basics": {
-    "summary": "Always-on hosting via Render or AWS; Git-based deploy; environment secrets; health endpoint.",
+  "production-deployment/recap-poc-to-production": {
+    "summary": "Review pilot feedback and decide which blockers must be addressed before rollout.",
     "sections": [
       {
         "heading": "Overview",
-        "body": "**Render:** connect repository, set start command, configure environment variables, deploy, verify URL.\n\n**AWS (when required):** App Runner or Elastic Beanstalk for FastAPI; S3/CloudFront or equivalent for static frontend; RDS if database is required; Secrets Manager or parameter store for credentials; single region documented.\n\n**Common rules:** no secrets in Git; `/health` endpoint; test Ask IT from a network outside your laptop.\n\n\n**Customer for Stages 3–9: a retail company (HQ and stores)**\n\n- Approximately **50 employees** across stores and head office.\n- IT receives **100 messages per week**; many repeat password, Wi‑Fi, VPN, and device questions.\n- Answers exist in **~15 FAQ documents** (PDF or Word). Staff rarely read them.\n- **IT lead (sponsor)** wants an internal **Ask IT** page: typed question, cited answer from FAQs, or a clear escalation to IT.\n- One **restricted FAQ** (“Admin-only IT notes”) must not appear in answers for standard staff. Only **admin** role may retrieve content from that source.\n- **Phase 1 scope:** FAQ assistant only—not a full ticketing or HR system."
+        "body": "Review pilot feedback and decide which blockers must be addressed before rollout."
+      }
+    ],
+    "typeExtras": {
+      "objectives": [
+        "Deploy the application to a production-like environment on Render or AWS.",
+        "Keep API keys and other secrets in environment configuration rather than source control.",
+        "Configure useful logs, health checks and user-facing error handling.",
+        "Write a one-page runbook and practise responding to a simulated outage."
+      ]
+    }
+  },
+  "production-deployment/deployment-fundamentals": {
+    "summary": "Production configuration, build/start process, environment variables, database/service dependencies and rollback considerations.",
+    "sections": [
+      {
+        "heading": "Overview",
+        "body": "- Production configuration\n- Build/start process\n- Environment variables\n- Database/service dependencies and rollback considerations"
+      }
+    ],
+    "typeExtras": {
+      "objectives": [
+        "Deploy the application to a production-like environment on Render or AWS.",
+        "Keep API keys and other secrets in environment configuration rather than source control.",
+        "Configure useful logs, health checks and user-facing error handling.",
+        "Write a one-page runbook and practise responding to a simulated outage."
+      ]
+    }
+  },
+  "production-deployment/logging-monitoring-and-errors": {
+    "summary": "Structured logs, health checks, timeouts, safe user-facing errors and diagnosing failed model/API calls.",
+    "sections": [
+      {
+        "heading": "Overview",
+        "body": "- Structured logs\n- Health checks\n- Timeouts\n- Safe user-facing errors and diagnosing failed model/API calls"
+      }
+    ],
+    "typeExtras": {
+      "objectives": [
+        "Deploy the application to a production-like environment on Render or AWS.",
+        "Keep API keys and other secrets in environment configuration rather than source control.",
+        "Configure useful logs, health checks and user-facing error handling.",
+        "Write a one-page runbook and practise responding to a simulated outage."
+      ]
+    }
+  },
+  "production-deployment/lab-7a-production-deployment": {
+    "summary": "Deploy or rehearse deployment using the target platform; verify configuration and run smoke tests.",
+    "sections": [
+      {
+        "heading": "Overview",
+        "body": "- Deployment and outage drill.\n- Use the selected platform's deployment flow or a guided simulation.\n- Verify configuration and health checks, then walk through one outage scenario using logs and the runbook."
       },
       {
-        "heading": "Template",
-        "body": "```\nPRODUCTION CHECKLIST\n[ ] Secrets in host env only\n[ ] /health returns OK\n[ ] Public URL tested\n[ ] One FAQ question succeeds\n```"
+        "heading": "Done when",
+        "body": "Secrets are not committed to Git, health checks work, errors are understandable, and a peer can follow the runbook to diagnose the simulated issue."
       }
     ],
-    "typeExtras": {
-      "objectives": [
-        "Contrast Render vs AWS use cases",
-        "List deploy safety checks"
-      ],
-      "checkpointQuestions": [
-        "Where do production secrets live?"
-      ]
-    }
+    "typeExtras": {}
   },
-  "production-deployment/observability-tracing": {
-    "summary": "Request logs, error counts, and feedback records for the IT lead.",
+  "production-deployment/lab-7b-runbook-and-outage-drill": {
+    "summary": "Write the first-response steps for an unavailable model API, failed deployment or elevated error rate.",
     "sections": [
       {
         "heading": "Overview",
-        "body": "Log timestamp, outcome, and duration per ask request (avoid logging secrets or full API keys). Retain negative feedback with question, answer, and source for FAQ updates. Use host log dashboard (Render or AWS CloudWatch)."
+        "body": "- Deployment and outage drill.\n- Use the selected platform's deployment flow or a guided simulation.\n- Verify configuration and health checks, then walk through one outage scenario using logs and the runbook."
       },
       {
-        "heading": "Template",
-        "body": "```\nINCIDENT LOOKUP\n1. Open host logs\n2. Match time window\n3. Cross-check feedback file\n4. Reproduce locally\n```"
+        "heading": "Done when",
+        "body": "Secrets are not committed to Git, health checks work, errors are understandable, and a peer can follow the runbook to diagnose the simulated issue."
       }
     ],
-    "typeExtras": {
-      "objectives": [
-        "Enable structured request logs",
-        "Locate logs on chosen host"
-      ],
-      "checkpointQuestions": [
-        "What not to log?"
-      ]
-    }
+    "typeExtras": {}
   },
-  "production-deployment/reliability-cost-incidents": {
-    "summary": "LLM timeout with friendly message; monitor provider spend during pilot.",
+  "production-deployment/review-and-assignment-brief": {
+    "summary": "Peer-check the runbook for clarity and completeness.",
     "sections": [
       {
         "heading": "Overview",
-        "body": "Set request timeout (e.g. 30s). On failure, show a neutral message and IT contact—never raw stack traces. Review provider usage weekly during early production."
+        "body": "Peer-check the runbook for clarity and completeness."
       }
     ],
     "typeExtras": {
       "objectives": [
-        "User-safe error handling",
-        "Timeout configured"
-      ],
-      "checkpointQuestions": [
-        "User-visible text on failure?"
+        "Deploy the application to a production-like environment on Render or AWS.",
+        "Keep API keys and other secrets in environment configuration rather than source control.",
+        "Configure useful logs, health checks and user-facing error handling.",
+        "Write a one-page runbook and practise responding to a simulated outage."
       ]
     }
   },
-  "production-deployment/deploy-with-tracing": {
-    "summary": "Promote POC to production posture on Render or AWS; verify URL and logs.",
+  "production-deployment/runbook-and-pre-rollout-checklist": {
+    "summary": "Refine the runbook and add a short pre-rollout checklist covering configuration, smoke tests, rollback/contact path and known limitations.",
     "sections": [
       {
-        "heading": "Procedure",
-        "body": "1. Deploy with production env vars.\n2. Verify /health and Ask IT from external network.\n3. Capture log screenshot after successful and failed request."
-      }
-    ],
-    "typeExtras": {
-      "objectives": [
-        "Production URL operational"
-      ],
-      "checkpointQuestions": [
-        "Tested off localhost?"
-      ],
-      "deliverables": [
-        "Production URL",
-        "Log screenshot"
-      ]
-    }
-  },
-  "production-deployment/runbook-incident-drill": {
-    "summary": "One-page runbook; partner simulates bad API key and recovers using runbook only.",
-    "sections": [
+        "heading": "Overview",
+        "body": "Refine the runbook and add a short pre-rollout checklist covering configuration, smoke tests, rollback/contact path and known limitations."
+      },
       {
-        "heading": "Template",
-        "body": "```\nRUNBOOK\nURL:\nHealth:\nLogs location:\nIf API errors: check ___ env var\nIf slow: check provider status\nContact:\n```"
+        "heading": "Details",
+        "body": "- Deliverable: Deployment evidence/checklist, logging notes and one-page runbook\n- Due: Before Session 8"
       }
     ],
-    "typeExtras": {
-      "objectives": [
-        "Runbook validated by drill"
-      ],
-      "checkpointQuestions": [
-        "Missing step identified?"
-      ],
-      "deliverables": [
-        "runbook.md"
-      ]
-    }
-  },
-  "production-deployment/poc-to-production": {
-    "summary": "Checklist before all staff use Ask IT daily.",
-    "sections": [
-      {
-        "heading": "Example: Retail case",
-        "body": "\"Confirm production URL, secrets, role enforcement, runbook, IT lead review of negative feedback, FAQ ownership, and regression after any FAQ update.\""
-      }
-    ],
-    "typeExtras": {
-      "objectives": [
-        "List five rollout gates"
-      ],
-      "checkpointQuestions": [
-        "Why rerun regression after FAQ edits?"
-      ]
-    }
+    "typeExtras": {}
   }
 }

@@ -1,146 +1,115 @@
 {
-  "fde-sdlc-business-requirement/fde-role-engagement-lifecycle": {
-    "summary": "Forward Deployed Engineers align customer problems with deliverable software through discovery, design, build, and handover.",
+  "fde-sdlc-business-requirement/welcome-and-scenario-kickoff": {
+    "summary": "Introduce Ask IT, the workshop outputs and the link between requirements, design, development and deployment.",
     "sections": [
       {
         "heading": "Overview",
-        "body": "A **Forward Deployed Engineer (FDE)** combines engineering with customer delivery: clarify the problem, document scope, implement incrementally, validate with evidence, and hand over runnable artifacts.\n\n**Typical sequence in this workshop:**\n\n1. **Discovery** — stakeholders, constraints, success measures.\n2. **Design** — UI flow and solution architecture.\n3. **Development** — working software on localhost.\n4. **MVP/POC** — repeatable run and pilot validation.\n5. **Production** — hosted deployment and operations.\n6. **Enterprise handover** — security, observability, and sponsor readout.\n\n\n**Customer for Stages 3–9: a retail company (HQ and stores)**\n\n- Approximately **50 employees** across stores and head office.\n- IT receives **100 messages per week**; many repeat password, Wi‑Fi, VPN, and device questions.\n- Answers exist in **~15 FAQ documents** (PDF or Word). Staff rarely read them.\n- **IT lead (sponsor)** wants an internal **Ask IT** page: typed question, cited answer from FAQs, or a clear escalation to IT.\n- One **restricted FAQ** (“Admin-only IT notes”) must not appear in answers for standard staff. Only **admin** role may retrieve content from that source.\n- **Phase 1 scope:** FAQ assistant only—not a full ticketing or HR system."
-      },
-      {
-        "heading": "Procedure",
-        "body": "1. Review the retail case above.\n2. Write one sentence describing the business problem.\n3. Write one sentence describing measurable success for the IT lead."
-      },
-      {
-        "heading": "Pitfalls",
-        "body": "- Opening with technology choices before scope is agreed.\n- Skipping written notes after stakeholder conversations.\n- Expanding scope beyond the FAQ assistant in phase 1."
+        "body": "- Introduce Ask IT\n- The workshop outputs and the link between requirements\n- Design\n- Development and deployment"
       }
     ],
     "typeExtras": {
       "objectives": [
-        "Summarize the FDE delivery sequence",
-        "State the retail IT problem in one sentence"
-      ],
-      "checkpointQuestions": [
-        "What is phase 1 in scope?",
-        "Who is the sponsor?"
+        "Explain the FDE engagement lifecycle from discovery through design, build, validation and handover.",
+        "Run structured discovery with an IT sponsor and distinguish business needs from proposed features.",
+        "Convert a vague request into measurable requirements, constraints and acceptance criteria.",
+        "Produce a concise one-page business requirements document (BRD)."
       ]
     }
   },
-  "fde-sdlc-business-requirement/running-discovery-session": {
-    "summary": "Structured questions covering problem, users, FAQ sources, restricted content, and success metrics.",
+  "fde-sdlc-business-requirement/what-an-fde-does": {
+    "summary": "Customer-facing engineering; discovery, rapid iteration, delivery constraints and ownership after handover.",
     "sections": [
       {
         "heading": "Overview",
-        "body": "Run a **30–45 minute discovery** with the IT lead. Capture answers under five headings:\n\n1. **Current state** — how employees obtain IT answers today.\n2. **Users** — who will use Ask IT (all staff, stores only, etc.).\n3. **Knowledge base** — location, format, and count of FAQ documents; update process.\n4. **Restrictions** — documents or topics that must not appear for standard staff.\n5. **Success** — metric the sponsor will use (for example, reduction in repeat FAQ emails).\n\nSend a short confirmation note after the session: “This is what we understood—please correct any errors.”"
-      },
-      {
-        "heading": "Example: Retail case",
-        "body": "- Volume: ~100 IT emails weekly; high repetition on access and device topics.\n- Users: ~50 employees; IT lead owns FAQ maintenance.\n- Restricted FAQ: admin-only file; must not surface for staff role.\n- Success: measurable drop in repeat FAQ-style emails within two months."
-      },
-      {
-        "heading": "Template",
-        "body": "```\nDISCOVERY NOTES\nProblem:\nUsers:\nFAQ sources:\nRestricted content:\nSuccess metric:\nOpen questions:\n```"
+        "body": "- Customer-facing engineering\n- Discovery\n- Rapid iteration\n- Delivery constraints and ownership after handover"
       }
     ],
     "typeExtras": {
       "objectives": [
-        "List five discovery areas",
-        "Draft at least eight specific questions"
-      ],
-      "checkpointQuestions": [
-        "Which area covers restricted FAQs?",
-        "Why confirm notes with the sponsor?"
+        "Explain the FDE engagement lifecycle from discovery through design, build, validation and handover.",
+        "Run structured discovery with an IT sponsor and distinguish business needs from proposed features.",
+        "Convert a vague request into measurable requirements, constraints and acceptance criteria.",
+        "Produce a concise one-page business requirements document (BRD)."
       ]
     }
   },
-  "fde-sdlc-business-requirement/writing-a-brd": {
-    "summary": "Goal, users, in-scope and out-of-scope items, and a measurable success criterion on a single page.",
+  "fde-sdlc-business-requirement/structured-discovery": {
+    "summary": "Stakeholders, user groups, current workflow, pain points, data sources, access rules, success measures and non-goals.",
     "sections": [
       {
         "heading": "Overview",
-        "body": "The **BRD** is a one-page agreement: what will be built, what will not, and how success is measured. The IT lead should review it in about five minutes.\n\n**Required sections:** goal, users, in scope, out of scope, success metric, open questions, approval line.\n\n**Phase 1 in scope (retail case):** Ask IT page, answers from approved FAQs with source file name, refusal when no match, role-based exclusion of admin-only content.\n\n**Out of scope (examples):** full ticketing, automated email replies, mobile-native app, company SSO integration."
-      },
-      {
-        "heading": "Template",
-        "body": "```\nRETAIL — ASK IT (BRD v1)\nGoal:\nUsers:\nIn scope:\nOut of scope:\nSuccess metric:\nApproved by: ______  Date: ______\n```"
+        "body": "- Stakeholders\n- User groups\n- Current workflow\n- Pain points\n- Data sources\n- Access rules\n- Success measures and non-goals"
       }
     ],
     "typeExtras": {
       "objectives": [
-        "Complete all BRD sections",
-        "Include one numeric success metric"
-      ],
-      "checkpointQuestions": [
-        "Why document out-of-scope items?",
-        "Name one out-of-scope capability"
+        "Explain the FDE engagement lifecycle from discovery through design, build, validation and handover.",
+        "Run structured discovery with an IT sponsor and distinguish business needs from proposed features.",
+        "Convert a vague request into measurable requirements, constraints and acceptance criteria.",
+        "Produce a concise one-page business requirements document (BRD)."
       ]
     }
   },
-  "fde-sdlc-business-requirement/northwind-discovery-lab": {
-    "summary": "Run discovery against the retail case, then produce notes and a one-page BRD.",
-    "sections": [
-      {
-        "heading": "Procedure",
-        "body": "1. Conduct a structured discovery session (partner or scripted sponsor).\n2. Produce half a page of discovery notes.\n3. Draft the one-page BRD from the template.\n4. Peer review: can a reader understand scope without verbal explanation?"
-      },
-      {
-        "heading": "Pitfalls",
-        "body": "- Missing out-of-scope section\n- No success metric"
-      }
-    ],
-    "typeExtras": {
-      "objectives": [
-        "Discovery notes and BRD v1 complete",
-        "One round of peer feedback"
-      ],
-      "checkpointQuestions": [
-        "What changed after peer review?"
-      ],
-      "prerequisites": [
-        "Stage 3 reads completed"
-      ],
-      "steps": [
-        "Discovery",
-        "Notes",
-        "BRD",
-        "Review"
-      ],
-      "deliverables": [
-        "Discovery notes",
-        "BRD v1"
-      ]
-    }
-  },
-  "fde-sdlc-business-requirement/ai-assistant-first-30-min": {
-    "summary": "Respond professionally when the sponsor requests an AI assistant over internal documents.",
+  "fde-sdlc-business-requirement/from-needs-to-requirements": {
+    "summary": "Functional and non-functional requirements; assumptions, dependencies, risks and acceptance criteria.",
     "sections": [
       {
         "heading": "Overview",
-        "body": "Lead with discovery questions and a written scope summary—not infrastructure details."
-      },
-      {
-        "heading": "Example: Retail case",
-        "body": "\"I would confirm the business problem, intended users, document locations, any restricted sources, and how success will be measured. I would capture that in a one-page BRD and agree on a first deliverable: the Ask IT FAQ assistant before any ticketing expansion.\""
+        "body": "- Functional and non-functional requirements\n- Assumptions\n- Dependencies\n- Risks and acceptance criteria"
       }
     ],
     "typeExtras": {
       "objectives": [
-        "Cover users, data, restrictions, and success",
-        "Propose a bounded first deliverable"
-      ],
-      "checkpointQuestions": [
-        "What is the phase 1 deliverable?"
-      ],
-      "prompt": "The IT lead wants AI over internal IT FAQ documents. What do you do in the first 30 minutes?",
-      "howToApproach": [
-        "Structured questions",
-        "Written summary",
-        "Bounded scope"
-      ],
-      "rubric": [
-        "Professional tone",
-        "No premature architecture"
+        "Explain the FDE engagement lifecycle from discovery through design, build, validation and handover.",
+        "Run structured discovery with an IT sponsor and distinguish business needs from proposed features.",
+        "Convert a vague request into measurable requirements, constraints and acceptance criteria.",
+        "Produce a concise one-page business requirements document (BRD)."
       ]
     }
+  },
+  "fde-sdlc-business-requirement/lab-1-discovery-and-brd": {
+    "summary": "Role-play sponsor discovery and draft the one-page BRD for Ask IT.",
+    "sections": [
+      {
+        "heading": "Overview",
+        "body": "- Discovery workshop and BRD draft.\n- In pairs, one participant plays the IT sponsor and the other the FDE.\n- Capture the problem, users, source documents, restricted content, desired outcomes and constraints, then write a one-page BRD."
+      },
+      {
+        "heading": "Done when",
+        "body": "The BRD identifies target users, problem statement, in-scope/out-of-scope items, data sources, measurable acceptance criteria, assumptions and open questions."
+      }
+    ],
+    "typeExtras": {}
+  },
+  "fde-sdlc-business-requirement/review-and-assignment-brief": {
+    "summary": "Peer-review scope, resolve ambiguities and identify questions that still need sponsor confirmation.",
+    "sections": [
+      {
+        "heading": "Overview",
+        "body": "- Peer-review scope\n- Resolve ambiguities and identify questions that still need sponsor confirmation"
+      }
+    ],
+    "typeExtras": {
+      "objectives": [
+        "Explain the FDE engagement lifecycle from discovery through design, build, validation and handover.",
+        "Run structured discovery with an IT sponsor and distinguish business needs from proposed features.",
+        "Convert a vague request into measurable requirements, constraints and acceptance criteria.",
+        "Produce a concise one-page business requirements document (BRD)."
+      ]
+    }
+  },
+  "fde-sdlc-business-requirement/one-page-brd-and-discovery-questions": {
+    "summary": "Create a one-page BRD and a discovery-question list. Include at least three measurable acceptance criteria and identify one risk or dependency.",
+    "sections": [
+      {
+        "heading": "Overview",
+        "body": "Create a one-page BRD and a discovery-question list. Include at least three measurable acceptance criteria and identify one risk or dependency."
+      },
+      {
+        "heading": "Details",
+        "body": "- Deliverable: One-page BRD and discovery notes\n- Due: Before Session 2"
+      }
+    ],
+    "typeExtras": {}
   }
 }

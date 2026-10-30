@@ -9,7 +9,7 @@ import { fileURLToPath } from 'url'
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url))
 const root = path.join(__dirname, '..')
-const htmlPath = path.join(root, 'AI FDE Course_ Stage by Stage (2).html')
+const htmlPath = path.join(root, 'AI_FDE_Course__Stage_by_Stage__48h.html')
 const fdeData = path.join(root, 'frontend/src/fde/data')
 const stagesPath = path.join(fdeData, 'stages.json')
 const contentDir = path.join(fdeData, 'content')

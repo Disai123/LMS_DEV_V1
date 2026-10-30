@@ -1,182 +1,179 @@
 {
-  "software-engineering/python-essentials-and-environment-setup": {
-    "summary": "Set up uv or venv, a clean project structure and Git, then read and write files with proper exception handling.",
+  "software-engineering/welcome-goals-and-the-running-scenario": {
+    "summary": "Introductions, how the workshop runs, the policy and support assistant used throughout, and how the Python, LLM, RAG and agent sessions fit together",
     "sections": [
       {
-        "heading": "Focus",
-        "body": "Set up uv or venv, a clean project structure and Git, then read and write files with proper exception handling."
+        "heading": "Overview",
+        "body": "- Introductions\n- How the workshop runs\n- The policy and support assistant used throughout\n- And how the Python\n- LLM\n- RAG and agent sessions fit together"
       }
     ],
     "typeExtras": {
       "objectives": [
-        "Set up an isolated environment and keep secrets in a .env file",
-        "Use functions, modules, file handling and try/except correctly",
-        "Structure a small project and commit it with Git"
-      ],
-      "checkpointQuestions": [
-        "How would you hand a client a project that runs on their machine first time?",
-        "What should happen when an input file is missing or malformed?"
+        "Set up a clean, reproducible Python project with secrets handled safely",
+        "Call an LLM API reliably, with timeouts, retries and rate-limit handling",
+        "Validate model output against a Pydantic schema and explain why it matters"
       ]
     }
   },
-  "software-engineering/data-structures-json-and-pandas": {
-    "summary": "Turn nested JSON, CSV and text extracted from PDFs and Word files into clean tables.",
+  "software-engineering/environment-setup-and-api-calls": {
+    "summary": "uv/venv, .env and secrets handling, project structure; requests/httpx and JSON handling",
     "sections": [
       {
-        "heading": "Focus",
-        "body": "Turn nested JSON, CSV and text extracted from PDFs and Word files into clean tables."
+        "heading": "Overview",
+        "body": "- Uv/venv\n- .env and secrets handling\n- Project structure\n- Requests/httpx and JSON handling"
       }
     ],
     "typeExtras": {
       "objectives": [
-        "Choose between lists, dicts, sets and tuples and use comprehensions",
-        "Parse and flatten JSON and CSV data",
-        "Filter, group, merge and clean data in pandas, including missing values"
-      ],
-      "checkpointQuestions": [
-        "How would you find and handle bad rows in a client’s export?",
-        "How do you get text out of PDF and DOCX files?"
+        "Set up a clean, reproducible Python project with secrets handled safely",
+        "Call an LLM API reliably, with timeouts, retries and rate-limit handling",
+        "Validate model output against a Pydantic schema and explain why it matters"
       ]
     }
   },
-  "software-engineering/working-with-apis-reliably": {
-    "summary": "Call REST and LLM APIs without letting timeouts, rate limits or bad responses break the job.",
+  "software-engineering/reliability-basics": {
+    "summary": "Retries with backoff, rate limits and timeouts; what should and should not be retried",
     "sections": [
       {
-        "heading": "Focus",
-        "body": "Call REST and LLM APIs without letting timeouts, rate limits or bad responses break the job."
+        "heading": "Overview",
+        "body": "- Retries with backoff\n- Rate limits and timeouts\n- What should and should not be retried"
       }
     ],
     "typeExtras": {
       "objectives": [
-        "Use requests or httpx with auth headers and check status codes",
-        "Add timeouts, exponential backoff, rate-limit handling and pagination",
-        "Log API calls so failures can be diagnosed later"
-      ],
-      "checkpointQuestions": [
-        "What should happen when an API returns 429 or times out?",
-        "Where do API keys live, and how do they stay out of Git?"
+        "Set up a clean, reproducible Python project with secrets handled safely",
+        "Call an LLM API reliably, with timeouts, retries and rate-limit handling",
+        "Validate model output against a Pydantic schema and explain why it matters"
       ]
     }
   },
-  "software-engineering/typing-pydantic-and-async": {
-    "summary": "Validate model output with Pydantic and run many calls concurrently without hitting rate limits.",
+  "software-engineering/pydantic-and-typing": {
+    "summary": "Schemas for structured LLM output and validation; handling invalid replies",
     "sections": [
       {
-        "heading": "Focus",
-        "body": "Validate model output with Pydantic and run many calls concurrently without hitting rate limits."
+        "heading": "Overview",
+        "body": "- Schemas for structured LLM output and validation\n- Handling invalid replies"
       }
     ],
     "typeExtras": {
       "objectives": [
-        "Model data with type hints and Pydantic, including custom validators",
-        "Run concurrent calls with asyncio and cap concurrency with a semaphore",
-        "Handle validation failures with a repair or retry step"
-      ],
-      "checkpointQuestions": [
-        "Why validate LLM output even when the prompt asks for JSON?",
-        "How do you run 50 parallel calls without hitting rate limits?"
+        "Set up a clean, reproducible Python project with secrets handled safely",
+        "Call an LLM API reliably, with timeouts, retries and rate-limit handling",
+        "Validate model output against a Pydantic schema and explain why it matters"
       ]
     }
   },
-  "software-engineering/fastapi-logging-and-pytest": {
-    "summary": "Wrap a model call in a FastAPI service, test it with mocked LLM calls and make failures debuggable.",
+  "software-engineering/async-python": {
+    "summary": "asyncio basics and concurrency limits, since parallel LLM calls are everywhere",
     "sections": [
       {
-        "heading": "Focus",
-        "body": "Wrap a model call in a FastAPI service, test it with mocked LLM calls and make failures debuggable."
+        "heading": "Overview",
+        "body": "- Asyncio basics and concurrency limits\n- Since parallel LLM calls are everywhere"
       }
     ],
     "typeExtras": {
       "objectives": [
-        "Expose a model call through FastAPI with request and response models",
-        "Write pytest tests and mock LLM calls",
-        "Add structured logging and debug failures"
-      ],
-      "checkpointQuestions": [
-        "How do you test code that calls a non-deterministic model?",
-        "How would you scope a vague client request into a measurable task?"
+        "Set up a clean, reproducible Python project with secrets handled safely",
+        "Call an LLM API reliably, with timeouts, retries and rate-limit handling",
+        "Validate model output against a Pydantic schema and explain why it matters"
       ]
     }
   },
-  "software-engineering/log-summariser-and-data-cleaning-script": {
-    "summary": "Build a command-line tool that reads a file, cleans it and reports counts and errors.",
+  "software-engineering/lab-1a-validated-api-call": {
+    "summary": "Build the call, add retries, and validate the reply",
     "sections": [
       {
-        "heading": "Focus",
-        "body": "Build a command-line tool that reads a file, cleans it and reports counts and errors."
+        "heading": "Overview",
+        "body": "- Call an LLM API from Python, return JSON validated by a Pydantic model, and handle a bad key, a timeout and an invalid reply without crashing."
+      },
+      {
+        "heading": "Done when",
+        "body": "The script returns valid JSON for good input and reports each failure clearly."
+      }
+    ],
+    "typeExtras": {}
+  },
+  "software-engineering/harden-the-api-script": {
+    "summary": "Harden the API script.",
+    "sections": [
+      {
+        "heading": "Overview",
+        "body": "- Extend the Lab 1A script to handle three failure modes: timeout, rate limit (429) and invalid JSON from the model\n- Write a short note (5 to 8 lines) explaining which failures you retry, which you do not, and why"
+      },
+      {
+        "heading": "Details",
+        "body": "- Deliverable: Updated script and the short note\n- Due: Before Session 2"
       }
     ],
     "typeExtras": {
-      "objectives": [
-        "Read and clean a messy input file",
-        "Handle bad lines without crashing",
-        "Report counts and a short summary"
-      ],
       "checkpointQuestions": [
-        "What did you do with rows that could not be parsed?",
-        "How would the tool behave on a file ten times larger?"
+        "Why should a 401 error never be retried?"
       ]
     }
   },
-  "software-engineering/async-batch-classifier-with-pydantic": {
-    "summary": "Classify 50 support tickets concurrently into validated JSON.",
+  "software-engineering/recap-and-assignment-review": {
+    "summary": "Two or three participants share how they handled the failure cases",
     "sections": [
       {
-        "heading": "Focus",
-        "body": "Classify 50 support tickets concurrently into validated JSON."
+        "heading": "Overview",
+        "body": "Two or three participants share how they handled the failure cases"
       }
     ],
     "typeExtras": {
       "objectives": [
-        "Run calls concurrently with a concurrency limit",
-        "Parse each reply into a Pydantic model",
-        "Retry or repair invalid replies"
-      ],
-      "checkpointQuestions": [
-        "How many replies failed validation, and why?",
-        "What concurrency limit did you choose and why?"
+        "Wrap a model call in a small, tested FastAPI service",
+        "Read and clean data from PDFs, CSVs and documents for AI use",
+        "Explain tokens, context windows, sampling and hallucination in plain language",
+        "Compare frontier, open-weight and small models on cost, latency and quality"
       ]
     }
   },
-  "software-engineering/document-triage-service-fastapi-llm-tests": {
-    "summary": "A FastAPI endpoint accepts a document, calls an LLM, returns validated JSON and ships with tests and logging.",
+  "software-engineering/data-wrangling": {
+    "summary": "pandas basics; reading PDFs, CSVs and Word documents",
     "sections": [
       {
-        "heading": "Focus",
-        "body": "A FastAPI endpoint accepts a document, calls an LLM, returns validated JSON and ships with tests and logging."
+        "heading": "Overview",
+        "body": "- Pandas basics\n- Reading PDFs\n- CSVs and Word documents"
       }
     ],
     "typeExtras": {
       "objectives": [
-        "Expose a validated endpoint that wraps the model call",
-        "Cover success and failure cases with pytest",
-        "Log each request so a failure can be traced"
-      ],
-      "checkpointQuestions": [
-        "What would you extend first for a batch endpoint?",
-        "How would you explain its limits to the client?"
+        "Wrap a model call in a small, tested FastAPI service",
+        "Read and clean data from PDFs, CSVs and documents for AI use",
+        "Explain tokens, context windows, sampling and hallucination in plain language",
+        "Compare frontier, open-weight and small models on cost, latency and quality"
       ]
     }
   },
-  "software-engineering/explain-retries-timeouts-and-async": {
-    "summary": "Practise explaining reliable API code to a technical interviewer in a few minutes.",
+  "software-engineering/quick-services-logging-and-testing": {
+    "summary": "A small FastAPI endpoint wrapping a model call; debugging, logging and pytest with a faked LLM call",
     "sections": [
       {
-        "heading": "Focus",
-        "body": "Practise explaining reliable API code to a technical interviewer in a few minutes."
+        "heading": "Overview",
+        "body": "- A small FastAPI endpoint wrapping a model call\n- Debugging\n- Logging and pytest with a faked LLM call"
       }
     ],
     "typeExtras": {
       "objectives": [
-        "Explain backoff, timeouts and rate limits",
-        "Explain when async helps and when it does not",
-        "Give one example from your own lab"
-      ],
-      "checkpointQuestions": [
-        "Can you explain this in two minutes without jargon?",
-        "What breaks first when traffic increases tenfold?"
+        "Wrap a model call in a small, tested FastAPI service",
+        "Read and clean data from PDFs, CSVs and documents for AI use",
+        "Explain tokens, context windows, sampling and hallucination in plain language",
+        "Compare frontier, open-weight and small models on cost, latency and quality"
       ]
     }
+  },
+  "software-engineering/lab-1b-tested-triage-endpoint": {
+    "summary": "Turn the Session 1 script into an endpoint with tests",
+    "sections": [
+      {
+        "heading": "Overview",
+        "body": "- Build a small script or service that calls an LLM API, returns validated structured JSON and handles failures.\n- Add a /triage endpoint and three tests: a valid reply, invalid JSON from the model and a timeout."
+      },
+      {
+        "heading": "Done when",
+        "body": "The endpoint returns valid JSON for good input, never crashes on bad model output and all three tests pass."
+      }
+    ],
+    "typeExtras": {}
   }
 }

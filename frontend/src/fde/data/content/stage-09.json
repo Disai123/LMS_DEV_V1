@@ -1,163 +1,112 @@
 {
-  "enterprise-ai-fde/security-reviews": {
-    "summary": "Five direct answers: data, hosting, admin FAQ isolation, secrets, wrong-answer handling.",
+  "enterprise-ai-fde/recap-and-handover-goals": {
+    "summary": "Review production checklist, runbook and unresolved risks.",
     "sections": [
       {
         "heading": "Overview",
-        "body": "**Customer for Stages 3–9: a retail company (HQ and stores)**\n\n- Approximately **50 employees** across stores and head office.\n- IT receives **100 messages per week**; many repeat password, Wi‑Fi, VPN, and device questions.\n- Answers exist in **~15 FAQ documents** (PDF or Word). Staff rarely read them.\n- **IT lead (sponsor)** wants an internal **Ask IT** page: typed question, cited answer from FAQs, or a clear escalation to IT.\n- One **restricted FAQ** (“Admin-only IT notes”) must not appear in answers for standard staff. Only **admin** role may retrieve content from that source.\n- **Phase 1 scope:** FAQ assistant only—not a full ticketing or HR system.\n\n\n1. **Data processed:** FAQ text and user questions (no credentials in FAQs).\n2. **Hosting:** production URL; FAQ storage location.\n3. **Admin content:** server-side role filter; staff cannot retrieve admin-only chunks.\n4. **Secrets:** environment variables on Render/AWS—not in Git.\n5. **Incorrect answers:** source citation, refusal path, feedback to IT lead."
-      },
-      {
-        "heading": "Template",
-        "body": "```\nSECURITY ANSWERS\n1 Data:\n2 Hosting:\n3 Admin FAQ:\n4 Secrets:\n5 Wrong answers:\n```"
+        "body": "- Review production checklist\n- Runbook and unresolved risks"
       }
     ],
     "typeExtras": {
       "objectives": [
-        "Complete five answers with specifics"
-      ],
-      "checkpointQuestions": [
-        "Evidence for admin isolation?"
+        "Respond to core IT security questions with evidence from the application and its configuration.",
+        "Use Langfuse or an available tracing tool to inspect traces and evaluation runs.",
+        "Explain approved-model constraints, access controls, data handling and known limitations.",
+        "Prepare a handover package and concise sponsor readout."
       ]
     }
   },
-  "enterprise-ai-fde/langfuse-observability-evals": {
-    "summary": "Instrument ask requests in Langfuse; attach regression scores; export evidence for IT and sponsor.",
+  "enterprise-ai-fde/it-security-questionnaire": {
+    "summary": "Approved models, secrets, data flow, role-based access, logging, retention and handling of sensitive information.",
     "sections": [
       {
         "heading": "Overview",
-        "body": "**Langfuse** provides trace history per question (latency, retrieval, model call) and supports evaluation datasets.\n\nConfigure Langfuse keys via environment variables. Log each `/ask` invocation with correlation id. Import or score the 20-question regression set; store summary scores for handover.\n\nDo not log API keys or full restricted FAQ text in traces."
-      },
-      {
-        "heading": "Procedure",
-        "body": "1. Create Langfuse project; add keys to .env.\n2. Wrap ask pipeline with trace context.\n3. Run regression; record scores in Langfuse or linked report.\n4. Capture one trace screenshot for security pack."
-      },
-      {
-        "heading": "Pitfalls",
-        "body": "- Secrets in trace payloads\n- No eval record after FAQ change"
+        "body": "- Approved models\n- Secrets\n- Data flow\n- Role-based access\n- Logging\n- Retention and handling of sensitive information"
       }
     ],
     "typeExtras": {
       "objectives": [
-        "Langfuse receiving traces",
-        "Regression scores documented"
-      ],
-      "checkpointQuestions": [
-        "What do you show IT from Langfuse?"
+        "Respond to core IT security questions with evidence from the application and its configuration.",
+        "Use Langfuse or an available tracing tool to inspect traces and evaluation runs.",
+        "Explain approved-model constraints, access controls, data handling and known limitations.",
+        "Prepare a handover package and concise sponsor readout."
       ]
     }
   },
-  "enterprise-ai-fde/executive-communication-handover": {
-    "summary": "Five-minute structure: scope, demo proof, risks, ask; README, runbook, security, tests.",
+  "enterprise-ai-fde/langfuse-traces-and-evaluations": {
+    "summary": "Inspect traces, prompt/model versions, latency, token/cost signals and regression/evaluation results; use an equivalent tool if required.",
     "sections": [
       {
         "heading": "Overview",
-        "body": "**Readout:** what was built → evidence (regression, pilots, Langfuse) → risks and mitigations → decision request.\n\n**Handover:** README, runbook.md, security-answers.md, questions.csv, Langfuse eval summary, .env.example."
-      },
-      {
-        "heading": "Template",
-        "body": "```\nREADOUT (5 min)\nBuilt:\nEvidence:\nRisks:\nAsk sponsor:\nHANDOVER FILES: ...\n```"
+        "body": "- Inspect traces\n- Prompt/model versions\n- Latency\n- Token/cost signals and regression/evaluation results\n- Use an equivalent tool if required"
       }
     ],
     "typeExtras": {
       "objectives": [
-        "Outline readout",
-        "List handover artifacts"
-      ],
-      "checkpointQuestions": [
-        "What do you ask the sponsor to decide?"
+        "Respond to core IT security questions with evidence from the application and its configuration.",
+        "Use Langfuse or an available tracing tool to inspect traces and evaluation runs.",
+        "Explain approved-model constraints, access controls, data handling and known limitations.",
+        "Prepare a handover package and concise sponsor readout."
       ]
     }
   },
-  "enterprise-ai-fde/enterprise-integration": {
-    "summary": "Document future SSO, ticketing, or intranet embedding without building in phase 1.",
+  "enterprise-ai-fde/lab-8a-observability-and-eval-evidence": {
+    "summary": "Wire or inspect tracing, run the evaluation set and capture evidence of a failure or regression.",
     "sections": [
       {
         "heading": "Overview",
-        "body": "Record phase 2 candidates: corporate identity provider, ticket creation handoff, intranet link. One slide **Now vs Later** is sufficient for this workshop."
+        "body": "- Enterprise evidence and handover pack.\n- Capture trace/evaluation evidence, complete a concise security questionnaire from the implemented design, and assemble the documents a client team needs to operate and extend Ask IT."
+      },
+      {
+        "heading": "Done when",
+        "body": "The handover explains architecture, deployment, access control, evaluation results, known limitations, operational response and recommended next steps."
+      }
+    ],
+    "typeExtras": {}
+  },
+  "enterprise-ai-fde/lab-8b-sponsor-readout-and-handover": {
+    "summary": "Prepare the README, architecture, test results, known limits, runbook and next-step recommendations.",
+    "sections": [
+      {
+        "heading": "Overview",
+        "body": "- Enterprise evidence and handover pack.\n- Capture trace/evaluation evidence, complete a concise security questionnaire from the implemented design, and assemble the documents a client team needs to operate and extend Ask IT."
+      },
+      {
+        "heading": "Done when",
+        "body": "The handover explains architecture, deployment, access control, evaluation results, known limitations, operational response and recommended next steps."
+      }
+    ],
+    "typeExtras": {}
+  },
+  "enterprise-ai-fde/capstone-style-readout-and-close": {
+    "summary": "Deliver a five-minute sponsor update and receive peer feedback.",
+    "sections": [
+      {
+        "heading": "Overview",
+        "body": "Deliver a five-minute sponsor update and receive peer feedback."
       }
     ],
     "typeExtras": {
       "objectives": [
-        "Name two phase 2 items"
-      ],
-      "checkpointQuestions": [
-        "What remains in phase 1?"
+        "Respond to core IT security questions with evidence from the application and its configuration.",
+        "Use Langfuse or an available tracing tool to inspect traces and evaluation runs.",
+        "Explain approved-model constraints, access controls, data handling and known limitations.",
+        "Prepare a handover package and concise sponsor readout."
       ]
     }
   },
-  "enterprise-ai-fde/security-questionnaire-lab": {
-    "summary": "Connect Langfuse, execute regression with tracing, export eval summary for handover.",
+  "enterprise-ai-fde/handover-package-and-sponsor-readout": {
+    "summary": "Finalize the handover package and rehearse a five-minute sponsor readout. Include the top three risks and the proposed next phase.",
     "sections": [
       {
-        "heading": "Procedure",
-        "body": "1. Configure Langfuse on localhost or production URL.\n2. Run full 20-question set; confirm traces.\n3. Save eval summary and one trace screenshot.\n4. Update security-answers.md with observability evidence."
-      }
-    ],
-    "typeExtras": {
-      "objectives": [
-        "Traces and eval summary delivered"
-      ],
-      "checkpointQuestions": [
-        "Any secret leaked in traces?"
-      ],
-      "deliverables": [
-        "Langfuse eval summary",
-        "security-answers.md"
-      ]
-    }
-  },
-  "enterprise-ai-fde/executive-readout-lab": {
-    "summary": "Five-minute timed readout plus two-minute demo.",
-    "sections": [
+        "heading": "Overview",
+        "body": "Finalize the handover package and rehearse a five-minute sponsor readout. Include the top three risks and the proposed next phase."
+      },
       {
-        "heading": "Procedure",
-        "body": "Prepare four bullets → rehearse with timer → incorporate feedback."
+        "heading": "Details",
+        "body": "- Deliverable: Security questionnaire evidence, Langfuse trace/evaluation snapshot, README, architecture, runbook and sponsor readout\n- Due: Within one week of Session 8"
       }
     ],
-    "typeExtras": {
-      "objectives": [
-        "Readout within time limit"
-      ],
-      "checkpointQuestions": [
-        "Clear sponsor ask?"
-      ],
-      "deliverables": [
-        "Slides or speaker notes"
-      ]
-    }
-  },
-  "enterprise-ai-fde/external-model-blocked": {
-    "summary": "Align with IT on approved providers; rerun regression on approved model.",
-    "sections": [
-      {
-        "heading": "Example: Retail case",
-        "body": "\"I request the approved model list from IT, rerun the 20-question regression on the approved endpoint, and compare scores before switching production configuration.\""
-      }
-    ],
-    "typeExtras": {
-      "objectives": [
-        "IT alignment and retest"
-      ],
-      "checkpointQuestions": [
-        "Why rerun regression?"
-      ]
-    }
-  },
-  "enterprise-ai-fde/say-no-use-case": {
-    "summary": "Professional deferral to phase 2 with reference to BRD.",
-    "sections": [
-      {
-        "heading": "Example: Retail case",
-        "body": "\"Ticketing is scheduled for phase 2 after FAQ assistant acceptance. We will complete regression and pilot evidence for phase 1 first.\""
-      }
-    ],
-    "typeExtras": {
-      "objectives": [
-        "Defer with written scope reference"
-      ],
-      "checkpointQuestions": [
-        "Phase 1 vs phase 2?"
-      ]
-    }
+    "typeExtras": {}
   }
 }
