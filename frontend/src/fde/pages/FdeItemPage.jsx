@@ -1,6 +1,7 @@
 import { Helmet } from 'react-helmet-async'
 import { Link, useParams } from 'react-router-dom'
 import FdeItemBody from '../components/FdeItemBody'
+import { ExerciseBlock, EXERCISES } from '../exercises'
 import { useFdeProgress } from '../context/FdeProgressContext'
 import { getAdjacentItems, getItem, getItemContent } from '../lib/stages.ts'
 
@@ -32,6 +33,8 @@ export default function FdeItemPage() {
   const content = getItemContent(stageSlug, itemSlug)
   const { prev, next } = getAdjacentItems(stageSlug, itemSlug)
   const done = isDone(stageSlug, itemSlug)
+  const exerciseKey = `${stageSlug}/${itemSlug}`
+  const exercise = EXERCISES[exerciseKey]
 
   return (
     <>
@@ -78,6 +81,10 @@ export default function FdeItemPage() {
         <h1 className="text-2xl sm:text-3xl font-bold tracking-tight leading-tight mb-5">{item.title}</h1>
 
         {content && <FdeItemBody content={content} itemType={item.type} />}
+
+        {exercise && (
+          <ExerciseBlock exercise={exercise} accentColor={stage.color} />
+        )}
 
         <div className="mt-10 pt-6 border-t border-[var(--fde-bd)] flex flex-wrap gap-3 items-center">
           <button

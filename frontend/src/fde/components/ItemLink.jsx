@@ -1,5 +1,6 @@
 import { Link } from 'react-router-dom'
 import { useFdeProgress } from '../context/FdeProgressContext'
+import { EXERCISES } from '../exercises/exerciseData'
 
 const TYPE_LABEL = {
   read: 'Read',
@@ -12,6 +13,7 @@ const TYPE_LABEL = {
 export default function ItemLink({ stageSlug, item, accent }) {
   const { isDone } = useFdeProgress()
   const done = isDone(stageSlug, item.slug)
+  const hasExercise = Boolean(EXERCISES[`${stageSlug}/${item.slug}`])
 
   return (
     <li>
@@ -31,7 +33,19 @@ export default function ItemLink({ stageSlug, item, accent }) {
           </span>
           <span className={`leading-snug ${done ? 'line-through' : ''}`}>{item.title}</span>
         </span>
-        <span className="shrink-0 text-xs text-[var(--fde-mut)] tabular-nums">
+        <span className="shrink-0 flex items-center text-xs text-[var(--fde-mut)] tabular-nums">
+          {hasExercise && (
+            <span
+              className="hidden sm:inline-flex items-center gap-1 text-[10px] font-semibold border rounded px-1.5 py-0.5 mr-2"
+              style={{
+                color: '#35d49a',
+                borderColor: 'rgba(53, 212, 154, 0.3)',
+                backgroundColor: 'rgba(53, 212, 154, 0.08)',
+              }}
+            >
+              <span>🛠</span> Exercise
+            </span>
+          )}
           {done && <span className="text-[#35d49a] mr-1.5">✓</span>}
           {item.minutes} min
         </span>

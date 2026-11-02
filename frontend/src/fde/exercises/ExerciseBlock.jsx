@@ -1,0 +1,344 @@
+import { useState, useCallback } from 'react'
+import { Prism as SyntaxHighlighter } from 'react-syntax-highlighter'
+import { vscDarkPlus } from 'react-syntax-highlighter/dist/esm/styles/prism'
+
+/* ─── Copy button ─── */
+function CopyButton({ code }) {
+  const [copied, setCopied] = useState(false)
+  const handleCopy = useCallback(() => {
+    navigator.clipboard.writeText(code).then(() => {
+      setCopied(true)
+      setTimeout(() => setCopied(false), 2000)
+    })
+  }, [code])
+  return (
+    <button
+      type="button"
+      onClick={handleCopy}
+      className="text-[11px] font-medium px-2.5 py-1 rounded border transition-colors"
+      style={{
+        borderColor: 'var(--fde-bd)',
+        color: copied ? '#35d49a' : 'var(--fde-mut)',
+        background: 'var(--fde-code-bg)',
+      }}
+    >
+      {copied ? '✓ Copied' : 'Copy'}
+    </button>
+  )
+}
+
+/* ─── Labelled info row ─── */
+function InfoRow({ label, children }) {
+  return (
+    <div className="mb-4">
+      <h4
+        className="text-[10px] font-semibold uppercase tracking-widest mb-1.5"
+        style={{ color: 'var(--fde-mut)' }}
+      >
+        {label}
+      </h4>
+      <div className="text-[0.9rem] leading-relaxed" style={{ color: 'var(--fde-tx)' }}>
+        {children}
+      </div>
+    </div>
+  )
+}
+
+/* ─── Numbered step list ─── */
+function StepList({ steps }) {
+  if (!steps?.length) return null
+  return (
+    <ol className="list-decimal pl-5 space-y-1.5 text-[0.9rem] leading-relaxed" style={{ color: 'var(--fde-mut)' }}>
+      {steps.map((s, i) => (
+        <li key={i} className="pl-1">{s}</li>
+      ))}
+    </ol>
+  )
+}
+
+/* ─── Code block with header + copy ─── */
+function CodeBlock({ language, code, filename }) {
+  return (
+    <div
+      className="rounded-lg overflow-hidden border"
+      style={{ borderColor: 'var(--fde-bd)' }}
+    >
+      <div
+        className="flex items-center justify-between px-3 py-2"
+        style={{ background: 'var(--fde-code-bg)', borderBottom: '1px solid var(--fde-bd)' }}
+      >
+        <span className="text-[11px] font-mono" style={{ color: 'var(--fde-mut)' }}>
+          {filename || language}
+        </span>
+        <CopyButton code={code} />
+      </div>
+      <SyntaxHighlighter
+        language={language}
+        style={vscDarkPlus}
+        customStyle={{
+          margin: 0,
+          borderRadius: 0,
+          fontSize: '0.8rem',
+          background: '#0b1020',
+          padding: '1rem',
+        }}
+        wrapLongLines={false}
+      >
+        {code}
+      </SyntaxHighlighter>
+    </div>
+  )
+}
+
+/* ─── Prompt exercise (shows prompt + Execute → static response) ─── */
+function PromptExercise({ exercise }) {
+  const [executed, setExecuted] = useState(false)
+  const [running, setRunning] = useState(false)
+
+  const handleExecute = () => {
+    setRunning(true)
+    setTimeout(() => {
+      setRunning(false)
+      setExecuted(true)
+    }, 900)
+  }
+
+  return (
+    <div className="space-y-5">
+      <InfoRow label="🎯 Objective">{exercise.objective}</InfoRow>
+      <InfoRow label="📋 Scenario">{exercise.scenario}</InfoRow>
+
+      {/* Prompt box */}
+      <div>
+        <h4
+          className="text-[10px] font-semibold uppercase tracking-widest mb-2"
+          style={{ color: 'var(--fde-mut)' }}
+        >
+          AI Prompt
+        </h4>
+        <div
+          className="rounded-lg border p-4 relative"
+          style={{ borderColor: 'var(--fde-bd)', background: 'var(--fde-code-bg)' }}
+        >
+          <div className="absolute top-2 right-2">
+            <CopyButton code={exercise.prompt} />
+          </div>
+          <p
+            className="text-[0.875rem] leading-relaxed font-mono pr-16"
+            style={{ color: '#a8d8a8' }}
+          >
+            {exercise.prompt}
+          </p>
+        </div>
+      </div>
+
+      {/* Execute button */}
+      {!executed && (
+        <button
+          type="button"
+          onClick={handleExecute}
+          disabled={running}
+          className="inline-flex items-center gap-2 text-sm font-semibold px-5 py-2.5 rounded-lg transition-all"
+          style={{
+            background: running ? 'var(--fde-bd)' : '#35d49a',
+            color: running ? 'var(--fde-mut)' : '#04210f',
+            cursor: running ? 'not-allowed' : 'pointer',
+          }}
+        >
+          {running ? (
+            <>
+              <span className="inline-block w-3.5 h-3.5 border-2 border-current border-t-transparent rounded-full animate-spin" />
+              Generating…
+            </>
+          ) : (
+            <>▶ Execute</>
+          )}
+        </button>
+      )}
+
+      {/* Static AI response */}
+      {executed && (
+        <div
+          className="rounded-lg border p-5 space-y-3"
+          style={{ borderColor: '#35d49a33', background: 'var(--fde-code-bg)' }}
+        >
+          <div className="flex items-center gap-2 mb-3">
+            <span
+              className="text-[10px] font-semibold uppercase tracking-widest px-2 py-0.5 rounded"
+              style={{ background: '#35d49a22', color: '#35d49a' }}
+            >
+              AI Output
+            </span>
+            <CopyButton code={exercise.staticResponse} />
+          </div>
+          <pre
+            className="text-[0.84rem] leading-relaxed whitespace-pre-wrap font-mono"
+            style={{ color: 'var(--fde-tx)' }}
+          >
+            {exercise.staticResponse}
+          </pre>
+        </div>
+      )}
+
+      {exercise.keyLearning && (
+        <InfoRow label="💡 Key Learning">{exercise.keyLearning}</InfoRow>
+      )}
+    </div>
+  )
+}
+
+/* ─── Code exercise (shows objective + steps + code + expected output) ─── */
+function CodeExercise({ exercise }) {
+  return (
+    <div className="space-y-5">
+      <InfoRow label="🎯 Objective">{exercise.objective}</InfoRow>
+      <InfoRow label="📋 Scenario">{exercise.scenario}</InfoRow>
+
+      {exercise.steps?.length > 0 && (
+        <div>
+          <h4
+            className="text-[10px] font-semibold uppercase tracking-widest mb-2"
+            style={{ color: 'var(--fde-mut)' }}
+          >
+            Implementation Steps
+          </h4>
+          <StepList steps={exercise.steps} />
+        </div>
+      )}
+
+      {/* Single code block */}
+      {exercise.code && (
+        <div>
+          <h4
+            className="text-[10px] font-semibold uppercase tracking-widest mb-2"
+            style={{ color: 'var(--fde-mut)' }}
+          >
+            Sample Code
+          </h4>
+          <CodeBlock
+            language={exercise.code.language}
+            code={exercise.code.content}
+            filename={exercise.code.filename}
+          />
+        </div>
+      )}
+
+      {/* Multiple code blocks */}
+      {exercise.codeBlocks?.map((cb, i) => (
+        <div key={i}>
+          <h4
+            className="text-[10px] font-semibold uppercase tracking-widest mb-2"
+            style={{ color: 'var(--fde-mut)' }}
+          >
+            {cb.label || 'Sample Code'}
+          </h4>
+          <CodeBlock language={cb.language} code={cb.content} filename={cb.filename} />
+        </div>
+      ))}
+
+      {exercise.expectedOutput && (
+        <div>
+          <h4
+            className="text-[10px] font-semibold uppercase tracking-widest mb-2"
+            style={{ color: 'var(--fde-mut)' }}
+          >
+            Expected Output
+          </h4>
+          <div
+            className="rounded-lg border p-4 font-mono text-[0.82rem] leading-relaxed whitespace-pre-wrap"
+            style={{
+              borderColor: 'var(--fde-bd)',
+              background: 'var(--fde-code-bg)',
+              color: '#a8d8a8',
+            }}
+          >
+            {exercise.expectedOutput}
+          </div>
+        </div>
+      )}
+
+      {exercise.keyLearning && (
+        <InfoRow label="💡 Key Learning">{exercise.keyLearning}</InfoRow>
+      )}
+    </div>
+  )
+}
+
+/* ─── Main ExerciseBlock component ─── */
+export default function ExerciseBlock({ exercise, accentColor }) {
+  const [open, setOpen] = useState(false)
+
+  if (!exercise) return null
+
+  return (
+    <div
+      className="mt-8 rounded-xl border overflow-hidden"
+      style={{ borderColor: accentColor ? `${accentColor}44` : 'var(--fde-bd)' }}
+    >
+      {/* Header / toggle */}
+      <button
+        type="button"
+        onClick={() => setOpen((o) => !o)}
+        className="w-full flex items-center justify-between px-5 py-4 text-left transition-colors"
+        style={{
+          background: accentColor ? `${accentColor}12` : 'var(--fde-card)',
+          borderBottom: open ? `1px solid ${accentColor ? accentColor + '33' : 'var(--fde-bd)'}` : 'none',
+        }}
+      >
+        <div className="flex items-center gap-3 min-w-0">
+          <span
+            className="shrink-0 text-sm font-bold px-2 py-0.5 rounded"
+            style={{
+              background: accentColor ? `${accentColor}22` : 'var(--fde-code-bg)',
+              color: accentColor || '#35d49a',
+            }}
+          >
+            🛠 Practical
+          </span>
+          <span
+            className="text-sm font-semibold truncate"
+            style={{ color: 'var(--fde-tx)' }}
+          >
+            {exercise.title}
+          </span>
+        </div>
+        <span
+          className="ml-4 shrink-0 text-lg leading-none transition-transform"
+          style={{
+            color: 'var(--fde-mut)',
+            transform: open ? 'rotate(90deg)' : 'rotate(0deg)',
+          }}
+        >
+          ›
+        </span>
+      </button>
+
+      {/* Body */}
+      {open && (
+        <div
+          className="px-5 py-6 sm:px-7"
+          style={{ background: 'var(--fde-card)' }}
+        >
+          {/* App context pill */}
+          <div
+            className="inline-flex items-center gap-1.5 text-[11px] font-medium px-2.5 py-1 rounded-full mb-5 border"
+            style={{
+              borderColor: 'var(--fde-bd)',
+              color: 'var(--fde-mut)',
+              background: 'var(--fde-code-bg)',
+            }}
+          >
+            <span>📦</span>
+            <span>To-Do Management App · Progressive Exercise</span>
+          </div>
+
+          {exercise.type === 'prompt' ? (
+            <PromptExercise exercise={exercise} />
+          ) : (
+            <CodeExercise exercise={exercise} />
+          )}
+        </div>
+      )}
+    </div>
+  )
+}
