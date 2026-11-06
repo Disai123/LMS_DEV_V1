@@ -1,8 +1,20 @@
 import { useState, useCallback } from 'react'
+import ReactMarkdown from 'react-markdown'
+import remarkGfm from 'remark-gfm'
 import { Prism as SyntaxHighlighter } from 'react-syntax-highlighter'
 import { vscDarkPlus } from 'react-syntax-highlighter/dist/esm/styles/prism'
+import { BADGE_LABEL } from './labShared'
 
-/* ─── Copy button ─── */
+/** Readable markdown in the lab UI; Copy still uses raw text for the AI tool. */
+function PromptMarkdown({ text, className = '' }) {
+  if (!text) return null
+  return (
+    <div className={`fde-md fde-prompt-md max-w-none ${className}`.trim()}>
+      <ReactMarkdown remarkPlugins={[remarkGfm]}>{text}</ReactMarkdown>
+    </div>
+  )
+}
+
 function CopyButton({ code }) {
   const [copied, setCopied] = useState(false)
   const handleCopy = useCallback(() => {
@@ -27,7 +39,6 @@ function CopyButton({ code }) {
   )
 }
 
-/* ─── Labelled info row ─── */
 function InfoRow({ label, children }) {
   return (
     <div className="mb-4">
@@ -44,7 +55,18 @@ function InfoRow({ label, children }) {
   )
 }
 
-/* ─── Numbered step list ─── */
+function WhereTag({ where }) {
+  if (!where) return null
+  return (
+    <span
+      className="text-[10px] font-semibold uppercase tracking-wide px-2 py-0.5 rounded"
+      style={{ background: 'var(--fde-code-bg)', color: 'var(--fde-mut)' }}
+    >
+      {where}
+    </span>
+  )
+}
+
 function StepList({ steps }) {
   if (!steps?.length) return null
   return (
@@ -56,13 +78,9 @@ function StepList({ steps }) {
   )
 }
 
-/* ─── Code block with header + copy ─── */
 function CodeBlock({ language, code, filename }) {
   return (
-    <div
-      className="rounded-lg overflow-hidden border"
-      style={{ borderColor: 'var(--fde-bd)' }}
-    >
+    <div className="rounded-lg overflow-hidden border" style={{ borderColor: 'var(--fde-bd)' }}>
       <div
         className="flex items-center justify-between px-3 py-2"
         style={{ background: 'var(--fde-code-bg)', borderBottom: '1px solid var(--fde-bd)' }}
@@ -90,7 +108,241 @@ function CodeBlock({ language, code, filename }) {
   )
 }
 
-/* ─── Prompt exercise (shows prompt + Execute → static response) ─── */
+function GlossaryBlock({ glossary }) {
+  const [open, setOpen] = useState(false)
+  if (!glossary?.length) return null
+  return (
+    <div className="mb-4">
+      <button
+        type="button"
+        onClick={() => setOpen((o) => !o)}
+        className="text-[10px] font-semibold uppercase tracking-widest"
+        style={{ color: 'var(--fde-mut)' }}
+      >
+        {open ? '▼' : '▶'} Glossary ({glossary.length} terms)
+      </button>
+      {open && (
+        <ul className="mt-2 space-y-2 text-[0.85rem]" style={{ color: 'var(--fde-tx)' }}>
+          {glossary.map((g, i) => (
+            <li key={i}>
+              <strong>{g.term}</strong>
+              <span style={{ color: 'var(--fde-mut)' }}> — {g.meaning}</span>
+            </li>
+          ))}
+        </ul>
+      )}
+    </div>
+  )
+}
+
+function LabMetaHeader({ exercise }) {
+  return (
+    <>
+      {(exercise.duration || exercise.prerequisites?.length > 0) && (
+        <div className="flex flex-wrap gap-3 mb-4 text-[0.85rem]" style={{ color: 'var(--fde-mut)' }}>
+          {exercise.duration && <span>⏱ {exercise.duration}</span>}
+          {exercise.prerequisites?.length > 0 && (
+            <span>Prerequisites: {exercise.prerequisites.join(', ')}</span>
+          )}
+        </div>
+      )}
+      {exercise.beforeYouStart && (
+        <InfoRow label="Before you start">{exercise.beforeYouStart}</InfoRow>
+      )}
+      <GlossaryBlock glossary={exercise.glossary} />
+    </>
+  )
+}
+
+function AcceptanceChecklist({ items }) {
+  if (!items?.length) return null
+  return (
+    <div>
+      <h4
+        className="text-[10px] font-semibold uppercase tracking-widest mb-2"
+        style={{ color: 'var(--fde-mut)' }}
+      >
+        Acceptance criteria
+      </h4>
+      <ul className="list-disc pl-5 space-y-1 text-[0.9rem]" style={{ color: 'var(--fde-tx)' }}>
+        {items.map((item, i) => (
+          <li key={i}>{item}</li>
+        ))}
+      </ul>
+    </div>
+  )
+}
+
+function TroubleshootingBlock({ items }) {
+  const [openIdx, setOpenIdx] = useState(null)
+  if (!items?.length) return null
+  return (
+    <div>
+      <h4
+        className="text-[10px] font-semibold uppercase tracking-widest mb-2"
+        style={{ color: 'var(--fde-mut)' }}
+      >
+        Troubleshooting (fix with prompts)
+      </h4>
+      <div className="space-y-2">
+        {items.map((t, i) => (
+          <div
+            key={i}
+            className="rounded-lg border overflow-hidden"
+            style={{ borderColor: 'var(--fde-bd)' }}
+          >
+            <button
+              type="button"
+              onClick={() => setOpenIdx(openIdx === i ? null : i)}
+              className="w-full text-left px-3 py-2 text-[0.88rem] font-medium"
+              style={{ background: 'var(--fde-code-bg)', color: 'var(--fde-tx)' }}
+            >
+              {openIdx === i ? '▼' : '▶'} {t.symptom}
+            </button>
+            {openIdx === i && (
+              <div className="px-3 py-3 space-y-2 text-[0.85rem]" style={{ color: 'var(--fde-mut)' }}>
+                {t.whatItMeans && <p><strong>What it means:</strong> {t.whatItMeans}</p>}
+                {t.likelyCause && <p><strong>Likely cause:</strong> {t.likelyCause}</p>}
+                <div
+                  className="rounded border p-3 relative"
+                  style={{ borderColor: 'var(--fde-bd)', background: '#0b1020' }}
+                >
+                  <div className="absolute top-2 right-2 z-10">
+                    <CopyButton code={t.fixPrompt} />
+                  </div>
+                  <PromptMarkdown text={t.fixPrompt} className="pr-14" />
+                </div>
+              </div>
+            )}
+          </div>
+        ))}
+      </div>
+    </div>
+  )
+}
+
+function PromptsList({ prompts }) {
+  if (!prompts?.length) return null
+  return (
+    <div className="space-y-4">
+      <h4
+        className="text-[10px] font-semibold uppercase tracking-widest"
+        style={{ color: 'var(--fde-mut)' }}
+      >
+        Prompts to run
+      </h4>
+      {prompts.map((p) => (
+        <div
+          key={p.step}
+          className="rounded-lg border p-4"
+          style={{ borderColor: 'var(--fde-bd)', background: 'var(--fde-code-bg)' }}
+        >
+          <div className="flex flex-wrap items-center gap-2 mb-2">
+            <span className="text-xs font-bold" style={{ color: '#35d49a' }}>Step {p.step}</span>
+            <span className="text-sm font-semibold" style={{ color: 'var(--fde-tx)' }}>{p.label}</span>
+            <WhereTag where={p.whereToRun} />
+          </div>
+          <div className="relative">
+            <div className="absolute top-0 right-0 z-10">
+              <CopyButton code={p.prompt} />
+            </div>
+            <PromptMarkdown text={p.prompt} className="pr-16 text-[0.875rem]" />
+          </div>
+          {p.checkpoint && (
+            <p className="mt-3 text-[0.85rem]" style={{ color: 'var(--fde-mut)' }}>
+              <strong>Checkpoint:</strong> {p.checkpoint}
+            </p>
+          )}
+        </div>
+      ))}
+    </div>
+  )
+}
+
+function PromptLabExercise({ exercise }) {
+  return (
+    <div className="space-y-5">
+      <LabMetaHeader exercise={exercise} />
+      <InfoRow label="Objective">{exercise.objective}</InfoRow>
+      <InfoRow label="Scenario">{exercise.scenario}</InfoRow>
+      <PromptsList prompts={exercise.prompts} />
+      <AcceptanceChecklist items={exercise.acceptanceCriteria} />
+      <TroubleshootingBlock items={exercise.troubleshooting} />
+      {exercise.deliverable && (
+        <InfoRow label="Deliverable">{exercise.deliverable}</InfoRow>
+      )}
+      {exercise.stretchGoal && (
+        <InfoRow label="Stretch goal">{exercise.stretchGoal}</InfoRow>
+      )}
+      {exercise.keyLearning && (
+        <InfoRow label="Key learning">{exercise.keyLearning}</InfoRow>
+      )}
+    </div>
+  )
+}
+
+function ConceptExercise({ exercise }) {
+  const snippet = exercise.conceptSnippet || exercise.code
+  const expected = exercise.conceptSnippet?.expectedOutput ?? exercise.expectedOutput
+  return (
+    <div className="space-y-5">
+      <LabMetaHeader exercise={exercise} />
+      <InfoRow label="Objective">{exercise.objective}</InfoRow>
+      <InfoRow label="Scenario">{exercise.scenario}</InfoRow>
+      {exercise.steps?.length > 0 && (
+        <div>
+          <h4
+            className="text-[10px] font-semibold uppercase tracking-widest mb-2"
+            style={{ color: 'var(--fde-mut)' }}
+          >
+            Steps
+          </h4>
+          <StepList steps={exercise.steps} />
+        </div>
+      )}
+      {exercise.codeExplanation && (
+        <InfoRow label="What each part does">{exercise.codeExplanation}</InfoRow>
+      )}
+      {snippet && (
+        <div>
+          <h4
+            className="text-[10px] font-semibold uppercase tracking-widest mb-2"
+            style={{ color: 'var(--fde-mut)' }}
+          >
+            Concept snippet (run in Terminal)
+          </h4>
+          <CodeBlock
+            language={snippet.language}
+            code={snippet.content}
+            filename={snippet.filename}
+          />
+        </div>
+      )}
+      {expected && (
+        <div>
+          <h4
+            className="text-[10px] font-semibold uppercase tracking-widest mb-2"
+            style={{ color: 'var(--fde-mut)' }}
+          >
+            Expected output
+          </h4>
+          <div
+            className="rounded-lg border p-4 font-mono text-[0.82rem] whitespace-pre-wrap"
+            style={{ borderColor: 'var(--fde-bd)', background: 'var(--fde-code-bg)', color: '#a8d8a8' }}
+          >
+            {expected}
+          </div>
+        </div>
+      )}
+      {exercise.prompts?.length > 0 && <PromptsList prompts={exercise.prompts} />}
+      <AcceptanceChecklist items={exercise.acceptanceCriteria} />
+      <TroubleshootingBlock items={exercise.troubleshooting} />
+      {exercise.deliverable && <InfoRow label="Deliverable">{exercise.deliverable}</InfoRow>}
+      {exercise.keyLearning && <InfoRow label="Key learning">{exercise.keyLearning}</InfoRow>}
+    </div>
+  )
+}
+
 function PromptExercise({ exercise }) {
   const [executed, setExecuted] = useState(false)
   const [running, setRunning] = useState(false)
@@ -103,37 +355,39 @@ function PromptExercise({ exercise }) {
     }, 900)
   }
 
+  const primaryPrompt = exercise.prompt || exercise.prompts?.[0]?.prompt
+
   return (
     <div className="space-y-5">
-      <InfoRow label="🎯 Objective">{exercise.objective}</InfoRow>
-      <InfoRow label="📋 Scenario">{exercise.scenario}</InfoRow>
+      <LabMetaHeader exercise={exercise} />
+      <InfoRow label="Objective">{exercise.objective}</InfoRow>
+      <InfoRow label="Scenario">{exercise.scenario}</InfoRow>
 
-      {/* Prompt box */}
-      <div>
-        <h4
-          className="text-[10px] font-semibold uppercase tracking-widest mb-2"
-          style={{ color: 'var(--fde-mut)' }}
-        >
-          AI Prompt
-        </h4>
-        <div
-          className="rounded-lg border p-4 relative"
-          style={{ borderColor: 'var(--fde-bd)', background: 'var(--fde-code-bg)' }}
-        >
-          <div className="absolute top-2 right-2">
-            <CopyButton code={exercise.prompt} />
+      {exercise.prompts?.length > 1 ? (
+        <PromptsList prompts={exercise.prompts} />
+      ) : (
+        primaryPrompt && (
+          <div>
+            <h4
+              className="text-[10px] font-semibold uppercase tracking-widest mb-2"
+              style={{ color: 'var(--fde-mut)' }}
+            >
+              AI prompt
+            </h4>
+            <div
+              className="rounded-lg border p-4 relative"
+              style={{ borderColor: 'var(--fde-bd)', background: 'var(--fde-code-bg)' }}
+            >
+              <div className="absolute top-2 right-2 z-10">
+                <CopyButton code={primaryPrompt} />
+              </div>
+              <PromptMarkdown text={primaryPrompt} className="pr-16 text-[0.875rem]" />
+            </div>
           </div>
-          <p
-            className="text-[0.875rem] leading-relaxed font-mono pr-16"
-            style={{ color: '#a8d8a8' }}
-          >
-            {exercise.prompt}
-          </p>
-        </div>
-      </div>
+        )
+      )}
 
-      {/* Execute button */}
-      {!executed && (
+      {exercise.staticResponse && !executed && (
         <button
           type="button"
           onClick={handleExecute}
@@ -151,13 +405,12 @@ function PromptExercise({ exercise }) {
               Generating…
             </>
           ) : (
-            <>▶ Execute</>
+            <>▶ Execute (sample output)</>
           )}
         </button>
       )}
 
-      {/* Static AI response */}
-      {executed && (
+      {executed && exercise.staticResponse && (
         <div
           className="rounded-lg border p-5 space-y-3"
           style={{ borderColor: '#35d49a33', background: 'var(--fde-code-bg)' }}
@@ -167,104 +420,43 @@ function PromptExercise({ exercise }) {
               className="text-[10px] font-semibold uppercase tracking-widest px-2 py-0.5 rounded"
               style={{ background: '#35d49a22', color: '#35d49a' }}
             >
-              AI Output
+              Sample output
             </span>
             <CopyButton code={exercise.staticResponse} />
           </div>
-          <pre
-            className="text-[0.84rem] leading-relaxed whitespace-pre-wrap font-mono"
-            style={{ color: 'var(--fde-tx)' }}
-          >
+          <pre className="text-[0.84rem] leading-relaxed whitespace-pre-wrap font-mono" style={{ color: 'var(--fde-tx)' }}>
             {exercise.staticResponse}
           </pre>
         </div>
       )}
 
-      {exercise.keyLearning && (
-        <InfoRow label="💡 Key Learning">{exercise.keyLearning}</InfoRow>
-      )}
+      <AcceptanceChecklist items={exercise.acceptanceCriteria} />
+      <TroubleshootingBlock items={exercise.troubleshooting} />
+      {exercise.deliverable && <InfoRow label="Deliverable">{exercise.deliverable}</InfoRow>}
+      {exercise.keyLearning && <InfoRow label="Key learning">{exercise.keyLearning}</InfoRow>}
     </div>
   )
 }
 
-/* ─── Code exercise (shows objective + steps + code + expected output) ─── */
 function CodeExercise({ exercise }) {
-  return (
-    <div className="space-y-5">
-      <InfoRow label="🎯 Objective">{exercise.objective}</InfoRow>
-      <InfoRow label="📋 Scenario">{exercise.scenario}</InfoRow>
-
-      {exercise.steps?.length > 0 && (
-        <div>
-          <h4
-            className="text-[10px] font-semibold uppercase tracking-widest mb-2"
-            style={{ color: 'var(--fde-mut)' }}
-          >
-            Implementation Steps
-          </h4>
-          <StepList steps={exercise.steps} />
-        </div>
-      )}
-
-      {/* Single code block */}
-      {exercise.code && (
-        <div>
-          <h4
-            className="text-[10px] font-semibold uppercase tracking-widest mb-2"
-            style={{ color: 'var(--fde-mut)' }}
-          >
-            Sample Code
-          </h4>
-          <CodeBlock
-            language={exercise.code.language}
-            code={exercise.code.content}
-            filename={exercise.code.filename}
-          />
-        </div>
-      )}
-
-      {/* Multiple code blocks */}
-      {exercise.codeBlocks?.map((cb, i) => (
-        <div key={i}>
-          <h4
-            className="text-[10px] font-semibold uppercase tracking-widest mb-2"
-            style={{ color: 'var(--fde-mut)' }}
-          >
-            {cb.label || 'Sample Code'}
-          </h4>
-          <CodeBlock language={cb.language} code={cb.content} filename={cb.filename} />
-        </div>
-      ))}
-
-      {exercise.expectedOutput && (
-        <div>
-          <h4
-            className="text-[10px] font-semibold uppercase tracking-widest mb-2"
-            style={{ color: 'var(--fde-mut)' }}
-          >
-            Expected Output
-          </h4>
-          <div
-            className="rounded-lg border p-4 font-mono text-[0.82rem] leading-relaxed whitespace-pre-wrap"
-            style={{
-              borderColor: 'var(--fde-bd)',
-              background: 'var(--fde-code-bg)',
-              color: '#a8d8a8',
-            }}
-          >
-            {exercise.expectedOutput}
-          </div>
-        </div>
-      )}
-
-      {exercise.keyLearning && (
-        <InfoRow label="💡 Key Learning">{exercise.keyLearning}</InfoRow>
-      )}
-    </div>
-  )
+  return <ConceptExercise exercise={{ ...exercise, type: 'concept' }} />
 }
 
-/* ─── Main ExerciseBlock component ─── */
+function renderExerciseBody(exercise) {
+  switch (exercise.type) {
+    case 'prompt':
+      return <PromptExercise exercise={exercise} />
+    case 'prompt-lab':
+      return <PromptLabExercise exercise={exercise} />
+    case 'concept':
+      return <ConceptExercise exercise={exercise} />
+    case 'code':
+      return <CodeExercise exercise={exercise} />
+    default:
+      return <PromptLabExercise exercise={exercise} />
+  }
+}
+
 export default function ExerciseBlock({ exercise, accentColor }) {
   const [open, setOpen] = useState(false)
 
@@ -275,7 +467,6 @@ export default function ExerciseBlock({ exercise, accentColor }) {
       className="mt-8 rounded-xl border overflow-hidden"
       style={{ borderColor: accentColor ? `${accentColor}44` : 'var(--fde-bd)' }}
     >
-      {/* Header / toggle */}
       <button
         type="button"
         onClick={() => setOpen((o) => !o)}
@@ -293,33 +484,22 @@ export default function ExerciseBlock({ exercise, accentColor }) {
               color: accentColor || '#35d49a',
             }}
           >
-            🛠 Practical
+            🛠 Lab
           </span>
-          <span
-            className="text-sm font-semibold truncate"
-            style={{ color: 'var(--fde-tx)' }}
-          >
+          <span className="text-sm font-semibold truncate" style={{ color: 'var(--fde-tx)' }}>
             {exercise.title}
           </span>
         </div>
         <span
           className="ml-4 shrink-0 text-lg leading-none transition-transform"
-          style={{
-            color: 'var(--fde-mut)',
-            transform: open ? 'rotate(90deg)' : 'rotate(0deg)',
-          }}
+          style={{ color: 'var(--fde-mut)', transform: open ? 'rotate(90deg)' : 'rotate(0deg)' }}
         >
           ›
         </span>
       </button>
 
-      {/* Body */}
       {open && (
-        <div
-          className="px-5 py-6 sm:px-7"
-          style={{ background: 'var(--fde-card)' }}
-        >
-          {/* App context pill */}
+        <div className="px-5 py-6 sm:px-7" style={{ background: 'var(--fde-card)' }}>
           <div
             className="inline-flex items-center gap-1.5 text-[11px] font-medium px-2.5 py-1 rounded-full mb-5 border"
             style={{
@@ -328,15 +508,10 @@ export default function ExerciseBlock({ exercise, accentColor }) {
               background: 'var(--fde-code-bg)',
             }}
           >
-            <span>📦</span>
-            <span>To-Do Management App · Progressive Exercise</span>
+            <span>🤖</span>
+            <span>{BADGE_LABEL}</span>
           </div>
-
-          {exercise.type === 'prompt' ? (
-            <PromptExercise exercise={exercise} />
-          ) : (
-            <CodeExercise exercise={exercise} />
-          )}
+          {renderExerciseBody(exercise)}
         </div>
       )}
     </div>

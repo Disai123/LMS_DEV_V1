@@ -34,11 +34,19 @@
     }
   },
   "mvp-poc-local-render/repeatable-local-run": {
-    "summary": "Dependency setup, configuration, seed data, startup commands and health check.",
+    "summary": "Why Docker Compose is the repeatable way to run Ask IT locally (api + web + Postgres) before any cloud POC.",
     "sections": [
       {
-        "heading": "Overview",
-        "body": "- Dependency setup\n- Configuration\n- Seed data\n- Startup commands and health check"
+        "heading": "Why Docker here",
+        "body": "After Labs 4–5 you can run uvicorn and `npm run dev` on your laptop. For a **POC**, mentors and pilots need the **same** stack without installing Python/Node versions by hand. **Docker Compose** starts three containers from one command: API, React UI, and Postgres.\n\nYou will **prompt** the AI to generate `backend/Dockerfile`, `frontend/Dockerfile`, `docker-compose.yml`, and `DOCKER.md`, then run `docker compose up --build` locally."
+      },
+      {
+        "heading": "What “good” looks like",
+        "body": "- `docker run hello-world` succeeds (Docker Desktop engine running).\n- `docker compose config` validates with no errors.\n- Browser opens the chat UI; `curl http://localhost:8000/health` returns `{\"status\":\"ok\"}`.\n- Inside compose, the API uses host **`postgres`** in `DATABASE_URL`, not `localhost`."
+      },
+      {
+        "heading": "Where the hands-on lab lives",
+        "body": "Open **Lab 6: Docker local deployment** in this stage. Expand the **🛠 Lab** panel for step-by-step AI prompts (verify Docker → Dockerfiles + compose → smoke test) and troubleshooting fix prompts."
       }
     ],
     "typeExtras": {
@@ -51,11 +59,19 @@
     }
   },
   "mvp-poc-local-render/render-poc-deployment": {
-    "summary": "Service configuration, build/start commands, environment variables, logs and deployment smoke test.",
+    "summary": "Deploy Ask IT to Render for a public POC URL after Docker works locally.",
     "sections": [
       {
         "heading": "Overview",
-        "body": "- Service configuration\n- Build/start commands\n- Environment variables\n- Logs and deployment smoke test"
+        "body": "Render hosts your API and static web app in the cloud. You will prompt `render.yaml`, env vars, and a deploy checklist—same **prompt → check → fix** loop as Docker.\n\nPrerequisite: **Lab 6 Docker local deployment** so you know the services and health check paths."
+      },
+      {
+        "heading": "Checklist topics",
+        "body": "- Service configuration (web + API)\n- Build/start commands\n- Environment variables (no secrets in Git)\n- Logs and deployment smoke test on the public URL"
+      },
+      {
+        "heading": "Prompts",
+        "body": "This read includes a **🛠 Lab** panel below with AI prompts for POC `render.yaml` and troubleshooting (build failures, wrong API URL in the built React app, health check)."
       }
     ],
     "typeExtras": {
@@ -68,15 +84,19 @@
     }
   },
   "mvp-poc-local-render/lab-6-poc-hardening": {
-    "summary": "Prepare deployment settings or follow the deployment walkthrough; validate the POC URL and run smoke tests.",
+    "summary": "Hands-on: prompt Dockerfiles and docker-compose for Ask IT, run the full stack locally, and pass smoke tests.",
     "sections": [
       {
-        "heading": "Overview",
-        "body": "- POC validation checklist.\n- Make the local run repeatable and deploy the app to a POC environment where access is available.\n- Run smoke tests and prepare a lightweight pilot feedback form."
+        "heading": "Before you open the lab panel",
+        "body": "Complete **Environment setup** (Stage 1) so Docker Desktop is installed. Finish **Development** Labs 4–5 so you have a backend and React chat to containerize."
+      },
+      {
+        "heading": "This lab covers",
+        "body": "1. Verify Docker (`hello-world`).\n2. Prompt-generate Docker POC files (Dockerfiles, compose, `.env.example`, `DOCKER.md`).\n3. Run `docker compose up --build` and a bash smoke script.\n\nExpand **🛠 Lab** below for copy-paste prompts and acceptance criteria."
       },
       {
         "heading": "Done when",
-        "body": "The local setup is documented; the POC URL or deployment evidence is available; smoke-test results and the top fixes are recorded."
+        "body": "`docker-compose.yml` and `DOCKER.md` exist; compose starts api + web + postgres; smoke tests pass; you used at least one troubleshooting fix prompt if something broke."
       }
     ],
     "typeExtras": {}

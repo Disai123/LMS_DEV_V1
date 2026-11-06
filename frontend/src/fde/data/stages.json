@@ -781,8 +781,8 @@
       "weeksLabel": "Section 2",
       "sectionLabel": "Section 2",
       "hours": 2,
-      "cardBlurb": "Repeatable local run, Render POC deploy, regression, and pilot feedback.",
-      "description": "Repeatable local run, Render POC deploy, regression, and pilot feedback.",
+      "cardBlurb": "Docker Compose local stack, Render POC deploy, regression, and pilot feedback.",
+      "description": "Package Ask IT with Docker Compose for a repeatable local run, then Render POC deploy, regression, and pilot feedback.",
       "outcomes": [
         "Distinguish development, MVP/POC, and production environments",
         "Document local startup and deploy a Render POC URL",
@@ -805,13 +805,13 @@
         {
           "slug": "repeatable-local-run",
           "type": "read",
-          "title": "Repeatable local run",
+          "title": "Docker: repeatable local run",
           "minutes": 15
         },
         {
           "slug": "render-poc-deployment",
           "type": "read",
-          "title": "Render POC deployment",
+          "title": "Render POC deployment (after Docker)",
           "minutes": 10
         },
         {
@@ -831,8 +831,8 @@
         {
           "slug": "lab-6-poc-hardening",
           "type": "lab",
-          "title": "Lab 6: POC hardening",
-          "minutes": 35
+          "title": "Lab 6: Docker local deployment",
+          "minutes": 75
         },
         {
           "slug": "staging-checklist-and-pilot-plan",

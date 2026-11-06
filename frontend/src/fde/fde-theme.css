@@ -63,6 +63,16 @@
   background: var(--fde-accent, var(--fde-mut));
 }
 
+/* Lab AI prompts (markdown preview; Copy uses raw source) */
+.fde-prompt-md.fde-md {
+  font-size: 0.875rem;
+}
+
+.fde-prompt-md.fde-md > h2:first-child,
+.fde-prompt-md.fde-md > h3:first-child {
+  margin-top: 0;
+}
+
 /* Lesson body rendered from markdown */
 .fde-md {
   font-size: 0.9375rem;
