@@ -68,15 +68,29 @@
     }
   },
   "fde-sdlc-architecture-solution/lab-3-diagram-tags-cost-and-adr": {
-    "summary": "Create the architecture diagram, FAQ metadata schema, rough cost estimate and one ADR.",
+    "summary": "Tutored lab: ARCHITECTURE.md for **Todo** + ADR-001.",
     "sections": [
       {
-        "heading": "Overview",
-        "body": "- Architecture design pack.\n- Create a component diagram and data flow, define document metadata including access level and source/version, estimate a simple monthly cost scenario, and document one decision with alternatives and rationale."
+        "heading": "Read vs lab vs assignment",
+        "body": "Reads cover **Ask IT** system design. **This lab** writes **Todo** architecture with your tutor. **Assignment:** *Update the architecture pack* — **Ask IT** ARCHITECTURE.md solo."
       },
       {
         "heading": "Done when",
-        "body": "The diagram shows data flow and trust boundaries; restricted content is filtered server-side; the ADR states context, decision and trade-offs."
+        "body": "Todo ARCHITECTURE.md includes ADR-001 and text diagram."
+      }
+    ],
+    "typeExtras": {}
+  },
+  "fde-sdlc-architecture-solution/update-the-architecture-pack": {
+    "summary": "Assignment: Ask IT architecture pack—on your own.",
+    "sections": [
+      {
+        "heading": "Before you start",
+        "body": "Finish Todo architecture lab. Same headings and ADR habit; scope is Ask IT (RAG, RBAC, /ask, /triage)."
+      },
+      {
+        "heading": "Panel below",
+        "body": "Ask IT prompts only."
       }
     ],
     "typeExtras": {}

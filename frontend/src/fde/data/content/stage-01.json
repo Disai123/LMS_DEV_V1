@@ -1,10 +1,14 @@
 {
   "software-engineering/welcome-goals-and-the-running-scenario": {
-    "summary": "Introductions, how the workshop runs, the policy and support assistant used throughout, and how the Python, LLM, RAG and agent sessions fit together",
+    "summary": "Ask IT customer story, Todo tutored labs, and your first prompt exercise.",
     "sections": [
       {
-        "heading": "Overview",
-        "body": "- Introductions\n- How the workshop runs\n- The policy and support assistant used throughout\n- And how the Python\n- LLM\n- RAG and agent sessions fit together"
+        "heading": "Two apps, one method",
+        "body": "**Ask IT** (assignments): retail IT chatbot for store staff and managers—you build this **on your own** later in the course.\n\n**Todo** (labs): simple task list you build **with your tutor** using copy-paste AI prompts.\n\n**You do not need to know Python by heart.** Copy one prompt → run the checkpoint → use a fix prompt if needed.\n\nOn the roadmap home page, read **How this course is organized** once—it explains Read, Lab, Assignment, and Capstone."
+      },
+      {
+        "heading": "This page",
+        "body": "Open **Lab 0** in the panel below with your tutor. Save `todo-summary.txt` when done."
       }
     ],
     "typeExtras": {
@@ -80,29 +84,29 @@
     }
   },
   "software-engineering/lab-1a-validated-api-call": {
-    "summary": "Build the call, add retries, and validate the reply",
+    "summary": "Tutored lab: httpx client for Todo POST /tasks.",
     "sections": [
       {
         "heading": "Overview",
-        "body": "- Call an LLM API from Python, return JSON validated by a Pydantic model, and handle a bad key, a timeout and an invalid reply without crashing."
+        "body": "Generate `submit_task.py` with AI prompts. Run in Terminal. Use troubleshooting fix prompts if the API is down."
       },
       {
         "heading": "Done when",
-        "body": "The script returns valid JSON for good input and reports each failure clearly."
+        "body": "POST /tasks works or fails with a clear, friendly message."
       }
     ],
     "typeExtras": {}
   },
   "software-engineering/harden-the-api-script": {
-    "summary": "Harden the API script.",
+    "summary": "Assignment: Ask IT triage validation spec (no tutor).",
     "sections": [
       {
         "heading": "Overview",
-        "body": "- Extend the Lab 1A script to handle three failure modes: timeout, rate limit (429) and invalid JSON from the model\n- Write a short note (5 to 8 lines) explaining which failures you retry, which you do not, and why"
+        "body": "After Todo Labs 1A/1B you know validation and tests. Write the **Ask IT** triage rules on your own—panel below."
       },
       {
         "heading": "Details",
-        "body": "- Deliverable: Updated script and the short note\n- Due: Before Session 2"
+        "body": "Deliverable: `triage-validation-spec.md`. Prompts only—build code in your repo."
       }
     ],
     "typeExtras": {
@@ -163,15 +167,15 @@
     }
   },
   "software-engineering/lab-1b-tested-triage-endpoint": {
-    "summary": "Turn the Session 1 script into an endpoint with tests",
+    "summary": "Tutored lab: Todo FastAPI + pytest.",
     "sections": [
       {
         "heading": "Overview",
-        "body": "- Build a small script or service that calls an LLM API, returns validated structured JSON and handles failures.\n- Add a /triage endpoint and three tests: a valid reply, invalid JSON from the model and a timeout."
+        "body": "Prompt `main.py` and `test_main.py` for **Todo** `/tasks`. Run `pytest -v` with your tutor."
       },
       {
         "heading": "Done when",
-        "body": "The endpoint returns valid JSON for good input, never crashes on bad model output and all three tests pass."
+        "body": "Blank title returns 422; all tests pass."
       }
     ],
     "typeExtras": {}

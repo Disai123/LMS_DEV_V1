@@ -1,10 +1,14 @@
 {
   "production-deployment/recap-poc-to-production": {
-    "summary": "Review pilot feedback and decide which blockers must be addressed before rollout.",
+    "summary": "Turn Todo POC lessons into a production plan for Ask IT.",
     "sections": [
       {
         "heading": "Overview",
-        "body": "Review pilot feedback and decide which blockers must be addressed before rollout."
+        "body": "Review pilot feedback from Stage 7. List what must change before real store users: secrets, logging, errors, rollback."
+      },
+      {
+        "heading": "Path",
+        "body": "**Reads** = production concepts for Ask IT. **Labs 7A–7B** = Todo production config and runbook **with tutor**. **Assignment** = Ask IT rollout checklist **on your own**."
       }
     ],
     "typeExtras": {
@@ -17,11 +21,11 @@
     }
   },
   "production-deployment/deployment-fundamentals": {
-    "summary": "Production configuration, build/start process, environment variables, database/service dependencies and rollback considerations.",
+    "summary": "Production config, env vars, dependencies, and rollback—in Ask IT terms.",
     "sections": [
       {
         "heading": "Overview",
-        "body": "- Production configuration\n- Build/start process\n- Environment variables\n- Database/service dependencies and rollback considerations"
+        "body": "- **Production configuration** — stricter than POC (no debug flags in public URLs).\n- **Build and start** — how Render (or AWS) builds your repo and starts the API.\n- **Environment variables** — API keys and DB URLs live in the dashboard, not in Git.\n- **Dependencies** — database, model API, static frontend.\n- **Rollback** — how to return to the last good deploy if something fails."
       }
     ],
     "typeExtras": {
@@ -34,11 +38,11 @@
     }
   },
   "production-deployment/logging-monitoring-and-errors": {
-    "summary": "Structured logs, health checks, timeouts, safe user-facing errors and diagnosing failed model/API calls.",
+    "summary": "Logs, health checks, timeouts, and safe errors users can understand.",
     "sections": [
       {
         "heading": "Overview",
-        "body": "- Structured logs\n- Health checks\n- Timeouts\n- Safe user-facing errors and diagnosing failed model/API calls"
+        "body": "- **Structured logs** — one line per request with status and latency.\n- **Health checks** — `/health` so the platform knows the API is up.\n- **Timeouts** — do not hang forever on a slow model API.\n- **User-facing errors** — “Try again” instead of raw stack traces.\n- **Diagnosing failures** — use logs to tell model 429 vs database down."
       }
     ],
     "typeExtras": {
@@ -51,39 +55,43 @@
     }
   },
   "production-deployment/lab-7a-production-deployment": {
-    "summary": "Deploy or rehearse deployment using the target platform; verify configuration and run smoke tests.",
+    "summary": "Tutored lab: Todo production Render config (panel below).",
     "sections": [
       {
-        "heading": "Overview",
-        "body": "- Deployment and outage drill.\n- Use the selected platform's deployment flow or a guided simulation.\n- Verify configuration and health checks, then walk through one outage scenario using logs and the runbook."
+        "heading": "Path",
+        "body": "You hardened **Todo** on Render in Stage 7. Here you add **production** rules: `render.yaml`, secret handling, CORS. Same pattern later on **Ask IT** in the assignment."
+      },
+      {
+        "heading": "Panel below",
+        "body": "One prompt → save `PRODUCTION_CHECKLIST.md` → checkpoint before you close the panel."
       },
       {
         "heading": "Done when",
-        "body": "Secrets are not committed to Git, health checks work, errors are understandable, and a peer can follow the runbook to diagnose the simulated issue."
+        "body": "No API keys in Git, health check configured, checklist includes rollback steps."
       }
     ],
     "typeExtras": {}
   },
   "production-deployment/lab-7b-runbook-and-outage-drill": {
-    "summary": "Write the first-response steps for an unavailable model API, failed deployment or elevated error rate.",
+    "summary": "Tutored lab: Todo runbook + outage drill (panel below).",
     "sections": [
       {
-        "heading": "Overview",
-        "body": "- Deployment and outage drill.\n- Use the selected platform's deployment flow or a guided simulation.\n- Verify configuration and health checks, then walk through one outage scenario using logs and the runbook."
+        "heading": "Path",
+        "body": "Practice **on Todo** so you are not guessing during a real Ask IT incident. Your tutor walks through one simulated outage."
       },
       {
         "heading": "Done when",
-        "body": "Secrets are not committed to Git, health checks work, errors are understandable, and a peer can follow the runbook to diagnose the simulated issue."
+        "body": "`RUNBOOK.md` and `drill-log.md` exist; drill notes include at least one **fix prompt** you used."
       }
     ],
     "typeExtras": {}
   },
   "production-deployment/review-and-assignment-brief": {
-    "summary": "Peer-check the runbook for clarity and completeness.",
+    "summary": "Peer-review runbooks before the Ask IT production assignment.",
     "sections": [
       {
         "heading": "Overview",
-        "body": "Peer-check the runbook for clarity and completeness."
+        "body": "Swap `RUNBOOK.md` with a peer. Can they follow it without asking you questions? Note gaps before the solo Ask IT checklist."
       }
     ],
     "typeExtras": {
@@ -96,15 +104,19 @@
     }
   },
   "production-deployment/runbook-and-pre-rollout-checklist": {
-    "summary": "Refine the runbook and add a short pre-rollout checklist covering configuration, smoke tests, rollback/contact path and known limitations.",
+    "summary": "Assignment: Ask IT pre-rollout checklist and runbook (solo).",
     "sections": [
       {
-        "heading": "Overview",
-        "body": "Refine the runbook and add a short pre-rollout checklist covering configuration, smoke tests, rollback/contact path and known limitations."
+        "heading": "What you deliver",
+        "body": "Deployment evidence, logging notes, and a one-page runbook for **Ask IT** (not Todo filenames)."
       },
       {
-        "heading": "Details",
-        "body": "- Deliverable: Deployment evidence/checklist, logging notes and one-page runbook\n- Due: Before Session 8"
+        "heading": "Skills from Todo",
+        "body": "Copy the structure from Labs 7A–7B, but every step names **Ask IT** services, URLs, and env vars."
+      },
+      {
+        "heading": "Due",
+        "body": "Before your instructor’s Session 8 deadline."
       }
     ],
     "typeExtras": {}

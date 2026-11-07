@@ -2,13 +2,14 @@
   "hero": {
     "eyebrow": "Level 4 · Forward Deployed Engineering",
     "title": "Forward Deployed Engineer Roadmap (48h)",
-    "subtitle": "Work at the intersection of customer, product, engineering and AI. 10 stages across 3 sections — 48 hours total."
+    "subtitle": "Learn the Ask IT customer story in readings; practice skills on the Todo app with your tutor in labs; deliver Ask IT for real on assignments. 10 stages · 48 hours."
   },
   "chips": [
     "3 Sections",
     "10 Stages",
     "48 hours",
-    "Hands-on Labs & Capstones"
+    "Todo labs (tutor)",
+    "Ask IT assignments"
   ],
   "phases": [
     {
@@ -41,7 +42,11 @@
     },
     {
       "question": "What does the roadmap cover?",
-      "answer": "Ten stages: Software Engineering (Python), AI Engineering (LLMs, RAG, LangGraph agents, MCP), FDE SDLC (business requirements, UI/UX, architecture), Development, MVP/POC (local and Render validation), Production deployment, Enterprise AI FDE, and Capstone Project. Stages 3–9 apply the retail Ask IT case; Stage 10 delivers four 4-hour capstone projects."
+      "answer": "Ten stages: Python and AI foundations (Stages 1–2), FDE SDLC documents and build (Stages 3–7), deploy and operations (Stages 8–9), and four e-commerce capstone projects (Stage 10). Stages 3–9 use one customer story—Ask IT—while tutored labs use a smaller Todo app so beginners can practice safely before working on Ask IT alone."
+    },
+    {
+      "question": "Why Todo in labs and Ask IT in assignments?",
+      "answer": "Labs are with your tutor on a simple Todo task-list app: same prompt-and-fix skills, less complexity. Assignments are Ask IT (retail IT chatbot) that you complete independently. Readings teach the Ask IT business context; labs build muscle memory; assignments prove you can deliver for the customer."
     },
     {
       "question": "What will I be able to do after?",
@@ -112,7 +117,7 @@
         {
           "slug": "welcome-goals-and-the-running-scenario",
           "type": "read",
-          "title": "Welcome, goals and the running scenario",
+          "title": "Welcome: Ask IT story and how labs work",
           "minutes": 10
         },
         {
@@ -167,14 +172,14 @@
         },
         {
           "slug": "harden-the-api-script",
-          "type": "project",
-          "title": "Harden the API script",
+          "type": "assignment",
+          "title": "Assignment: Ask IT triage client spec",
           "minutes": 60
         },
         {
           "slug": "lab-1b-tested-triage-endpoint",
           "type": "lab",
-          "title": "Lab 1B: tested /triage endpoint",
+          "title": "Lab 1B: Todo API and pytest",
           "minutes": 25
         }
       ]
@@ -394,7 +399,7 @@
       "practise": [
         {
           "slug": "batch-classifier-and-model-selection-note",
-          "type": "project",
+          "type": "assignment",
           "title": "Batch classifier and model-selection note",
           "minutes": 75
         },
@@ -406,7 +411,7 @@
         },
         {
           "slug": "model-recommendation",
-          "type": "project",
+          "type": "assignment",
           "title": "Model recommendation",
           "minutes": 75
         },
@@ -418,7 +423,7 @@
         },
         {
           "slug": "chunking-comparison",
-          "type": "project",
+          "type": "assignment",
           "title": "Chunking comparison",
           "minutes": 75
         },
@@ -430,7 +435,7 @@
         },
         {
           "slug": "rag-evaluation-report",
-          "type": "project",
+          "type": "assignment",
           "title": "RAG evaluation report",
           "minutes": 90
         },
@@ -442,7 +447,7 @@
         },
         {
           "slug": "workflow-or-agent",
-          "type": "project",
+          "type": "assignment",
           "title": "Workflow or agent?",
           "minutes": 60
         },
@@ -460,7 +465,7 @@
         },
         {
           "slug": "agent-threat-model",
-          "type": "project",
+          "type": "assignment",
           "title": "Agent threat model",
           "minutes": 75
         },
@@ -472,7 +477,7 @@
         },
         {
           "slug": "final-project-package-and-present-your-assistant",
-          "type": "project",
+          "type": "assignment",
           "title": "Final project: package and present your assistant",
           "minutes": "120–180"
         }
@@ -486,8 +491,8 @@
       "weeksLabel": "Section 2",
       "sectionLabel": "Section 2",
       "hours": 2,
-      "cardBlurb": "Discovery and a one-page requirements note for the retail Ask IT case.",
-      "description": "Discovery and a one-page requirements note for the retail Ask IT case.",
+      "cardBlurb": "Read Ask IT discovery; Todo lab for BRD practice; Ask IT assignment for your BRD.",
+      "description": "Read the Ask IT customer context. Tutored Todo lab: discovery questions and BRD. Assignment: Ask IT BRD on your own.",
       "outcomes": [
         "Describe the FDE engagement lifecycle",
         "Conduct structured discovery with the IT sponsor",
@@ -530,12 +535,12 @@
         {
           "slug": "lab-1-discovery-and-brd",
           "type": "lab",
-          "title": "Lab 1: discovery and BRD",
+          "title": "Lab 1: Todo discovery and BRD",
           "minutes": 35
         },
         {
           "slug": "one-page-brd-and-discovery-questions",
-          "type": "project",
+          "type": "assignment",
           "title": "One-page BRD and discovery questions",
           "minutes": "45–60"
         }
@@ -549,8 +554,8 @@
       "weeksLabel": "Section 2",
       "sectionLabel": "Section 2",
       "hours": 2,
-      "cardBlurb": "UI rules, user flow, and wireframes for Ask IT.",
-      "description": "UI rules, user flow, and wireframes for Ask IT.",
+      "cardBlurb": "Read Ask IT UX rules; Todo lab for wireframes; Ask IT UI assignment.",
+      "description": "Learn Ask IT chat UX in readings. Todo lab: UI/UX brief. Assignment: Ask IT UI/UX on your own.",
       "outcomes": [
         "Define UX requirements for an internal FAQ assistant",
         "Document user flow for answer and no-answer paths",
@@ -593,12 +598,12 @@
         {
           "slug": "lab-2-wireframe-ask-it",
           "type": "lab",
-          "title": "Lab 2: wireframe Ask IT",
+          "title": "Lab 2: Todo UI/UX brief",
           "minutes": 35
         },
         {
           "slug": "revise-the-flow-and-wireframes",
-          "type": "project",
+          "type": "assignment",
           "title": "Revise the flow and wireframes",
           "minutes": 45
         }
@@ -612,7 +617,7 @@
       "weeksLabel": "Section 2",
       "sectionLabel": "Section 2",
       "hours": 2,
-      "cardBlurb": "Reference architecture, permissions, cost, and decisions.",
+      "cardBlurb": "Read Ask IT architecture; Todo lab for diagrams; Ask IT assignment for your reference design.",
       "description": "Reference architecture, permissions, cost, and decisions.",
       "outcomes": [
         "Document end-to-end architecture for Ask IT",
@@ -656,12 +661,12 @@
         {
           "slug": "lab-3-diagram-tags-cost-and-adr",
           "type": "lab",
-          "title": "Lab 3: diagram, tags, cost and ADR",
+          "title": "Lab 3: Todo architecture and ADR",
           "minutes": 35
         },
         {
           "slug": "update-the-architecture-pack",
-          "type": "project",
+          "type": "assignment",
           "title": "Update the architecture pack",
           "minutes": "45–60"
         }
@@ -675,15 +680,15 @@
       "weeksLabel": "Section 2",
       "sectionLabel": "Section 2",
       "hours": 4,
-      "cardBlurb": "Backend, frontend, RAG, and data modules for Ask IT on localhost.",
-      "description": "Backend, frontend, RAG, and data modules for Ask IT on localhost.",
+      "cardBlurb": "Todo labs: build API and UI with tutor. Assignments: run Ask IT locally and test.",
+      "description": "Tutored Todo labs for FastAPI and React. Assignments: Ask IT startup, tests, and fix loops on your own.",
       "outcomes": [
-        "Implement FastAPI backend with role-aware FAQ ingest and ask endpoint",
-        "Build Ask IT frontend wired to the API",
-        "Integrate RAG with citations and refusal behavior",
-        "Run a 20-question regression set with zero admin leaks"
+        "Build Todo API and UI in labs with your tutor",
+        "Complete Ask IT local run and test-plan assignments independently",
+        "Use prompt → checkpoint → fix prompts when builds fail",
+        "Document staff vs admin checks before pilot"
       ],
-      "readyWhen": "Ask IT runs on localhost, regression is scored, and admin-only content does not leak to staff.",
+      "readyWhen": "Todo labs pass checkpoints; Ask IT assignment shows local run and test notes; staff vs admin behavior documented.",
       "reads": [
         {
           "slug": "recap-and-development-plan",
@@ -750,24 +755,24 @@
         {
           "slug": "lab-4-application-skeleton",
           "type": "lab",
-          "title": "Lab 4: application skeleton",
+          "title": "Lab 4: Todo FastAPI backend",
           "minutes": 35
         },
         {
           "slug": "startup-instructions-and-tests",
-          "type": "project",
+          "type": "assignment",
           "title": "Startup instructions and tests",
           "minutes": "45–60"
         },
         {
           "slug": "lab-5-connect-rag-and-test",
           "type": "lab",
-          "title": "Lab 5: connect RAG and test",
+          "title": "Lab 5: Todo React UI",
           "minutes": 35
         },
         {
           "slug": "fix-a-failed-test-and-rerun",
-          "type": "project",
+          "type": "assignment",
           "title": "Fix a failed test and rerun",
           "minutes": "60–75"
         }
@@ -781,8 +786,8 @@
       "weeksLabel": "Section 2",
       "sectionLabel": "Section 2",
       "hours": 2,
-      "cardBlurb": "Docker Compose local stack, Render POC deploy, regression, and pilot feedback.",
-      "description": "Package Ask IT with Docker Compose for a repeatable local run, then Render POC deploy, regression, and pilot feedback.",
+      "cardBlurb": "Todo Lab 6: local, Docker, Render POC (tutor). Ask IT assignment: pilot deploy and checklist (solo).",
+      "description": "Todo lab: local run, Docker hello-world, compose, and Render POC. Assignment: same path for Ask IT on your own.",
       "outcomes": [
         "Distinguish development, MVP/POC, and production environments",
         "Document local startup and deploy a Render POC URL",
@@ -831,12 +836,12 @@
         {
           "slug": "lab-6-poc-hardening",
           "type": "lab",
-          "title": "Lab 6: Docker local deployment",
-          "minutes": 75
+          "title": "Lab 6: Todo deploy (local, Docker, Render)",
+          "minutes": 90
         },
         {
           "slug": "staging-checklist-and-pilot-plan",
-          "type": "project",
+          "type": "assignment",
           "title": "Staging checklist and pilot plan",
           "minutes": "45–60"
         }
@@ -850,7 +855,7 @@
       "weeksLabel": "Section 2",
       "sectionLabel": "Section 2",
       "hours": 2,
-      "cardBlurb": "Production on Render or AWS; secrets, runbook, and operations.",
+      "cardBlurb": "Todo labs: production config and runbook drill. Ask IT assignment: pre-rollout checklist.",
       "description": "Production on Render or AWS; secrets, runbook, and operations.",
       "outcomes": [
         "Deploy Ask IT to Render or AWS with secrets outside Git",
@@ -888,18 +893,18 @@
         {
           "slug": "lab-7a-production-deployment",
           "type": "lab",
-          "title": "Lab 7A: production deployment",
+          "title": "Lab 7A: Todo production on Render",
           "minutes": 30
         },
         {
           "slug": "lab-7b-runbook-and-outage-drill",
           "type": "lab",
-          "title": "Lab 7B: runbook and outage drill",
+          "title": "Lab 7B: Todo runbook and drill",
           "minutes": 25
         },
         {
           "slug": "runbook-and-pre-rollout-checklist",
-          "type": "project",
+          "type": "assignment",
           "title": "Runbook and pre-rollout checklist",
           "minutes": 45
         }
@@ -913,7 +918,7 @@
       "weeksLabel": "Section 2",
       "sectionLabel": "Section 2",
       "hours": 2,
-      "cardBlurb": "Security, Langfuse observability, evals, and sponsor handover.",
+      "cardBlurb": "Todo labs: traces and handover template. Ask IT assignment: security pack and sponsor readout.",
       "description": "Security, Langfuse observability, evals, and sponsor handover.",
       "outcomes": [
         "Complete IT security questionnaire with evidence",
@@ -951,18 +956,18 @@
         {
           "slug": "lab-8a-observability-and-eval-evidence",
           "type": "lab",
-          "title": "Lab 8A: observability and eval evidence",
+          "title": "Lab 8A: Todo tracing (Langfuse)",
           "minutes": 30
         },
         {
           "slug": "lab-8b-sponsor-readout-and-handover",
           "type": "lab",
-          "title": "Lab 8B: sponsor readout and handover",
+          "title": "Lab 8B: Todo handover (tutor)",
           "minutes": 25
         },
         {
           "slug": "handover-package-and-sponsor-readout",
-          "type": "project",
+          "type": "assignment",
           "title": "Handover package and sponsor readout",
           "minutes": 60
         }

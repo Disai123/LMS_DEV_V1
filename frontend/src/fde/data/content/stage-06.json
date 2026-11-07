@@ -67,20 +67,6 @@
       ]
     }
   },
-  "development/lab-4-application-skeleton": {
-    "summary": "Create or extend the FastAPI service, define schemas, load sample FAQs and connect a basic UI call.",
-    "sections": [
-      {
-        "heading": "Overview",
-        "body": "- Build the application foundation.\n- Implement a minimal FastAPI service with health and ask routes, typed request/response models, sample FAQ records and a basic frontend request.\n- Use the architecture's chosen stack and repository structure."
-      },
-      {
-        "heading": "Done when",
-        "body": "The app starts locally, the frontend reaches the backend, sample FAQ data can be loaded, and invalid requests return a clear error."
-      }
-    ],
-    "typeExtras": {}
-  },
   "development/review-and-assignment-brief-session-4": {
     "summary": "Run locally and record what is working and what remains.",
     "sections": [
@@ -180,16 +166,40 @@
       ]
     }
   },
-  "development/lab-5-connect-rag-and-test": {
-    "summary": "Wire retrieval into Ask IT, show citations and run the regression set.",
+  "development/lab-4-application-skeleton": {
+    "summary": "Tutored lab: Todo FastAPI backend — health route, task schemas, SQLite (panel below).",
     "sections": [
       {
-        "heading": "Overview",
-        "body": "- RAG integration and regression run.\n- Connect the RAG pipeline to the ask endpoint, return citations, refuse or escalate when the corpus cannot answer, and test staff/admin access against sample FAQs."
+        "heading": "Path",
+        "body": "- **Reads** in this stage = Ask IT API and data design (customer language).\n- **This lab** = Todo `main.py` and models **with your tutor**.\n- **Assignment** *Startup instructions and tests* = same ideas on **Ask IT**, solo."
       },
       {
         "heading": "Done when",
-        "body": "The 20-question test set is recorded; citations point to retrieved sources; unsupported questions follow the no-answer path; staff queries never expose admin-only content."
+        "body": "Todo API starts locally, `GET /health` works, you can create a task, and bad input returns a clear error."
+      }
+    ],
+    "typeExtras": {}
+  },
+  "development/lab-5-connect-rag-and-test": {
+    "summary": "Tutored lab: Todo React UI wired to API.",
+    "sections": [
+      {
+        "heading": "Overview",
+        "body": "Not RAG yet—this lab is **Todo** frontend integration. Ask IT chat UI comes in assignments and later AI stages."
+      },
+      {
+        "heading": "Done when",
+        "body": "Add task works in the browser against your Todo API."
+      }
+    ],
+    "typeExtras": {}
+  },
+  "development/startup-instructions-and-tests": {
+    "summary": "Assignment: Ask IT local run + TEST-PLAN.md.",
+    "sections": [
+      {
+        "heading": "Skills from Todo labs 4–5",
+        "body": "You built Todo API + UI with tutor. Repeat README-RUN and tests for Ask IT—solo panel below."
       }
     ],
     "typeExtras": {}
@@ -212,15 +222,11 @@
     }
   },
   "development/fix-a-failed-test-and-rerun": {
-    "summary": "Fix at least one failed test, document the cause and rerun the relevant regression cases.",
+    "summary": "Assignment: fix one failing Ask IT test with a follow-up prompt.",
     "sections": [
       {
         "heading": "Overview",
-        "body": "Fix at least one failed test, document the cause and rerun the relevant regression cases."
-      },
-      {
-        "heading": "Details",
-        "body": "- Deliverable: Local Ask IT slice, 20-question regression results and a short failure log\n- Due: Before Session 6"
+        "body": "Document symptom, fix prompt, and pass/fail after rerun in `failure-fix-log.md`. Panel below."
       }
     ],
     "typeExtras": {}

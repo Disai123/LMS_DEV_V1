@@ -30,7 +30,7 @@ function ListBlock({ title, items, ordered = false }) {
 
 export default function FdeItemBody({ content, itemType }) {
   const extras = content.typeExtras || {}
-  const isProject = itemType === 'project' || itemType === 'capstone'
+  const isProject = itemType === 'project' || itemType === 'assignment' || itemType === 'capstone'
 
   return (
     <article className="text-[var(--fde-tx)]">

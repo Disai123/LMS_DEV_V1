@@ -45,6 +45,10 @@ export default function StageSection({ stage, index }) {
         ))}
       </ul>
 
+      <p className="text-xs text-[var(--fde-mut)] mt-4 mb-0 max-w-3xl">
+        <strong className="text-[var(--fde-tx)]">Practise:</strong> Lab = Todo with tutor · Assignment = Ask IT on your own · Capstone = e-commerce (Stage 10)
+      </p>
+
       {stage.reads.length > 0 && (
         <>
           <SubHeading>Read</SubHeading>

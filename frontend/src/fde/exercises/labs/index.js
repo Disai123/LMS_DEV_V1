@@ -3,6 +3,7 @@ import { stage02Labs } from './stage02'
 import { stageSdlcLabs } from './stageSdlc'
 import { stageDevDeployLabs } from './stageDevDeploy'
 import { stageCapstoneLabs } from './stageCapstone'
+import { ASSIGNMENTS } from './assignments'
 
 export const EXERCISES = {
   ...stage01Labs,
@@ -10,4 +11,5 @@ export const EXERCISES = {
   ...stageSdlcLabs,
   ...stageDevDeployLabs,
   ...stageCapstoneLabs,
+  ...ASSIGNMENTS,
 }

@@ -1,11 +1,14 @@
 import { useEffect } from 'react'
 import { Helmet } from 'react-helmet-async'
+import ReactMarkdown from 'react-markdown'
+import remarkGfm from 'remark-gfm'
 import { Link, useLocation } from 'react-router-dom'
 import FaqAccordion from '../components/FaqAccordion'
 import ProgressBar from '../components/ProgressBar'
 import StageSection from '../components/StageSection'
 import VisualRoadmap from '../components/VisualRoadmap'
 import { useFdeProgress } from '../context/FdeProgressContext'
+import { HOW_COURSE_WORKS } from '../lib/fdeNarrative'
 import { getRoadmapData } from '../lib/stages.ts'
 
 export default function FdeRoadmapPage() {
@@ -38,6 +41,15 @@ export default function FdeRoadmapPage() {
         <p className="text-base sm:text-lg leading-relaxed text-[var(--fde-mut)] max-w-2xl m-0">
           {data.hero.subtitle}
         </p>
+
+        <div
+          className="rounded-xl border border-[var(--fde-bd)] bg-[var(--fde-card)] px-5 py-4 mt-5 max-w-3xl fde-md"
+          style={{ borderLeft: '4px solid #35d49a' }}
+        >
+          <ReactMarkdown className="fde-md m-0" remarkPlugins={[remarkGfm]}>
+            {HOW_COURSE_WORKS}
+          </ReactMarkdown>
+        </div>
 
         <div className="flex flex-wrap gap-2 mt-5">
           {data.chips.map((c) => (

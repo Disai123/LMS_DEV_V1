@@ -381,7 +381,7 @@ Senior FDE writing the client-facing BRD after discovery.
 ## Task
 Write **BRD.md** for Ask IT.
 
-## Required sections (LMS sidebar — exact H2 order)
+## Required sections (exact H2 order)
 ${BRD_H2}
 
 ## Must include
@@ -661,7 +661,7 @@ ${AUDIENCE_BEGINNER}
 This capstone applies the **same prompt → check → fix** method on a **different** product.
 
 ## Project
-**${project}** (Realtime e-commerce capstone in LMS)
+**${project}** (Realtime e-commerce capstone)
 
 ## Goal for this hour
 ${hourGoal}

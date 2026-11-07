@@ -68,15 +68,29 @@
     }
   },
   "fde-sdlc-business-requirement/lab-1-discovery-and-brd": {
-    "summary": "Role-play sponsor discovery and draft the one-page BRD for Ask IT.",
+    "summary": "Tutored lab: discovery questions + BRD for the **Todo** app (practice before Ask IT).",
     "sections": [
       {
-        "heading": "Overview",
-        "body": "- Discovery workshop and BRD draft.\n- In pairs, one participant plays the IT sponsor and the other the FDE.\n- Capture the problem, users, source documents, restricted content, desired outcomes and constraints, then write a one-page BRD."
+        "heading": "Read vs lab vs assignment",
+        "body": "Reads above teach **Ask IT** discovery ideas. **This lab** writes discovery + BRD for **Todo** with your tutor. **Assignment:** *One-page BRD and discovery questions* — same work for **Ask IT**, alone."
       },
       {
         "heading": "Done when",
-        "body": "The BRD identifies target users, problem statement, in-scope/out-of-scope items, data sources, measurable acceptance criteria, assumptions and open questions."
+        "body": "discovery.md (12 questions) and Todo BRD.md with all required headings. Tutor signed off checkpoints in the lab panel."
+      }
+    ],
+    "typeExtras": {}
+  },
+  "fde-sdlc-business-requirement/one-page-brd-and-discovery-questions": {
+    "summary": "Assignment: Ask IT discovery + BRD—on your own, using Todo lab notes.",
+    "sections": [
+      {
+        "heading": "Before you start",
+        "body": "Finish **Lab 1: Todo discovery and BRD** with your tutor. Copy the structure, not the Todo feature text."
+      },
+      {
+        "heading": "Panel below",
+        "body": "Ask IT prompts and deliverables. No tutor—use fix prompts if sections are missing."
       }
     ],
     "typeExtras": {}

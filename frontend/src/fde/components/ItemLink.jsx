@@ -7,6 +7,7 @@ const TYPE_LABEL = {
   lab: 'Lab',
   interview: 'Interview',
   project: 'Project',
+  assignment: 'Assignment',
   capstone: 'Capstone',
 }
 

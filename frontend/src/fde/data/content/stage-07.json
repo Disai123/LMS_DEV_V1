@@ -1,152 +1,90 @@
 {
   "mvp-poc-local-render/recap-and-environment-readiness": {
-    "summary": "Review regression results and list blockers to a usable POC.",
+    "summary": "Check you are ready for deploy: Todo Lab 6 done or planned; Ask IT assignment next.",
     "sections": [
       {
         "heading": "Overview",
-        "body": "Review regression results and list blockers to a usable POC."
+        "body": "List anything blocking a POC: missing Docker, failing tests, unclear env vars. Tutor helps on Todo lab; Ask IT deploy is your assignment."
       }
-    ],
-    "typeExtras": {
-      "objectives": [
-        "Distinguish a development build, MVP/POC and production deployment.",
-        "Document a repeatable local startup process and prepare a POC deployment.",
-        "Deploy or walk through deploying the application to Render using environment configuration.",
-        "Plan three pilot sessions and capture feedback as actionable fixes."
-      ]
-    }
+    ]
   },
   "mvp-poc-local-render/development-vs-mvp-poc-vs-production": {
-    "summary": "Explain the purpose and acceptance criteria of each environment.",
+    "summary": "Plain definitions: dev on your laptop, POC for a small pilot URL, production for real users.",
     "sections": [
       {
-        "heading": "Overview",
-        "body": "Explain the purpose and acceptance criteria of each environment."
+        "heading": "Three environments",
+        "body": "- **Development:** fast changes on localhost (Todo labs, early Ask IT).\n- **POC / MVP:** shared pilot URL (Render), limited users.\n- **Production:** stricter secrets, monitoring, runbooks (Stage 8+)."
       }
-    ],
-    "typeExtras": {
-      "objectives": [
-        "Distinguish a development build, MVP/POC and production deployment.",
-        "Document a repeatable local startup process and prepare a POC deployment.",
-        "Deploy or walk through deploying the application to Render using environment configuration.",
-        "Plan three pilot sessions and capture feedback as actionable fixes."
-      ]
-    }
+    ]
   },
   "mvp-poc-local-render/repeatable-local-run": {
-    "summary": "Why Docker Compose is the repeatable way to run Ask IT locally (api + web + Postgres) before any cloud POC.",
+    "summary": "Why Docker matters—and where Todo lab vs Ask IT assignment fit.",
     "sections": [
       {
-        "heading": "Why Docker here",
-        "body": "After Labs 4–5 you can run uvicorn and `npm run dev` on your laptop. For a **POC**, mentors and pilots need the **same** stack without installing Python/Node versions by hand. **Docker Compose** starts three containers from one command: API, React UI, and Postgres.\n\nYou will **prompt** the AI to generate `backend/Dockerfile`, `frontend/Dockerfile`, `docker-compose.yml`, and `DOCKER.md`, then run `docker compose up --build` locally."
+        "heading": "Ask IT (what the client needs)",
+        "body": "Pilot stores need the same stack everywhere: API, chat UI, database. Docker Compose is the standard way to run that stack."
       },
       {
-        "heading": "What “good” looks like",
-        "body": "- `docker run hello-world` succeeds (Docker Desktop engine running).\n- `docker compose config` validates with no errors.\n- Browser opens the chat UI; `curl http://localhost:8000/health` returns `{\"status\":\"ok\"}`.\n- Inside compose, the API uses host **`postgres`** in `DATABASE_URL`, not `localhost`."
-      },
-      {
-        "heading": "Where the hands-on lab lives",
-        "body": "Open **Lab 6: Docker local deployment** in this stage. Expand the **🛠 Lab** panel for step-by-step AI prompts (verify Docker → Dockerfiles + compose → smoke test) and troubleshooting fix prompts."
+        "heading": "Todo lab (where you learn)",
+        "body": "Open **Lab 6: Todo deploy** in this stage. You will practice local run, hello-world, compose, and Render POC on the **Todo** app with your tutor."
       }
-    ],
-    "typeExtras": {
-      "objectives": [
-        "Distinguish a development build, MVP/POC and production deployment.",
-        "Document a repeatable local startup process and prepare a POC deployment.",
-        "Deploy or walk through deploying the application to Render using environment configuration.",
-        "Plan three pilot sessions and capture feedback as actionable fixes."
-      ]
-    }
+    ]
   },
   "mvp-poc-local-render/render-poc-deployment": {
-    "summary": "Deploy Ask IT to Render for a public POC URL after Docker works locally.",
+    "summary": "Render hosting concepts—prompts live on Lab 6 (Todo) and the staging assignment (Ask IT).",
     "sections": [
       {
         "heading": "Overview",
-        "body": "Render hosts your API and static web app in the cloud. You will prompt `render.yaml`, env vars, and a deploy checklist—same **prompt → check → fix** loop as Docker.\n\nPrerequisite: **Lab 6 Docker local deployment** so you know the services and health check paths."
-      },
-      {
-        "heading": "Checklist topics",
-        "body": "- Service configuration (web + API)\n- Build/start commands\n- Environment variables (no secrets in Git)\n- Logs and deployment smoke test on the public URL"
-      },
-      {
-        "heading": "Prompts",
-        "body": "This read includes a **🛠 Lab** panel below with AI prompts for POC `render.yaml` and troubleshooting (build failures, wrong API URL in the built React app, health check)."
+        "body": "Render builds and runs your API and static site. Set `healthCheckPath`, build commands, and env vars in the dashboard.\n\n- **Todo:** Lab 6 step 4 (with tutor)\n- **Ask IT:** Assignment *Staging checklist and pilot plan* (on your own)\n\nThis read has **no** prompt panel—go to those items in the list."
       }
-    ],
-    "typeExtras": {
-      "objectives": [
-        "Distinguish a development build, MVP/POC and production deployment.",
-        "Document a repeatable local startup process and prepare a POC deployment.",
-        "Deploy or walk through deploying the application to Render using environment configuration.",
-        "Plan three pilot sessions and capture feedback as actionable fixes."
-      ]
-    }
+    ]
   },
   "mvp-poc-local-render/lab-6-poc-hardening": {
-    "summary": "Hands-on: prompt Dockerfiles and docker-compose for Ask IT, run the full stack locally, and pass smoke tests.",
+    "summary": "Tutored lab: Todo — local, Docker, Render POC (four steps).",
     "sections": [
       {
-        "heading": "Before you open the lab panel",
-        "body": "Complete **Environment setup** (Stage 1) so Docker Desktop is installed. Finish **Development** Labs 4–5 so you have a backend and React chat to containerize."
+        "heading": "Prerequisites",
+        "body": "Development Labs 4–5 complete. Docker Desktop running."
       },
       {
-        "heading": "This lab covers",
-        "body": "1. Verify Docker (`hello-world`).\n2. Prompt-generate Docker POC files (Dockerfiles, compose, `.env.example`, `DOCKER.md`).\n3. Run `docker compose up --build` and a bash smoke script.\n\nExpand **🛠 Lab** below for copy-paste prompts and acceptance criteria."
+        "heading": "Panel below",
+        "body": "Copy one prompt at a time. Checkpoints: README works, hello-world, compose up, render checklist."
       },
       {
-        "heading": "Done when",
-        "body": "`docker-compose.yml` and `DOCKER.md` exist; compose starts api + web + postgres; smoke tests pass; you used at least one troubleshooting fix prompt if something broke."
+        "heading": "Then",
+        "body": "Do the **Ask IT** deploy assignment in this stage without your tutor."
       }
-    ],
-    "typeExtras": {}
+    ]
   },
   "mvp-poc-local-render/pilot-feedback-and-triage": {
-    "summary": "Plan three pilot sessions, capture issues and rank fixes by user impact and risk.",
+    "summary": "How to run three pilot sessions and turn feedback into a fix list.",
     "sections": [
       {
         "heading": "Overview",
-        "body": "- Plan three pilot sessions\n- Capture issues and rank fixes by user impact and risk"
+        "body": "After Ask IT is on a POC URL, watch real users for 15–20 minutes each. Log: what broke, what confused them, what worked. Rank fixes by user impact."
       }
-    ],
-    "typeExtras": {
-      "objectives": [
-        "Distinguish a development build, MVP/POC and production deployment.",
-        "Document a repeatable local startup process and prepare a POC deployment.",
-        "Deploy or walk through deploying the application to Render using environment configuration.",
-        "Plan three pilot sessions and capture feedback as actionable fixes."
-      ]
-    }
+    ]
   },
   "mvp-poc-local-render/wrap-up-and-assignment-brief": {
-    "summary": "Record deployment status, known limitations and pilot questions.",
+    "summary": "Record deploy status and open questions before production stage.",
     "sections": [
       {
         "heading": "Overview",
-        "body": "- Record deployment status\n- Known limitations and pilot questions"
+        "body": "Note Todo vs Ask IT URLs, known limits, and what you would harden next. Submit assignment evidence to your instructor."
       }
-    ],
-    "typeExtras": {
-      "objectives": [
-        "Distinguish a development build, MVP/POC and production deployment.",
-        "Document a repeatable local startup process and prepare a POC deployment.",
-        "Deploy or walk through deploying the application to Render using environment configuration.",
-        "Plan three pilot sessions and capture feedback as actionable fixes."
-      ]
-    }
+    ]
   },
   "mvp-poc-local-render/staging-checklist-and-pilot-plan": {
-    "summary": "Complete a staging checklist and a pilot plan for three sessions, including the feedback questions and issue-prioritisation method.",
+    "summary": "Assignment: Ask IT local → Docker → Render (solo).",
     "sections": [
       {
-        "heading": "Overview",
-        "body": "Complete a staging checklist and a pilot plan for three sessions, including the feedback questions and issue-prioritisation method."
+        "heading": "Skills from Todo Lab 6",
+        "body": "Same sequence you did with your tutor—now for Ask IT in your repo."
       },
       {
-        "heading": "Details",
-        "body": "- Deliverable: Local run instructions, POC deployment evidence, smoke-test checklist and pilot plan\n- Due: Before Session 7"
+        "heading": "Panel below",
+        "body": "Three assignment prompts + deliverables. Use fix prompts if deploy fails."
       }
-    ],
-    "typeExtras": {}
+    ]
   }
 }

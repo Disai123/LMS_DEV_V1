@@ -68,15 +68,29 @@
     }
   },
   "fde-sdlc-ui-ux-solution/lab-2-wireframe-ask-it": {
-    "summary": "Create low-fidelity screens and a user-flow diagram aligned to the BRD.",
+    "summary": "Tutored lab: UI_UX.md for **Todo** task list.",
     "sections": [
       {
-        "heading": "Overview",
-        "body": "- Ask IT user flow and wireframes.\n- Create low-fidelity wireframes for the question screen, cited answer, no-answer/error state and escalation path.\n- Annotate where role and document permissions affect what a user sees."
+        "heading": "Read vs lab vs assignment",
+        "body": "Reads describe **Ask IT** chat UX. **This lab** documents **Todo** screens with your tutor. **Assignment:** *Revise the flow and wireframes* — **Ask IT** UI/UX solo."
       },
       {
         "heading": "Done when",
-        "body": "Every screen maps to a BRD requirement, source citations are visible, and the no-answer/escalation path is clear."
+        "body": "UI_UX.md has all six required headings for Todo."
+      }
+    ],
+    "typeExtras": {}
+  },
+  "fde-sdlc-ui-ux-solution/revise-the-flow-and-wireframes": {
+    "summary": "Assignment: Ask IT chat UI/UX document—on your own.",
+    "sections": [
+      {
+        "heading": "Before you start",
+        "body": "Complete Todo UI lab. Reuse heading discipline; content must be Ask IT chat (roles, citations, escalate)."
+      },
+      {
+        "heading": "Panel below",
+        "body": "Ask IT assignment prompts—not Todo."
       }
     ],
     "typeExtras": {}
@@ -97,19 +111,5 @@
         "Explain how UX decisions reduce confusion when an AI answer is uncertain or unavailable."
       ]
     }
-  },
-  "fde-sdlc-ui-ux-solution/revise-the-flow-and-wireframes": {
-    "summary": "Revise the flow and wireframes using peer feedback. Add a short note explaining how the UI avoids presenting unsupported answers as facts.",
-    "sections": [
-      {
-        "heading": "Overview",
-        "body": "Revise the flow and wireframes using peer feedback. Add a short note explaining how the UI avoids presenting unsupported answers as facts."
-      },
-      {
-        "heading": "Details",
-        "body": "- Deliverable: User-flow diagram, wireframes and UX decision notes\n- Due: Before Session 3"
-      }
-    ],
-    "typeExtras": {}
   }
 }

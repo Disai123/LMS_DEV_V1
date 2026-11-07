@@ -1,71 +1,70 @@
-/** Shared copy and prompt building blocks for Ask IT labs (beginner audience). */
+/** Shared copy for FDE labs (Todo, tutor) and assignments (Ask IT, solo). */
 
-export const BADGE_LABEL = 'Ask IT Support Chatbot · Progressive Lab'
+export const BADGE_LAB = 'Todo · Tutored lab'
+export const BADGE_ASSIGNMENT = 'Ask IT · On your own'
+/** @deprecated use BADGE_LAB or BADGE_ASSIGNMENT */
+export const BADGE_LABEL = BADGE_LAB
+
+export const TUTOR_START =
+  'Work **with your tutor**. Do **one step at a time**. Pass each checkpoint before opening the next prompt. If something breaks, expand **Troubleshooting** and paste the fix prompt—do not skip ahead.'
+
+export const ASSIGNMENT_START =
+  'You are **on your own** (no tutor). Read **Skills from the lab** first, then use the same prompt → checkpoint → fix loop. Run everything in **your Ask IT repo** on your laptop.'
+
+export const TODO_ONE_LINER =
+  'A small Todo app: add tasks, mark done, filter by status—FastAPI + SQLite + simple React or CLI.'
 
 export const ASK_IT_ONE_LINER =
-  'Ask IT is an internal chatbot that helps retail store staff get IT answers from FAQs, ' +
-  'respects who is allowed to see sensitive info, and opens a helpdesk ticket when it is not sure.'
+  'Ask IT helps store staff with IT FAQs, respects staff vs admin access, and opens tickets when unsure.'
 
 export const GLOSSARY_COMMON = [
-  { term: 'Prompt', meaning: 'Instructions you give an AI tool in plain language so it knows what to create or fix.' },
-  { term: 'API', meaning: 'A way for programs to talk over the internet—like a waiter carrying orders to the kitchen.' },
-  { term: 'Artifact', meaning: 'A file or screenshot you keep as proof the lab step worked (e.g. BRD.md).' },
+  { term: 'Prompt', meaning: 'Instructions you give an AI tool so it knows what to create or fix.' },
+  { term: 'API', meaning: 'How two programs talk over the network—like sending an order to the kitchen.' },
+  { term: 'Artifact', meaning: 'A file or screenshot that proves a step worked (e.g. BRD.md).' },
 ]
 
 export const GLOSSARY_DOCKER = [
   { term: 'Docker', meaning: 'Runs your app in a portable box so it behaves the same on every computer.' },
-  { term: 'Image', meaning: 'A recipe snapshot used to start a container.' },
-  { term: 'Container', meaning: 'A running instance of an image (your app actually executing).' },
-  { term: 'docker compose', meaning: 'Starts several containers together (API + web + database) from one file.' },
+  { term: 'Container', meaning: 'A running copy of your app from a Docker image.' },
+  { term: 'docker compose', meaning: 'Starts API + UI + database together from one file.' },
 ]
 
 export function troubleshootingEntry(symptom, whatItMeans, likelyCause, fixPrompt) {
   return { symptom, whatItMeans, likelyCause, fixPrompt }
 }
 
-/** Paste at the start of most generation prompts */
-export const ASK_IT_CONTEXT = `## Project — Ask IT (running scenario for this roadmap)
-Ask IT is an enterprise IT support assistant for ~500 retail stores.
+/** First prompt in a Todo lab only — keep short. */
+export const TODO_CONTEXT = `## Todo app (practice project)
+- Tasks: title, done/open, optional due date
+- API: GET/POST /tasks, PATCH /tasks/{id}, GET /health
+- Stack: Python 3.11 FastAPI, SQLite, optional Vite React UI`
 
-**Users & roles**
-- staff: general store IT (POS, printers, WiFi basics)
-- manager / admin: store ops policies, sensitive items (must never leak to staff)
+/** First prompt in an Ask IT assignment only — keep short. */
+export const ASK_IT_CONTEXT = `## Ask IT (your assignment)
+- Retail IT helper: RAG on FAQs, POST /ask, POST /triage, staff vs admin RBAC
+- Build in your own repo; submit artifacts to your tutor`
 
-**Core capabilities**
-- RAG: answer from IT FAQs and runbooks (POS boot, barcode pairing, VPN, etc.)
-- POST /ask with role-based filtering and citation sources
-- POST /triage when confidence is low → ticket with priority High | Medium | Low and SLA hours
-- Escalate to Human IT from the chat UI
+export const AUDIENCE_BEGINNER = `Write for a beginner. Short sentences.`
 
-**Technology (reference only — generate only what this task asks for)**
-- Backend: Python 3.11, FastAPI, Pydantic v2, SQLAlchemy, SQLite (dev) / PostgreSQL (prod)
-- Frontend: React 18 (Vite), single-screen chat
-- AI: OpenAI embeddings + FAISS retrieval; optional LangChain/LangGraph agents
-- Deploy: Docker Compose locally; Render for POC/production; Langfuse for traces
+export const PROMPT_STOP = `**Stop:** Do only what this step asks. No extra features.`
 
-**Non-negotiable security**
-- Filter FAQs by min_access_level BEFORE any text is sent to the LLM for staff roles.
-- Never expose admin override codes or admin-only policies in staff responses.`
-
-export const AUDIENCE_BEGINNER = `## Audience
-The reader has NO prior programming or cloud experience (mixed backgrounds: support, QA, business, career switchers).
-Explain jargon in plain language. Prefer short sentences and numbered steps.`
-
-export const PROMPT_QUALITY_RULES = `## How you must respond
-1. Follow the output format exactly (headings, filenames, or code files named below).
-2. Do not add features outside scope.
-3. Do not start servers, deploy, or run commands unless this task explicitly asks for shell commands only.
-4. After delivering the artifact, summarize what you created in 3–5 bullets and stop.`
+export function compactPrompt({ context, task, output, stop = PROMPT_STOP }) {
+  const parts = []
+  if (context) parts.push(context)
+  parts.push(`## Task\n${task}`)
+  parts.push(`## Output\n${output}`)
+  parts.push(stop)
+  return parts.join('\n\n')
+}
 
 export function stopAfterFiles(filenames) {
-  return `## Stop rule
-Deliver ONLY these files (full contents): ${filenames}.
-Do not create other files. Do not deploy. List the files you wrote, then stop.`
+  return `**Stop:** Deliver only these files (full contents): ${filenames}. Then list filenames and stop.`
 }
 
 export function stopAfterMarkdown(filename, requiredH2) {
-  return `## Stop rule
-Output a single markdown document saved as **${filename}**.
-Use these exact level-2 headings (##) in this order: ${requiredH2}.
-Do not rename headings. Do not write code or start implementation. After the document, stop.`
+  return `**Stop:** One markdown file **${filename}** with H2 sections: ${requiredH2}. No code. Then stop.`
 }
+
+/** Legacy — avoid on new prompts */
+export const PROMPT_QUALITY_RULES = PROMPT_STOP
+export const ASK_IT_CONTEXT_LEGACY = ASK_IT_CONTEXT

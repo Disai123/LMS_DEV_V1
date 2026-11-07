@@ -3,7 +3,15 @@ import ReactMarkdown from 'react-markdown'
 import remarkGfm from 'remark-gfm'
 import { Prism as SyntaxHighlighter } from 'react-syntax-highlighter'
 import { vscDarkPlus } from 'react-syntax-highlighter/dist/esm/styles/prism'
-import { BADGE_LABEL } from './labShared'
+import { ASSIGNMENT_START, BADGE_LAB, BADGE_ASSIGNMENT, TUTOR_START } from './labShared'
+
+function isAssignment(exercise) {
+  return exercise?.track === 'assignment'
+}
+
+function exerciseBadge(exercise) {
+  return isAssignment(exercise) ? BADGE_ASSIGNMENT : BADGE_LAB
+}
 
 /** Readable markdown in the lab UI; Copy still uses raw text for the AI tool. */
 function PromptMarkdown({ text, className = '' }) {
@@ -135,6 +143,27 @@ function GlossaryBlock({ glossary }) {
   )
 }
 
+function PanelHowTo({ exercise }) {
+  const assignment = isAssignment(exercise)
+  return (
+    <div
+      className="rounded-lg border px-4 py-3 mb-5 text-[0.88rem] leading-relaxed"
+      style={{ borderColor: 'var(--fde-bd)', background: 'var(--fde-code-bg)', color: 'var(--fde-tx)' }}
+    >
+      <p className="m-0 font-semibold mb-1.5" style={{ color: assignment ? '#f0b429' : '#35d49a' }}>
+        {assignment ? 'Ask IT · on your own' : 'Todo · with your tutor'}
+      </p>
+      <p className="m-0" style={{ color: 'var(--fde-mut)' }}>
+        {assignment ? ASSIGNMENT_START : TUTOR_START}
+      </p>
+      <p className="m-0 mt-2 text-[0.82rem]" style={{ color: 'var(--fde-mut)' }}>
+        <strong style={{ color: 'var(--fde-tx)' }}>How to use this panel:</strong> click <strong>Copy</strong> on a
+        prompt → paste into your AI tool → do what the <strong>Checkpoint</strong> says → only then open the next step.
+      </p>
+    </div>
+  )
+}
+
 function LabMetaHeader({ exercise }) {
   return (
     <>
@@ -259,10 +288,31 @@ function PromptsList({ prompts }) {
   )
 }
 
+function SkillsFromLab({ items }) {
+  if (!items?.length) return null
+  return (
+    <div className="mb-4">
+      <h4
+        className="text-[10px] font-semibold uppercase tracking-widest mb-1.5"
+        style={{ color: 'var(--fde-mut)' }}
+      >
+        Skills from the lab
+      </h4>
+      <ul className="list-disc pl-5 space-y-1 text-[0.9rem]" style={{ color: 'var(--fde-tx)' }}>
+        {items.map((line, i) => (
+          <li key={i}>{line}</li>
+        ))}
+      </ul>
+    </div>
+  )
+}
+
 function PromptLabExercise({ exercise }) {
   return (
     <div className="space-y-5">
+      <PanelHowTo exercise={exercise} />
       <LabMetaHeader exercise={exercise} />
+      {isAssignment(exercise) && <SkillsFromLab items={exercise.skillsFromLab} />}
       <InfoRow label="Objective">{exercise.objective}</InfoRow>
       <InfoRow label="Scenario">{exercise.scenario}</InfoRow>
       <PromptsList prompts={exercise.prompts} />
@@ -282,11 +332,14 @@ function PromptLabExercise({ exercise }) {
 }
 
 function ConceptExercise({ exercise }) {
-  const snippet = exercise.conceptSnippet || exercise.code
-  const expected = exercise.conceptSnippet?.expectedOutput ?? exercise.expectedOutput
+  const assignment = isAssignment(exercise)
+  const snippet = !assignment && (exercise.conceptSnippet || exercise.code)
+  const expected = !assignment && (exercise.conceptSnippet?.expectedOutput ?? exercise.expectedOutput)
   return (
     <div className="space-y-5">
+      <PanelHowTo exercise={exercise} />
       <LabMetaHeader exercise={exercise} />
+      {assignment && <SkillsFromLab items={exercise.skillsFromLab} />}
       <InfoRow label="Objective">{exercise.objective}</InfoRow>
       <InfoRow label="Scenario">{exercise.scenario}</InfoRow>
       {exercise.steps?.length > 0 && (
@@ -344,6 +397,7 @@ function ConceptExercise({ exercise }) {
 }
 
 function PromptExercise({ exercise }) {
+  const assignment = isAssignment(exercise)
   const [executed, setExecuted] = useState(false)
   const [running, setRunning] = useState(false)
 
@@ -359,7 +413,9 @@ function PromptExercise({ exercise }) {
 
   return (
     <div className="space-y-5">
+      <PanelHowTo exercise={exercise} />
       <LabMetaHeader exercise={exercise} />
+      {assignment && <SkillsFromLab items={exercise.skillsFromLab} />}
       <InfoRow label="Objective">{exercise.objective}</InfoRow>
       <InfoRow label="Scenario">{exercise.scenario}</InfoRow>
 
@@ -387,7 +443,7 @@ function PromptExercise({ exercise }) {
         )
       )}
 
-      {exercise.staticResponse && !executed && (
+      {!assignment && exercise.staticResponse && !executed && (
         <button
           type="button"
           onClick={handleExecute}
@@ -410,7 +466,7 @@ function PromptExercise({ exercise }) {
         </button>
       )}
 
-      {executed && exercise.staticResponse && (
+      {!assignment && executed && exercise.staticResponse && (
         <div
           className="rounded-lg border p-5 space-y-3"
           style={{ borderColor: '#35d49a33', background: 'var(--fde-code-bg)' }}
@@ -481,10 +537,10 @@ export default function ExerciseBlock({ exercise, accentColor }) {
             className="shrink-0 text-sm font-bold px-2 py-0.5 rounded"
             style={{
               background: accentColor ? `${accentColor}22` : 'var(--fde-code-bg)',
-              color: accentColor || '#35d49a',
+              color: isAssignment(exercise) ? '#f0b429' : accentColor || '#35d49a',
             }}
           >
-            🛠 Lab
+            {isAssignment(exercise) ? '📋 Assignment' : '🛠 Lab'}
           </span>
           <span className="text-sm font-semibold truncate" style={{ color: 'var(--fde-tx)' }}>
             {exercise.title}
@@ -509,7 +565,7 @@ export default function ExerciseBlock({ exercise, accentColor }) {
             }}
           >
             <span>🤖</span>
-            <span>{BADGE_LABEL}</span>
+            <span>{exerciseBadge(exercise)}</span>
           </div>
           {renderExerciseBody(exercise)}
         </div>
