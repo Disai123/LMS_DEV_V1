@@ -63,7 +63,12 @@ export const stageDevDeployLabs = {
       ),
     ],
     deliverable: 'main.py + curl transcript',
-    keyLearning: 'Build backend via prompts; curl is your acceptance test.',
+    whatYouLearn: [
+      'Generate a minimal FastAPI Todo backend with /health and /tasks from prompts.',
+      'Prove the API works with curl smoke tests, not only by reading code.',
+      'Fix import, routing, and validation issues with small targeted prompts.',
+      'Carry the same backend skeleton approach to Ask IT in the assignment.',
+    ],
   },
 
   'development/lab-5-connect-rag-and-test': {
@@ -107,7 +112,12 @@ export const stageDevDeployLabs = {
       ),
     ],
     deliverable: 'App.jsx + screenshot',
-    keyLearning: 'UI integration is prompt + browser check + fix loop.',
+    whatYouLearn: [
+      'Connect a React Todo UI to your FastAPI backend with fetch calls.',
+      'Resolve CORS and empty-list bugs using browser errors and fix prompts.',
+      'Verify add-task and list-task flows end to end with a screenshot.',
+      'Apply the same front-to-back integration steps on Ask IT later.',
+    ],
   },
 
   'mvp-poc-local-render/lab-6-poc-hardening': {
@@ -176,7 +186,12 @@ export const stageDevDeployLabs = {
       ),
     ],
     deliverable: 'README-RUN.md + docker-compose.yml + DOCKER.md + poc-deploy-checklist.md',
-    keyLearning: 'Same path repeats on Ask IT in your assignment.',
+    whatYouLearn: [
+      'Run Todo locally from a README you can hand to another developer.',
+      'Prove Docker works with hello-world, then run the app with docker compose.',
+      'Fix port, engine, and DATABASE_URL issues common in real deploys.',
+      'Prepare Render POC config and checklist—the same path repeats on Ask IT in your assignment.',
+    ],
   },
 
   'production-deployment/lab-7a-production-deployment': {
@@ -220,7 +235,12 @@ export const stageDevDeployLabs = {
       ),
     ],
     deliverable: 'PRODUCTION_CHECKLIST.md',
-    keyLearning: 'Repeat for Ask IT in production assignment.',
+    whatYouLearn: [
+      'Harden Render config: secrets outside git, explicit CORS origin, health checks.',
+      'Write a production checklist that includes rollback steps.',
+      'Spot POC shortcuts that are unsafe for real users.',
+      'Repeat this checklist pattern for Ask IT in the production assignment.',
+    ],
   },
 
   'production-deployment/lab-7b-runbook-and-outage-drill': {
@@ -259,7 +279,12 @@ export const stageDevDeployLabs = {
       ),
     ],
     deliverable: 'RUNBOOK.md + drill-log.md',
-    keyLearning: 'Runbook pattern transfers to Ask IT assignment.',
+    whatYouLearn: [
+      'Write a one-page runbook another person can follow during an outage.',
+      'Practice one simulated incident and record the fix prompt you used.',
+      'Separate symptoms, checks, and rollback in clear numbered steps.',
+      'Reuse this runbook structure for Ask IT operations.',
+    ],
   },
 
   'enterprise-ai-fde/lab-8a-observability-and-eval-evidence': {
@@ -297,7 +322,12 @@ export const stageDevDeployLabs = {
       ),
     ],
     deliverable: 'langfuse-setup.md',
-    keyLearning: 'Observability spec before enterprise Ask IT.',
+    whatYouLearn: [
+      'Define which Todo API spans you would trace (validation, DB write, etc.).',
+      'List Langfuse env vars and flush behavior without exposing secrets.',
+      'Connect tracing to debugging real latency and failure issues.',
+      'Scale the same observability plan to Ask IT in the enterprise stage.',
+    ],
   },
 
   'enterprise-ai-fde/lab-8b-sponsor-readout-and-handover': {
@@ -335,6 +365,11 @@ export const stageDevDeployLabs = {
       ),
     ],
     deliverable: 'HANDOVER.md',
-    keyLearning: 'Handover on Todo → full Ask IT package alone.',
+    whatYouLearn: [
+      'Assemble a handover doc with sponsor bullets, URLs, and known limits.',
+      'Write for a non-technical reader at the top and technical detail below.',
+      'Use real deploy URLs from earlier labs, not localhost placeholders.',
+      'Use this Todo handover as the template for the full Ask IT package assignment.',
+    ],
   },
 }

@@ -1,6 +1,7 @@
 import { Helmet } from 'react-helmet-async'
 import { Link, useParams } from 'react-router-dom'
 import FdeItemBody from '../components/FdeItemBody'
+import LabWhatYouLearn from '../components/LabWhatYouLearn'
 import { ExerciseBlock, EXERCISES } from '../exercises'
 import { useFdeProgress } from '../context/FdeProgressContext'
 import { getAdjacentItems, getItem, getItemContent } from '../lib/stages.ts'
@@ -82,6 +83,10 @@ export default function FdeItemPage() {
         <h1 className="text-2xl sm:text-3xl font-bold tracking-tight leading-tight mb-5">{item.title}</h1>
 
         {content && <FdeItemBody content={content} itemType={item.type} />}
+
+        {item.type === 'lab' && exercise?.whatYouLearn?.length > 0 && (
+          <LabWhatYouLearn items={exercise.whatYouLearn} accentColor={stage.color} />
+        )}
 
         {exercise && (
           <ExerciseBlock exercise={exercise} accentColor={stage.color} />

@@ -82,7 +82,12 @@ for task in TASKS:
       ),
     ],
     deliverable: 'compare output + model-notes.txt',
-    keyLearning: 'Measure on your data.',
+    whatYouLearn: [
+      'Call two LLM models on the same Todo tasks and compare latency and labels.',
+      'Keep prompts tight so outputs stay in one-word format for fair comparison.',
+      'Record results and write a short recommendation backed by your own run data.',
+      'Choose a default model for later labs based on evidence, not habit.',
+    ],
   },
 
   'ai-engineering/lab-3-ingest-and-index': {
@@ -125,7 +130,12 @@ for task in TASKS:
       ),
     ],
     deliverable: 'ingest_todo_help.py + output',
-    keyLearning: 'Data quality beats bigger models.',
+    whatYouLearn: [
+      'Build a small FAISS index over Todo help text using embeddings.',
+      'Run a test query and judge whether the top match is actually relevant.',
+      'Improve recall with document edits or retrieval settings—not only a bigger model.',
+      'Explain why source content quality matters for RAG answers.',
+    ],
   },
 
   'ai-engineering/lab-4-diagnose-and-fix': {
@@ -164,7 +174,12 @@ for task in TASKS:
       ),
     ],
     deliverable: 'rag-debug-notes.md',
-    keyLearning: 'data → retrieval → prompt → model',
+    whatYouLearn: [
+      'Walk a wrong RAG answer through data → retrieval → prompt → model in order.',
+      'Document one root cause in writing before you change anything.',
+      'Apply a single targeted fix and re-test one query.',
+      'Use the same diagnosis habit later on Ask IT FAQ retrieval.',
+    ],
   },
 
   'ai-engineering/lab-5a-first-agent': {
@@ -202,7 +217,12 @@ for task in TASKS:
       ),
     ],
     deliverable: 'todo_agent.py',
-    keyLearning: 'Agents = model + tools.',
+    whatYouLearn: [
+      'Wire an LLM to Todo tools (search help, create task) instead of free-form answers only.',
+      'Read a simple trace or log to confirm which tool the agent chose.',
+      'Handle API-down errors inside tools with clear user messages.',
+      'Describe when an agent is better than a single chat prompt.',
+    ],
   },
 
   'ai-engineering/lab-5b-approval-step': {
@@ -240,7 +260,11 @@ for task in TASKS:
       ),
     ],
     deliverable: 'Updated todo_agent.py',
-    keyLearning: 'Human-in-the-loop on risky actions.',
+    whatYouLearn: [
+      'Add a human approval step before create_task without slowing safe read-only tools.',
+      'Test both approve and decline paths so tasks are not created by mistake.',
+      'Explain why risky actions need a gate in customer-facing AI products.',
+    ],
   },
 
   'ai-engineering/lab-6-add-guardrails-and-attack': {
@@ -279,7 +303,12 @@ for task in TASKS:
       ),
     ],
     deliverable: 'guardrail-test-log.txt',
-    keyLearning: 'Attack your bot, then fix with prompts.',
+    whatYouLearn: [
+      'Run a realistic prompt-injection attack against your Todo agent.',
+      'Define the safe behavior you expect when rules are broken.',
+      'Add guardrails that block abuse but still allow normal task commands.',
+      'Log attacks and fixes for security reviews on Ask IT later.',
+    ],
   },
 
   'ai-engineering/lab-7-skill-and-mcp-tool': {
@@ -317,6 +346,11 @@ for task in TASKS:
       ),
     ],
     deliverable: 'skills/task_lookup.md',
-    keyLearning: 'Package behaviors as skills.',
+    whatYouLearn: [
+      'Write a reusable skill doc that describes one Todo API operation.',
+      'Specify parameters and HTTP method so another agent can call it correctly.',
+      'Map the skill to an MCP-style tool schema for assistants.',
+      'Package small behaviors as skills instead of one giant prompt.',
+    ],
   },
 }

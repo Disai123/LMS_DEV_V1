@@ -335,7 +335,7 @@ function PromptLabExercise({ exercise }) {
       {exercise.stretchGoal && (
         <InfoRow label="Stretch goal">{exercise.stretchGoal}</InfoRow>
       )}
-      {exercise.keyLearning && (
+      {exercise.keyLearning && exercise.track !== 'todo' && (
         <InfoRow label="Key learning">{exercise.keyLearning}</InfoRow>
       )}
     </div>
@@ -402,7 +402,9 @@ function ConceptExercise({ exercise }) {
       <AcceptanceChecklist items={exercise.acceptanceCriteria} />
       <TroubleshootingBlock items={exercise.troubleshooting} />
       {exercise.deliverable && <InfoRow label="Deliverable">{exercise.deliverable}</InfoRow>}
-      {exercise.keyLearning && <InfoRow label="Key learning">{exercise.keyLearning}</InfoRow>}
+      {exercise.keyLearning && exercise.track !== 'todo' && (
+        <InfoRow label="Key learning">{exercise.keyLearning}</InfoRow>
+      )}
     </div>
   )
 }
@@ -500,7 +502,9 @@ function PromptExercise({ exercise }) {
       <AcceptanceChecklist items={exercise.acceptanceCriteria} />
       <TroubleshootingBlock items={exercise.troubleshooting} />
       {exercise.deliverable && <InfoRow label="Deliverable">{exercise.deliverable}</InfoRow>}
-      {exercise.keyLearning && <InfoRow label="Key learning">{exercise.keyLearning}</InfoRow>}
+      {exercise.keyLearning && exercise.track !== 'todo' && (
+        <InfoRow label="Key learning">{exercise.keyLearning}</InfoRow>
+      )}
     </div>
   )
 }

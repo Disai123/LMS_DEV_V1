@@ -73,7 +73,12 @@ export const stageSdlcLabs = {
       ),
     ],
     deliverable: 'discovery.md + BRD.md',
-    keyLearning: 'Exact headings keep reviewers aligned—Ask IT assignment next.',
+    whatYouLearn: [
+      'Run structured discovery questions before you specify requirements.',
+      'Write a one-page Todo BRD with fixed headings reviewers can scan quickly.',
+      'Number functional requirements and user stories so they are testable.',
+      'Reuse the same BRD pattern on the Ask IT assignment without copying Todo features.',
+    ],
   },
 
   'fde-sdlc-ui-ux-solution/lab-2-wireframe-ask-it': {
@@ -117,7 +122,12 @@ export const stageSdlcLabs = {
       ),
     ],
     deliverable: 'UI_UX.md',
-    keyLearning: 'UI brief via prompts—mirror for Ask IT assignment.',
+    whatYouLearn: [
+      'Describe Todo screens (list, add, mark done) in a wireframe-style markdown brief.',
+      'Include empty and error states, not only the happy path.',
+      'Keep scope on the task-list app—no chat or Ask IT flows in this lab.',
+      'Produce a UI spec you can mirror for Ask IT in the assignment.',
+    ],
   },
 
   'fde-sdlc-architecture-solution/lab-3-diagram-tags-cost-and-adr': {
@@ -161,6 +171,11 @@ export const stageSdlcLabs = {
       ),
     ],
     deliverable: 'ARCHITECTURE.md',
-    keyLearning: 'Architecture before code—Ask IT pack is your assignment.',
+    whatYouLearn: [
+      'Sketch Todo as React → FastAPI → SQLite with labeled API routes.',
+      'Record an ADR that explains one real decision (e.g. auth deferred in v1).',
+      'List components and data flow before writing production code.',
+      'Use the same architecture discipline on Ask IT in your assignment.',
+    ],
   },
 }

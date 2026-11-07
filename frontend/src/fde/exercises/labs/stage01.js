@@ -216,7 +216,12 @@ if __name__ == "__main__":
       ),
     ],
     deliverable: 'submit_task.py',
-    keyLearning: 'Generate, run, fix—FDE loop.',
+    whatYouLearn: [
+      'Send JSON to a Todo API with httpx and read status codes and response bodies.',
+      'Tell network errors apart from validation errors and explain each in plain English.',
+      'Use a fix prompt when the API is down instead of changing code at random.',
+      'Run a small client script from your project folder and save it as a deliverable.',
+    ],
   },
 
   'software-engineering/lab-1b-tested-triage-endpoint': {
@@ -258,6 +263,11 @@ if __name__ == "__main__":
       ),
     ],
     deliverable: 'main.py, test_main.py, pytest log',
-    keyLearning: 'Trust but verify AI code with pytest.',
+    whatYouLearn: [
+      'Scaffold a FastAPI Todo endpoint with Pydantic validation using AI-generated code.',
+      'Write pytest tests that expect 422 for bad input and pass when behavior is correct.',
+      'Run pytest, read failures, and apply a minimal fix prompt until tests are green.',
+      'Verify AI-written backend code with automated tests before you trust it.',
+    ],
   },
 }
