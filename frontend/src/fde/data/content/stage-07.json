@@ -44,11 +44,7 @@
     "sections": [
       {
         "heading": "Prerequisites",
-        "body": "Development Labs 4–5 complete. Docker Desktop running."
-      },
-      {
-        "heading": "Panel below",
-        "body": "Copy one prompt at a time. Checkpoints: README works, hello-world, compose up, render checklist."
+        "body": "Development Labs 4–5 complete. Docker Desktop running. Open the **Lab** panel at the bottom of this page for prompts and checkpoints."
       },
       {
         "heading": "Then",
@@ -79,11 +75,7 @@
     "sections": [
       {
         "heading": "Skills from Todo Lab 6",
-        "body": "Same sequence you did with your tutor—now for Ask IT in your repo."
-      },
-      {
-        "heading": "Panel below",
-        "body": "Three assignment prompts + deliverables. Use fix prompts if deploy fails."
+        "body": "Same sequence you did with your tutor—now for Ask IT in your repo. Prompts are in the **Assignment** panel at the bottom of this page."
       }
     ]
   }

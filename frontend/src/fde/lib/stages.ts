@@ -1,13 +1,5 @@
 import roadmapData from '../data/stages.json'
-import {
-  ASK_IT_PLAIN,
-  ASSIGNMENT_FIT_HEADING,
-  HOW_COURSE_WORKS,
-  LAB_FIT_HEADING,
-  READ_CONNECT,
-  READ_FIT_HEADING,
-  TODO_PLAIN,
-} from './fdeNarrative'
+import { ASK_IT_PLAIN, READ_CONNECT, READ_FIT_HEADING, TODO_PLAIN } from './fdeNarrative'
 
 export type ItemType = 'read' | 'lab' | 'interview' | 'project' | 'assignment' | 'capstone'
 
@@ -174,7 +166,11 @@ function defaultContent(stage: Stage, item: RoadmapItem): ItemContent {
         heading: 'Overview',
         body: `${summary}\n\n${ASK_IT_PLAIN}\n\n${READ_CONNECT}`,
       },
-      { heading: 'Course structure (read once)', body: HOW_COURSE_WORKS },
+      {
+        heading: 'Course map',
+        body:
+          'Read **How this course is organized** on the [FDE roadmap](/roadmap/fde) home page once (Todo labs vs Ask IT assignments).',
+      },
       {
         heading: 'While you read',
         body:
@@ -285,24 +281,7 @@ function withNarrativePreamble(item: RoadmapItem, sections: ItemSection[]): Item
       ...sections,
     ]
   }
-  if (item.type === 'lab') {
-    return [
-      {
-        heading: LAB_FIT_HEADING,
-        body: `${TODO_PLAIN}\n\nOpen the **Todo · Tutored lab** panel below. One prompt at a time; pass each checkpoint before the next.`,
-      },
-      ...sections,
-    ]
-  }
-  if (item.type === 'assignment') {
-    return [
-      {
-        heading: ASSIGNMENT_FIT_HEADING,
-        body: `${ASK_IT_PLAIN}\n\n**Solo work**—use **Skills from the lab** in the panel, then the same prompt → checkpoint → fix loop on **Ask IT**.`,
-      },
-      ...sections,
-    ]
-  }
+  // Labs and assignments: prompts live in the panel below — avoid repeating tutor loop on the page.
   return sections
 }
 

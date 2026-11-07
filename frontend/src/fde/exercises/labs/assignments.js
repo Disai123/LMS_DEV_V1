@@ -1,6 +1,5 @@
 import {
   ASK_IT_CONTEXT,
-  ASSIGNMENT_START,
   GLOSSARY_COMMON,
   troubleshootingEntry,
   compactPrompt,
@@ -21,7 +20,6 @@ function assignmentBase(extra) {
     track: 'assignment',
     type: 'prompt-lab',
     glossary: GLOSSARY_COMMON,
-    beforeYouStart: ASSIGNMENT_START,
     ...extra,
   }
 }

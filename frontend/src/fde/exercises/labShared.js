@@ -11,6 +11,22 @@ export const TUTOR_START =
 export const ASSIGNMENT_START =
   'You are **on your own** (no tutor). Read **Skills from the lab** first, then use the same prompt → checkpoint → fix loop. Run everything in **your Ask IT repo** on your laptop.'
 
+/** Hide generic opener when the exercise panel already explains the loop. */
+export function stripGenericBeforeYouStart(text) {
+  if (!text || typeof text !== 'string') return null
+  const trimmed = text.trim()
+  if (trimmed === TUTOR_START || trimmed === ASSIGNMENT_START) return null
+  if (trimmed.startsWith(TUTOR_START)) {
+    const rest = trimmed.slice(TUTOR_START.length).trim()
+    return rest || null
+  }
+  if (trimmed.startsWith(ASSIGNMENT_START)) {
+    const rest = trimmed.slice(ASSIGNMENT_START.length).trim()
+    return rest || null
+  }
+  return trimmed
+}
+
 export const TODO_ONE_LINER =
   'A small Todo app: add tasks, mark done, filter by status—FastAPI + SQLite + simple React or CLI.'
 

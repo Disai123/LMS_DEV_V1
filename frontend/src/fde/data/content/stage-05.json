@@ -86,11 +86,7 @@
     "sections": [
       {
         "heading": "Before you start",
-        "body": "Finish Todo architecture lab. Same headings and ADR habit; scope is Ask IT (RAG, RBAC, /ask, /triage)."
-      },
-      {
-        "heading": "Panel below",
-        "body": "Ask IT prompts only."
+        "body": "Finish Todo architecture lab. Same headings and ADR habit; scope is Ask IT (RAG, RBAC, /ask, /triage). Prompts are in the **Assignment** panel at the bottom of this page."
       }
     ],
     "typeExtras": {}

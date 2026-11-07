@@ -3,7 +3,7 @@ import ReactMarkdown from 'react-markdown'
 import remarkGfm from 'remark-gfm'
 import { Prism as SyntaxHighlighter } from 'react-syntax-highlighter'
 import { vscDarkPlus } from 'react-syntax-highlighter/dist/esm/styles/prism'
-import { ASSIGNMENT_START, BADGE_LAB, BADGE_ASSIGNMENT, TUTOR_START } from './labShared'
+import { BADGE_LAB, BADGE_ASSIGNMENT, stripGenericBeforeYouStart } from './labShared'
 
 function isAssignment(exercise) {
   return exercise?.track === 'assignment'
@@ -48,6 +48,12 @@ function CopyButton({ code }) {
 }
 
 function InfoRow({ label, children }) {
+  const body =
+    typeof children === 'string' ? (
+      <PromptMarkdown text={children} className="text-[0.9rem]" />
+    ) : (
+      children
+    )
   return (
     <div className="mb-4">
       <h4
@@ -57,7 +63,7 @@ function InfoRow({ label, children }) {
         {label}
       </h4>
       <div className="text-[0.9rem] leading-relaxed" style={{ color: 'var(--fde-tx)' }}>
-        {children}
+        {body}
       </div>
     </div>
   )
@@ -150,21 +156,28 @@ function PanelHowTo({ exercise }) {
       className="rounded-lg border px-4 py-3 mb-5 text-[0.88rem] leading-relaxed"
       style={{ borderColor: 'var(--fde-bd)', background: 'var(--fde-code-bg)', color: 'var(--fde-tx)' }}
     >
-      <p className="m-0 font-semibold mb-1.5" style={{ color: assignment ? '#f0b429' : '#35d49a' }}>
-        {assignment ? 'Ask IT · on your own' : 'Todo · with your tutor'}
-      </p>
-      <p className="m-0" style={{ color: 'var(--fde-mut)' }}>
-        {assignment ? ASSIGNMENT_START : TUTOR_START}
-      </p>
-      <p className="m-0 mt-2 text-[0.82rem]" style={{ color: 'var(--fde-mut)' }}>
-        <strong style={{ color: 'var(--fde-tx)' }}>How to use this panel:</strong> click <strong>Copy</strong> on a
-        prompt → paste into your AI tool → do what the <strong>Checkpoint</strong> says → only then open the next step.
+      <p className="m-0 text-[0.82rem]" style={{ color: 'var(--fde-mut)' }}>
+        {assignment ? (
+          <>
+            On your own: read <strong style={{ color: 'var(--fde-tx)' }}>Skills from the lab</strong>, then{' '}
+            <strong style={{ color: 'var(--fde-tx)' }}>Copy</strong> → paste into your AI tool → pass the{' '}
+            <strong style={{ color: 'var(--fde-tx)' }}>Checkpoint</strong> → open{' '}
+            <strong style={{ color: 'var(--fde-tx)' }}>Troubleshooting</strong> if something breaks.
+          </>
+        ) : (
+          <>
+            With your tutor: one step at a time. <strong style={{ color: 'var(--fde-tx)' }}>Copy</strong> → paste into
+            your AI tool → pass the <strong style={{ color: 'var(--fde-tx)' }}>Checkpoint</strong> → open{' '}
+            <strong style={{ color: 'var(--fde-tx)' }}>Troubleshooting</strong> if something breaks.
+          </>
+        )}
       </p>
     </div>
   )
 }
 
 function LabMetaHeader({ exercise }) {
+  const beforeExtra = stripGenericBeforeYouStart(exercise.beforeYouStart)
   return (
     <>
       {(exercise.duration || exercise.prerequisites?.length > 0) && (
@@ -175,9 +188,7 @@ function LabMetaHeader({ exercise }) {
           )}
         </div>
       )}
-      {exercise.beforeYouStart && (
-        <InfoRow label="Before you start">{exercise.beforeYouStart}</InfoRow>
-      )}
+      {beforeExtra && <InfoRow label="Before you start">{beforeExtra}</InfoRow>}
       <GlossaryBlock glossary={exercise.glossary} />
     </>
   )

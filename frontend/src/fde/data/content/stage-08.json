@@ -59,11 +59,7 @@
     "sections": [
       {
         "heading": "Path",
-        "body": "You hardened **Todo** on Render in Stage 7. Here you add **production** rules: `render.yaml`, secret handling, CORS. Same pattern later on **Ask IT** in the assignment."
-      },
-      {
-        "heading": "Panel below",
-        "body": "One prompt → save `PRODUCTION_CHECKLIST.md` → checkpoint before you close the panel."
+        "body": "You hardened **Todo** on Render in Stage 7. Here you add **production** rules: `render.yaml`, secret handling, CORS. Same pattern later on **Ask IT** in the assignment. Prompts are in the **Lab** panel at the bottom of this page."
       },
       {
         "heading": "Done when",
