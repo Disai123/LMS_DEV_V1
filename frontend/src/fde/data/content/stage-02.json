@@ -287,6 +287,35 @@
       ]
     }
   },
+  "ai-engineering/assignment-model-recommendation": {
+    "summary": "Extend your Lab 2A eval set to 20 examples, including three edge cases, and re-run both models. Then write a one-page recommendation for a client manager covering which model to use, why, the expected cost per 1,000 requests and the main risk.",
+    "sections": [
+      {
+        "heading": "Overview",
+        "body": "Extend your Lab 2A eval set to 20 examples, including three edge cases, and re-run both models. Then write a one-page recommendation for a client manager covering which model to use, why, the expected cost per 1,000 requests and the main risk."
+      },
+      {
+        "heading": "Details",
+        "body": "Deliverable: Eval set, results table and one-page recommendation (recommendation.md)\n\nDue: Before Session 4"
+      },
+      {
+        "heading": "Check-out question",
+        "body": "**What evidence would convince a client the model is good enough?**"
+      }
+    ],
+    "typeExtras": {
+      "objectives": [
+        "Grow a small eval set without changing the task type.",
+        "Add edge cases that show where a model fails.",
+        "Turn per-call token counts into a cost per 1,000 requests.",
+        "Write a recommendation a non-technical manager can act on.",
+        "Back every claim in the recommendation with a number from your results table."
+      ],
+      "checkpointQuestions": [
+        "What evidence would convince a client the model is good enough?"
+      ]
+    }
+  },
   "ai-engineering/lab-ingest-chunk-and-index": {
     "summary": "Understand the RAG architecture and why messy document parsing decides retrieval quality.",
     "sections": [
@@ -316,6 +345,35 @@
         "Answer questions using only text you retrieved from your index",
         "Name the source chunk for every factual answer",
         "Say you do not know when the documents do not support an answer"
+      ]
+    }
+  },
+  "ai-engineering/assignment-chunking-comparison": {
+    "summary": "Take the policy index you built in Lab 3A and compare it with a second chunking strategy. Run the same 10 questions against both, record which chunks come back, and recommend one strategy with evidence. Also list the parsing and data-quality problems you found and how you handled them.",
+    "sections": [
+      {
+        "heading": "Overview",
+        "body": "Take the policy index you built in Lab 3A and compare it with a second chunking strategy. Run the same 10 questions against both, record which chunks come back, and recommend one strategy with evidence. Also list the parsing and data-quality problems you found and how you handled them."
+      },
+      {
+        "heading": "Details",
+        "body": "Deliverable: Comparison table, recommendation and problem list (chunking_report.md)\n\nDue: Before Session 5"
+      },
+      {
+        "heading": "Check-out question",
+        "body": "**Which document in the corpus was hardest to parse, and why?**"
+      }
+    ],
+    "typeExtras": {
+      "objectives": [
+        "Build two indexes from the same documents and compare them fairly.",
+        "Write test questions with a known source, so retrieval can be checked.",
+        "Judge a chunking strategy by the chunks it returns, not by the final answer.",
+        "Recognise and record parsing and data-quality problems in a document set.",
+        "Justify a design choice with evidence from your own results."
+      ],
+      "checkpointQuestions": [
+        "Which document in the corpus was hardest to parse, and why?"
       ]
     }
   },
@@ -351,6 +409,35 @@
       ]
     }
   },
+  "ai-engineering/assignment-rag-evaluation-report": {
+    "summary": "Measure your policy assistant, fix three failures and show before-and-after results in a short evaluation report. Then add a test proving that a restricted HR document never reaches a user who is not allowed to see it.",
+    "sections": [
+      {
+        "heading": "Overview",
+        "body": "Measure your policy assistant, fix three failures and show before-and-after results in a short evaluation report. Then add a test proving that a restricted HR document never reaches a user who is not allowed to see it."
+      },
+      {
+        "heading": "Details",
+        "body": "Deliverable: Evaluation report (eval_report.md) and the access-control test (test_access_control.py)\n\nDue: Before Session 6"
+      },
+      {
+        "heading": "Check-out question",
+        "body": "**How do you tell a retrieval failure from a generation failure?**"
+      }
+    ],
+    "typeExtras": {
+      "objectives": [
+        "Set a baseline for a RAG pipeline before changing anything.",
+        "Fix one failure per layer (data, retrieval, prompt) and measure each fix.",
+        "Report results as before-and-after numbers with a one-line cause.",
+        "Keep restricted documents out of retrieval by filtering on the user’s role.",
+        "Write a test that fails when the protection is removed."
+      ],
+      "checkpointQuestions": [
+        "How do you tell a retrieval failure from a generation failure?"
+      ]
+    }
+  },
   "ai-engineering/lab-langgraph-human-approval": {
     "summary": "Add checkpointing and an approval step before a risky action.",
     "sections": [
@@ -383,6 +470,39 @@
       ]
     }
   },
+  "ai-engineering/assignment-choose-workflow-or-agent": {
+    "summary": "Decide whether three client use cases need a workflow or an agent, and justify each in one paragraph. Then add a third tool to your policy agent and test it on two questions.",
+    "sections": [
+      {
+        "heading": "Overview",
+        "body": "Decide whether three client use cases need a workflow or an agent, and justify each in one paragraph. Then add a third tool to your policy agent and test it on two questions."
+      },
+      {
+        "heading": "Details",
+        "body": "Deliverable: Decision paragraphs (decisions.md) and the updated agent\n\nDue: Before Session 7"
+      },
+      {
+        "heading": "The three client use cases",
+        "body": "1. **Invoice intake (finance team)**: Every day about 200 supplier invoices arrive as PDFs. Each must be read, checked against five fixed rules and posted to the accounting system. Mistakes cost money, and auditors want the same steps every time.\n2. **Employee help desk (HR and IT)**: Staff ask open questions such as “Can I work from Portugal for two weeks, and how many working days is that?” Answering may need policy search, date maths, a ticket lookup or none of these. The questions vary every day.\n3. **Vendor contract review (legal team)**: A contract comes in. The system must extract the key clauses, compare them with a checklist, and draft a summary email for a lawyer to approve. The order of steps is the same each time, but some clauses need extra reading."
+      },
+      {
+        "heading": "Check-out question",
+        "body": "**Name a case where a plain workflow is better than an agent.**"
+      }
+    ],
+    "typeExtras": {
+      "objectives": [
+        "Tell a fixed workflow from an agent that chooses its own steps.",
+        "Justify the choice using step predictability, risk and cost.",
+        "Add a tool to an agent with a clear description and a narrow job.",
+        "Check from a trace that the agent called the new tool only when it should.",
+        "Keep the approval gate working after the agent changes."
+      ],
+      "checkpointQuestions": [
+        "Name a case where a plain workflow is better than an agent."
+      ]
+    }
+  },
   "ai-engineering/lab-red-team-guardrails": {
     "summary": "Add at least two guardrails, then attack each other’s agents and fix what breaks.",
     "sections": [
@@ -399,6 +519,35 @@
       ]
     }
   },
+  "ai-engineering/assignment-threat-model": {
+    "summary": "Write a threat model table for your policy agent, based on attacks you actually run. Then fix at least one weakness from your red-team round and show the test that now passes.",
+    "sections": [
+      {
+        "heading": "Overview",
+        "body": "Write a threat model table for your policy agent, based on attacks you actually run. Then fix at least one weakness from your red-team round and show the test that now passes."
+      },
+      {
+        "heading": "Details",
+        "body": "Deliverable: Threat model (threat_model.md) and the fix, with its test\n\nDue: Before Session 8"
+      },
+      {
+        "heading": "Check-out question",
+        "body": "**What is the worst action your agent could take, and what stops it?**"
+      }
+    ],
+    "typeExtras": {
+      "objectives": [
+        "Turn red-team results into a threat model with attack, impact, mitigation and status.",
+        "Test attacks beyond the two you were given.",
+        "Judge how much a guardrail really protects.",
+        "Fix a weakness and prove it with a test that fails before the fix and passes after.",
+        "Report what is still open, honestly."
+      ],
+      "checkpointQuestions": [
+        "What is the worst action your agent could take, and what stops it?"
+      ]
+    }
+  },
   "ai-engineering/lab-mcp-server": {
     "summary": "Build a Python MCP server that exposes policy search and a ticketing tool, and connect it to the agent.",
     "sections": [
@@ -412,6 +561,35 @@
         "Expose a search tool and a read-only resource through an MCP server",
         "Connect that server to your agent so it can call the tool",
         "Check inputs before the tool runs so bad requests are rejected"
+      ]
+    }
+  },
+  "ai-engineering/assignment-package-and-present": {
+    "summary": "Finish your policy and support assistant as a project another engineer could pick up. Write the README, draw the architecture, gather your evaluation results and complete a production checklist. Then give a 10-minute walkthrough for a team lead that includes the known limits and what you would do next.",
+    "sections": [
+      {
+        "heading": "Overview",
+        "body": "Finish your policy and support assistant as a project another engineer could pick up. Write the README, draw the architecture, gather your evaluation results and complete a production checklist. Then give a 10-minute walkthrough for a team lead that includes the known limits and what you would do next."
+      },
+      {
+        "heading": "Details",
+        "body": "Deliverable: Repository link, one-page architecture and checklist (architecture.md), and the walkthrough\n\nDue: Within two weeks of Session 8"
+      },
+      {
+        "heading": "Check-out question",
+        "body": "**What would you change before a client uses this system?**"
+      }
+    ],
+    "typeExtras": {
+      "objectives": [
+        "Package a working AI system so someone else can run it from a clean copy.",
+        "Show the whole system in one diagram: LLM, RAG, agent, guardrails and MCP tool.",
+        "Bring evaluation evidence together instead of describing it from memory.",
+        "Judge production readiness with a checklist, and mark what is not done.",
+        "Present a system to a team lead, including its limits."
+      ],
+      "checkpointQuestions": [
+        "What would you change before a client uses this system?"
       ]
     }
   },

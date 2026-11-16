@@ -181,6 +181,8 @@ function GlossaryBlock({ glossary }) {
 
 function PanelHowTo({ exercise }) {
   const askIt = isAskItAssignment(exercise)
+  const hasSkills = Boolean(exercise.skillsFromLab?.length > 0)
+  const skillsTitle = exercise.skillsFromLabTitle || 'Skills from the lab'
   const foundation = isFoundation(exercise) || isFoundationAssignment(exercise)
   return (
     <div
@@ -188,9 +190,9 @@ function PanelHowTo({ exercise }) {
       style={{ borderColor: 'var(--fde-bd)', background: 'var(--fde-code-bg)', color: 'var(--fde-tx)' }}
     >
       <p className="m-0 text-[0.82rem]" style={{ color: 'var(--fde-mut)' }}>
-        {askIt ? (
+        {askIt || hasSkills ? (
           <>
-            Read <strong style={{ color: 'var(--fde-tx)' }}>Skills from the lab</strong> and{' '}
+            Read <strong style={{ color: 'var(--fde-tx)' }}>{skillsTitle}</strong> and{' '}
             <strong style={{ color: 'var(--fde-tx)' }}>What you will do</strong>, then{' '}
             <strong style={{ color: 'var(--fde-tx)' }}>Copy</strong> → paste into your AI tool. Match{' '}
             <strong style={{ color: 'var(--fde-tx)' }}>acceptance criteria</strong>. Open{' '}
@@ -220,11 +222,12 @@ function LabMetaHeader({ exercise }) {
   const beforeExtra = stripGenericBeforeYouStart(exercise.beforeYouStart)
   return (
     <>
-      {(exercise.duration || exercise.prerequisites?.length > 0) && (
+      {(exercise.duration || exercise.prerequisites?.length > 0 || exercise.covers) && (
         <div className="flex flex-wrap gap-3 mb-4 text-[0.85rem]" style={{ color: 'var(--fde-mut)' }}>
           {exercise.duration && <span>⏱ {exercise.duration}</span>}
+          {exercise.covers && <span>Covers: {exercise.covers}</span>}
           {exercise.prerequisites?.length > 0 && (
-            <span>Prerequisites: {exercise.prerequisites.join(', ')}</span>
+            <span>Prerequisites: {exercise.prerequisites.join(' · ')}</span>
           )}
         </div>
       )}
@@ -339,7 +342,7 @@ function PromptsList({ prompts, showCheckpoints = true }) {
   )
 }
 
-function SkillsFromLab({ items }) {
+function SkillsFromLab({ items, title = 'Skills from the lab' }) {
   if (!items?.length) return null
   return (
     <div className="mb-4">
@@ -347,7 +350,7 @@ function SkillsFromLab({ items }) {
         className="text-[10px] font-semibold uppercase tracking-widest mb-1.5"
         style={{ color: 'var(--fde-mut)' }}
       >
-        Skills from the lab
+        {title}
       </h4>
       <ul className="list-disc pl-5 space-y-1 text-[0.9rem]" style={{ color: 'var(--fde-tx)' }}>
         {items.map((line, i) => (
@@ -405,7 +408,12 @@ function PromptLabExercise({ exercise }) {
       <PanelHowTo exercise={exercise} />
       <LabMetaHeader exercise={exercise} />
       {isFoundation(exercise) && <FoundationLabConcepts exercise={exercise} />}
-      {isAskItAssignment(exercise) && <SkillsFromLab items={exercise.skillsFromLab} />}
+      {exercise.skillsFromLab?.length > 0 && (
+        <SkillsFromLab
+          items={exercise.skillsFromLab}
+          title={exercise.skillsFromLabTitle}
+        />
+      )}
       {isFoundationAssignment(exercise) && <SkillsFromStage items={exercise.skillsFromStage} />}
       {customer ? (
         contextText && <InfoRow label="What you will do">{contextText}</InfoRow>
@@ -418,6 +426,9 @@ function PromptLabExercise({ exercise }) {
       <PromptsList prompts={exercise.prompts} showCheckpoints={!customer} />
       <AcceptanceChecklist items={exercise.acceptanceCriteria} />
       <TroubleshootingBlock items={exercise.troubleshooting} />
+      {exercise.checkoutQuestion && (
+        <InfoRow label="Check-out question">{exercise.checkoutQuestion}</InfoRow>
+      )}
       {!customer && exercise.deliverable && (
         <InfoRow label="Deliverable">{exercise.deliverable}</InfoRow>
       )}

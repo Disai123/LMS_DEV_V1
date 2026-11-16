@@ -155,14 +155,20 @@
         {
           "slug": "lab-fastapi-simple-api",
           "type": "lab",
-          "title": "Lab: Create a simple FastAPI API",
+          "title": "Lab 1A: Create a simple API",
           "minutes": 45
         },
         {
           "slug": "lab-fastapi-validation-and-testing",
           "type": "lab",
-          "title": "Lab: FastAPI validation and testing",
+          "title": "Lab 1B: FastAPI validation and testing",
           "minutes": 45
+        },
+        {
+          "slug": "assignment-harden-the-api-script",
+          "type": "assignment",
+          "title": "Assignment 1: Harden the API script",
+          "minutes": 60
         }
       ]
     },
@@ -189,7 +195,7 @@
           "slug": "llm-fundamentals",
           "type": "read",
           "title": "LLM fundamentals",
-          "minutes": 20
+          "minutes": 25
         },
         {
           "slug": "model-landscape-and-selection",
@@ -207,19 +213,19 @@
           "slug": "structured-outputs-and-tool-calling",
           "type": "read",
           "title": "Structured outputs and tool calling",
-          "minutes": 20
+          "minutes": 25
         },
         {
           "slug": "llm-evaluation-cost-and-safety",
           "type": "read",
           "title": "LLM evaluation, cost and safety",
-          "minutes": 20
+          "minutes": 25
         },
         {
           "slug": "rag-foundations-and-ingestion",
           "type": "read",
           "title": "RAG foundations and ingestion",
-          "minutes": 20
+          "minutes": 25
         },
         {
           "slug": "chunking-embeddings-and-vector-stores",
@@ -231,13 +237,13 @@
           "slug": "hybrid-search-reranking-and-query-transformation",
           "type": "read",
           "title": "Hybrid search, reranking and query transformation",
-          "minutes": 20
+          "minutes": 25
         },
         {
           "slug": "rag-evaluation-and-production",
           "type": "read",
           "title": "RAG evaluation and production",
-          "minutes": 20
+          "minutes": 25
         },
         {
           "slug": "agent-fundamentals-and-langchain",
@@ -249,7 +255,7 @@
           "slug": "langgraph-state-memory-and-human-in-the-loop",
           "type": "read",
           "title": "LangGraph: state, memory and human-in-the-loop",
-          "minutes": 20
+          "minutes": 25
         },
         {
           "slug": "agentic-rag",
@@ -273,7 +279,7 @@
           "slug": "model-context-protocol-mcp",
           "type": "read",
           "title": "Model Context Protocol (MCP)",
-          "minutes": 20
+          "minutes": 25
         },
         {
           "slug": "agent-skills-and-cursor-rules",
@@ -286,62 +292,98 @@
         {
           "slug": "lab-compare-two-models",
           "type": "lab",
-          "title": "Lab: Compare two models with an eval harness",
-          "minutes": 25
+          "title": "Lab 2A: Compare two models with an eval harness",
+          "minutes": 30
         },
         {
           "slug": "lab-extraction-and-tool-calling",
           "type": "lab",
-          "title": "Lab: Extraction pipeline and tool-calling assistant",
-          "minutes": 25
+          "title": "Lab 2B: Extraction pipeline and tool-calling assistant",
+          "minutes": 30
+        },
+        {
+          "slug": "assignment-model-recommendation",
+          "type": "assignment",
+          "title": "Assignment 2: Model recommendation",
+          "minutes": 75
         },
         {
           "slug": "lab-ingest-chunk-and-index",
           "type": "lab",
-          "title": "Lab: Ingest, chunk, and index a policy corpus",
-          "minutes": 28
+          "title": "Lab 3A: Ingest, chunk, and index a policy corpus",
+          "minutes": 30
         },
         {
           "slug": "lab-baseline-cited-rag",
           "type": "lab",
-          "title": "Lab: Baseline cited RAG Q&A",
-          "minutes": 28
+          "title": "Lab 3B: Baseline cited RAG Q&A",
+          "minutes": 30
+        },
+        {
+          "slug": "assignment-chunking-comparison",
+          "type": "assignment",
+          "title": "Assignment 3: Chunking comparison",
+          "minutes": 75
         },
         {
           "slug": "lab-hybrid-search-reranker",
           "type": "lab",
-          "title": "Lab: Add hybrid search and a reranker",
-          "minutes": 28
+          "title": "Lab 4A: Add hybrid search and a reranker",
+          "minutes": 30
         },
         {
           "slug": "lab-diagnose-rag-failures",
           "type": "lab",
-          "title": "Lab: Diagnose and fix planted RAG failures",
+          "title": "Lab 4B: Diagnose and fix planted RAG failures",
           "minutes": 30
+        },
+        {
+          "slug": "assignment-rag-evaluation-report",
+          "type": "assignment",
+          "title": "Assignment 4: RAG evaluation report",
+          "minutes": 90
         },
         {
           "slug": "lab-langgraph-human-approval",
           "type": "lab",
-          "title": "Lab: LangGraph agent with human approval",
+          "title": "Lab 5A: LangGraph agent with human approval",
           "minutes": 30
         },
         {
           "slug": "lab-agentic-rag-mini-loop",
           "type": "lab",
-          "title": "Lab: Agentic RAG mini-loop",
-          "minutes": 28
+          "title": "Lab 5B: Agentic RAG mini-loop",
+          "minutes": 30
+        },
+        {
+          "slug": "assignment-choose-workflow-or-agent",
+          "type": "assignment",
+          "title": "Assignment 5: Choose a workflow or an agent",
+          "minutes": 60
         },
         {
           "slug": "lab-red-team-guardrails",
           "type": "lab",
-          "title": "Lab: Red-team your agent and add guardrails",
-          "minutes": 28
+          "title": "Lab 6: Red-team your agent and add guardrails",
+          "minutes": 30
+        },
+        {
+          "slug": "assignment-threat-model",
+          "type": "assignment",
+          "title": "Assignment 6: Build a threat model for your agent",
+          "minutes": 75
         },
         {
           "slug": "lab-mcp-server",
           "type": "lab",
-          "title": "Lab: Build an MCP server and connect it to your agent",
+          "title": "Lab 7: Build an MCP server and connect it to your agent",
           "minutes": 30
+        },
+        {
+          "slug": "assignment-package-and-present",
+          "type": "assignment",
+          "title": "Assignment 7: Package and present your assistant",
+          "minutes": 150
         },
         {
           "slug": "assignment-integrated-policy-assistant",

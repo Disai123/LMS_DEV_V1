@@ -134,5 +134,34 @@
         "Fix failing tests with a small targeted change"
       ]
     }
+  },
+  "software-engineering/assignment-harden-the-api-script": {
+    "summary": "Extend your Lab 1A notes API and a small client script so they survive three failure modes: timeout, rate limit (429) and invalid JSON. Then write a short note explaining your retry decisions.",
+    "sections": [
+      {
+        "heading": "Overview",
+        "body": "Extend your Lab 1A notes API and a small client script so they survive three failure modes: timeout, rate limit (429) and invalid JSON. Then write a short note explaining your retry decisions."
+      },
+      {
+        "heading": "Details",
+        "body": "Deliverable: Updated app, client.py, tests and note.md\n\nDue: Before Session 2"
+      },
+      {
+        "heading": "Check-out question",
+        "body": "**Why should a 401 error never be retried?**"
+      }
+    ],
+    "typeExtras": {
+      "objectives": [
+        "Add timeouts and bounded retries to an HTTP client.",
+        "Handle a 429 response by honouring Retry-After.",
+        "Parse a response safely when the body is not valid JSON.",
+        "Prove each failure mode with pytest, as in Lab 1B.",
+        "Decide which failures are worth retrying and which are not."
+      ],
+      "checkpointQuestions": [
+        "Why should a 401 error never be retried?"
+      ]
+    }
   }
 }
