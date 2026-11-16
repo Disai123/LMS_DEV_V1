@@ -38,7 +38,7 @@ function assignmentBase(extra) {
 export const ASSIGNMENTS = {
   'fde-sdlc-business-requirement/one-page-brd-and-discovery-questions': assignmentBase({
     title: 'Assignment: Ask IT BRD + discovery questions',
-    duration: '60 min',
+    duration: '8 min',
     skillsFromLab: ['Todo lab: you drafted a smaller BRD for Todo.', 'Do the full BRD for Ask IT on your own.'],
     assignmentContext: INTRO_ASKIT_BRD,
     whatYouLearn: [
@@ -55,7 +55,7 @@ export const ASSIGNMENTS = {
 
   'fde-sdlc-ui-ux-solution/revise-the-flow-and-wireframes': assignmentBase({
     title: 'Assignment: Ask IT UI/UX pack',
-    duration: '60 min',
+    duration: '8 min',
     skillsFromLab: ['Todo lab: UI brief for task list.', 'Same structure for Ask IT chat UI.'],
     assignmentContext: INTRO_ASKIT_UI,
     whatYouLearn: [
@@ -71,7 +71,7 @@ export const ASSIGNMENTS = {
 
   'fde-sdlc-architecture-solution/update-the-architecture-pack': assignmentBase({
     title: 'Assignment: Ask IT architecture pack',
-    duration: '60 min',
+    duration: '8 min',
     skillsFromLab: ['Todo lab: simple system diagram.', 'Ask IT needs API, RAG, RBAC, deploy notes.'],
     assignmentContext: INTRO_ASKIT_ARCH,
     whatYouLearn: ['Align architecture to BRD.', 'Call out security before the LLM runs.'],
@@ -82,7 +82,7 @@ export const ASSIGNMENTS = {
 
   'development/startup-instructions-and-tests': assignmentBase({
     title: 'Assignment: Ask IT startup + tests',
-    duration: '75 min',
+    duration: '85 min',
     skillsFromLab: ['Todo lab: you built and ran Todo locally.', 'Repeat for Ask IT in your repo.'],
     assignmentContext: INTRO_ASKIT_STARTUP,
     whatYouLearn: ['Local run and manual test plan for Ask IT.', 'Same loop as Todo, different app.'],
@@ -96,7 +96,7 @@ export const ASSIGNMENTS = {
 
   'development/fix-a-failed-test-and-rerun': assignmentBase({
     title: 'Assignment: Fix failing Ask IT test',
-    duration: '60 min',
+    duration: '75 min',
     skillsFromLab: ['Todo lab: fix prompt when tests failed.', 'Do the same on Ask IT.'],
     assignmentContext: INTRO_ASKIT_FIX_TEST,
     whatYouLearn: ['Prompt → fail → fix prompt → run again.'],
@@ -107,7 +107,7 @@ export const ASSIGNMENTS = {
 
   'mvp-poc-local-render/staging-checklist-and-pilot-plan': assignmentBase({
     title: 'Assignment: Ask IT local + Docker + Render',
-    duration: '90 min',
+    duration: '20 min',
     skillsFromLab: ['Todo lab: local → Docker → Render POC.', 'Mirror for Ask IT on your own.'],
     assignmentContext: INTRO_ASKIT_DEPLOY,
     whatYouLearn: ['End-to-end deploy evidence for Ask IT pilot.'],
@@ -125,7 +125,7 @@ export const ASSIGNMENTS = {
 
   'production-deployment/runbook-and-pre-rollout-checklist': assignmentBase({
     title: 'Assignment: Ask IT runbook + rollout checklist',
-    duration: '60 min',
+    duration: '8 min',
     skillsFromLab: ['Todo Render POC taught smoke URLs.', 'Production runbook is Ask IT specific.'],
     assignmentContext: INTRO_ASKIT_RUNBOOK,
     whatYouLearn: ['Ops docs are written with prompts too.'],
@@ -136,7 +136,7 @@ export const ASSIGNMENTS = {
 
   'enterprise-ai-fde/handover-package-and-sponsor-readout': assignmentBase({
     title: 'Assignment: Ask IT handover + sponsor readout',
-    duration: '60 min',
+    duration: '25 min',
     skillsFromLab: ['You traced and deployed Ask IT.', 'Package it for the sponsor.'],
     assignmentContext: INTRO_ASKIT_HANDOVER,
     whatYouLearn: ['Close the engagement with a readable handover.'],

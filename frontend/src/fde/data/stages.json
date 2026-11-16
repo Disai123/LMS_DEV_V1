@@ -54,7 +54,7 @@
     },
     {
       "question": "How are the 48 hours split?",
-      "answer": "Section 1 is 16 hours (5h Python and FastAPI + 11h AI engineering). Section 2 is 16 hours covering Stages 3 through 9 across the full customer engagement lifecycle. Section 3 is 16 hours dedicated to four 4-hour hands-on capstone projects."
+      "answer": "Section 1 is 16 hours (5h Python and FastAPI + 11h AI engineering). Section 2 is 16 hours: Stages 3–5 are 1h each; Development 8h; MVP/POC 2h; Production deployment 1h; Enterprise AI FDE 2h. Section 3 is 16 hours dedicated to four 4-hour hands-on capstone projects."
     },
     {
       "question": "What are the Capstone Projects in Section 3?",
@@ -400,7 +400,7 @@
       "color": "#a074ff",
       "weeksLabel": "Section 2",
       "sectionLabel": "Section 2",
-      "hours": 2,
+      "hours": 1,
       "cardBlurb": "Read Ask IT discovery; Todo lab for BRD practice; Ask IT assignment for your BRD.",
       "description": "Read the Ask IT customer context. Tutored Todo lab: discovery questions and BRD. Assignment: Ask IT BRD on your own.",
       "outcomes": [
@@ -414,31 +414,31 @@
           "slug": "welcome-and-scenario-kickoff",
           "type": "read",
           "title": "Welcome and scenario kickoff",
-          "minutes": 10
+          "minutes": 8
         },
         {
           "slug": "what-an-fde-does",
           "type": "read",
           "title": "What an FDE does",
-          "minutes": 15
+          "minutes": 8
         },
         {
           "slug": "structured-discovery",
           "type": "read",
           "title": "Structured discovery",
-          "minutes": 20
+          "minutes": 8
         },
         {
           "slug": "from-needs-to-requirements",
           "type": "read",
           "title": "From needs to requirements",
-          "minutes": 20
+          "minutes": 8
         },
         {
           "slug": "review-and-assignment-brief",
           "type": "read",
           "title": "Review and assignment brief",
-          "minutes": 10
+          "minutes": 8
         }
       ],
       "practise": [
@@ -446,13 +446,13 @@
           "slug": "lab-1-discovery-and-brd",
           "type": "lab",
           "title": "Lab 1: Todo discovery and BRD",
-          "minutes": 35
+          "minutes": 12
         },
         {
           "slug": "one-page-brd-and-discovery-questions",
           "type": "assignment",
           "title": "One-page BRD and discovery questions",
-          "minutes": "45–60"
+          "minutes": 8
         }
       ]
     },
@@ -463,7 +463,7 @@
       "color": "#ffd23a",
       "weeksLabel": "Section 2",
       "sectionLabel": "Section 2",
-      "hours": 2,
+      "hours": 1,
       "cardBlurb": "Read Ask IT UX rules; Todo lab for wireframes; Ask IT UI assignment.",
       "description": "Learn Ask IT chat UX in readings. Todo lab: UI/UX brief. Assignment: Ask IT UI/UX on your own.",
       "outcomes": [
@@ -477,31 +477,31 @@
           "slug": "recap-and-brd-review",
           "type": "read",
           "title": "Recap and BRD review",
-          "minutes": 10
+          "minutes": 8
         },
         {
           "slug": "design-rules-for-ask-it",
           "type": "read",
           "title": "Design rules for Ask IT",
-          "minutes": 20
+          "minutes": 8
         },
         {
           "slug": "user-flow-and-edge-cases",
           "type": "read",
           "title": "User flow and edge cases",
-          "minutes": 15
+          "minutes": 8
         },
         {
           "slug": "wireframe-walkthrough",
           "type": "read",
           "title": "Wireframe walkthrough",
-          "minutes": 20
+          "minutes": 8
         },
         {
           "slug": "review-and-assignment-brief",
           "type": "read",
           "title": "Review and assignment brief",
-          "minutes": 10
+          "minutes": 8
         }
       ],
       "practise": [
@@ -509,13 +509,13 @@
           "slug": "lab-2-wireframe-ask-it",
           "type": "lab",
           "title": "Lab 2: Todo UI/UX brief",
-          "minutes": 35
+          "minutes": 12
         },
         {
           "slug": "revise-the-flow-and-wireframes",
           "type": "assignment",
           "title": "Revise the flow and wireframes",
-          "minutes": 45
+          "minutes": 8
         }
       ]
     },
@@ -526,7 +526,7 @@
       "color": "#ff5a7a",
       "weeksLabel": "Section 2",
       "sectionLabel": "Section 2",
-      "hours": 2,
+      "hours": 1,
       "cardBlurb": "Read Ask IT architecture; Todo lab for diagrams; Ask IT assignment for your reference design.",
       "description": "Reference architecture, permissions, cost, and decisions.",
       "outcomes": [
@@ -540,31 +540,31 @@
           "slug": "recap-and-architecture-goals",
           "type": "read",
           "title": "Recap and architecture goals",
-          "minutes": 10
+          "minutes": 8
         },
         {
           "slug": "reference-architecture",
           "type": "read",
           "title": "Reference architecture",
-          "minutes": 20
+          "minutes": 8
         },
         {
           "slug": "permissions-and-trust-boundaries",
           "type": "read",
           "title": "Permissions and trust boundaries",
-          "minutes": 15
+          "minutes": 8
         },
         {
           "slug": "cost-latency-and-architecture-decisions",
           "type": "read",
           "title": "Cost, latency and architecture decisions",
-          "minutes": 20
+          "minutes": 8
         },
         {
           "slug": "review-and-assignment-brief",
           "type": "read",
           "title": "Review and assignment brief",
-          "minutes": 10
+          "minutes": 8
         }
       ],
       "practise": [
@@ -572,13 +572,13 @@
           "slug": "lab-3-diagram-tags-cost-and-adr",
           "type": "lab",
           "title": "Lab 3: Todo architecture and ADR",
-          "minutes": 35
+          "minutes": 12
         },
         {
           "slug": "update-the-architecture-pack",
           "type": "assignment",
           "title": "Update the architecture pack",
-          "minutes": "45–60"
+          "minutes": 8
         }
       ]
     },
@@ -589,7 +589,7 @@
       "color": "#27c4c4",
       "weeksLabel": "Section 2",
       "sectionLabel": "Section 2",
-      "hours": 4,
+      "hours": 8,
       "cardBlurb": "Todo labs: build API and UI with tutor. Assignments: run Ask IT locally and test.",
       "description": "Tutored Todo labs for FastAPI and React. Assignments: Ask IT startup, tests, and fix loops on your own.",
       "outcomes": [
@@ -604,61 +604,61 @@
           "slug": "recap-and-development-plan",
           "type": "read",
           "title": "Recap and development plan",
-          "minutes": 10
+          "minutes": 12
         },
         {
           "slug": "backend-module",
           "type": "read",
           "title": "Backend module",
-          "minutes": 20
+          "minutes": 12
         },
         {
           "slug": "frontend-module",
           "type": "read",
           "title": "Frontend module",
-          "minutes": 15
+          "minutes": 12
         },
         {
           "slug": "database-and-faq-data",
           "type": "read",
           "title": "Database and FAQ data",
-          "minutes": 20
+          "minutes": 12
         },
         {
           "slug": "review-and-assignment-brief-session-4",
           "type": "read",
           "title": "Review and assignment brief (Session 4)",
-          "minutes": 10
+          "minutes": 12
         },
         {
           "slug": "recap-and-development-status",
           "type": "read",
           "title": "Recap and development status",
-          "minutes": 10
+          "minutes": 12
         },
         {
           "slug": "rag-integration",
           "type": "read",
           "title": "RAG integration",
-          "minutes": 20
+          "minutes": 12
         },
         {
           "slug": "no-answer-and-permission-behaviour",
           "type": "read",
           "title": "No-answer and permission behaviour",
-          "minutes": 15
+          "minutes": 12
         },
         {
           "slug": "regression-test-design",
           "type": "read",
           "title": "Regression test design",
-          "minutes": 20
+          "minutes": 12
         },
         {
           "slug": "review-and-assignment-brief-session-5",
           "type": "read",
           "title": "Review and assignment brief (Session 5)",
-          "minutes": 10
+          "minutes": 12
         }
       ],
       "practise": [
@@ -666,25 +666,25 @@
           "slug": "lab-4-application-skeleton",
           "type": "lab",
           "title": "Lab 4: Todo FastAPI backend",
-          "minutes": 35
+          "minutes": 100
         },
         {
           "slug": "startup-instructions-and-tests",
           "type": "assignment",
           "title": "Startup instructions and tests",
-          "minutes": "45–60"
+          "minutes": 85
         },
         {
           "slug": "lab-5-connect-rag-and-test",
           "type": "lab",
           "title": "Lab 5: Todo React UI",
-          "minutes": 35
+          "minutes": 100
         },
         {
           "slug": "fix-a-failed-test-and-rerun",
           "type": "assignment",
           "title": "Fix a failed test and rerun",
-          "minutes": "60–75"
+          "minutes": 75
         }
       ]
     },
@@ -715,13 +715,13 @@
           "slug": "development-vs-mvp-poc-vs-production",
           "type": "read",
           "title": "Development vs MVP/POC vs production",
-          "minutes": 15
+          "minutes": 10
         },
         {
           "slug": "repeatable-local-run",
           "type": "read",
           "title": "Docker: repeatable local run",
-          "minutes": 15
+          "minutes": 10
         },
         {
           "slug": "render-poc-deployment",
@@ -733,7 +733,7 @@
           "slug": "pilot-feedback-and-triage",
           "type": "read",
           "title": "Pilot feedback and triage",
-          "minutes": 15
+          "minutes": 10
         },
         {
           "slug": "wrap-up-and-assignment-brief",
@@ -747,13 +747,13 @@
           "slug": "lab-6-poc-hardening",
           "type": "lab",
           "title": "Lab 6: Todo deploy (local, Docker, Render)",
-          "minutes": 90
+          "minutes": 40
         },
         {
           "slug": "staging-checklist-and-pilot-plan",
           "type": "assignment",
           "title": "Staging checklist and pilot plan",
-          "minutes": "45–60"
+          "minutes": 20
         }
       ]
     },
@@ -764,7 +764,7 @@
       "color": "#7a8cff",
       "weeksLabel": "Section 2",
       "sectionLabel": "Section 2",
-      "hours": 2,
+      "hours": 1,
       "cardBlurb": "Todo labs: production config and runbook drill. Ask IT assignment: pre-rollout checklist.",
       "description": "Production on Render or AWS; secrets, runbook, and operations.",
       "outcomes": [
@@ -778,25 +778,25 @@
           "slug": "recap-poc-to-production",
           "type": "read",
           "title": "Recap: POC to production",
-          "minutes": 10
+          "minutes": 8
         },
         {
           "slug": "deployment-fundamentals",
           "type": "read",
           "title": "Deployment fundamentals",
-          "minutes": 20
+          "minutes": 8
         },
         {
           "slug": "logging-monitoring-and-errors",
           "type": "read",
           "title": "Logging, monitoring and errors",
-          "minutes": 15
+          "minutes": 8
         },
         {
           "slug": "review-and-assignment-brief",
           "type": "read",
           "title": "Review and assignment brief",
-          "minutes": 10
+          "minutes": 6
         }
       ],
       "practise": [
@@ -804,19 +804,19 @@
           "slug": "lab-7a-production-deployment",
           "type": "lab",
           "title": "Lab 7A: Todo production on Render",
-          "minutes": 30
+          "minutes": 12
         },
         {
           "slug": "lab-7b-runbook-and-outage-drill",
           "type": "lab",
           "title": "Lab 7B: Todo runbook and drill",
-          "minutes": 25
+          "minutes": 10
         },
         {
           "slug": "runbook-and-pre-rollout-checklist",
           "type": "assignment",
           "title": "Runbook and pre-rollout checklist",
-          "minutes": 45
+          "minutes": 8
         }
       ]
     },
@@ -847,13 +847,13 @@
           "slug": "it-security-questionnaire",
           "type": "read",
           "title": "IT security questionnaire",
-          "minutes": 20
+          "minutes": 10
         },
         {
           "slug": "langfuse-traces-and-evaluations",
           "type": "read",
           "title": "Langfuse: traces and evaluations",
-          "minutes": 15
+          "minutes": 10
         },
         {
           "slug": "capstone-style-readout-and-close",
@@ -879,7 +879,7 @@
           "slug": "handover-package-and-sponsor-readout",
           "type": "assignment",
           "title": "Handover package and sponsor readout",
-          "minutes": 60
+          "minutes": 25
         }
       ]
     },
