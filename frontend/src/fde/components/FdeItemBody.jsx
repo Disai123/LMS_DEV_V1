@@ -28,7 +28,12 @@ function ListBlock({ title, items, ordered = false }) {
   )
 }
 
-export default function FdeItemBody({ content, itemType }) {
+export default function FdeItemBody({
+  content,
+  itemType,
+  hideLabDeliverables = false,
+  hideCheckpointQuestions = false,
+}) {
   const extras = content.typeExtras || {}
   const isProject = itemType === 'project' || itemType === 'assignment' || itemType === 'capstone'
 
@@ -71,7 +76,7 @@ export default function FdeItemBody({ content, itemType }) {
         <>
           <ListBlock title="Prerequisites" items={extras.prerequisites} />
           <ListBlock title="Steps" items={extras.steps} ordered />
-          <ListBlock title="Deliverables" items={extras.deliverables} />
+          {!hideLabDeliverables && <ListBlock title="Deliverables" items={extras.deliverables} />}
         </>
       )}
 
@@ -89,7 +94,9 @@ export default function FdeItemBody({ content, itemType }) {
         </>
       )}
 
-      <ListBlock title="Checkpoint questions" items={extras.checkpointQuestions} />
+      {!hideCheckpointQuestions && (
+        <ListBlock title="Checkpoint questions" items={extras.checkpointQuestions} />
+      )}
     </article>
   )
 }

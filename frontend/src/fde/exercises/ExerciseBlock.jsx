@@ -3,14 +3,44 @@ import ReactMarkdown from 'react-markdown'
 import remarkGfm from 'remark-gfm'
 import { Prism as SyntaxHighlighter } from 'react-syntax-highlighter'
 import { vscDarkPlus } from 'react-syntax-highlighter/dist/esm/styles/prism'
-import { BADGE_LAB, BADGE_ASSIGNMENT, stripGenericBeforeYouStart } from './labShared'
+import {
+  BADGE_LAB,
+  BADGE_ASSIGNMENT,
+  BADGE_FOUNDATION,
+  BADGE_FOUNDATION_ASSIGNMENT,
+  stripGenericBeforeYouStart,
+} from './labShared'
 
-function isAssignment(exercise) {
+function isAskItAssignment(exercise) {
   return exercise?.track === 'assignment'
 }
 
+function isFoundationAssignment(exercise) {
+  return exercise?.track === 'foundation-assignment'
+}
+
+function isAssignment(exercise) {
+  return isAskItAssignment(exercise) || isFoundationAssignment(exercise)
+}
+
+function isFoundation(exercise) {
+  return exercise?.track === 'foundation'
+}
+
+function isTodo(exercise) {
+  return exercise?.track === 'todo'
+}
+
+function usesCustomerPanel(exercise) {
+  const t = exercise?.track
+  return t === 'foundation' || t === 'foundation-assignment' || t === 'todo' || t === 'assignment'
+}
+
 function exerciseBadge(exercise) {
-  return isAssignment(exercise) ? BADGE_ASSIGNMENT : BADGE_LAB
+  if (isFoundationAssignment(exercise)) return BADGE_FOUNDATION_ASSIGNMENT
+  if (isAskItAssignment(exercise)) return BADGE_ASSIGNMENT
+  if (isFoundation(exercise)) return BADGE_FOUNDATION
+  return BADGE_LAB
 }
 
 /** Readable markdown in the lab UI; Copy still uses raw text for the AI tool. */
@@ -150,25 +180,35 @@ function GlossaryBlock({ glossary }) {
 }
 
 function PanelHowTo({ exercise }) {
-  const assignment = isAssignment(exercise)
+  const askIt = isAskItAssignment(exercise)
+  const foundation = isFoundation(exercise) || isFoundationAssignment(exercise)
   return (
     <div
       className="rounded-lg border px-4 py-3 mb-5 text-[0.88rem] leading-relaxed"
       style={{ borderColor: 'var(--fde-bd)', background: 'var(--fde-code-bg)', color: 'var(--fde-tx)' }}
     >
       <p className="m-0 text-[0.82rem]" style={{ color: 'var(--fde-mut)' }}>
-        {assignment ? (
+        {askIt ? (
           <>
-            On your own: read <strong style={{ color: 'var(--fde-tx)' }}>Skills from the lab</strong>, then{' '}
-            <strong style={{ color: 'var(--fde-tx)' }}>Copy</strong> → paste into your AI tool → pass the{' '}
-            <strong style={{ color: 'var(--fde-tx)' }}>Checkpoint</strong> → open{' '}
-            <strong style={{ color: 'var(--fde-tx)' }}>Troubleshooting</strong> if something breaks.
+            Read <strong style={{ color: 'var(--fde-tx)' }}>Skills from the lab</strong> and{' '}
+            <strong style={{ color: 'var(--fde-tx)' }}>What you will do</strong>, then{' '}
+            <strong style={{ color: 'var(--fde-tx)' }}>Copy</strong> → paste into your AI tool. Match{' '}
+            <strong style={{ color: 'var(--fde-tx)' }}>acceptance criteria</strong>. Open{' '}
+            <strong style={{ color: 'var(--fde-tx)' }}>Troubleshooting</strong> if stuck.
+          </>
+        ) : foundation || isTodo(exercise) ? (
+          <>
+            Read <strong style={{ color: 'var(--fde-tx)' }}>What you will do</strong>, then{' '}
+            <strong style={{ color: 'var(--fde-tx)' }}>Copy</strong> → paste into your AI tool. Match{' '}
+            <strong style={{ color: 'var(--fde-tx)' }}>acceptance criteria</strong>. Open{' '}
+            <strong style={{ color: 'var(--fde-tx)' }}>Troubleshooting</strong> if stuck.
           </>
         ) : (
           <>
-            With your tutor: one step at a time. <strong style={{ color: 'var(--fde-tx)' }}>Copy</strong> → paste into
-            your AI tool → pass the <strong style={{ color: 'var(--fde-tx)' }}>Checkpoint</strong> → open{' '}
-            <strong style={{ color: 'var(--fde-tx)' }}>Troubleshooting</strong> if something breaks.
+            Read <strong style={{ color: 'var(--fde-tx)' }}>What you will do</strong>, then{' '}
+            <strong style={{ color: 'var(--fde-tx)' }}>Copy</strong> → paste into your AI tool. Match{' '}
+            <strong style={{ color: 'var(--fde-tx)' }}>acceptance criteria</strong>. Open{' '}
+            <strong style={{ color: 'var(--fde-tx)' }}>Troubleshooting</strong> if stuck.
           </>
         )}
       </p>
@@ -261,7 +301,7 @@ function TroubleshootingBlock({ items }) {
   )
 }
 
-function PromptsList({ prompts }) {
+function PromptsList({ prompts, showCheckpoints = true }) {
   if (!prompts?.length) return null
   return (
     <div className="space-y-4">
@@ -288,7 +328,7 @@ function PromptsList({ prompts }) {
             </div>
             <PromptMarkdown text={p.prompt} className="pr-16 text-[0.875rem]" />
           </div>
-          {p.checkpoint && (
+          {showCheckpoints && p.checkpoint && (
             <p className="mt-3 text-[0.85rem]" style={{ color: 'var(--fde-mut)' }}>
               <strong>Checkpoint:</strong> {p.checkpoint}
             </p>
@@ -318,18 +358,67 @@ function SkillsFromLab({ items }) {
   )
 }
 
+function SkillsFromStage({ items }) {
+  if (!items?.length) return null
+  return (
+    <div className="mb-4">
+      <h4
+        className="text-[10px] font-semibold uppercase tracking-widest mb-1.5"
+        style={{ color: 'var(--fde-mut)' }}
+      >
+        Skills from this stage
+      </h4>
+      <ul className="list-disc pl-5 space-y-1 text-[0.9rem]" style={{ color: 'var(--fde-tx)' }}>
+        {items.map((line, i) => (
+          <li key={i}>{line}</li>
+        ))}
+      </ul>
+    </div>
+  )
+}
+
+function FoundationLabConcepts({ exercise }) {
+  const { coversConcepts } = exercise
+  if (!coversConcepts?.length) return null
+  return (
+    <div className="mb-4">
+      <h4
+        className="text-[10px] font-semibold uppercase tracking-widest mb-1.5"
+        style={{ color: 'var(--fde-mut)' }}
+      >
+        Concepts this lab practises
+      </h4>
+      <ul className="list-disc pl-5 space-y-1 text-[0.9rem]" style={{ color: 'var(--fde-tx)' }}>
+        {coversConcepts.map((line, i) => (
+          <li key={i}>{line}</li>
+        ))}
+      </ul>
+    </div>
+  )
+}
+
 function PromptLabExercise({ exercise }) {
+  const customer = usesCustomerPanel(exercise)
+  const contextText = exercise.labContext || exercise.assignmentContext
   return (
     <div className="space-y-5">
       <PanelHowTo exercise={exercise} />
       <LabMetaHeader exercise={exercise} />
-      {isAssignment(exercise) && <SkillsFromLab items={exercise.skillsFromLab} />}
-      <InfoRow label="Objective">{exercise.objective}</InfoRow>
-      <InfoRow label="Scenario">{exercise.scenario}</InfoRow>
-      <PromptsList prompts={exercise.prompts} />
+      {isFoundation(exercise) && <FoundationLabConcepts exercise={exercise} />}
+      {isAskItAssignment(exercise) && <SkillsFromLab items={exercise.skillsFromLab} />}
+      {isFoundationAssignment(exercise) && <SkillsFromStage items={exercise.skillsFromStage} />}
+      {customer ? (
+        contextText && <InfoRow label="What you will do">{contextText}</InfoRow>
+      ) : (
+        <>
+          <InfoRow label="Objective">{exercise.objective}</InfoRow>
+          <InfoRow label="Scenario">{exercise.scenario}</InfoRow>
+        </>
+      )}
+      <PromptsList prompts={exercise.prompts} showCheckpoints={!customer} />
       <AcceptanceChecklist items={exercise.acceptanceCriteria} />
       <TroubleshootingBlock items={exercise.troubleshooting} />
-      {exercise.deliverable && (
+      {!customer && exercise.deliverable && (
         <InfoRow label="Deliverable">{exercise.deliverable}</InfoRow>
       )}
       {exercise.stretchGoal && (

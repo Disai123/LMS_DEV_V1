@@ -65,6 +65,12 @@ export interface CurriculumEntry {
 }
 
 const data = roadmapData as RoadmapData
+
+const FOUNDATION_STAGE_SLUGS = new Set(['software-engineering', 'ai-engineering'])
+
+function isFoundationStage(stageSlug: string): boolean {
+  return FOUNDATION_STAGE_SLUGS.has(stageSlug)
+}
 const contentModules = import.meta.glob('../data/content/*.json', { eager: true }) as Record<
   string,
   { default: Record<string, ItemContent> }
@@ -159,42 +165,62 @@ export function getAdjacentItems(
 function defaultContent(stage: Stage, item: RoadmapItem): ItemContent {
   const summary = `${item.title} — ${stage.name}`
   const sections: ItemSection[] = []
+  const foundation = isFoundationStage(stage.slug)
 
   if (item.type === 'read') {
-    sections.push(
-      {
-        heading: 'Overview',
-        body: `${summary}\n\n${ASK_IT_PLAIN}\n\n${READ_CONNECT}`,
-      },
-      {
-        heading: 'Course map',
-        body:
-          'Read **How this course is organized** on the [FDE roadmap](/roadmap/fde) home page once (Todo labs vs Ask IT assignments).',
-      },
-      {
-        heading: 'While you read',
-        body:
-          '- Write one plain-language note you could tell a store manager.\n' +
-          '- Mark one risk (security, wrong answer, cost, or delay).\n' +
-          '- Note which **Todo lab** or **Ask IT assignment** comes next in this stage.',
-      }
-    )
+    if (foundation) {
+      sections.push(
+        {
+          heading: 'Overview',
+          body: `${summary}\n\nSection 1 is core skills only. The customer project (Ask IT) starts in Stage 3.`,
+        },
+        {
+          heading: 'While you read',
+          body:
+            '- Summarize the idea in two sentences.\n' +
+            '- Note one thing you will try in the next lab.\n' +
+            '- Write one checkpoint question you could ask a peer.',
+        }
+      )
+    } else {
+      sections.push(
+        {
+          heading: 'Overview',
+          body: `${summary}\n\n${ASK_IT_PLAIN}\n\n${READ_CONNECT}`,
+        },
+        {
+          heading: 'While you read',
+          body:
+            '- Write one plain-language note you could tell a store manager.\n' +
+            '- Mark one risk (security, wrong answer, cost, or delay).\n' +
+            '- Note which **Todo lab** or **Ask IT assignment** comes next in this stage.',
+        }
+      )
+    }
   } else if (item.type === 'lab') {
-    sections.push(
-      {
-        heading: 'Overview',
-        body: `${summary}\n\n${TODO_PLAIN}`,
-      },
-      {
-        heading: 'What to do (with your tutor)',
+    if (foundation) {
+      sections.push({
+        heading: 'Lab',
         body:
-          '1. Open the **Todo · Tutored lab** panel below.\n' +
-          '2. Copy **one** prompt at a time into your AI tool (Cursor, ChatGPT, etc.).\n' +
-          '3. Run the checkpoint (command, file, or screenshot). **Do not skip ahead.**\n' +
-          '4. If you see an error, expand **Troubleshooting** and paste the fix prompt.\n' +
-          '5. When the lab is done, open the **Ask IT assignment** in this stage and repeat the idea without your tutor.',
-      }
-    )
+          'Open the **Foundation · Lab** panel below. Read what you will do, copy the prompt, then meet the acceptance criteria.',
+      })
+    } else {
+      sections.push(
+        {
+          heading: 'Overview',
+          body: `${summary}\n\n${TODO_PLAIN}`,
+        },
+        {
+          heading: 'What to do (with your tutor)',
+          body:
+            '1. Open the **Todo · Tutored lab** panel below.\n' +
+            '2. Copy **one** prompt at a time into your AI tool (Cursor, ChatGPT, etc.).\n' +
+            '3. Run the checkpoint (command, file, or screenshot). **Do not skip ahead.**\n' +
+            '4. If you see an error, expand **Troubleshooting** and paste the fix prompt.\n' +
+            '5. When the lab is done, open the **Ask IT assignment** in this stage and repeat the idea without your tutor.',
+        }
+      )
+    }
   } else if (item.type === 'assignment') {
     sections.push(
       {
@@ -220,16 +246,24 @@ function defaultContent(stage: Stage, item: RoadmapItem): ItemContent {
   const typeExtras: Record<string, unknown> = {}
 
   if (item.type === 'read') {
-    typeExtras.objectives = [
-      `Understand "${item.title}" in the Ask IT customer context`,
-      'Connect the idea to the Todo lab and Ask IT assignment in this stage',
-      'Explain one takeaway to a non-technical teammate',
-    ]
-    typeExtras.checkpointQuestions = [
-      'Can you explain this in two minutes without jargon?',
-      'Which Todo lab skill does this feed?',
-    ]
-  } else if (item.type === 'lab') {
+    if (foundation) {
+      typeExtras.objectives = [
+        `Understand "${item.title}" for your own projects`,
+        'Connect the idea to the foundation labs in this stage',
+        'Explain one takeaway without jargon',
+      ]
+    } else {
+      typeExtras.objectives = [
+        `Understand "${item.title}" in the Ask IT customer context`,
+        'Connect the idea to the Todo lab and Ask IT assignment in this stage',
+        'Explain one takeaway to a non-technical teammate',
+      ]
+      typeExtras.checkpointQuestions = [
+        'Can you explain this in two minutes without jargon?',
+        'Which Todo lab skill does this feed?',
+      ]
+    }
+  } else if (item.type === 'lab' && !foundation) {
     typeExtras.deliverables = ['Files or logs named in the lab panel', 'Notes on what transfers to Ask IT']
   } else if (item.type === 'assignment') {
     typeExtras.deliverables = ['Ask IT artifacts named in the assignment panel', 'Evidence you ran checks locally']
@@ -270,9 +304,9 @@ function sectionMentionsPath(sections: ItemSection[]): boolean {
 }
 
 /** Prepend a short dual-narrative block when JSON content exists but omits the path legend. */
-function withNarrativePreamble(item: RoadmapItem, sections: ItemSection[]): ItemSection[] {
+function withNarrativePreamble(stageSlug: string, item: RoadmapItem, sections: ItemSection[]): ItemSection[] {
   if (!sections.length || sectionMentionsPath(sections)) return sections
-  if (item.type === 'read') {
+  if (item.type === 'read' && !isFoundationStage(stageSlug)) {
     return [
       {
         heading: READ_FIT_HEADING,
@@ -296,7 +330,7 @@ export function getItemContent(stageSlug: string, itemSlug: string): ItemContent
     return {
       ...defaults,
       ...fromJson,
-      sections: withNarrativePreamble(resolved.item, sections),
+      sections: withNarrativePreamble(stageSlug, resolved.item, sections),
       typeExtras: fromJson.typeExtras || defaults.typeExtras,
     }
   }

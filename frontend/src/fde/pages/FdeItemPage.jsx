@@ -37,6 +37,21 @@ export default function FdeItemPage() {
   const done = isDone(stageSlug, itemSlug)
   const exerciseKey = `${stageSlug}/${itemSlug}`
   const exercise = EXERCISES[exerciseKey]
+  const foundationStage =
+    stageSlug === 'software-engineering' || stageSlug === 'ai-engineering'
+  const customerStageSlugs = new Set([
+    'fde-sdlc-business-requirement',
+    'fde-sdlc-ui-ux-solution',
+    'fde-sdlc-architecture-solution',
+    'development',
+    'mvp-poc-local-render',
+    'production-deployment',
+    'enterprise-ai-fde',
+  ])
+  const hideItemExtras = foundationStage || customerStageSlugs.has(stageSlug)
+  const foundationPractise =
+    foundationStage && (item.type === 'lab' || item.type === 'assignment')
+  const foundationLab = item.type === 'lab' && foundationStage
 
   return (
     <>
@@ -82,9 +97,16 @@ export default function FdeItemPage() {
         </div>
         <h1 className="text-2xl sm:text-3xl font-bold tracking-tight leading-tight mb-5">{item.title}</h1>
 
-        {content && <FdeItemBody content={content} itemType={item.type} />}
+        {content && (
+          <FdeItemBody
+            content={content}
+            itemType={item.type}
+            hideLabDeliverables={foundationPractise || (item.type === 'lab' && customerStageSlugs.has(stageSlug))}
+            hideCheckpointQuestions={hideItemExtras}
+          />
+        )}
 
-        {item.type === 'lab' && exercise?.whatYouLearn?.length > 0 && (
+        {(item.type === 'lab' || item.type === 'assignment') && exercise?.whatYouLearn?.length > 0 && (
           <LabWhatYouLearn items={exercise.whatYouLearn} accentColor={stage.color} />
         )}
 

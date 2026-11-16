@@ -1,765 +1,433 @@
 {
-  "ai-engineering/how-llms-work": {
-    "summary": "Tokens, context windows, sampling (temperature, top-p) and why models hallucinate",
+  "ai-engineering/llm-fundamentals": {
+    "summary": "Learn how tokens, context windows and sampling shape model behaviour, and why models hallucinate.",
     "sections": [
       {
         "heading": "Overview",
-        "body": "- Tokens\n- Context windows\n- Sampling (temperature, top-p) and why models hallucinate"
+        "body": "Learn how tokens, context windows and sampling shape model behaviour, and why models hallucinate."
       }
     ],
     "typeExtras": {
       "objectives": [
-        "Wrap a model call in a small, tested FastAPI service",
-        "Read and clean data from PDFs, CSVs and documents for AI use",
-        "Explain tokens, context windows, sampling and hallucination in plain language",
-        "Compare frontier, open-weight and small models on cost, latency and quality"
+        "Explain tokens, context windows, and temperature in everyday language",
+        "Describe how models are trained at a high level (pretraining vs instruction tuning)",
+        "Explain why models invent facts and what that means when you design a product"
       ]
     }
   },
-  "ai-engineering/model-landscape": {
-    "summary": "Frontier vs. open-weight vs. small models; cost, latency and quality trade-offs; enterprise constraints",
+  "ai-engineering/model-landscape-and-selection": {
+    "summary": "Compare model families and choose one against a client’s privacy, cost and latency constraints.",
     "sections": [
       {
         "heading": "Overview",
-        "body": "- Frontier vs. open-weight vs. small models\n- Cost\n- Latency and quality trade-offs\n- Enterprise constraints"
+        "body": "Compare model families and choose one against a client’s privacy, cost and latency constraints."
       }
     ],
     "typeExtras": {
       "objectives": [
-        "Wrap a model call in a small, tested FastAPI service",
-        "Read and clean data from PDFs, CSVs and documents for AI use",
-        "Explain tokens, context windows, sampling and hallucination in plain language",
-        "Compare frontier, open-weight and small models on cost, latency and quality"
+        "Compare big hosted models, open models, and small local models on cost, speed, quality, and privacy",
+        "Decide when to use a hosted API versus running a model on your machine",
+        "Fill a simple table that helps you pick a model for a real constraint (budget, data rules, or latency)"
       ]
     }
   },
-  "ai-engineering/batch-classifier-and-model-selection-note": {
-    "summary": "Batch classifier and model-selection note.",
+  "ai-engineering/prompt-engineering": {
+    "summary": "Write prompts that hold up under change, and keep them versioned and out of code.",
     "sections": [
       {
         "heading": "Overview",
-        "body": "- Classify 20 sample support tickets concurrently with asyncio and a concurrency limit, returning validated JSON for each\n- Write a half-page note recommending a model type (frontier, open-weight or small) for a client that cannot send data outside its network"
-      },
-      {
-        "heading": "Details",
-        "body": "- Deliverable: Working script and the note\n- Due: Before Session 3"
-      }
-    ],
-    "typeExtras": {
-      "checkpointQuestions": [
-        "Why can the same prompt give different answers on two runs?"
-      ]
-    }
-  },
-  "ai-engineering/recap-and-assignment-review-session-3": {
-    "summary": "Share model-selection reasoning from the assignment",
-    "sections": [
-      {
-        "heading": "Overview",
-        "body": "Share model-selection reasoning from the assignment"
+        "body": "Write prompts that hold up under change, and keep them versioned and out of code."
       }
     ],
     "typeExtras": {
       "objectives": [
-        "Write prompts that hold up under change and keep them versioned",
-        "Get structured output and use tool calling safely",
-        "Build a small eval set and compare two models with evidence, not impressions",
-        "Describe the main cost, latency and safety risks and how to reduce them"
-      ]
-    }
-  },
-  "ai-engineering/prompting": {
-    "summary": "System prompts, few-shot, chain-of-thought and prompt structure that holds up",
-    "sections": [
-      {
-        "heading": "Overview",
-        "body": "- System prompts\n- Few-shot\n- Chain-of-thought and prompt structure that holds up"
-      }
-    ],
-    "typeExtras": {
-      "objectives": [
-        "Write prompts that hold up under change and keep them versioned",
-        "Get structured output and use tool calling safely",
-        "Build a small eval set and compare two models with evidence, not impressions",
-        "Describe the main cost, latency and safety risks and how to reduce them"
+        "Write prompts using system and user roles, and try zero-shot and few-shot styles",
+        "Keep prompt templates versioned so you can improve them over time",
+        "Decide when better prompting is enough and when you need a different approach"
       ]
     }
   },
   "ai-engineering/structured-outputs-and-tool-calling": {
-    "summary": "Schema-constrained output, the tool-calling loop and tool descriptions",
+    "summary": "Get dependable JSON from models and let them call tools through a controlled loop.",
     "sections": [
       {
         "heading": "Overview",
-        "body": "- Schema-constrained output\n- The tool-calling loop and tool descriptions"
+        "body": "Get dependable JSON from models and let them call tools through a controlled loop."
       }
     ],
     "typeExtras": {
       "objectives": [
-        "Write prompts that hold up under change and keep them versioned",
-        "Get structured output and use tool calling safely",
-        "Build a small eval set and compare two models with evidence, not impressions",
-        "Describe the main cost, latency and safety risks and how to reduce them"
+        "Ask the model for structured JSON and handle replies that are not valid",
+        "Explain the loop: model asks for a tool, you run it, then send the result back",
+        "Write clear tool descriptions and recover when a tool fails"
       ]
     }
   },
-  "ai-engineering/evaluation-basics": {
-    "summary": "Why “looks good” is not enough; building a small eval set; LLM-as-judge and its limits",
+  "ai-engineering/llm-evaluation-cost-and-safety": {
+    "summary": "Replace “looks good” with eval sets, and control cost, latency and basic safety risks.",
     "sections": [
       {
         "heading": "Overview",
-        "body": "- Why “looks good” is not enough\n- Building a small eval set\n- LLM-as-judge and its limits"
+        "body": "Replace “looks good” with eval sets, and control cost, latency and basic safety risks."
       }
     ],
     "typeExtras": {
       "objectives": [
-        "Write prompts that hold up under change and keep them versioned",
-        "Get structured output and use tool calling safely",
-        "Build a small eval set and compare two models with evidence, not impressions",
-        "Describe the main cost, latency and safety risks and how to reduce them"
+        "Build a small set of test examples and score answers fairly",
+        "Lower cost and wait time with practical tricks like caching or batching",
+        "Spot risks such as prompt injection and leaking private data"
       ]
     }
   },
-  "ai-engineering/cost-latency-and-safety": {
-    "summary": "Token budgeting, caching, batching, model routing; prompt injection, data leakage and PII",
+  "ai-engineering/rag-foundations-and-ingestion": {
+    "summary": "Understand the RAG architecture and why messy document parsing decides retrieval quality.",
     "sections": [
       {
         "heading": "Overview",
-        "body": "- Token budgeting\n- Caching\n- Batching\n- Model routing\n- Prompt injection\n- Data leakage and PII"
+        "body": "Understand the RAG architecture and why messy document parsing decides retrieval quality."
       }
     ],
     "typeExtras": {
       "objectives": [
-        "Write prompts that hold up under change and keep them versioned",
-        "Get structured output and use tool calling safely",
-        "Build a small eval set and compare two models with evidence, not impressions",
-        "Describe the main cost, latency and safety risks and how to reduce them"
+        "Explain RAG in plain words: find relevant docs, then answer from them",
+        "Name the main steps: ingest, index, retrieve, generate",
+        "Describe why messy PDFs and missing metadata hurt answers later"
       ]
     }
   },
-  "ai-engineering/lab-2-compare-two-models": {
-    "summary": "Run the same task through two models with a simple eval harness",
+  "ai-engineering/chunking-embeddings-and-vector-stores": {
+    "summary": "Choose chunking, embedding models and vector stores based on evidence from your own corpus.",
     "sections": [
       {
         "heading": "Overview",
-        "body": "- Compare two models on the same task with a simple eval harness: at least 15 labelled examples, schema validity and accuracy scoring, and tokens, cost and latency per call."
-      },
-      {
-        "heading": "Done when",
-        "body": "A results table shows quality, cost and latency for both models."
-      }
-    ],
-    "typeExtras": {}
-  },
-  "ai-engineering/debrief-and-assignment-brief": {
-    "summary": "Groups share which model they would recommend and why",
-    "sections": [
-      {
-        "heading": "Overview",
-        "body": "Groups share which model they would recommend and why"
+        "body": "Choose chunking, embedding models and vector stores based on evidence from your own corpus."
       }
     ],
     "typeExtras": {
       "objectives": [
-        "Write prompts that hold up under change and keep them versioned",
-        "Get structured output and use tool calling safely",
-        "Build a small eval set and compare two models with evidence, not impressions",
-        "Describe the main cost, latency and safety risks and how to reduce them"
+        "Compare simple ways to split documents into chunks",
+        "Explain what embeddings are and why chunk size matters",
+        "Describe what a vector store does when you search"
       ]
     }
   },
-  "ai-engineering/model-recommendation": {
-    "summary": "Model recommendation.",
+  "ai-engineering/hybrid-search-reranking-and-query-transformation": {
+    "summary": "Raise retrieval quality with hybrid search, rerankers and smarter queries.",
     "sections": [
       {
         "heading": "Overview",
-        "body": "- Extend the eval set to 20 examples including three edge cases\n- Write a one-page recommendation for a client manager: which model, why, expected cost per 1,000 requests and the main risk"
-      },
-      {
-        "heading": "Details",
-        "body": "- Deliverable: Eval set, results table and one-page recommendation\n- Due: Before Session 4"
-      }
-    ],
-    "typeExtras": {
-      "checkpointQuestions": [
-        "What evidence would convince a client the model is good enough?"
-      ]
-    }
-  },
-  "ai-engineering/recap-and-scenario-kickoff": {
-    "summary": "Review assignments and introduce the policy corpus, with its planted problems",
-    "sections": [
-      {
-        "heading": "Overview",
-        "body": "- Review assignments and introduce the policy corpus\n- With its planted problems"
+        "body": "Raise retrieval quality with hybrid search, rerankers and smarter queries."
       }
     ],
     "typeExtras": {
       "objectives": [
-        "Decide when RAG is the right choice compared with fine-tuning or long context",
-        "Build an ingestion pipeline that handles messy documents and captures metadata",
-        "Compare chunking strategies and justify a choice with evidence",
-        "Index a document set in a vector store"
+        "Explain why keyword search and vector search catch different kinds of questions",
+        "Describe reranking: reorder top matches before the model answers",
+        "Give one example of rewriting a weak user question to search better"
       ]
     }
   },
-  "ai-engineering/when-to-use-rag": {
-    "summary": "RAG vs. fine-tuning vs. long context",
+  "ai-engineering/rag-evaluation-and-production": {
+    "summary": "Measure retrieval and answer quality, then prepare a RAG service for enterprise use.",
     "sections": [
       {
         "heading": "Overview",
-        "body": "RAG vs. fine-tuning vs. long context"
+        "body": "Measure retrieval and answer quality, then prepare a RAG service for enterprise use."
       }
     ],
     "typeExtras": {
       "objectives": [
-        "Decide when RAG is the right choice compared with fine-tuning or long context",
-        "Build an ingestion pipeline that handles messy documents and captures metadata",
-        "Compare chunking strategies and justify a choice with evidence",
-        "Index a document set in a vector store"
+        "Measure whether the right documents were retrieved and whether answers stay faithful",
+        "Tell retrieval problems apart from prompt or model problems",
+        "List practical production concerns: permissions, freshness, cost, and monitoring"
       ]
     }
   },
-  "ai-engineering/ingestion-pipeline": {
-    "summary": "Parsing messy documents (PDFs, tables, scans), cleaning and metadata",
+  "ai-engineering/agent-fundamentals-and-langchain": {
+    "summary": "Learn the agent loop and workflow patterns, and when an agent is the wrong choice.",
     "sections": [
       {
         "heading": "Overview",
-        "body": "- Parsing messy documents (PDFs, tables, scans)\n- Cleaning and metadata"
+        "body": "Learn the agent loop and workflow patterns, and when an agent is the wrong choice."
       }
     ],
     "typeExtras": {
       "objectives": [
-        "Decide when RAG is the right choice compared with fine-tuning or long context",
-        "Build an ingestion pipeline that handles messy documents and captures metadata",
-        "Compare chunking strategies and justify a choice with evidence",
-        "Index a document set in a vector store"
+        "Explain the basic agent loop: think, act with a tool, observe, repeat",
+        "Decide when a fixed workflow is enough versus a free-form agent",
+        "Describe how tools and retrievers plug into an agent framework"
       ]
     }
   },
-  "ai-engineering/chunking-strategies": {
-    "summary": "Fixed, recursive and structure-aware chunking, and their trade-offs",
+  "ai-engineering/langgraph-state-memory-and-human-in-the-loop": {
+    "summary": "Model agent behaviour as a graph with persistence, approvals and multiple agents.",
     "sections": [
       {
         "heading": "Overview",
-        "body": "- Fixed\n- Recursive and structure-aware chunking\n- And their trade-offs"
+        "body": "Model agent behaviour as a graph with persistence, approvals and multiple agents."
       }
     ],
     "typeExtras": {
       "objectives": [
-        "Decide when RAG is the right choice compared with fine-tuning or long context",
-        "Build an ingestion pipeline that handles messy documents and captures metadata",
-        "Compare chunking strategies and justify a choice with evidence",
-        "Index a document set in a vector store"
+        "Describe an agent as a graph of steps with shared state",
+        "Explain why saving state matters so a run can pause and resume",
+        "Describe a human approval step before a risky action"
       ]
     }
   },
-  "ai-engineering/embeddings-and-vector-stores": {
-    "summary": "pgvector, Chroma, Pinecone or the company’s choice",
+  "ai-engineering/agentic-rag": {
+    "summary": "Make retrieval a tool the agent can grade, rewrite and retry.",
     "sections": [
       {
         "heading": "Overview",
-        "body": "- Pgvector\n- Chroma\n- Pinecone or the company’s choice"
+        "body": "Make retrieval a tool the agent can grade, rewrite and retry."
       }
     ],
     "typeExtras": {
       "objectives": [
-        "Decide when RAG is the right choice compared with fine-tuning or long context",
-        "Build an ingestion pipeline that handles messy documents and captures metadata",
-        "Compare chunking strategies and justify a choice with evidence",
-        "Index a document set in a vector store"
+        "Explain grading retrieved docs and rewriting the question when quality is low",
+        "Compare a simple RAG answer with a small agentic loop in plain words",
+        "Weigh extra quality against extra cost and latency"
       ]
     }
   },
-  "ai-engineering/lab-3-ingest-and-index": {
-    "summary": "Parse the corpus, chunk it two ways and index it",
+  "ai-engineering/guardrails-and-agent-safety": {
+    "summary": "Constrain what agents can see and do, and defend them against injection.",
     "sections": [
       {
         "heading": "Overview",
-        "body": "- Parse the policy corpus into clean text with metadata, chunk it with two strategies, index both and run five test questions against each."
-      },
-      {
-        "heading": "Done when",
-        "body": "Both indexes return results for the five questions and the worst parsing errors are fixed."
-      }
-    ],
-    "typeExtras": {}
-  },
-  "ai-engineering/chunking-comparison": {
-    "summary": "Chunking comparison.",
-    "sections": [
-      {
-        "heading": "Overview",
-        "body": "- Run 10 questions against two chunking strategies and record which chunks come back\n- Recommend one strategy with a short paragraph of evidence\n- List any parsing or data-quality problems you found and how you handled them"
-      },
-      {
-        "heading": "Details",
-        "body": "- Deliverable: Comparison table, recommendation and problem list\n- Due: Before Session 5"
-      }
-    ],
-    "typeExtras": {
-      "checkpointQuestions": [
-        "Which document in the corpus was hardest to parse, and why?"
-      ]
-    }
-  },
-  "ai-engineering/recap-and-assignment-review-session-5": {
-    "summary": "Share chunking recommendations",
-    "sections": [
-      {
-        "heading": "Overview",
-        "body": "Share chunking recommendations"
+        "body": "Constrain what agents can see and do, and defend them against injection."
       }
     ],
     "typeExtras": {
       "objectives": [
-        "Improve retrieval with hybrid search, reranking and query rewriting",
-        "Produce grounded, cited answers that say “I don’t know” when appropriate",
-        "Measure retrieval and answer quality with the right metrics",
-        "Diagnose and fix common RAG failures, including access-control problems"
+        "Validate what goes into and comes out of the model",
+        "Limit what tools can do (least privilege)",
+        "Defend against prompt injection with clear rules and approval gates"
       ]
     }
   },
-  "ai-engineering/retrieval-quality": {
-    "summary": "Hybrid search (BM25 + vector), reranking, query rewriting and metadata filters",
+  "ai-engineering/observability-and-agent-evaluation": {
+    "summary": "Trace agent runs and evaluate trajectories, tool use and cost per task.",
     "sections": [
       {
         "heading": "Overview",
-        "body": "- Hybrid search (BM25 + vector)\n- Reranking\n- Query rewriting and metadata filters"
+        "body": "Trace agent runs and evaluate trajectories, tool use and cost per task."
       }
     ],
     "typeExtras": {
       "objectives": [
-        "Improve retrieval with hybrid search, reranking and query rewriting",
-        "Produce grounded, cited answers that say “I don’t know” when appropriate",
-        "Measure retrieval and answer quality with the right metrics",
-        "Diagnose and fix common RAG failures, including access-control problems"
+        "Explain why tracing each step helps you debug agents",
+        "Measure whether tools were called correctly and whether the task succeeded",
+        "Describe a small regression suite so changes do not silently break quality"
       ]
     }
   },
-  "ai-engineering/generation": {
-    "summary": "Grounding, citations and “I don’t know” behavior",
+  "ai-engineering/model-context-protocol-mcp": {
+    "summary": "Learn how MCP standardises tool and data access for agents and applications.",
     "sections": [
       {
         "heading": "Overview",
-        "body": "- Grounding\n- Citations and “I don’t know” behavior"
+        "body": "Learn how MCP standardises tool and data access for agents and applications."
       }
     ],
     "typeExtras": {
       "objectives": [
-        "Improve retrieval with hybrid search, reranking and query rewriting",
-        "Produce grounded, cited answers that say “I don’t know” when appropriate",
-        "Measure retrieval and answer quality with the right metrics",
-        "Diagnose and fix common RAG failures, including access-control problems"
+        "Explain host, client, and server roles in MCP in plain words",
+        "Describe tools and resources an MCP server can expose",
+        "List basic trust checks before connecting an agent to a server"
       ]
     }
   },
-  "ai-engineering/evaluation": {
-    "summary": "Retrieval metrics (recall@k, MRR) vs. answer metrics (faithfulness, relevance); using RAGAS",
+  "ai-engineering/agent-skills-and-cursor-rules": {
+    "summary": "Package reusable capabilities and speed up AI-assisted delivery.",
     "sections": [
       {
         "heading": "Overview",
-        "body": "- Retrieval metrics (recall@k, MRR) vs. answer metrics (faithfulness, relevance)\n- Using RAGAS"
+        "body": "Package reusable capabilities and speed up AI-assisted delivery."
       }
     ],
     "typeExtras": {
       "objectives": [
-        "Improve retrieval with hybrid search, reranking and query rewriting",
-        "Produce grounded, cited answers that say “I don’t know” when appropriate",
-        "Measure retrieval and answer quality with the right metrics",
-        "Diagnose and fix common RAG failures, including access-control problems"
+        "Explain what a reusable skill file is for in everyday terms",
+        "Use project rules so the AI coding tool follows your team style",
+        "Choose when a skill, MCP tool, or a plain prompt is the better fit"
       ]
     }
   },
-  "ai-engineering/failure-modes": {
-    "summary": "Bad chunks, stale data, access control and permissions on documents",
+  "ai-engineering/lab-compare-two-models": {
+    "summary": "Compare two models on the same extraction task and report quality, cost and latency.",
     "sections": [
       {
         "heading": "Overview",
-        "body": "- Bad chunks\n- Stale data\n- Access control and permissions on documents"
+        "body": "Compare two models on the same extraction task and report quality, cost and latency."
       }
     ],
     "typeExtras": {
       "objectives": [
-        "Improve retrieval with hybrid search, reranking and query rewriting",
-        "Produce grounded, cited answers that say “I don’t know” when appropriate",
-        "Measure retrieval and answer quality with the right metrics",
-        "Diagnose and fix common RAG failures, including access-control problems"
+        "Write about 10 short test questions of the same type for both models",
+        "Run both models on those questions and note quality, speed, and cost",
+        "Choose a default model and explain why using your notes"
       ]
     }
   },
-  "ai-engineering/lab-4-diagnose-and-fix": {
-    "summary": "Find and fix three planted failures",
+  "ai-engineering/lab-extraction-and-tool-calling": {
+    "summary": "Build a schema-based extractor and an assistant with calculator, database and web API tools.",
     "sections": [
       {
         "heading": "Overview",
-        "body": "- Build a RAG pipeline over the realistic document set, then diagnose and fix three planted failures (bad chunks, stale data and weak retrieval), measuring each fix."
-      },
-      {
-        "heading": "Done when",
-        "body": "Each fix has a before-and-after metric and a one-line cause."
-      }
-    ],
-    "typeExtras": {}
-  },
-  "ai-engineering/rag-evaluation-report": {
-    "summary": "RAG evaluation report.",
-    "sections": [
-      {
-        "heading": "Overview",
-        "body": "- Produce a short report with a baseline, your three fixes and measured before-and-after results\n- Add a test showing that a restricted HR document never appears for an unauthorised user"
-      },
-      {
-        "heading": "Details",
-        "body": "- Deliverable: Evaluation report and the access-control test\n- Due: Before Session 6"
-      }
-    ],
-    "typeExtras": {
-      "checkpointQuestions": [
-        "How do you tell a retrieval failure from a generation failure?"
-      ]
-    }
-  },
-  "ai-engineering/recap-and-assignment-review-session-6": {
-    "summary": "Review RAG evaluation reports",
-    "sections": [
-      {
-        "heading": "Overview",
-        "body": "Review RAG evaluation reports"
+        "body": "Build a schema-based extractor and an assistant with calculator, database and web API tools."
       }
     ],
     "typeExtras": {
       "objectives": [
-        "Explain the agent loop and decide between a workflow and a true agent",
-        "Build a tool-calling agent in LangChain that uses the RAG pipeline as a tool",
-        "Describe how LangGraph represents state, nodes and edges"
+        "Pull clear fields out of free text (for example category or priority)",
+        "Decide when the assistant should call a tool instead of guessing",
+        "Show what happens when a tool fails, without crashing the chat"
       ]
     }
   },
-  "ai-engineering/agent-fundamentals": {
-    "summary": "The agent loop, tool use, workflows vs. true agents, and when you should not use an agent",
+  "ai-engineering/lab-ingest-chunk-and-index": {
+    "summary": "Understand the RAG architecture and why messy document parsing decides retrieval quality.",
     "sections": [
       {
         "heading": "Overview",
-        "body": "- The agent loop\n- Tool use\n- Workflows vs. true agents\n- And when you should not use an agent"
+        "body": "Understand the RAG architecture and why messy document parsing decides retrieval quality."
       }
     ],
     "typeExtras": {
       "objectives": [
-        "Explain the agent loop and decide between a workflow and a true agent",
-        "Build a tool-calling agent in LangChain that uses the RAG pipeline as a tool",
-        "Describe how LangGraph represents state, nodes and edges"
+        "Split a few sample policy texts into chunks that still make sense",
+        "Build a searchable index and try one question against it",
+        "Judge whether the top match is actually useful for that question"
       ]
     }
   },
-  "ai-engineering/langchain": {
-    "summary": "Chains, tools, retrievers, and how it relates to the raw API",
+  "ai-engineering/lab-baseline-cited-rag": {
+    "summary": "Build a Q&A assistant over a policy corpus that cites sources and declines out-of-scope questions.",
     "sections": [
       {
         "heading": "Overview",
-        "body": "- Chains\n- Tools\n- Retrievers\n- And how it relates to the raw API"
+        "body": "Build a Q&A assistant over a policy corpus that cites sources and declines out-of-scope questions."
       }
     ],
     "typeExtras": {
       "objectives": [
-        "Explain the agent loop and decide between a workflow and a true agent",
-        "Build a tool-calling agent in LangChain that uses the RAG pipeline as a tool",
-        "Describe how LangGraph represents state, nodes and edges"
+        "Answer questions using only text you retrieved from your index",
+        "Name the source chunk for every factual answer",
+        "Say you do not know when the documents do not support an answer"
       ]
     }
   },
-  "ai-engineering/introduction-to-langgraph": {
-    "summary": "State, nodes and edges",
+  "ai-engineering/lab-hybrid-search-reranker": {
+    "summary": "Add BM25 and a reranker to the Policy Assistant and measure the change.",
     "sections": [
       {
         "heading": "Overview",
-        "body": "- State\n- Nodes and edges"
+        "body": "Add BM25 and a reranker to the Policy Assistant and measure the change."
       }
     ],
     "typeExtras": {
       "objectives": [
-        "Explain the agent loop and decide between a workflow and a true agent",
-        "Build a tool-calling agent in LangChain that uses the RAG pipeline as a tool",
-        "Describe how LangGraph represents state, nodes and edges"
+        "Combine keyword search with vector search for the same question",
+        "Reorder the top matches before the model writes an answer",
+        "Compare one question before and after this change"
       ]
     }
   },
-  "ai-engineering/lab-5a-first-agent": {
-    "summary": "Build a tool-calling agent, then restructure it as a graph",
+  "ai-engineering/lab-diagnose-rag-failures": {
+    "summary": "Use evaluation results to find and fix bad chunks, stale data and weak retrieval.",
     "sections": [
       {
         "heading": "Overview",
-        "body": "- Build a tool-calling agent with the RAG pipeline as one tool and a second tool of your choice, then restructure it as a simple LangGraph graph."
-      },
-      {
-        "heading": "Done when",
-        "body": "The agent answers a question that needs both tools, and you can show the steps it took."
-      }
-    ],
-    "typeExtras": {}
-  },
-  "ai-engineering/workflow-or-agent": {
-    "summary": "Workflow or agent?.",
-    "sections": [
-      {
-        "heading": "Overview",
-        "body": "- For three client use cases (supplied), decide whether a workflow or an agent fits and justify each in one paragraph\n- Add a third tool to your agent and test it on two questions"
-      },
-      {
-        "heading": "Details",
-        "body": "- Deliverable: Decision paragraphs and the updated agent\n- Due: Before Session 7"
-      }
-    ],
-    "typeExtras": {
-      "checkpointQuestions": [
-        "Name a case where a plain workflow is better than an agent."
-      ]
-    }
-  },
-  "ai-engineering/recap-and-assignment-review-session-7": {
-    "summary": "Share workflow-or-agent decisions",
-    "sections": [
-      {
-        "heading": "Overview",
-        "body": "Share workflow-or-agent decisions"
+        "body": "Use evaluation results to find and fix bad chunks, stale data and weak retrieval."
       }
     ],
     "typeExtras": {
       "objectives": [
-        "Add memory, checkpointing and human approval to an agent",
-        "Apply guardrails: validation, permission scoping, injection defence and limits",
-        "Attack an agent, find its weaknesses and fix them",
-        "Use tracing to explain why an agent behaved as it did"
+        "Look at a wrong answer and decide if the problem is data, search, prompt, or the model",
+        "Fix one layer at a time and test again",
+        "Write a short note of what was wrong and what you changed"
       ]
     }
   },
-  "ai-engineering/langgraph-in-depth": {
-    "summary": "Conditional routing, memory and checkpointing, human-in-the-loop, multi-step and multi-agent patterns",
+  "ai-engineering/lab-langgraph-human-approval": {
+    "summary": "Add checkpointing and an approval step before a risky action.",
     "sections": [
       {
         "heading": "Overview",
-        "body": "- Conditional routing\n- Memory and checkpointing\n- Human-in-the-loop\n- Multi-step and multi-agent patterns"
+        "body": "Add checkpointing and an approval step before a risky action."
       }
     ],
     "typeExtras": {
       "objectives": [
-        "Add memory, checkpointing and human approval to an agent",
-        "Apply guardrails: validation, permission scoping, injection defence and limits",
-        "Attack an agent, find its weaknesses and fix them",
-        "Use tracing to explain why an agent behaved as it did"
+        "Map the agent as a simple flow with clear steps",
+        "Pause before a risky action until a person says yes or no",
+        "Continue safely after approval, or stop cleanly if the person says no"
       ]
     }
   },
-  "ai-engineering/lab-5b-approval-step": {
-    "summary": "Add checkpointing and a human approval step before a risky action",
+  "ai-engineering/lab-agentic-rag-mini-loop": {
+    "summary": "Make retrieval a tool the agent can grade, rewrite and retry.",
     "sections": [
       {
         "heading": "Overview",
-        "body": "- Build a LangGraph agent with tools, a human approval step and at least two guardrails, then try to break it."
-      },
-      {
-        "heading": "Done when",
-        "body": "The agent never takes the risky action without approval, and at least one attack from a partner is blocked."
-      }
-    ],
-    "typeExtras": {}
-  },
-  "ai-engineering/guardrails": {
-    "summary": "Input and output validation, tool permission scoping, prompt injection defence, PII filtering, rate and spend limits, approval gates, and tracing (e.g., LangSmith)",
-    "sections": [
-      {
-        "heading": "Overview",
-        "body": "- Input and output validation\n- Tool permission scoping\n- Prompt injection defence\n- PII filtering\n- Rate and spend limits\n- Approval gates\n- And tracing (e.g., LangSmith)"
+        "body": "Make retrieval a tool the agent can grade, rewrite and retry."
       }
     ],
     "typeExtras": {
       "objectives": [
-        "Add memory, checkpointing and human approval to an agent",
-        "Apply guardrails: validation, permission scoping, injection defence and limits",
-        "Attack an agent, find its weaknesses and fix them",
-        "Use tracing to explain why an agent behaved as it did"
+        "Score whether the retrieved text is good enough for the question",
+        "Rewrite the question once when the retrieved text is weak",
+        "Answer or refuse after that single rewrite so the loop does not run forever"
       ]
     }
   },
-  "ai-engineering/lab-6-add-guardrails-and-attack": {
-    "summary": "Add two guardrails, swap agents with a partner and try to break them",
+  "ai-engineering/lab-red-team-guardrails": {
+    "summary": "Add at least two guardrails, then attack each other’s agents and fix what breaks.",
     "sections": [
       {
         "heading": "Overview",
-        "body": "- Build a LangGraph agent with tools, a human approval step and at least two guardrails, then try to break it."
-      },
-      {
-        "heading": "Done when",
-        "body": "The agent never takes the risky action without approval, and at least one attack from a partner is blocked."
-      }
-    ],
-    "typeExtras": {}
-  },
-  "ai-engineering/agent-threat-model": {
-    "summary": "Agent threat model.",
-    "sections": [
-      {
-        "heading": "Overview",
-        "body": "- Write a threat model table: attack, impact, mitigation and status\n- Fix at least one weakness found in the red-team round and show the test that now passes"
-      },
-      {
-        "heading": "Details",
-        "body": "- Deliverable: Threat model and the fix\n- Due: Before Session 8"
-      }
-    ],
-    "typeExtras": {
-      "checkpointQuestions": [
-        "What is the worst action your agent could take, and what stops it?"
-      ]
-    }
-  },
-  "ai-engineering/recap": {
-    "summary": "Quick review of threat models and demo preparation",
-    "sections": [
-      {
-        "heading": "Overview",
-        "body": "Quick review of threat models and demo preparation"
+        "body": "Add at least two guardrails, then attack each other’s agents and fix what breaks."
       }
     ],
     "typeExtras": {
       "objectives": [
-        "Package a reusable capability as an agent skill and Cursor rules",
-        "Connect a tool to an AI client through MCP",
-        "Describe the end-to-end architecture: LLM, RAG, agent, guardrails",
-        "Apply a production checklist and plan next steps"
+        "Try two realistic attacks that try to make the agent ignore its rules",
+        "Add two protections that block those attacks",
+        "Confirm normal IT questions still get useful answers"
       ]
     }
   },
-  "ai-engineering/agent-skills-and-ai-coding-tools": {
-    "summary": "Claude’s Agent Skills (SKILL.md structure, progressive loading) and Cursor rules, as ways to speed up delivery and package reusable capabilities for clients",
+  "ai-engineering/lab-mcp-server": {
+    "summary": "Build a Python MCP server that exposes policy search and a ticketing tool, and connect it to the agent.",
     "sections": [
       {
         "heading": "Overview",
-        "body": "- Claude’s Agent Skills (SKILL.md structure, progressive loading) and Cursor rules\n- As ways to speed up delivery and package reusable capabilities for clients"
+        "body": "Build a Python MCP server that exposes policy search and a ticketing tool, and connect it to the agent."
       }
     ],
     "typeExtras": {
       "objectives": [
-        "Package a reusable capability as an agent skill and Cursor rules",
-        "Connect a tool to an AI client through MCP",
-        "Describe the end-to-end architecture: LLM, RAG, agent, guardrails",
-        "Apply a production checklist and plan next steps"
+        "Expose a search tool and a read-only resource through an MCP server",
+        "Connect that server to your agent so it can call the tool",
+        "Check inputs before the tool runs so bad requests are rejected"
       ]
     }
   },
-  "ai-engineering/mcp": {
-    "summary": "Using MCP to connect tools and data",
+  "ai-engineering/assignment-integrated-policy-assistant": {
+    "summary": "Solo Stage 2 capstone: document one integrated policy assistant using your policy_corpus/, cited RAG, hybrid retrieval, approval gate, guardrails, and MCP search.",
     "sections": [
       {
         "heading": "Overview",
-        "body": "Using MCP to connect tools and data"
+        "body": "Complete seven copy-paste steps in the exercise panel. Each step must include concrete artifacts (model id, HTTP JSON, file names, traces, or MCP snippet) from your Stage 2 labs — not generic prose."
       }
     ],
     "typeExtras": {
       "objectives": [
-        "Package a reusable capability as an agent skill and Cursor rules",
-        "Connect a tool to an AI client through MCP",
-        "Describe the end-to-end architecture: LLM, RAG, agent, guardrails",
-        "Apply a production checklist and plan next steps"
-      ]
-    }
-  },
-  "ai-engineering/lab-7-skill-and-mcp-tool": {
-    "summary": "Write a skill or Cursor rule and connect one MCP tool",
-    "sections": [
-      {
-        "heading": "Overview",
-        "body": "- Write a SKILL.md or Cursor rules file for the running scenario and connect one MCP tool to Claude or Cursor."
-      },
-      {
-        "heading": "Done when",
-        "body": "The skill or rule is used successfully in a real task, and the MCP tool is called from the client."
-      }
-    ],
-    "typeExtras": {}
-  },
-  "ai-engineering/architecture-recap": {
-    "summary": "End-to-end view: LLM → RAG → agent → guardrails",
-    "sections": [
-      {
-        "heading": "Overview",
-        "body": "End-to-end view: LLM → RAG → agent → guardrails"
-      }
-    ],
-    "typeExtras": {
-      "objectives": [
-        "Package a reusable capability as an agent skill and Cursor rules",
-        "Connect a tool to an AI client through MCP",
-        "Describe the end-to-end architecture: LLM, RAG, agent, guardrails",
-        "Apply a production checklist and plan next steps"
-      ]
-    }
-  },
-  "ai-engineering/capstone-demos": {
-    "summary": "Short demos or review of lab outputs",
-    "sections": [
-      {
-        "heading": "Overview",
-        "body": "Short demos or review of lab outputs"
-      }
-    ],
-    "typeExtras": {
-      "objectives": [
-        "Package a reusable capability as an agent skill and Cursor rules",
-        "Connect a tool to an AI client through MCP",
-        "Describe the end-to-end architecture: LLM, RAG, agent, guardrails",
-        "Apply a production checklist and plan next steps"
-      ]
-    }
-  },
-  "ai-engineering/production-checklist": {
-    "summary": "Evals, monitoring, security and cost",
-    "sections": [
-      {
-        "heading": "Overview",
-        "body": "- Evals\n- Monitoring\n- Security and cost"
-      }
-    ],
-    "typeExtras": {
-      "objectives": [
-        "Package a reusable capability as an agent skill and Cursor rules",
-        "Connect a tool to an AI client through MCP",
-        "Describe the end-to-end architecture: LLM, RAG, agent, guardrails",
-        "Apply a production checklist and plan next steps"
-      ]
-    }
-  },
-  "ai-engineering/next-steps-and-feedback": {
-    "summary": "Resources, follow-up and feedback form",
-    "sections": [
-      {
-        "heading": "Overview",
-        "body": "- Resources\n- Follow-up and feedback form"
-      }
-    ],
-    "typeExtras": {
-      "objectives": [
-        "Package a reusable capability as an agent skill and Cursor rules",
-        "Connect a tool to an AI client through MCP",
-        "Describe the end-to-end architecture: LLM, RAG, agent, guardrails",
-        "Apply a production checklist and plan next steps"
-      ]
-    }
-  },
-  "ai-engineering/final-project-package-and-present-your-assistant": {
-    "summary": "Final project: package and present your assistant.",
-    "sections": [
-      {
-        "heading": "Overview",
-        "body": "- Complete the running scenario: README, architecture diagram, evaluation results and production checklist\n- Record or deliver a 10-minute walkthrough for a team lead, including known limits and what you would do next"
-      },
-      {
-        "heading": "Details",
-        "body": "- Deliverable: Repository link, one-page architecture and checklist, and the walkthrough\n- Due: Within two weeks of Session 8"
-      }
-    ],
-    "typeExtras": {
-      "checkpointQuestions": [
-        "What would you change before a client uses this system?"
+        "Name your default chat model with eval evidence",
+        "Show cited and refusal answers on policy_corpus/",
+        "Tie hybrid, diagnose, approval, guardrails, and MCP into one write-up"
       ]
     }
   }

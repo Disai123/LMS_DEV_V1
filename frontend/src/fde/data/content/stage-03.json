@@ -82,11 +82,15 @@
     "typeExtras": {}
   },
   "fde-sdlc-business-requirement/one-page-brd-and-discovery-questions": {
-    "summary": "Assignment: Ask IT discovery + BRD—on your own, using Todo lab notes.",
+    "summary": "Create a one-page BRD and a discovery-question list. Include at least three measurable acceptance criteria and identify one risk or dependency.",
     "sections": [
       {
-        "heading": "Before you start",
-        "body": "Finish **Lab 1: Todo discovery and BRD** with your tutor. Copy the structure, not the Todo feature text. Expand the **Assignment** panel at the bottom of this page for Ask IT prompts."
+        "heading": "Overview",
+        "body": "Create a one-page BRD and a discovery-question list. Include at least three measurable acceptance criteria and identify one risk or dependency."
+      },
+      {
+        "heading": "Details",
+        "body": "- Deliverable: One-page BRD and discovery notes\n- Due: Before Session 2"
       }
     ],
     "typeExtras": {}
@@ -107,19 +111,5 @@
         "Produce a concise one-page business requirements document (BRD)."
       ]
     }
-  },
-  "fde-sdlc-business-requirement/one-page-brd-and-discovery-questions": {
-    "summary": "Create a one-page BRD and a discovery-question list. Include at least three measurable acceptance criteria and identify one risk or dependency.",
-    "sections": [
-      {
-        "heading": "Overview",
-        "body": "Create a one-page BRD and a discovery-question list. Include at least three measurable acceptance criteria and identify one risk or dependency."
-      },
-      {
-        "heading": "Details",
-        "body": "- Deliverable: One-page BRD and discovery notes\n- Due: Before Session 2"
-      }
-    ],
-    "typeExtras": {}
   }
 }

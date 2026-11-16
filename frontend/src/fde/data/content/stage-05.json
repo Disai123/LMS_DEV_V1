@@ -82,11 +82,15 @@
     "typeExtras": {}
   },
   "fde-sdlc-architecture-solution/update-the-architecture-pack": {
-    "summary": "Assignment: Ask IT architecture pack—on your own.",
+    "summary": "Update the architecture pack and list three implementation tasks in priority order for the development slice.",
     "sections": [
       {
-        "heading": "Before you start",
-        "body": "Finish Todo architecture lab. Same headings and ADR habit; scope is Ask IT (RAG, RBAC, /ask, /triage). Prompts are in the **Assignment** panel at the bottom of this page."
+        "heading": "Overview",
+        "body": "Update the architecture pack and list three implementation tasks in priority order for the development slice."
+      },
+      {
+        "heading": "Details",
+        "body": "- Deliverable: Architecture diagram, FAQ permission model, cost estimate and ADR\n- Due: Before Session 4"
       }
     ],
     "typeExtras": {}
@@ -107,19 +111,5 @@
         "Record a key architecture choice in a short architecture decision record (ADR)."
       ]
     }
-  },
-  "fde-sdlc-architecture-solution/update-the-architecture-pack": {
-    "summary": "Update the architecture pack and list three implementation tasks in priority order for the development slice.",
-    "sections": [
-      {
-        "heading": "Overview",
-        "body": "Update the architecture pack and list three implementation tasks in priority order for the development slice."
-      },
-      {
-        "heading": "Details",
-        "body": "- Deliverable: Architecture diagram, FAQ permission model, cost estimate and ADR\n- Due: Before Session 4"
-      }
-    ],
-    "typeExtras": {}
   }
 }

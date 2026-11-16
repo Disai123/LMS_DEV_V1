@@ -1,0 +1,177 @@
+{
+  "software-engineering/fde-role-sdlc-and-how-this-course-flows": [
+    "Explain what an FDE does in plain language",
+    "Name the main SDLC phases you will practise from Stage 3 onward",
+    "Describe how Section 1 skills (Python and FastAPI) connect to the Ask IT customer flow and capstone"
+  ],
+  "software-engineering/python-essentials-and-environment-setup": [
+    "Create a clean Python project folder and install packages without mixing with other projects",
+    "Read and write files safely, and catch errors instead of crashing",
+    "Save API keys in a .env file and keep them out of Git"
+  ],
+  "software-engineering/data-structures-json-and-pandas": [
+    "Pick the right Python structure (list, dict, and so on) for simple data jobs",
+    "Open JSON or CSV and turn nested data into a flat table you can work with",
+    "Clean missing or messy values so the table is ready to use"
+  ],
+  "software-engineering/working-with-apis-reliably": [
+    "Call an API, check whether the response succeeded, and read the result",
+    "Handle timeouts, rate limits, and retries so a bad call does not stop the whole job",
+    "Write short logs so you can see what failed later"
+  ],
+  "software-engineering/typing-pydantic-and-async": [
+    "Describe the shape of data you expect and reject replies that do not match",
+    "Run several API calls at once without starting too many at the same time",
+    "When a reply is invalid, ask again or fix it before you move on"
+  ],
+  "software-engineering/fastapi-logging-and-pytest": [
+    "Wrap a model call behind a small web API with clear request and response shapes",
+    "Write tests that fake the model so you can check the API without spending tokens",
+    "Add logs that help you find why a request failed"
+  ],
+  "software-engineering/lab-fastapi-simple-api": [
+    "Start FastAPI with uvicorn locally",
+    "Implement GET /health and one simple JSON resource",
+    "Prove both work with curl"
+  ],
+  "software-engineering/lab-fastapi-validation-and-testing": [
+    "Add Pydantic models so invalid JSON returns 422",
+    "Write pytest tests with TestClient for health and create",
+    "Fix failing tests with a small targeted change"
+  ],
+  "ai-engineering/llm-fundamentals": [
+    "Explain tokens, context windows, and temperature in everyday language",
+    "Describe how models are trained at a high level (pretraining vs instruction tuning)",
+    "Explain why models invent facts and what that means when you design a product"
+  ],
+  "ai-engineering/model-landscape-and-selection": [
+    "Compare big hosted models, open models, and small local models on cost, speed, quality, and privacy",
+    "Decide when to use a hosted API versus running a model on your machine",
+    "Fill a simple table that helps you pick a model for a real constraint (budget, data rules, or latency)"
+  ],
+  "ai-engineering/prompt-engineering": [
+    "Write prompts using system and user roles, and try zero-shot and few-shot styles",
+    "Keep prompt templates versioned so you can improve them over time",
+    "Decide when better prompting is enough and when you need a different approach"
+  ],
+  "ai-engineering/structured-outputs-and-tool-calling": [
+    "Ask the model for structured JSON and handle replies that are not valid",
+    "Explain the loop: model asks for a tool, you run it, then send the result back",
+    "Write clear tool descriptions and recover when a tool fails"
+  ],
+  "ai-engineering/llm-evaluation-cost-and-safety": [
+    "Build a small set of test examples and score answers fairly",
+    "Lower cost and wait time with practical tricks like caching or batching",
+    "Spot risks such as prompt injection and leaking private data"
+  ],
+  "ai-engineering/rag-foundations-and-ingestion": [
+    "Explain RAG in plain words: find relevant docs, then answer from them",
+    "Name the main steps: ingest, index, retrieve, generate",
+    "Describe why messy PDFs and missing metadata hurt answers later"
+  ],
+  "ai-engineering/chunking-embeddings-and-vector-stores": [
+    "Compare simple ways to split documents into chunks",
+    "Explain what embeddings are and why chunk size matters",
+    "Describe what a vector store does when you search"
+  ],
+  "ai-engineering/hybrid-search-reranking-and-query-transformation": [
+    "Explain why keyword search and vector search catch different kinds of questions",
+    "Describe reranking: reorder top matches before the model answers",
+    "Give one example of rewriting a weak user question to search better"
+  ],
+  "ai-engineering/rag-evaluation-and-production": [
+    "Measure whether the right documents were retrieved and whether answers stay faithful",
+    "Tell retrieval problems apart from prompt or model problems",
+    "List practical production concerns: permissions, freshness, cost, and monitoring"
+  ],
+  "ai-engineering/agent-fundamentals-and-langchain": [
+    "Explain the basic agent loop: think, act with a tool, observe, repeat",
+    "Decide when a fixed workflow is enough versus a free-form agent",
+    "Describe how tools and retrievers plug into an agent framework"
+  ],
+  "ai-engineering/langgraph-state-memory-and-human-in-the-loop": [
+    "Describe an agent as a graph of steps with shared state",
+    "Explain why saving state matters so a run can pause and resume",
+    "Describe a human approval step before a risky action"
+  ],
+  "ai-engineering/agentic-rag": [
+    "Explain grading retrieved docs and rewriting the question when quality is low",
+    "Compare a simple RAG answer with a small agentic loop in plain words",
+    "Weigh extra quality against extra cost and latency"
+  ],
+  "ai-engineering/guardrails-and-agent-safety": [
+    "Validate what goes into and comes out of the model",
+    "Limit what tools can do (least privilege)",
+    "Defend against prompt injection with clear rules and approval gates"
+  ],
+  "ai-engineering/observability-and-agent-evaluation": [
+    "Explain why tracing each step helps you debug agents",
+    "Measure whether tools were called correctly and whether the task succeeded",
+    "Describe a small regression suite so changes do not silently break quality"
+  ],
+  "ai-engineering/model-context-protocol-mcp": [
+    "Explain host, client, and server roles in MCP in plain words",
+    "Describe tools and resources an MCP server can expose",
+    "List basic trust checks before connecting an agent to a server"
+  ],
+  "ai-engineering/agent-skills-and-cursor-rules": [
+    "Explain what a reusable skill file is for in everyday terms",
+    "Use project rules so the AI coding tool follows your team style",
+    "Choose when a skill, MCP tool, or a plain prompt is the better fit"
+  ],
+  "ai-engineering/lab-compare-two-models": [
+    "Write about 10 short test questions of the same type for both models",
+    "Run both models on those questions and note quality, speed, and cost",
+    "Choose a default model and explain why using your notes"
+  ],
+  "ai-engineering/lab-extraction-and-tool-calling": [
+    "Pull clear fields out of free text (for example category or priority)",
+    "Decide when the assistant should call a tool instead of guessing",
+    "Show what happens when a tool fails, without crashing the chat"
+  ],
+  "ai-engineering/lab-ingest-chunk-and-index": [
+    "Split a few sample policy texts into chunks that still make sense",
+    "Build a searchable index and try one question against it",
+    "Judge whether the top match is actually useful for that question"
+  ],
+  "ai-engineering/lab-baseline-cited-rag": [
+    "Answer questions using only text you retrieved from your index",
+    "Name the source chunk for every factual answer",
+    "Say you do not know when the documents do not support an answer"
+  ],
+  "ai-engineering/lab-hybrid-search-reranker": [
+    "Combine keyword search with vector search for the same question",
+    "Reorder the top matches before the model writes an answer",
+    "Compare one question before and after this change"
+  ],
+  "ai-engineering/lab-diagnose-rag-failures": [
+    "Look at a wrong answer and decide if the problem is data, search, prompt, or the model",
+    "Fix one layer at a time and test again",
+    "Write a short note of what was wrong and what you changed"
+  ],
+  "ai-engineering/lab-langgraph-human-approval": [
+    "Map the agent as a simple flow with clear steps",
+    "Pause before a risky action until a person says yes or no",
+    "Continue safely after approval, or stop cleanly if the person says no"
+  ],
+  "ai-engineering/lab-agentic-rag-mini-loop": [
+    "Score whether the retrieved text is good enough for the question",
+    "Rewrite the question once when the retrieved text is weak",
+    "Answer or refuse after that single rewrite so the loop does not run forever"
+  ],
+  "ai-engineering/lab-red-team-guardrails": [
+    "Try two realistic attacks that try to make the agent ignore its rules",
+    "Add two protections that block those attacks",
+    "Confirm normal IT questions still get useful answers"
+  ],
+  "ai-engineering/lab-mcp-server": [
+    "Expose a search tool and a read-only resource through an MCP server",
+    "Connect that server to your agent so it can call the tool",
+    "Check inputs before the tool runs so bad requests are rejected"
+  ],
+  "ai-engineering/assignment-integrated-policy-assistant": [
+    "Document default model choice from the compare lab with metrics",
+    "Show POST /ask cited and refusal examples on policy_corpus/",
+    "Complete all seven integrated capstone steps with concrete artifacts"
+  ]
+}

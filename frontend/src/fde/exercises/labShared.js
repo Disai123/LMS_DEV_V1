@@ -1,21 +1,26 @@
 /** Shared copy for FDE labs (Todo, tutor) and assignments (Ask IT, solo). */
 
 export const BADGE_LAB = 'Todo · Tutored lab'
+export const BADGE_FOUNDATION = 'Foundation · Lab'
+export const BADGE_FOUNDATION_ASSIGNMENT = 'Foundation · Assignment'
 export const BADGE_ASSIGNMENT = 'Ask IT · On your own'
 /** @deprecated use BADGE_LAB or BADGE_ASSIGNMENT */
 export const BADGE_LABEL = BADGE_LAB
 
+export const FOUNDATION_START =
+  'Foundation lab: read **What you will do** below, copy the prompt into your AI tool, then build or sketch the result in your own folder. If something breaks, open **Troubleshooting** and paste the fix prompt.'
+
 export const TUTOR_START =
-  'Work **with your tutor**. Do **one step at a time**. Pass each checkpoint before opening the next prompt. If something breaks, expand **Troubleshooting** and paste the fix prompt—do not skip ahead.'
+  'Work **with your tutor**. One prompt at a time. Read **What you will do**, copy the prompt, match the **acceptance criteria**. If something breaks, open **Troubleshooting** and paste the fix prompt.'
 
 export const ASSIGNMENT_START =
-  'You are **on your own** (no tutor). Read **Skills from the lab** first, then use the same prompt → checkpoint → fix loop. Run everything in **your Ask IT repo** on your laptop.'
+  'You are **on your own** (no tutor). Read **Skills from the lab** and **What you will do**, then copy each prompt into your AI tool. Build in **your Ask IT repo**. Match **acceptance criteria**; use **Troubleshooting** if stuck.'
 
 /** Hide generic opener when the exercise panel already explains the loop. */
 export function stripGenericBeforeYouStart(text) {
   if (!text || typeof text !== 'string') return null
   const trimmed = text.trim()
-  if (trimmed === TUTOR_START || trimmed === ASSIGNMENT_START) return null
+  if (trimmed === TUTOR_START || trimmed === ASSIGNMENT_START || trimmed === FOUNDATION_START) return null
   if (trimmed.startsWith(TUTOR_START)) {
     const rest = trimmed.slice(TUTOR_START.length).trim()
     return rest || null
@@ -69,7 +74,7 @@ export function compactPrompt({ context, task, output, stop = PROMPT_STOP }) {
   if (context) parts.push(context)
   parts.push(`## Task\n${task}`)
   parts.push(`## Output\n${output}`)
-  parts.push(stop)
+  if (stop) parts.push(stop)
   return parts.join('\n\n')
 }
 

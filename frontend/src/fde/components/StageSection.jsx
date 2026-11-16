@@ -70,10 +70,6 @@ export default function StageSection({ stage, index }) {
           </ul>
         </>
       )}
-
-      <p className="text-sm leading-relaxed text-[var(--fde-mut)] mt-6 mb-0 pt-4 border-t border-[var(--fde-bd)]">
-        <strong className="text-[var(--fde-tx)] font-semibold">Ready to move on when:</strong> {stage.readyWhen}
-      </p>
     </section>
   )
 }

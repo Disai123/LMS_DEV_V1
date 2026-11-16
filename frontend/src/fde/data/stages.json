@@ -2,7 +2,7 @@
   "hero": {
     "eyebrow": "Level 4 · Forward Deployed Engineering",
     "title": "Forward Deployed Engineer Roadmap (48h)",
-    "subtitle": "Learn the Ask IT customer story in readings; practice skills on the Todo app with your tutor in labs; deliver Ask IT for real on assignments. 10 stages · 48 hours."
+    "subtitle": "Section 1: core Python and AI labs. From Stage 3: customer story with Todo tutor labs and Ask IT assignments."
   },
   "chips": [
     "3 Sections",
@@ -14,7 +14,7 @@
   "phases": [
     {
       "label": "Section 1 · 16 h",
-      "detail": "Stages 1–2: Python and AI engineering foundations (3h + 13h)"
+      "detail": "Stages 1–2: Python and AI engineering foundations (5h + 11h)"
     },
     {
       "label": "Section 2 · 16 h",
@@ -46,7 +46,7 @@
     },
     {
       "question": "Why Todo in labs and Ask IT in assignments?",
-      "answer": "Labs are with your tutor on a simple Todo task-list app: same prompt-and-fix skills, less complexity. Assignments are Ask IT (retail IT chatbot) that you complete independently. Readings teach the Ask IT business context; labs build muscle memory; assignments prove you can deliver for the customer."
+      "answer": "Stages 1–2 are concept labs only (no customer storyline). From Stage 3 onward, tutored labs use the Todo app and assignments use the Ask IT retail scenario."
     },
     {
       "question": "What will I be able to do after?",
@@ -54,7 +54,7 @@
     },
     {
       "question": "How are the 48 hours split?",
-      "answer": "Section 1 is 16 hours (3h Python + 13h AI engineering). Section 2 is 16 hours covering Stages 3 through 9 across the full customer engagement lifecycle. Section 3 is 16 hours dedicated to four 4-hour hands-on capstone projects."
+      "answer": "Section 1 is 16 hours (5h Python and FastAPI + 11h AI engineering). Section 2 is 16 hours covering Stages 3 through 9 across the full customer engagement lifecycle. Section 3 is 16 hours dedicated to four 4-hour hands-on capstone projects."
     },
     {
       "question": "What are the Capstone Projects in Section 3?",
@@ -103,84 +103,66 @@
       "color": "#2fd3a0",
       "weeksLabel": "Section 1",
       "sectionLabel": "Section 1",
-      "hours": 3,
-      "cardBlurb": "Write reliable Python that calls APIs, validates data and ships as a tested service.",
-      "description": "Write reliable Python that calls APIs, validates data and ships as a tested service.",
+      "hours": 5,
+      "cardBlurb": "1h FDE and SDLC context, then Python, APIs, and a tested FastAPI service.",
+      "description": "Understand how the FDE course flows, then build reliable Python and a small FastAPI API with validation and tests.",
       "outcomes": [
-        "Write Python scripts that handle files, JSON and errors",
-        "Call REST and LLM APIs with retries and timeouts",
-        "Validate data with Pydantic and run calls in parallel with asyncio",
-        "Ship a tested FastAPI service"
+        "Explain the FDE role and SDLC stages used in this course",
+        "Write Python that handles files, JSON, and API calls safely",
+        "Validate request and response data with Pydantic",
+        "Ship a minimal tested FastAPI service"
       ],
-      "readyWhen": "You can stand up a tested API that calls an LLM and returns validated JSON in a day.",
+      "readyWhen": "You can explain the course flow and stand up a tested FastAPI API with /health and one resource in a day.",
       "reads": [
         {
-          "slug": "welcome-goals-and-the-running-scenario",
+          "slug": "fde-role-sdlc-and-how-this-course-flows",
           "type": "read",
-          "title": "Welcome: Ask IT story and how labs work",
-          "minutes": 10
+          "title": "FDE role, SDLC lifecycle, and how this course is structured",
+          "minutes": 60
         },
         {
-          "slug": "environment-setup-and-api-calls",
+          "slug": "python-essentials-and-environment-setup",
           "type": "read",
-          "title": "Environment setup and API calls",
-          "minutes": 20
+          "title": "Python essentials and environment setup",
+          "minutes": 30
         },
         {
-          "slug": "reliability-basics",
+          "slug": "data-structures-json-and-pandas",
           "type": "read",
-          "title": "Reliability basics",
-          "minutes": 15
+          "title": "Data structures, JSON and pandas",
+          "minutes": 30
         },
         {
-          "slug": "pydantic-and-typing",
+          "slug": "working-with-apis-reliably",
           "type": "read",
-          "title": "Pydantic and typing",
-          "minutes": 20
+          "title": "Working with APIs reliably",
+          "minutes": 30
         },
         {
-          "slug": "async-python",
+          "slug": "typing-pydantic-and-async",
           "type": "read",
-          "title": "Async Python",
-          "minutes": 15
+          "title": "Typing, Pydantic and async",
+          "minutes": 30
         },
         {
-          "slug": "recap-and-assignment-review",
+          "slug": "fastapi-logging-and-pytest",
           "type": "read",
-          "title": "Recap and assignment review",
-          "minutes": 10
-        },
-        {
-          "slug": "data-wrangling",
-          "type": "read",
-          "title": "Data wrangling",
-          "minutes": 20
-        },
-        {
-          "slug": "quick-services-logging-and-testing",
-          "type": "read",
-          "title": "Quick services, logging and testing",
-          "minutes": 15
+          "title": "FastAPI, logging and pytest",
+          "minutes": 30
         }
       ],
       "practise": [
         {
-          "slug": "lab-1a-validated-api-call",
+          "slug": "lab-fastapi-simple-api",
           "type": "lab",
-          "title": "Lab 1A: validated API call",
-          "minutes": 25
+          "title": "Lab: Create a simple FastAPI API",
+          "minutes": 45
         },
         {
-          "slug": "harden-the-api-script",
-          "type": "assignment",
-          "title": "Assignment: Ask IT triage client spec",
-          "minutes": 60
-        },
-        {
-          "slug": "lab-1b-tested-triage-endpoint",
+          "slug": "lab-fastapi-validation-and-testing",
           "type": "lab",
-          "title": "Lab 1B: Todo API and pytest",
-          "minutes": 25
+          "title": "Lab: FastAPI validation and testing",
+          "minutes": 45
         }
       ]
     },
@@ -191,8 +173,8 @@
       "color": "#3aa6ff",
       "weeksLabel": "Section 1",
       "sectionLabel": "Section 1",
-      "hours": 13,
-      "cardBlurb": "Work with LLMs, RAG, agents and MCP to build and ship intelligent solutions.",
+      "hours": 11,
+      "cardBlurb": "LLMs, RAG, agents, guardrails, and MCP — concept labs only.",
       "description": "Work with LLMs, RAG, agents and MCP to build and ship intelligent solutions.",
       "outcomes": [
         "Prompt and call LLM APIs with structured output and tools",
@@ -204,282 +186,168 @@
       "readyWhen": "You can build a cited, guarded, agent-driven Q&A prototype over documents in a week.",
       "reads": [
         {
-          "slug": "how-llms-work",
+          "slug": "llm-fundamentals",
           "type": "read",
-          "title": "How LLMs work",
+          "title": "LLM fundamentals",
           "minutes": 20
         },
         {
-          "slug": "model-landscape",
+          "slug": "model-landscape-and-selection",
           "type": "read",
-          "title": "Model landscape",
-          "minutes": 15
+          "title": "Model landscape and selection",
+          "minutes": 20
         },
         {
-          "slug": "recap-and-assignment-review-session-3",
+          "slug": "prompt-engineering",
           "type": "read",
-          "title": "Recap and assignment review (Session 3)",
-          "minutes": 10
-        },
-        {
-          "slug": "prompting",
-          "type": "read",
-          "title": "Prompting",
+          "title": "Prompt engineering",
           "minutes": 20
         },
         {
           "slug": "structured-outputs-and-tool-calling",
           "type": "read",
           "title": "Structured outputs and tool calling",
-          "minutes": 15
-        },
-        {
-          "slug": "evaluation-basics",
-          "type": "read",
-          "title": "Evaluation basics",
-          "minutes": 15
-        },
-        {
-          "slug": "cost-latency-and-safety",
-          "type": "read",
-          "title": "Cost, latency and safety",
-          "minutes": 10
-        },
-        {
-          "slug": "debrief-and-assignment-brief",
-          "type": "read",
-          "title": "Debrief and assignment brief",
-          "minutes": 10
-        },
-        {
-          "slug": "recap-and-scenario-kickoff",
-          "type": "read",
-          "title": "Recap and scenario kickoff",
-          "minutes": 10
-        },
-        {
-          "slug": "when-to-use-rag",
-          "type": "read",
-          "title": "When to use RAG",
-          "minutes": 15
-        },
-        {
-          "slug": "ingestion-pipeline",
-          "type": "read",
-          "title": "Ingestion pipeline",
           "minutes": 20
         },
         {
-          "slug": "chunking-strategies",
+          "slug": "llm-evaluation-cost-and-safety",
           "type": "read",
-          "title": "Chunking strategies",
-          "minutes": 15
-        },
-        {
-          "slug": "embeddings-and-vector-stores",
-          "type": "read",
-          "title": "Embeddings and vector stores",
-          "minutes": 15
-        },
-        {
-          "slug": "recap-and-assignment-review-session-5",
-          "type": "read",
-          "title": "Recap and assignment review (Session 5)",
-          "minutes": 10
-        },
-        {
-          "slug": "retrieval-quality",
-          "type": "read",
-          "title": "Retrieval quality",
+          "title": "LLM evaluation, cost and safety",
           "minutes": 20
         },
         {
-          "slug": "generation",
+          "slug": "rag-foundations-and-ingestion",
           "type": "read",
-          "title": "Generation",
-          "minutes": 10
-        },
-        {
-          "slug": "evaluation",
-          "type": "read",
-          "title": "Evaluation",
+          "title": "RAG foundations and ingestion",
           "minutes": 20
         },
         {
-          "slug": "failure-modes",
+          "slug": "chunking-embeddings-and-vector-stores",
           "type": "read",
-          "title": "Failure modes",
-          "minutes": 10
-        },
-        {
-          "slug": "recap-and-assignment-review-session-6",
-          "type": "read",
-          "title": "Recap and assignment review (Session 6)",
-          "minutes": 10
-        },
-        {
-          "slug": "agent-fundamentals",
-          "type": "read",
-          "title": "Agent fundamentals",
-          "minutes": 30
-        },
-        {
-          "slug": "langchain",
-          "type": "read",
-          "title": "LangChain",
+          "title": "Chunking, embeddings and vector stores",
           "minutes": 20
         },
         {
-          "slug": "introduction-to-langgraph",
+          "slug": "hybrid-search-reranking-and-query-transformation",
           "type": "read",
-          "title": "Introduction to LangGraph",
-          "minutes": 10
-        },
-        {
-          "slug": "recap-and-assignment-review-session-7",
-          "type": "read",
-          "title": "Recap and assignment review (Session 7)",
-          "minutes": 10
-        },
-        {
-          "slug": "langgraph-in-depth",
-          "type": "read",
-          "title": "LangGraph in depth",
-          "minutes": 25
-        },
-        {
-          "slug": "guardrails",
-          "type": "read",
-          "title": "Guardrails",
-          "minutes": 25
-        },
-        {
-          "slug": "recap",
-          "type": "read",
-          "title": "Recap",
-          "minutes": 5
-        },
-        {
-          "slug": "agent-skills-and-ai-coding-tools",
-          "type": "read",
-          "title": "Agent skills and AI coding tools",
-          "minutes": 25
-        },
-        {
-          "slug": "mcp",
-          "type": "read",
-          "title": "MCP",
+          "title": "Hybrid search, reranking and query transformation",
           "minutes": 20
         },
         {
-          "slug": "architecture-recap",
+          "slug": "rag-evaluation-and-production",
           "type": "read",
-          "title": "Architecture recap",
-          "minutes": 15
-        },
-        {
-          "slug": "capstone-demos",
-          "type": "read",
-          "title": "Capstone demos",
+          "title": "RAG evaluation and production",
           "minutes": 20
         },
         {
-          "slug": "production-checklist",
+          "slug": "agent-fundamentals-and-langchain",
           "type": "read",
-          "title": "Production checklist",
-          "minutes": 7
+          "title": "Agent fundamentals and LangChain",
+          "minutes": 20
         },
         {
-          "slug": "next-steps-and-feedback",
+          "slug": "langgraph-state-memory-and-human-in-the-loop",
           "type": "read",
-          "title": "Next steps and feedback",
-          "minutes": 3
+          "title": "LangGraph: state, memory and human-in-the-loop",
+          "minutes": 20
+        },
+        {
+          "slug": "agentic-rag",
+          "type": "read",
+          "title": "Agentic RAG",
+          "minutes": 20
+        },
+        {
+          "slug": "guardrails-and-agent-safety",
+          "type": "read",
+          "title": "Guardrails and agent safety",
+          "minutes": 20
+        },
+        {
+          "slug": "observability-and-agent-evaluation",
+          "type": "read",
+          "title": "Observability and agent evaluation",
+          "minutes": 20
+        },
+        {
+          "slug": "model-context-protocol-mcp",
+          "type": "read",
+          "title": "Model Context Protocol (MCP)",
+          "minutes": 20
+        },
+        {
+          "slug": "agent-skills-and-cursor-rules",
+          "type": "read",
+          "title": "Agent skills and Cursor rules",
+          "minutes": 20
         }
       ],
       "practise": [
         {
-          "slug": "batch-classifier-and-model-selection-note",
-          "type": "assignment",
-          "title": "Batch classifier and model-selection note",
-          "minutes": 75
-        },
-        {
-          "slug": "lab-2-compare-two-models",
+          "slug": "lab-compare-two-models",
           "type": "lab",
-          "title": "Lab 2: compare two models",
-          "minutes": 30
-        },
-        {
-          "slug": "model-recommendation",
-          "type": "assignment",
-          "title": "Model recommendation",
-          "minutes": 75
-        },
-        {
-          "slug": "lab-3-ingest-and-index",
-          "type": "lab",
-          "title": "Lab 3: ingest and index",
-          "minutes": 30
-        },
-        {
-          "slug": "chunking-comparison",
-          "type": "assignment",
-          "title": "Chunking comparison",
-          "minutes": 75
-        },
-        {
-          "slug": "lab-4-diagnose-and-fix",
-          "type": "lab",
-          "title": "Lab 4: diagnose and fix",
-          "minutes": 35
-        },
-        {
-          "slug": "rag-evaluation-report",
-          "type": "assignment",
-          "title": "RAG evaluation report",
-          "minutes": 90
-        },
-        {
-          "slug": "lab-5a-first-agent",
-          "type": "lab",
-          "title": "Lab 5A: first agent",
-          "minutes": 30
-        },
-        {
-          "slug": "workflow-or-agent",
-          "type": "assignment",
-          "title": "Workflow or agent?",
-          "minutes": 60
-        },
-        {
-          "slug": "lab-5b-approval-step",
-          "type": "lab",
-          "title": "Lab 5B: approval step",
+          "title": "Lab: Compare two models with an eval harness",
           "minutes": 25
         },
         {
-          "slug": "lab-6-add-guardrails-and-attack",
+          "slug": "lab-extraction-and-tool-calling",
           "type": "lab",
-          "title": "Lab 6: add guardrails and attack",
-          "minutes": 20
+          "title": "Lab: Extraction pipeline and tool-calling assistant",
+          "minutes": 25
         },
         {
-          "slug": "agent-threat-model",
-          "type": "assignment",
-          "title": "Agent threat model",
-          "minutes": 75
-        },
-        {
-          "slug": "lab-7-skill-and-mcp-tool",
+          "slug": "lab-ingest-chunk-and-index",
           "type": "lab",
-          "title": "Lab 7: skill and MCP tool",
-          "minutes": 15
+          "title": "Lab: Ingest, chunk, and index a policy corpus",
+          "minutes": 28
         },
         {
-          "slug": "final-project-package-and-present-your-assistant",
+          "slug": "lab-baseline-cited-rag",
+          "type": "lab",
+          "title": "Lab: Baseline cited RAG Q&A",
+          "minutes": 28
+        },
+        {
+          "slug": "lab-hybrid-search-reranker",
+          "type": "lab",
+          "title": "Lab: Add hybrid search and a reranker",
+          "minutes": 28
+        },
+        {
+          "slug": "lab-diagnose-rag-failures",
+          "type": "lab",
+          "title": "Lab: Diagnose and fix planted RAG failures",
+          "minutes": 30
+        },
+        {
+          "slug": "lab-langgraph-human-approval",
+          "type": "lab",
+          "title": "Lab: LangGraph agent with human approval",
+          "minutes": 30
+        },
+        {
+          "slug": "lab-agentic-rag-mini-loop",
+          "type": "lab",
+          "title": "Lab: Agentic RAG mini-loop",
+          "minutes": 28
+        },
+        {
+          "slug": "lab-red-team-guardrails",
+          "type": "lab",
+          "title": "Lab: Red-team your agent and add guardrails",
+          "minutes": 28
+        },
+        {
+          "slug": "lab-mcp-server",
+          "type": "lab",
+          "title": "Lab: Build an MCP server and connect it to your agent",
+          "minutes": 30
+        },
+        {
+          "slug": "assignment-integrated-policy-assistant",
           "type": "assignment",
-          "title": "Final project: package and present your assistant",
-          "minutes": "120–180"
+          "title": "Assignment: Integrated policy assistant (Stage 2 capstone)",
+          "minutes": 60
         }
       ]
     },

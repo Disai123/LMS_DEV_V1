@@ -85,15 +85,11 @@
     }
   },
   "development/startup-instructions-and-tests": {
-    "summary": "Complete the local startup instructions and add tests for the health route and request validation.",
+    "summary": "Assignment: Ask IT local run + TEST-PLAN.md.",
     "sections": [
       {
-        "heading": "Overview",
-        "body": "Complete the local startup instructions and add tests for the health route and request validation."
-      },
-      {
-        "heading": "Details",
-        "body": "- Deliverable: Working application skeleton, sample FAQ schema and startup README\n- Due: Before Session 5"
+        "heading": "Skills from Todo labs 4–5",
+        "body": "You built Todo API + UI with tutor. Repeat README-RUN and tests for Ask IT—solo panel below."
       }
     ],
     "typeExtras": {}
@@ -190,16 +186,6 @@
       {
         "heading": "Done when",
         "body": "Add task works in the browser against your Todo API."
-      }
-    ],
-    "typeExtras": {}
-  },
-  "development/startup-instructions-and-tests": {
-    "summary": "Assignment: Ask IT local run + TEST-PLAN.md.",
-    "sections": [
-      {
-        "heading": "Skills from Todo labs 4–5",
-        "body": "You built Todo API + UI with tutor. Repeat README-RUN and tests for Ask IT—solo panel below."
       }
     ],
     "typeExtras": {}

@@ -1,183 +1,138 @@
 {
-  "software-engineering/welcome-goals-and-the-running-scenario": {
-    "summary": "Ask IT customer story, Todo tutored labs, and your first prompt exercise.",
+  "software-engineering/python-essentials-and-environment-setup": {
+    "summary": "Set up uv or venv, a clean project structure and Git, then read and write files with proper exception handling.",
     "sections": [
       {
-        "heading": "Two apps, one method",
-        "body": "**Ask IT** (assignments): retail IT chatbot for store staff and managers—you build this **on your own** later in the course.\n\n**Todo** (labs): simple task list you build **with your tutor** using copy-paste AI prompts.\n\n**You do not need to know Python by heart.** Copy one prompt → run the checkpoint → use a fix prompt if needed.\n\nOn the roadmap home page, read **How this course is organized** once—it explains Read, Lab, Assignment, and Capstone."
+        "heading": "Overview",
+        "body": "Set up uv or venv, a clean project structure and Git, then read and write files with proper exception handling."
+      }
+    ],
+    "typeExtras": {
+      "objectives": [
+        "Create a clean Python project folder and install packages without mixing with other projects",
+        "Read and write files safely, and catch errors instead of crashing",
+        "Save API keys in a .env file and keep them out of Git"
+      ]
+    }
+  },
+  "software-engineering/data-structures-json-and-pandas": {
+    "summary": "Turn nested JSON, CSV and text extracted from PDFs and Word files into clean tables.",
+    "sections": [
+      {
+        "heading": "Overview",
+        "body": "Turn nested JSON, CSV and text extracted from PDFs and Word files into clean tables."
+      }
+    ],
+    "typeExtras": {
+      "objectives": [
+        "Pick the right Python structure (list, dict, and so on) for simple data jobs",
+        "Open JSON or CSV and turn nested data into a flat table you can work with",
+        "Clean missing or messy values so the table is ready to use"
+      ]
+    }
+  },
+  "software-engineering/working-with-apis-reliably": {
+    "summary": "Call REST and LLM APIs without letting timeouts, rate limits or bad responses break the job.",
+    "sections": [
+      {
+        "heading": "Overview",
+        "body": "Call REST and LLM APIs without letting timeouts, rate limits or bad responses break the job."
+      }
+    ],
+    "typeExtras": {
+      "objectives": [
+        "Call an API, check whether the response succeeded, and read the result",
+        "Handle timeouts, rate limits, and retries so a bad call does not stop the whole job",
+        "Write short logs so you can see what failed later"
+      ]
+    }
+  },
+  "software-engineering/typing-pydantic-and-async": {
+    "summary": "Validate model output with Pydantic and run many calls concurrently without hitting rate limits.",
+    "sections": [
+      {
+        "heading": "Overview",
+        "body": "Validate model output with Pydantic and run many calls concurrently without hitting rate limits."
+      }
+    ],
+    "typeExtras": {
+      "objectives": [
+        "Describe the shape of data you expect and reject replies that do not match",
+        "Run several API calls at once without starting too many at the same time",
+        "When a reply is invalid, ask again or fix it before you move on"
+      ]
+    }
+  },
+  "software-engineering/fastapi-logging-and-pytest": {
+    "summary": "Wrap a model call in a FastAPI service, test it with mocked LLM calls and make failures debuggable.",
+    "sections": [
+      {
+        "heading": "Overview",
+        "body": "Wrap a model call in a FastAPI service, test it with mocked LLM calls and make failures debuggable."
+      }
+    ],
+    "typeExtras": {
+      "objectives": [
+        "Wrap a model call behind a small web API with clear request and response shapes",
+        "Write tests that fake the model so you can check the API without spending tokens",
+        "Add logs that help you find why a request failed"
+      ]
+    }
+  },
+  "software-engineering/fde-role-sdlc-and-how-this-course-flows": {
+    "summary": "What a Forward Deployed Engineer does, the SDLC stages you will practise, and how Section 1 (foundations), Section 2 (customer delivery), and Section 3 (capstone) fit together.",
+    "sections": [
+      {
+        "heading": "Overview",
+        "body": "This hour sets context before Python and FastAPI. You are learning how real customer engagements run—not building the Ask IT app yet."
       },
       {
-        "heading": "This page",
-        "body": "Open **Lab 0** in the panel below with your tutor. Save `todo-summary.txt` when done."
-      }
-    ],
-    "typeExtras": {
-      "objectives": [
-        "Set up a clean, reproducible Python project with secrets handled safely",
-        "Call an LLM API reliably, with timeouts, retries and rate-limit handling",
-        "Validate model output against a Pydantic schema and explain why it matters"
-      ]
-    }
-  },
-  "software-engineering/environment-setup-and-api-calls": {
-    "summary": "uv/venv, .env and secrets handling, project structure; requests/httpx and JSON handling",
-    "sections": [
-      {
-        "heading": "Overview",
-        "body": "- Uv/venv\n- .env and secrets handling\n- Project structure\n- Requests/httpx and JSON handling"
-      }
-    ],
-    "typeExtras": {
-      "objectives": [
-        "Set up a clean, reproducible Python project with secrets handled safely",
-        "Call an LLM API reliably, with timeouts, retries and rate-limit handling",
-        "Validate model output against a Pydantic schema and explain why it matters"
-      ]
-    }
-  },
-  "software-engineering/reliability-basics": {
-    "summary": "Retries with backoff, rate limits and timeouts; what should and should not be retried",
-    "sections": [
-      {
-        "heading": "Overview",
-        "body": "- Retries with backoff\n- Rate limits and timeouts\n- What should and should not be retried"
-      }
-    ],
-    "typeExtras": {
-      "objectives": [
-        "Set up a clean, reproducible Python project with secrets handled safely",
-        "Call an LLM API reliably, with timeouts, retries and rate-limit handling",
-        "Validate model output against a Pydantic schema and explain why it matters"
-      ]
-    }
-  },
-  "software-engineering/pydantic-and-typing": {
-    "summary": "Schemas for structured LLM output and validation; handling invalid replies",
-    "sections": [
-      {
-        "heading": "Overview",
-        "body": "- Schemas for structured LLM output and validation\n- Handling invalid replies"
-      }
-    ],
-    "typeExtras": {
-      "objectives": [
-        "Set up a clean, reproducible Python project with secrets handled safely",
-        "Call an LLM API reliably, with timeouts, retries and rate-limit handling",
-        "Validate model output against a Pydantic schema and explain why it matters"
-      ]
-    }
-  },
-  "software-engineering/async-python": {
-    "summary": "asyncio basics and concurrency limits, since parallel LLM calls are everywhere",
-    "sections": [
-      {
-        "heading": "Overview",
-        "body": "- Asyncio basics and concurrency limits\n- Since parallel LLM calls are everywhere"
-      }
-    ],
-    "typeExtras": {
-      "objectives": [
-        "Set up a clean, reproducible Python project with secrets handled safely",
-        "Call an LLM API reliably, with timeouts, retries and rate-limit handling",
-        "Validate model output against a Pydantic schema and explain why it matters"
-      ]
-    }
-  },
-  "software-engineering/lab-1a-validated-api-call": {
-    "summary": "Tutored lab: httpx client for Todo POST /tasks.",
-    "sections": [
-      {
-        "heading": "Overview",
-        "body": "Generate `submit_task.py` with AI prompts. Run in Terminal. Use troubleshooting fix prompts if the API is down."
+        "heading": "What an FDE does",
+        "body": "- Works with the customer on discovery, design, build, validation, deploy, and handover.\n- Turns fuzzy requests into working software with clear acceptance checks.\n- Uses AI tools and engineering discipline together—not only coding in isolation."
       },
       {
-        "heading": "Done when",
-        "body": "POST /tasks works or fails with a clear, friendly message."
-      }
-    ],
-    "typeExtras": {}
-  },
-  "software-engineering/harden-the-api-script": {
-    "summary": "Assignment: Ask IT triage validation spec (no tutor).",
-    "sections": [
-      {
-        "heading": "Overview",
-        "body": "After Todo Labs 1A/1B you know validation and tests. Write the **Ask IT** triage rules on your own—panel below."
-      },
-      {
-        "heading": "Details",
-        "body": "Deliverable: `triage-validation-spec.md`. Prompts only—build code in your repo."
-      }
-    ],
-    "typeExtras": {
-      "checkpointQuestions": [
-        "Why should a 401 error never be retried?"
-      ]
-    }
-  },
-  "software-engineering/recap-and-assignment-review": {
-    "summary": "Two or three participants share how they handled the failure cases",
-    "sections": [
-      {
-        "heading": "Overview",
-        "body": "Two or three participants share how they handled the failure cases"
+        "heading": "SDLC in this course",
+        "body": "- **Discover & requirements** — Stages 3–4 (business, UI/UX).\n- **Architecture** — Stage 5.\n- **Build & test** — Stage 6.\n- **Pilot & production** — Stages 7–8.\n- **Operate & handover** — Stage 9.\n- **Capstone** — Stage 10 applies everything on e-commerce projects."
       }
     ],
     "typeExtras": {
       "objectives": [
-        "Wrap a model call in a small, tested FastAPI service",
-        "Read and clean data from PDFs, CSVs and documents for AI use",
-        "Explain tokens, context windows, sampling and hallucination in plain language",
-        "Compare frontier, open-weight and small models on cost, latency and quality"
+        "Explain what an FDE does in plain language",
+        "Name the main SDLC phases you will practise from Stage 3 onward",
+        "Describe how Section 1 skills (Python and FastAPI) connect to the Ask IT customer flow and capstone"
       ]
     }
   },
-  "software-engineering/data-wrangling": {
-    "summary": "pandas basics; reading PDFs, CSVs and Word documents",
+  "software-engineering/lab-fastapi-simple-api": {
+    "summary": "Stand up a minimal FastAPI service with /health and one small JSON resource, then verify with curl.",
     "sections": [
       {
         "heading": "Overview",
-        "body": "- Pandas basics\n- Reading PDFs\n- CSVs and Word documents"
+        "body": "You build the smallest useful HTTP API: health check plus one resource. No database required— in-memory is fine for this lab."
       }
     ],
     "typeExtras": {
       "objectives": [
-        "Wrap a model call in a small, tested FastAPI service",
-        "Read and clean data from PDFs, CSVs and documents for AI use",
-        "Explain tokens, context windows, sampling and hallucination in plain language",
-        "Compare frontier, open-weight and small models on cost, latency and quality"
+        "Start FastAPI with uvicorn locally",
+        "Implement GET /health and one simple JSON resource",
+        "Prove both work with curl"
       ]
     }
   },
-  "software-engineering/quick-services-logging-and-testing": {
-    "summary": "A small FastAPI endpoint wrapping a model call; debugging, logging and pytest with a faked LLM call",
+  "software-engineering/lab-fastapi-validation-and-testing": {
+    "summary": "Add Pydantic validation and pytest tests so bad input returns 422 and core routes stay protected by tests.",
     "sections": [
       {
         "heading": "Overview",
-        "body": "- A small FastAPI endpoint wrapping a model call\n- Debugging\n- Logging and pytest with a faked LLM call"
+        "body": "Extend the API from the previous lab. Invalid bodies should fail clearly; tests should run with TestClient without starting a server manually."
       }
     ],
     "typeExtras": {
       "objectives": [
-        "Wrap a model call in a small, tested FastAPI service",
-        "Read and clean data from PDFs, CSVs and documents for AI use",
-        "Explain tokens, context windows, sampling and hallucination in plain language",
-        "Compare frontier, open-weight and small models on cost, latency and quality"
+        "Add Pydantic models so invalid JSON returns 422",
+        "Write pytest tests with TestClient for health and create",
+        "Fix failing tests with a small targeted change"
       ]
     }
-  },
-  "software-engineering/lab-1b-tested-triage-endpoint": {
-    "summary": "Tutored lab: Todo FastAPI + pytest.",
-    "sections": [
-      {
-        "heading": "Overview",
-        "body": "Prompt `main.py` and `test_main.py` for **Todo** `/tasks`. Run `pytest -v` with your tutor."
-      },
-      {
-        "heading": "Done when",
-        "body": "Blank title returns 422; all tests pass."
-      }
-    ],
-    "typeExtras": {}
   }
 }
