@@ -88,11 +88,16 @@
     "summary": "Assignment: Ask IT local run + TEST-PLAN.md.",
     "sections": [
       {
-        "heading": "Skills from Todo labs 4–5",
-        "body": "You built Todo API + UI with tutor. Repeat README-RUN and tests for Ask IT—solo panel below."
+        "heading": "Skills from Todo labs 11–12",
+        "body": "You built Todo API + UI with tutor. Repeat README-RUN and tests for Ask IT, solo panel below."
       }
     ],
-    "typeExtras": {}
+    "typeExtras": {
+      "objectives": [
+        "Local run and manual test plan for Ask IT.",
+        "Same loop as Todo, different app."
+      ]
+    }
   },
   "development/recap-and-development-status": {
     "summary": "Review the application skeleton and tests from Session 4.",
@@ -163,32 +168,42 @@
     }
   },
   "development/lab-4-application-skeleton": {
-    "summary": "Tutored lab: Todo FastAPI backend — health route, task schemas, SQLite (panel below).",
+    "summary": "Tutored lab: Todo FastAPI backend with task schemas and SQLite (panel below).",
     "sections": [
       {
         "heading": "Path",
-        "body": "- **Reads** in this stage = Ask IT API and data design (customer language).\n- **This lab** = Todo `main.py` and models **with your tutor**.\n- **Assignment** *Startup instructions and tests* = same ideas on **Ask IT**, solo."
+        "body": "- Reads in this stage = Ask IT API and data design (customer language).\n- This lab = Todo main.py and models with your tutor.\n- Assignment Startup instructions and tests = same ideas on Ask IT, solo."
       },
       {
         "heading": "Done when",
-        "body": "Todo API starts locally, `GET /health` works, you can create a task, and bad input returns a clear error."
+        "body": "Todo API starts locally, you can create a task and list tasks, bad input returns a clear error, and the created task shows in the SQLite file."
       }
     ],
-    "typeExtras": {}
+    "typeExtras": {
+      "objectives": [
+        "Generate a minimal FastAPI Todo backend with GET /tasks and POST /tasks from prompts.",
+        "Prove the API works with curl smoke tests, not only by reading code.",
+        "Fix import, routing, and validation issues with small targeted prompts.",
+        "Carry the same backend skeleton approach to Ask IT in the assignment."
+      ]
+    }
   },
   "development/lab-5-connect-rag-and-test": {
-    "summary": "Tutored lab: Todo React UI wired to API.",
+    "summary": "Add task works in the browser against your Todo API.",
     "sections": [
-      {
-        "heading": "Overview",
-        "body": "Not RAG yet—this lab is **Todo** frontend integration. Ask IT chat UI comes in assignments and later AI stages."
-      },
       {
         "heading": "Done when",
         "body": "Add task works in the browser against your Todo API."
       }
     ],
-    "typeExtras": {}
+    "typeExtras": {
+      "objectives": [
+        "Connect a React Todo UI to your FastAPI backend with fetch calls.",
+        "Resolve CORS and empty-list bugs using browser errors and fix prompts.",
+        "Apply the same front-to-back integration steps on Ask IT later.",
+        "Verify add-task and list-task flows end to end with a screenshot."
+      ]
+    }
   },
   "development/review-and-assignment-brief-session-5": {
     "summary": "Review failed cases and identify whether the cause is data, retrieval, permissions or generation.",
@@ -208,13 +223,17 @@
     }
   },
   "development/fix-a-failed-test-and-rerun": {
-    "summary": "Assignment: fix one failing Ask IT test with a follow-up prompt.",
+    "summary": "Document symptom, fix prompt, and pass/fail after rerun in failure-fix-log.md. Panel below.",
     "sections": [
       {
         "heading": "Overview",
-        "body": "Document symptom, fix prompt, and pass/fail after rerun in `failure-fix-log.md`. Panel below."
+        "body": "Document symptom, fix prompt, and pass/fail after rerun in failure-fix-log.md. Panel below."
       }
     ],
-    "typeExtras": {}
+    "typeExtras": {
+      "objectives": [
+        "Prompt → fail → fix prompt → run again."
+      ]
+    }
   }
 }

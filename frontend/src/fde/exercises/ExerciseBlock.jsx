@@ -424,6 +424,23 @@ function PromptLabExercise({ exercise }) {
         </>
       )}
       <PromptsList prompts={exercise.prompts} showCheckpoints={!customer} />
+      {exercise.executionSteps?.length > 0 && (
+        <div className="space-y-3">
+          <h4
+            className="text-[10px] font-semibold uppercase tracking-widest"
+            style={{ color: 'var(--fde-mut)' }}
+          >
+            Execution steps
+          </h4>
+          <ol className="list-decimal pl-5 space-y-3 text-[0.9rem] leading-relaxed" style={{ color: 'var(--fde-tx)' }}>
+            {exercise.executionSteps.map((step, i) => (
+              <li key={i} className="pl-1">
+                <PromptMarkdown text={step} />
+              </li>
+            ))}
+          </ol>
+        </div>
+      )}
       <AcceptanceChecklist items={exercise.acceptanceCriteria} />
       <TroubleshootingBlock items={exercise.troubleshooting} />
       {exercise.checkoutQuestion && (

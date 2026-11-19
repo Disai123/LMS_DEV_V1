@@ -260,43 +260,43 @@
     "sections": [
       {
         "heading": "Overview",
-        "body": "Compare two models on the same extraction task and report quality, cost and latency."
+        "body": "This lab picks a default chat model with evidence. A small script sends the same 3 extraction prompts to two models and records how well and how fast each one answers."
       }
     ],
     "typeExtras": {
       "objectives": [
-        "Write about 10 short test questions of the same type for both models",
-        "Run both models on those questions and note quality, speed, and cost",
-        "Choose a default model and explain why using your notes"
+        "Run 3 short extraction prompts on both models.",
+        "Record quality, latency and token counts for each model.",
+        "Choose a default model and explain the choice using the results."
       ]
     }
   },
   "ai-engineering/lab-extraction-and-tool-calling": {
-    "summary": "Build a schema-based extractor and an assistant with calculator, database and web API tools.",
+    "summary": "Build an assistant that extracts structured fields from a ticket and calls a tool only when needed.",
     "sections": [
       {
         "heading": "Overview",
-        "body": "Build a schema-based extractor and an assistant with calculator, database and web API tools."
+        "body": "This lab uses the default model chosen in Lab 2A. A small assistant turns messy HR ticket text into JSON and calls one of two tools when the ticket needs it. When a tool fails, the assistant reports the failure and keeps running."
       }
     ],
     "typeExtras": {
       "objectives": [
-        "Pull clear fields out of free text (for example category or priority)",
-        "Decide when the assistant should call a tool instead of guessing",
-        "Show what happens when a tool fails, without crashing the chat"
+        "Pull clear fields out of free text.",
+        "Decide when the assistant should call a tool instead of guessing.",
+        "Show what happens when a tool fails, without crashing."
       ]
     }
   },
   "ai-engineering/assignment-model-recommendation": {
-    "summary": "Extend your Lab 2A eval set to 20 examples, including three edge cases, and re-run both models. Then write a one-page recommendation for a client manager covering which model to use, why, the expected cost per 1,000 requests and the main risk.",
+    "summary": "Extend the Lab 2A comparison with edge cases and cost, test the Lab 2B assistant on difficult tickets, then write a one-page model recommendation for a client manager.",
     "sections": [
       {
         "heading": "Overview",
-        "body": "Extend your Lab 2A eval set to 20 examples, including three edge cases, and re-run both models. Then write a one-page recommendation for a client manager covering which model to use, why, the expected cost per 1,000 requests and the main risk."
+        "body": "A model choice needs more than three easy test prompts. This assignment adds three edge cases to the eval set and adds cost to the results. It also checks how the assistant behaves on difficult tickets. The findings go into a short recommendation."
       },
       {
         "heading": "Details",
-        "body": "Deliverable: Eval set, results table and one-page recommendation (recommendation.md)\n\nDue: Before Session 4"
+        "body": "Deliverable: Eval set (eval_set.json), results table (results.csv) and one-page recommendation (recommendation.md)\n\nDue: Before Session 4"
       },
       {
         "heading": "Check-out question",
@@ -308,8 +308,8 @@
         "Grow a small eval set without changing the task type.",
         "Add edge cases that show where a model fails.",
         "Turn per-call token counts into a cost per 1,000 requests.",
-        "Write a recommendation a non-technical manager can act on.",
-        "Back every claim in the recommendation with a number from your results table."
+        "Test an assistant on tickets designed to break it.",
+        "Write a recommendation a non-technical manager can act on, backed by numbers."
       ],
       "checkpointQuestions": [
         "What evidence would convince a client the model is good enough?"
@@ -317,47 +317,47 @@
     }
   },
   "ai-engineering/lab-ingest-chunk-and-index": {
-    "summary": "Understand the RAG architecture and why messy document parsing decides retrieval quality.",
+    "summary": "Ingest three short PDF policies, split them into chunks, index them in ChromaDB and run one test query.",
     "sections": [
       {
         "heading": "Overview",
-        "body": "Understand the RAG architecture and why messy document parsing decides retrieval quality."
+        "body": "Retrieval quality starts with how documents are read and split. This lab turns three small policy PDFs into chunks, embeds them with text-embedding-3-small, stores them in a ChromaDB index and runs one question against it."
       }
     ],
     "typeExtras": {
       "objectives": [
-        "Split a few sample policy texts into chunks that still make sense",
-        "Build a searchable index and try one question against it",
-        "Judge whether the top match is actually useful for that question"
+        "Split sample policy PDFs into chunks.",
+        "Build a searchable ChromaDB index and run one question against it.",
+        "Judge whether the top match is useful for that question."
       ]
     }
   },
   "ai-engineering/lab-baseline-cited-rag": {
-    "summary": "Build a Q&A assistant over a policy corpus that cites sources and declines out-of-scope questions.",
+    "summary": "Build a small API that answers policy questions from the ChromaDB index, cites its sources and declines questions the documents do not cover.",
     "sections": [
       {
         "heading": "Overview",
-        "body": "Build a Q&A assistant over a policy corpus that cites sources and declines out-of-scope questions."
+        "body": "A RAG assistant retrieves the best chunks first, then answers only from them. This lab adds a POST /ask endpoint on the Lab 3A index that cites its sources and refuses when the policy text does not support an answer."
       }
     ],
     "typeExtras": {
       "objectives": [
-        "Answer questions using only text you retrieved from your index",
-        "Name the source chunk for every factual answer",
-        "Say you do not know when the documents do not support an answer"
+        "Answer questions using only text retrieved from the index.",
+        "Name the source chunk for every factual answer.",
+        "Refuse when the documents do not support an answer."
       ]
     }
   },
   "ai-engineering/assignment-chunking-comparison": {
-    "summary": "Take the policy index you built in Lab 3A and compare it with a second chunking strategy. Run the same 10 questions against both, record which chunks come back, and recommend one strategy with evidence. Also list the parsing and data-quality problems you found and how you handled them.",
+    "summary": "Compare two chunking strategies on the Lab 3A index, choose one with evidence, then confirm the Lab 3B Q&A API still cites and refuses correctly.",
     "sections": [
       {
         "heading": "Overview",
-        "body": "Take the policy index you built in Lab 3A and compare it with a second chunking strategy. Run the same 10 questions against both, record which chunks come back, and recommend one strategy with evidence. Also list the parsing and data-quality problems you found and how you handled them."
+        "body": "Build a second chunking strategy, run the same questions against both and record which chunks come back. An outdated policy file is added to show how a data-quality problem affects answers."
       },
       {
         "heading": "Details",
-        "body": "Deliverable: Comparison table, recommendation and problem list (chunking_report.md)\n\nDue: Before Session 5"
+        "body": "Deliverable: Question set (questions.json), results (results.csv) and report (chunking_report.md)\n\nDue: Before Session 5"
       },
       {
         "heading": "Check-out question",
@@ -369,8 +369,8 @@
         "Build two indexes from the same documents and compare them fairly.",
         "Write test questions with a known source, so retrieval can be checked.",
         "Judge a chunking strategy by the chunks it returns, not by the final answer.",
-        "Recognise and record parsing and data-quality problems in a document set.",
-        "Justify a design choice with evidence from your own results."
+        "Recognise and record data-quality problems in a document set.",
+        "Justify a design choice with evidence from the results."
       ],
       "checkpointQuestions": [
         "Which document in the corpus was hardest to parse, and why?"
@@ -378,47 +378,47 @@
     }
   },
   "ai-engineering/lab-hybrid-search-reranker": {
-    "summary": "Add BM25 and a reranker to the Policy Assistant and measure the change.",
+    "summary": "Combine keyword and vector search on the policy index, rerank the results and compare them with vector search alone.",
     "sections": [
       {
         "heading": "Overview",
-        "body": "Add BM25 and a reranker to the Policy Assistant and measure the change."
+        "body": "Build hybrid search by combining BM25 keyword search with vector search, then rerank the merged results so the best chunks come first. Two test questions show what changes compared with vector search alone."
       }
     ],
     "typeExtras": {
       "objectives": [
-        "Combine keyword search with vector search for the same question",
-        "Reorder the top matches before the model writes an answer",
-        "Compare one question before and after this change"
+        "Combine keyword search with vector search for the same question.",
+        "Reorder the top matches before the model reads them.",
+        "Compare the results before and after the change."
       ]
     }
   },
   "ai-engineering/lab-diagnose-rag-failures": {
-    "summary": "Use evaluation results to find and fix bad chunks, stale data and weak retrieval.",
+    "summary": "Break the policy assistant on purpose, find which layer failed, fix it and test again.",
     "sections": [
       {
         "heading": "Overview",
-        "body": "Use evaluation results to find and fix bad chunks, stale data and weak retrieval."
+        "body": "Break the policy assistant with two planted failures, a data failure and a prompt failure. A four-layer checklist (data, retrieval, prompt, model) shows which layer failed, and each fix is tested again."
       }
     ],
     "typeExtras": {
       "objectives": [
-        "Look at a wrong answer and decide if the problem is data, search, prompt, or the model",
-        "Fix one layer at a time and test again",
-        "Write a short note of what was wrong and what you changed"
+        "Look at a wrong answer and decide if the problem is data, retrieval, prompt or model.",
+        "Fix one layer at a time and test again.",
+        "Write a short note of what was wrong and what changed."
       ]
     }
   },
   "ai-engineering/assignment-rag-evaluation-report": {
-    "summary": "Measure your policy assistant, fix three failures and show before-and-after results in a short evaluation report. Then add a test proving that a restricted HR document never reaches a user who is not allowed to see it.",
+    "summary": "Score the policy assistant, record three fixes with before-and-after results, then prove a restricted HR document stays hidden from staff.",
     "sections": [
       {
         "heading": "Overview",
-        "body": "Measure your policy assistant, fix three failures and show before-and-after results in a short evaluation report. Then add a test proving that a restricted HR document never reaches a user who is not allowed to see it."
+        "body": "Score the policy assistant on six questions, record one fix for each of three layers (data, retrieval and prompt), then add a restricted HR file and a test that keeps it hidden from staff."
       },
       {
         "heading": "Details",
-        "body": "Deliverable: Evaluation report (eval_report.md) and the access-control test (test_access_control.py)\n\nDue: Before Session 6"
+        "body": "Deliverable: Evaluation report (eval_report.md) and access-control test (test_access_control.py)\n\nDue: Before Session 6"
       },
       {
         "heading": "Check-out question",
@@ -427,10 +427,9 @@
     ],
     "typeExtras": {
       "objectives": [
-        "Set a baseline for a RAG pipeline before changing anything.",
-        "Fix one failure per layer (data, retrieval, prompt) and measure each fix.",
-        "Report results as before-and-after numbers with a one-line cause.",
-        "Keep restricted documents out of retrieval by filtering on the user’s role.",
+        "Measure a RAG pipeline before changing anything.",
+        "Report each fix as a before-and-after score with a one-line cause.",
+        "Keep a restricted document away from users who are not allowed to see it.",
         "Write a test that fails when the protection is removed."
       ],
       "checkpointQuestions": [
@@ -439,51 +438,51 @@
     }
   },
   "ai-engineering/lab-langgraph-human-approval": {
-    "summary": "Add checkpointing and an approval step before a risky action.",
+    "summary": "Build a small LangGraph agent that pauses for a person's approval before it sends a summary email.",
     "sections": [
       {
         "heading": "Overview",
-        "body": "Add checkpointing and an approval step before a risky action."
+        "body": "Build a flow that answers a policy question, drafts a summary email and then stops. The email is sent only after a person types yes. A no ends the run without sending anything."
       }
     ],
     "typeExtras": {
       "objectives": [
-        "Map the agent as a simple flow with clear steps",
-        "Pause before a risky action until a person says yes or no",
-        "Continue safely after approval, or stop cleanly if the person says no"
+        "Map the agent as a simple flow with clear steps.",
+        "Pause before a risky action until a person says yes or no.",
+        "Continue after approval, or stop cleanly after a no."
       ]
     }
   },
   "ai-engineering/lab-agentic-rag-mini-loop": {
-    "summary": "Make retrieval a tool the agent can grade, rewrite and retry.",
+    "summary": "Make retrieval a step the agent can grade, rewrite once and retry, then answer or refuse.",
     "sections": [
       {
         "heading": "Overview",
-        "body": "Make retrieval a tool the agent can grade, rewrite and retry."
+        "body": "Build a retrieval loop that checks its own results. If the retrieved text is weak, the question is rewritten once and searched again. If it is still weak, the assistant refuses, so the loop never runs forever."
       }
     ],
     "typeExtras": {
       "objectives": [
-        "Score whether the retrieved text is good enough for the question",
-        "Rewrite the question once when the retrieved text is weak",
-        "Answer or refuse after that single rewrite so the loop does not run forever"
+        "Score whether the retrieved text is good enough for the question.",
+        "Rewrite the question once when the retrieved text is weak.",
+        "Answer or refuse after that single rewrite."
       ]
     }
   },
   "ai-engineering/assignment-choose-workflow-or-agent": {
-    "summary": "Decide whether three client use cases need a workflow or an agent, and justify each in one paragraph. Then add a third tool to your policy agent and test it on two questions.",
+    "summary": "Decide whether three client use cases need a workflow or an agent, then add a read-only tool to the policy agent and test it.",
     "sections": [
       {
         "heading": "Overview",
-        "body": "Decide whether three client use cases need a workflow or an agent, and justify each in one paragraph. Then add a third tool to your policy agent and test it on two questions."
+        "body": "Not every task needs an agent. Decide whether three client use cases need a fixed workflow or an agent that chooses its own steps, and justify each choice in one paragraph. Then add a third tool to the Lab 5A agent and check that it is used only when needed."
       },
       {
         "heading": "Details",
-        "body": "Deliverable: Decision paragraphs (decisions.md) and the updated agent\n\nDue: Before Session 7"
+        "body": "Deliverable: Decision paragraphs (decisions.md) and the updated agent.py\n\nDue: Before Session 7"
       },
       {
         "heading": "The three client use cases",
-        "body": "1. **Invoice intake (finance team)**: Every day about 200 supplier invoices arrive as PDFs. Each must be read, checked against five fixed rules and posted to the accounting system. Mistakes cost money, and auditors want the same steps every time.\n2. **Employee help desk (HR and IT)**: Staff ask open questions such as “Can I work from Portugal for two weeks, and how many working days is that?” Answering may need policy search, date maths, a ticket lookup or none of these. The questions vary every day.\n3. **Vendor contract review (legal team)**: A contract comes in. The system must extract the key clauses, compare them with a checklist, and draft a summary email for a lawyer to approve. The order of steps is the same each time, but some clauses need extra reading."
+        "body": "1. **Invoice intake (finance):** About 200 supplier invoices arrive daily. Each is read, checked against five fixed rules and posted. The steps are the same every time, and mistakes cost money.\n2. **Employee help desk (HR and IT):** Staff ask open questions that may need a policy search, date maths, a ticket lookup or nothing. The questions vary every day.\n3. **Vendor contract review (legal):** A contract is read, key clauses are compared with a checklist, and a summary email is drafted for a lawyer to approve. The order of steps is the same, but some clauses need extra reading."
       },
       {
         "heading": "Check-out question",
@@ -494,8 +493,7 @@
       "objectives": [
         "Tell a fixed workflow from an agent that chooses its own steps.",
         "Justify the choice using step predictability, risk and cost.",
-        "Add a tool to an agent with a clear description and a narrow job.",
-        "Check from a trace that the agent called the new tool only when it should.",
+        "Add a read-only tool with a clear, narrow description.",
         "Keep the approval gate working after the agent changes."
       ],
       "checkpointQuestions": [
@@ -504,43 +502,42 @@
     }
   },
   "ai-engineering/lab-red-team-guardrails": {
-    "summary": "Add at least two guardrails, then attack each other’s agents and fix what breaks.",
+    "summary": "Attack the policy agent with two injection attempts, add two guardrails and confirm a normal question still works.",
     "sections": [
       {
         "heading": "Overview",
-        "body": "Add at least two guardrails, then attack each other’s agents and fix what breaks."
+        "body": "Attack the policy agent with two realistic prompt injections, add two guardrails that block them, and check that a normal policy question still gets a useful, cited answer. A partner then tries one more attack."
       }
     ],
     "typeExtras": {
       "objectives": [
-        "Try two realistic attacks that try to make the agent ignore its rules",
-        "Add two protections that block those attacks",
-        "Confirm normal IT questions still get useful answers"
+        "Try two realistic attacks that try to make the agent ignore its rules.",
+        "Add two protections that block those attacks.",
+        "Confirm normal policy questions still get useful answers."
       ]
     }
   },
   "ai-engineering/assignment-threat-model": {
-    "summary": "Write a threat model table for your policy agent, based on attacks you actually run. Then fix at least one weakness from your red-team round and show the test that now passes.",
+    "summary": "Test the policy agent with four more attacks, record the findings in a threat model table and fix one weakness with a test.",
     "sections": [
       {
         "heading": "Overview",
-        "body": "Write a threat model table for your policy agent, based on attacks you actually run. Then fix at least one weakness from your red-team round and show the test that now passes."
+        "body": "Test the policy agent with four attacks beyond the two from Lab 6, and record what happens in a threat model table. Then fix one weakness and show a test that fails before the fix and passes after it."
       },
       {
         "heading": "Details",
-        "body": "Deliverable: Threat model (threat_model.md) and the fix, with its test\n\nDue: Before Session 8"
+        "body": "Deliverable: Threat model (threat_model.md), the fix and its test (test_guardrail.py)\n\nDue: Before Session 8"
       },
       {
         "heading": "Check-out question",
-        "body": "**What is the worst action your agent could take, and what stops it?**"
+        "body": "What is the worst action your agent could take, and what stops it?"
       }
     ],
     "typeExtras": {
       "objectives": [
         "Turn red-team results into a threat model with attack, impact, mitigation and status.",
-        "Test attacks beyond the two you were given.",
         "Judge how much a guardrail really protects.",
-        "Fix a weakness and prove it with a test that fails before the fix and passes after.",
+        "Fix a weakness and prove it with a test that fails first and then passes.",
         "Report what is still open, honestly."
       ],
       "checkpointQuestions": [
@@ -549,27 +546,27 @@
     }
   },
   "ai-engineering/lab-mcp-server": {
-    "summary": "Build a Python MCP server that exposes policy search and a ticketing tool, and connect it to the agent.",
+    "summary": "Build a Python MCP server that exposes policy search and a read-only manifest, then connect it to an MCP client.",
     "sections": [
       {
         "heading": "Overview",
-        "body": "Build a Python MCP server that exposes policy search and a ticketing tool, and connect it to the agent."
+        "body": "Build an MCP server that shares the policy index as a search tool and a read-only resource. A client can then call the tool without knowing how the index works. Bad requests are rejected before the tool runs."
       }
     ],
     "typeExtras": {
       "objectives": [
-        "Expose a search tool and a read-only resource through an MCP server",
-        "Connect that server to your agent so it can call the tool",
-        "Check inputs before the tool runs so bad requests are rejected"
+        "Expose a search tool and a read-only resource through an MCP server.",
+        "Connect the server to an MCP client so it can call the tool.",
+        "Check inputs before the tool runs so bad requests are rejected."
       ]
     }
   },
   "ai-engineering/assignment-package-and-present": {
-    "summary": "Finish your policy and support assistant as a project another engineer could pick up. Write the README, draw the architecture, gather your evaluation results and complete a production checklist. Then give a 10-minute walkthrough for a team lead that includes the known limits and what you would do next.",
+    "summary": "Package the policy and support assistant so another engineer can run it, then present it to a team lead.",
     "sections": [
       {
         "heading": "Overview",
-        "body": "Finish your policy and support assistant as a project another engineer could pick up. Write the README, draw the architecture, gather your evaluation results and complete a production checklist. Then give a 10-minute walkthrough for a team lead that includes the known limits and what you would do next."
+        "body": "Package the assistant as a project another engineer can pick up: a README, an architecture diagram and a production checklist. Then give a 10-minute walkthrough that includes the known limits and the next steps."
       },
       {
         "heading": "Details",
@@ -577,13 +574,13 @@
       },
       {
         "heading": "Check-out question",
-        "body": "**What would you change before a client uses this system?**"
+        "body": "What would you change before a client uses this system?"
       }
     ],
     "typeExtras": {
       "objectives": [
         "Package a working AI system so someone else can run it from a clean copy.",
-        "Show the whole system in one diagram: LLM, RAG, agent, guardrails and MCP tool.",
+        "Show the whole system in one diagram.",
         "Bring evaluation evidence together instead of describing it from memory.",
         "Judge production readiness with a checklist, and mark what is not done.",
         "Present a system to a team lead, including its limits."
@@ -594,18 +591,22 @@
     }
   },
   "ai-engineering/assignment-integrated-policy-assistant": {
-    "summary": "Solo Stage 2 capstone: document one integrated policy assistant using your policy_corpus/, cited RAG, hybrid retrieval, approval gate, guardrails, and MCP search.",
+    "summary": "Document one integrated policy assistant in a single file, using real results from the Stage 2 labs.",
     "sections": [
       {
         "heading": "Overview",
-        "body": "Complete seven copy-paste steps in the exercise panel. Each step must include concrete artifacts (model id, HTTP JSON, file names, traces, or MCP snippet) from your Stage 2 labs — not generic prose."
+        "body": "Complete seven short steps. Each step adds one section to capstone.md with real results from the Stage 2 labs, such as a model id, an HTTP reply, a trace or a table, and not general text."
+      },
+      {
+        "heading": "Details",
+        "body": "Deliverable: capstone.md"
       }
     ],
     "typeExtras": {
       "objectives": [
-        "Name your default chat model with eval evidence",
-        "Show cited and refusal answers on policy_corpus/",
-        "Tie hybrid, diagnose, approval, guardrails, and MCP into one write-up"
+        "Name the default chat model with evidence from the eval results.",
+        "Show cited and refused answers on the policy PDFs.",
+        "Tie hybrid search, debugging, approval, guardrails and MCP into one write-up."
       ]
     }
   }

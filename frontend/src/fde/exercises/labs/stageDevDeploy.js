@@ -1,53 +1,74 @@
 import { GLOSSARY_COMMON, GLOSSARY_DOCKER, TUTOR_START, troubleshootingEntry } from '../labShared'
-import {
-  INTRO_TODO_LAB4,
-  INTRO_TODO_LAB5,
-  INTRO_TODO_LAB6,
-  INTRO_TODO_LAB7A,
-  INTRO_TODO_LAB7B,
-  INTRO_TODO_LAB8A,
-  INTRO_TODO_LAB8B,
-  PROMPT_TODO_DEV_BACKEND,
-  PROMPT_TODO_CURL_SMOKE,
-  PROMPT_TODO_DEV_UI,
-  PROMPT_TODO_LOCAL_RUN,
-  PROMPT_TODO_DOCKER_VERIFY,
-  PROMPT_TODO_DOCKER_COMPOSE,
-  PROMPT_TODO_RENDER_POC,
-  PROMPT_TODO_RENDER_PROD,
-  PROMPT_TODO_RUNBOOK,
-  PROMPT_TODO_RUNBOOK_DRILL,
-  PROMPT_TODO_LANGFUSE,
-  PROMPT_TODO_HANDOVER,
-} from './promptTodo'
 
 export const stageDevDeployLabs = {
   'development/lab-4-application-skeleton': {
     track: 'todo',
     type: 'prompt-lab',
-    title: 'Lab 4: Todo FastAPI backend',
+    title: 'Lab 11: Todo FastAPI backend',
     duration: '100 min',
     prerequisites: ['Architecture lab'],
     beforeYouStart: TUTOR_START,
     glossary: GLOSSARY_COMMON,
-    labContext: INTRO_TODO_LAB4,
+    labContext:
+      'You will generate a minimal Todo API with two task endpoints (GET /tasks and POST /tasks), prove it with curl, then open the SQLite file to see the stored tasks.',
     whatYouLearn: [
-      'Generate a minimal FastAPI Todo backend with /health and /tasks from prompts.',
+      'Generate a minimal FastAPI Todo backend with GET /tasks and POST /tasks from prompts.',
       'Prove the API works with curl smoke tests, not only by reading code.',
       'Fix import, routing, and validation issues with small targeted prompts.',
       'Carry the same backend skeleton approach to Ask IT in the assignment.',
     ],
     prompts: [
-      { step: 1, label: 'Backend', whereToRun: 'AI tool', prompt: PROMPT_TODO_DEV_BACKEND },
-      { step: 2, label: 'curl smoke tests', whereToRun: 'Terminal', prompt: PROMPT_TODO_CURL_SMOKE },
+      {
+        step: 1,
+        label: 'Backend',
+        whereToRun: 'AI tool',
+        prompt: `## Context
+This step generates a minimal Todo API with two task endpoints, then proves it with curl.
+
+## Task
+Create a minimal FastAPI Todo backend in main.py with GET /tasks and POST /tasks, Pydantic models and SQLite storage in a table named tasks. POST /tasks returns the created task with status 201.
+
+## Outcome
+- How to start the server.
+- curl GET /tasks returns the list of tasks.
+- curl POST /tasks creates a task.`,
+      },
+      {
+        step: 2,
+        label: 'curl smoke tests',
+        whereToRun: 'AI tool',
+        prompt: `## Context
+A running Todo API needs quick proof that it works.
+
+## Task
+Give 2 curl commands: POST /tasks with a title, and GET /tasks. Give each for Mac/Linux and for Windows PowerShell (curl.exe).
+
+## Outcome
+- One line per command.
+- Expected HTTP status for each.`,
+      },
     ],
-    acceptanceCriteria: ['/health returns 200.', 'POST /tasks creates a task.'],
+    executionSteps: [
+      '**[Antigravity]** Paste the Step 1 prompt and send it.\n\n*Outcome:* `main.py` appears in the project folder (Checkpoint 1).',
+      '**[Manual]** Open a terminal in the project folder, then create the environment, install the libraries and start the API:\n- `python -m venv .venv`\n- Windows (PowerShell): `.venv\\Scripts\\Activate.ps1`\n- Mac/Linux: `source .venv/bin/activate`\n- `pip install fastapi uvicorn`\n- `uvicorn main:app --reload`\n\n*Outcome:* The terminal shows "Application startup complete". Leave this terminal open.',
+      '**[Antigravity]** Paste the Step 2 prompt and send it.\n\n*Outcome:* Two curl commands appear, each with its expected status.',
+      '**[Manual]** Open a second terminal and run these three requests:\n- `POST /tasks` with the title "Buy milk".\n- `GET /tasks`.\n- `POST /tasks` again with `{}` as the body and no title.\n\n*Outcome:* The first returns 201 with the new task and an `id`. The second returns 200 with a list that contains the task. The third returns 422 with `{"detail":` and a message that `title` is missing (Checkpoint 2).',
+      '**[Manual]** Open DB Browser for SQLite (a free download from sqlitebrowser.org if it is not installed). Choose File → Open Database and select the SQLite file in the project folder, such as `todo.db`. Open the Browse Data tab and choose the `tasks` table.\n\n*Outcome:* The table shows one row for "Buy milk" with `id` 1 and `done` 0 (false). The invalid request from step 4 created no row (Checkpoint 3).',
+      '**[Antigravity]** Only if a step above showed an error: paste the full error and ask for the smallest possible fix, then repeat the step that failed.\n\n*Outcome:* The server starts and the requests return the expected status.',
+      '**[Manual]** Close DB Browser for SQLite, then press `Ctrl+C` in the server terminal.\n\n*Outcome:* The server stops.',
+    ],
+    acceptanceCriteria: [
+      'GET /tasks returns 200 with the list of tasks.',
+      'POST /tasks creates a task and returns 201.',
+      'Bad input returns 422 with a clear error.',
+      'The created task shows as a row in the tasks table in DB Browser for SQLite.',
+    ],
     troubleshooting: [
       troubleshootingEntry(
-        'GET /health returns 404',
-        'Health route missing.',
-        'Wrong path.',
-        'Add GET /health returning {"status":"ok"}. Show one curl that returns 200.',
+        'GET /tasks returns 404',
+        'Tasks route missing or not registered.',
+        'Wrong route path.',
+        'Ensure GET /tasks is registered on the FastAPI app instance.',
       ),
       troubleshootingEntry(
         'POST /tasks returns 422',
@@ -67,38 +88,65 @@ export const stageDevDeployLabs = {
   'development/lab-5-connect-rag-and-test': {
     track: 'todo',
     type: 'prompt-lab',
-    title: 'Lab 5: Todo React UI',
+    title: 'Lab 12: Todo React UI',
     duration: '100 min',
-    prerequisites: ['Lab 4'],
+    prerequisites: ['Lab 11'],
     beforeYouStart: TUTOR_START,
     glossary: GLOSSARY_COMMON,
-    labContext: INTRO_TODO_LAB5,
+    labContext: 'Add task works in the browser against your Todo API.',
     whatYouLearn: [
       'Connect a React Todo UI to your FastAPI backend with fetch calls.',
       'Resolve CORS and empty-list bugs using browser errors and fix prompts.',
-      'Verify add-task and list-task flows end to end with a screenshot.',
       'Apply the same front-to-back integration steps on Ask IT later.',
+      'Verify add-task and list-task flows end to end with a screenshot.',
     ],
-    prompts: [{ step: 1, label: 'Frontend', whereToRun: 'AI tool', prompt: PROMPT_TODO_DEV_UI }],
-    acceptanceCriteria: ['UI loads tasks from API.', 'Add task works end to end.'],
+    prompts: [
+      {
+        step: 1,
+        label: 'Build the React UI',
+        whereToRun: 'AI tool',
+        prompt: `## Context
+The Todo API from Lab 11 runs at http://localhost:8000 with two routes: GET /tasks and POST /tasks. The UI is a new Vite + React project in a folder named todo-ui.
+
+## Task
+Create a simple task list page. On load, call GET /tasks and show every task title. An input and an Add button call POST /tasks with {"title": ...}, then reload the list. Read the API address from VITE_API_URL and fall back to http://localhost:8000. Show any request error on the page. No toggle or delete, since the API has no such routes.
+
+## Outcome
+npm run dev shows the page. Adding one task updates the list.`,
+      },
+    ],
+    executionSteps: [
+      '**[Antigravity] Generate the UI**\nPaste the Step 1 prompt and generate the todo-ui project.\n\n*Outcome:* Folder todo-ui with package.json, index.html and src/App.jsx.',
+      '**[Manual] Start the backend**\nIn the Lab 11 folder, run `uvicorn main:app --reload`.\n\n*Outcome:* Terminal shows `Uvicorn running on http://127.0.0.1:8000`.',
+      '**[Manual] Start the UI**\nIn a second terminal, inside todo-ui, run `npm install`, then `npm run dev`.\n\n*Outcome:* Terminal shows `Local: http://localhost:5173/` (Checkpoint: the Vite URL is printed).',
+      '**[Manual] Add a task in the browser**\nOpen `http://localhost:5173`, type a task and click Add.\n\n*Outcome:* The task appears in the list (Checkpoint: the list updates without a page refresh).',
+      '**[Antigravity] Fix CORS (only if needed)**\nIf the page shows "Failed to fetch" or the browser console shows a CORS error, paste the full error and ask for the smallest fix that allows `http://localhost:5173` on the backend. Restart the backend and reload the page.\n\n*Outcome:* The task list loads with no error.',
+      '**[Manual] Check the data in SQLite**\nOpen `todo.db` in DB Browser for SQLite, then Browse Data → tasks.\n\n*Outcome:* The task added in the browser is a new row (Checkpoint: the UI and the database show the same tasks).',
+      '**[Manual] Take a screenshot**\nCapture the page with the added task.\n\n*Outcome:* Screenshot saved as proof.',
+      '**[Manual] Stop both servers**\nPress Ctrl+C in both terminals.\n\n*Outcome:* Both terminals are back at the prompt.',
+    ],
+    acceptanceCriteria: [
+      'The UI loads tasks from the API.',
+      'Add task works end to end in the browser.',
+    ],
     troubleshooting: [
       troubleshootingEntry(
         'CORS or Failed to fetch',
-        'Browser cannot call API.',
-        'CORS not configured.',
-        'React on :5173 cannot call /tasks. Add CORSMiddleware for that origin only.',
+        'The Lab 11 backend has no CORS setting yet.',
+        'Backend blocks cross-origin requests from the React dev server.',
+        'Run step 5 to configure CORSMiddleware on the backend for http://localhost:5173.',
       ),
       troubleshootingEntry(
         'Tasks list stays empty',
         'GET result not shown.',
-        'Wrong URL or state.',
-        'Fix fetch URL and state update when GET /tasks returns data. Minimal diff.',
+        'Backend is not running or wrong endpoint URL.',
+        'Confirm the backend is running and http://localhost:8000/tasks opens in the browser.',
       ),
       troubleshootingEntry(
         'Add task does nothing',
-        'No POST sent.',
-        'Handler not wired.',
-        'Wire Add to POST /tasks with {title}. Show the fixed handler only.',
+        'Add button click does not submit or fails silently.',
+        'Handler not wired or API request failed.',
+        'Check the browser console and the backend terminal for the error, then paste it into Antigravity.',
       ),
     ],
   },
@@ -106,12 +154,13 @@ export const stageDevDeployLabs = {
   'mvp-poc-local-render/lab-6-poc-hardening': {
     track: 'todo',
     type: 'prompt-lab',
-    title: 'Lab 6: Todo deploy — local, Docker, Render',
+    title: 'Lab 13: Todo deploy — local, Docker, Render',
     duration: '40 min',
-    prerequisites: ['Lab 5'],
+    prerequisites: ['Lab 12'],
     beforeYouStart: `${TUTOR_START} Learn Docker hello-world before containerizing Todo.`,
     glossary: [...GLOSSARY_COMMON, ...GLOSSARY_DOCKER],
-    labContext: INTRO_TODO_LAB6,
+    labContext:
+      'You will run Todo on your laptop, then in Docker, then prepare a Render POC checklist—with tutor help when stuck.',
     whatYouLearn: [
       'Run Todo locally from steps you can hand to another developer.',
       'Prove Docker with hello-world, then run the app with docker compose.',
@@ -119,10 +168,66 @@ export const stageDevDeployLabs = {
       'Prepare Render POC config—the same path repeats on Ask IT in your assignment.',
     ],
     prompts: [
-      { step: 1, label: 'Local run', whereToRun: 'AI tool', prompt: PROMPT_TODO_LOCAL_RUN },
-      { step: 2, label: 'Docker hello-world', whereToRun: 'Terminal', prompt: PROMPT_TODO_DOCKER_VERIFY },
-      { step: 3, label: 'Docker compose', whereToRun: 'AI tool', prompt: PROMPT_TODO_DOCKER_COMPOSE },
-      { step: 4, label: 'Render POC', whereToRun: 'AI tool', prompt: PROMPT_TODO_RENDER_POC },
+      {
+        step: 1,
+        label: 'Local run',
+        whereToRun: 'AI tool',
+        prompt: `## Context
+Local run step in the deploy lab. Todo is a Python 3.11 FastAPI app with SQLite and an optional Vite React UI.
+
+## Task
+Write local run steps for Todo: start API and UI on a fresh laptop.
+
+## Outcome
+- Numbered steps
+- One verify command for /health and GET /tasks
+- What success looks like`,
+      },
+      {
+        step: 2,
+        label: 'Docker hello-world',
+        whereToRun: 'Terminal',
+        prompt: `## Context
+Docker Desktop is installed on Windows or Mac. Docker is checked with hello-world before Todo is containerized.
+
+## Task
+List commands to check Docker and run hello-world on Windows or Mac.
+
+## Outcome
+- docker --version
+- docker run hello-world
+- What you should see if it worked`,
+      },
+      {
+        step: 3,
+        label: 'Docker compose',
+        whereToRun: 'AI tool',
+        prompt: `## Context
+Containerize Todo so API and optional UI start together. The Todo monorepo has an API, an optional web app, and a database service.
+
+## Task
+Plan Docker setup for the Todo monorepo: API, optional web, database service.
+
+## Outcome
+- What each container does
+- How to start with docker compose
+- curl /health from outside`,
+      },
+      {
+        step: 4,
+        label: 'Render POC',
+        whereToRun: 'AI tool',
+        prompt: `## Context
+Prepare Todo for a Render POC deploy. The API exposes /health for the health check.
+
+## Task
+Draft Render POC config and a short deploy checklist for Todo.
+
+## Outcome
+- healthCheckPath /health
+- Env vars listed (no secrets in git)
+- 5-step deploy and smoke URL check`,
+      },
     ],
     acceptanceCriteria: [
       'Todo runs locally and in Docker.',
@@ -154,20 +259,41 @@ export const stageDevDeployLabs = {
   'production-deployment/lab-7a-production-deployment': {
     track: 'todo',
     type: 'prompt-lab',
-    title: 'Lab 7A: Todo production Render',
+    title: 'Lab 14: Todo production Render',
     duration: '12 min',
     prerequisites: ['Todo Render POC lab'],
     beforeYouStart: TUTOR_START,
     glossary: GLOSSARY_COMMON,
-    labContext: INTRO_TODO_LAB7A,
+    labContext:
+      'You will tighten Todo deploy settings for a pilot: secrets, CORS, and a production checklist including rollback.',
     whatYouLearn: [
       'Harden Render config: secrets outside git, explicit CORS origin, health checks.',
       'Write a production checklist that includes rollback steps.',
       'Spot POC shortcuts that are unsafe for real users.',
       'Repeat this checklist pattern for Ask IT in the production assignment.',
     ],
-    prompts: [{ step: 1, label: 'Production config', whereToRun: 'AI tool', prompt: PROMPT_TODO_RENDER_PROD }],
-    acceptanceCriteria: ['Secrets not in git', 'Exact FRONTEND_ORIGIN', 'Rollback steps'],
+    prompts: [
+      {
+        step: 1,
+        label: 'Production config',
+        whereToRun: 'AI tool',
+        prompt: `## Context
+Todo runs on Render from the Stage 7 POC. Deploy settings are tightened for a pilot: secrets, CORS, and a production checklist including rollback.
+
+## Task
+Upgrade Todo Render settings for pilot plus a production checklist (health, secrets, rollback).
+
+## Outcome
+- Secrets not in git
+- Exact frontend origin for CORS
+- Rollback steps numbered`,
+      },
+    ],
+    acceptanceCriteria: [
+      'Secrets not in git',
+      'Exact FRONTEND_ORIGIN',
+      'Rollback steps',
+    ],
     troubleshooting: [
       troubleshootingEntry('API key in render.yaml', 'Secret in git.', 'Inlined value.', 'Remove key; note sync:false for secrets.'),
       troubleshootingEntry('CORS wildcard', 'Too open.', 'Dev wildcard copied.', 'Set FRONTEND_ORIGIN to exact Todo web URL.'),
@@ -175,78 +301,44 @@ export const stageDevDeployLabs = {
     ],
   },
 
-  'production-deployment/lab-7b-runbook-and-outage-drill': {
-    track: 'todo',
-    type: 'prompt-lab',
-    title: 'Lab 7B: Todo runbook + drill',
-    duration: '10 min',
-    prerequisites: ['Lab 7A'],
-    beforeYouStart: TUTOR_START,
-    glossary: GLOSSARY_COMMON,
-    labContext: INTRO_TODO_LAB7B,
-    whatYouLearn: [
-      'Write a one-page runbook another person can follow during an outage.',
-      'Practice one simulated incident and record the fix prompt you used.',
-      'Separate symptoms, checks, and rollback in clear numbered steps.',
-      'Reuse this runbook structure for Ask IT operations.',
-    ],
-    prompts: [
-      { step: 1, label: 'Runbook', whereToRun: 'AI tool', prompt: PROMPT_TODO_RUNBOOK },
-      { step: 2, label: 'Outage drill', whereToRun: 'AI tool', prompt: PROMPT_TODO_RUNBOOK_DRILL },
-    ],
-    acceptanceCriteria: ['Rollback section exists', 'Drill mentions one fix prompt'],
-    troubleshooting: [
-      troubleshootingEntry('Runbook is Ask IT not Todo', 'Wrong app.', 'Context leak.', 'Todo service names only; /health on Todo API.'),
-      troubleshootingEntry('Drill has no fix prompt', 'Loop not practiced.', 'Skipped drill.', 'Add the exact follow-up prompt used when API returned 503.'),
-      troubleshootingEntry('Incidents too vague', 'Cannot act.', 'No steps.', 'Add numbered steps for DB down and rate limits.'),
-    ],
-  },
-
   'enterprise-ai-fde/lab-8a-observability-and-eval-evidence': {
     track: 'todo',
     type: 'prompt-lab',
-    title: 'Lab 8A: Todo tracing (Langfuse)',
+    title: 'Lab 15: Todo tracing (Langfuse)',
     duration: '30 min',
-    prerequisites: ['Lab 7A'],
+    prerequisites: ['Lab 14'],
     beforeYouStart: TUTOR_START,
     glossary: [...GLOSSARY_COMMON, { term: 'Langfuse', meaning: 'Trace and score LLM/API calls.' }],
-    labContext: INTRO_TODO_LAB8A,
+    labContext:
+      'You will plan how to trace Todo API requests (for example with Langfuse) without pasting your whole app.',
     whatYouLearn: [
       'Define which Todo API spans you would trace (validation, DB write, etc.).',
       'List Langfuse env vars and flush behavior without exposing secrets.',
       'Connect tracing to debugging real latency and failure issues.',
       'Scale the same observability plan to Ask IT in the enterprise stage.',
     ],
-    prompts: [{ step: 1, label: 'Tracing plan', whereToRun: 'AI tool', prompt: PROMPT_TODO_LANGFUSE }],
+    prompts: [
+      {
+        step: 1,
+        label: 'Tracing plan',
+        whereToRun: 'AI tool',
+        prompt: `## Context
+A plan for tracing Todo API requests, for example with Langfuse. Only setup notes are needed, not the whole app.
+
+## Task
+Describe how to trace Todo POST /tasks with Langfuse (spans: validate, db_write, total_ms)—setup notes only, not full app paste.
+
+## Outcome
+- Env vars to set
+- Mention flush before exit
+- What to see in the dashboard`,
+      },
+    ],
     acceptanceCriteria: ['validate + db_write spans named', 'flush mentioned'],
     troubleshooting: [
       troubleshootingEntry('Empty dashboard', 'No events.', 'Missing keys or flush.', 'List LANGFUSE env vars and flush() before exit.'),
       troubleshootingEntry('Full app pasted in doc', 'Too much code.', 'Open prompt.', 'Setup notes only—implement from bullets yourself.'),
       troubleshootingEntry('/ask instead of /tasks', 'Wrong endpoint.', 'Ask IT habit.', 'Instrument POST /tasks only for Todo.'),
-    ],
-  },
-
-  'enterprise-ai-fde/lab-8b-sponsor-readout-and-handover': {
-    track: 'todo',
-    type: 'prompt-lab',
-    title: 'Lab 8B: Todo handover (tutor)',
-    duration: '25 min',
-    prerequisites: ['Lab 8A'],
-    beforeYouStart: TUTOR_START,
-    glossary: GLOSSARY_COMMON,
-    labContext: INTRO_TODO_LAB8B,
-    whatYouLearn: [
-      'Assemble a handover doc with sponsor bullets, URLs, and known limits.',
-      'Write for a non-technical reader at the top and technical detail below.',
-      'Use real deploy URLs from earlier labs, not localhost placeholders.',
-      'Use this Todo handover as the template for the full Ask IT package assignment.',
-    ],
-    prompts: [{ step: 1, label: 'Handover', whereToRun: 'AI tool', prompt: PROMPT_TODO_HANDOVER }],
-    acceptanceCriteria: ['5 sponsor bullets', 'Real URLs not localhost', 'Limits section'],
-    troubleshooting: [
-      troubleshootingEntry('No sponsor bullets', 'Too technical.', 'Skipped summary.', 'Add 5 non-technical bullets at top.'),
-      troubleshootingEntry('Ask IT content', 'Wrong product.', 'Wrong context.', 'Todo handover only; no RAG/triage.'),
-      troubleshootingEntry('localhost URLs', 'Not deployable.', 'Placeholder left.', 'Use Render Todo URLs from Labs 6–7.'),
     ],
   },
 }

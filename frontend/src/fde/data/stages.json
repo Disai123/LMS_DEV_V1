@@ -121,6 +121,12 @@
           "minutes": 60
         },
         {
+          "slug": "python-basics",
+          "type": "read",
+          "title": "Python basics",
+          "minutes": 20
+        },
+        {
           "slug": "python-essentials-and-environment-setup",
           "type": "read",
           "title": "Python essentials and environment setup",
@@ -152,6 +158,12 @@
         }
       ],
       "practise": [
+        {
+          "slug": "lab-0-python-basics",
+          "type": "lab",
+          "title": "Lab 0: Python basics",
+          "minutes": 40
+        },
         {
           "slug": "lab-fastapi-simple-api",
           "type": "lab",
@@ -388,7 +400,7 @@
         {
           "slug": "assignment-integrated-policy-assistant",
           "type": "assignment",
-          "title": "Assignment: Integrated policy assistant (Stage 2 capstone)",
+          "title": "Capstone: Integrated policy assistant",
           "minutes": 60
         }
       ]
@@ -445,13 +457,13 @@
         {
           "slug": "lab-1-discovery-and-brd",
           "type": "lab",
-          "title": "Lab 1: Todo discovery and BRD",
+          "title": "Lab 8: Todo discovery and BRD",
           "minutes": 12
         },
         {
           "slug": "one-page-brd-and-discovery-questions",
           "type": "assignment",
-          "title": "One-page BRD and discovery questions",
+          "title": "Assignment 8: Ask IT BRD and discovery questions",
           "minutes": 8
         }
       ]
@@ -508,13 +520,13 @@
         {
           "slug": "lab-2-wireframe-ask-it",
           "type": "lab",
-          "title": "Lab 2: Todo UI/UX brief",
+          "title": "Lab 9: Todo UI/UX brief",
           "minutes": 12
         },
         {
           "slug": "revise-the-flow-and-wireframes",
           "type": "assignment",
-          "title": "Revise the flow and wireframes",
+          "title": "Assignment 9: Revise the flow and wireframes",
           "minutes": 8
         }
       ]
@@ -571,13 +583,13 @@
         {
           "slug": "lab-3-diagram-tags-cost-and-adr",
           "type": "lab",
-          "title": "Lab 3: Todo architecture and ADR",
+          "title": "Lab 10: Todo architecture and ADR",
           "minutes": 12
         },
         {
           "slug": "update-the-architecture-pack",
           "type": "assignment",
-          "title": "Update the architecture pack",
+          "title": "Assignment 10: Update the architecture pack",
           "minutes": 8
         }
       ]
@@ -665,25 +677,25 @@
         {
           "slug": "lab-4-application-skeleton",
           "type": "lab",
-          "title": "Lab 4: Todo FastAPI backend",
+          "title": "Lab 11: Todo FastAPI backend",
           "minutes": 100
         },
         {
           "slug": "startup-instructions-and-tests",
           "type": "assignment",
-          "title": "Startup instructions and tests",
+          "title": "Assignment 11: Startup instructions and tests",
           "minutes": 85
         },
         {
           "slug": "lab-5-connect-rag-and-test",
           "type": "lab",
-          "title": "Lab 5: Todo React UI",
+          "title": "Lab 12: Todo React UI",
           "minutes": 100
         },
         {
           "slug": "fix-a-failed-test-and-rerun",
           "type": "assignment",
-          "title": "Fix a failed test and rerun",
+          "title": "Assignment 12: Fix a failed test and rerun",
           "minutes": 75
         }
       ]
@@ -746,13 +758,13 @@
         {
           "slug": "lab-6-poc-hardening",
           "type": "lab",
-          "title": "Lab 6: Todo deploy (local, Docker, Render)",
+          "title": "Lab 13: Todo deploy (local, Docker, Render)",
           "minutes": 40
         },
         {
           "slug": "staging-checklist-and-pilot-plan",
           "type": "assignment",
-          "title": "Staging checklist and pilot plan",
+          "title": "Assignment 13: Staging checklist and pilot plan",
           "minutes": 20
         }
       ]
@@ -803,19 +815,13 @@
         {
           "slug": "lab-7a-production-deployment",
           "type": "lab",
-          "title": "Lab 7A: Todo production on Render",
+          "title": "Lab 14: Todo production on Render",
           "minutes": 12
-        },
-        {
-          "slug": "lab-7b-runbook-and-outage-drill",
-          "type": "lab",
-          "title": "Lab 7B: Todo runbook and drill",
-          "minutes": 10
         },
         {
           "slug": "runbook-and-pre-rollout-checklist",
           "type": "assignment",
-          "title": "Runbook and pre-rollout checklist",
+          "title": "Assignment 14: Runbook and pre-rollout checklist",
           "minutes": 8
         }
       ]
@@ -828,7 +834,7 @@
       "weeksLabel": "Section 2",
       "sectionLabel": "Section 2",
       "hours": 2,
-      "cardBlurb": "Todo labs: traces and handover template. Ask IT assignment: security pack and sponsor readout.",
+      "cardBlurb": "Todo lab: traces and eval snapshot. Ask IT assignment: security pack and sponsor readout.",
       "description": "Security, Langfuse observability, evals, and sponsor handover.",
       "outcomes": [
         "Complete IT security questionnaire with evidence",
@@ -866,19 +872,13 @@
         {
           "slug": "lab-8a-observability-and-eval-evidence",
           "type": "lab",
-          "title": "Lab 8A: Todo tracing (Langfuse)",
+          "title": "Lab 15: Todo tracing (Langfuse)",
           "minutes": 30
-        },
-        {
-          "slug": "lab-8b-sponsor-readout-and-handover",
-          "type": "lab",
-          "title": "Lab 8B: Todo handover (tutor)",
-          "minutes": 25
         },
         {
           "slug": "handover-package-and-sponsor-readout",
           "type": "assignment",
-          "title": "Handover package and sponsor readout",
+          "title": "Assignment 15: Handover package and sponsor readout",
           "minutes": 25
         }
       ]

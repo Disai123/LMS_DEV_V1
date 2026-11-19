@@ -8,7 +8,7 @@
       },
       {
         "heading": "Path",
-        "body": "**Reads** = security and observability vocabulary. **Labs 8A–8B** = Todo tracing and handover pack **with tutor**. **Assignment** = Ask IT security evidence and sponsor readout **on your own**."
+        "body": "**Reads** = security and observability vocabulary. **Lab 15** = Todo tracing **with tutor**. **Assignment** = Ask IT security evidence and sponsor readout **on your own**."
       }
     ],
     "typeExtras": {
@@ -59,28 +59,21 @@
     "sections": [
       {
         "heading": "Path",
-        "body": "Wire or inspect tracing on **Todo** first (smaller surface). Capture one trace screenshot and one eval failure you can explain."
+        "body": "Wire or inspect tracing on Todo first (smaller surface). Capture one trace screenshot and one eval failure you can explain."
       },
       {
         "heading": "Then",
-        "body": "Reuse the workflow on **Ask IT** in the final assignment."
+        "body": "Reuse the workflow on Ask IT in the final assignment."
       }
     ],
-    "typeExtras": {}
-  },
-  "enterprise-ai-fde/lab-8b-sponsor-readout-and-handover": {
-    "summary": "Tutored lab: Todo handover pack structure (panel below).",
-    "sections": [
-      {
-        "heading": "Path",
-        "body": "Assemble README, architecture, limits, and runbook **for Todo** with your tutor—this is the template for the Ask IT handover."
-      },
-      {
-        "heading": "Done when",
-        "body": "A peer can operate Todo for one day using only your documents."
-      }
-    ],
-    "typeExtras": {}
+    "typeExtras": {
+      "objectives": [
+        "Define which Todo API spans you would trace (validation, DB write, etc.).",
+        "List Langfuse env vars and flush behavior without exposing secrets.",
+        "Connect tracing to debugging real latency and failure issues.",
+        "Scale the same observability plan to Ask IT in the enterprise stage."
+      ]
+    }
   },
   "enterprise-ai-fde/capstone-style-readout-and-close": {
     "summary": "Practice a five-minute sponsor update (Ask IT story).",
@@ -104,17 +97,21 @@
     "sections": [
       {
         "heading": "Deliverables",
-        "body": "Security questionnaire evidence, trace/eval snapshot, README, architecture diagram, runbook, and a five-minute sponsor readout script for **Ask IT**."
+        "body": "Security questionnaire evidence, trace/eval snapshot, README, architecture diagram, runbook, and a five-minute sponsor readout script for Ask IT."
       },
       {
         "heading": "Skills from Todo",
-        "body": "Mirror Lab 8B structure but every artifact describes Ask IT URLs, RBAC, and evaluation results."
+        "body": "Mirror Lab 15 structure but every artifact describes Ask IT URLs, RBAC, and evaluation results."
       },
       {
         "heading": "Due",
-        "body": "Within one week of Session 8 (per your instructor)."
+        "body": "Within one week of Session 15 (per your instructor)."
       }
     ],
-    "typeExtras": {}
+    "typeExtras": {
+      "objectives": [
+        "Close the engagement with a readable handover."
+      ]
+    }
   }
 }

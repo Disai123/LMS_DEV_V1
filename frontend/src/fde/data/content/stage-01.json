@@ -1,4 +1,20 @@
 {
+  "software-engineering/python-basics": {
+    "summary": "Learn variables, strings, lists, dictionaries, functions, loops and if statements, then see how a dictionary matches the JSON an API returns.",
+    "sections": [
+      {
+        "heading": "Overview",
+        "body": "Learn variables, strings, lists, dictionaries, functions, loops and if statements, then see how a dictionary matches the JSON an API returns."
+      }
+    ],
+    "typeExtras": {
+      "objectives": [
+        "Store text, numbers and True/False values in variables, and format text with strings",
+        "Keep related values in a list or a dictionary, and read a value by its key",
+        "Write a function that returns a value, and use a loop with an if to count matching items"
+      ]
+    }
+  },
   "software-engineering/python-essentials-and-environment-setup": {
     "summary": "Set up uv or venv, a clean project structure and Git, then read and write files with proper exception handling.",
     "sections": [
@@ -103,48 +119,68 @@
       ]
     }
   },
-  "software-engineering/lab-fastapi-simple-api": {
-    "summary": "Stand up a minimal FastAPI service with /health and one small JSON resource, then verify with curl.",
+  "software-engineering/lab-0-python-basics": {
+    "summary": "Write one small Python script for a fruit shop that uses variables, strings, a list, a dictionary, functions, a loop and an if statement, then run it.",
     "sections": [
       {
         "heading": "Overview",
-        "body": "You build the smallest useful HTTP API: health check plus one resource. No database required— in-memory is fine for this lab."
+        "body": "This lab builds the smallest useful Python script before any API work. No libraries and no database are needed."
+      },
+      {
+        "heading": "What you will learn",
+        "body": "- Store text, numbers and True/False values in variables.\n- Clean and format text with string methods and f-strings.\n- Keep related values in a list or a dictionary.\n- Write a function, then use a for loop and an if statement to count matching items.\n- Recognise that a dictionary has the same shape as the JSON an API returns in Lab 1A."
       }
     ],
     "typeExtras": {
       "objectives": [
-        "Start FastAPI with uvicorn locally",
-        "Implement GET /health and one simple JSON resource",
-        "Prove both work with curl"
+        "Create variables, strings, a list and a dictionary.",
+        "Write functions that return values.",
+        "Run the script and confirm the output."
+      ]
+    }
+  },
+  "software-engineering/lab-fastapi-simple-api": {
+    "summary": "Create a minimal FastAPI service with a welcome route and a /health route, then verify it with curl.",
+    "sections": [
+      {
+        "heading": "Overview",
+        "body": "This lab builds the smallest useful HTTP API: a welcome route and a health check. No database is needed."
+      }
+    ],
+    "typeExtras": {
+      "objectives": [
+        "Start FastAPI with uvicorn locally.",
+        "Implement GET / and GET /health.",
+        "Prove both work in the browser and with curl."
       ]
     }
   },
   "software-engineering/lab-fastapi-validation-and-testing": {
-    "summary": "Add Pydantic validation and pytest tests so bad input returns 422 and core routes stay protected by tests.",
+    "summary": "Add Pydantic validation and pytest tests with FastAPI’s TestClient, so bad input returns 422 and core routes stay protected by tests.",
     "sections": [
       {
         "heading": "Overview",
-        "body": "Extend the API from the previous lab. Invalid bodies should fail clearly; tests should run with TestClient without starting a server manually."
+        "body": "This lab extends the API from Lab 1A. Invalid request bodies fail with a clear error, and automated tests check the routes without starting a server manually."
       }
     ],
     "typeExtras": {
       "objectives": [
-        "Add Pydantic models so invalid JSON returns 422",
-        "Write pytest tests with TestClient for health and create",
-        "Fix failing tests with a small targeted change"
+        "Add a Pydantic model so an invalid body returns 422.",
+        "Write pytest tests with TestClient for /health and the new route.",
+        "Fix a failing test with a small, targeted change."
       ]
     }
   },
   "software-engineering/assignment-harden-the-api-script": {
-    "summary": "Extend your Lab 1A notes API and a small client script so they survive three failure modes: timeout, rate limit (429) and invalid JSON. Then write a short note explaining your retry decisions.",
+    "summary": "Extend the Lab 1A and Lab 1B API with a small client that survives three failures (timeout, rate limit 429 and invalid JSON), then write a short note on the retry decisions.",
     "sections": [
       {
         "heading": "Overview",
-        "body": "Extend your Lab 1A notes API and a small client script so they survive three failure modes: timeout, rate limit (429) and invalid JSON. Then write a short note explaining your retry decisions."
+        "body": "An API client that works only when everything goes right is not ready for real use. This assignment adds three routes that fail on purpose and a client that handles each failure."
       },
       {
         "heading": "Details",
-        "body": "Deliverable: Updated app, client.py, tests and note.md\n\nDue: Before Session 2"
+        "body": "Deliverable: Updated main.py, client.py and note.md\n\nDue: Before Session 2"
       },
       {
         "heading": "Check-out question",
@@ -153,10 +189,9 @@
     ],
     "typeExtras": {
       "objectives": [
-        "Add timeouts and bounded retries to an HTTP client.",
-        "Handle a 429 response by honouring Retry-After.",
-        "Parse a response safely when the body is not valid JSON.",
-        "Prove each failure mode with pytest, as in Lab 1B.",
+        "Add a timeout and a capped number of retries to an HTTP client.",
+        "Wait for the Retry-After time when a 429 response arrives.",
+        "Handle a reply that is not valid JSON without crashing.",
         "Decide which failures are worth retrying and which are not."
       ],
       "checkpointQuestions": [

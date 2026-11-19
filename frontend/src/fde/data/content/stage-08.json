@@ -59,28 +59,21 @@
     "sections": [
       {
         "heading": "Path",
-        "body": "You hardened **Todo** on Render in Stage 7. Here you add **production** rules: `render.yaml`, secret handling, CORS. Same pattern later on **Ask IT** in the assignment. Prompts are in the **Lab** panel at the bottom of this page."
+        "body": "You hardened Todo on Render in Stage 7. Here you add production rules: render.yaml, secret handling, CORS. Same pattern later on Ask IT in the assignment. Prompts are in the Lab panel at the bottom of this page."
       },
       {
         "heading": "Done when",
         "body": "No API keys in Git, health check configured, checklist includes rollback steps."
       }
     ],
-    "typeExtras": {}
-  },
-  "production-deployment/lab-7b-runbook-and-outage-drill": {
-    "summary": "Tutored lab: Todo runbook + outage drill (panel below).",
-    "sections": [
-      {
-        "heading": "Path",
-        "body": "Practice **on Todo** so you are not guessing during a real Ask IT incident. Your tutor walks through one simulated outage."
-      },
-      {
-        "heading": "Done when",
-        "body": "`RUNBOOK.md` and `drill-log.md` exist; drill notes include at least one **fix prompt** you used."
-      }
-    ],
-    "typeExtras": {}
+    "typeExtras": {
+      "objectives": [
+        "Harden Render config: secrets outside git, explicit CORS origin, health checks.",
+        "Write a production checklist that includes rollback steps.",
+        "Spot POC shortcuts that are unsafe for real users.",
+        "Repeat this checklist pattern for Ask IT in the production assignment."
+      ]
+    }
   },
   "production-deployment/review-and-assignment-brief": {
     "summary": "Peer-review runbooks before the Ask IT production assignment.",
@@ -104,17 +97,21 @@
     "sections": [
       {
         "heading": "What you deliver",
-        "body": "Deployment evidence, logging notes, and a one-page runbook for **Ask IT** (not Todo filenames)."
+        "body": "Deployment evidence, logging notes, and a one-page runbook for Ask IT (not Todo filenames)."
       },
       {
         "heading": "Skills from Todo",
-        "body": "Copy the structure from Labs 7A–7B, but every step names **Ask IT** services, URLs, and env vars."
+        "body": "Copy the structure from Lab 14, but every step names Ask IT services, URLs, and env vars."
       },
       {
         "heading": "Due",
-        "body": "Before your instructor’s Session 8 deadline."
+        "body": "Before Session 15."
       }
     ],
-    "typeExtras": {}
+    "typeExtras": {
+      "objectives": [
+        "Ops docs are written with prompts too."
+      ]
+    }
   }
 }

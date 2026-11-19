@@ -68,18 +68,25 @@
     }
   },
   "fde-sdlc-architecture-solution/lab-3-diagram-tags-cost-and-adr": {
-    "summary": "Tutored lab: ARCHITECTURE.md for **Todo** + ADR-001.",
+    "summary": "Tutored lab: ARCHITECTURE.md for Todo + ADR-001.",
     "sections": [
       {
         "heading": "Read vs lab vs assignment",
-        "body": "Reads cover **Ask IT** system design. **This lab** writes **Todo** architecture with your tutor. **Assignment:** *Update the architecture pack* — **Ask IT** ARCHITECTURE.md solo."
+        "body": "Reads cover Ask IT system design. This lab writes Todo architecture with your tutor. Assignment: Update the architecture pack, Ask IT ARCHITECTURE.md solo."
       },
       {
         "heading": "Done when",
         "body": "Todo ARCHITECTURE.md includes ADR-001 and text diagram."
       }
     ],
-    "typeExtras": {}
+    "typeExtras": {
+      "objectives": [
+        "Sketch Todo as React → FastAPI → SQLite with labeled API routes.",
+        "Record an ADR that explains one real decision (e.g. auth deferred in v1).",
+        "List components and data flow before writing production code.",
+        "Use the same architecture discipline on Ask IT in your assignment."
+      ]
+    }
   },
   "fde-sdlc-architecture-solution/update-the-architecture-pack": {
     "summary": "Update the architecture pack and list three implementation tasks in priority order for the development slice.",
@@ -90,10 +97,15 @@
       },
       {
         "heading": "Details",
-        "body": "- Deliverable: Architecture diagram, FAQ permission model, cost estimate and ADR\n- Due: Before Session 4"
+        "body": "- Deliverable: Architecture diagram, FAQ permission model, cost estimate and ADR\n- Due: Before Session 13"
       }
     ],
-    "typeExtras": {}
+    "typeExtras": {
+      "objectives": [
+        "Align architecture to BRD.",
+        "Call out security before the LLM runs."
+      ]
+    }
   },
   "fde-sdlc-architecture-solution/review-and-assignment-brief": {
     "summary": "Explain trade-offs and confirm the design is buildable within the POC scope.",

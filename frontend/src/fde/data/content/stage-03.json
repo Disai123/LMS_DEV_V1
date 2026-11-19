@@ -68,18 +68,25 @@
     }
   },
   "fde-sdlc-business-requirement/lab-1-discovery-and-brd": {
-    "summary": "Tutored lab: discovery questions + BRD for the **Todo** app (practice before Ask IT).",
+    "summary": "Tutored lab: discovery questions + BRD for the Todo app (practice before Ask IT).",
     "sections": [
       {
         "heading": "Read vs lab vs assignment",
-        "body": "Reads above teach **Ask IT** discovery ideas. **This lab** writes discovery + BRD for **Todo** with your tutor. **Assignment:** *One-page BRD and discovery questions* — same work for **Ask IT**, alone."
+        "body": "Reads above teach Ask IT discovery ideas. This lab writes discovery + BRD for Todo with your tutor. Assignment: One-page BRD and discovery questions, the same work for Ask IT, alone."
       },
       {
         "heading": "Done when",
         "body": "discovery.md (12 questions) and Todo BRD.md with all required headings. Tutor signed off checkpoints in the lab panel."
       }
     ],
-    "typeExtras": {}
+    "typeExtras": {
+      "objectives": [
+        "Run structured discovery questions before you specify requirements.",
+        "Write a one-page Todo BRD with fixed headings reviewers can scan quickly.",
+        "Number functional requirements and user stories so they are testable.",
+        "Reuse the same BRD pattern on the Ask IT assignment without copying Todo features."
+      ]
+    }
   },
   "fde-sdlc-business-requirement/one-page-brd-and-discovery-questions": {
     "summary": "Create a one-page BRD and a discovery-question list. Include at least three measurable acceptance criteria and identify one risk or dependency.",
@@ -90,10 +97,15 @@
       },
       {
         "heading": "Details",
-        "body": "- Deliverable: One-page BRD and discovery notes\n- Due: Before Session 2"
+        "body": "- Deliverable: One-page BRD and discovery notes\n- Due: Before Session 11"
       }
     ],
-    "typeExtras": {}
+    "typeExtras": {
+      "objectives": [
+        "Transfer the Todo BRD structure to Ask IT without copying Todo features.",
+        "Cover staff vs admin and triage in requirements."
+      ]
+    }
   },
   "fde-sdlc-business-requirement/review-and-assignment-brief": {
     "summary": "Peer-review scope, resolve ambiguities and identify questions that still need sponsor confirmation.",

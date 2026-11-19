@@ -44,13 +44,21 @@
     "sections": [
       {
         "heading": "Prerequisites",
-        "body": "Development Labs 4–5 complete. Docker Desktop running. Open the **Lab** panel at the bottom of this page for prompts and checkpoints."
+        "body": "Development Labs 11–12 complete. Docker Desktop running. Open the Lab panel at the bottom of this page for prompts and checkpoints."
       },
       {
         "heading": "Then",
-        "body": "Do the **Ask IT** deploy assignment in this stage without your tutor."
+        "body": "Do the Ask IT deploy assignment in this stage without your tutor."
       }
-    ]
+    ],
+    "typeExtras": {
+      "objectives": [
+        "Run Todo locally from steps you can hand to another developer.",
+        "Prove Docker with hello-world, then run the app with docker compose.",
+        "Fix port, engine, and DATABASE_URL issues common in real deploys.",
+        "Prepare Render POC config—the same path repeats on Ask IT in your assignment."
+      ]
+    }
   },
   "mvp-poc-local-render/pilot-feedback-and-triage": {
     "summary": "How to run three pilot sessions and turn feedback into a fix list.",
@@ -74,9 +82,14 @@
     "summary": "Assignment: Ask IT local → Docker → Render (solo).",
     "sections": [
       {
-        "heading": "Skills from Todo Lab 6",
-        "body": "Same sequence you did with your tutor—now for Ask IT in your repo. Prompts are in the **Assignment** panel at the bottom of this page."
+        "heading": "Skills from Todo Lab 13",
+        "body": "Same sequence you did with your tutor—now for Ask IT in your repo. Prompts are in the Assignment panel at the bottom of this page."
       }
-    ]
+    ],
+    "typeExtras": {
+      "objectives": [
+        "End-to-end deploy evidence for Ask IT pilot."
+      ]
+    }
   }
 }
