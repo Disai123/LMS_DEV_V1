@@ -33,7 +33,7 @@ export default function VisualRoadmap({ stages }) {
             data-stage-card
             onClick={() => scrollToStage(stage.slug)}
             onKeyDown={(e) => onKeyDown(e, index)}
-            className="w-[168px] min-h-[200px] text-left border-[1.5px] rounded-xl p-3 bg-[var(--fde-card)] cursor-pointer transition-shadow focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#35d49a]"
+            className="w-[168px] h-[212px] text-left border-[1.5px] rounded-xl p-3 bg-[var(--fde-card)] cursor-pointer transition-shadow focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#35d49a] flex flex-col"
             style={{
               borderColor: stage.color,
               boxShadow: `0 0 14px -6px ${stage.color}`,
@@ -51,12 +51,12 @@ export default function VisualRoadmap({ stages }) {
               <StageIcon name={stage.icon} style={{ color: stage.color }} />
             </div>
             <div
-              className="text-xs font-semibold text-center leading-tight mb-2 min-h-[2.5rem]"
+              className="text-xs font-semibold text-center leading-tight mb-2 min-h-[2.5rem] line-clamp-2 shrink-0"
               style={{ color: stage.color }}
             >
               {stage.name}
             </div>
-            <p className="text-[11px] text-[var(--fde-mut)] text-center leading-snug m-0">
+            <p className="text-[11px] text-[var(--fde-mut)] text-center leading-snug m-0 mt-auto line-clamp-4">
               {stage.cardBlurb}
             </p>
           </button>

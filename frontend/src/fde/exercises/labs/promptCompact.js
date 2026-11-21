@@ -51,31 +51,31 @@ export const PROMPT_TODO_DEV_UI = compactPrompt({
   stop: stopAfterFiles('frontend/src/App.jsx'),
 })
 
-/** Assignment: full deploy path on Ask IT (after Todo lab) */
+/** Assignment: full deploy path on Customer support ticketing system (after Todo lab) */
 export const PROMPT_ASKIT_DEPLOY_LOCAL = compactPrompt({
   context: ASK_IT_CONTEXT,
-  task: 'Write **README-RUN.md** for Ask IT: local API + React chat (same idea as your Todo README-RUN).',
+  task: 'Write **README-RUN.md** for Customer support ticketing system: local API + React chat (same idea as your Todo README-RUN).',
   output: '- Steps, verify /health and POST /ask with role=staff',
   stop: PROMPT_STOP,
 })
 
 export const PROMPT_ASKIT_DEPLOY_DOCKER = compactPrompt({
   context: ASK_IT_CONTEXT,
-  task: 'Using your Todo Docker notes, generate Ask IT **docker-compose.yml**, Dockerfiles, **DOCKER.md**, and `.env.example` (api + web + postgres).',
+  task: 'Using your Todo Docker notes, generate Customer support ticketing system **docker-compose.yml**, Dockerfiles, **DOCKER.md**, and `.env.example` (api + web + postgres).',
   output: '- DATABASE_URL host **postgres** not localhost\n- `docker compose up --build` works',
   stop: stopAfterFiles('backend/Dockerfile, frontend/Dockerfile, docker-compose.yml, .env.example, DOCKER.md'),
 })
 
 export const PROMPT_ASKIT_DEPLOY_RENDER = compactPrompt({
   context: ASK_IT_CONTEXT,
-  task: 'Create Ask IT **render.yaml** (POC) and **poc-deploy-checklist.md** with public URL smoke tests.',
+  task: 'Create Customer support ticketing system **render.yaml** (POC) and **poc-deploy-checklist.md** with public URL smoke tests.',
   output: '- /health green on Render\n- VITE_API_URL points to Render API, not localhost',
   stop: stopAfterFiles('render.yaml, poc-deploy-checklist.md'),
 })
 
 export const PROMPT_ASKIT_BRD = compactPrompt({
   context: ASK_IT_CONTEXT,
-  task: 'Write **BRD.md** for Ask IT with H2: Overview, Functional Requirements, Non-Functional Requirements, User Stories, Conclusion.',
+  task: 'Write **BRD.md** for Customer support ticketing system with H2: Overview, Functional Requirements, Non-Functional Requirements, User Stories, Conclusion.',
   output: '- Staff vs admin rules\n- RAG + triage mentioned',
   stop: stopAfterMarkdown('BRD.md', 'Overview, Functional Requirements, Non-Functional Requirements, User Stories, Conclusion'),
 })
@@ -92,7 +92,7 @@ export const PROMPT_ASKIT_ARCH = compactPrompt({
 
 export const PROMPT_ASKIT_HARDEN_API = compactPrompt({
   context: ASK_IT_CONTEXT,
-  task: 'Specify how **submit_triage** (or triage client) should validate JSON for Ask IT—fields and error messages only, no full app code.',
+  task: 'Specify how **submit_triage** (or triage client) should validate JSON for Customer support ticketing system—fields and error messages only, no full app code.',
   output: '- Bullet spec + 2 example invalid payloads and expected errors',
   stop: PROMPT_STOP,
 })

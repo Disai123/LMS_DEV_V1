@@ -175,9 +175,9 @@ module.exports = (sequelize, DataTypes) => {
           const { StudentPermission } = require('./index');
           await StudentPermission.create({
             student_id: user.id,
-            courses: true,
+            courses: false,
             hackathons: true,
-            realtime_projects: true
+            realtime_projects: false
           });
           console.log(`Created permissions for new student: ${user.email}`);
         }

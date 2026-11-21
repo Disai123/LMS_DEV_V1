@@ -32,9 +32,9 @@ async function createAllPermissions() {
                 where: { student_id: student.id },
                 defaults: {
                     student_id: student.id,
-                    courses: true,
+                    courses: false,
                     hackathons: true,
-                    realtime_projects: true
+                    realtime_projects: false
                 }
             });
 
@@ -42,13 +42,7 @@ async function createAllPermissions() {
                 console.log(`✅ Created permissions for: ${student.name}`);
                 created++;
             } else {
-                // Update existing record to ensure all permissions are true
-                await permission.update({
-                    courses: true,
-                    hackathons: true,
-                    realtime_projects: true
-                });
-                console.log(`🔄 Updated permissions for: ${student.name}`);
+                console.log(`ℹ️  Existing permissions kept for: ${student.name}`);
                 updated++;
             }
         }

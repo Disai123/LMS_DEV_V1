@@ -1,5 +1,5 @@
 {
-  "development/recap-and-development-plan": {
+  "development-backend/recap-and-development-plan": {
     "summary": "Review architecture and turn it into small, testable work items.",
     "sections": [
       {
@@ -10,13 +10,13 @@
     "typeExtras": {
       "objectives": [
         "Break the solution into backend, frontend, RAG and data modules.",
-        "Define the FastAPI endpoints and request/response models needed for Ask IT.",
+        "Define the FastAPI endpoints and request/response models needed for Customer support ticketing system.",
         "Build or scaffold the application foundation and connect the UI to the backend.",
         "Use the sample FAQ data model consistently across the application."
       ]
     }
   },
-  "development/backend-module": {
+  "development-backend/backend-module": {
     "summary": "FastAPI structure, health endpoint, ask endpoint, request/response models and error responses.",
     "sections": [
       {
@@ -27,13 +27,13 @@
     "typeExtras": {
       "objectives": [
         "Break the solution into backend, frontend, RAG and data modules.",
-        "Define the FastAPI endpoints and request/response models needed for Ask IT.",
+        "Define the FastAPI endpoints and request/response models needed for Customer support ticketing system.",
         "Build or scaffold the application foundation and connect the UI to the backend.",
         "Use the sample FAQ data model consistently across the application."
       ]
     }
   },
-  "development/frontend-module": {
+  "development-frontend/frontend-module": {
     "summary": "Question input, answer display, loading/error states and API integration.",
     "sections": [
       {
@@ -44,13 +44,13 @@
     "typeExtras": {
       "objectives": [
         "Break the solution into backend, frontend, RAG and data modules.",
-        "Define the FastAPI endpoints and request/response models needed for Ask IT.",
+        "Define the FastAPI endpoints and request/response models needed for Customer support ticketing system.",
         "Build or scaffold the application foundation and connect the UI to the backend.",
         "Use the sample FAQ data model consistently across the application."
       ]
     }
   },
-  "development/database-and-faq-data": {
+  "development-backend/database-and-faq-data": {
     "summary": "FAQ fields, source, version/date, access level and a small seed dataset.",
     "sections": [
       {
@@ -61,13 +61,13 @@
     "typeExtras": {
       "objectives": [
         "Break the solution into backend, frontend, RAG and data modules.",
-        "Define the FastAPI endpoints and request/response models needed for Ask IT.",
+        "Define the FastAPI endpoints and request/response models needed for Customer support ticketing system.",
         "Build or scaffold the application foundation and connect the UI to the backend.",
         "Use the sample FAQ data model consistently across the application."
       ]
     }
   },
-  "development/review-and-assignment-brief-session-4": {
+  "development-backend/review-and-assignment-brief-session-4": {
     "summary": "Run locally and record what is working and what remains.",
     "sections": [
       {
@@ -78,28 +78,28 @@
     "typeExtras": {
       "objectives": [
         "Break the solution into backend, frontend, RAG and data modules.",
-        "Define the FastAPI endpoints and request/response models needed for Ask IT.",
+        "Define the FastAPI endpoints and request/response models needed for Customer support ticketing system.",
         "Build or scaffold the application foundation and connect the UI to the backend.",
         "Use the sample FAQ data model consistently across the application."
       ]
     }
   },
-  "development/startup-instructions-and-tests": {
-    "summary": "Assignment: Ask IT local run + TEST-PLAN.md.",
+  "development-backend/startup-instructions-and-tests": {
+    "summary": "Assignment: Customer support ticketing system local run + TEST-PLAN.md.",
     "sections": [
       {
         "heading": "Skills from Todo labs 11–12",
-        "body": "You built Todo API + UI with tutor. Repeat README-RUN and tests for Ask IT, solo panel below."
+        "body": "You built Todo API + UI with tutor. Repeat README-RUN and tests for Customer support ticketing system, solo panel below."
       }
     ],
     "typeExtras": {
       "objectives": [
-        "Local run and manual test plan for Ask IT.",
+        "Local run and manual test plan for Customer support ticketing system.",
         "Same loop as Todo, different app."
       ]
     }
   },
-  "development/recap-and-development-status": {
+  "development-frontend/recap-and-development-status": {
     "summary": "Review the application skeleton and tests from Session 4.",
     "sections": [
       {
@@ -116,7 +116,7 @@
       ]
     }
   },
-  "development/rag-integration": {
+  "development-frontend/rag-integration": {
     "summary": "FAQ ingestion, chunking/indexing at a practical level, retrieval, grounded generation and citation metadata.",
     "sections": [
       {
@@ -133,7 +133,7 @@
       ]
     }
   },
-  "development/no-answer-and-permission-behaviour": {
+  "development-frontend/no-answer-and-permission-behaviour": {
     "summary": "Confidence/fallback behaviour, staff/admin test identities and permission filters before context reaches the model.",
     "sections": [
       {
@@ -150,7 +150,7 @@
       ]
     }
   },
-  "development/regression-test-design": {
+  "development-frontend/regression-test-design": {
     "summary": "20 representative questions, expected sources/answers, unsupported questions and access-control cases.",
     "sections": [
       {
@@ -167,32 +167,27 @@
       ]
     }
   },
-  "development/lab-4-application-skeleton": {
+  "development-backend/lab-4-application-skeleton": {
     "summary": "Tutored lab: Todo FastAPI backend with task schemas and SQLite (panel below).",
     "sections": [
       {
-        "heading": "Path",
-        "body": "- Reads in this stage = Ask IT API and data design (customer language).\n- This lab = Todo main.py and models with your tutor.\n- Assignment Startup instructions and tests = same ideas on Ask IT, solo."
-      },
-      {
-        "heading": "Done when",
-        "body": "Todo API starts locally, you can create a task and list tasks, bad input returns a clear error, and the created task shows in the SQLite file."
+        "heading": "Overview",
+        "body": "- Reads in this stage = Customer support ticketing system API and data design (customer language). - This lab = Todo main.py and models with your tutor."
       }
     ],
     "typeExtras": {
       "objectives": [
         "Generate a minimal FastAPI Todo backend with GET /tasks and POST /tasks from prompts.",
         "Prove the API works with curl smoke tests, not only by reading code.",
-        "Fix import, routing, and validation issues with small targeted prompts.",
-        "Carry the same backend skeleton approach to Ask IT in the assignment."
+        "Fix import, routing, and validation issues with small targeted prompts."
       ]
     }
   },
-  "development/lab-5-connect-rag-and-test": {
+  "development-frontend/lab-5-connect-rag-and-test": {
     "summary": "Add task works in the browser against your Todo API.",
     "sections": [
       {
-        "heading": "Done when",
+        "heading": "Overview",
         "body": "Add task works in the browser against your Todo API."
       }
     ],
@@ -200,12 +195,11 @@
       "objectives": [
         "Connect a React Todo UI to your FastAPI backend with fetch calls.",
         "Resolve CORS and empty-list bugs using browser errors and fix prompts.",
-        "Apply the same front-to-back integration steps on Ask IT later.",
-        "Verify add-task and list-task flows end to end with a screenshot."
+        "Apply the same front-to-back integration steps on Customer support ticketing system later."
       ]
     }
   },
-  "development/review-and-assignment-brief-session-5": {
+  "development-frontend/review-and-assignment-brief-session-5": {
     "summary": "Review failed cases and identify whether the cause is data, retrieval, permissions or generation.",
     "sections": [
       {
@@ -222,7 +216,7 @@
       ]
     }
   },
-  "development/fix-a-failed-test-and-rerun": {
+  "development-frontend/fix-a-failed-test-and-rerun": {
     "summary": "Document symptom, fix prompt, and pass/fail after rerun in failure-fix-log.md. Panel below.",
     "sections": [
       {

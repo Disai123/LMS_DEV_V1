@@ -1,10 +1,16 @@
 import React from 'react';
 import { motion } from 'framer-motion';
-import { FiLock, FiMail, FiShield } from 'react-icons/fi';
+import { FiLock, FiMail, FiShield, FiBook } from 'react-icons/fi';
 
 const AccessDenied = ({ feature, onContactAdmin }) => {
   const getFeatureInfo = (feature) => {
     switch (feature) {
+      case 'courses':
+        return {
+          title: 'Courses Access Required',
+          description: 'You need administrator permission to access courses.',
+          icon: <FiBook className="w-12 h-12 text-indigo-600" />
+        };
       case 'hackathons':
         return {
           title: 'Hackathon Access Required',

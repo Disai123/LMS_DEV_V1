@@ -276,7 +276,7 @@
     "sections": [
       {
         "heading": "Overview",
-        "body": "This lab uses the default model chosen in Lab 2A. A small assistant turns messy HR ticket text into JSON and calls one of two tools when the ticket needs it. When a tool fails, the assistant reports the failure and keeps running."
+        "body": "This lab uses the default model chosen in Lab 2A. A small assistant turns messy HR ticket text into JSON and calls one of two tools when the ticket needs it."
       }
     ],
     "typeExtras": {
@@ -321,7 +321,7 @@
     "sections": [
       {
         "heading": "Overview",
-        "body": "Retrieval quality starts with how documents are read and split. This lab turns three small policy PDFs into chunks, embeds them with text-embedding-3-small, stores them in a ChromaDB index and runs one question against it."
+        "body": "Retrieval quality starts with how documents are read and split. This lab turns three small policy PDFs into chunks, embeds them with text-embedding-3-small, stores them in a ChromaDB index and runs on"
       }
     ],
     "typeExtras": {
@@ -337,7 +337,7 @@
     "sections": [
       {
         "heading": "Overview",
-        "body": "A RAG assistant retrieves the best chunks first, then answers only from them. This lab adds a POST /ask endpoint on the Lab 3A index that cites its sources and refuses when the policy text does not support an answer."
+        "body": "A RAG assistant retrieves the best chunks first, then answers only from them. This lab adds a POST /ask endpoint on the Lab 3A index that cites its sources and refuses when the policy text does not su"
       }
     ],
     "typeExtras": {
@@ -382,7 +382,7 @@
     "sections": [
       {
         "heading": "Overview",
-        "body": "Build hybrid search by combining BM25 keyword search with vector search, then rerank the merged results so the best chunks come first. Two test questions show what changes compared with vector search alone."
+        "body": "Build hybrid search by combining BM25 keyword search with vector search, then rerank the merged results so the best chunks come first. Two test questions show what changes compared with vector search"
       }
     ],
     "typeExtras": {
@@ -398,7 +398,7 @@
     "sections": [
       {
         "heading": "Overview",
-        "body": "Break the policy assistant with two planted failures, a data failure and a prompt failure. A four-layer checklist (data, retrieval, prompt, model) shows which layer failed, and each fix is tested again."
+        "body": "Break the policy assistant with two planted failures, a data failure and a prompt failure. A four-layer checklist (data, retrieval, prompt, model) shows which layer failed, and each fix is tested agai"
       }
     ],
     "typeExtras": {
@@ -442,7 +442,7 @@
     "sections": [
       {
         "heading": "Overview",
-        "body": "Build a flow that answers a policy question, drafts a summary email and then stops. The email is sent only after a person types yes. A no ends the run without sending anything."
+        "body": "Build a flow that answers a policy question, drafts a summary email and then stops. The email is sent only after a person types yes."
       }
     ],
     "typeExtras": {
@@ -458,7 +458,7 @@
     "sections": [
       {
         "heading": "Overview",
-        "body": "Build a retrieval loop that checks its own results. If the retrieved text is weak, the question is rewritten once and searched again. If it is still weak, the assistant refuses, so the loop never runs forever."
+        "body": "Build a retrieval loop that checks its own results. If the retrieved text is weak, the question is rewritten once and searched again."
       }
     ],
     "typeExtras": {
@@ -506,7 +506,7 @@
     "sections": [
       {
         "heading": "Overview",
-        "body": "Attack the policy agent with two realistic prompt injections, add two guardrails that block them, and check that a normal policy question still gets a useful, cited answer. A partner then tries one more attack."
+        "body": "Attack the policy agent with two realistic prompt injections, add two guardrails that block them, and check that a normal policy question still gets a useful, cited answer. A partner then tries one mo"
       }
     ],
     "typeExtras": {
@@ -550,7 +550,7 @@
     "sections": [
       {
         "heading": "Overview",
-        "body": "Build an MCP server that shares the policy index as a search tool and a read-only resource. A client can then call the tool without knowing how the index works. Bad requests are rejected before the tool runs."
+        "body": "Build an MCP server that shares the policy index as a search tool and a read-only resource. A client can then call the tool without knowing how the index works."
       }
     ],
     "typeExtras": {

@@ -10,11 +10,13 @@ import useCourseLogo from '../hooks/useCourseLogo'
 import Header from '../components/common/Header'
 import Footer from '../components/common/Footer'
 import LoadingSpinner from '../components/common/LoadingSpinner'
+import AccessDenied from '../components/common/AccessDenied'
 import ChapterSidebar from '../components/course/ChapterSidebar'
 import StudentChapterView from '../components/course/StudentChapterView'
 import ChapterNavigation from '../components/course/ChapterNavigation'
 import TestSection from '../components/course/TestSection'
 import usePlanAccess from '../hooks/usePlanAccess'
+import { usePermissions } from '../hooks/usePermissions'
 import { getCourseMetadata, hasPlanAccess as manifestCheck } from '../utils/courseManifest'
 import { PRICING_HIDDEN } from '../config/features'
 import { FiAlertCircle } from 'react-icons/fi'
@@ -23,20 +25,22 @@ const CourseDetailPage = () => {
   const { id } = useParams()
   const { user, isAuthenticated } = useAuth()
   const { tierOrder: userTierOrder } = usePlanAccess(user)
+  const { loading: permissionsLoading, hasAccess, isAdmin: isRbacAdmin } = usePermissions()
   const queryClient = useQueryClient()
   const [selectedChapter, setSelectedChapter] = useState(null)
   const [showLoginModal, setShowLoginModal] = useState(false)
   const [chapterProgression, setChapterProgression] = useState(null)
   const [showTestSection, setShowTestSection] = useState(false)
 
-  const isAdmin = user?.role === 'admin'
+  const isAdmin = user?.role === 'admin' || isRbacAdmin
+  const canAccessCourses = isAdmin || hasAccess('courses')
 
   // Get course preview/info - always use getCourseById which now supports preview mode
   const { data: courseData, isLoading, error } = useQuery(
     ['course', id],
     () => courseService.getCourseById(id),
     {
-      enabled: !!id,
+      enabled: !!id && !permissionsLoading && canAccessCourses,
       refetchOnWindowFocus: false,
       retry: 2,
       staleTime: 0 
@@ -67,14 +71,14 @@ const CourseDetailPage = () => {
   // Try to get full content if enrolled (this includes enrollment data and full chapter details)
   // Enable if user is authenticated AND (accessLevel is 'enrolled' OR we have enrollment data)
   // Always fetch if we have enrollment data, regardless of accessLevel
-  const shouldFetchFullContent = (isAuthenticated && (accessLevel === 'enrolled' || !!enrollmentFromCourseData) && !effectiveIsLocked) || isAdmin
+  const shouldFetchFullContent = canAccessCourses && ((isAuthenticated && (accessLevel === 'enrolled' || !!enrollmentFromCourseData) && !effectiveIsLocked) || isAdmin)
 
 
   const { data: fullContentData } = useQuery(
     ['courseContent', id],
     () => courseService.getCourseContent(id),
     {
-      enabled: !!id && shouldFetchFullContent,
+      enabled: !!id && !permissionsLoading && shouldFetchFullContent,
       refetchOnWindowFocus: false,
       retry: false
     }
@@ -206,6 +210,28 @@ const CourseDetailPage = () => {
     }
   }
 
+
+  const handleContactAdmin = () => {
+    window.location.href = 'mailto:admin@gnanamai.com?subject=Request for Courses Access&body=Hello, I would like to request access to courses.'
+  }
+
+  if (permissionsLoading) {
+    return (
+      <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-slate-50 via-blue-50 to-indigo-100">
+        <LoadingSpinner size="lg" />
+      </div>
+    )
+  }
+
+  if (!canAccessCourses) {
+    return (
+      <>
+        <Header />
+        <AccessDenied feature="courses" onContactAdmin={handleContactAdmin} />
+        <Footer />
+      </>
+    )
+  }
 
   // Handle loading state
   if (isLoading) {

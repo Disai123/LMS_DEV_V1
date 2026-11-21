@@ -32,12 +32,10 @@ export const stage01Labs = {
     labContext:
       'Build a small Python script, basics.py, for a fruit shop, run it, and change one value to see the result change. This is the first step before the API labs in Lab 1A.',
     whatYouLearn: [
-      'Store text, numbers and True/False values in variables.',
-      'Clean and format text with string methods and f-strings.',
-      'Keep related values in a list or a dictionary.',
-      'Write a function, then use a for loop and an if statement to count matching items.',
-      'Recognise that a dictionary has the same shape as the JSON an API returns in Lab 1A.',
-    ],
+    'Variables, strings, lists and dictionaries in one small script.',
+    'A function plus loop and if to count items.',
+    'How dict/list shapes relate to JSON in the next API lab.',
+  ],
     prompts: [
       {
         step: 1,
@@ -84,16 +82,6 @@ Error: <paste the full error here>. Fix it with the smallest possible change.
 ## Outcome
 One line saying what changed.`,
       },
-    ],
-    executionSteps: [
-      '**[Manual]** Open a terminal and run `python --version`.\n\n*Outcome:* The version is 3.11 or later.',
-      '**[Manual]** Create a folder named `python-basics` and open it in Antigravity.\n\n*Outcome:* An empty folder is open.',
-      '**[Antigravity]** Paste the Step 1 prompt and send it.\n\n*Outcome:* `basics.py` appears in the project folder (Checkpoint 1).',
-      '**[Manual]** In the terminal, run: `python basics.py`\n\n*Outcome:* The terminal prints the welcome line, the upper-case name, `Fruits: 3`, the item name and one line of JSON (Checkpoint 2).',
-      '**[Antigravity]** Paste the Step 2 prompt and send it.\n\n*Outcome:* `basics.py` now has two functions and a loop.',
-      '**[Manual]** Run again: `python basics.py`\n\n*Outcome:* The output ends with three item totals and `Low stock: 1` (Checkpoint 3).',
-      '**[Manual]** Change one item\'s quantity to 2, save, and run again.\n\n*Outcome:* The last line shows `Low stock: 2`.',
-      '**[Antigravity]** Only if step 4 or step 6 showed an error: paste the Step 3 prompt with the full error, then repeat the step that failed.\n\n*Outcome:* The script runs and prints the expected output.',
     ],
     acceptanceCriteria: [
       'The script uses a variable, a string method, a list, a dictionary, two functions, a for loop and an if.',
@@ -147,10 +135,10 @@ One line saying what changed.`,
     labContext:
       'Ask the AI tool to create main.py, set up a virtual environment, start the server and confirm it works. This is the first step before AI or customer APIs in later stages.',
     whatYouLearn: [
-      'Start a FastAPI app with uvicorn on a local machine.',
-      'Expose a welcome route and a /health route.',
-      'Verify behaviour with curl before adding complexity.',
-    ],
+    'Start a FastAPI app with uvicorn on a local machine.',
+    'Expose a welcome route and a /health route.',
+    'Verify behaviour with curl before adding complexity.',
+  ],
     prompts: [
       {
         step: 1,
@@ -181,17 +169,6 @@ Error: <paste the full error here>. Fix it with the smallest possible change.
 ## Outcome
 One line saying what changed.`,
       },
-    ],
-    executionSteps: [
-      '**[AI tool]** Paste the Step 1 prompt and send it.\n\n*Outcome:* `main.py` appears in the project folder (Checkpoint 1).',
-      '**[Manual]** Open a terminal in the project folder and create a virtual environment: `python -m venv .venv`\n\n*Outcome:* A `.venv` folder appears in the project.',
-      '**[Manual]** Activate the environment, then install FastAPI and uvicorn.\n- Windows (PowerShell): `.venv\\Scripts\\Activate.ps1`\n- Mac/Linux: `source .venv/bin/activate`\n\nThen run: `pip install fastapi uvicorn`\n\n*Outcome:* `(.venv)` appears at the start of the terminal line, and the install ends with “Successfully installed”.',
-      '**[Manual]** Start the API: `uvicorn main:app --reload`\n\n*Outcome:* The terminal shows “Uvicorn running on http://127.0.0.1:8000” and “Application startup complete”. Leave this terminal open.',
-      '**[Manual]** Open `http://localhost:8000` in the browser.\n\n*Outcome:* The page shows `{"message":"Welcome to the API built with FastAPI"}` (Checkpoint 2).',
-      '**[Manual]** Open `http://localhost:8000/docs` in the browser.\n\n*Outcome:* The Swagger page lists both endpoints, `/` and `/health`.',
-      '**[Manual]** Open a second terminal and run: `curl http://localhost:8000/health` (use `curl.exe` in Windows PowerShell).\n\n*Outcome:* The terminal prints `{"status":"ok"}` (Checkpoint 3).',
-      '**[AI tool]** Only if step 4 or step 7 showed an error: paste the Step 2 prompt with the full error, then repeat the step that failed.\n\n*Outcome:* The server starts and curl returns the expected reply.',
-      '**[Manual]** Press `Ctrl+C` in the server terminal to stop the server.\n\n*Outcome:* The server stops.',
     ],
     acceptanceCriteria: [
       'GET / returns the welcome message.',
@@ -241,10 +218,10 @@ One line saying what changed.`,
     labContext:
       'Ask the AI tool to add a POST /greet route that validates its input and three pytest tests for it, then run the tests.',
     whatYouLearn: [
-      'Reject bad JSON with Pydantic and a clear 422 response.',
-      'Write pytest tests with TestClient, without a live server.',
-      'Use fix prompts when a test fails for the wrong reason.',
-    ],
+    'Reject bad JSON with Pydantic and a clear 422 response.',
+    'Write pytest tests with TestClient, without a live server.',
+    'Use fix prompts when a test fails for the wrong reason.',
+  ],
     prompts: [
       {
         step: 1,
@@ -280,12 +257,6 @@ Error: <paste the full error here>. Fix it with the smallest possible change.
 ## Outcome
 One line saying what changed.`,
       },
-    ],
-    executionSteps: [
-      '**[AI tool]** Paste the Step 1 prompt and send it.\n\n*Outcome:* `main.py` is updated with `GreetRequest` and `POST /greet`, and `test_main.py` appears in the project folder (Checkpoint 1).',
-      '**[Manual]** Open a terminal in the project folder, activate the virtual environment from Lab 1A, then install the test tools: `pip install pytest httpx`\n- Windows (PowerShell): `.venv\\Scripts\\Activate.ps1`\n- Mac/Linux: `source .venv/bin/activate`\n\n*Outcome:* `(.venv)` appears at the start of the terminal line, and the install ends with “Successfully installed”. TestClient needs httpx.',
-      '**[Manual]** Run the tests from the project folder: `pytest -v`\n\n*Outcome:* The terminal shows `3 passed` (Checkpoint 2). No server needs to be running.',
-      '**[AI tool]** Only if step 3 showed an error: paste the Step 2 prompt with the full error, then run `pytest -v` again.\n\n*Outcome:* The route works and all three tests pass.',
     ],
     acceptanceCriteria: [
       'POST /greet with a valid name returns 200 and the greeting.',
@@ -359,11 +330,11 @@ One line saying what changed.`,
       'This assignment: Uses the same project, focused on failures, with no new features.',
     ],
     whatYouLearn: [
-      'Add a timeout and a capped number of retries to an HTTP client.',
-      'Wait for the Retry-After time when a 429 response arrives.',
-      'Handle a reply that is not valid JSON without crashing.',
-      'Decide which failures are worth retrying and which are not.',
-    ],
+    'Add a timeout and a capped number of retries to an HTTP client.',
+    'Wait for the Retry-After time when a 429 response arrives.',
+    'Handle a reply that is not valid JSON without crashing.',
+    'Decide which failures are worth retrying and which are not.',
+  ],
     prompts: [
       {
         step: 1,
@@ -399,15 +370,6 @@ Print each attempt. Call the four routes and print each result or error.
 ## Outcome
 Reply with only the name of the file created and one line about what it does. Do not paste the file contents.`,
       },
-    ],
-    executionSteps: [
-      '**[AI tool]** Paste the Step 1 prompt and send it.\n\n*Outcome:* `main.py` has the three new routes (Checkpoint 1).',
-      '**[AI tool]** Paste the Step 2 prompt and send it.\n\n*Outcome:* `client.py` appears in the project folder.',
-      '**[Manual]** Open a terminal in the project folder, activate the virtual environment, then start the API: `uvicorn main:app --reload`\n- Windows (PowerShell): `.venv\\Scripts\\Activate.ps1`\n- Mac/Linux: `source .venv/bin/activate`\n\n*Outcome:* The terminal shows "Application startup complete". Leave this terminal open.',
-      '**[Manual]** Open a second terminal, activate the environment, then install the client library and run the client: `pip install httpx` then `python client.py`\n\n*Outcome:* The output shows `/health` returning ok, `/slow` ending in an error after 3 attempts, `/limited` succeeding on the third attempt, and `/bad-json` reporting an invalid JSON error (Checkpoint 2).',
-      '**[AI tool]** Only if step 3 or step 4 showed an error: paste the full error and ask for the smallest possible fix, then repeat the step that failed.\n\n*Outcome:* The server starts and the client prints the expected results.',
-      '**[Manual]** Press `Ctrl+C` in the server terminal to stop the server.\n\n*Outcome:* The server stops. To run the client again, restart the server first so the `/limited` counter starts from zero.',
-      '**[Manual]** Create `note.md` and write 5 to 8 lines covering:\n- Which failures are retried, and why.\n- Which failures are not retried, such as invalid JSON and a 401 error, and why.\n- The retry limit and the backoff choice, and why retries stop at that limit.\n\n*Outcome:* `note.md` is saved in the project folder (Checkpoint 3).',
     ],
     acceptanceCriteria: [
       '/, /health and /greet from Labs 1A and 1B still work.',

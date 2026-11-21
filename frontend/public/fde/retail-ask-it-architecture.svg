@@ -1,6 +1,6 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 720 380" fill="none">
   <rect width="720" height="380" fill="#f8fafc"/>
-  <text x="360" y="26" text-anchor="middle" font-family="system-ui,sans-serif" font-size="14" font-weight="600" fill="#1e293b">Ask IT  reference architecture</text>
+  <text x="360" y="26" text-anchor="middle" font-family="system-ui,sans-serif" font-size="14" font-weight="600" fill="#1e293b">Customer support ticketing  reference architecture</text>
   <rect x="280" y="48" width="160" height="44" rx="6" stroke="#4338ca" stroke-width="2" fill="#eef2ff"/>
   <text x="360" y="75" text-anchor="middle" font-family="system-ui,sans-serif" font-size="11" fill="#312e81">Employee browser</text>
   <path d="M360 92v28" stroke="#64748b" stroke-width="2" marker-end="url(#arr)"/>

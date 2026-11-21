@@ -3,7 +3,7 @@
  *
  * track: 'foundation' — Section 1 labs (Context + Task + Output; labContext; no Stop/Checkpoint/Deliverable)
  * track: 'todo' — Stages 3–9 Tutored Todo labs (labContext; same prompt shape)
- * track: 'assignment' — Stages 3–9 Ask IT solo (assignmentContext; skillsFromLab)
+ * track: 'assignment' — Stages 3–9 Customer support ticketing system solo (assignmentContext; skillsFromLab)
  * track: 'foundation-assignment' — Stage 2 capstone (assignmentContext; skillsFromStage)
  * whatYouLearn: string[] — labs only; shown on item page above the panel
  *

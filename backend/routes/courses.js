@@ -7,29 +7,36 @@ const chapterController = require('../controllers/chapterController');
 const { courseSchemas, commonSchemas } = require('../utils/validation');
 const { CourseChapter } = require('../models');
 const { checkPlanAccess } = require('../middleware/planAccessMiddleware');
+const { requireFeatureAccess } = require('../middleware/featureAccessMiddleware');
 
 const router = express.Router();
+const requireCoursesAccess = requireFeatureAccess('courses', { allowAnonymous: true });
+const requireCoursesAccessAuth = requireFeatureAccess('courses');
 
-// Public routes
+// Public routes (anonymous can browse; logged-in students need RBAC courses flag)
 router.get('/', 
   optionalAuth,
+  requireCoursesAccess,
   validate(courseSchemas.list, 'query'),
   courseController.getCourses
 );
 
 router.get('/search', 
   optionalAuth,
+  requireCoursesAccess,
   validate(courseSchemas.search, 'query'),
   courseController.searchCourses
 );
 
 router.get('/popular', 
   optionalAuth,
+  requireCoursesAccess,
   courseController.getPopularCourses
 );
 
 router.get('/top-rated', 
   optionalAuth,
+  requireCoursesAccess,
   courseController.getTopRatedCourses
 );
 
@@ -71,6 +78,7 @@ router.get('/:id/certificates',
 
 router.get('/:id', 
   optionalAuth,
+  requireCoursesAccess,
   validate(commonSchemas.id, 'params'),
   courseController.getCourseById
 );
@@ -138,9 +146,10 @@ router.delete('/:id/files/:fileId',
   courseController.deleteCourseFile
 );
 
-// Student routes
+// Student routes — require feature RBAC for all courses
 router.get('/:id/content', 
   authenticate,
+  requireCoursesAccessAuth,
   checkPlanAccess('course'),
   requireEnrollment,
   validate(commonSchemas.id, 'params'),
@@ -149,18 +158,21 @@ router.get('/:id/content',
 
 router.post('/:id/enroll', 
   authenticate,
+  requireCoursesAccessAuth,
   validate(commonSchemas.id, 'params'),
   courseController.enrollInCourse
 );
 
 router.post('/:id/unenroll', 
   authenticate,
+  requireCoursesAccessAuth,
   validate(commonSchemas.id, 'params'),
   courseController.unenrollFromCourse
 );
 
 router.put('/:id/progress', 
   authenticate,
+  requireCoursesAccessAuth,
   requireEnrollment,
   validate(commonSchemas.id, 'params'),
   courseController.updateProgress
@@ -168,6 +180,7 @@ router.put('/:id/progress',
 
 router.post('/:id/rate', 
   authenticate,
+  requireCoursesAccessAuth,
   requireEnrollment,
   validate(commonSchemas.id, 'params'),
   courseController.rateCourse
@@ -183,11 +196,13 @@ router.post('/:courseId/chapters',
 
 router.get('/:courseId/chapters', 
   authenticate,
+  requireCoursesAccessAuth,
   chapterController.getChapters
 );
 
 router.get('/:courseId/chapters/:chapterId', 
   authenticate,
+  requireCoursesAccessAuth,
   chapterController.getChapter
 );
 

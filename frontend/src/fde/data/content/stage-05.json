@@ -9,7 +9,7 @@
     ],
     "typeExtras": {
       "objectives": [
-        "Draw an end-to-end architecture for Ask IT and explain each component's responsibility.",
+        "Draw an end-to-end architecture for Customer support ticketing system and explain each component's responsibility.",
         "Define how FAQ metadata and role-based permissions are enforced on the server.",
         "Estimate indicative monthly AI cost and identify latency considerations.",
         "Record a key architecture choice in a short architecture decision record (ADR)."
@@ -26,7 +26,7 @@
     ],
     "typeExtras": {
       "objectives": [
-        "Draw an end-to-end architecture for Ask IT and explain each component's responsibility.",
+        "Draw an end-to-end architecture for Customer support ticketing system and explain each component's responsibility.",
         "Define how FAQ metadata and role-based permissions are enforced on the server.",
         "Estimate indicative monthly AI cost and identify latency considerations.",
         "Record a key architecture choice in a short architecture decision record (ADR)."
@@ -43,7 +43,7 @@
     ],
     "typeExtras": {
       "objectives": [
-        "Draw an end-to-end architecture for Ask IT and explain each component's responsibility.",
+        "Draw an end-to-end architecture for Customer support ticketing system and explain each component's responsibility.",
         "Define how FAQ metadata and role-based permissions are enforced on the server.",
         "Estimate indicative monthly AI cost and identify latency considerations.",
         "Record a key architecture choice in a short architecture decision record (ADR)."
@@ -60,7 +60,7 @@
     ],
     "typeExtras": {
       "objectives": [
-        "Draw an end-to-end architecture for Ask IT and explain each component's responsibility.",
+        "Draw an end-to-end architecture for Customer support ticketing system and explain each component's responsibility.",
         "Define how FAQ metadata and role-based permissions are enforced on the server.",
         "Estimate indicative monthly AI cost and identify latency considerations.",
         "Record a key architecture choice in a short architecture decision record (ADR)."
@@ -71,20 +71,15 @@
     "summary": "Tutored lab: ARCHITECTURE.md for Todo + ADR-001.",
     "sections": [
       {
-        "heading": "Read vs lab vs assignment",
-        "body": "Reads cover Ask IT system design. This lab writes Todo architecture with your tutor. Assignment: Update the architecture pack, Ask IT ARCHITECTURE.md solo."
-      },
-      {
-        "heading": "Done when",
-        "body": "Todo ARCHITECTURE.md includes ADR-001 and text diagram."
+        "heading": "Overview",
+        "body": "Reads cover Customer support ticketing system system design. This lab writes Todo architecture with your tutor."
       }
     ],
     "typeExtras": {
       "objectives": [
         "Sketch Todo as React → FastAPI → SQLite with labeled API routes.",
         "Record an ADR that explains one real decision (e.g. auth deferred in v1).",
-        "List components and data flow before writing production code.",
-        "Use the same architecture discipline on Ask IT in your assignment."
+        "List components and data flow before writing production code."
       ]
     }
   },
@@ -117,7 +112,7 @@
     ],
     "typeExtras": {
       "objectives": [
-        "Draw an end-to-end architecture for Ask IT and explain each component's responsibility.",
+        "Draw an end-to-end architecture for Customer support ticketing system and explain each component's responsibility.",
         "Define how FAQ metadata and role-based permissions are enforced on the server.",
         "Estimate indicative monthly AI cost and identify latency considerations.",
         "Record a key architecture choice in a short architecture decision record (ADR)."

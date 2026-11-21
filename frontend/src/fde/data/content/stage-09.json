@@ -1,6 +1,6 @@
 {
   "enterprise-ai-fde/recap-and-handover-goals": {
-    "summary": "What enterprise customers ask before they trust Ask IT in production.",
+    "summary": "What enterprise customers ask before they trust Customer support ticketing system in production.",
     "sections": [
       {
         "heading": "Overview",
@@ -8,7 +8,7 @@
       },
       {
         "heading": "Path",
-        "body": "**Reads** = security and observability vocabulary. **Lab 15** = Todo tracing **with tutor**. **Assignment** = Ask IT security evidence and sponsor readout **on your own**."
+        "body": "**Reads** = security and observability vocabulary. **Lab 15** = Todo tracing **with tutor**. **Assignment** = Customer support ticketing system security evidence and sponsor readout **on your own**."
       }
     ],
     "typeExtras": {
@@ -25,7 +25,7 @@
     "sections": [
       {
         "heading": "Overview",
-        "body": "Retail IT will send a **security questionnaire**. You answer with **evidence** from your running Ask IT app—not promises.\n\n- Approved models and where keys live\n- Data flow (FAQ → retrieval → model → user)\n- Staff vs admin access\n- Logs and retention\n- How sensitive store data is handled"
+        "body": "Retail IT will send a **security questionnaire**. You answer with **evidence** from your running Customer support ticketing system app—not promises.\n\n- Approved models and where keys live\n- Data flow (FAQ → retrieval → model → user)\n- Staff vs admin access\n- Logs and retention\n- How sensitive store data is handled"
       }
     ],
     "typeExtras": {
@@ -58,29 +58,24 @@
     "summary": "Tutored lab: Todo traces and evaluation snapshot (panel below).",
     "sections": [
       {
-        "heading": "Path",
+        "heading": "Overview",
         "body": "Wire or inspect tracing on Todo first (smaller surface). Capture one trace screenshot and one eval failure you can explain."
-      },
-      {
-        "heading": "Then",
-        "body": "Reuse the workflow on Ask IT in the final assignment."
       }
     ],
     "typeExtras": {
       "objectives": [
         "Define which Todo API spans you would trace (validation, DB write, etc.).",
         "List Langfuse env vars and flush behavior without exposing secrets.",
-        "Connect tracing to debugging real latency and failure issues.",
-        "Scale the same observability plan to Ask IT in the enterprise stage."
+        "Connect tracing to debugging real latency and failure issues."
       ]
     }
   },
   "enterprise-ai-fde/capstone-style-readout-and-close": {
-    "summary": "Practice a five-minute sponsor update (Ask IT story).",
+    "summary": "Practice a five-minute sponsor update (Customer support ticketing system story).",
     "sections": [
       {
         "heading": "Overview",
-        "body": "Present: what Ask IT does, what you proved in pilot, top three risks, and recommended next phase. Keep slides optional—clear speaking notes are enough."
+        "body": "Present: what Customer support ticketing system does, what you proved in pilot, top three risks, and recommended next phase. Keep slides optional—clear speaking notes are enough."
       }
     ],
     "typeExtras": {
@@ -93,15 +88,15 @@
     }
   },
   "enterprise-ai-fde/handover-package-and-sponsor-readout": {
-    "summary": "Assignment: Ask IT handover + sponsor readout (solo).",
+    "summary": "Assignment: Customer support ticketing system handover + sponsor readout (solo).",
     "sections": [
       {
         "heading": "Deliverables",
-        "body": "Security questionnaire evidence, trace/eval snapshot, README, architecture diagram, runbook, and a five-minute sponsor readout script for Ask IT."
+        "body": "Security questionnaire evidence, trace/eval snapshot, README, architecture diagram, runbook, and a five-minute sponsor readout script for Customer support ticketing system."
       },
       {
         "heading": "Skills from Todo",
-        "body": "Mirror Lab 15 structure but every artifact describes Ask IT URLs, RBAC, and evaluation results."
+        "body": "Mirror Lab 15 structure but every artifact describes Customer support ticketing system URLs, RBAC, and evaluation results."
       },
       {
         "heading": "Due",

@@ -55,15 +55,13 @@ const getStudentPermissions = async (req, res) => {
           realtimeProjects: studentPerms.realtime_projects
         };
       } else {
-        // Student doesn't have permissions yet - use defaults
+        // Student doesn't have permissions yet - locked by default
         permissions[student.id] = {
-          courses: true, // Default access to courses
+          courses: false,
           hackathons: true,
-          realtimeProjects: true
+          realtimeProjects: false
         };
       }
-      // Force realtimeProjects to true
-      permissions[student.id].realtimeProjects = true;
     });
 
     console.log('Returning permissions to frontend:', permissions);
@@ -132,8 +130,8 @@ const updateStudentPermissions = async (req, res) => {
             where: { student_id: studentId },
             defaults: {
               student_id: studentId,
-              courses: studentPermissions.courses !== undefined ? studentPermissions.courses : true,
-              hackathons: studentPermissions.hackathons !== undefined ? studentPermissions.hackathons : false,
+              courses: studentPermissions.courses !== undefined ? studentPermissions.courses : false,
+              hackathons: studentPermissions.hackathons !== undefined ? studentPermissions.hackathons : true,
               realtime_projects: studentPermissions.realtimeProjects !== undefined ? studentPermissions.realtimeProjects : false
             },
             transaction: t
@@ -264,13 +262,10 @@ const getStudentPermission = async (req, res) => {
       hackathons: permission.hackathons,
       realtimeProjects: permission.realtime_projects
     } : {
-      courses: true, // Default access to courses
+      courses: false,
       hackathons: true,
-      realtimeProjects: true
+      realtimeProjects: false
     };
-
-    // Force realtimeProjects to true
-    if (permissions) permissions.realtimeProjects = true;
 
     res.json({
       success: true,
@@ -319,8 +314,8 @@ const updateStudentPermission = async (req, res) => {
       where: { student_id: studentId },
       defaults: {
         student_id: studentId,
-        courses: courses !== undefined ? courses : true,
-        hackathons: hackathons !== undefined ? hackathons : false,
+        courses: courses !== undefined ? courses : false,
+        hackathons: hackathons !== undefined ? hackathons : true,
         realtime_projects: realtimeProjects !== undefined ? realtimeProjects : false
       }
     });
@@ -390,11 +385,11 @@ const checkStudentAccess = async (req, res) => {
       where: { student_id: studentId }
     });
 
-    // Default permissions
+    // Default permissions — courses/projects locked until admin grants
     const defaultPermissions = {
-      courses: true,
+      courses: false,
       hackathons: true,
-      realtimeProjects: true
+      realtimeProjects: false
     };
 
     // Map feature names to database field names
@@ -462,15 +457,10 @@ const getMyPermissions = async (req, res) => {
         hackathons: permission.hackathons,
         realtimeProjects: permission.realtime_projects
       } : {
-        courses: true, // Default access to courses
+        courses: false,
         hackathons: true,
-        realtimeProjects: true
+        realtimeProjects: false
       };
-
-      // Force realtimeProjects to true as it's now controlled by plan-based locking
-      if (permissions) {
-        permissions.realtimeProjects = true;
-      }
 
       return res.json({
         success: true,

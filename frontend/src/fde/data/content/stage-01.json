@@ -1,4 +1,36 @@
 {
+  "software-engineering/antigravity-for-fde": {
+    "summary": "Use Antigravity (or your AI coding environment) the way an FDE does: project context, prompts, checkpoints, and safe iteration on customer work.",
+    "sections": [
+      {
+        "heading": "Overview",
+        "body": "After you understand the FDE role and course flow, use Antigravity as your day-to-day partner for labs: project context, structured prompts, checkpoints, and the smallest fix when something breaks."
+      }
+    ],
+    "typeExtras": {
+      "objectives": [
+        "Open a project folder and run prompts against real files",
+        "Read checkpoint outcomes before moving to the next step",
+        "Escalate errors back to the AI with full context instead of guessing"
+      ]
+    }
+  },
+  "software-engineering/git-docker-and-cloud": {
+    "summary": "Version control, containers, and first cloud deploy patterns every FDE uses when handing work to a customer team.",
+    "sections": [
+      {
+        "heading": "Overview",
+        "body": "Git keeps changes reviewable; Docker makes runs repeatable; cloud hosts (Render, AWS, and similar) host the POC and production URLs you will practice in Section 2."
+      }
+    ],
+    "typeExtras": {
+      "objectives": [
+        "Keep secrets out of Git and document them in .env.example",
+        "Explain what a container gives you over running on bare metal",
+        "Name the deploy surfaces this course uses for MVP and production"
+      ]
+    }
+  },
   "software-engineering/python-basics": {
     "summary": "Learn variables, strings, lists, dictionaries, functions, loops and if statements, then see how a dictionary matches the JSON an API returns.",
     "sections": [
@@ -100,7 +132,7 @@
     "sections": [
       {
         "heading": "Overview",
-        "body": "This hour sets context before Python and FastAPI. You are learning how real customer engagements run—not building the Ask IT app yet."
+        "body": "This hour sets context before Python and FastAPI. You are learning how real customer engagements run—not building the Customer support ticketing system app yet."
       },
       {
         "heading": "What an FDE does",
@@ -115,7 +147,7 @@
       "objectives": [
         "Explain what an FDE does in plain language",
         "Name the main SDLC phases you will practise from Stage 3 onward",
-        "Describe how Section 1 skills (Python and FastAPI) connect to the Ask IT customer flow and capstone"
+        "Describe how Section 1 skills (Python and FastAPI) connect to the Customer support ticketing system customer flow and capstone"
       ]
     }
   },
@@ -125,10 +157,6 @@
       {
         "heading": "Overview",
         "body": "This lab builds the smallest useful Python script before any API work. No libraries and no database are needed."
-      },
-      {
-        "heading": "What you will learn",
-        "body": "- Store text, numbers and True/False values in variables.\n- Clean and format text with string methods and f-strings.\n- Keep related values in a list or a dictionary.\n- Write a function, then use a for loop and an if statement to count matching items.\n- Recognise that a dictionary has the same shape as the JSON an API returns in Lab 1A."
       }
     ],
     "typeExtras": {

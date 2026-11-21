@@ -400,47 +400,37 @@ function FoundationLabConcepts({ exercise }) {
   )
 }
 
-function PromptLabExercise({ exercise }) {
+function PromptLabExercise({ exercise, compactLabPanel = false }) {
   const customer = usesCustomerPanel(exercise)
   const contextText = exercise.labContext || exercise.assignmentContext
+  const todoOrFoundationLab = compactLabPanel && (isTodo(exercise) || isFoundation(exercise))
   return (
     <div className="space-y-5">
-      <PanelHowTo exercise={exercise} />
-      <LabMetaHeader exercise={exercise} />
-      {isFoundation(exercise) && <FoundationLabConcepts exercise={exercise} />}
-      {exercise.skillsFromLab?.length > 0 && (
+      {!compactLabPanel && <PanelHowTo exercise={exercise} />}
+      {compactLabPanel && (
+        <p className="text-xs leading-relaxed m-0 mb-2" style={{ color: 'var(--fde-mut)' }}>
+          Copy each prompt into your AI tool, run the checkpoint, then open Troubleshooting if something fails.
+        </p>
+      )}
+      {!compactLabPanel && <LabMetaHeader exercise={exercise} />}
+      {!compactLabPanel && isFoundation(exercise) && <FoundationLabConcepts exercise={exercise} />}
+      {exercise.skillsFromLab?.length > 0 && !todoOrFoundationLab && (
         <SkillsFromLab
           items={exercise.skillsFromLab}
           title={exercise.skillsFromLabTitle}
         />
       )}
       {isFoundationAssignment(exercise) && <SkillsFromStage items={exercise.skillsFromStage} />}
-      {customer ? (
-        contextText && <InfoRow label="What you will do">{contextText}</InfoRow>
-      ) : (
-        <>
-          <InfoRow label="Objective">{exercise.objective}</InfoRow>
-          <InfoRow label="Scenario">{exercise.scenario}</InfoRow>
-        </>
-      )}
+      {!compactLabPanel &&
+        (customer ? (
+          contextText && <InfoRow label="What you will do">{contextText}</InfoRow>
+        ) : (
+          <>
+            <InfoRow label="Objective">{exercise.objective}</InfoRow>
+            <InfoRow label="Scenario">{exercise.scenario}</InfoRow>
+          </>
+        ))}
       <PromptsList prompts={exercise.prompts} showCheckpoints={!customer} />
-      {exercise.executionSteps?.length > 0 && (
-        <div className="space-y-3">
-          <h4
-            className="text-[10px] font-semibold uppercase tracking-widest"
-            style={{ color: 'var(--fde-mut)' }}
-          >
-            Execution steps
-          </h4>
-          <ol className="list-decimal pl-5 space-y-3 text-[0.9rem] leading-relaxed" style={{ color: 'var(--fde-tx)' }}>
-            {exercise.executionSteps.map((step, i) => (
-              <li key={i} className="pl-1">
-                <PromptMarkdown text={step} />
-              </li>
-            ))}
-          </ol>
-        </div>
-      )}
       <AcceptanceChecklist items={exercise.acceptanceCriteria} />
       <TroubleshootingBlock items={exercise.troubleshooting} />
       {exercise.checkoutQuestion && (
@@ -630,22 +620,22 @@ function CodeExercise({ exercise }) {
   return <ConceptExercise exercise={{ ...exercise, type: 'concept' }} />
 }
 
-function renderExerciseBody(exercise) {
+function renderExerciseBody(exercise, compactLabPanel) {
   switch (exercise.type) {
     case 'prompt':
       return <PromptExercise exercise={exercise} />
     case 'prompt-lab':
-      return <PromptLabExercise exercise={exercise} />
+      return <PromptLabExercise exercise={exercise} compactLabPanel={compactLabPanel} />
     case 'concept':
       return <ConceptExercise exercise={exercise} />
     case 'code':
       return <CodeExercise exercise={exercise} />
     default:
-      return <PromptLabExercise exercise={exercise} />
+      return <PromptLabExercise exercise={exercise} compactLabPanel={compactLabPanel} />
   }
 }
 
-export default function ExerciseBlock({ exercise, accentColor }) {
+export default function ExerciseBlock({ exercise, accentColor, compactLabPanel = false }) {
   const [open, setOpen] = useState(false)
 
   if (!exercise) return null
@@ -699,7 +689,7 @@ export default function ExerciseBlock({ exercise, accentColor }) {
             <span>🤖</span>
             <span>{exerciseBadge(exercise)}</span>
           </div>
-          {renderExerciseBody(exercise)}
+          {renderExerciseBody(exercise, compactLabPanel)}
         </div>
       )}
     </div>

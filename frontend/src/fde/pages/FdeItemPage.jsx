@@ -43,12 +43,13 @@ export default function FdeItemPage() {
     'fde-sdlc-business-requirement',
     'fde-sdlc-ui-ux-solution',
     'fde-sdlc-architecture-solution',
-    'development',
-    'mvp-poc-local-render',
-    'production-deployment',
+    'development-backend',
+    'development-frontend',
+    'deployment',
     'enterprise-ai-fde',
   ])
-  const hideItemExtras = foundationStage || customerStageSlugs.has(stageSlug)
+  const capstoneStage = stageSlug === 'capstone-fde'
+  const hideItemExtras = foundationStage || customerStageSlugs.has(stageSlug) || capstoneStage
   const foundationPractise =
     foundationStage && (item.type === 'lab' || item.type === 'assignment')
   const foundationLab = item.type === 'lab' && foundationStage
@@ -92,8 +93,12 @@ export default function FdeItemPage() {
           >
             {TYPE_LABEL[item.type]}
           </span>
-          <span aria-hidden className="opacity-50">·</span>
-          <span className="tabular-nums">{item.minutes} min</span>
+          {stageSlug !== 'capstone-fde' && (
+            <>
+              <span aria-hidden className="opacity-50">·</span>
+              <span className="tabular-nums">{item.minutes} min</span>
+            </>
+          )}
         </div>
         <h1 className="text-2xl sm:text-3xl font-bold tracking-tight leading-tight mb-5">{item.title}</h1>
 
@@ -101,17 +106,18 @@ export default function FdeItemPage() {
           <FdeItemBody
             content={content}
             itemType={item.type}
+            minimalPractise={item.type === 'lab'}
             hideLabDeliverables={foundationPractise || (item.type === 'lab' && customerStageSlugs.has(stageSlug))}
             hideCheckpointQuestions={hideItemExtras}
           />
         )}
 
-        {(item.type === 'lab' || item.type === 'assignment') && exercise?.whatYouLearn?.length > 0 && (
+        {item.type === 'lab' && exercise?.whatYouLearn?.length > 0 && (
           <LabWhatYouLearn items={exercise.whatYouLearn} accentColor={stage.color} />
         )}
 
         {exercise && (
-          <ExerciseBlock exercise={exercise} accentColor={stage.color} />
+          <ExerciseBlock exercise={exercise} accentColor={stage.color} compactLabPanel={item.type === 'lab'} />
         )}
 
         <div className="mt-10 pt-6 border-t border-[var(--fde-bd)] flex flex-wrap gap-3 items-center">

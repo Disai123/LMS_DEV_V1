@@ -50,7 +50,7 @@ export default function ItemLink({ stageSlug, item, accent }) {
             </span>
           )}
           {done && <span className="text-[#35d49a] mr-1.5">✓</span>}
-          {item.minutes} min
+          {stageSlug !== 'capstone-fde' && <>{item.minutes} min</>}
         </span>
       </Link>
     </li>

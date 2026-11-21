@@ -6,7 +6,7 @@ export const usePermissions = () => {
   const { user, loading: authLoading } = useAuth();
   console.log('usePermissions - user:', user, 'authLoading:', authLoading);
   const [permissions, setPermissions] = useState({
-    courses: true,
+    courses: false,
     hackathons: false,
     realtimeProjects: false
   });
@@ -49,9 +49,9 @@ export const usePermissions = () => {
       
     } catch (error) {
       console.error('Error fetching student permissions:', error);
-      // Use default permissions on error - deny access to hackathons and realtime projects
+      // Use default permissions on error - keep features locked
       const defaultPermissions = {
-        courses: true,
+        courses: false,
         hackathons: false,
         realtimeProjects: false
       };

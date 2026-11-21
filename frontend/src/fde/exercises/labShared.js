@@ -1,9 +1,9 @@
-/** Shared copy for FDE labs (Todo, tutor) and assignments (Ask IT, solo). */
+/** Shared copy for FDE labs (Todo, tutor) and assignments (Customer support ticketing system, solo). */
 
 export const BADGE_LAB = 'Todo · Tutored lab'
 export const BADGE_FOUNDATION = 'Foundation · Lab'
 export const BADGE_FOUNDATION_ASSIGNMENT = 'Foundation · Assignment'
-export const BADGE_ASSIGNMENT = 'Ask IT · On your own'
+export const BADGE_ASSIGNMENT = 'Customer support ticketing system · On your own'
 /** @deprecated use BADGE_LAB or BADGE_ASSIGNMENT */
 export const BADGE_LABEL = BADGE_LAB
 
@@ -14,7 +14,7 @@ export const TUTOR_START =
   'Work **with your tutor**. One prompt at a time. Read **What you will do**, copy the prompt, match the **acceptance criteria**. If something breaks, open **Troubleshooting** and paste the fix prompt.'
 
 export const ASSIGNMENT_START =
-  'You are **on your own** (no tutor). Read **Skills from the lab** and **What you will do**, then copy each prompt into your AI tool. Build in **your Ask IT repo**. Match **acceptance criteria**; use **Troubleshooting** if stuck.'
+  'You are **on your own** (no tutor). Read **Skills from the lab** and **What you will do**, then copy each prompt into your AI tool. Build in **your Customer support ticketing system repo**. Match **acceptance criteria**; use **Troubleshooting** if stuck.'
 
 /** Hide generic opener when the exercise panel already explains the loop. */
 export function stripGenericBeforeYouStart(text) {
@@ -36,7 +36,7 @@ export const TODO_ONE_LINER =
   'A small Todo app: add tasks, mark done, filter by status—FastAPI + SQLite + simple React or CLI.'
 
 export const ASK_IT_ONE_LINER =
-  'Ask IT helps store staff with IT FAQs, respects staff vs admin access, and opens tickets when unsure.'
+  'Customer support ticketing system helps store staff with IT FAQs, respects staff vs admin access, and opens tickets when unsure.'
 
 export const GLOSSARY_COMMON = [
   { term: 'Prompt', meaning: 'Instructions you give an AI tool so it knows what to create or fix.' },
@@ -60,8 +60,8 @@ export const TODO_CONTEXT = `## Todo app (practice project)
 - API: GET/POST /tasks, PATCH /tasks/{id}, GET /health
 - Stack: Python 3.11 FastAPI, SQLite, optional Vite React UI`
 
-/** First prompt in an Ask IT assignment only — keep short. */
-export const ASK_IT_CONTEXT = `## Ask IT (your assignment)
+/** First prompt in a customer support ticketing system assignment only — keep short. */
+export const ASK_IT_CONTEXT = `## Customer support ticketing system (your assignment)
 - Retail IT helper: RAG on FAQs, POST /ask, POST /triage, staff vs admin RBAC
 - Build in your own repo; submit artifacts to your tutor`
 

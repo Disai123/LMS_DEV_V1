@@ -30,13 +30,13 @@ export const stageSdlcLabs = {
       },
     ],
     labContext:
-      'With your tutor, practice discovery and a one-page requirements doc for the small Todo app, not Ask IT yet.',
+      'With your tutor, practice discovery and a one-page requirements doc for the small Todo app, not Customer support ticketing system yet.',
     whatYouLearn: [
-      'Run structured discovery questions before you specify requirements.',
-      'Write a one-page Todo BRD with fixed headings reviewers can scan quickly.',
-      'Number functional requirements and user stories so they are testable.',
-      'Reuse the same BRD pattern on the Ask IT assignment without copying Todo features.',
-    ],
+    'Run structured discovery questions before you specify requirements.',
+    'Write a one-page Todo BRD with fixed headings reviewers can scan quickly.',
+    'Number functional requirements and user stories so they are testable.',
+    'Reuse the same BRD pattern on the Customer support ticketing system assignment without copying…',
+  ],
     prompts: [
       {
         step: 1,
@@ -112,11 +112,11 @@ Write a Todo BRD with these H2 sections: Overview, Functional Requirements, Non-
     labContext:
       'You will describe how the Todo task list looks and flows (add task, mark done, empty state) in a short UI brief.',
     whatYouLearn: [
-      'Describe Todo screens (list, add, mark done) in a wireframe-style markdown brief.',
-      'Include empty and error states, not only the happy path.',
-      'Keep scope on the task-list app, with no chat or Ask IT flows in this lab.',
-      'Produce a UI spec you can mirror for Ask IT in the assignment.',
-    ],
+    'Describe Todo screens (list, add, mark done) in a wireframe-style markdown brief.',
+    'Include empty and error states, not only the happy path.',
+    'Keep scope on the task-list app, with no chat or Customer support ticketing system flows in this…',
+    'Produce a UI spec you can mirror for Customer support ticketing system in the assignment.',
+  ],
     prompts: [
       {
         step: 1,
@@ -154,8 +154,8 @@ Write a Todo UI brief with these H2 sections: Overview, Design System, Task List
       troubleshootingEntry(
         'Chat UI instead of task list',
         'Wrong application UI described.',
-        'Ask IT bleed-through into Todo task-list prompt.',
-        'Rewrite the UI brief strictly for the Todo task list (list, add, mark done), removing any chat or Ask IT interface elements.',
+        'Customer support ticketing system bleed-through into Todo task-list prompt.',
+        'Rewrite the UI brief strictly for the Todo task list (list, add, mark done), removing any chat or Customer support ticketing system interface elements.',
       ),
     ],
   },
@@ -177,11 +177,11 @@ Write a Todo UI brief with these H2 sections: Overview, Design System, Task List
     labContext:
       'You will sketch how Todo is built (browser → API → database) and record one architecture decision before coding.',
     whatYouLearn: [
-      'Sketch Todo as React → FastAPI → SQLite with labeled API routes.',
-      'Record an ADR that explains one real decision (e.g. auth deferred in v1).',
-      'List components and data flow before writing production code.',
-      'Use the same architecture discipline on Ask IT in your assignment.',
-    ],
+    'Sketch Todo as React → FastAPI → SQLite with labeled API routes.',
+    'Record an ADR that explains one real decision (e.g. auth deferred in v1).',
+    'List components and data flow before writing production code.',
+    'Use the same architecture discipline on Customer support ticketing system in your assignment.',
+  ],
     prompts: [
       {
         step: 1,
@@ -218,10 +218,10 @@ Write Todo architecture notes: React → FastAPI → SQLite, API routes, and ADR
         'Add ADR-001: decision (auth optional in v1) and consequence.',
       ),
       troubleshootingEntry(
-        'Ask IT /ask flow included',
+        'Customer support ticketing system /ask flow included',
         'Wrong application context included.',
-        'Ask IT bleed-through into Todo architecture.',
-        'Remove any Ask IT or RAG /ask flows and keep the architecture strictly focused on the Todo app (React → FastAPI → SQLite).',
+        'Customer support ticketing system bleed-through into Todo architecture.',
+        'Remove any Customer support ticketing system or RAG /ask flows and keep the architecture strictly focused on the Todo app (React → FastAPI → SQLite).',
       ),
     ],
   },

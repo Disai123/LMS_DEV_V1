@@ -3,7 +3,7 @@ import { todoPrompt } from './promptCustomer'
 
 // Panel intros (match exercise labContext)
 export const INTRO_TODO_LAB1 =
-  'With your tutor, practice discovery and a one-page requirements doc for the small Todo app—not Ask IT yet.'
+  'With your tutor, practice discovery and a one-page requirements doc for the small Todo app—not Customer support ticketing system yet.'
 export const INTRO_TODO_LAB2 =
   'You will describe how the Todo task list looks and flows (add task, mark done, empty state) in a short UI brief.'
 export const INTRO_TODO_LAB3 =
@@ -69,7 +69,7 @@ export const PROMPT_TODO_ARCH = todoPrompt(
 )
 
 export const FIX_TODO_ARCH = todoPrompt(
-  'Architecture doc is too generic or mentions Ask IT.',
+  'Architecture doc is too generic or mentions Customer support ticketing system.',
   'Todo only: diagram React → FastAPI → SQLite; label /tasks routes; remove RAG or chat flows.',
   '- Revised architecture section',
 )

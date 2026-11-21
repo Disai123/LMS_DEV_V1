@@ -12,7 +12,7 @@ export default function FaqAccordion({ items }) {
               ▾
             </span>
           </summary>
-          <p className="px-5 pb-4 pt-0 m-0 text-[var(--fde-mut)] text-sm leading-relaxed max-w-3xl">{f.answer}</p>
+          <p className="px-5 pb-4 pt-0 m-0 text-[var(--fde-mut)] text-sm leading-relaxed">{f.answer}</p>
         </details>
       ))}
     </div>

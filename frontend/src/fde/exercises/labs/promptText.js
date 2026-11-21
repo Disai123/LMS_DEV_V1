@@ -23,11 +23,11 @@ ${AUDIENCE_BEGINNER}
 You are an FDE instructor onboarding a new learner.
 
 ## Task
-Explain the Ask IT project so a non-programmer can brief a teammate in under two minutes.
+Explain the Customer support ticketing system project so a non-programmer can brief a teammate in under two minutes.
 
 ## Output format
 - Exactly **8 bullet points** (no intro paragraph, no extra sections).
-- Cover: who uses Ask IT (staff vs admin), business problem (L1 IT load), RAG/FAQs, tickets/triage, RBAC, what gets built by end of roadmap, and one success metric (e.g. faster answers).
+- Cover: who uses Customer support ticketing system (staff vs admin), business problem (L1 IT load), RAG/FAQs, tickets/triage, RBAC, what gets built by end of roadmap, and one success metric (e.g. faster answers).
 - Define RAG in one short plain phrase inside the relevant bullet.
 
 ${PROMPT_QUALITY_RULES}`
@@ -63,7 +63,7 @@ ${AUDIENCE_BEGINNER}
 You are a patient setup guide for Windows 11 or macOS (ask the learner which OS if unknown).
 
 ## Task
-Create a **numbered install checklist** for Ask IT development tools:
+Create a **numbered install checklist** for Customer support ticketing system development tools:
 1. Python 3.11+
 2. Node.js 20 LTS
 3. Git
@@ -101,7 +101,7 @@ export const PROMPT_ENV_SETUP_STEP3 = `${ASK_IT_CONTEXT}
 ${AUDIENCE_BEGINNER}
 
 ## Task
-Teach a beginner how to check if the Ask IT API is alive **later** when it runs at http://localhost:8000.
+Teach a beginner how to check if the Customer support ticketing system API is alive **later** when it runs at http://localhost:8000.
 
 Provide:
 1. **One** curl command for \`GET /health\`
@@ -172,10 +172,10 @@ ${AUDIENCE_BEGINNER}
 FastAPI + pytest instructor.
 
 ## Task
-Create two files for Ask IT triage (in-memory store is fine for lab):
+Create two files for Customer support ticketing system triage (in-memory store is fine for lab):
 
 **main.py**
-- FastAPI app title "Ask IT API"
+- FastAPI app title "Customer support ticketing system API"
 - POST **/triage** accepts TicketCreate (EmailStr, strip blank issue_description)
 - Returns ticket id \`TKT-*\`, priority, **sla_hours**: High=2, Medium=8, Low=24
 - GET **/tickets** optional for debugging
@@ -191,7 +191,7 @@ ${PROMPT_QUALITY_RULES}`
 export const PROMPT_LAB1B_FIX = `${AUDIENCE_BEGINNER}
 
 ## Task
-pytest failed for Ask IT triage tests. Learner pastes failure output.
+pytest failed for Customer support ticketing system triage tests. Learner pastes failure output.
 
 1. Explain failure simply.
 2. Give **one** follow-up prompt to fix code (name file: main.py or test_main.py).
@@ -205,7 +205,7 @@ ${AUDIENCE_BEGINNER}
 ## Task
 The learner ran compare_models.py and will paste a table of model, issue, urgency label, latency, tokens.
 
-1. Recommend **one model** for Ask IT pilot (gpt-4o-mini vs gpt-3.5-turbo).
+1. Recommend **one model** for Customer support ticketing system pilot (gpt-4o-mini vs gpt-3.5-turbo).
 2. Give **3 bullets**: quality on retail downtime, cost/tokens, latency.
 3. One paragraph the learner can read to a non-technical sponsor.
 
@@ -216,7 +216,7 @@ export const PROMPT_LAB3_INGEST = `${ASK_IT_CONTEXT}
 ${AUDIENCE_BEGINNER}
 
 ## Task
-Create **ingest_faqs.py** for Ask IT:
+Create **ingest_faqs.py** for Customer support ticketing system:
 - **8** realistic retail IT FAQ strings (POS boot, scanner Bluetooth, staff WiFi, VPN, printer jam, network drop, price lookup, RF gun battery)
 - OpenAI **text-embedding-3-small**, FAISS **IndexFlatL2**
 - Functions: embed(), build_index(), find_similar(query, k=2)
@@ -299,7 +299,7 @@ export const PROMPT_LAB5B_APPROVAL = `${ASK_IT_CONTEXT}
 ${AUDIENCE_BEGINNER}
 
 ## Task
-Extend the Ask IT agent so **escalate_to_helpdesk** requires human approval:
+Extend the Customer support ticketing system agent so **escalate_to_helpdesk** requires human approval:
 - Before POST /triage, prompt \`Approve escalation? (y/n):\`
 - If n → print "Escalation cancelled" and do not call API
 - **search_it_faqs** must NOT require approval
@@ -327,7 +327,7 @@ ${PROMPT_QUALITY_RULES}`
 export const PROMPT_LAB6_GUARDRAIL = `${ASK_IT_CONTEXT}
 
 ## Task
-Design guardrails for Ask IT /ask for role=staff:
+Design guardrails for Customer support ticketing system /ask for role=staff:
 - Filter admin min_access_level FAQs before LLM context
 - System prompt refuses override/password exfiltration
 - Return escalate_suggested when appropriate
@@ -357,7 +357,7 @@ export const PROMPT_DISCOVERY_12 = `${ASK_IT_CONTEXT}
 ${AUDIENCE_BEGINNER}
 
 ## Your role
-Senior FDE preparing a discovery workshop for Ask IT (500 stores).
+Senior FDE preparing a discovery workshop for Customer support ticketing system (500 stores).
 
 ## Task
 Write **12 open-ended discovery questions** (not yes/no), grouped:
@@ -379,7 +379,7 @@ ${AUDIENCE_BEGINNER}
 Senior FDE writing the client-facing BRD after discovery.
 
 ## Task
-Write **BRD.md** for Ask IT.
+Write **BRD.md** for Customer support ticketing system.
 
 ## Required sections (exact H2 order)
 ${BRD_H2}
@@ -399,7 +399,7 @@ export const PROMPT_DISCOVERY_ONE_PAGE = `${ASK_IT_CONTEXT}
 ${AUDIENCE_BEGINNER}
 
 ## Task
-Output **only** 12 numbered discovery questions for Ask IT in 4 labeled groups (business, technical, roles, compliance).
+Output **only** 12 numbered discovery questions for Customer support ticketing system in 4 labeled groups (business, technical, roles, compliance).
 Open-ended. No BRD. No code.
 
 Save as discovery-questions.md content in your reply.
@@ -411,7 +411,7 @@ export const PROMPT_UIUX_FULL = `${ASK_IT_CONTEXT}
 ${AUDIENCE_BEGINNER}
 
 ## Your role
-UI/UX designer + FDE for Ask IT single-screen chat (React).
+UI/UX designer + FDE for Customer support ticketing system single-screen chat (React).
 
 ## Task
 Write **UI_UX.md** with text wireframes (ASCII or bullet layout descriptions).
@@ -434,7 +434,7 @@ export const PROMPT_ARCH_FULL = `${ASK_IT_CONTEXT}
 ${AUDIENCE_BEGINNER}
 
 ## Your role
-Solutions architect for Ask IT.
+Solutions architect for Customer support ticketing system.
 
 ## Task
 Write **ARCHITECTURE.md**.
@@ -457,7 +457,7 @@ export const PROMPT_DEV_BACKEND = `${ASK_IT_CONTEXT}
 ${AUDIENCE_BEGINNER}
 
 ## Task
-Create Ask IT backend **main.py**:
+Create Customer support ticketing system backend **main.py**:
 - FastAPI + SQLAlchemy (SQLite default via DATABASE_URL)
 - Seed FAQs: staff + admin (admin override policy admin-only)
 - GET /health → {"status":"ok","service":"ask-it-api"}
@@ -491,7 +491,7 @@ export const PROMPT_DEV_FRONTEND = `${ASK_IT_CONTEXT}
 ${AUDIENCE_BEGINNER}
 
 ## Task
-Create **frontend/src/App.jsx** for Ask IT (Vite React):
+Create **frontend/src/App.jsx** for Customer support ticketing system (Vite React):
 - Role select: staff vs admin/manager
 - Chat UI: messages, input, send
 - POST /ask using VITE_API_URL or http://localhost:8000
@@ -521,7 +521,7 @@ export const PROMPT_DOCKER_COMPOSE = `${ASK_IT_CONTEXT}
 ${AUDIENCE_BEGINNER}
 
 ## Task
-Generate Docker POC for Ask IT monorepo layout:
+Generate Docker POC for Customer support ticketing system monorepo layout:
 
 1. **backend/Dockerfile** — python:3.11-slim, non-root user, HEALTHCHECK /health
 2. **frontend/Dockerfile** — multi-stage Node build + nginx serve
@@ -553,7 +553,7 @@ export const PROMPT_RENDER_POC = `${ASK_IT_CONTEXT}
 ${AUDIENCE_BEGINNER}
 
 ## Task
-Create **render.yaml** for Ask IT POC:
+Create **render.yaml** for Customer support ticketing system POC:
 - Web service: FastAPI (ask-it-api), healthCheckPath /health
 - Static site: React (ask-it-app), VITE_API_URL
 - Managed Postgres (ask-it-db)
@@ -569,7 +569,7 @@ export const PROMPT_RENDER_PROD = `${ASK_IT_CONTEXT}
 ${AUDIENCE_BEGINNER}
 
 ## Task
-Upgrade Ask IT for **production pilot**:
+Upgrade Customer support ticketing system for **production pilot**:
 - **render.yaml** — pinned deps note in comments, sync:false secrets, exact FRONTEND_ORIGIN (no wildcard CORS)
 - **PRODUCTION_CHECKLIST.md** — health, RBAC smoke questions, secret rotation, rollback 3 steps
 
@@ -584,7 +584,7 @@ ${AUDIENCE_BEGINNER}
 Senior SRE writing first draft runbook.
 
 ## Task
-Write **RUNBOOK.md** for Ask IT production:
+Write **RUNBOOK.md** for Customer support ticketing system production:
 - Service URLs (ask-it-api, ask-it-app, /health, Langfuse)
 - Health check procedure (4 steps)
 - Incidents with triage: OpenAI **429**, RAG latency, **RBAC leak** (sev-1), DB timeout
@@ -601,7 +601,7 @@ export const PROMPT_RUNBOOK_DRILL = `${ASK_IT_CONTEXT}
 ${AUDIENCE_BEGINNER}
 
 ## Scenario
-Ask IT returns HTTP 429 from OpenAI during peak store hours.
+Customer support ticketing system returns HTTP 429 from OpenAI during peak store hours.
 
 ## Task
 1. Three triage steps for on-call (plain language)
@@ -617,7 +617,7 @@ export const PROMPT_LANGFUSE = `${ASK_IT_CONTEXT}
 ${AUDIENCE_BEGINNER}
 
 ## Task
-Add Langfuse observability for Ask IT POST /ask:
+Add Langfuse observability for Customer support ticketing system POST /ask:
 - Trace: retrieval span (latency_ms, hit count) + generation span (tokens)
 - Score **groundedness** 0.0 or 1.0 with simple rule documented
 - Update **.env.example** with LANGFUSE_* vars
@@ -657,7 +657,7 @@ export function capstoneMainPrompt(project, hourGoal, deliverable) {
 
 ${AUDIENCE_BEGINNER}
 
-## Important — not Ask IT build
+## Important — not Customer support ticketing system build
 This capstone applies the **same prompt → check → fix** method on a **different** product.
 
 ## Project

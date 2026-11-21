@@ -47,9 +47,9 @@ const register = async (req, res, next) => {
     try {
       await StudentPermission.create({
         student_id: user.id,
-        courses: true,
+        courses: false,
         hackathons: true,
-        realtime_projects: true
+        realtime_projects: false
       });
       logger.info(`Permissions created for new student: ${email}`);
 

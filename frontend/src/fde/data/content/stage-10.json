@@ -1,162 +1,86 @@
 {
-  "capstone-fde/project-1-hour-1-requirements-structure-and-database": {
-    "summary": "Expected outcome: Application flow and project structure understood; database is reachable.",
+  "capstone-fde/module-1-fullstack-commerce": {
+    "summary": "Build and verify the commerce backbone—React storefront, FastAPI services, and PostgreSQL—before any AI layers.",
     "sections": [
       {
-        "heading": "Overview",
-        "body": "- Confirm the customer/admin scope and journey: browse products → product details → cart → checkout → order history.\n- Inspect the starter repository; identify React pages, FastAPI routes and PostgreSQL tables.\n- Verify the database connection and sample data."
+        "heading": "What we will do",
+        "body": "- Stand up one e-commerce application skeleton: product catalog, product detail, cart, checkout, and order history.\n- Connect FastAPI routes to PostgreSQL so lists, carts, and orders reflect real persisted data.\n- Wire the React client to those APIs with loading, empty, and error states.\n- Prove the customer shopping journey works end-to-end while the assistant features are still off.\n- Record what is verified vs. still rough so later modules add AI without masking broken commerce."
+      },
+      {
+        "heading": "What you will learn",
+        "body": "- How FDEs **stabilize core product flows** before adding LLM complexity.\n- FastAPI resource design for catalog, cart, and orders with validation.\n- React patterns for API-backed UI states.\n- PostgreSQL as the source of truth for storefront data.\n- Trade-offs when introducing AI on top of an untested vs. tested commerce stack."
       }
     ],
-    "typeExtras": {}
+    "typeExtras": {
+      "objectives": [
+        "Explain the end-to-end shopper flow in one diagram or short narrative",
+        "Name the FastAPI routes and tables that back catalog, cart, and orders",
+        "Describe how UI states map to API success, empty, and failure",
+        "State why commerce must work before agents or RAG are added"
+      ]
+    }
   },
-  "capstone-fde/project-1-hour-2-backend-apis-and-business-flow": {
-    "summary": "Expected outcome: Core APIs return real database data and the main business flow is demonstrable.",
+  "capstone-fde/module-2-multi-agent-store-assistant": {
+    "summary": "Layer a LangGraph multi-agent assistant on the same storefront—store actions with clear permissions, not open-ended chat.",
     "sections": [
       {
-        "heading": "Overview",
-        "body": "- Walk through or implement product/category APIs, cart operations and order APIs.\n- Connect endpoints to PostgreSQL and validate request/response behavior.\n- Check basic login/role handling if already present in the starter."
+        "heading": "What we will do",
+        "body": "- Define shopper questions the assistant should handle: product search, cart status, order lookup.\n- Start from a single-agent baseline on existing store tools, then split responsibilities into specialists.\n- Design an orchestrator that routes to Product Search, Cart, and Order agents with **scoped** database permissions.\n- Implement a LangGraph flow with conditional routing and minimal context between nodes.\n- Test invalid questions, unauthorized actions, and failures against normal app behavior."
+      },
+      {
+        "heading": "What you will learn",
+        "body": "- When a **single agent** is enough vs. when **multi-agent** routing improves control.\n- LangGraph orchestration and specialist boundaries in a production-shaped app.\n- Tool design that reuses FastAPI and database access—no duplicate business logic.\n- Permission models for agents that can read or mutate store data.\n- Failure behavior: refuse, escalate, or hand off without corrupting cart or orders."
       }
     ],
-    "typeExtras": {}
+    "typeExtras": {
+      "objectives": [
+        "Map example shopper questions to the correct specialist agent",
+        "Explain what each agent may read or change in the database",
+        "Contrast single-agent limits with multi-agent routing benefits",
+        "List failure cases where the assistant must not guess or over-act"
+      ]
+    }
   },
-  "capstone-fde/project-1-hour-3-react-ui-and-api-integration": {
-    "summary": "Expected outcome: Customer flow works across React, FastAPI and PostgreSQL.",
+  "capstone-fde/module-3-agentic-rag-product-manuals": {
+    "summary": "Add agentic RAG over approved product manuals—cited answers about products without letting retrieval mutate the cart.",
     "sections": [
       {
-        "heading": "Overview",
-        "body": "- Connect product listing/details, cart and order screens to FastAPI.\n- Demonstrate loading, success, empty and error states.\n- Check that cart totals and order data reflect backend responses rather than hard-coded UI data."
+        "heading": "What we will do",
+        "body": "- Curate approved product documentation (manuals, specs, warranty notes) with clear ownership.\n- Chunk, embed, and index content in **ChromaDB** with metadata tied to products.\n- Build an agentic retrieval loop: query preparation, sufficiency checks, grounded answers with **quotes**, and explicit refusal when evidence is weak.\n- Expose a manual-assistance mode in the UI separate from store-action chat.\n- Evaluate ambiguous questions and attacks where retrieval must not invent specs or change orders."
+      },
+      {
+        "heading": "What you will learn",
+        "body": "- **Agentic RAG** vs. one-shot retrieval for product Q&A.\n- ChromaDB collections, metadata, and citation discipline in customer-facing apps.\n- Separating **store mutations** (agents) from **read-only knowledge** (RAG).\n- Refusal and low-confidence behavior as product requirements.\n- Connecting observability from Section 2 to capstone retrieval quality."
       }
     ],
-    "typeExtras": {}
+    "typeExtras": {
+      "objectives": [
+        "Describe the document sources and how chunks map to products",
+        "Explain citation and refusal rules in plain language",
+        "State why RAG endpoints must not perform cart or checkout actions",
+        "Name metrics or traces that show retrieval quality"
+      ]
+    }
   },
-  "capstone-fde/project-1-hour-4-end-to-end-testing-and-handover": {
-    "summary": "Expected outcome: A working full-stack walkthrough plus verified features and known gaps.",
+  "capstone-fde/module-4-deployment-and-demo": {
+    "summary": "Ship a pilot-ready demo: repeatable runs, a cloud URL, smoke tests, and a concise handover story.",
     "sections": [
       {
-        "heading": "Overview",
-        "body": "- Run the customer journey end-to-end; test key admin product/order operations if included.\n- Fix one high-priority issue, review environment configuration, and record test results."
-      }
-    ],
-    "typeExtras": {}
-  },
-  "capstone-fde/project-2-hour-1-agent-concepts-and-single-agent-baseline": {
-    "summary": "Expected outcome: A simple single-agent flow and its tool boundaries are understood.",
-    "sections": [
+        "heading": "What we will do",
+        "body": "- Package the unified app for repeatable local and container runs.\n- Promote a POC build to a hosted URL with secrets outside source control.\n- Run smoke tests on commerce, agent store actions, and manual RAG modes.\n- Prepare a short demo narrative: what works, known gaps, and operational limits.\n- Align handover artifacts with deployment and observability practices from earlier stages."
+      },
       {
-        "heading": "Overview",
-        "body": "- Choose Shop Assistant use cases: product search, cart questions and order questions.\n- Demonstrate a single agent calling a limited set of existing application tools.\n- Identify what it handles well and where one agent becomes difficult to control."
+        "heading": "What you will learn",
+        "body": "- FDE deployment habits: env config, health checks, rollback thinking.\n- How to demo **three modes** in one app without confusing stakeholders.\n- Smoke-test design for full-stack plus AI surfaces.\n- Honest gap lists vs. overselling pilot features.\n- Sponsor-ready storytelling for integrated commerce, agents, and RAG."
       }
     ],
-    "typeExtras": {}
-  },
-  "capstone-fde/project-2-hour-2-define-multi-agent-responsibilities": {
-    "summary": "Expected outcome: Agent responsibilities, routing rules and permission boundaries are documented.",
-    "sections": [
-      {
-        "heading": "Overview",
-        "body": "- Design the Orchestrator, Product Search Agent, Cart Agent and Order Management Agent.\n- Map example questions to specialists and define what each agent may read or change.\n- Reuse existing authentication, business rules and database functions."
-      }
-    ],
-    "typeExtras": {}
-  },
-  "capstone-fde/project-2-hour-3-build-the-langgraph-flow": {
-    "summary": "Expected outcome: A basic multi-agent path routes common requests to the correct specialist.",
-    "sections": [
-      {
-        "heading": "Overview",
-        "body": "- Connect the user request to the Orchestrator, add conditional routing to the relevant specialist, pass only required context, and return the specialist result.\n- Test product search, view-cart and order-history questions."
-      }
-    ],
-    "typeExtras": {}
-  },
-  "capstone-fde/project-2-hour-4-test-actions-permissions-and-failures": {
-    "summary": "Expected outcome: A single-agent vs multi-agent comparison, with core routing and permission checks tested.",
-    "sections": [
-      {
-        "heading": "Overview",
-        "body": "- Test valid and invalid requests, unclear questions, no-data results, unauthorized cart/order access and repeated action attempts.\n- Compare agent results with normal application behavior and record limitations."
-      }
-    ],
-    "typeExtras": {}
-  },
-  "capstone-fde/project-3-hour-1-knowledge-sources-and-document-preparation": {
-    "summary": "Expected outcome: A small, approved document set is ready for indexing.",
-    "sections": [
-      {
-        "heading": "Overview",
-        "body": "- Select approved product manuals, FAQs or usage guides.\n- Demonstrate text extraction, cleaning, chunking, overlap and metadata such as product, document and section.\n- Define which questions the assistant is allowed to answer."
-      }
-    ],
-    "typeExtras": {}
-  },
-  "capstone-fde/project-3-hour-2-embeddings-faiss-and-retrieval": {
-    "summary": "Expected outcome: A retrieval step returns relevant chunks with document/source information.",
-    "sections": [
-      {
-        "heading": "Overview",
-        "body": "- Generate embeddings for document chunks, create/load the FAISS index, and map retrieved vectors back to source metadata.\n- Run sample queries and inspect whether returned chunks answer them."
-      }
-    ],
-    "typeExtras": {}
-  },
-  "capstone-fde/project-3-hour-3-agentic-retrieval-and-grounded-answers": {
-    "summary": "Expected outcome: The RAG assistant answers from approved document content and avoids unsupported claims.",
-    "sections": [
-      {
-        "heading": "Overview",
-        "body": "- Create a simple flow: understand the question → prepare/search query → retrieve → check whether context is sufficient → optionally retry once → generate an answer from retrieved text.\n- Return a no-information response when sources do not support an answer."
-      }
-    ],
-    "typeExtras": {}
-  },
-  "capstone-fde/project-3-hour-4-api-ui-integration-and-evaluation": {
-    "summary": "Expected outcome: A working document-question-answering demo with a small evaluation checklist.",
-    "sections": [
-      {
-        "heading": "Overview",
-        "body": "- Expose the RAG flow through a FastAPI endpoint and connect a simple React chat panel.\n- Test product specifications, how-to questions, ambiguous questions, no-match questions and prompt-injection attempts.\n- Check source references and response behavior."
-      }
-    ],
-    "typeExtras": {}
-  },
-  "capstone-fde/project-4-hour-1-integration-design-and-codebase-review": {
-    "summary": "Expected outcome: Integration flow and module boundaries are clear; no duplicate backend or database is introduced.",
-    "sections": [
-      {
-        "heading": "Overview",
-        "body": "- Review the full-stack application and separate Multi-Agent and RAG modules.\n- Define one Shop Assistant UI with two explicit modes: “Store Data & Actions” and “Product Manuals.” Confirm both modules reuse the same application, authentication and database."
-      }
-    ],
-    "typeExtras": {}
-  },
-  "capstone-fde/project-4-hour-2-integrate-the-multi-agent-module": {
-    "summary": "Expected outcome: Store Data & Actions mode works with existing application data and permitted actions.",
-    "sections": [
-      {
-        "heading": "Overview",
-        "body": "- Connect the chat mode for live store questions and allowed actions.\n- Route product/catalog questions, cart operations and order requests through the Orchestrator and specialists.\n- Verify user identity and role permissions remain intact."
-      }
-    ],
-    "typeExtras": {}
-  },
-  "capstone-fde/project-4-hour-3-integrate-the-agentic-rag-module": {
-    "summary": "Expected outcome: Product Manuals mode answers from approved documents and reports when information is not found.",
-    "sections": [
-      {
-        "heading": "Overview",
-        "body": "- Connect Product Manuals mode to the RAG endpoint and FAISS index.\n- Return grounded answers and source references.\n- Keep manual-based answers separate from live database answers; do not silently mix the two knowledge sources."
-      }
-    ],
-    "typeExtras": {}
-  },
-  "capstone-fde/project-4-hour-4-end-to-end-validation-and-demo": {
-    "summary": "Expected outcome: One integrated application demonstrates full-stack shopping, multi-agent store assistance and Agentic RAG in separate modes.",
-    "sections": [
-      {
-        "heading": "Overview",
-        "body": "- Test both modes, normal shopping flows, authorization boundaries, no-data questions, retrieval failures and service errors.\n- Review Langfuse traces/evaluation if configured, clean temporary debug files, and prepare a short demo walkthrough."
-      }
-    ],
-    "typeExtras": {}
+    "typeExtras": {
+      "objectives": [
+        "List environments from local dev through POC URL",
+        "Name smoke tests that prove commerce and both assistant modes",
+        "Summarize risks and known gaps for a five-minute readout",
+        "Connect capstone demo to production-hardening themes from Section 2"
+      ]
+    }
   }
 }

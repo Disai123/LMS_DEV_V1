@@ -101,7 +101,7 @@ exports.submitPaymentRequest = async (req, res, next) => {
             payment_id: `UPI_${trimmedTxn}`
         }, { transaction });
 
-        // Update RBAC permissions immediately based on plan
+        // Only update hackathons from plan; courses/realtime_projects stay admin-RBAC controlled
         const StudentPermission = require('../models').StudentPermission;
         const planName = plan.name.toLowerCase();
         const hackathonsAccess = (planName === 'basic' || planName === 'pro');
@@ -113,16 +113,14 @@ exports.submitPaymentRequest = async (req, res, next) => {
 
         if (existingPerm) {
             await existingPerm.update({
-                courses: true,
-                hackathons: hackathonsAccess,
-                realtime_projects: true
+                hackathons: hackathonsAccess
             }, { transaction });
         } else {
             await StudentPermission.create({
                 student_id: userId,
-                courses: true,
+                courses: false,
                 hackathons: hackathonsAccess,
-                realtime_projects: true
+                realtime_projects: false
             }, { transaction });
         }
 
@@ -577,15 +575,15 @@ exports.manualUpgrade = async (req, res, next) => {
             payment_id: `MANUAL_ADMIN_${req.user.id}_${Date.now()}`
         }, { transaction });
 
-        // Update RBAC permissions
+        // Only update hackathons from plan; courses/realtime_projects stay admin-RBAC controlled
         const StudentPermission = require('../models').StudentPermission;
         const hackathonsAccess = plan_name !== 'free';
         const [perm] = await StudentPermission.findOrCreate({
             where: { student_id },
-            defaults: { student_id, courses: true, hackathons: hackathonsAccess, realtime_projects: true },
+            defaults: { student_id, courses: false, hackathons: hackathonsAccess, realtime_projects: false },
             transaction
         });
-        await perm.update({ hackathons: hackathonsAccess, courses: true, realtime_projects: true }, { transaction });
+        await perm.update({ hackathons: hackathonsAccess }, { transaction });
 
         await transaction.commit();
 

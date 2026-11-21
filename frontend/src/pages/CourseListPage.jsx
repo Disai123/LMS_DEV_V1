@@ -8,7 +8,9 @@ import Footer from '../components/common/Footer'
 import CourseList from '../components/course/CourseList'
 import Pagination from '../components/common/Pagination'
 import ErrorBoundary from '../components/common/ErrorBoundary'
+import AccessDenied from '../components/common/AccessDenied'
 import usePlanAccess from '../hooks/usePlanAccess'
+import { usePermissions } from '../hooks/usePermissions'
 import { PRICING_HIDDEN } from '../config/features'
 import { useAuth } from '../context/AuthContext'
 import {
@@ -35,6 +37,7 @@ const CourseListPage = () => {
   const navigate = useNavigate()
   const { user } = useAuth()
   const { tierOrder: planTierOrder } = usePlanAccess(user)
+  const { loading: permissionsLoading, hasAccess, isAdmin } = usePermissions()
   const [search, setSearch] = useState('')
   const [activeCategory, setActiveCategory] = useState('')
   const [activeDifficulty, setActiveDifficulty] = useState('')
@@ -42,6 +45,8 @@ const CourseListPage = () => {
   const [currentPage, setCurrentPage] = useState(1)
   const [showFilters, setShowFilters] = useState(false)
   const COURSES_PER_PAGE = 12 // Increased to show more courses
+
+  const canAccessCourses = isAdmin || hasAccess('courses')
 
   const { data: coursesData, isLoading, error } = useQuery(
     ['courses', search, activeCategory, activeDifficulty, activePlan, currentPage],
@@ -53,13 +58,21 @@ const CourseListPage = () => {
       if (activePlan !== '') params.is_free = activePlan
       return courseService.getCourses(params)
     },
-    { refetchOnWindowFocus: false, staleTime: 5 * 60 * 1000 }
+    {
+      enabled: !permissionsLoading && canAccessCourses,
+      refetchOnWindowFocus: false,
+      staleTime: 5 * 60 * 1000
+    }
   )
 
   const { data: categoriesData } = useQuery(
     'categories',
     () => courseService.getCategories(),
-    { refetchOnWindowFocus: false, staleTime: 10 * 60 * 1000 }
+    {
+      enabled: !permissionsLoading && canAccessCourses,
+      refetchOnWindowFocus: false,
+      staleTime: 10 * 60 * 1000
+    }
   )
 
   const courses = coursesData?.data?.courses || []
@@ -107,6 +120,36 @@ const CourseListPage = () => {
   }
 
   const hasFilters = search || activeCategory || activeDifficulty || activePlan
+
+  const handleContactAdmin = () => {
+    window.location.href = 'mailto:admin@gnanamai.com?subject=Request for Courses Access&body=Hello, I would like to request access to courses.'
+  }
+
+  if (permissionsLoading) {
+    return (
+      <ErrorBoundary>
+        <div className="min-h-screen" style={{ background: '#0F172A' }}>
+          <Header />
+          <div className="flex items-center justify-center min-h-[60vh]">
+            <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-indigo-400" />
+          </div>
+          <Footer />
+        </div>
+      </ErrorBoundary>
+    )
+  }
+
+  if (!canAccessCourses) {
+    return (
+      <ErrorBoundary>
+        <>
+          <Header />
+          <AccessDenied feature="courses" onContactAdmin={handleContactAdmin} />
+          <Footer />
+        </>
+      </ErrorBoundary>
+    )
+  }
 
   return (
     <ErrorBoundary>

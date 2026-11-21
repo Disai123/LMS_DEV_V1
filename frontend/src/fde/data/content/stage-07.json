@@ -1,27 +1,27 @@
 {
-  "mvp-poc-local-render/recap-and-environment-readiness": {
-    "summary": "Check you are ready for deploy: Todo Lab 6 done or planned; Ask IT assignment next.",
+  "deployment/recap-and-environment-readiness": {
+    "summary": "Check you are ready for deploy: Todo Lab 6 done or planned; Customer support ticketing system assignment next.",
     "sections": [
       {
         "heading": "Overview",
-        "body": "List anything blocking a POC: missing Docker, failing tests, unclear env vars. Tutor helps on Todo lab; Ask IT deploy is your assignment."
+        "body": "List anything blocking a POC: missing Docker, failing tests, unclear env vars. Tutor helps on Todo lab; Customer support ticketing system deploy is your assignment."
       }
     ]
   },
-  "mvp-poc-local-render/development-vs-mvp-poc-vs-production": {
+  "deployment/development-vs-mvp-poc-vs-production": {
     "summary": "Plain definitions: dev on your laptop, POC for a small pilot URL, production for real users.",
     "sections": [
       {
         "heading": "Three environments",
-        "body": "- **Development:** fast changes on localhost (Todo labs, early Ask IT).\n- **POC / MVP:** shared pilot URL (Render), limited users.\n- **Production:** stricter secrets, monitoring, runbooks (Stage 8+)."
+        "body": "- **Development:** fast changes on localhost (Todo labs, early Customer support ticketing system).\n- **POC / MVP:** shared pilot URL (Render), limited users.\n- **Production:** stricter secrets, monitoring, runbooks (Stage 8+)."
       }
     ]
   },
-  "mvp-poc-local-render/repeatable-local-run": {
-    "summary": "Why Docker matters—and where Todo lab vs Ask IT assignment fit.",
+  "deployment/repeatable-local-run": {
+    "summary": "Why Docker matters—and where Todo lab vs Customer support ticketing system assignment fit.",
     "sections": [
       {
-        "heading": "Ask IT (what the client needs)",
+        "heading": "Customer support ticketing system (what the client needs)",
         "body": "Pilot stores need the same stack everywhere: API, chat UI, database. Docker Compose is the standard way to run that stack."
       },
       {
@@ -30,65 +30,170 @@
       }
     ]
   },
-  "mvp-poc-local-render/render-poc-deployment": {
-    "summary": "Render hosting concepts—prompts live on Lab 6 (Todo) and the staging assignment (Ask IT).",
+  "deployment/render-poc-deployment": {
+    "summary": "Render hosting concepts—prompts live on Lab 6 (Todo) and the staging assignment (Customer support ticketing system).",
     "sections": [
       {
         "heading": "Overview",
-        "body": "Render builds and runs your API and static site. Set `healthCheckPath`, build commands, and env vars in the dashboard.\n\n- **Todo:** Lab 6 step 4 (with tutor)\n- **Ask IT:** Assignment *Staging checklist and pilot plan* (on your own)\n\nThis read has **no** prompt panel—go to those items in the list."
+        "body": "Render builds and runs your API and static site. Set `healthCheckPath`, build commands, and env vars in the dashboard.\n\n- **Todo:** Lab 6 step 4 (with tutor)\n- **Customer support ticketing system:** Assignment *Staging checklist and pilot plan* (on your own)\n\nThis read has **no** prompt panel—go to those items in the list."
       }
     ]
   },
-  "mvp-poc-local-render/lab-6-poc-hardening": {
+  "deployment/lab-6-poc-hardening": {
     "summary": "Tutored lab: Todo — local, Docker, Render POC (four steps).",
     "sections": [
       {
-        "heading": "Prerequisites",
+        "heading": "Overview",
         "body": "Development Labs 11–12 complete. Docker Desktop running. Open the Lab panel at the bottom of this page for prompts and checkpoints."
-      },
-      {
-        "heading": "Then",
-        "body": "Do the Ask IT deploy assignment in this stage without your tutor."
       }
     ],
     "typeExtras": {
       "objectives": [
         "Run Todo locally from steps you can hand to another developer.",
         "Prove Docker with hello-world, then run the app with docker compose.",
-        "Fix port, engine, and DATABASE_URL issues common in real deploys.",
-        "Prepare Render POC config—the same path repeats on Ask IT in your assignment."
+        "Fix port, engine, and DATABASE_URL issues common in real deploys."
       ]
     }
   },
-  "mvp-poc-local-render/pilot-feedback-and-triage": {
+  "deployment/pilot-feedback-and-triage": {
     "summary": "How to run three pilot sessions and turn feedback into a fix list.",
     "sections": [
       {
         "heading": "Overview",
-        "body": "After Ask IT is on a POC URL, watch real users for 15–20 minutes each. Log: what broke, what confused them, what worked. Rank fixes by user impact."
+        "body": "After Customer support ticketing system is on a POC URL, watch real users for 15–20 minutes each. Log: what broke, what confused them, what worked. Rank fixes by user impact."
       }
     ]
   },
-  "mvp-poc-local-render/wrap-up-and-assignment-brief": {
+  "deployment/wrap-up-and-assignment-brief": {
     "summary": "Record deploy status and open questions before production stage.",
     "sections": [
       {
         "heading": "Overview",
-        "body": "Note Todo vs Ask IT URLs, known limits, and what you would harden next. Submit assignment evidence to your instructor."
+        "body": "Note Todo vs Customer support ticketing system URLs, known limits, and what you would harden next. Submit assignment evidence to your instructor."
       }
     ]
   },
-  "mvp-poc-local-render/staging-checklist-and-pilot-plan": {
-    "summary": "Assignment: Ask IT local → Docker → Render (solo).",
+  "deployment/staging-checklist-and-pilot-plan": {
+    "summary": "Assignment: Customer support ticketing system local → Docker → Render (solo).",
     "sections": [
       {
         "heading": "Skills from Todo Lab 13",
-        "body": "Same sequence you did with your tutor—now for Ask IT in your repo. Prompts are in the Assignment panel at the bottom of this page."
+        "body": "Same sequence you did with your tutor—now for Customer support ticketing system in your repo. Prompts are in the Assignment panel at the bottom of this page."
       }
     ],
     "typeExtras": {
       "objectives": [
-        "End-to-end deploy evidence for Ask IT pilot."
+        "End-to-end deploy evidence for Customer support ticketing system pilot."
+      ]
+    }
+  },
+  "deployment/recap-poc-to-production": {
+    "summary": "Turn Todo POC lessons into a production plan for Customer support ticketing system.",
+    "sections": [
+      {
+        "heading": "Overview",
+        "body": "Review pilot feedback from Stage 7. List what must change before real store users: secrets, logging, errors, rollback."
+      },
+      {
+        "heading": "Path",
+        "body": "**Reads** = production concepts for Customer support ticketing system. **Labs 7A–7B** = Todo production config and runbook **with tutor**. **Assignment** = Customer support ticketing system rollout checklist **on your own**."
+      }
+    ],
+    "typeExtras": {
+      "objectives": [
+        "Deploy the application to a production-like environment on Render or AWS.",
+        "Keep API keys and other secrets in environment configuration rather than source control.",
+        "Configure useful logs, health checks and user-facing error handling.",
+        "Write a one-page runbook and practise responding to a simulated outage."
+      ]
+    }
+  },
+  "deployment/deployment-fundamentals": {
+    "summary": "Production config, env vars, dependencies, and rollback—in Customer support ticketing system terms.",
+    "sections": [
+      {
+        "heading": "Overview",
+        "body": "- **Production configuration** — stricter than POC (no debug flags in public URLs).\n- **Build and start** — how Render (or AWS) builds your repo and starts the API.\n- **Environment variables** — API keys and DB URLs live in the dashboard, not in Git.\n- **Dependencies** — database, model API, static frontend.\n- **Rollback** — how to return to the last good deploy if something fails."
+      }
+    ],
+    "typeExtras": {
+      "objectives": [
+        "Deploy the application to a production-like environment on Render or AWS.",
+        "Keep API keys and other secrets in environment configuration rather than source control.",
+        "Configure useful logs, health checks and user-facing error handling.",
+        "Write a one-page runbook and practise responding to a simulated outage."
+      ]
+    }
+  },
+  "deployment/logging-monitoring-and-errors": {
+    "summary": "Logs, health checks, timeouts, and safe errors users can understand.",
+    "sections": [
+      {
+        "heading": "Overview",
+        "body": "- **Structured logs** — one line per request with status and latency.\n- **Health checks** — `/health` so the platform knows the API is up.\n- **Timeouts** — do not hang forever on a slow model API.\n- **User-facing errors** — “Try again” instead of raw stack traces.\n- **Diagnosing failures** — use logs to tell model 429 vs database down."
+      }
+    ],
+    "typeExtras": {
+      "objectives": [
+        "Deploy the application to a production-like environment on Render or AWS.",
+        "Keep API keys and other secrets in environment configuration rather than source control.",
+        "Configure useful logs, health checks and user-facing error handling.",
+        "Write a one-page runbook and practise responding to a simulated outage."
+      ]
+    }
+  },
+  "deployment/lab-7a-production-deployment": {
+    "summary": "Tutored lab: Todo production Render config (panel below).",
+    "sections": [
+      {
+        "heading": "Overview",
+        "body": "You hardened Todo on Render in Stage 7. Here you add production rules: render.yaml, secret handling, CORS."
+      }
+    ],
+    "typeExtras": {
+      "objectives": [
+        "Harden Render config: secrets outside git, explicit CORS origin, health checks.",
+        "Write a production checklist that includes rollback steps.",
+        "Spot POC shortcuts that are unsafe for real users."
+      ]
+    }
+  },
+  "deployment/review-and-assignment-brief": {
+    "summary": "Peer-review runbooks before the Customer support ticketing system production assignment.",
+    "sections": [
+      {
+        "heading": "Overview",
+        "body": "Swap `RUNBOOK.md` with a peer. Can they follow it without asking you questions? Note gaps before the solo Customer support ticketing system checklist."
+      }
+    ],
+    "typeExtras": {
+      "objectives": [
+        "Deploy the application to a production-like environment on Render or AWS.",
+        "Keep API keys and other secrets in environment configuration rather than source control.",
+        "Configure useful logs, health checks and user-facing error handling.",
+        "Write a one-page runbook and practise responding to a simulated outage."
+      ]
+    }
+  },
+  "deployment/runbook-and-pre-rollout-checklist": {
+    "summary": "Assignment: Customer support ticketing system pre-rollout checklist and runbook (solo).",
+    "sections": [
+      {
+        "heading": "What you deliver",
+        "body": "Deployment evidence, logging notes, and a one-page runbook for Customer support ticketing system (not Todo filenames)."
+      },
+      {
+        "heading": "Skills from Todo",
+        "body": "Copy the structure from Lab 14, but every step names Customer support ticketing system services, URLs, and env vars."
+      },
+      {
+        "heading": "Due",
+        "body": "Before Session 15."
+      }
+    ],
+    "typeExtras": {
+      "objectives": [
+        "Ops docs are written with prompts too."
       ]
     }
   }

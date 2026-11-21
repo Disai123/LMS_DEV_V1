@@ -28,12 +28,58 @@
   --fde-code-bg: #0b1020;
 }
 
+html.fde-route,
+body.fde-route {
+  background: #080b14 !important;
+  background-image: none !important;
+}
+
 .fde-eyebrow {
   font-size: 0.75rem;
   font-weight: 600;
   letter-spacing: 0.08em;
   text-transform: uppercase;
   color: var(--fde-mut);
+}
+
+.fde-hero {
+  position: relative;
+  overflow: hidden;
+  background: linear-gradient(145deg, #0f172a 0%, #0c1222 45%, #080b14 100%);
+}
+
+.fde-hero::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  opacity: 0.12;
+  background-image:
+    linear-gradient(rgba(255, 255, 255, 0.09) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255, 255, 255, 0.09) 1px, transparent 1px);
+  background-size: 40px 40px;
+  pointer-events: none;
+}
+
+.fde-hero::after {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 0;
+  height: 100%;
+  width: 3px;
+  background: linear-gradient(to bottom, transparent, #fbbf24, transparent);
+  opacity: 0.75;
+  pointer-events: none;
+}
+
+.fde-glow-card {
+  transition: transform 0.2s ease, box-shadow 0.2s ease, border-color 0.2s ease;
+}
+
+.fde-glow-card:hover {
+  transform: translateY(-3px);
+  border-color: var(--fde-accent);
+  box-shadow: 0 12px 32px -14px var(--fde-accent);
 }
 
 .fde-bullets {

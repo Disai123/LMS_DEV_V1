@@ -13,9 +13,9 @@ const RBACManagementPage = () => {
   const [permissions, setPermissions] = useState({});
   const [selectedStudents, setSelectedStudents] = useState([]);
   const [bulkPermissions, setBulkPermissions] = useState({
-    courses: true,
+    courses: false,
     hackathons: true,
-    realtimeProjects: true
+    realtimeProjects: false
   });
 
   const fetchStudentPermissions = useCallback(async () => {
@@ -88,9 +88,9 @@ const RBACManagementPage = () => {
         const initialPermissions = {};
         data.data.users.forEach(student => {
           initialPermissions[student.id] = {
-            courses: true,
+            courses: false,
             hackathons: true,
-            realtimeProjects: true
+            realtimeProjects: false
           };
         });
         console.log('Initial permissions created for students:', initialPermissions);
@@ -188,9 +188,9 @@ const RBACManagementPage = () => {
   const togglePermission = (studentId, permissionType) => {
     setPermissions(prev => {
       const currentStudentPerms = prev[studentId] || {
-        courses: true,
+        courses: false,
         hackathons: true,
-        realtimeProjects: true
+        realtimeProjects: false
       };
 
       const newPermissions = {
@@ -217,9 +217,9 @@ const RBACManagementPage = () => {
     const newPermissions = { ...permissions };
     selectedStudents.forEach(studentId => {
       const currentStudentPerms = newPermissions[studentId] || {
-        courses: true,
+        courses: false,
         hackathons: true,
-        realtimeProjects: true
+        realtimeProjects: false
       };
 
       newPermissions[studentId] = {

@@ -6,8 +6,10 @@ import Footer from '../components/common/Footer';
 import ProjectGrid from '../components/projects/ProjectGrid';
 import ProjectFilters from '../components/projects/ProjectFilters';
 import ProjectsUpsell from '../components/common/ProjectsUpsell';
+import AccessDenied from '../components/common/AccessDenied';
 import { useNavigate } from 'react-router-dom';
 import { useRealtimeProjects } from '../hooks/useRealtimeProjects';
+import { usePermissions } from '../hooks/usePermissions';
 import { useAuth } from '../context/AuthContext';
 import { paymentService } from '../services/api';
 import { PRICING_HIDDEN } from '../config/features';
@@ -17,6 +19,7 @@ const StudentRealtimeProjectsPage = () => {
   // Add free project IDs here when ready (e.g. 'todo_list')
   const FREE_PROJECTS = [];
   const { user } = useAuth();
+  const { loading: permissionsLoading } = usePermissions();
   const {
     projects,
     categories,
@@ -45,19 +48,14 @@ const StudentRealtimeProjectsPage = () => {
   // Check if premium: Admin OR has active subscription OR has student permissions
   const planName = subscription?.plan?.name?.toLowerCase();
 
-  // Use permissions from AuthContext as the primary source of truth for optimistic activation
-  const hasCoursesPerm = user?.permissions?.courses || false;
-  const hasProjectsPerm = user?.permissions?.realtime_projects || false;
-
-  // isPaid true if any paid plan or admin or has explicit project permissions
+  // Plan badge only (feature unlock is RBAC, not pricing)
   const isPaid = PRICING_HIDDEN || user?.role === 'admin' ||
-    ['basic', 'pro'].includes(planName) ||
-    hasProjectsPerm;
+    ['basic', 'pro'].includes(planName);
 
-  const isPremiumUser = isPaid; // Simplified: if you paid, you're premium
+  const isPremiumUser = isPaid;
 
-  console.log('User Permissions:', user?.permissions);
-  console.log('Is Paid (Access Granted):', isPaid);
+  console.log('RBAC hasAccess (realtimeProjects):', hasAccess);
+  console.log('Is Paid (plan):', isPaid);
 
   const badgeText = planName ? `${planName.charAt(0).toUpperCase() + planName.slice(1)} Plan` : (isPaid ? 'Premium Plan' : 'Free Plan');
 
@@ -66,14 +64,28 @@ const StudentRealtimeProjectsPage = () => {
   const freeProjects = projects.filter(p => freeAllowedList.includes(p.id?.toLowerCase()?.replace(/[-_]/g, '')));
   const premiumProjects = projects.filter(p => !freeAllowedList.includes(p.id?.toLowerCase()?.replace(/[-_]/g, '')));
 
-  // Show access denied if no permission
-  if (!PRICING_HIDDEN && !hasAccess && !isLoading && !isPaid) {
+  const handleContactAdmin = () => {
+    window.location.href = 'mailto:admin@gnanamai.com?subject=Request for Realtime Projects Access&body=Hello, I would like to request access to realtime projects.';
+  };
+
+  if (permissionsLoading) {
     return (
       <>
         <Header />
-        <div className="min-h-screen bg-gradient-to-br from-slate-50 via-blue-50 to-indigo-100 py-12">
-          <ProjectsUpsell />
+        <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-slate-50 via-blue-50 to-indigo-100">
+          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-indigo-600" />
         </div>
+        <Footer />
+      </>
+    );
+  }
+
+  // Feature RBAC gate — all realtime projects locked until admin grants
+  if (!hasAccess && user?.role !== 'admin') {
+    return (
+      <>
+        <Header />
+        <AccessDenied feature="realtimeProjects" onContactAdmin={handleContactAdmin} />
         <Footer />
       </>
     );

@@ -6,6 +6,7 @@ import { useAuth } from '../../context/AuthContext'
 import { courseService } from '../../services/courseService'
 import { enrollmentService } from '../../services/enrollmentService'
 import useCourseLogo from '../../hooks/useCourseLogo'
+import { usePermissions } from '../../hooks/usePermissions'
 import { paymentService } from '../../services/api'
 import LoadingSpinner from '../common/LoadingSpinner'
 import { PRICING_HIDDEN } from '../../config/features'
@@ -47,6 +48,8 @@ const AllCoursesModal = ({ isOpen, onClose }) => {
   const navigate = useNavigate()
   const queryClient = useQueryClient()
   const [enrollingCourseId, setEnrollingCourseId] = useState(null)
+  const { hasAccess, loading: permissionsLoading, isAdmin } = usePermissions()
+  const canAccessCourses = isAdmin || hasAccess('courses')
 
   // Fetch Subscription Data for premium check
   const { data: subscriptionResponse } = useQuery(
@@ -58,12 +61,12 @@ const AllCoursesModal = ({ isOpen, onClose }) => {
   const planName = subscription?.plan?.name?.toLowerCase();
   const isPremiumUser = PRICING_HIDDEN || user?.role === 'admin' || user?.plan_type === 'premium' || (subscription && subscription.status === 'active' && planName && !planName.includes('free'));
 
-  // Fetch all courses
+  // Fetch all courses only when RBAC allows
   const { data: coursesData, isLoading: coursesLoading } = useQuery(
     'all-courses-modal',
     () => courseService.getCourses({ limit: 50 }),
     {
-      enabled: isOpen,
+      enabled: isOpen && !permissionsLoading && canAccessCourses,
       refetchOnWindowFocus: false,
       staleTime: 5 * 60 * 1000
     }

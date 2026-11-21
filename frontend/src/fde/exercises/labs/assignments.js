@@ -25,33 +25,33 @@ function assignmentBase(extra) {
 
 export const ASSIGNMENTS = {
   'fde-sdlc-business-requirement/one-page-brd-and-discovery-questions': assignmentBase({
-    title: 'Assignment 8: Ask IT BRD and discovery questions',
+    title: 'Assignment 8: Customer support ticketing system BRD and discovery questions',
     duration: '8 min',
     deliverable: 'One-page BRD and discovery notes',
     skillsFromLab: [
       'Todo lab: you drafted a smaller BRD for Todo.',
-      'Do the full BRD for Ask IT on your own.',
+      'Do the full BRD for Customer support ticketing system on your own.',
     ],
     assignmentContext:
-      'On your own: write Ask IT discovery and a BRD for the retail IT helper (staff vs admin, FAQs, triage).',
+      'On your own: write Customer support ticketing system discovery and a BRD for the retail IT helper (staff vs admin, FAQs, triage).',
     whatYouLearn: [
-      'Transfer the Todo BRD structure to Ask IT without copying Todo features.',
-      'Cover staff vs admin and triage in requirements.',
-    ],
+    'Transfer the Todo BRD structure to Customer support ticketing system without copying Todo features.',
+    'Cover staff vs admin and triage in requirements.',
+  ],
     prompts: [
       {
         step: 1,
-        label: 'Ask IT BRD',
+        label: 'Customer support ticketing system BRD',
         whereToRun: 'AI tool',
         prompt: `## Context
-Ask IT (your assignment):
+Customer support ticketing system (your assignment):
 - Retail IT helper: RAG on FAQs, POST /ask, POST /triage, staff vs admin RBAC
 - Build in your own repo; submit artifacts to your tutor
 
-This step is done on your own: write the Ask IT BRD for the retail IT helper (staff vs admin, FAQs, triage).
+This step is done on your own: write the Customer support ticketing system BRD for the retail IT helper (staff vs admin, FAQs, triage).
 
 ## Task
-Write the Ask IT BRD with these H2 sections: Overview, Functional Requirements, Non-Functional Requirements, User Stories and Conclusion.
+Write the Customer support ticketing system BRD with these H2 sections: Overview, Functional Requirements, Non-Functional Requirements, User Stories and Conclusion.
 
 ## Outcome
 - Staff vs admin rules.
@@ -63,11 +63,11 @@ Write the Ask IT BRD with these H2 sections: Overview, Functional Requirements, 
         label: 'Discovery questions',
         whereToRun: 'AI tool',
         prompt: `## Context
-Ask IT (your assignment):
+Customer support ticketing system (your assignment):
 - Retail IT helper: RAG on FAQs, POST /ask, POST /triage, staff vs admin RBAC
 - Build in your own repo; submit artifacts to your tutor
 
-This is the second step: discovery questions for Ask IT sponsors and store IT.
+This is the second step: discovery questions for Customer support ticketing system sponsors and store IT.
 
 ## Task
 List 10 discovery questions covering RBAC, FAQs, escalation and pilot stores.
@@ -84,28 +84,28 @@ List 10 discovery questions covering RBAC, FAQs, escalation and pilot stores.
   }),
 
   'fde-sdlc-ui-ux-solution/revise-the-flow-and-wireframes': assignmentBase({
-    title: 'Assignment 9: Ask IT UI/UX pack',
+    title: 'Assignment 9: Customer support ticketing system UI/UX pack',
     duration: '8 min',
     skillsFromLab: [
       'Todo lab: UI brief for task list.',
-      'Same structure for Ask IT chat UI.',
+      'Same structure for Customer support ticketing system chat UI.',
     ],
     assignmentContext:
-      'On your own: describe Ask IT chat UI (roles, citations and escalation), not the Todo task list.',
+      'On your own: describe Customer support ticketing system chat UI (roles, citations and escalation), not the Todo task list.',
     whatYouLearn: [
-      'Describe Ask IT chat, roles, citations, and escalation in a UI brief.',
-      'Keep headings consistent with the Todo lab discipline.',
-    ],
+    'Describe Customer support ticketing system chat, roles, citations, and escalation in a UI brief.',
+    'Keep headings consistent with the Todo lab discipline.',
+  ],
     prompts: [
       {
         step: 1,
         label: 'UI brief',
         whereToRun: 'AI tool',
         prompt: `## Context
-This step is done on your own: describe the Ask IT chat UI (roles, citations and escalation), not the Todo task list.
+This step is done on your own: describe the Customer support ticketing system chat UI (roles, citations and escalation), not the Todo task list.
 
 ## Task
-Write the Ask IT UI brief with these H2 sections: Overview, Design System, Chat Interface Design, User Experience Flow, Navigation Flow and Conclusion.
+Write the Customer support ticketing system UI brief with these H2 sections: Overview, Design System, Chat Interface Design, User Experience Flow, Navigation Flow and Conclusion.
 
 ## Outcome
 - Staff/admin toggle.
@@ -120,37 +120,37 @@ Write the Ask IT UI brief with these H2 sections: Overview, Design System, Chat 
     troubleshooting: [
       troubleshootingEntry(
         'Todo task list wireframe',
-        'Draft describes the Todo task list instead of Ask IT chat.',
-        'Accidentally used Todo task list patterns rather than Ask IT chat interface.',
-        'Rewrite the UI brief strictly for Ask IT chat (staff and admin roles, citations, escalation to tickets), removing all Todo task-list elements.',
+        'Draft describes the Todo task list instead of Customer support ticketing system chat.',
+        'Accidentally used Todo task list patterns rather than Customer support ticketing system chat interface.',
+        'Rewrite the UI brief strictly for Customer support ticketing system chat (staff and admin roles, citations, escalation to tickets), removing all Todo task-list elements.',
       ),
     ],
   }),
 
   'fde-sdlc-architecture-solution/update-the-architecture-pack': assignmentBase({
-    title: 'Assignment 10: Ask IT architecture pack',
+    title: 'Assignment 10: Customer support ticketing system architecture pack',
     duration: '8 min',
     deliverable: 'Architecture diagram, FAQ permission model, cost estimate and ADR',
     skillsFromLab: [
       'Todo lab: simple system diagram.',
-      'Ask IT needs API, RAG, RBAC, deploy notes.',
+      'Customer support ticketing system needs API, RAG, RBAC, deploy notes.',
     ],
     assignmentContext:
-      'On your own: architecture for Ask IT aligned to your BRD (API, RAG, RBAC, security).',
+      'On your own: architecture for Customer support ticketing system aligned to your BRD (API, RAG, RBAC, security).',
     whatYouLearn: [
-      'Align architecture to BRD.',
-      'Call out security before the LLM runs.',
-    ],
+    'Align architecture to BRD.',
+    'Call out security before the LLM runs.',
+  ],
     prompts: [
       {
         step: 1,
         label: 'Architecture',
         whereToRun: 'AI tool',
         prompt: `## Context
-This step is done on your own: architecture for Ask IT aligned to your BRD (API, RAG, RBAC, security).
+This step is done on your own: architecture for Customer support ticketing system aligned to your BRD (API, RAG, RBAC, security).
 
 ## Task
-Write the Ask IT architecture with these H2 sections: Overview, System Architecture, Database Design, API Design, AI Integration Architecture, Security Architecture and Conclusion.
+Write the Customer support ticketing system architecture with these H2 sections: Overview, System Architecture, Database Design, API Design, AI Integration Architecture, Security Architecture and Conclusion.
 
 ## Outcome
 - Text diagrams OK.
@@ -164,29 +164,29 @@ Write the Ask IT architecture with these H2 sections: Overview, System Architect
     troubleshooting: [],
   }),
 
-  'development/startup-instructions-and-tests': assignmentBase({
-    title: 'Assignment 11: Ask IT startup + tests',
+  'development-backend/startup-instructions-and-tests': assignmentBase({
+    title: 'Assignment 11: Customer support ticketing system startup + tests',
     duration: '85 min',
     skillsFromLab: [
       'Todo lab: you built and ran Todo locally.',
-      'Repeat for Ask IT in your repo.',
+      'Repeat for Customer support ticketing system in your repo.',
     ],
     assignmentContext:
-      'On your own: how to run Ask IT locally and a short manual test plan.',
+      'On your own: how to run Customer support ticketing system locally and a short manual test plan.',
     whatYouLearn: [
-      'Local run and manual test plan for Ask IT.',
-      'Same loop as Todo, different app.',
-    ],
+    'Local run and manual test plan for Customer support ticketing system.',
+    'Same loop as Todo, different app.',
+  ],
     prompts: [
       {
         step: 1,
         label: 'Local run',
         whereToRun: 'AI tool',
         prompt: `## Context
-This step is done on your own: how to run Ask IT locally and a short manual test plan.
+This step is done on your own: how to run Customer support ticketing system locally and a short manual test plan.
 
 ## Task
-Write local run steps for Ask IT in README-RUN.md: API + React chat (mirror the discipline from your Todo README).
+Write local run steps for Customer support ticketing system in README-RUN.md: API + React chat (mirror the discipline from your Todo README).
 
 ## Outcome
 - Start commands.
@@ -197,7 +197,7 @@ Write local run steps for Ask IT in README-RUN.md: API + React chat (mirror the 
         label: 'Test plan',
         whereToRun: 'AI tool',
         prompt: `## Context
-After the local run works, document how Ask IT will be tested manually.
+After the local run works, document how Customer support ticketing system will be tested manually.
 
 ## Task
 Write a test plan in TEST-PLAN.md with 5 manual tests: /health, staff /ask, admin FAQ, triage and RBAC negative case.
@@ -205,14 +205,7 @@ Write a test plan in TEST-PLAN.md with 5 manual tests: /health, staff /ask, admi
 ## Outcome
 - Steps and expected result for each test.`,
       },
-    ],
-    executionSteps: [
-      '**[Antigravity]** Paste the Step 1 prompt and send it.\n\n*Outcome:* `README-RUN.md` appears in the repo (Checkpoint 1).',
-      '**[Manual]** Follow `README-RUN.md` to start the API and the React chat, then check `/health` and send a `POST /ask` as staff.\n\n*Outcome:* `/health` returns ok, `POST /ask` as staff returns an answer, and the chat page loads (Checkpoint 2).',
-      '**[Antigravity]** Paste the Step 2 prompt and send it.\n\n*Outcome:* `TEST-PLAN.md` appears with 5 tests, each with steps and an expected result.',
-      '**[Manual]** Run the 5 tests locally and write pass or fail next to each one in `TEST-PLAN.md`.\n\n*Outcome:* Every test has a result, and the RBAC negative test shows that staff cannot see admin-only content (Checkpoint 3).',
-      '**[Antigravity]** Only if a step above showed an error: paste the full error and ask for the smallest possible fix, then repeat the step that failed.\n\n*Outcome:* The local run and the tests work as described.',
-    ],
+    ],
     acceptanceCriteria: [
       'You ran tests locally.',
       'Staff cannot see admin-only content in your notes.',
@@ -222,24 +215,24 @@ Write a test plan in TEST-PLAN.md with 5 manual tests: /health, staff /ask, admi
     ],
   }),
 
-  'development/fix-a-failed-test-and-rerun': assignmentBase({
-    title: 'Assignment 12: Fix failing Ask IT test',
+  'development-frontend/fix-a-failed-test-and-rerun': assignmentBase({
+    title: 'Assignment 12: Fix failing Customer support ticketing system test',
     duration: '75 min',
     skillsFromLab: [
-      'Todo lab: fix prompt when tests failed. Do the same on Ask IT.',
+      'Todo lab: fix prompt when tests failed. Do the same on Customer support ticketing system.',
     ],
     assignmentContext:
       'Document symptom, fix prompt, and pass/fail after rerun in failure-fix-log.md.',
     whatYouLearn: [
-      'Prompt → fail → fix prompt → run again.',
-    ],
+    'Prompt → fail → fix prompt → run again.',
+  ],
     prompts: [
       {
         step: 1,
         label: 'Fix one failing test',
         whereToRun: 'AI tool',
         prompt: `## Context
-This step is done independently on the Ask IT project. One failing test from TEST-PLAN.md is fixed with a fix prompt, then rerun until it passes.
+This step is done independently on the Customer support ticketing system project. One failing test from TEST-PLAN.md is fixed with a fix prompt, then rerun until it passes.
 
 ## Task
 Pick one failing test. Paste the full error. Ask for the smallest code fix only, with no unrelated changes.
@@ -247,13 +240,7 @@ Pick one failing test. Paste the full error. Ask for the smallest code fix only,
 ## Outcome
 failure-fix-log.md holds the symptom in one line, the fix prompt used, the fix applied, and pass or fail after rerun.`,
       },
-    ],
-    executionSteps: [
-      '**[Manual] Find a failing test**\nRun the tests listed in TEST-PLAN.md and pick one that fails.\n\n*Outcome:* One failing test and its full error (Checkpoint: the error text is copied in full).',
-      '**[Antigravity] Apply the fix**\nPaste the Step 1 prompt together with the error.\n\n*Outcome:* A small code fix is applied.',
-      '**[Manual] Rerun the test**\nRun the same test again. If it still fails, repeat step 2 with the new error.\n\n*Outcome:* The test passes (Checkpoint: the same test now passes).',
-      '**[Manual] Write the log**\nCreate failure-fix-log.md with the symptom, fix prompt, fix and result.\n\n*Outcome:* Log file is complete.',
-    ],
+    ],
     acceptanceCriteria: [
       'The log includes the fix used.',
       'The test passes after the fix.',
@@ -261,26 +248,28 @@ failure-fix-log.md holds the symptom in one line, the fix prompt used, the fix a
     troubleshooting: [],
   }),
 
-  'mvp-poc-local-render/staging-checklist-and-pilot-plan': assignmentBase({
-    title: 'Assignment 13: Ask IT local + Docker + Render',
+  'deployment/staging-checklist-and-pilot-plan': assignmentBase({
+    title: 'Assignment 13: Customer support ticketing system local + Docker + Render',
     duration: '20 min',
     skillsFromLab: [
       'Todo lab: local → Docker → Render POC.',
-      'Mirror for Ask IT on your own.',
+      'Mirror for Customer support ticketing system on your own.',
     ],
     assignmentContext:
-      'On your own: local run, Docker, and Render POC for Ask IT—same path you practiced on Todo.',
-    whatYouLearn: ['End-to-end deploy evidence for Ask IT pilot.'],
+      'On your own: local run, Docker, and Render POC for Customer support ticketing system—same path you practiced on Todo.',
+    whatYouLearn: [
+    'End-to-end deploy evidence for Customer support ticketing system pilot.',
+  ],
     prompts: [
       {
         step: 1,
         label: 'Local',
         whereToRun: 'AI tool',
         prompt: `## Context
-On your own: how to run Ask IT locally and a short manual test plan. Ask IT has an API and a React chat.
+On your own: how to run Customer support ticketing system locally and a short manual test plan. Customer support ticketing system has an API and a React chat.
 
 ## Task
-Write local run steps for Ask IT: API + React chat (mirror the discipline from your Todo README).
+Write local run steps for Customer support ticketing system: API + React chat (mirror the discipline from your Todo README).
 
 ## Outcome
 - Start commands
@@ -291,10 +280,10 @@ Write local run steps for Ask IT: API + React chat (mirror the discipline from y
         label: 'Docker',
         whereToRun: 'AI tool',
         prompt: `## Context
-Docker step in the Ask IT deploy assignment. Inside containers, the database is reached by its service name, not localhost.
+Docker step in the Customer support ticketing system deploy assignment. Inside containers, the database is reached by its service name, not localhost.
 
 ## Task
-Plan Docker for Ask IT: API, web, Postgres. Use service name postgres in DATABASE_URL—not localhost inside containers.
+Plan Docker for Customer support ticketing system: API, web, Postgres. Use service name postgres in DATABASE_URL—not localhost inside containers.
 
 ## Outcome
 - Services to define
@@ -306,10 +295,10 @@ Plan Docker for Ask IT: API, web, Postgres. Use service name postgres in DATABAS
         label: 'Render POC',
         whereToRun: 'AI tool',
         prompt: `## Context
-Render POC step for Ask IT. The deployed app needs a public URL.
+Render POC step for Customer support ticketing system. The deployed app needs a public URL.
 
 ## Task
-Draft Render POC config and smoke checklist for Ask IT public URL.
+Draft Render POC config and smoke checklist for Customer support ticketing system public URL.
 
 ## Outcome
 - /health green on Render
@@ -336,28 +325,30 @@ Draft Render POC config and smoke checklist for Ask IT public URL.
     ],
   }),
 
-  'production-deployment/runbook-and-pre-rollout-checklist': assignmentBase({
-    title: 'Assignment 14: Ask IT runbook + rollout checklist',
+  'deployment/runbook-and-pre-rollout-checklist': assignmentBase({
+    title: 'Assignment 14: Customer support ticketing system runbook + rollout checklist',
     duration: '8 min',
     deliverable:
-      'Deployment evidence, logging notes, and a one-page runbook for Ask IT',
+      'Deployment evidence, logging notes, and a one-page runbook for Customer support ticketing system',
     skillsFromLab: [
       'Todo Render POC taught smoke URLs.',
-      'Production runbook is Ask IT specific.',
+      'Production runbook is Customer support ticketing system specific.',
     ],
     assignmentContext:
-      'On your own: operations runbook and pre-rollout checklist for Ask IT.',
-    whatYouLearn: ['Ops docs are written with prompts too.'],
+      'On your own: operations runbook and pre-rollout checklist for Customer support ticketing system.',
+    whatYouLearn: [
+    'Ops docs are written with prompts too.',
+  ],
     prompts: [
       {
         step: 1,
         label: 'Runbook',
         whereToRun: 'AI tool',
         prompt: `## Context
-On your own: operations runbook and pre-rollout checklist for Ask IT.
+On your own: operations runbook and pre-rollout checklist for Customer support ticketing system.
 
 ## Task
-Write Ask IT runbook: health, three incidents (429, slow RAG, RBAC leak), rollback, escalation.
+Write Customer support ticketing system runbook: health, three incidents (429, slow RAG, RBAC leak), rollback, escalation.
 
 ## Outcome
 - Plain numbered steps
@@ -370,29 +361,29 @@ Write Ask IT runbook: health, three incidents (429, slow RAG, RBAC leak), rollba
   }),
 
   'enterprise-ai-fde/handover-package-and-sponsor-readout': assignmentBase({
-    title: 'Assignment 15: Ask IT handover + sponsor readout',
+    title: 'Assignment 15: Customer support ticketing system handover + sponsor readout',
     duration: '25 min',
     deliverable:
-      'Security questionnaire evidence, trace/eval snapshot, README, architecture diagram, runbook, and a five-minute sponsor readout script for Ask IT.',
+      'Security questionnaire evidence, trace/eval snapshot, README, architecture diagram, runbook, and a five-minute sponsor readout script for Customer support ticketing system.',
     skillsFromLab: [
-      'You traced and deployed Ask IT.',
+      'You traced and deployed Customer support ticketing system.',
       'Package it for the sponsor.',
     ],
     assignmentContext:
-      'On your own: handover package and sponsor readout for Ask IT.',
+      'On your own: handover package and sponsor readout for Customer support ticketing system.',
     whatYouLearn: [
-      'Close the engagement with a readable handover.',
-    ],
+    'Close the engagement with a readable handover.',
+  ],
     prompts: [
       {
         step: 1,
         label: 'Handover',
         whereToRun: 'AI tool',
         prompt: `## Context
-On your own: handover package and sponsor readout for Ask IT.
+On your own: handover package and sponsor readout for Customer support ticketing system.
 
 ## Task
-Write Ask IT handover plus 5 sponsor bullets (goal, shipped, RBAC, observability, limits).
+Write Customer support ticketing system handover plus 5 sponsor bullets (goal, shipped, RBAC, observability, limits).
 
 ## Outcome
 - Non-technical bullets at top

@@ -26,9 +26,9 @@ module.exports = (sequelize, DataTypes) => {
     },
     courses: {
       type: DataTypes.BOOLEAN,
-      defaultValue: true,
+      defaultValue: false,
       allowNull: false,
-      comment: 'Access to courses - enabled by default for all students'
+      comment: 'Access to all courses - locked by default until admin grants via RBAC'
     },
     hackathons: {
       type: DataTypes.BOOLEAN,
@@ -38,9 +38,9 @@ module.exports = (sequelize, DataTypes) => {
     },
     realtime_projects: {
       type: DataTypes.BOOLEAN,
-      defaultValue: true,
+      defaultValue: false,
       allowNull: false,
-      comment: 'Access to realtime projects - enabled by default for all students'
+      comment: 'Access to all realtime projects - locked by default until admin grants via RBAC'
     }
   }, {
     tableName: 'student_permissions',
@@ -61,18 +61,16 @@ module.exports = (sequelize, DataTypes) => {
     ],
     hooks: {
       beforeCreate: (permission) => {
-        // Ensure courses is always true by default
         if (permission.courses === undefined || permission.courses === null) {
-          permission.courses = true;
+          permission.courses = false;
         }
 
-        // Ensure hackathons and realtime_projects are true by default
         if (permission.hackathons === undefined || permission.hackathons === null) {
           permission.hackathons = true;
         }
 
         if (permission.realtime_projects === undefined || permission.realtime_projects === null) {
-          permission.realtime_projects = true;
+          permission.realtime_projects = false;
         }
       }
     }

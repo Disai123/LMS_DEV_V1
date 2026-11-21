@@ -39,9 +39,9 @@ export const stage02Assignment = {
       'Wire one integrated policy assistant that reuses the model choice, the policy_corpus/ index, cited RAG, hybrid search, the approval gate, the guardrails and the MCP search. Document each part in capstone.md.',
     skillsFromStage: SKILLS_FROM_STAGE,
     whatYouLearn: [
-      'Connect every Stage 2 lab into one documented policy assistant.',
-      'Show evidence (JSON, traces, tables), not a general summary.',
-    ],
+    'Connect every Stage 2 lab into one documented policy assistant.',
+    'Show evidence (JSON, traces, tables), not a general summary.',
+  ],
     prompts: [
       {
         step: 1,
@@ -134,20 +134,11 @@ Run mcp_client.py (Lab 7) with the query "How many PTO days can roll over?". Add
 ## Outcome
 Add the section to capstone.md. Reply with one line saying what was added.`,
       },
-    ],
-    executionSteps: [
-      '**[Manual]** Open a terminal in the project folder and activate the virtual environment.\n- Windows (PowerShell): `.venv\\Scripts\\Activate.ps1`\n- Mac/Linux: `source .venv/bin/activate`\n\n*Outcome:* `(.venv)` appears at the start of the terminal line.',
-      '**[Antigravity]** Paste the Step 1 prompt and send it.\n\n*Outcome:* `capstone.md` appears with a "Default model" section (Checkpoint 1).',
-      '**[Antigravity]** Paste the Step 2 prompt and send it.\n\n*Outcome:* The "Cited RAG" section shows one cited answer and one refusal (Checkpoint 2).',
-      '**[Antigravity]** Paste the Step 3 and Step 4 prompts, one after the other.\n\n*Outcome:* The "Hybrid search" and "Diagnose and fix" sections hold real chunk names and results (Checkpoint 3).',
-      '**[Antigravity]** Paste the Step 5 and Step 6 prompts, one after the other.\n\n*Outcome:* The "Approval gate" section shows an approved and a declined trace, and the "Guardrails" section shows 2 rows (Checkpoint 4).',
-      '**[Antigravity]** Paste the Step 7 prompt and send it.\n\n*Outcome:* The "MCP search" section shows the tool arguments and the first result (Checkpoint 5).',
-      '**[Manual]** Read `capstone.md` from top to bottom.\n\n*Outcome:* All seven sections hold real results, with no placeholder text.',
-    ],
+    ],
     acceptanceCriteria: [
       'All seven sections include real results (a model id, HTTP JSON, file names, traces or an MCP result).',
       'The write-up uses the policy_corpus/ storyline, not a generic "sample documents" folder.',
-      'No Ask IT or Todo product names appear in the deliverable.',
+      'No Customer support ticketing system or Todo product names appear in the deliverable.',
     ],
     troubleshooting: [
       troubleshootingEntry(

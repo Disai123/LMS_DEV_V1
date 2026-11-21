@@ -1,28 +1,28 @@
 {
   "hero": {
-    "eyebrow": "Level 4 · Forward Deployed Engineering",
-    "title": "Forward Deployed Engineer Roadmap (48h)",
-    "subtitle": "Section 1: core Python and AI labs. From Stage 3: customer story with Todo tutor labs and Ask IT assignments."
+    "eyebrow": "Forward Deployed Engineering",
+    "title": "Forward Deployed Engineer Roadmap",
+    "subtitle": "This roadmap establishes Python and AI engineering fundamentals along with FDE SDLC. From Stage 3,we will be learning to build an unified customer engagement—instructor-guided Todo labs and independent deliverables on the Customer support ticketing system scenario."
   },
   "chips": [
     "3 Sections",
     "10 Stages",
-    "48 hours",
-    "Todo labs (tutor)",
-    "Ask IT assignments"
+    "40 hours",
+    "Todo labs",
+    "Customer support ticketing system assignments"
   ],
   "phases": [
     {
-      "label": "Section 1 · 16 h",
-      "detail": "Stages 1–2: Python and AI engineering foundations (5h + 11h)"
+      "label": "Section 1 · 15 h",
+      "detail": "Stages 1–2: Software engineering and AI engineering fundamentals"
     },
     {
-      "label": "Section 2 · 16 h",
-      "detail": "Stages 3–9: FDE SDLC — Requirements to Production & Handover (7 stages)"
+      "label": "Section 2 · 15 h",
+      "detail": "Stages 3–9: BRD, UI/UX, architecture, backend, frontend, deployment, Langfuse/evals/obs/guardrails"
     },
     {
-      "label": "Section 3 · 16 h",
-      "detail": "Stage 10: Four 4-Hour Capstone Projects (Full-Stack, Multi-Agent, Agentic RAG, Integration)"
+      "label": "Section 3 · 10 h",
+      "detail": "Stage 10: One e-commerce Fullstack Agentic RAG capstone"
     }
   ],
   "capabilities": [
@@ -33,32 +33,32 @@
     "Develop, test, and harden customer solutions locally with a 20-question regression set",
     "Deploy to Render or AWS with secrets in env, Langfuse traces/evals, and incident runbooks",
     "Complete IT security questionnaires, run sponsor readouts, and deliver production handover packages",
-    "Deliver 4 hands-on capstone projects: E-commerce full-stack, multi-agent orchestration, agentic RAG, and unified integration"
+    "Deliver one integrated e-commerce capstone: full-stack commerce, multi-agent store assistant, and agentic RAG in a single application"
   ],
   "faq": [
     {
       "question": "How long does this roadmap take?",
-      "answer": "48 hours total, divided into three 16-hour sections: Section 1 (Foundations, 16h), Section 2 (FDE SDLC, 16h), and Section 3 (Capstone Projects, 16h). Move on when you meet each stage’s \"ready to move on\" checkpoint."
+      "answer": "40 hours total: Section 1 (Foundations, 15h — 3h software engineering + 12h AI engineering), Section 2 (FDE SDLC, 15h), and Section 3 (single e-commerce capstone, 10h). Move on when you meet each stage’s \"ready to move on\" checkpoint."
     },
     {
       "question": "What does the roadmap cover?",
-      "answer": "Ten stages: Python and AI foundations (Stages 1–2), FDE SDLC documents and build (Stages 3–7), deploy and operations (Stages 8–9), and four e-commerce capstone projects (Stage 10). Stages 3–9 use one customer story—Ask IT—while tutored labs use a smaller Todo app so beginners can practice safely before working on Ask IT alone."
+      "answer": "Ten stages: Python and AI foundations (Stages 1–2), FDE SDLC and delivery (Stages 3–9: BRD, UI/UX, architecture, backend and frontend development, deployment, Langfuse/evals/observability/guardrails), and one integrated e-commerce capstone (Stage 10). Stages 3–9 use one customer story—Customer support ticketing system—while tutored labs use a smaller Todo app so beginners can practice safely before working on Customer support ticketing system alone."
     },
     {
-      "question": "Why Todo in labs and Ask IT in assignments?",
-      "answer": "Stages 1–2 are concept labs only (no customer storyline). From Stage 3 onward, tutored labs use the Todo app and assignments use the Ask IT retail scenario."
+      "question": "Why Todo in labs and Customer support ticketing system in assignments?",
+      "answer": "Stages 1–2 are concept labs only (no customer storyline). From Stage 3 onward, tutored labs use the Todo app and assignments use the Customer support ticketing system retail scenario."
     },
     {
       "question": "What will I be able to do after?",
       "answer": "Stand up tested APIs and RAG prototypes, run customer discovery, produce BRDs and architecture diagrams, develop and test solutions, deploy to Render or AWS, configure Langfuse observability, pass enterprise security reviews, and build multi-agent applications."
     },
     {
-      "question": "How are the 48 hours split?",
-      "answer": "Section 1 is 16 hours (5h Python and FastAPI + 11h AI engineering). Section 2 is 16 hours: Stages 3–5 are 1h each; Development 8h; MVP/POC 2h; Production deployment 1h; Enterprise AI FDE 2h. Section 3 is 16 hours dedicated to four 4-hour hands-on capstone projects."
+      "question": "How are the 40 hours split?",
+      "answer": "Section 1 is 15 hours (Stage 1: 3h — FDE Intro, Python/FastAPI reads, Git and cloud last; Stage 2: 12h AI — LLM, RAG, agents, MCP and guardrails). Section 2 is 15 hours: BRD 1h, UI/UX 1h, architecture 1.5h, development backend 4h, development frontend 3h, deployment 3h, Langfuse/evals/observability/guardrails and handover 1.5h. Section 3 is 10 hours — one e-commerce Fullstack Agentic RAG capstone in four modules."
     },
     {
-      "question": "What are the Capstone Projects in Section 3?",
-      "answer": "Four 4-hour projects: 1) E-commerce Full-Stack Application (React + FastAPI + PostgreSQL), 2) Single Agent & Multi-Agent (LangGraph orchestration & specialists), 3) Agentic RAG (FAISS retrieval & cited answers), and 4) Integrated Application (unified commerce platform combining multi-agent and RAG)."
+      "question": "What is the capstone in Section 3?",
+      "answer": "One integrated e-commerce application (10h total): four modules—full-stack commerce (React + FastAPI + PostgreSQL), multi-agent store assistant (LangGraph), agentic RAG over product manuals (ChromaDB), and deployment plus demo."
     },
     {
       "question": "Is progress saved? Do I need an account?",
@@ -66,13 +66,13 @@
     }
   ],
   "capstone": {
-    "title": "Section 3: Capstone Projects (16h)",
-    "intro": "Four hands-on capstone projects (4 hours each): E-commerce Full-Stack Application, Single Agent + Multi-Agent Orchestration, Agentic RAG with FAISS, and one Integrated Application combining all three.",
+    "title": "Section 3: Capstone (10h)",
+    "intro": "One e-commerce Fullstack Agentic RAG application in four modules: full-stack commerce, multi-agent store assistant, agentic product-manual RAG with ChromaDB, then deployment and demo. Each module covers what you will do and what you will learn.",
     "deliverables": [
-      "Project 1: E-commerce Full-Stack Application (ReactJS frontend, FastAPI backend, PostgreSQL database, customer journey)",
-      "Project 2: E-commerce Single Agent + Multi-Agent (LangGraph orchestrator, Product Search Agent, Cart Agent, Order Agent)",
-      "Project 3: E-commerce Agentic RAG (Product document prep, embeddings, FAISS vector index, grounded cited answers)",
-      "Project 4: Integrated E-Commerce Application (Single app combining full-stack commerce, multi-agent store actions, and RAG product manual assistance)"
+      "Module 1: Full-stack commerce foundation — React, FastAPI, PostgreSQL, customer journey",
+      "Module 2: Multi-agent store assistant — LangGraph orchestrator and specialist agents",
+      "Module 3: Agentic RAG — product manuals, ChromaDB, cited answers, refusal behavior",
+      "Module 4: Deployment and demo — repeatable run, POC URL, smoke tests, handover narrative"
     ],
     "strongWork": [
       {
@@ -85,7 +85,7 @@
       },
       {
         "title": "Grounded RAG retrieval",
-        "body": "FAISS retrieval over approved manuals provides citations and explicit \"I don’t know\" refusal behavior without cart mutations."
+        "body": "ChromaDB retrieval over approved manuals provides citations and explicit \"I don’t know\" refusal behavior without cart mutations."
       },
       {
         "title": "Single unified interface",
@@ -93,7 +93,7 @@
       }
     ],
     "startStageSlug": "capstone-fde",
-    "startItemSlug": "project-1-hour-1-requirements-structure-and-database"
+    "startItemSlug": "module-1-fullstack-commerce"
   },
   "stages": [
     {
@@ -103,8 +103,8 @@
       "color": "#2fd3a0",
       "weeksLabel": "Section 1",
       "sectionLabel": "Section 1",
-      "hours": 5,
-      "cardBlurb": "1h FDE and SDLC context, then Python, APIs, and a tested FastAPI service.",
+      "hours": 3,
+      "cardBlurb": "FDE Intro (role and Antigravity), then Python/FastAPI reads—Git and cloud last—plus hands-on labs.",
       "description": "Understand how the FDE course flows, then build reliable Python and a small FastAPI API with validation and tests.",
       "outcomes": [
         "Explain the FDE role and SDLC stages used in this course",
@@ -113,48 +113,86 @@
         "Ship a minimal tested FastAPI service"
       ],
       "readyWhen": "You can explain the course flow and stand up a tested FastAPI API with /health and one resource in a day.",
+      "readSections": [
+        {
+          "heading": "FDE Intro",
+          "slugs": [
+            "fde-role-sdlc-and-how-this-course-flows",
+            "antigravity-for-fde"
+          ]
+        },
+        {
+          "heading": "Python, APIs and FastAPI",
+          "slugs": [
+            "python-basics",
+            "python-essentials-and-environment-setup",
+            "data-structures-json-and-pandas",
+            "working-with-apis-reliably",
+            "typing-pydantic-and-async",
+            "fastapi-logging-and-pytest"
+          ]
+        },
+        {
+          "heading": "Git, Docker and cloud",
+          "slugs": [
+            "git-docker-and-cloud"
+          ]
+        }
+      ],
       "reads": [
         {
           "slug": "fde-role-sdlc-and-how-this-course-flows",
           "type": "read",
           "title": "FDE role, SDLC lifecycle, and how this course is structured",
-          "minutes": 60
+          "minutes": 16
+        },
+        {
+          "slug": "antigravity-for-fde",
+          "type": "read",
+          "title": "Antigravity for FDE",
+          "minutes": 14
         },
         {
           "slug": "python-basics",
           "type": "read",
           "title": "Python basics",
-          "minutes": 20
+          "minutes": 14
         },
         {
           "slug": "python-essentials-and-environment-setup",
           "type": "read",
           "title": "Python essentials and environment setup",
-          "minutes": 30
+          "minutes": 14
         },
         {
           "slug": "data-structures-json-and-pandas",
           "type": "read",
           "title": "Data structures, JSON and pandas",
-          "minutes": 30
+          "minutes": 14
         },
         {
           "slug": "working-with-apis-reliably",
           "type": "read",
           "title": "Working with APIs reliably",
-          "minutes": 30
+          "minutes": 14
         },
         {
           "slug": "typing-pydantic-and-async",
           "type": "read",
           "title": "Typing, Pydantic and async",
-          "minutes": 30
+          "minutes": 14
         },
         {
           "slug": "fastapi-logging-and-pytest",
           "type": "read",
           "title": "FastAPI, logging and pytest",
-          "minutes": 30
+          "minutes": 14
+        },
+        {
+          "slug": "git-docker-and-cloud",
+          "type": "read",
+          "title": "Git, Docker and cloud",
+          "minutes": 16
         }
       ],
       "practise": [
@@ -162,25 +200,25 @@
           "slug": "lab-0-python-basics",
           "type": "lab",
           "title": "Lab 0: Python basics",
-          "minutes": 40
+          "minutes": 12
         },
         {
           "slug": "lab-fastapi-simple-api",
           "type": "lab",
           "title": "Lab 1A: Create a simple API",
-          "minutes": 45
+          "minutes": 10
         },
         {
           "slug": "lab-fastapi-validation-and-testing",
           "type": "lab",
           "title": "Lab 1B: FastAPI validation and testing",
-          "minutes": 45
+          "minutes": 10
         },
         {
           "slug": "assignment-harden-the-api-script",
           "type": "assignment",
           "title": "Assignment 1: Harden the API script",
-          "minutes": 60
+          "minutes": 18
         }
       ]
     },
@@ -191,7 +229,7 @@
       "color": "#3aa6ff",
       "weeksLabel": "Section 1",
       "sectionLabel": "Section 1",
-      "hours": 11,
+      "hours": 12,
       "cardBlurb": "LLMs, RAG, agents, guardrails, and MCP — concept labs only.",
       "description": "Work with LLMs, RAG, agents and MCP to build and ship intelligent solutions.",
       "outcomes": [
@@ -202,102 +240,194 @@
         "Expose tools through MCP and package reusable skills"
       ],
       "readyWhen": "You can build a cited, guarded, agent-driven Q&A prototype over documents in a week.",
+      "readSections": [
+        {
+          "heading": "LLMs",
+          "slugs": [
+            "llm-fundamentals",
+            "model-landscape-and-selection",
+            "prompt-engineering",
+            "structured-outputs-and-tool-calling",
+            "llm-evaluation-cost-and-safety"
+          ]
+        },
+        {
+          "heading": "RAG",
+          "slugs": [
+            "rag-foundations-and-ingestion",
+            "chunking-embeddings-and-vector-stores",
+            "hybrid-search-reranking-and-query-transformation",
+            "rag-evaluation-and-production"
+          ]
+        },
+        {
+          "heading": "Agents",
+          "slugs": [
+            "agent-fundamentals-and-langchain",
+            "langgraph-state-memory-and-human-in-the-loop",
+            "agentic-rag"
+          ]
+        },
+        {
+          "heading": "Guardrails and safety",
+          "slugs": [
+            "guardrails-and-agent-safety"
+          ]
+        },
+        {
+          "heading": "Observability and evaluation",
+          "slugs": [
+            "observability-and-agent-evaluation"
+          ]
+        },
+        {
+          "heading": "MCP and agent skills",
+          "slugs": [
+            "model-context-protocol-mcp",
+            "agent-skills-and-cursor-rules"
+          ]
+        }
+      ],
+      "practiseSections": [
+        {
+          "heading": "LLMs",
+          "slugs": [
+            "lab-compare-two-models",
+            "lab-extraction-and-tool-calling",
+            "assignment-model-recommendation"
+          ]
+        },
+        {
+          "heading": "RAG",
+          "slugs": [
+            "lab-ingest-chunk-and-index",
+            "lab-baseline-cited-rag",
+            "assignment-chunking-comparison",
+            "lab-hybrid-search-reranker",
+            "lab-diagnose-rag-failures",
+            "assignment-rag-evaluation-report"
+          ]
+        },
+        {
+          "heading": "Agents",
+          "slugs": [
+            "lab-langgraph-human-approval",
+            "lab-agentic-rag-mini-loop",
+            "assignment-choose-workflow-or-agent"
+          ]
+        },
+        {
+          "heading": "Guardrails and safety",
+          "slugs": [
+            "lab-red-team-guardrails",
+            "assignment-threat-model"
+          ]
+        },
+        {
+          "heading": "MCP, packaging and integration",
+          "slugs": [
+            "lab-mcp-server",
+            "assignment-package-and-present",
+            "assignment-integrated-policy-assistant"
+          ]
+        }
+      ],
       "reads": [
         {
           "slug": "llm-fundamentals",
           "type": "read",
           "title": "LLM fundamentals",
-          "minutes": 25
+          "minutes": 14
         },
         {
           "slug": "model-landscape-and-selection",
           "type": "read",
           "title": "Model landscape and selection",
-          "minutes": 20
+          "minutes": 12
         },
         {
           "slug": "prompt-engineering",
           "type": "read",
           "title": "Prompt engineering",
-          "minutes": 20
+          "minutes": 12
         },
         {
           "slug": "structured-outputs-and-tool-calling",
           "type": "read",
           "title": "Structured outputs and tool calling",
-          "minutes": 25
+          "minutes": 14
         },
         {
           "slug": "llm-evaluation-cost-and-safety",
           "type": "read",
           "title": "LLM evaluation, cost and safety",
-          "minutes": 25
+          "minutes": 14
         },
         {
           "slug": "rag-foundations-and-ingestion",
           "type": "read",
           "title": "RAG foundations and ingestion",
-          "minutes": 25
+          "minutes": 14
         },
         {
           "slug": "chunking-embeddings-and-vector-stores",
           "type": "read",
           "title": "Chunking, embeddings and vector stores",
-          "minutes": 20
+          "minutes": 12
         },
         {
           "slug": "hybrid-search-reranking-and-query-transformation",
           "type": "read",
           "title": "Hybrid search, reranking and query transformation",
-          "minutes": 25
+          "minutes": 14
         },
         {
           "slug": "rag-evaluation-and-production",
           "type": "read",
           "title": "RAG evaluation and production",
-          "minutes": 25
+          "minutes": 14
         },
         {
           "slug": "agent-fundamentals-and-langchain",
           "type": "read",
           "title": "Agent fundamentals and LangChain",
-          "minutes": 20
+          "minutes": 12
         },
         {
           "slug": "langgraph-state-memory-and-human-in-the-loop",
           "type": "read",
           "title": "LangGraph: state, memory and human-in-the-loop",
-          "minutes": 25
+          "minutes": 14
         },
         {
           "slug": "agentic-rag",
           "type": "read",
           "title": "Agentic RAG",
-          "minutes": 20
+          "minutes": 12
         },
         {
           "slug": "guardrails-and-agent-safety",
           "type": "read",
           "title": "Guardrails and agent safety",
-          "minutes": 20
+          "minutes": 12
         },
         {
           "slug": "observability-and-agent-evaluation",
           "type": "read",
           "title": "Observability and agent evaluation",
-          "minutes": 20
+          "minutes": 12
         },
         {
           "slug": "model-context-protocol-mcp",
           "type": "read",
           "title": "Model Context Protocol (MCP)",
-          "minutes": 25
+          "minutes": 14
         },
         {
           "slug": "agent-skills-and-cursor-rules",
           "type": "read",
           "title": "Agent skills and Cursor rules",
-          "minutes": 20
+          "minutes": 12
         }
       ],
       "practise": [
@@ -305,103 +435,103 @@
           "slug": "lab-compare-two-models",
           "type": "lab",
           "title": "Lab 2A: Compare two models with an eval harness",
-          "minutes": 30
+          "minutes": 17
         },
         {
           "slug": "lab-extraction-and-tool-calling",
           "type": "lab",
           "title": "Lab 2B: Extraction pipeline and tool-calling assistant",
-          "minutes": 30
+          "minutes": 17
         },
         {
           "slug": "assignment-model-recommendation",
           "type": "assignment",
           "title": "Assignment 2: Model recommendation",
-          "minutes": 75
+          "minutes": 43
         },
         {
           "slug": "lab-ingest-chunk-and-index",
           "type": "lab",
           "title": "Lab 3A: Ingest, chunk, and index a policy corpus",
-          "minutes": 30
+          "minutes": 17
         },
         {
           "slug": "lab-baseline-cited-rag",
           "type": "lab",
           "title": "Lab 3B: Baseline cited RAG Q&A",
-          "minutes": 30
+          "minutes": 17
         },
         {
           "slug": "assignment-chunking-comparison",
           "type": "assignment",
           "title": "Assignment 3: Chunking comparison",
-          "minutes": 75
+          "minutes": 43
         },
         {
           "slug": "lab-hybrid-search-reranker",
           "type": "lab",
           "title": "Lab 4A: Add hybrid search and a reranker",
-          "minutes": 30
+          "minutes": 17
         },
         {
           "slug": "lab-diagnose-rag-failures",
           "type": "lab",
           "title": "Lab 4B: Diagnose and fix planted RAG failures",
-          "minutes": 30
+          "minutes": 17
         },
         {
           "slug": "assignment-rag-evaluation-report",
           "type": "assignment",
           "title": "Assignment 4: RAG evaluation report",
-          "minutes": 90
+          "minutes": 52
         },
         {
           "slug": "lab-langgraph-human-approval",
           "type": "lab",
           "title": "Lab 5A: LangGraph agent with human approval",
-          "minutes": 30
+          "minutes": 17
         },
         {
           "slug": "lab-agentic-rag-mini-loop",
           "type": "lab",
           "title": "Lab 5B: Agentic RAG mini-loop",
-          "minutes": 30
+          "minutes": 17
         },
         {
           "slug": "assignment-choose-workflow-or-agent",
           "type": "assignment",
           "title": "Assignment 5: Choose a workflow or an agent",
-          "minutes": 60
+          "minutes": 35
         },
         {
           "slug": "lab-red-team-guardrails",
           "type": "lab",
           "title": "Lab 6: Red-team your agent and add guardrails",
-          "minutes": 30
+          "minutes": 17
         },
         {
           "slug": "assignment-threat-model",
           "type": "assignment",
           "title": "Assignment 6: Build a threat model for your agent",
-          "minutes": 75
+          "minutes": 43
         },
         {
           "slug": "lab-mcp-server",
           "type": "lab",
           "title": "Lab 7: Build an MCP server and connect it to your agent",
-          "minutes": 30
+          "minutes": 17
         },
         {
           "slug": "assignment-package-and-present",
           "type": "assignment",
           "title": "Assignment 7: Package and present your assistant",
-          "minutes": 150
+          "minutes": 87
         },
         {
           "slug": "assignment-integrated-policy-assistant",
           "type": "assignment",
           "title": "Capstone: Integrated policy assistant",
-          "minutes": 60
+          "minutes": 39
         }
       ]
     },
@@ -413,8 +543,8 @@
       "weeksLabel": "Section 2",
       "sectionLabel": "Section 2",
       "hours": 1,
-      "cardBlurb": "Read Ask IT discovery; Todo lab for BRD practice; Ask IT assignment for your BRD.",
-      "description": "Read the Ask IT customer context. Tutored Todo lab: discovery questions and BRD. Assignment: Ask IT BRD on your own.",
+      "cardBlurb": "Read Customer support ticketing system discovery; Todo lab for BRD practice; Customer support ticketing system assignment for your BRD.",
+      "description": "Read the Customer support ticketing system customer context. Tutored Todo lab: discovery questions and BRD. Assignment: Customer support ticketing system BRD on your own.",
       "outcomes": [
         "Describe the FDE engagement lifecycle",
         "Conduct structured discovery with the IT sponsor",
@@ -463,7 +593,7 @@
         {
           "slug": "one-page-brd-and-discovery-questions",
           "type": "assignment",
-          "title": "Assignment 8: Ask IT BRD and discovery questions",
+          "title": "Assignment 8: Customer support ticketing system BRD and discovery questions",
           "minutes": 8
         }
       ]
@@ -476,8 +606,8 @@
       "weeksLabel": "Section 2",
       "sectionLabel": "Section 2",
       "hours": 1,
-      "cardBlurb": "Read Ask IT UX rules; Todo lab for wireframes; Ask IT UI assignment.",
-      "description": "Learn Ask IT chat UX in readings. Todo lab: UI/UX brief. Assignment: Ask IT UI/UX on your own.",
+      "cardBlurb": "Read Customer support ticketing system UX rules; Todo lab for wireframes; Customer support ticketing system UI assignment.",
+      "description": "Learn Customer support ticketing system chat UX in readings. Todo lab: UI/UX brief. Assignment: Customer support ticketing system UI/UX on your own.",
       "outcomes": [
         "Define UX requirements for an internal FAQ assistant",
         "Document user flow for answer and no-answer paths",
@@ -494,7 +624,7 @@
         {
           "slug": "design-rules-for-ask-it",
           "type": "read",
-          "title": "Design rules for Ask IT",
+          "title": "Design rules for Customer support ticketing system",
           "minutes": 8
         },
         {
@@ -538,11 +668,11 @@
       "color": "#ff5a7a",
       "weeksLabel": "Section 2",
       "sectionLabel": "Section 2",
-      "hours": 1,
-      "cardBlurb": "Read Ask IT architecture; Todo lab for diagrams; Ask IT assignment for your reference design.",
+      "hours": 1.5,
+      "cardBlurb": "Read Customer support ticketing system architecture; Todo lab for diagrams; Customer support ticketing system assignment for your reference design.",
       "description": "Reference architecture, permissions, cost, and decisions.",
       "outcomes": [
-        "Document end-to-end architecture for Ask IT",
+        "Document end-to-end architecture for Customer support ticketing system",
         "Define role-based FAQ access on the server",
         "Estimate monthly AI cost and record one architecture decision"
       ],
@@ -552,31 +682,31 @@
           "slug": "recap-and-architecture-goals",
           "type": "read",
           "title": "Recap and architecture goals",
-          "minutes": 8
+          "minutes": 12
         },
         {
           "slug": "reference-architecture",
           "type": "read",
           "title": "Reference architecture",
-          "minutes": 8
+          "minutes": 12
         },
         {
           "slug": "permissions-and-trust-boundaries",
           "type": "read",
           "title": "Permissions and trust boundaries",
-          "minutes": 8
+          "minutes": 12
         },
         {
           "slug": "cost-latency-and-architecture-decisions",
           "type": "read",
           "title": "Cost, latency and architecture decisions",
-          "minutes": 8
+          "minutes": 12
         },
         {
           "slug": "review-and-assignment-brief",
           "type": "read",
           "title": "Review and assignment brief",
-          "minutes": 8
+          "minutes": 12
         }
       ],
       "practise": [
@@ -584,33 +714,32 @@
           "slug": "lab-3-diagram-tags-cost-and-adr",
           "type": "lab",
           "title": "Lab 10: Todo architecture and ADR",
-          "minutes": 12
+          "minutes": 18
         },
         {
           "slug": "update-the-architecture-pack",
           "type": "assignment",
           "title": "Assignment 10: Update the architecture pack",
-          "minutes": 8
+          "minutes": 12
         }
       ]
     },
     {
-      "slug": "development",
-      "name": "Development",
+      "slug": "development-backend",
+      "name": "Development: Backend",
       "icon": "code",
       "color": "#27c4c4",
       "weeksLabel": "Section 2",
       "sectionLabel": "Section 2",
-      "hours": 8,
-      "cardBlurb": "Todo labs: build API and UI with tutor. Assignments: run Ask IT locally and test.",
-      "description": "Tutored Todo labs for FastAPI and React. Assignments: Ask IT startup, tests, and fix loops on your own.",
+      "hours": 4,
+      "cardBlurb": "Todo lab: FastAPI backend with tutor. Assignment: Customer support ticketing system startup and tests on your own.",
+      "description": "Tutored Todo lab for FastAPI, data, and tests. Assignment: Customer support ticketing system backend run and test plan independently.",
       "outcomes": [
-        "Build Todo API and UI in labs with your tutor",
-        "Complete Ask IT local run and test-plan assignments independently",
-        "Use prompt → checkpoint → fix prompts when builds fail",
-        "Document staff vs admin checks before pilot"
+        "Build the Todo API with your tutor",
+        "Complete Customer support ticketing system backend startup and tests solo",
+        "Document staff vs admin server checks before pilot"
       ],
-      "readyWhen": "Todo labs pass checkpoints; Ask IT assignment shows local run and test notes; staff vs admin behavior documented.",
+      "readyWhen": "Todo backend lab passes checkpoints; Customer support ticketing system assignment shows local API run and test notes.",
       "reads": [
         {
           "slug": "recap-and-development-plan",
@@ -625,12 +754,6 @@
           "minutes": 12
         },
         {
-          "slug": "frontend-module",
-          "type": "read",
-          "title": "Frontend module",
-          "minutes": 12
-        },
-        {
           "slug": "database-and-faq-data",
           "type": "read",
           "title": "Database and FAQ data",
@@ -641,36 +764,6 @@
           "type": "read",
           "title": "Review and assignment brief (Session 4)",
           "minutes": 12
-        },
-        {
-          "slug": "recap-and-development-status",
-          "type": "read",
-          "title": "Recap and development status",
-          "minutes": 12
-        },
-        {
-          "slug": "rag-integration",
-          "type": "read",
-          "title": "RAG integration",
-          "minutes": 12
-        },
-        {
-          "slug": "no-answer-and-permission-behaviour",
-          "type": "read",
-          "title": "No-answer and permission behaviour",
-          "minutes": 12
-        },
-        {
-          "slug": "regression-test-design",
-          "type": "read",
-          "title": "Regression test design",
-          "minutes": 12
-        },
-        {
-          "slug": "review-and-assignment-brief-session-5",
-          "type": "read",
-          "title": "Review and assignment brief (Session 5)",
-          "minutes": 12
         }
       ],
       "practise": [
@@ -678,44 +771,101 @@
           "slug": "lab-4-application-skeleton",
           "type": "lab",
           "title": "Lab 11: Todo FastAPI backend",
-          "minutes": 100
+          "minutes": 103
         },
         {
           "slug": "startup-instructions-and-tests",
           "type": "assignment",
           "title": "Assignment 11: Startup instructions and tests",
-          "minutes": 85
+          "minutes": 89
+        }
+      ]
+    },
+    {
+      "slug": "development-frontend",
+      "name": "Development: Frontend",
+      "icon": "monitor",
+      "color": "#5ad4c4",
+      "weeksLabel": "Section 2",
+      "sectionLabel": "Section 2",
+      "hours": 3,
+      "cardBlurb": "Todo lab: React UI with tutor. Assignment: connect RAG, fix tests, and validate Customer support ticketing system UI solo.",
+      "description": "Tutored Todo lab for React UI. Assignment: Customer support ticketing system frontend, RAG hooks, and fix loops on your own.",
+      "outcomes": [
+        "Build the Todo UI in lab with your tutor",
+        "Complete Customer support ticketing system UI and regression checks independently",
+        "Use prompt → checkpoint → fix when builds fail"
+      ],
+      "readyWhen": "Todo UI lab passes checkpoints; Customer support ticketing system assignment shows UI wired and regression notes.",
+      "reads": [
+        {
+          "slug": "frontend-module",
+          "type": "read",
+          "title": "Frontend module",
+          "minutes": 9
         },
+        {
+          "slug": "recap-and-development-status",
+          "type": "read",
+          "title": "Recap and development status",
+          "minutes": 9
+        },
+        {
+          "slug": "rag-integration",
+          "type": "read",
+          "title": "RAG integration",
+          "minutes": 9
+        },
+        {
+          "slug": "no-answer-and-permission-behaviour",
+          "type": "read",
+          "title": "No-answer and permission behaviour",
+          "minutes": 9
+        },
+        {
+          "slug": "regression-test-design",
+          "type": "read",
+          "title": "Regression test design",
+          "minutes": 9
+        },
+        {
+          "slug": "review-and-assignment-brief-session-5",
+          "type": "read",
+          "title": "Review and assignment brief (Session 5)",
+          "minutes": 9
+        }
+      ],
+      "practise": [
         {
           "slug": "lab-5-connect-rag-and-test",
           "type": "lab",
           "title": "Lab 12: Todo React UI",
-          "minutes": 100
+          "minutes": 73
         },
         {
           "slug": "fix-a-failed-test-and-rerun",
           "type": "assignment",
           "title": "Assignment 12: Fix a failed test and rerun",
-          "minutes": 75
+          "minutes": 53
         }
       ]
     },
     {
-      "slug": "mvp-poc-local-render",
-      "name": "MVP/POC: Local and Render validation",
-      "icon": "lightbulb",
-      "color": "#ff9a2f",
+      "slug": "deployment",
+      "name": "Deployment",
+      "icon": "cloud-upload",
+      "color": "#7a8cff",
       "weeksLabel": "Section 2",
       "sectionLabel": "Section 2",
-      "hours": 2,
-      "cardBlurb": "Todo Lab 6: local, Docker, Render POC (tutor). Ask IT assignment: pilot deploy and checklist (solo).",
-      "description": "Todo lab: local run, Docker hello-world, compose, and Render POC. Assignment: same path for Ask IT on your own.",
+      "hours": 3,
+      "cardBlurb": "Todo labs: local, Docker, Render POC, and production. Customer support ticketing system assignments: pilot and rollout checklists.",
+      "description": "Local run through Docker, Render POC, and production hardening—secrets, runbooks, and operations.",
       "outcomes": [
         "Distinguish development, MVP/POC, and production environments",
-        "Document local startup and deploy a Render POC URL",
-        "Run regression and three pilot sessions; triage top fixes"
+        "Deploy Customer support ticketing system to Render or AWS with secrets outside Git",
+        "Run pilot regression and author runbook for common failures"
       ],
-      "readyWhen": "Local and Render POC URLs work, regression is scored, three pilots completed, top fixes listed.",
+      "readyWhen": "POC and production URLs work, pilots are scored, secrets are in env config, and runbook is peer-tested.",
       "reads": [
         {
           "slug": "recap-and-environment-readiness",
@@ -752,6 +902,30 @@
           "type": "read",
           "title": "Wrap-up and assignment brief",
           "minutes": 10
+        },
+        {
+          "slug": "recap-poc-to-production",
+          "type": "read",
+          "title": "Recap: POC to production",
+          "minutes": 10
+        },
+        {
+          "slug": "deployment-fundamentals",
+          "type": "read",
+          "title": "Deployment fundamentals",
+          "minutes": 10
+        },
+        {
+          "slug": "logging-monitoring-and-errors",
+          "type": "read",
+          "title": "Logging, monitoring and errors",
+          "minutes": 10
+        },
+        {
+          "slug": "review-and-assignment-brief",
+          "type": "read",
+          "title": "Review and assignment brief",
+          "minutes": 7
         }
       ],
       "practise": [
@@ -766,76 +940,31 @@
           "type": "assignment",
           "title": "Assignment 13: Staging checklist and pilot plan",
           "minutes": 20
-        }
-      ]
-    },
-    {
-      "slug": "production-deployment",
-      "name": "Production deployment",
-      "icon": "cloud-upload",
-      "color": "#7a8cff",
-      "weeksLabel": "Section 2",
-      "sectionLabel": "Section 2",
-      "hours": 1,
-      "cardBlurb": "Todo labs: production config and runbook drill. Ask IT assignment: pre-rollout checklist.",
-      "description": "Production on Render or AWS; secrets, runbook, and operations.",
-      "outcomes": [
-        "Deploy Ask IT to Render or AWS with secrets outside Git",
-        "Configure logging and user-facing error handling",
-        "Author a one-page runbook for common failures"
-      ],
-      "readyWhen": "Production URL is stable, secrets are in environment config, and a peer resolved a simulated outage using the runbook.",
-      "reads": [
-        {
-          "slug": "recap-poc-to-production",
-          "type": "read",
-          "title": "Recap: POC to production",
-          "minutes": 8
         },
-        {
-          "slug": "deployment-fundamentals",
-          "type": "read",
-          "title": "Deployment fundamentals",
-          "minutes": 8
-        },
-        {
-          "slug": "logging-monitoring-and-errors",
-          "type": "read",
-          "title": "Logging, monitoring and errors",
-          "minutes": 8
-        },
-        {
-          "slug": "review-and-assignment-brief",
-          "type": "read",
-          "title": "Review and assignment brief",
-          "minutes": 6
-        }
-      ],
-      "practise": [
         {
           "slug": "lab-7a-production-deployment",
           "type": "lab",
           "title": "Lab 14: Todo production on Render",
-          "minutes": 12
+          "minutes": 14
         },
         {
           "slug": "runbook-and-pre-rollout-checklist",
           "type": "assignment",
           "title": "Assignment 14: Runbook and pre-rollout checklist",
-          "minutes": 8
+          "minutes": 9
         }
       ]
     },
     {
       "slug": "enterprise-ai-fde",
-      "name": "Enterprise AI FDE",
+      "name": "Langfuse, evals, observability and guardrails",
       "icon": "building",
       "color": "#ff5fa8",
       "weeksLabel": "Section 2",
       "sectionLabel": "Section 2",
-      "hours": 2,
-      "cardBlurb": "Todo lab: traces and eval snapshot. Ask IT assignment: security pack and sponsor readout.",
-      "description": "Security, Langfuse observability, evals, and sponsor handover.",
+      "hours": 1.5,
+      "cardBlurb": "Todo lab: Langfuse traces and eval snapshot. Customer support ticketing system assignment: security, guardrails evidence, and sponsor readout.",
+      "description": "Langfuse observability, regression evals, guardrails evidence, IT security questionnaire, and sponsor handover.",
       "outcomes": [
         "Complete IT security questionnaire with evidence",
         "Configure Langfuse for traces and regression eval visibility",
@@ -847,25 +976,25 @@
           "slug": "recap-and-handover-goals",
           "type": "read",
           "title": "Recap and handover goals",
-          "minutes": 10
+          "minutes": 9
         },
         {
           "slug": "it-security-questionnaire",
           "type": "read",
           "title": "IT security questionnaire",
-          "minutes": 10
+          "minutes": 9
         },
         {
           "slug": "langfuse-traces-and-evaluations",
           "type": "read",
           "title": "Langfuse: traces and evaluations",
-          "minutes": 10
+          "minutes": 9
         },
         {
           "slug": "capstone-style-readout-and-close",
           "type": "read",
           "title": "Capstone-style readout and close",
-          "minutes": 10
+          "minutes": 9
         }
       ],
       "practise": [
@@ -873,133 +1002,60 @@
           "slug": "lab-8a-observability-and-eval-evidence",
           "type": "lab",
           "title": "Lab 15: Todo tracing (Langfuse)",
-          "minutes": 30
+          "minutes": 28
         },
         {
           "slug": "handover-package-and-sponsor-readout",
           "type": "assignment",
           "title": "Assignment 15: Handover package and sponsor readout",
-          "minutes": 25
+          "minutes": 26
         }
       ]
     },
     {
       "slug": "capstone-fde",
-      "name": "Capstone Project",
+      "name": "Capstone: E-commerce Fullstack Agentic RAG",
       "icon": "trophy",
       "color": "#27d3e0",
       "weeksLabel": "Section 3",
       "sectionLabel": "Section 3",
-      "hours": 16,
-      "cardBlurb": "Four capstone projects: e-commerce full-stack, single agent and multi-agent, agentic RAG, and one integrated application.",
-      "description": "Four capstone projects: e-commerce full-stack, single agent and multi-agent, agentic RAG, and one integrated application.",
+      "hours": 10,
+      "cardBlurb": "One integrated storefront: full-stack commerce, multi-agent assistant, agentic RAG with ChromaDB, deployment.",
+      "description": "A single e-commerce application that combines React, FastAPI, PostgreSQL, LangGraph agents, and ChromaDB-backed product-manual RAG.",
       "outcomes": [
-        "Demonstrate the ReactJS → FastAPI → PostgreSQL e-commerce flow.",
-        "Demonstrate a single-agent baseline and a LangGraph multi-agent assistant with specialist routing.",
-        "Demonstrate document ingestion, FAISS retrieval and grounded Agentic RAG answers.",
-        "Demonstrate one integrated e-commerce application with separate store-action and product-manual assistant modes."
+        "Explain the full-stack shopper journey before AI features are enabled.",
+        "Describe multi-agent routing and permissions for store actions.",
+        "Explain agentic RAG with citations and refusal separate from cart mutations.",
+        "Outline deployment, smoke testing, and demo handover for the unified app."
       ],
-      "readyWhen": "One integrated application demonstrates full-stack shopping, multi-agent store assistance and Agentic RAG in separate modes.",
+      "readyWhen": "You can walk through all four modules and explain what the one integrated app does in commerce, agent, RAG, and deploy terms.",
       "reads": [
         {
-          "slug": "project-1-hour-1-requirements-structure-and-database",
+          "slug": "module-1-fullstack-commerce",
           "type": "read",
-          "title": "Project 1, Hour 1: Requirements, structure and database",
-          "minutes": 60
+          "title": "Module 1: Full-stack e-commerce foundation",
+          "minutes": 180
         },
         {
-          "slug": "project-2-hour-1-agent-concepts-and-single-agent-baseline",
+          "slug": "module-2-multi-agent-store-assistant",
           "type": "read",
-          "title": "Project 2, Hour 1: Agent concepts and single-agent baseline",
-          "minutes": 60
+          "title": "Module 2: Multi-agent store assistant",
+          "minutes": 180
         },
         {
-          "slug": "project-3-hour-1-knowledge-sources-and-document-preparation",
+          "slug": "module-3-agentic-rag-product-manuals",
           "type": "read",
-          "title": "Project 3, Hour 1: Knowledge sources and document preparation",
-          "minutes": 60
+          "title": "Module 3: Agentic RAG for product manuals",
+          "minutes": 180
         },
         {
-          "slug": "project-4-hour-1-integration-design-and-codebase-review",
+          "slug": "module-4-deployment-and-demo",
           "type": "read",
-          "title": "Project 4, Hour 1: Integration design and codebase review",
+          "title": "Module 4: Deployment and demo handover",
           "minutes": 60
         }
       ],
-      "practise": [
-        {
-          "slug": "project-1-hour-2-backend-apis-and-business-flow",
-          "type": "capstone",
-          "title": "Project 1, Hour 2: Backend APIs and business flow",
-          "minutes": 60
-        },
-        {
-          "slug": "project-1-hour-3-react-ui-and-api-integration",
-          "type": "capstone",
-          "title": "Project 1, Hour 3: React UI and API integration",
-          "minutes": 60
-        },
-        {
-          "slug": "project-1-hour-4-end-to-end-testing-and-handover",
-          "type": "capstone",
-          "title": "Project 1, Hour 4: End-to-end testing and handover",
-          "minutes": 60
-        },
-        {
-          "slug": "project-2-hour-2-define-multi-agent-responsibilities",
-          "type": "capstone",
-          "title": "Project 2, Hour 2: Define multi-agent responsibilities",
-          "minutes": 60
-        },
-        {
-          "slug": "project-2-hour-3-build-the-langgraph-flow",
-          "type": "capstone",
-          "title": "Project 2, Hour 3: Build the LangGraph flow",
-          "minutes": 60
-        },
-        {
-          "slug": "project-2-hour-4-test-actions-permissions-and-failures",
-          "type": "capstone",
-          "title": "Project 2, Hour 4: Test actions, permissions and failures",
-          "minutes": 60
-        },
-        {
-          "slug": "project-3-hour-2-embeddings-faiss-and-retrieval",
-          "type": "capstone",
-          "title": "Project 3, Hour 2: Embeddings, FAISS and retrieval",
-          "minutes": 60
-        },
-        {
-          "slug": "project-3-hour-3-agentic-retrieval-and-grounded-answers",
-          "type": "capstone",
-          "title": "Project 3, Hour 3: Agentic retrieval and grounded answers",
-          "minutes": 60
-        },
-        {
-          "slug": "project-3-hour-4-api-ui-integration-and-evaluation",
-          "type": "capstone",
-          "title": "Project 3, Hour 4: API/UI integration and evaluation",
-          "minutes": 60
-        },
-        {
-          "slug": "project-4-hour-2-integrate-the-multi-agent-module",
-          "type": "capstone",
-          "title": "Project 4, Hour 2: Integrate the Multi-Agent module",
-          "minutes": 60
-        },
-        {
-          "slug": "project-4-hour-3-integrate-the-agentic-rag-module",
-          "type": "capstone",
-          "title": "Project 4, Hour 3: Integrate the Agentic RAG module",
-          "minutes": 60
-        },
-        {
-          "slug": "project-4-hour-4-end-to-end-validation-and-demo",
-          "type": "capstone",
-          "title": "Project 4, Hour 4: End-to-end validation and demo",
-          "minutes": 60
-        }
-      ]
+      "practise": []
     }
   ]
 }

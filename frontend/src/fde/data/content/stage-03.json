@@ -1,10 +1,10 @@
 {
   "fde-sdlc-business-requirement/welcome-and-scenario-kickoff": {
-    "summary": "Introduce Ask IT, the workshop outputs and the link between requirements, design, development and deployment.",
+    "summary": "Introduce Customer support ticketing system, the workshop outputs and the link between requirements, design, development and deployment.",
     "sections": [
       {
         "heading": "Overview",
-        "body": "- Introduce Ask IT\n- The workshop outputs and the link between requirements\n- Design\n- Development and deployment"
+        "body": "- Introduce Customer support ticketing system\n- The workshop outputs and the link between requirements\n- Design\n- Development and deployment"
       }
     ],
     "typeExtras": {
@@ -68,23 +68,18 @@
     }
   },
   "fde-sdlc-business-requirement/lab-1-discovery-and-brd": {
-    "summary": "Tutored lab: discovery questions + BRD for the Todo app (practice before Ask IT).",
+    "summary": "Tutored lab: discovery questions + BRD for the Todo app (practice before Customer support ticketing system).",
     "sections": [
       {
-        "heading": "Read vs lab vs assignment",
-        "body": "Reads above teach Ask IT discovery ideas. This lab writes discovery + BRD for Todo with your tutor. Assignment: One-page BRD and discovery questions, the same work for Ask IT, alone."
-      },
-      {
-        "heading": "Done when",
-        "body": "discovery.md (12 questions) and Todo BRD.md with all required headings. Tutor signed off checkpoints in the lab panel."
+        "heading": "Overview",
+        "body": "Reads above teach Customer support ticketing system discovery ideas. This lab writes discovery + BRD for Todo with your tutor."
       }
     ],
     "typeExtras": {
       "objectives": [
         "Run structured discovery questions before you specify requirements.",
         "Write a one-page Todo BRD with fixed headings reviewers can scan quickly.",
-        "Number functional requirements and user stories so they are testable.",
-        "Reuse the same BRD pattern on the Ask IT assignment without copying Todo features."
+        "Number functional requirements and user stories so they are testable."
       ]
     }
   },
@@ -102,7 +97,7 @@
     ],
     "typeExtras": {
       "objectives": [
-        "Transfer the Todo BRD structure to Ask IT without copying Todo features.",
+        "Transfer the Todo BRD structure to Customer support ticketing system without copying Todo features.",
         "Cover staff vs admin and triage in requirements."
       ]
     }

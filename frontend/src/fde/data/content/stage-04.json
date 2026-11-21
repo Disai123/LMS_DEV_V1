@@ -71,34 +71,29 @@
     "summary": "Tutored lab: UI_UX.md for Todo task list.",
     "sections": [
       {
-        "heading": "Read vs lab vs assignment",
-        "body": "Reads describe Ask IT chat UX. This lab documents Todo screens with your tutor. Assignment: Revise the flow and wireframes, Ask IT UI/UX solo."
-      },
-      {
-        "heading": "Done when",
-        "body": "UI_UX.md has all six required headings for Todo."
+        "heading": "Overview",
+        "body": "Reads describe Customer support ticketing system chat UX. This lab documents Todo screens with your tutor."
       }
     ],
     "typeExtras": {
       "objectives": [
         "Describe Todo screens (list, add, mark done) in a wireframe-style markdown brief.",
         "Include empty and error states, not only the happy path.",
-        "Keep scope on the task-list app, with no chat or Ask IT flows in this lab.",
-        "Produce a UI spec you can mirror for Ask IT in the assignment."
+        "Keep scope on the task-list app, with no chat or Customer support ticketing system flows in this lab."
       ]
     }
   },
   "fde-sdlc-ui-ux-solution/revise-the-flow-and-wireframes": {
-    "summary": "Assignment: Ask IT chat UI/UX document, on your own.",
+    "summary": "Assignment: Customer support ticketing system chat UI/UX document, on your own.",
     "sections": [
       {
         "heading": "Before you start",
-        "body": "Complete Todo UI lab. Reuse heading discipline; content must be Ask IT chat (roles, citations, escalate). Prompts are in the Assignment panel at the bottom of this page."
+        "body": "Complete Todo UI lab. Reuse heading discipline; content must be Customer support ticketing system chat (roles, citations, escalate). Prompts are in the Assignment panel at the bottom of this page."
       }
     ],
     "typeExtras": {
       "objectives": [
-        "Describe Ask IT chat, roles, citations, and escalation in a UI brief.",
+        "Describe Customer support ticketing system chat, roles, citations, and escalation in a UI brief.",
         "Keep headings consistent with the Todo lab discipline."
       ]
     }

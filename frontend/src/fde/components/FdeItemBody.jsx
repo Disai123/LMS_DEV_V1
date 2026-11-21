@@ -33,9 +33,24 @@ export default function FdeItemBody({
   itemType,
   hideLabDeliverables = false,
   hideCheckpointQuestions = false,
+  minimalPractise = false,
 }) {
   const extras = content.typeExtras || {}
   const isProject = itemType === 'project' || itemType === 'assignment' || itemType === 'capstone'
+
+  if (minimalPractise && itemType === 'lab') {
+    const overview =
+      content.sections?.find((s) => /^overview$/i.test(s.heading)) || content.sections?.[0]
+    const body = overview?.body?.trim() || content.summary
+    return (
+      <article className="text-[var(--fde-tx)]">
+        <h2 className="text-sm font-semibold tracking-tight m-0 mb-2 text-[var(--fde-tx)]">Overview</h2>
+        <div className="fde-md text-sm leading-relaxed text-[var(--fde-mut)] max-w-3xl">
+          <ReactMarkdown remarkPlugins={[remarkGfm]}>{body}</ReactMarkdown>
+        </div>
+      </article>
+    )
+  }
 
   return (
     <article className="text-[var(--fde-tx)]">

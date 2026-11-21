@@ -1,6 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const { authenticate } = require('../middleware/auth');
+const { requireFeatureAccess } = require('../middleware/featureAccessMiddleware');
 const {
   getProjectsList,
   getProjectInfo,
@@ -16,8 +17,9 @@ router.get('/diagnose', diagnoseProjects);
 // Public endpoint for landing page (no auth required)
 router.get('/public', getProjectsList);
 
-// All other routes require authentication
+// All other routes require authentication + realtime_projects RBAC
 router.use(authenticate);
+router.use(requireFeatureAccess('realtime_projects'));
 
 // Get all projects (for students with permission)
 router.get('/list', getProjectsList);

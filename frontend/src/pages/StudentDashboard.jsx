@@ -29,6 +29,8 @@ const StudentDashboard = () => {
   const queryClient = useQueryClient()
   const navigate = useNavigate()
   const { user } = useAuth()
+  const { hasAccess, loading: permissionsLoading, isAdmin } = usePermissions()
+  const canAccessCourses = isAdmin || hasAccess('courses')
 
   // Fetch Subscription Data
   const { data: subscriptionResponse } = useQuery(
@@ -45,6 +47,7 @@ const StudentDashboard = () => {
     'student-courses',
     () => courseService.getCourses({ limit: 6 }),
     {
+      enabled: !permissionsLoading && canAccessCourses,
       refetchOnWindowFocus: false,
       staleTime: 5 * 60 * 1000,
       retry: 1,
@@ -176,11 +179,10 @@ const StudentDashboard = () => {
   // const [selectedInternship, setSelectedInternship] = useState(null)
   // const [isSubmissionModalOpen, setIsSubmissionModalOpen] = useState(false)
 
-  const { hasAccess } = usePermissions()
   const { projects: realtimeProjects = [], hasAccess: hasProjectsAccess = false } = useRealtimeProjects({ category: 'all', difficulty: 'all', sort: 'name' })
 
-  const isLoading = coursesLoading || enrollmentsLoading || activitiesLoading || scoreLoading
-  const courses = coursesData?.data?.courses || []
+  const isLoading = permissionsLoading || (canAccessCourses && coursesLoading) || enrollmentsLoading || activitiesLoading || scoreLoading
+  const courses = canAccessCourses ? (coursesData?.data?.courses || []) : []
   const enrollments = enrollmentsData?.data?.enrollments || []
   const activities = activitiesData?.data?.activities || []
   // const chatRooms = chatRoomsData?.data?.chatRooms || []
@@ -344,8 +346,14 @@ const StudentDashboard = () => {
     )
   }
 
-  // Handle API errors gracefully
-  if (coursesError || enrollmentsError) {
+  // Only treat enrollments as fatal; locked courses (403) must not break the dashboard
+  const isCoursesLockedError = coursesError && (
+    coursesError?.response?.status === 403 ||
+    coursesError?.status === 403 ||
+    coursesError?.locked === true ||
+    String(coursesError?.message || '').toLowerCase().includes('access')
+  )
+  if (enrollmentsError || (coursesError && canAccessCourses && !isCoursesLockedError)) {
     return (
       <div className="min-h-screen bg-gradient-to-br from-slate-50 via-amber-50/30 to-stone-100">
         <Header />
@@ -803,7 +811,13 @@ const StudentDashboard = () => {
                       <p className="text-sm text-gray-600">Discover new learning opportunities</p>
                     </div>
                     <button
-                      onClick={() => setIsAllCoursesModalOpen(true)}
+                      onClick={() => {
+                        if (canAccessCourses) {
+                          setIsAllCoursesModalOpen(true)
+                        } else {
+                          navigate('/courses')
+                        }
+                      }}
                       className="inline-flex items-center px-3 py-1.5 bg-green-100 text-green-600 rounded-lg hover:bg-green-200 transition-colors duration-200 font-medium text-sm"
                     >
                       <svg className="w-3 h-3 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">

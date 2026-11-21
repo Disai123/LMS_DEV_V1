@@ -1,7 +1,7 @@
 import { GLOSSARY_COMMON, GLOSSARY_DOCKER, TUTOR_START, troubleshootingEntry } from '../labShared'
 
 export const stageDevDeployLabs = {
-  'development/lab-4-application-skeleton': {
+  'development-backend/lab-4-application-skeleton': {
     track: 'todo',
     type: 'prompt-lab',
     title: 'Lab 11: Todo FastAPI backend',
@@ -12,11 +12,11 @@ export const stageDevDeployLabs = {
     labContext:
       'You will generate a minimal Todo API with two task endpoints (GET /tasks and POST /tasks), prove it with curl, then open the SQLite file to see the stored tasks.',
     whatYouLearn: [
-      'Generate a minimal FastAPI Todo backend with GET /tasks and POST /tasks from prompts.',
-      'Prove the API works with curl smoke tests, not only by reading code.',
-      'Fix import, routing, and validation issues with small targeted prompts.',
-      'Carry the same backend skeleton approach to Ask IT in the assignment.',
-    ],
+    'Generate a minimal FastAPI Todo backend with GET /tasks and POST /tasks from prompts.',
+    'Prove the API works with curl smoke tests, not only by reading code.',
+    'Fix import, routing, and validation issues with small targeted prompts.',
+    'Carry the same backend skeleton approach to Customer support ticketing system in the assignment.',
+  ],
     prompts: [
       {
         step: 1,
@@ -47,16 +47,7 @@ Give 2 curl commands: POST /tasks with a title, and GET /tasks. Give each for Ma
 - One line per command.
 - Expected HTTP status for each.`,
       },
-    ],
-    executionSteps: [
-      '**[Antigravity]** Paste the Step 1 prompt and send it.\n\n*Outcome:* `main.py` appears in the project folder (Checkpoint 1).',
-      '**[Manual]** Open a terminal in the project folder, then create the environment, install the libraries and start the API:\n- `python -m venv .venv`\n- Windows (PowerShell): `.venv\\Scripts\\Activate.ps1`\n- Mac/Linux: `source .venv/bin/activate`\n- `pip install fastapi uvicorn`\n- `uvicorn main:app --reload`\n\n*Outcome:* The terminal shows "Application startup complete". Leave this terminal open.',
-      '**[Antigravity]** Paste the Step 2 prompt and send it.\n\n*Outcome:* Two curl commands appear, each with its expected status.',
-      '**[Manual]** Open a second terminal and run these three requests:\n- `POST /tasks` with the title "Buy milk".\n- `GET /tasks`.\n- `POST /tasks` again with `{}` as the body and no title.\n\n*Outcome:* The first returns 201 with the new task and an `id`. The second returns 200 with a list that contains the task. The third returns 422 with `{"detail":` and a message that `title` is missing (Checkpoint 2).',
-      '**[Manual]** Open DB Browser for SQLite (a free download from sqlitebrowser.org if it is not installed). Choose File → Open Database and select the SQLite file in the project folder, such as `todo.db`. Open the Browse Data tab and choose the `tasks` table.\n\n*Outcome:* The table shows one row for "Buy milk" with `id` 1 and `done` 0 (false). The invalid request from step 4 created no row (Checkpoint 3).',
-      '**[Antigravity]** Only if a step above showed an error: paste the full error and ask for the smallest possible fix, then repeat the step that failed.\n\n*Outcome:* The server starts and the requests return the expected status.',
-      '**[Manual]** Close DB Browser for SQLite, then press `Ctrl+C` in the server terminal.\n\n*Outcome:* The server stops.',
-    ],
+    ],
     acceptanceCriteria: [
       'GET /tasks returns 200 with the list of tasks.',
       'POST /tasks creates a task and returns 201.',
@@ -85,7 +76,7 @@ Give 2 curl commands: POST /tasks with a title, and GET /tasks. Give each for Ma
     ],
   },
 
-  'development/lab-5-connect-rag-and-test': {
+  'development-frontend/lab-5-connect-rag-and-test': {
     track: 'todo',
     type: 'prompt-lab',
     title: 'Lab 12: Todo React UI',
@@ -95,11 +86,11 @@ Give 2 curl commands: POST /tasks with a title, and GET /tasks. Give each for Ma
     glossary: GLOSSARY_COMMON,
     labContext: 'Add task works in the browser against your Todo API.',
     whatYouLearn: [
-      'Connect a React Todo UI to your FastAPI backend with fetch calls.',
-      'Resolve CORS and empty-list bugs using browser errors and fix prompts.',
-      'Apply the same front-to-back integration steps on Ask IT later.',
-      'Verify add-task and list-task flows end to end with a screenshot.',
-    ],
+    'Connect a React Todo UI to your FastAPI backend with fetch calls.',
+    'Resolve CORS and empty-list bugs using browser errors and fix prompts.',
+    'Apply the same front-to-back integration steps on Customer support ticketing system later.',
+    'Verify add-task and list-task flows end to end with a screenshot.',
+  ],
     prompts: [
       {
         step: 1,
@@ -114,17 +105,7 @@ Create a simple task list page. On load, call GET /tasks and show every task tit
 ## Outcome
 npm run dev shows the page. Adding one task updates the list.`,
       },
-    ],
-    executionSteps: [
-      '**[Antigravity] Generate the UI**\nPaste the Step 1 prompt and generate the todo-ui project.\n\n*Outcome:* Folder todo-ui with package.json, index.html and src/App.jsx.',
-      '**[Manual] Start the backend**\nIn the Lab 11 folder, run `uvicorn main:app --reload`.\n\n*Outcome:* Terminal shows `Uvicorn running on http://127.0.0.1:8000`.',
-      '**[Manual] Start the UI**\nIn a second terminal, inside todo-ui, run `npm install`, then `npm run dev`.\n\n*Outcome:* Terminal shows `Local: http://localhost:5173/` (Checkpoint: the Vite URL is printed).',
-      '**[Manual] Add a task in the browser**\nOpen `http://localhost:5173`, type a task and click Add.\n\n*Outcome:* The task appears in the list (Checkpoint: the list updates without a page refresh).',
-      '**[Antigravity] Fix CORS (only if needed)**\nIf the page shows "Failed to fetch" or the browser console shows a CORS error, paste the full error and ask for the smallest fix that allows `http://localhost:5173` on the backend. Restart the backend and reload the page.\n\n*Outcome:* The task list loads with no error.',
-      '**[Manual] Check the data in SQLite**\nOpen `todo.db` in DB Browser for SQLite, then Browse Data → tasks.\n\n*Outcome:* The task added in the browser is a new row (Checkpoint: the UI and the database show the same tasks).',
-      '**[Manual] Take a screenshot**\nCapture the page with the added task.\n\n*Outcome:* Screenshot saved as proof.',
-      '**[Manual] Stop both servers**\nPress Ctrl+C in both terminals.\n\n*Outcome:* Both terminals are back at the prompt.',
-    ],
+    ],
     acceptanceCriteria: [
       'The UI loads tasks from the API.',
       'Add task works end to end in the browser.',
@@ -151,7 +132,7 @@ npm run dev shows the page. Adding one task updates the list.`,
     ],
   },
 
-  'mvp-poc-local-render/lab-6-poc-hardening': {
+  'deployment/lab-6-poc-hardening': {
     track: 'todo',
     type: 'prompt-lab',
     title: 'Lab 13: Todo deploy — local, Docker, Render',
@@ -162,11 +143,11 @@ npm run dev shows the page. Adding one task updates the list.`,
     labContext:
       'You will run Todo on your laptop, then in Docker, then prepare a Render POC checklist—with tutor help when stuck.',
     whatYouLearn: [
-      'Run Todo locally from steps you can hand to another developer.',
-      'Prove Docker with hello-world, then run the app with docker compose.',
-      'Fix port, engine, and DATABASE_URL issues common in real deploys.',
-      'Prepare Render POC config—the same path repeats on Ask IT in your assignment.',
-    ],
+    'Run Todo locally from steps you can hand to another developer.',
+    'Prove Docker with hello-world, then run the app with docker compose.',
+    'Fix port, engine, and DATABASE_URL issues common in real deploys.',
+    'Prepare Render POC config—the same path repeats on Customer support ticketing system in your…',
+  ],
     prompts: [
       {
         step: 1,
@@ -256,7 +237,7 @@ Draft Render POC config and a short deploy checklist for Todo.
     ],
   },
 
-  'production-deployment/lab-7a-production-deployment': {
+  'deployment/lab-7a-production-deployment': {
     track: 'todo',
     type: 'prompt-lab',
     title: 'Lab 14: Todo production Render',
@@ -267,11 +248,11 @@ Draft Render POC config and a short deploy checklist for Todo.
     labContext:
       'You will tighten Todo deploy settings for a pilot: secrets, CORS, and a production checklist including rollback.',
     whatYouLearn: [
-      'Harden Render config: secrets outside git, explicit CORS origin, health checks.',
-      'Write a production checklist that includes rollback steps.',
-      'Spot POC shortcuts that are unsafe for real users.',
-      'Repeat this checklist pattern for Ask IT in the production assignment.',
-    ],
+    'Harden Render config: secrets outside git, explicit CORS origin, health checks.',
+    'Write a production checklist that includes rollback steps.',
+    'Spot POC shortcuts that are unsafe for real users.',
+    'Repeat this checklist pattern for Customer support ticketing system in the production assignment.',
+  ],
     prompts: [
       {
         step: 1,
@@ -312,11 +293,11 @@ Upgrade Todo Render settings for pilot plus a production checklist (health, secr
     labContext:
       'You will plan how to trace Todo API requests (for example with Langfuse) without pasting your whole app.',
     whatYouLearn: [
-      'Define which Todo API spans you would trace (validation, DB write, etc.).',
-      'List Langfuse env vars and flush behavior without exposing secrets.',
-      'Connect tracing to debugging real latency and failure issues.',
-      'Scale the same observability plan to Ask IT in the enterprise stage.',
-    ],
+    'Define which Todo API spans you would trace (validation, DB write, etc.).',
+    'List Langfuse env vars and flush behavior without exposing secrets.',
+    'Connect tracing to debugging real latency and failure issues.',
+    'Scale the same observability plan to Customer support ticketing system in the enterprise stage.',
+  ],
     prompts: [
       {
         step: 1,
@@ -338,7 +319,7 @@ Describe how to trace Todo POST /tasks with Langfuse (spans: validate, db_write,
     troubleshooting: [
       troubleshootingEntry('Empty dashboard', 'No events.', 'Missing keys or flush.', 'List LANGFUSE env vars and flush() before exit.'),
       troubleshootingEntry('Full app pasted in doc', 'Too much code.', 'Open prompt.', 'Setup notes only—implement from bullets yourself.'),
-      troubleshootingEntry('/ask instead of /tasks', 'Wrong endpoint.', 'Ask IT habit.', 'Instrument POST /tasks only for Todo.'),
+      troubleshootingEntry('/ask instead of /tasks', 'Wrong endpoint.', 'Customer support ticketing system habit.', 'Instrument POST /tasks only for Todo.'),
     ],
   },
 }

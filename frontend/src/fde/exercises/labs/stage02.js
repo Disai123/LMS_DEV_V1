@@ -69,10 +69,10 @@ export const stage02Labs = {
     labContext:
       'Ask the AI tool to write one comparison script, run it, and write a short recommendation from the results table.',
     whatYouLearn: [
-      'Build a tiny eval set for one task type.',
-      'Record quality, latency and token usage for each model.',
-      'Recommend a model with reasons tied to data.',
-    ],
+    'Build a tiny eval set for one task type.',
+    'Record quality, latency and token usage for each model.',
+    'Recommend a model with reasons tied to data.',
+  ],
     prompts: [
       {
         step: 1,
@@ -105,15 +105,7 @@ Error: <paste the full error here>. Fix it with the smallest possible change.
 ## Outcome
 One line saying what changed.`,
       },
-    ],
-    executionSteps: [
-      '**[AI tool]** Paste the Step 1 prompt and send it.\n\n*Outcome:* `compare.py` appears in the project folder (Checkpoint 1).',
-      '**[Manual]** Open a terminal in the project folder, activate the virtual environment (or create one with `python -m venv .venv`), then install the libraries: `pip install openai google-genai python-dotenv`\n- Windows (PowerShell): `.venv\\Scripts\\Activate.ps1`\n- Mac/Linux: `source .venv/bin/activate`\n\n*Outcome:* `(.venv)` appears at the start of the terminal line, and the install ends with "Successfully installed".',
-      '**[Manual]** Create a file named `.env` in the project folder containing the two keys, one per line: `OPENAI_API_KEY=...` and `GOOGLE_API_KEY=...`\n\n*Outcome:* `.env` is saved. The file stays private and is never shared or committed.',
-      '**[Manual]** Run the script: `python compare.py`\n\n*Outcome:* The terminal prints a table of 6 rows (3 per model), and `results.csv` is created (Checkpoint 2).',
-      '**[AI tool]** Only if step 4 showed an error: paste the Step 2 prompt with the full error, then run step 4 again.\n\n*Outcome:* The script finishes and prints the table.',
-      '**[Manual]** Create `recommendation.md` with 2 to 3 lines: the default model chosen, and one sentence naming the worst failure the choice avoids, using a number from the table.\n\n*Outcome:* `recommendation.md` is saved in the project folder (Checkpoint 3).',
-    ],
+    ],
     acceptanceCriteria: [
       'Both models run on the same 3 inputs with the same system message.',
       'The table shows quality, latency, input tokens and output tokens for every call.',
@@ -176,10 +168,10 @@ One line saying what changed.`,
     labContext:
       'Ask the AI tool to build the assistant, run it on four sample tickets, and write a short note on when each tool is used.',
     whatYouLearn: [
-      'Return structured fields from unstructured text.',
-      'Let the model call a tool when maths or a lookup is needed.',
-      'Handle tool failure without inventing data.',
-    ],
+    'Return structured fields from unstructured text.',
+    'Let the model call a tool when maths or a lookup is needed.',
+    'Handle tool failure without inventing data.',
+  ],
     prompts: [
       {
         step: 1,
@@ -204,14 +196,7 @@ Run these tickets and print each result and the tool used:
 ## Outcome
 Reply with only the name of the file created and one line about what it does. Do not paste the file contents.`,
       },
-    ],
-    executionSteps: [
-      '**[AI tool]** Paste the Step 1 prompt and send it.\n\n*Outcome:* `assistant.py` appears in the project folder (Checkpoint 1).',
-      '**[Manual]** Open a terminal in the project folder and activate the virtual environment from Lab 2A.\n- Windows (PowerShell): `.venv\\Scripts\\Activate.ps1`\n- Mac/Linux: `source .venv/bin/activate`\n\n*Outcome:* `(.venv)` appears at the start of the terminal line.',
-      '**[Manual]** Run the assistant: `python assistant.py`\n\n*Outcome:* The terminal shows four results. Ticket 1 uses no tool, ticket 2 uses `calc_business_days` and returns 3, ticket 3 uses `lookup_policy_snippet`, and ticket 4 returns `{"error":"tool_failed","tool":"calc_business_days"}` without stopping the run (Checkpoint 2).',
-      '**[AI tool]** Only if step 3 showed an error or a wrong tool: paste the full error or a description of the problem and ask for the smallest possible fix, then run step 3 again.\n\n*Outcome:* All four tickets behave as described in step 3.',
-      '**[Manual]** Create `tools.md` with one line per tool saying when it is used, and one line saying what the assistant returns when a tool fails.\n\n*Outcome:* `tools.md` is saved in the project folder (Checkpoint 3).',
-    ],
+    ],
     acceptanceCriteria: [
       'Exactly two tools are registered and each is described in tools.md.',
       'Ticket 1 uses no tool.',
@@ -291,12 +276,11 @@ Reply with only the name of the file created and one line about what it does. Do
       'This assignment: Uses the same models, script and assistant. It adds edge cases, cost and a recommendation, with no new tools.',
     ],
     whatYouLearn: [
-      'Grow a small eval set without changing the task type.',
-      'Add edge cases that show where a model fails.',
-      'Turn per-call token counts into a cost per 1,000 requests.',
-      'Test an assistant on tickets designed to break it.',
-      'Write a recommendation a non-technical manager can act on, backed by numbers.',
-    ],
+    'Grow a small eval set without changing the task type.',
+    'Add edge cases that show where a model fails.',
+    'Turn per-call token counts into a cost per 1,000 requests.',
+    'Test an assistant on tickets designed to break it.',
+  ],
     prompts: [
       {
         step: 1,
@@ -327,15 +311,7 @@ Run these tickets and print each result and the tool used:
 ## Outcome
 Reply with only the name of the file changed and one line about what was added. Do not paste the file contents.`,
       },
-    ],
-    executionSteps: [
-      '**[AI tool]** Paste the Step 1 prompt and send it.\n\n*Outcome:* `eval_set.json` appears and `compare.py` is updated (Checkpoint 1).',
-      '**[Manual]** Open `compare.py` and enter the current input and output token prices for both models from each provider\'s pricing page. Note the source and the date.\n\n*Outcome:* The price variables hold real values, and the source and date are written down.',
-      '**[Manual]** Open a terminal in the project folder, activate the virtual environment, then run: `python compare.py`\n- Windows (PowerShell): `.venv\\Scripts\\Activate.ps1`\n- Mac/Linux: `source .venv/bin/activate`\n\n*Outcome:* The terminal prints accuracy, valid JSON share, average latency and cost per 1,000 requests for both models, and `results.csv` holds 12 rows (Checkpoint 2).',
-      '**[AI tool]** Paste the Step 2 prompt and send it.\n\n*Outcome:* `assistant.py` is updated with the three edge-case tickets.',
-      '**[Manual]** Run the assistant: `python assistant.py`\n\n*Outcome:* Three new results appear. Ticket 1 shows `employee_id` as `null`, ticket 2 shows which dates were used, and ticket 3 stays in JSON and ignores the instruction (Checkpoint 3).',
-      '**[Manual]** Create `recommendation.md` that fits on one page and covers:\n- The model chosen, and why, with numbers from the results.\n- The expected cost per 1,000 requests, with the pricing source and date.\n- The main risk, using one finding from the edge cases or the assistant run.\n\n*Outcome:* `recommendation.md` is saved in the project folder (Checkpoint 4).',
-    ],
+    ],
     acceptanceCriteria: [
       'eval_set.json has 6 examples, each with an expected answer, and 3 are marked as edge cases.',
       'Both models run on the same 6 inputs with the same system message and temperature 0.',
@@ -413,10 +389,10 @@ Reply with only the name of the file changed and one line about what was added. 
     labContext:
       'Ask the AI tool to write one ingest script, run it, and note whether the top result answers the question.',
     whatYouLearn: [
-      'Extract text from PDF files and split it into chunks.',
-      'Build a vector index with ChromaDB and run a test query.',
-      'Judge whether the top match is relevant.',
-    ],
+    'Extract text from PDF files and split it into chunks.',
+    'Build a vector index with ChromaDB and run a test query.',
+    'Judge whether the top match is relevant.',
+  ],
     prompts: [
       {
         step: 1,
@@ -437,15 +413,7 @@ Create ingest.py with these steps:
 ## Outcome
 Reply with only the name of the file created and one line about what it does. Do not paste the file contents.`,
       },
-    ],
-    executionSteps: [
-      '**[AI tool]** Paste the Step 1 prompt and send it.\n\n*Outcome:* `ingest.py` appears in the project folder (Checkpoint 1).',
-      '**[Manual]** Open a terminal in the project folder, activate the virtual environment from Lab 2A, then install the libraries: `pip install chromadb pypdf reportlab openai python-dotenv`\n- Windows (PowerShell): `.venv\\Scripts\\Activate.ps1`\n- Mac/Linux: `source .venv/bin/activate`\n\n*Outcome:* `(.venv)` appears at the start of the terminal line, and the install ends with "Successfully installed".',
-      '**[Manual]** Run the script: `python ingest.py`\n\n*Outcome:* The terminal shows more than 1 chunk for each of the 3 files, the model name `text-embedding-3-small` with dimension 1536, and 4 query results with distances (Checkpoint 2).',
-      '**[Manual]** Open `policy_corpus/pto_policy.pdf`.\n\n*Outcome:* The PDF shows 3 short sentences, one per line, and one of them states the PTO roll-over limit.',
-      '**[AI tool]** Only if step 3 showed an error: paste the full error and ask for the smallest possible fix, then repeat step 3.\n\n*Outcome:* The script finishes and prints the chunk counts and query results.',
-      '**[Manual]** Create `findings.md` with one sentence saying whether the top result is about PTO and contains the roll-over answer.\n\n*Outcome:* `findings.md` is saved in the project folder (Checkpoint 3).',
-    ],
+    ],
     acceptanceCriteria: [
       'policy_corpus/ holds 3 PDF files, and each is split into more than 1 chunk.',
       'The ChromaDB index stores chunk_id, source_file and text for every chunk.',
@@ -514,10 +482,10 @@ Reply with only the name of the file created and one line about what it does. Do
     labContext:
       'Ask the AI tool to build the endpoint, test one question the policy answers and one it does not, and check that the citation is real.',
     whatYouLearn: [
-      'Retrieve first, then generate, in two clear steps.',
-      'Cite the source for every factual answer.',
-      'Refuse when retrieval does not support an answer.',
-    ],
+    'Retrieve first, then generate, in two clear steps.',
+    'Cite the source for every factual answer.',
+    'Refuse when retrieval does not support an answer.',
+  ],
     prompts: [
       {
         step: 1,
@@ -536,17 +504,7 @@ Create app.py with a FastAPI endpoint POST /ask that accepts {"question": "..."}
 ## Outcome
 Reply with only the name of the file created and one line about what it does. Do not paste the file contents.`,
       },
-    ],
-    executionSteps: [
-      '**[AI tool]** Paste the Step 1 prompt and send it.\n\n*Outcome:* `app.py` appears in the project folder (Checkpoint 1).',
-      '**[Manual]** Open a terminal in the project folder, activate the virtual environment from Lab 3A, then install the web libraries: `pip install fastapi uvicorn`\n- Windows (PowerShell): `.venv\\Scripts\\Activate.ps1`\n- Mac/Linux: `source .venv/bin/activate`\n\n*Outcome:* `(.venv)` appears at the start of the terminal line, and the install ends with "Successfully installed".',
-      '**[Manual]** Start the API: `uvicorn app:app --reload`\n\n*Outcome:* The terminal shows "Application startup complete". Leave this terminal open.',
-      '**[Manual]** Open a second terminal and ask a question the policy answers (use `curl.exe` in Windows PowerShell):\n- Mac/Linux: `curl -X POST http://localhost:8000/ask -H "Content-Type: application/json" -d \'{"question":"How many PTO days can roll over?"}\'`\n- Windows (PowerShell): `curl.exe -X POST http://localhost:8000/ask -H "Content-Type: application/json" -d "{\\"question\\":\\"How many PTO days can roll over?\\"}"`\n\n*Outcome:* The reply contains the roll-over answer and a citation with `file` set to `pto_policy.pdf`, a `chunk_id` and a `quote` (Checkpoint 2).',
-      '**[Manual]** Compare the `quote` in the reply with the text in `policy_corpus/pto_policy.pdf`.\n\n*Outcome:* The quote appears in the PDF word for word, which shows the citation is real.',
-      '**[Manual]** Ask a question the policy does not cover:\n- Mac/Linux: `curl -X POST http://localhost:8000/ask -H "Content-Type: application/json" -d \'{"question":"Can I expense a personal gaming console?"}\'`\n- Windows (PowerShell): `curl.exe -X POST http://localhost:8000/ask -H "Content-Type: application/json" -d "{\\"question\\":\\"Can I expense a personal gaming console?\\"}"`\n\n*Outcome:* The reply is `{"answer":null,"refusal":"No supported policy text found."}` (Checkpoint 3).',
-      '**[AI tool]** Only if a step above showed an error or a wrong result: paste the full error or a description and ask for the smallest possible fix, then repeat the step that failed.\n\n*Outcome:* Both questions return the expected replies.',
-      '**[Manual]** Press `Ctrl+C` in the server terminal to stop the server.\n\n*Outcome:* The server stops.',
-    ],
+    ],
     acceptanceCriteria: [
       'The PTO question returns an answer with at least one citation containing file, chunk_id and quote.',
       'Each quote appears word for word in its source PDF.',
@@ -625,12 +583,11 @@ Reply with only the name of the file created and one line about what it does. Do
       'This assignment: Uses the same corpus, embedding and top 4 results. Only the chunking changes, so any difference in results comes from chunking.',
     ],
     whatYouLearn: [
-      'Build two indexes from the same documents and compare them fairly.',
-      'Write test questions with a known source, so retrieval can be checked.',
-      'Judge a chunking strategy by the chunks it returns, not by the final answer.',
-      'Recognise and record data-quality problems in a document set.',
-      'Justify a design choice with evidence from the results.',
-    ],
+    'Build two indexes from the same documents and compare them fairly.',
+    'Write test questions with a known source, so retrieval can be checked.',
+    'Judge a chunking strategy by the chunks it returns, not by the final answer.',
+    'Recognise and record data-quality problems in a document set.',
+  ],
     prompts: [
       {
         step: 1,
@@ -663,15 +620,7 @@ Point /ask at the collection of Strategy <A or B>, the one chosen in chunking_re
 ## Outcome
 Reply with only the name of the file changed and one line about what changed. Do not paste the file contents.`,
       },
-    ],
-    executionSteps: [
-      '**[Antigravity]** Paste the Step 1 prompt and send it.\n\n*Outcome:* `compare_chunking.py` and `questions.json` appear, and `policy_corpus/` now holds 4 PDFs (Checkpoint 1).',
-      '**[Manual]** Open a terminal in the project folder, activate the virtual environment, then run: `python compare_chunking.py`\n- Windows (PowerShell): `.venv\\Scripts\\Activate.ps1`\n- Mac/Linux: `source .venv/bin/activate`\n\n*Outcome:* The terminal prints the top 4 results for each question under both strategies, then the top-1 hits and complete quotes per strategy, and `results.csv` holds 12 rows (Checkpoint 2).',
-      '**[Manual]** Create `chunking_report.md` with:\n- One short paragraph choosing Strategy A or B, with at least 2 numbers from the results.\n- A problem list with at least 2 problems found, each with how it was handled. Include what the outdated PTO file did to the results.\n\n*Outcome:* `chunking_report.md` is saved in the project folder (Checkpoint 3).',
-      '**[Antigravity]** Paste the Step 2 prompt, with the chosen strategy filled in, and send it.\n\n*Outcome:* `app.py` now uses the chosen collection.',
-      '**[Manual]** Start the API with `uvicorn app:app --reload`, then run the two curl commands from Lab 3B: the PTO roll-over question and the gaming console question.\n\n*Outcome:* The PTO reply cites a file and chunk, and the gaming console question returns the refusal (Checkpoint 4). Press `Ctrl+C` to stop the server.',
-      '**[Antigravity]** Only if a step above showed an error or a wrong result: paste the full error or a description and ask for the smallest possible fix, then repeat the step that failed.\n\n*Outcome:* The comparison and the API run as described.',
-    ],
+    ],
     acceptanceCriteria: [
       'questions.json has 6 questions: 4 answerable with an expected source file and quote, and 2 not answerable.',
       'Both strategies index the same PDFs with the same embedding and return the top 4 results.',
@@ -750,10 +699,10 @@ Reply with only the name of the file changed and one line about what changed. Do
     labContext:
       'Build one hybrid search script, run two test questions, and write a short before-and-after table.',
     whatYouLearn: [
-      'Blend keyword and vector retrieval.',
-      'Rerank candidates so the best chunks come first.',
-      'Compare the same question before and after.',
-    ],
+    'Blend keyword and vector retrieval.',
+    'Rerank candidates so the best chunks come first.',
+    'Compare the same question before and after.',
+  ],
     prompts: [
       {
         step: 1,
@@ -773,14 +722,7 @@ Create hybrid.py with these steps:
 ## Outcome
 Reply with only the name of the file created and one line about what it does. Do not paste the file contents.`,
       },
-    ],
-    executionSteps: [
-      '**[Antigravity]** Paste the Step 1 prompt and send it.\n\n*Outcome:* `hybrid.py` appears in the project folder (Checkpoint 1).',
-      '**[Manual]** Open a terminal in the project folder, activate the virtual environment from Lab 3A, then install the BM25 library: `pip install rank-bm25`\n- Windows (PowerShell): `.venv\\Scripts\\Activate.ps1`\n- Mac/Linux: `source .venv/bin/activate`\n\n*Outcome:* `(.venv)` appears at the start of the terminal line, and the install ends with "Successfully installed".',
-      '**[Manual]** Run the script: `python hybrid.py`\n\n*Outcome:* For each of the 2 questions, the terminal prints the vector-only top 4 chunk ids and the hybrid top 4 chunk ids with their scores (Checkpoint 2).',
-      '**[Antigravity]** Only if step 3 showed an error: paste the full error and ask for the smallest possible fix, then repeat step 3.\n\n*Outcome:* The script finishes and prints both questions.',
-      '**[Manual]** Create `findings.md` with:\n- A table with the columns question, vector-only top-1 chunk and hybrid top-1 chunk.\n- One sentence saying whether hybrid search improved, matched or worsened the result, and why.\n- One line giving the reason for keeping 4 chunks after reranking.\n\n*Outcome:* `findings.md` is saved in the project folder (Checkpoint 3).',
-    ],
+    ],
     acceptanceCriteria: [
       'Vector top 8 and BM25 top 8 are merged without duplicates.',
       'Every merged chunk is scored from 0 to 10, and the top 4 are kept.',
@@ -842,10 +784,10 @@ Reply with only the name of the file created and one line about what it does. Do
     labContext:
       'Run one debug script with a planted data failure and a planted prompt failure, fix each one, and record the results in a short table.',
     whatYouLearn: [
-      'Separate data, retrieval, prompt and model issues.',
-      'Apply one fix and test again.',
-      'Log what changed in a short table.',
-    ],
+    'Separate data, retrieval, prompt and model issues.',
+    'Apply one fix and test again.',
+    'Log what changed in a short table.',
+  ],
     prompts: [
       {
         step: 1,
@@ -865,16 +807,7 @@ Create debug_rag.py with these steps:
 ## Outcome
 Reply with only the name of the file created and one line about what it does. Do not paste the file contents.`,
       },
-    ],
-    executionSteps: [
-      '**[Antigravity]** Paste the Step 1 prompt and send it.\n\n*Outcome:* `debug_rag.py` appears in the project folder (Checkpoint 1).',
-      '**[Manual]** Open a terminal in the project folder, activate the virtual environment from Lab 3A, then run the planted data failure: `python debug_rag.py data`\n- Windows (PowerShell): `.venv\\Scripts\\Activate.ps1`\n- Mac/Linux: `source .venv/bin/activate`\n\n*Outcome:* The checklist shows retrieved chunks that are not about PTO, and the answer is a refusal or a guess. The failing layer is Data (Checkpoint 2).',
-      '**[Manual]** Apply the fix and test again: `python debug_rag.py data --fix`\n\n*Outcome:* The answer states the roll-over limit and cites `pto_policy.pdf`.',
-      '**[Manual]** Run the planted prompt failure: `python debug_rag.py prompt`\n\n*Outcome:* The retrieved chunks are about PTO, but the answer has no citation or adds details that are not in the chunks. The failing layer is Prompt (Checkpoint 3).',
-      '**[Manual]** Apply the fix and test again: `python debug_rag.py prompt --fix`\n\n*Outcome:* The answer states the roll-over limit and cites `pto_policy.pdf`.',
-      '**[Antigravity]** Only if a step above showed an error: paste the full error and ask for the smallest possible fix, then repeat the step that failed.\n\n*Outcome:* All four runs complete.',
-      '**[Manual]** Create `fixlog.md` with a table of 2 rows (one data, one prompt) and the columns symptom, layer, fix and retest result.\n\n*Outcome:* `fixlog.md` is saved in the project folder (Checkpoint 4).',
-    ],
+    ],
     acceptanceCriteria: [
       'The four-layer checklist is printed for each run.',
       'The data failure and the prompt failure each have a named failing layer.',
@@ -944,11 +877,11 @@ Reply with only the name of the file created and one line about what it does. Do
       'This assignment: Reuses both labs and the questions.json set from Assignment 3, with no new features.',
     ],
     whatYouLearn: [
-      'Measure a RAG pipeline before changing anything.',
-      'Report each fix as a before-and-after score with a one-line cause.',
-      'Keep a restricted document away from users who are not allowed to see it.',
-      'Write a test that fails when the protection is removed.',
-    ],
+    'Measure a RAG pipeline before changing anything.',
+    'Report each fix as a before-and-after score with a one-line cause.',
+    'Keep a restricted document away from users who are not allowed to see it.',
+    'Write a test that fails when the protection is removed.',
+  ],
     prompts: [
       {
         step: 1,
@@ -985,16 +918,7 @@ Make these changes:
 ## Outcome
 Reply with only the names of the files created or changed and one line about what each does. Do not paste the file contents.`,
       },
-    ],
-    executionSteps: [
-      '**[Antigravity]** Paste the Step 1 prompt and send it.\n\n*Outcome:* `eval.py` appears in the project folder (Checkpoint 1).',
-      '**[Manual]** Open a terminal in the project folder, activate the virtual environment, then run: `python eval.py`\n- Windows (PowerShell): `.venv\\Scripts\\Activate.ps1`\n- Mac/Linux: `source .venv/bin/activate`\n\n*Outcome:* The terminal prints a score out of 6 for each of the 6 configurations (Checkpoint 2).',
-      '**[Manual]** Create `eval_report.md` with the baseline score (`vector`) and a table of 3 rows with the columns layer, before, after and one-line cause. Use these pairs:\n- Data: `data` and `data --fix`\n- Retrieval: `vector` and `hybrid`\n- Prompt: `prompt` and `prompt --fix`\n\n*Outcome:* `eval_report.md` is saved in the project folder (Checkpoint 3).',
-      '**[Antigravity]** Paste the Step 2 prompt and send it.\n\n*Outcome:* `hr_salary_bands.pdf`, the updated `app.py` and `test_access_control.py` appear (Checkpoint 4).',
-      '**[Manual]** Run the tests: `pip install pytest httpx` then `pytest -v test_access_control.py`\n\n*Outcome:* The terminal shows `2 passed` (Checkpoint 5).',
-      '**[Manual]** Comment out the `where` filter in `app.py`, run the tests again, then restore the filter.\n\n*Outcome:* `test_staff_cannot_see_hr_chunks` fails with the filter off, and both tests pass again with it restored.',
-      '**[Antigravity]** Only if a step above showed an error: paste the full error and ask for the smallest possible fix, then repeat the step that failed.\n\n*Outcome:* The script and the tests run as described.',
-    ],
+    ],
     acceptanceCriteria: [
       'eval.py prints a score out of 6 for all 6 configurations.',
       'eval_report.md has the baseline and 3 rows (data, retrieval, prompt), each with before, after and a one-line cause. A fix that changes nothing is explained.',
@@ -1058,10 +982,10 @@ Reply with only the names of the files created or changed and one line about wha
     labContext:
       'Build one LangGraph script, run it once with yes and once with no, and write a short note on the flow.',
     whatYouLearn: [
-      'Model agent flow as a graph with branches.',
-      'Gate a risky action behind approval.',
-      'Resume or cancel cleanly after user input.',
-    ],
+    'Model agent flow as a graph with branches.',
+    'Gate a risky action behind approval.',
+    'Resume or cancel cleanly after user input.',
+  ],
     prompts: [
       {
         step: 1,
@@ -1083,15 +1007,7 @@ Create agent.py with LangGraph, following these steps:
 ## Outcome
 Reply with only the name of the file created and one line about what it does. Do not paste the file contents.`,
       },
-    ],
-    executionSteps: [
-      '**[Antigravity]** Paste the Step 1 prompt and send it.\n\n*Outcome:* `agent.py` appears in the project folder (Checkpoint 1).',
-      '**[Manual]** Open a terminal in the project folder, activate the virtual environment from Lab 3A, then install LangGraph: `pip install langgraph`\n- Windows (PowerShell): `.venv\\Scripts\\Activate.ps1`\n- Mac/Linux: `source .venv/bin/activate`\n\n*Outcome:* `(.venv)` appears at the start of the terminal line, and the install ends with "Successfully installed".',
-      '**[Manual]** Run the agent and type `yes` when asked: `python agent.py`\n\n*Outcome:* The draft is shown and the run pauses. After `yes`, the mock email prints `to`, `subject` and `body`, and the result is `{"status": "sent"}` (Checkpoint 2).',
-      '**[Manual]** Run the agent again and type `no` when asked: `python agent.py`\n\n*Outcome:* No email is printed, and the result is `{"status": "cancelled"}` (Checkpoint 3).',
-      '**[Antigravity]** Only if a step above showed an error or the email was sent without approval: paste the full error or a description and ask for the smallest possible fix, then repeat the step that failed.\n\n*Outcome:* Both runs behave as described.',
-      '**[Manual]** Create `flow.md` with the list of nodes and edges, the name of the risky action, and one line on what happens when the answer is no.\n\n*Outcome:* `flow.md` is saved in the project folder (Checkpoint 4).',
-    ],
+    ],
     acceptanceCriteria: [
       'The graph has the nodes ingest_question, retrieve, draft_answer, await_approval and send_summary_email.',
       'The run pauses at await_approval until yes or no is typed.',
@@ -1154,10 +1070,10 @@ Reply with only the name of the file created and one line about what it does. Do
     labContext:
       'Build one script with the grading loop, run a specific question and a vague question, and write a short note on how the loop is limited.',
     whatYouLearn: [
-      'Score whether retrieved text is good enough.',
-      'Rewrite the user question once when retrieval is weak.',
-      'End the loop to control cost.',
-    ],
+    'Score whether retrieved text is good enough.',
+    'Rewrite the user question once when retrieval is weak.',
+    'End the loop to control cost.',
+  ],
     prompts: [
       {
         step: 1,
@@ -1179,13 +1095,7 @@ Create agentic_rag.py with these steps:
 ## Outcome
 Reply with only the name of the file created and one line about what it does. Do not paste the file contents.`,
       },
-    ],
-    executionSteps: [
-      '**[Antigravity]** Paste the Step 1 prompt and send it.\n\n*Outcome:* `agentic_rag.py` appears in the project folder (Checkpoint 1).',
-      '**[Manual]** Open a terminal in the project folder, activate the virtual environment from Lab 3A, then run: `python agentic_rag.py`\n- Windows (PowerShell): `.venv\\Scripts\\Activate.ps1`\n- Mac/Linux: `source .venv/bin/activate`\n\n*Outcome:* The PTO question scores 0.6 or higher, uses no rewrite and returns a cited answer. The monitors question scores below 0.6, shows the original and rewritten question, scores below 0.6 again, and returns "Retrieval confidence too low." (Checkpoint 2).',
-      '**[Antigravity]** Only if step 2 showed an error or a wrong result: paste the full error or a description and ask for the smallest possible fix, then repeat step 2.\n\n*Outcome:* Both questions behave as described in step 2.',
-      '**[Manual]** Create `loop_notes.md` with the grading threshold, the line of code that limits the loop to one rewrite, and one line for each question summarising its scores and result.\n\n*Outcome:* `loop_notes.md` is saved in the project folder (Checkpoint 3).',
-    ],
+    ],
     acceptanceCriteria: [
       'The script grades retrieval from 0 to 1 and rewrites the question only when the score is below 0.6.',
       'The loop allows at most one rewrite, and the limit is enforced in code.',
@@ -1256,11 +1166,11 @@ Reply with only the name of the file created and one line about what it does. Do
       'This assignment: Uses the same agent, with one new tool and a design decision, and no other features.',
     ],
     whatYouLearn: [
-      'Tell a fixed workflow from an agent that chooses its own steps.',
-      'Justify the choice using step predictability, risk and cost.',
-      'Add a read-only tool with a clear, narrow description.',
-      'Keep the approval gate working after the agent changes.',
-    ],
+    'Tell a fixed workflow from an agent that chooses its own steps.',
+    'Justify the choice using step predictability, risk and cost.',
+    'Add a read-only tool with a clear, narrow description.',
+    'Keep the approval gate working after the agent changes.',
+  ],
     prompts: [
       {
         step: 1,
@@ -1279,14 +1189,7 @@ Update agent.py with these steps:
 ## Outcome
 Reply with only the name of the file changed and one line about what was added. Do not paste the file contents.`,
       },
-    ],
-    executionSteps: [
-      '**[Antigravity]** Paste the Step 1 prompt and send it.\n\n*Outcome:* `agent.py` is updated with the new tool (Checkpoint 1).',
-      '**[Manual]** Open a terminal in the project folder, activate the virtual environment, then run the date question and type `no` when asked: `python agent.py "How many working days is 2026-03-03 to 2026-03-14?"`\n- Windows (PowerShell): `.venv\\Scripts\\Activate.ps1`\n- Mac/Linux: `source .venv/bin/activate`\n\n*Outcome:* The tools called include `calc_business_days`, the draft states 9 working days, and the result is `{"status": "cancelled"}` with no email (Checkpoint 2).',
-      '**[Manual]** Run the policy question and type `yes` when asked: `python agent.py "How many PTO days can roll over?"`\n\n*Outcome:* `calc_business_days` is not called, the mock email prints, and the result is `{"status": "sent"}` (Checkpoint 3).',
-      '**[Antigravity]** Only if a step above showed an error or a wrong result: paste the full error or a description and ask for the smallest possible fix, then repeat the step that failed.\n\n*Outcome:* Both runs behave as described.',
-      '**[Manual]** Create `decisions.md` with one paragraph for each use case. Start each paragraph with "workflow" or "agent", and give one reason about how predictable the steps are and one about risk or cost.\n\n*Outcome:* `decisions.md` is saved in the project folder (Checkpoint 4).',
-    ],
+    ],
     acceptanceCriteria: [
       'decisions.md has exactly three paragraphs, each naming "workflow" or "agent" with a reason about predictability and a reason about risk or cost.',
       'The new tool is read-only, has a one-sentence description and returns the error format on bad dates.',
@@ -1351,10 +1254,10 @@ Reply with only the name of the file changed and one line about what was added. 
     labContext:
       'Build one red-team script and two guardrails, run the attacks, and record the results in a short note.',
     whatYouLearn: [
-      'Run realistic injection attempts.',
-      'Define the expected safe behaviour.',
-      'Add guardrails that block abuse but allow normal use.',
-    ],
+    'Run realistic injection attempts.',
+    'Define the expected safe behaviour.',
+    'Add guardrails that block abuse but allow normal use.',
+  ],
     prompts: [
       {
         step: 1,
@@ -1377,14 +1280,7 @@ Update agent.py and create redteam.py with these steps:
 ## Outcome
 Reply with only the names of the files changed or created and one line about what each does. Do not paste the file contents.`,
       },
-    ],
-    executionSteps: [
-      '**[Antigravity]** Paste the Step 1 prompt and send it.\n\n*Outcome:* `agent.py` is updated and `redteam.py` appears in the project folder (Checkpoint 1).',
-      '**[Manual]** Open a terminal in the project folder, activate the virtual environment, then run: `python redteam.py`\n- Windows (PowerShell): `.venv\\Scripts\\Activate.ps1`\n- Mac/Linux: `source .venv/bin/activate`\n\n*Outcome:* The table has 3 rows. The normal question returns a cited PTO answer. Both attacks pass: no email is sent and no credentials appear (Checkpoint 2).',
-      '**[Antigravity]** Only if a step above showed an error or a normal question was blocked: paste the full error or a description and ask for the smallest possible fix, then repeat step 2.\n\n*Outcome:* All three prompts behave as described in step 2.',
-      '**[Manual]** Swap project folders with a partner. Write one new attack and run it: `python agent.py "<attack prompt>"`\n\n*Outcome:* The attack and its result, blocked or not, are noted (Checkpoint 3).',
-      '**[Manual]** Create `guardrails.md` with one line for each guardrail saying where it runs, and one line for the partner attack and its result.\n\n*Outcome:* `guardrails.md` is saved in the project folder (Checkpoint 4).',
-    ],
+    ],
     acceptanceCriteria: [
       'Both attacks are logged with the tools called and a pass or fail result.',
       'No email is sent to attacker@evil.com, and no credentials appear.',
@@ -1451,11 +1347,11 @@ Reply with only the names of the files changed or created and one line about wha
       'This assignment: Uses the same agent and guardrails. It tests further, records the findings, fixes one weakness and adds no new features.',
     ],
     whatYouLearn: [
-      'Turn red-team results into a threat model with attack, impact, mitigation and status.',
-      'Judge how much a guardrail really protects.',
-      'Fix a weakness and prove it with a test that fails first and then passes.',
-      'Report what is still open, honestly.',
-    ],
+    'Turn red-team results into a threat model with attack, impact, mitigation and status.',
+    'Judge how much a guardrail really protects.',
+    'Fix a weakness and prove it with a test that fails first and then passes.',
+    'Report what is still open, honestly.',
+  ],
     prompts: [
       {
         step: 1,
@@ -1493,16 +1389,7 @@ Follow these steps:
 ## Outcome
 Reply with the failing test result, the passing test result and the names of the files changed, one line each.`,
       },
-    ],
-    executionSteps: [
-      '**[Antigravity]** Paste the Step 1 prompt and send it.\n\n*Outcome:* `redteam.py` is updated and `injected_policy.pdf` appears in `policy_corpus/` (Checkpoint 1).',
-      '**[Manual]** Open a terminal in the project folder, activate the virtual environment, then run: `python redteam.py`\n- Windows (PowerShell): `.venv\\Scripts\\Activate.ps1`\n- Mac/Linux: `source .venv/bin/activate`\n\n*Outcome:* The table has 7 rows, with a pass or fail for each of the 4 new attacks. Each fail is a weakness to fix (Checkpoint 2).',
-      '**[Manual]** Install the test library: `pip install pytest`\n\n*Outcome:* The install ends with "Successfully installed".',
-      '**[Antigravity]** Paste the Step 2 prompt and send it.\n\n*Outcome:* `test_guardrail.py` appears, and the reply shows one failing run and one passing run (Checkpoint 3).',
-      '**[Manual]** Run the test and the red-team script again: `pytest -v test_guardrail.py` then `python redteam.py`\n\n*Outcome:* The test passes, the fixed attack now passes, and the normal PTO question still returns a cited answer.',
-      '**[Antigravity]** Only if a step above showed an error: paste the full error and ask for the smallest possible fix, then repeat the step that failed.\n\n*Outcome:* The test and the script run as described.',
-      '**[Manual]** Create `threat_model.md` with a table of at least 6 rows, including the 2 attacks from Lab 6, and the columns attack, impact, mitigation and status. Use the status Mitigated, Partly mitigated or Open.\n\n*Outcome:* `threat_model.md` is saved in the project folder (Checkpoint 4).',
-    ],
+    ],
     acceptanceCriteria: [
       '4 new attacks are logged, each with its tools called and a pass or fail result.',
       'threat_model.md has at least 6 rows with attack, impact, mitigation and status filled in.',
@@ -1569,10 +1456,10 @@ Reply with the failing test result, the passing test result and the names of the
     labContext:
       'Build one MCP server and a test client, run them, connect the server to an MCP client, and write a short note on the tool.',
     whatYouLearn: [
-      'Describe the host, client and server roles in MCP.',
-      'Expose a tool with clear inputs and outputs.',
-      'Validate inputs before the tool runs.',
-    ],
+    'Describe the host, client and server roles in MCP.',
+    'Expose a tool with clear inputs and outputs.',
+    'Validate inputs before the tool runs.',
+  ],
     prompts: [
       {
         step: 1,
@@ -1593,16 +1480,7 @@ Create server.py and mcp_client.py with these steps:
 ## Outcome
 Reply with only the names of the files created and one line about what each does. Do not paste the file contents.`,
       },
-    ],
-    executionSteps: [
-      '**[Antigravity]** Paste the Step 1 prompt and send it.\n\n*Outcome:* `server.py` and `mcp_client.py` appear in the project folder (Checkpoint 1).',
-      '**[Manual]** Open a terminal in the project folder, activate the virtual environment from Lab 3A, then install the MCP library: `pip install "mcp<2"`\n- Windows (PowerShell): `.venv\\Scripts\\Activate.ps1`\n- Mac/Linux: `source .venv/bin/activate`\n\n*Outcome:* `(.venv)` appears at the start of the terminal line, and the install ends with "Successfully installed".',
-      '**[Manual]** Run the test client: `python mcp_client.py`\n\n*Outcome:* The output lists the tool `search_policy_index` and the resource `policy://manifest`. The PTO search returns 4 chunks, the empty query returns an error, and the manifest lists each PDF with its chunk count (Checkpoint 2).',
-      '**[Antigravity]** Only if a step above showed an error: paste the full error and ask for the smallest possible fix, then repeat the step that failed.\n\n*Outcome:* The test client prints the results described in step 3.',
-      '**[Manual]** Add the printed config to the settings of an MCP client such as Claude Desktop or Cursor, then restart the client.\n\n*Outcome:* The client lists `search_policy_index` as an available tool (Checkpoint 3).',
-      '**[Manual]** In the client, ask: "Search the policy index: how many PTO days can roll over?"\n\n*Outcome:* The client calls `search_policy_index` and shows a chunk from `pto_policy.pdf` (Checkpoint 4).',
-      '**[Manual]** Create `mcp_notes.md` with the tool\'s input and output, the resource address, and the two input checks.\n\n*Outcome:* `mcp_notes.md` is saved in the project folder (Checkpoint 5).',
-    ],
+    ],
     acceptanceCriteria: [
       'The client lists one tool and one resource.',
       'The search tool returns the top 4 chunks with chunk_id, file and snippet.',
@@ -1672,12 +1550,11 @@ Reply with only the names of the files created and one line about what each does
       'This assignment: Adds no new features. It packages, checks and presents what is already built.',
     ],
     whatYouLearn: [
-      'Package a working AI system so someone else can run it from a clean copy.',
-      'Show the whole system in one diagram.',
-      'Bring evaluation evidence together instead of describing it from memory.',
-      'Judge production readiness with a checklist, and mark what is not done.',
-      'Present a system to a team lead, including its limits.',
-    ],
+    'Package a working AI system so someone else can run it from a clean copy.',
+    'Show the whole system in one diagram.',
+    'Bring evaluation evidence together instead of describing it from memory.',
+    'Judge production readiness with a checklist, and mark what is not done.',
+  ],
     prompts: [
       {
         step: 1,
@@ -1711,16 +1588,7 @@ Create architecture.md that fits on one page, with two parts:
 ## Outcome
 Reply with only the name of the file created and the list of items marked Not done. Do not paste the file contents.`,
       },
-    ],
-    executionSteps: [
-      '**[Antigravity]** Paste the Step 1 prompt and send it.\n\n*Outcome:* `README.md` and `.env.example` appear in the project folder (Checkpoint 1).',
-      '**[Manual]** Check that no secrets are stored: `.env` must be listed in `.gitignore`, and `.env.example` must hold names only.\n\n*Outcome:* No API key appears in any file that will be shared.',
-      '**[Antigravity]** Paste the Step 2 prompt and send it.\n\n*Outcome:* `architecture.md` appears with the diagram and the 12-item checklist (Checkpoint 2).',
-      '**[Manual]** Copy the project to a new folder without `.venv` and `.env`, add a fresh `.env`, then follow the README to set up, run the assistant and run the tests.\n\n*Outcome:* Every README step works on the clean copy (Checkpoint 3).',
-      '**[Antigravity]** Only if a README step failed: paste the full error and ask for the README to be corrected, then repeat step 4.\n\n*Outcome:* The README works from start to finish.',
-      '**[Manual]** Push the project to a repository and note its link.\n\n*Outcome:* The repository link is ready to submit.',
-      '**[Manual]** Record or give a 10-minute walkthrough for a team lead covering the problem, a live demo, the architecture, evaluation numbers, at least 3 known limits and at least 3 next steps.\n\n*Outcome:* The recording or the session is complete (Checkpoint 4).',
-    ],
+    ],
     acceptanceCriteria: [
       'A new person can follow the README on a clean copy, and run the assistant and the tests.',
       'The README has all eight H2 sections, and the configuration table lists every environment variable.',

@@ -45,7 +45,7 @@ export const INTRO_S2_MCP =
   'Expose **search_policy_index** (query string → top 4 chunks) and read-only resource **policy_corpus_manifest** over MCP; wire your agent client. Aligns with **Model Context Protocol (MCP)**.'
 
 export const INTRO_S2_ASSIGNMENT =
-  'Solo capstone for Stage 2 (foundation only — not Ask IT). Wire one **integrated policy assistant** that reuses your compare-lab model choice, **policy_corpus/** index, cited RAG, one hybrid improvement, approval gate, guardrails, and MCP search — documented in seven steps.'
+  'Solo capstone for Stage 2 (foundation only — not Customer support ticketing system). Wire one **integrated policy assistant** that reuses your compare-lab model choice, **policy_corpus/** index, cited RAG, one hybrid improvement, approval gate, guardrails, and MCP search — documented in seven steps.'
 
 // Stage 1 — main prompts
 export const PROMPT_S1_FASTAPI_SIMPLE = fp({
